@@ -21,9 +21,14 @@ const Navbar = (props: any) => {
       >
         <ul className="navbar-nav">
           <li className="nav-item active">
-            <a className="nav-link" href="#">
-              Dashboard <span className="sr-only">(current)</span>
-            </a>
+            <NavLink
+              to="/dashboard"
+              className={(isActive) =>
+                "nav-link" + (!isActive ? " unselected" : "")
+              }
+            >
+              Dashboard
+            </NavLink>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="#">

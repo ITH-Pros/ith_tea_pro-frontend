@@ -24,11 +24,13 @@ const Rating = () => {
   };
 
   return (
-    <div className="my-2 table-responsive">
-      <div></div>
+    <div className="my-4 table-responsive">
+      <div>
+        <h4 className="text-center">Current Date : {`${moment().format("DD MMMM YYYY")}`}</h4>
+      </div>
       <div className="m-3 d-flex justify-content-center flex-column">
         <div>
-          <h3 className="text-center">Ratings for {moment().format('MMMM')}</h3>
+          <h3 className="text-center">Ratings for {moment().format("MMMM")}</h3>
         </div>
         <table className="w-100">
           <tbody>
