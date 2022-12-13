@@ -6,6 +6,15 @@ import * as path from "path";
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
+    alias: [
+      {
+        find: "components",
+        replacement: path.resolve(__dirname, "src/components"),
+      },
+      {
+        find: "pages",
+        replacement: path.resolve(__dirname, "src/pages"),
+      },
+    ],
   },
 });

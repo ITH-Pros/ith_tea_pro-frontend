@@ -31,14 +31,24 @@ const Navbar = (props: any) => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <NavLink
+              to="/projects"
+              className={(isActive) =>
+                "nav-link" + (!isActive ? " unselected" : "")
+              }
+            >
               Projects
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <NavLink
+              to="/tasks"
+              className={(isActive) =>
+                "nav-link" + (!isActive ? " unselected" : "")
+              }
+            >
               Tasks
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
             <NavLink
