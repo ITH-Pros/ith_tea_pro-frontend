@@ -24,15 +24,71 @@ const Rating = () => {
   };
 
   return (
-    <div className="my-4 table-responsive">
+    <div className="py-4">
       <div>
-        <h4 className="text-center">Current Date : {`${moment().format("DD MMMM YYYY")}`}</h4>
+        <h4 className="text-center">
+          Current Date : {`${moment().format("DD MMMM YYYY")}`}
+        </h4>
       </div>
       <div className="m-3 d-flex justify-content-center flex-column">
         <div>
-          <h3 className="text-center">Ratings for {moment().format("MMMM")}</h3>
+          <h3 className="text-center">
+            Ratings for {moment().format("MMMM, YYYY")}
+          </h3>
         </div>
-        <table className="w-100">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              {Array(days)
+                .fill(0)
+                .map((rating, index) => {
+                  return (
+                    <th key={`${index}_${index}`} className={`text-center`}>{`${moment()
+                      .startOf("month")
+                      .add(index, "days")
+                      .format("DD")}`}</th>
+                  );
+                })}
+              <th>Average</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, userIndex) => {
+              return (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  {Array(days)
+                    .fill(0)
+                    .map((day, dayIndex) => {
+                      return (
+                        <td key={`${user.id}_${dayIndex}`} >
+                          <input
+                            type="text"
+                            name=""
+                            id=""
+                            className="input_dashboard"
+                            value={`${user.rating[dayIndex] || ""}`}
+                            disabled={
+                              moment().diff(
+                                moment().startOf("month").add(dayIndex, "days"),
+                                "days"
+                              ) > 0
+                            }
+                            onChange={(e) =>
+                              handleChange(e, userIndex, dayIndex)
+                            }
+                          />
+                        </td>
+                      );
+                    })}
+                  <td>Average</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        {/* <table>
           <tbody>
             <tr>
               <th>Name</th>
@@ -61,6 +117,7 @@ const Rating = () => {
                             type="text"
                             name=""
                             id=""
+                            className="input_dashboard"
                             value={`${user.rating[dayIndex] || ""}`}
                             disabled={
                               moment().diff(
@@ -80,7 +137,7 @@ const Rating = () => {
               );
             })}
           </tbody>
-        </table>
+        </table> */}
       </div>
     </div>
   );
