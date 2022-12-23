@@ -1,0 +1,32 @@
+
+
+.clrfltr{
+    float: left;
+    margin-left: 50px;
+}
+
+.btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color:white;
+
+    padding: 12px 32px;
+    margin: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+  }
+  
+  .btn:hover {
+    transition: all 0.3s ease;
+  }
+  
+  .btn-glow:hover {
+    color:white !important;
+  }
+  
+
+
+
+  

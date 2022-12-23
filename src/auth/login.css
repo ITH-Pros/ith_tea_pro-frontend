@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=Recursive&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+.man-login {
+
+  min-height: 100vh;
+  padding: 0rem;
+  display: flex;
+  align-items: center;
+  font-family: "Recursive", sans-serif;
+  font-size: 1.16rem;
+  position: relative;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 1;
+}
+
+.bg-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: -1;
+  display: flex;
+  overflow: hidden;
+  filter: opacity(0.8);
+}
+.bg-box div {
+  flex: 1 1;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  border-radius: 1.3rem;
+}
+.bg-box .bg1 {
+  background-image: url("../../public/img/bg-1.png");
+  background-color: #d9d8d8;
+  background-position: -50px 50px;
+  animation: fadeinBottom 1s both;
+  margin: 5rem 5rem 0 3rem;
+}
+.bg-box .bg2 {
+  background-image: url("../../public/img/image_processing.gif");
+  background-color: #f1f1f1;
+  background-position: center;
+  animation: fadeinTop 1s 0.3s both;
+  margin: 0 3rem 4rem 0;
+}
+
+.form {
+  width: 24rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(60px);
+  backdrop-filter: blur(60px);
+  box-shadow: 0 0 15px rgb(0 0 0 / 20%);
+  margin: auto;
+}
+.form label {
+  display: block;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.form input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+          display: block;
+          width: 100%;
+          height: 50px;
+          margin: 10px 0px 0px 0px;
+          border: none;
+          border-radius: 0.3rem;
+          padding: 0.1rem 0.3rem;
+          padding-left: 2.2rem;
+          font-size: 14px;
+}
+
+
+.form input:focus, .form input:focus-within {
+  outline: none;
+  box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+}
+.form ion-icon {
+  font-size: 15px;
+}
+.form .input-box {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.form .prefix {
+  position: absolute;
+  color: lightgrey;
+  top: 0;
+  bottom: 0;
+  left: 0.9rem;
+  margin: auto;
+}
+.form .switch-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 7px;
+  padding: 0.2rem;
+  margin: auto;
+  cursor: pointer;
+}
+.form .send-btn {
+  display: inline-block;
+  width: 126px;
+  margin-top: 0px;
+  padding: 7px 10px;
+  color: #fff;
+  background-image: linear-gradient(62deg,#8355ad 0%,#b86bff 100%);
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.form .send-btn ion-icon {
+  vertical-align: middle;
+  position: relative;
+  right: -8px;
+}
+
+@-webkit-keyframes fadeinBottom {
+  from {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(1rem);
+  }
+}
+
+@keyframes fadeinBottom {
+  from {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(1rem);
+  }
+}
+@-webkit-keyframes fadeinTop {
+  from {
+    opacity: 0;
+    transform: translateY(-3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-1rem);
+  }
+}
+@keyframes fadeinTop {
+  from {
+    opacity: 0;
+    transform: translateY(-3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-1rem);
+  }
+}

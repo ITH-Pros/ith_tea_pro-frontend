@@ -1,0 +1,22 @@
+.react-datepicker__input-container > input {
+    width: 100%;
+  }
+
+  .dv-50{
+    width: 100%;
+    height: 100%;
+    margin-top: 5rem;
+  }
+  .dv-40{
+    width: 100%;
+    height: 100%;
+    float: right;
+  }
+
+  .toast-message{
+    border: 2px solid grey;
+    box-shadow: rgb(249 138 251 / 40%) -11px 19px 20px 8px;
+  }
+  .bg-active{
+    background-image: linear-gradient(62deg,#8355ad 0%,#b86bff 100%);
+  }
