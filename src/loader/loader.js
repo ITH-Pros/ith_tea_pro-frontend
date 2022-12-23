@@ -5,7 +5,7 @@ export default function Loader(){
         <>
         <div className="cont">
   <div className="paper"></div>
-  <button className="butn"><div className='loader'>
+  <button className="butn"  ><div className='loader'>
     <div></div>
     <div></div>
     <div></div>

@@ -70,12 +70,10 @@ export default function Project() {
 					allUserList.map((proejctUser, index) => {
 						console.log(proejctUser)
 						return (
-							<>
-								<div key={proejctUser._id + index} >
-									<input type='checkbox'></input>
-									<span> {proejctUser.name}</span>
-								</div>
-							</>
+							<div key={proejctUser._id} >
+								<input type='checkbox'></input>
+								<span> {proejctUser.name}</span>
+							</div>
 						)
 
 					})
@@ -83,6 +81,30 @@ export default function Project() {
 			</>
 		)
 	}
+	const getProjectUserIcons = (projectUsers) => {
+		let rows = [];
+		console.log()
+		for (let i = 0; i < projectUsers?.length; i++) {
+			let user = projectUsers[i]
+			if (i === 5) {
+				rows.push(
+					//PUT IMAGE/ICON for MORE here...
+					<span key={user._id + i} onClick={handleMoreProjectUser}> (...) </span>
+				);
+				break
+			}
+			console.log(user)
+			rows.push(
+				<img key={user._id + i} src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80" alt="participant" />
+			);
+		}
+		return rows;
+
+	}
+	const handleMoreProjectUser = () => {
+		console.log('handleMoreProjectUser')
+	}
+
 	return (
 		<>
 			<h1 className="h1-text">
@@ -97,7 +119,7 @@ export default function Project() {
 									<div className="project-box-header">
 										{/* <span>December 10, 2020</span> */}
 										<div className="more-wrapper">
-											<button className="project-btn-more">
+											<button  className="project-btn-more">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
 													<circle cx="12" cy="12" r="1" />
 													<circle cx="12" cy="5" r="1" />
@@ -120,21 +142,13 @@ export default function Project() {
 									<div className="project-box-footer">
 										<div className="participants">
 											{
-												element?.accessibleBy.map((user, idx) => {
-													console.log(user)
-													return (
-														<img key={user._id + idx} src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80" alt="participant" />
-													)
-												})
+												getProjectUserIcons(element?.accessibleBy)
 											}
 											<button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProject(element)}>
 												<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
 													<path d="M12 5v14M5 12h14" />
 												</svg>
 											</button>
-										</div>
-										<div className="days-left" style={{ color: '#ff942e' }}>
-											2 Days Left
 										</div>
 									</div>
 								</div>

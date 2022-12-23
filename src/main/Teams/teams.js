@@ -70,7 +70,7 @@ export default function Teams() {
                             <div key={user._id} className="box">
                                 <div className="top-bar"></div>
                                 <div className="top">
-                                    {/* <i className="fa fa-check-circle" id="heart-btn-1" style={{ cursor: "grab" }} aria-hidden="true" onClick={() => editUserDetailHandle(user)}></i> */}
+                                    <i className="fa fa-check-circle" id="heart-btn-1" style={{ cursor: "grab" }} aria-hidden="true" onClick={() => editUserDetailHandle(user)}></i>
                                     <label className="heart" ></label>
                                 </div>
                                 <div className="content">

@@ -24,7 +24,7 @@ const Modals = (props) => {
                     {modalBody}
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className='btn btn-gradient-border ' onClick={onClick}>Submit</button>
+                    <button className='btn btn-gradient-border'  onClick={onClick}>Submit</button>
                 </Modal.Footer>
             </Modal>
         </>
