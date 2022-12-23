@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import React from "react";
 import { useState, useEffect } from "react";
 import "react-date-picker/dist/DatePicker.css";

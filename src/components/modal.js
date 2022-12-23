@@ -1,16 +1,16 @@
 import React from 'react'
 import Modal from 'react-bootstrap/Modal'
-
+import './modal.css'
 const Modals = (props) => {
-    console.log(`Modals:`)
-    const { heading, modalBody, modalShow, onClick, onHide } = props;
+    console.log(`Modals:`,props)
+    const { heading, modalBody, modalShow, onClick, onHide,keyboardProp ,backdropProp} = props;
     return (
         <>
             <Modal
                 onHide={onHide}
                 show={modalShow}
-                backdrop="static"
-                keyboard={false}
+                backdrop={backdropProp}
+                keyboard={keyboardProp}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered

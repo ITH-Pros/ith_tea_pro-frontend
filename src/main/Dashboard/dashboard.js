@@ -3,7 +3,8 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import { getRatings } from "../../services/user/api";
 import "./dashboard.css";
-import { v4 as uuidv4 } from "uuid";
+import Modals from '../../components/modal';
+import Button from "react-bootstrap/Button";
 import { MDBTooltip } from "mdb-react-ui-kit";
 // eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Link } from "react-router-dom";
@@ -12,12 +13,16 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Loader from "../../loader/loader";
 import { getAllUsers } from "../../services/user/api";
+import { addComment } from '../../services/user/api';
 
 var month = moment().month();
 
 export default function Dashboard(props) {
+  const [clickedRatingArray, setclickedRatingArray] = useState([]);
   const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
+	const [modalShow, setModalShow] = useState(false);
+  const [comments, setComments] = useState("");
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -132,6 +137,111 @@ export default function Dashboard(props) {
     }
   }
 
+  async function addCommnetFunc() {
+    let ratingId=clickedRatingArray?.ratingId
+    let dataToSend = {
+      comment: comments,
+      ratingId:ratingId
+    }
+    setLoading(true);
+
+    try {
+      const comment = await addComment(dataToSend);
+      setLoading(false);
+
+      if (comment.error) {
+        console.log(comment.error)
+        // toast.error(rating.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        console.log('comment added succesfully ')
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  }
+
+
+
+
+  const GetModalBody = () => {
+		return (
+      <>
+        <div>
+          <h4>Rating : {clickedRatingArray?.rating}</h4>
+          <CommentsForm/>
+        </div>
+         <div style={{display:'flex',justifyContent:'space-around',marginBottom:'20px'}}>
+            {/* <span className="spanBtnG spnBtn" onClick={()=> addComment()}>Add Comment</span> */}
+            <span className="spanBtnY spnBtn">Edit Rating</span>
+            <span className="spanBtnR spnBtn">New Rating</span>
+         </div>
+        {
+         
+					clickedRatingArray?.comments.map((comments, index) => {
+						return (
+							<div  key={comments?._id} style={{borderTop:'1px solid #b86bff',borderBottom:'1px solid #b86bff',padding:'20px' ,marginBottom:'20px'}}>
+								<span>Comment:- </span> {comments?.comment}<br/>
+								<span> Commented By:- </span>{clickedRatingArray.commentedByArray?.[index]?.name}<br/>
+                <span> Date & Time:- </span>{comments.createdAt?.split('T')[0] +'(' +comments?.createdAt?.split('T')[1]?.split('.')[0]+')'}
+							</div>
+						)
+
+					})
+				}
+			</>
+		)
+  }
+  
+  const CommentsForm = () => {
+		return (
+      <>
+         <Row  className="mb-3">
+                <Form.Group as={Col} md="9" controlId="comment">
+                  <Form.Label>Comment</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    required
+                    type="text-area"
+                    placeholder="Comment" 
+                    value={comments}
+                    onChange={(e) => setComments(e.target.value)}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Comment is required !!
+                  </Form.Control.Feedback>
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+
+              </Row>
+                    <Button md="3"
+                      className="btnshort"
+                        type="submit"
+                        onClick={addCommnetFunc}>
+                        Add Comment
+                      </Button>
+			</>
+		)
+  }
+
+
+  
+  function openShowCommentsModal(data) {
+    console.log(data)
+    setclickedRatingArray(data)
+    setModalShow(true)
+    
+  }
+
+
+  
+
   return (
     <div>
       <h1 className="h1-text">
@@ -222,8 +332,8 @@ export default function Dashboard(props) {
                   <td> {user.name}</td>
                   {
                     Array(days)
-                      .fill(0)
-                      .map((day, index) => {
+                      ?.fill(0)
+                     ?.map((day, index) => {
                         let ratingUserObj = ratingsArray.find((el) => {
                           return el._id === user._id;
                         });
@@ -240,19 +350,15 @@ export default function Dashboard(props) {
                                 tag="a"
                                 wrapperProps={{ href: "#" }}
                                 title={
-                                  ratingCommentObj?.comments?.[0]?.comment || "0"
+                                  'click to view details'
                                 }
                               >
-                                <input
-                                  style={{ cursor: "pointer" }}
-                                  type="text"
-                                  name=""
-                                  id=""
+                                <div
+                                  style={{ cursor: "pointer",border:'1px solid grey' }}
                                   className="input_dashboard"
-                                  value={`${ratingCommentObj?.rating}`}
-                                  disabled={true}
+                                  onClick={() => openShowCommentsModal(ratingCommentObj)}
                                 // onInput={(e) => handleChange(e, userIndex, dayIndex)}
-                                />
+                                >{`${ratingCommentObj?.rating}`}</div>
                               </MDBTooltip>
                             </td>
                           )
@@ -284,13 +390,19 @@ export default function Dashboard(props) {
         </table>
       </div>
       {loading ? <Loader /> : null}
+
+			<Modals
+        modalShow={modalShow}
+				modalBody={<GetModalBody />}
+				heading='Rating Details'
+				onHide={() => setModalShow(false)}
+			/>
+			
     </div>
   );
 }
 
-function toTitleCase(str) {
-  return str?.replace(/\w\S*/g, function (txt) {
-    return txt?.charAt(0)?.toUpperCase() + txt?.substr(1)?.toLowerCase();
-  });
-}
-// eslint-disable-next-line import/no-anonymous-default-export
+
+
+
+
