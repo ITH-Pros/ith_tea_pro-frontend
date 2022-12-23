@@ -4,8 +4,10 @@ import { getAllUsers, editUserDetail } from '../../services/user/api';
 import { toast } from "react-toastify";
 import './teams.css'
 import Loader from '../../loader/loader';
+import { Link } from 'react-router-dom';
+import Rating from '../Rating/rating';
 
-export default function Teams() {
+export default function Teams(props) {
 
     const [loading, setLoading] = useState(false);
     const [usersList, setUsersListValue] = useState([]);
@@ -57,7 +59,7 @@ export default function Teams() {
             return error.message;
         }
     };
-    
+
     return (
         <>
             <h1 className="h1-text">
@@ -75,12 +77,19 @@ export default function Teams() {
                                 </div>
                                 <div className="content">
                                     <img src="https://images.pexels.com/photos/2570145/pexels-photo-2570145.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260" alt="" />
-                                    <strong>David Warner</strong>
-                                    <p>thewarner@gmail.com</p>
+                                    <strong>{user.name}</strong>
+                                    <p>{user.email}</p>
                                 </div>
                                 <div className="btn">
-                                    <a href="#"><i className="fa fa-check" aria-hidden="true"></i>Assign</a>
-                                    <a href="#"><i className="fa fa-check" aria-hidden="true"></i>Rating</a>
+
+                                    <button className='btn btn-gradient-border btn-glow'> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
+
+                                    <Link to={{
+                                        pathname: "/rating",
+                                    }} state={{ userId: user._id }}>
+                                        Add Rating
+                                    </Link>
+
                                 </div>
                             </div>
 

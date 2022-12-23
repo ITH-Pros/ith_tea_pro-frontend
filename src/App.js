@@ -37,7 +37,8 @@ function App() {
           }
         />
         <Route
-          path='/rating'
+          path='/rating/'
+
           element={
             <RequireAuth>
           <Navbar/>

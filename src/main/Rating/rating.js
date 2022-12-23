@@ -10,14 +10,15 @@ import { addRating } from "../../services/user/api";
 import Dashboard from "../Dashboard/dashboard";
 // import { toast } from "react-toastify";
 import Loader from "../../loader/loader";
-  
+
 import { getAllUsers } from "../../services/user/api";
 
 import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
 
 // let teamOptions = [];
-export default function Rating() {
-
+export default function Rating(props) {
+  const location = useLocation();
   useEffect(() => {
     onInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,13 +37,18 @@ export default function Rating() {
   const [validated, setValidated] = useState(false);
   // const [tags, setTags] = useState([]);
 
+
+  if (!team && location && location.state && location.state.userId) {
+    setTeam(location.state.userId)
+  }
+
   const handleViewChange = (view) => {
     setCurrentView(view);
   };
 
   const onchangeTeam = (e) => {
     setTeam(e.target.value);
-    setTimeout(() => {}, 1000);
+    setTimeout(() => { }, 1000);
   };
 
   const handleChangeDate = (date) => {
@@ -80,66 +86,66 @@ export default function Rating() {
   };
 
   const getUsersList = async function () {
-   
+
     setLoading(true);
     try {
 
-    const user = await getAllUsers();
-    setLoading(false);
+      const user = await getAllUsers();
+      setLoading(false);
 
-    if (user.error) {
-    
-      // toast.error(user.error.message, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: "toast-message",
-      // });
-    } else {
-      // toast.success("Submitted succesfully !", {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: "toast-message",
-      // });
-     
-      setTeamOptions(user.data);
-      console.log(user.data);
-    }
+      if (user.error) {
+
+        // toast.error(user.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+
+        setTeamOptions(user.data);
+        console.log(user.data);
+      }
     } catch (error) {
-     
-     setLoading(false);
-      return error.message ;
+
+      setLoading(false);
+      return error.message;
     }
   };
 
   async function addRatingFunc(data) {
     setLoading(true);
-    try{
-    const rating = await addRating(data);
-    setLoading(false);
-    if (rating.error) {
-      
-      // toast.error(rating.error.message, {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: "toast-message",
-      // });
-    } else {
-      
+    try {
+      const rating = await addRating(data);
+      setLoading(false);
+      if (rating.error) {
+
+        // toast.error(rating.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        console.log(rating.data);
+      }
+    }
+    catch (error) {
+
       // toast.success("Submitted succesfully !", {
       //   position: toast.POSITION.TOP_CENTER,
       //   className: "toast-message",
       // });
-      console.log(rating.data);
+      setLoading(false);
+
+      console.log(error?.message)
+
     }
-  }
-catch(error){
- 
-   // toast.success("Submitted succesfully !", {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: "toast-message",
-      // });
-  setLoading(false);
-
-  console.log(error?.message)
-
-}
   }
 
   const renderCurrentView = () => {
@@ -245,6 +251,8 @@ catch(error){
             </div>
           </div>
         );
+      default:
+        return
     }
   };
 
@@ -253,18 +261,16 @@ catch(error){
       <div className="d-flex w-100 justify-content-around ">
         <div
           onClick={() => handleViewChange("Add")}
-          className={`p-3 border-top border-start border-end w-50  text-center rounded ${
-            currentView === "Add" ? "text-white bg-active" : "border-bottom "
-          }`}
+          className={`p-3 border-top border-start border-end w-50  text-center rounded ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
+            }`}
           style={{ cursor: "pointer" }}
         >
           Add Rating
         </div>
         <div
           onClick={() => handleViewChange("View")}
-          className={`p-3 border-top border-start border-end w-50 text-center rounded ${
-            currentView === "View" ? "text-white bg-active" : "border-bottom "
-          }`}
+          className={`p-3 border-top border-start border-end w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
+            }`}
           style={{ cursor: "pointer" }}
         >
           View{" "}
