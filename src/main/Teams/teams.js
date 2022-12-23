@@ -1,16 +1,23 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { getAllUsers, editUserDetail } from '../../services/user/api';
+import { getAllUsers, editUserDetail, getAllProjects, getUserAssignedProjects, assignUserToProject } from '../../services/user/api';
 import { toast } from "react-toastify";
 import './teams.css'
 import Loader from '../../loader/loader';
 import { Link } from 'react-router-dom';
 import Rating from '../Rating/rating';
+import Modals from '../../components/modal';
 
 export default function Teams(props) {
 
     const [loading, setLoading] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
+    const [selectedProjectId, setSelectedProjectId] = useState('');
+    const [selectedUserId, setSelectedUserId] = useState('');
     const [usersList, setUsersListValue] = useState([]);
+    const [projectList, setProjectListValue] = useState([]);
+    const [userAssignedProjects, setUserAssignedProjects] = useState([]);
+
 
     useEffect(() => {
         onInit();
@@ -59,6 +66,103 @@ export default function Teams(props) {
             return error.message;
         }
     };
+    const handleSelectProject = (projectId) => {
+        setSelectedProjectId(projectId)
+    }
+
+    const handleAddUserToProject = async function (userId) {
+        setLoading(true);
+        try {
+            const projects = await getAllProjects();
+            setLoading(false);
+            if (projects.error) {
+                toast.error(projects.error.message, {
+                    position: toast.POSITION.TOP_CENTER,
+                    className: "toast-message",
+                });
+                return
+            } else {
+                setProjectListValue(projects.data);
+            }
+        } catch (error) {
+            setLoading(false);
+            return error.message;
+        }
+        try {
+            let dataToSend = {
+                params: { userId }
+            }
+            const userAssignedProjects = await getUserAssignedProjects(dataToSend);
+            setLoading(false);
+            if (userAssignedProjects.error) {
+                toast.error(userAssignedProjects.error.message, {
+                    position: toast.POSITION.TOP_CENTER,
+                    className: "toast-message",
+                });
+                return
+            } else {
+                setUserAssignedProjects(userAssignedProjects.data);
+                console.log("userAssignedProjects.data---", userAssignedProjects.data)
+            }
+        } catch (error) {
+            setLoading(false);
+            return error.message;
+        }
+        setSelectedUserId(userId)
+        setModalShow(true);
+    };
+
+    const GetModalBody = () => {
+        console.log("projectList", projectList)
+        return (
+            <>
+                {
+                    projectList && projectList.map((proejct, index) => {
+                        console.log(proejct)
+                        let checkAlreadyAssigned = userAssignedProjects.find((ele) => ele._id === proejct._id)
+                        return (
+                            <div key={proejct._id} >
+                                <input
+                                    disabled={checkAlreadyAssigned}
+                                    checked={checkAlreadyAssigned || selectedProjectId === proejct._id}
+                                    onChange={() => handleSelectProject(proejct._id)}
+                                    type="checkbox" ></input>
+                                <span> {proejct.name}</span>
+                            </div>
+                        )
+
+                    })
+                }
+            </>
+        )
+    }
+    const handleAssignUserProjectSubmit = async () => {
+        setLoading(true);
+        try {
+            let dataToSend = {
+                projectId: selectedProjectId,
+                userIds: [selectedUserId]
+            }
+            const assignRes = await assignUserToProject(dataToSend);
+            setLoading(false);
+            if (assignRes.error) {
+                toast.error(assignRes.error.message, {
+                    position: toast.POSITION.TOP_CENTER,
+                    className: "toast-message",
+                });
+                setModalShow(false);
+
+                return
+            } else {
+                setProjectListValue(assignRes.data);
+            }
+        } catch (error) {
+            setLoading(false);
+            setModalShow(false);
+            return error.message;
+        }
+        setModalShow(false);
+    }
 
     return (
         <>
@@ -67,7 +171,7 @@ export default function Teams(props) {
             </h1>
             <div className="container-team">
                 {
-                    usersList.map((user) => {
+                    usersList && usersList.map((user) => {
                         return (
                             <div key={user._id} className="box">
                                 <div className="top-bar"></div>
@@ -82,7 +186,7 @@ export default function Teams(props) {
                                 </div>
                                 <div className="btn">
 
-                                    <button className='btn btn-gradient-border btn-glow'> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
+                                    <button className='btn btn-gradient-border btn-glow' onClick={() => { handleAddUserToProject(user._id) }}> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
 
                                     <Link to={{
                                         pathname: "/rating",
@@ -99,6 +203,16 @@ export default function Teams(props) {
 
 
             </div>
+            {loading ? <Loader /> : null}
+
+            <Modals
+                modalShow={modalShow}
+                modalBody={<GetModalBody />}
+                heading='Assign Project'
+                onHide={() => setModalShow(false)}
+                submitBtnDisabled={!selectedProjectId}
+                onClick={handleAssignUserProjectSubmit}
+            />
 
         </>
     )

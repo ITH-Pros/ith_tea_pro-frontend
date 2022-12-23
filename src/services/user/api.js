@@ -1,6 +1,7 @@
 import axios from 'axios';
-let url='http://192.168.29.78:9000' 
-// let url = 'http://localhost:9000'
+// let url='http://192.168.29.131:9000' 
+// let url='http://192.168.29.78:9000' 
+let url = 'http://localhost:9000'
 
 export function addRating(data) {
   return (axios.post(url + '/rating/v1/user/insert', data).then(res => res.data))
@@ -19,6 +20,12 @@ export async function getAllProjects() {
 
 export async function getUsersOfProject(data) {
   return (axios.get(url + '/projects/v1/user/all', data).then(res => res.data))
+}
+export async function getUserAssignedProjects(data) {
+  return (axios.get(url + '/projects/v1/user/assigned', data).then(res => res.data))
+}
+export async function assignUserToProject(data) {
+  return (axios.patch(url + '/projects/v1/assign/users', data).then(res => res.data))
 }
 
 

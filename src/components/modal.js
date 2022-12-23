@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal'
 
 const Modals = (props) => {
     console.log(`Modals:`)
-    const { heading, modalBody, modalShow, onClick, onHide } = props;
+    const { heading, modalBody, modalShow, onClick, onHide,submitBtnDisabled } = props;
     return (
         <>
             <Modal
@@ -24,7 +24,7 @@ const Modals = (props) => {
                     {modalBody}
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className='btn btn-gradient-border'  onClick={onClick}>Submit</button>
+                    <button disabled={submitBtnDisabled} className='btn btn-gradient-border'  onClick={onClick}>Submit</button>
                 </Modal.Footer>
             </Modal>
         </>
