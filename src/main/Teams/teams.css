@@ -130,7 +130,7 @@ a{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
 }
 .btn a i{
     margin-right: 9px;
