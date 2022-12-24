@@ -21,6 +21,7 @@ var month = moment().month();
 export default function Dashboard(props) {
   const [clickedRatingArray, setclickedRatingArray] = useState([]);
   const [selectedRating, setSelectedRating] = useState([]);
+  const [selectedRatingId, setSelectedRatingId] = useState([]);
   const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
   const [modalShow, setModalShow] = useState(false);
@@ -140,10 +141,10 @@ export default function Dashboard(props) {
   }
 
   async function addCommnetFunc() {
-    let ratingId = clickedRatingArray?.ratingId;
+    // let ratingId = clickedRatingArray?.ratingId;
     let dataToSend = {
       comment: comments,
-      ratingId: ratingId,
+      ratingId: selectedRatingId,
     };
     setLoading(true);
 
@@ -162,6 +163,9 @@ export default function Dashboard(props) {
         //   position: toast.POSITION.TOP_CENTER,
         //   className: "toast-message",
         // });
+          
+          getCommentsByRatingId(selectedRatingId,selectedRating)
+         setComments('')
         console.log("comment added succesfully ");
       }
     } catch (error) {
@@ -188,20 +192,21 @@ export default function Dashboard(props) {
           <CommentsForm />
         </div>
         {clickedRatingArray?.map((comments, index) => {
-          console.log(clickedRatingArray)
+          console.log(clickedRatingArray);
           return (
             <div
               key={comments?.comments?._id}
               style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
             >
-              <span>
-                {comments?.comments?.commentedBy?.[0]?.name}
-              </span>
+              <span>{comments?.comments?.commentedBy?.[0]?.name}</span>
               <small>
                 {moment(comments.createdAt).format("Do MMMM  YYYY, h:mm a")}
               </small>{" "}
               <br />
-             <p style={{marginTop:'10px'}}> {comments?.comments?.comment}</p>
+              <p style={{ marginTop: "10px" }}>
+                {" "}
+                {comments?.comments?.comment}
+              </p>
               {/* <span>Comment:- </span> {comments?.comment}<br/>
 								<span> Commented By:- </span>{clickedRatingArray.commentedByArray?.[index]?.name}<br/>
                 <span> Date & Time:- </span>{comments.createdAt?.split('T')[0] +'(' +comments?.createdAt?.split('T')[1]?.split('.')[0]+')'} */}
@@ -240,7 +245,7 @@ export default function Dashboard(props) {
     );
   };
 
-  async function getCommentsByRatingId(ratingId,rating) {
+  async function getCommentsByRatingId(ratingId, rating) {
     let dataToSend = {
       params: {
         // comment: comments,
@@ -264,10 +269,16 @@ export default function Dashboard(props) {
         //   position: toast.POSITION.TOP_CENTER,
         //   className: "toast-message",
         // });
-        console.log(comment)
-             setclickedRatingArray(comment?.data)
-             setSelectedRating(rating)
-        setModalShow(true)
+        console.log(comment);
+          setclickedRatingArray(comment?.data);
+          console.log(rating)
+          setSelectedRating(rating);
+          console.log(rating)
+          setSelectedRatingId(ratingId)
+          if (!modalShow) {
+              setComments('')
+          }
+        setModalShow(true);
       }
     } catch (error) {
       setLoading(false);
@@ -276,7 +287,7 @@ export default function Dashboard(props) {
 
   function openShowCommentsModal(data) {
     console.log(data);
-    getCommentsByRatingId(data?.ratingId,data?.rating);
+    getCommentsByRatingId(data?.ratingId, data?.rating);
   }
 
   return (
