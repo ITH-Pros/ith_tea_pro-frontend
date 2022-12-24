@@ -298,14 +298,7 @@ export default function Dashboard(props) {
       <div>
         <div>
           <Link to="/rating" params={{ params: true }}>
-            {props.showBtn && (
-              <button
-                className="btn btn-gradient-border btn-glow"
-                style={{ float: "right" }}
-              >
-                Add Rating
-              </button>
-            )}
+            {props.showBtn && (<button className='btn btn-gradient-border btn-glow' style={{ float: "right" }}>Add Rating</button>)}
           </Link>
         </div>
         {/* <h4 className="text-center">

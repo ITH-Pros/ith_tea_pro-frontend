@@ -2,8 +2,8 @@ import React from 'react'
 import Modal from 'react-bootstrap/Modal'
 import './modal.css'
 const Modals = (props) => {
-    console.log(`Modals:`,props)
-    const { heading, modalBody, modalShow, onClick, onHide,keyboardProp ,backdropProp,size,btnContent} = props;
+    const { heading, modalBody, modalShow, onClick, onHide, keyboardProp, submitBtnDisabled, backdropProp, size, btnContent } = props;
+    console.log(`Modals:`, props)
     return (
         <>
             <Modal
@@ -11,7 +11,7 @@ const Modals = (props) => {
                 show={modalShow}
                 backdrop={backdropProp}
                 keyboard={keyboardProp}
-                size={size||'lg'}
+                size={size || 'lg'}
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
@@ -24,7 +24,7 @@ const Modals = (props) => {
                     {modalBody}
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className='btn btn-gradient-border' onClick={onClick}>{ btnContent ||'Submit'}</button>
+                    <button disabled={submitBtnDisabled} className='btn btn-gradient-border' onClick={onClick}>{btnContent || 'Submit'}</button>
                 </Modal.Footer>
             </Modal>
         </>
