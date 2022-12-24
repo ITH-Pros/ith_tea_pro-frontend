@@ -22,11 +22,15 @@ td {
 
   }
 
-  .spanBtnG{
-    border: 2px solid green;
-    background-color: green;
+  span{
+    font-weight: 500;
     
   }
+  small{
+    float: right;
+
+  }
+  
   .spanBtnY{
     border: 2px solid rgb(168, 168, 39);
     background-color: rgb(168, 168, 39);
@@ -34,20 +38,11 @@ td {
 
 
   }
-  .spanBtnR{
-    border: 2px solid rgb(248, 111, 111);
-    background-color: rgb(248, 111, 111);
-    
 
 
-  }
-
-  span{
-    font-weight: 500;
-    
-  }
+  
   .btnshort{
-    width: 184px !important;
+    width: 100px !important;
   }
 
   .btn {
@@ -55,8 +50,8 @@ td {
     font-size: 18px;
     color:white !important;
 
-    padding: 12px 32px;
-    margin: 1rem;
+    /* padding: 12px 32px;
+    margin: 1rem; */
     cursor: pointer;
     border-radius: 4px;
     transition: all 0.3s ease;
@@ -81,3 +76,11 @@ td {
     display: flex;
     justify-content: center;
   }
+
+  .modal-body{
+    max-height: 200px !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .modal-backdrop {background: none !important;}
