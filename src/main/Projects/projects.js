@@ -161,6 +161,8 @@ export default function Project() {
 
 			<Modals
 				modalShow={modalShow}
+				keyboardProp={true} 
+				backdropProp='static'
 				modalBody={<GetModalBody />}
 				heading='Assign Project'
 				onHide={() => setModalShow(false)}
