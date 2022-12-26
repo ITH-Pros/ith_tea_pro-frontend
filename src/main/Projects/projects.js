@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllProjects, getAllUsers, getUsersOfProject } from '../../services/user/api';
+import { assignUserToProject, getAllProjects, getAllUsers, getUsersOfProject } from '../../services/user/api';
 import { toast } from "react-toastify";
 
 import './projects.css';
@@ -12,7 +12,10 @@ export default function Project() {
 	const [loading, setLoading] = useState(false);
 	const [projectList, setProjectListValue] = useState([]);
 	const [allUserList, setAllUserListValue] = useState([]);
+	const [selectedProjectId, setSelectedProjectId] = useState('');
+	const [projectAssignedUsers, setProjectAssignedUsers] = useState([]);
 	const [modalShow, setModalShow] = useState(false);
+	const userListToAddInProject = new Set();
 
 
 	useEffect(() => {
@@ -41,7 +44,12 @@ export default function Project() {
 		}
 	};
 
-	const handleAddUserToProject = async function (element) {
+	const addAndRemveUserFromList = (userId) => {
+		userListToAddInProject.has(userId) ? userListToAddInProject.delete(userId) : userListToAddInProject.add(userId)
+		console.log(userListToAddInProject)
+	}
+
+	const handleAddUserToProjectButton = async function (element) {
 		console.log("AddUserToProject", element);
 		setLoading(true);
 		try {
@@ -61,17 +69,45 @@ export default function Project() {
 			setLoading(false);
 			return error.message;
 		}
-		setModalShow(true);
+		try {
+			let dataToSend = {
+				params: { projectId: element._id }
+			}
+			const projectAssignedUsers = await getUsersOfProject(dataToSend);
+			setLoading(false);
+			if (projectAssignedUsers.error) {
+				toast.error(projectAssignedUsers.error.message, {
+					position: toast.POSITION.TOP_CENTER,
+					className: "toast-message",
+				});
+				return
+			} else {
+				setProjectAssignedUsers(projectAssignedUsers.data);
+				setSelectedProjectId(element._id);
+
+				setModalShow(true);
+				console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
+			}
+		} catch (error) {
+			setLoading(false);
+			return error.message;
+		}
+		// setSelectedUserId(userId)
 	};
 	const GetModalBody = () => {
 		return (
 			<>
 				{
-					allUserList.map((proejctUser, index) => {
+					allUserList && allUserList.map((proejctUser, index) => {
 						console.log(proejctUser)
+						let checkAlreadyAssigned = projectAssignedUsers.find((ele) => ele._id === proejctUser._id)
 						return (
 							<div key={proejctUser._id} >
-								<input type='checkbox'></input>
+								<input
+									disabled={checkAlreadyAssigned}
+									checked={checkAlreadyAssigned}
+									onClick={() => addAndRemveUserFromList(proejctUser._id)}
+									type="checkbox" ></input>
 								<span> {proejctUser.name}</span>
 							</div>
 						)
@@ -104,6 +140,37 @@ export default function Project() {
 	const handleMoreProjectUser = () => {
 		console.log('handleMoreProjectUser')
 	}
+	const AddSelectedUsersToProject = async () => {
+		// console.log("AddSelectedUsersToProject", element);
+		setLoading(true);
+		try {
+			let dataToSend = {
+				projectId: selectedProjectId,
+				userIds: [...userListToAddInProject]
+			}
+			const addRes = await assignUserToProject(dataToSend);
+			console.log("AddSelectedUsersToProject", addRes);
+			setLoading(false);
+			if (addRes.error) {
+				toast.error(addRes.error.message, {
+					position: toast.POSITION.TOP_CENTER,
+					className: "toast-message",
+				});
+				return
+			} else {
+				toast.success(addRes.message, {
+					position: toast.POSITION.TOP_CENTER,
+					className: "toast-message",
+				});
+				getAndSetAllProjects();
+				setModalShow(false)
+				userListToAddInProject.clear()
+			}
+		} catch (error) {
+			setLoading(false);
+			return error.message;
+		}
+	}
 
 	return (
 		<>
@@ -112,14 +179,14 @@ export default function Project() {
 			</h1>
 			<div className="project-boxes jsGridView">
 				{
-					projectList.map((element, projectIndex) => {
+					projectList && projectList.map((element, projectIndex) => {
 						return (
 							<div key={element._id} className="project-box-wrapper">
 								<div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 5] }}>
 									<div className="project-box-header">
 										{/* <span>December 10, 2020</span> */}
 										<div className="more-wrapper">
-											<button  className="project-btn-more">
+											<button className="project-btn-more">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
 													<circle cx="12" cy="12" r="1" />
 													<circle cx="12" cy="5" r="1" />
@@ -144,7 +211,7 @@ export default function Project() {
 											{
 												getProjectUserIcons(element?.accessibleBy)
 											}
-											<button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProject(element)}>
+											<button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProjectButton(element)}>
 												<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
 													<path d="M12 5v14M5 12h14" />
 												</svg>
@@ -161,10 +228,11 @@ export default function Project() {
 
 			<Modals
 				modalShow={modalShow}
-				keyboardProp={true} 
+				keyboardProp={true}
 				backdropProp='static'
 				modalBody={<GetModalBody />}
 				heading='Assign Project'
+				onClick={AddSelectedUsersToProject}
 				onHide={() => setModalShow(false)}
 			/>
 		</>
