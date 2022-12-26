@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { useState, useEffect } from "react";
-import { getRatings } from "../../services/user/api";
+import { getRatings, updateUserRating } from "../../services/user/api";
 import "./dashboard.css";
 import Modals from "../../components/modal";
 import Button from "react-bootstrap/Button";
@@ -20,14 +20,17 @@ var month = moment().month();
 
 export default function Dashboard(props) {
   const [clickedRatingArray, setclickedRatingArray] = useState([]);
-  const [selectedRating, setSelectedRating] = useState([]);
+  const [selectedRating, setSelectedRating] = useState('');
   const [selectedRatingId, setSelectedRatingId] = useState([]);
   const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [comments, setComments] = useState("");
+  const [editRatingEnabled, setEditRatingEnabled] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  let commentFormValue = ''
+  let newRating = ''
+
   useEffect(() => {
     onInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,7 +146,7 @@ export default function Dashboard(props) {
   async function addCommnetFunc() {
     // let ratingId = clickedRatingArray?.ratingId;
     let dataToSend = {
-      comment: comments,
+      comment: commentFormValue,
       ratingId: selectedRatingId,
     };
     setLoading(true);
@@ -163,14 +166,49 @@ export default function Dashboard(props) {
         //   position: toast.POSITION.TOP_CENTER,
         //   className: "toast-message",
         // });
-          
-          getCommentsByRatingId(selectedRatingId,selectedRating)
-         setComments('')
+
         console.log("comment added succesfully ");
+        getCommentsByRatingId(selectedRatingId, selectedRating)
       }
     } catch (error) {
       setLoading(false);
     }
+  }
+
+  const editUserRating = async () => {
+    setLoading(true);
+
+    try {
+      let dataToSend = {
+        ratingId: selectedRatingId,
+        rating: newRating
+      }
+      const rating = await updateUserRating(dataToSend);
+      setLoading(false);
+
+      if (rating.error) {
+        // toast.error(rating.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        setSelectedRating(newRating);
+        setEditRatingEnabled(false);
+        getAllRatings({
+          month: months.indexOf(monthUse) + 1,
+          year: yearUse,
+        })
+
+
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+
   }
 
   const GetModalBody = () => {
@@ -184,35 +222,48 @@ export default function Dashboard(props) {
               marginBottom: "20px",
             }}
           >
-            <h5>Rating : {selectedRating}</h5>
-            <span className="spanBtnY spnBtn">Edit Rating</span>
-            {/* <span className="spanBtnG spnBtn" onClick={()=> addComment()}>Add Comment</span> */}
-            {/* <span className="spanBtnR spnBtn">New Rating</span> */}
+            {
+
+              editRatingEnabled ?
+                <div>
+                  <input type='number' placeholder={'Previous Rating : ' + selectedRating} onChange={(e) => { newRating = e.target.value }} ></input>
+                  <button className="btn btn-gradient-border" onClick={() => setEditRatingEnabled(false)}>Cancel</button>
+                  <button className="btn btn-gradient-border" onClick={editUserRating} >Submit</button>
+                </div>
+                :
+                <div>
+                  <h5>Rating : {selectedRating}</h5>
+                  <span className="spanBtnY spnBtn" onClick={() => { setEditRatingEnabled(true) }}>Edit Rating</span>
+                </div>
+            }
+
           </div>
           <CommentsForm />
         </div>
-        {clickedRatingArray?.map((comments, index) => {
-          console.log(clickedRatingArray);
-          return (
-            <div
-              key={comments?.comments?._id}
-              style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
-            >
-              <span>{comments?.comments?.commentedBy?.[0]?.name}</span>
-              <small>
-                {moment(comments.createdAt).format("Do MMMM  YYYY, h:mm a")}
-              </small>{" "}
-              <br />
-              <p style={{ marginTop: "10px" }}>
-                {" "}
-                {comments?.comments?.comment}
-              </p>
-              {/* <span>Comment:- </span> {comments?.comment}<br/>
+        {
+          clickedRatingArray?.map((comments, index) => {
+            console.log(comments);
+            return (
+              <div
+                key={comments?.comments?._id}
+                style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
+              >
+                <span>{comments?.comments?.commentedBy?.[0]?.name}</span>
+                <small>
+                  {moment(comments?.comments?.createdAt).format("Do MMMM  YYYY, h:mm a")}
+                </small>{" "}
+                <br />
+                <p style={{ marginTop: "10px" }}>
+                  {" "}
+                  {comments?.comments?.comment}
+                </p>
+                {/* <span>Comment:- </span> {comments?.comment}<br/>
 								<span> Commented By:- </span>{clickedRatingArray.commentedByArray?.[index]?.name}<br/>
                 <span> Date & Time:- </span>{comments.createdAt?.split('T')[0] +'(' +comments?.createdAt?.split('T')[1]?.split('.')[0]+')'} */}
-            </div>
-          );
-        })}
+              </div>
+            );
+          })
+        }
       </>
     );
   };
@@ -221,15 +272,14 @@ export default function Dashboard(props) {
     return (
       <>
         <Row className="mb-3">
-          <Form.Group as={Col} md="8" controlId="comment">
+          <Form.Group as={Col} md="8" controlId="comment" >
             {/* <Form.Label>Comment</Form.Label> */}
             <Form.Control
               as="textarea"
               required
               type="text-area"
               placeholder="Comment"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
+              onChange={(e) => { commentFormValue = e.target.value }}
             />
             {/* <Form.Control.Feedback type="invalid">
                     Comment is required !!
@@ -237,7 +287,7 @@ export default function Dashboard(props) {
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
           </Form.Group>
 
-          <Button className="btnshort" type="submit" onClick={addCommnetFunc}>
+          <Button className="btnshort btn btn-gradient-border" type="submit" onClick={() => { addCommnetFunc() }}>
             Add
           </Button>
         </Row>
@@ -246,9 +296,9 @@ export default function Dashboard(props) {
   };
 
   async function getCommentsByRatingId(ratingId, rating) {
+    console.log("================================")
     let dataToSend = {
       params: {
-        // comment: comments,
         ratingId,
       },
     };
@@ -269,16 +319,14 @@ export default function Dashboard(props) {
         //   position: toast.POSITION.TOP_CENTER,
         //   className: "toast-message",
         // });
-        console.log(comment);
-          setclickedRatingArray(comment?.data);
-          console.log(rating)
+        setclickedRatingArray(comment?.data);
+        console.log("=============================222222222222===", modalShow)
+
+        if (!modalShow) {
           setSelectedRating(rating);
-          console.log(rating)
           setSelectedRatingId(ratingId)
-          if (!modalShow) {
-              setComments('')
-          }
-        setModalShow(true);
+          setModalShow(true);
+        }
       }
     } catch (error) {
       setLoading(false);
@@ -288,6 +336,11 @@ export default function Dashboard(props) {
   function openShowCommentsModal(data) {
     console.log(data);
     getCommentsByRatingId(data?.ratingId, data?.rating);
+  }
+
+  const clearModalVariablesAndCloseModal = () => {
+    setEditRatingEnabled(false);
+    setModalShow(false);
   }
 
   return (
@@ -359,12 +412,11 @@ export default function Dashboard(props) {
                 .fill(0)
                 .map((rating, index) => {
                   return (
-                    <th key={`${index}_${index}`} className={`text-center`}>{`${
-                      month + 1
-                    }/${moment()
-                      .startOf("month")
-                      .add(index, "days")
-                      .format("DD")}`}</th>
+                    <th key={`${index}_${index}`} className={`text-center`}>{`${month + 1
+                      }/${moment()
+                        .startOf("month")
+                        .add(index, "days")
+                        .format("DD")}`}</th>
                   );
                 })}
               <th style={{ color: "green" }}>Average</th>
@@ -391,8 +443,9 @@ export default function Dashboard(props) {
                       if (ratingCommentObj) {
                         userRatingSum += ratingCommentObj?.rating;
                         userRatingCount += 1;
+
                         return (
-                          <td key={index}>
+                          <td key={index} >
                             <MDBTooltip
                               tag="a"
                               wrapperProps={{ href: "#" }}
@@ -407,24 +460,32 @@ export default function Dashboard(props) {
                                 onClick={() =>
                                   openShowCommentsModal(ratingCommentObj)
                                 }
-                                // onInput={(e) => handleChange(e, userIndex, dayIndex)}
+                              // onInput={(e) => handleChange(e, userIndex, dayIndex)}
                               >{`${ratingCommentObj?.rating}`}</div>
                             </MDBTooltip>
                           </td>
                         );
                       } else {
                         return (
+
                           <td key={index}>
-                            <input
-                              style={{ cursor: "pointer" }}
-                              type="text"
-                              name=""
-                              id=""
-                              className="input_dashboard"
-                              value=""
-                              disabled={true}
+                            <MDBTooltip
+                              tag="a"
+                              wrapperProps={{ href: "#" }}
+                              title={<button>Add Rating</button>}
+                            >
+                              <input
+                                style={{ cursor: "pointer" }}
+                                type="text"
+                                name=""
+                                id=""
+                                className="input_dashboard"
+                                value=""
+                                disabled={true}
                               // onInput={(e) => handleChange(e, userIndex, dayIndex)}
-                            />
+                              />
+                            </MDBTooltip>
+
                           </td>
                         );
                       }
@@ -433,7 +494,7 @@ export default function Dashboard(props) {
                   <td>
                     {userRatingCount
                       ? Math.round((userRatingSum / userRatingCount) * 100) /
-                        100
+                      100
                       : "NA"}
                   </td>
                 </tr>
@@ -444,14 +505,16 @@ export default function Dashboard(props) {
       </div>
       {loading ? <Loader /> : null}
 
-      <Modals
+      {modalShow && <Modals
         modalShow={modalShow}
         modalBody={<GetModalBody />}
         heading="Rating Details"
         size="md"
         btnContent="Close"
-        onHide={() => setModalShow(false)}
+        onClick={() => clearModalVariablesAndCloseModal()}
+        onHide={() => clearModalVariablesAndCloseModal()}
       />
+      }
     </div>
   );
 }

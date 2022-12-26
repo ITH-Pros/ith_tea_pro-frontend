@@ -30,6 +30,9 @@ export async function getUserAssignedProjects(data) {
 export async function assignUserToProject(data) {
   return (axios.patch(url + '/projects/v1/assign/users', data).then(res => res.data))
 }
+export async function updateUserRating(data) {
+  return (axios.patch(url + '/rating/v1/user/update', data).then(res => res.data))
+}
 
 export async function getComment(data) {
   return (axios.get(url + '/comment/v1/rating', data).then(res => res.data))
