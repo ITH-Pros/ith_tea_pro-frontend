@@ -343,6 +343,10 @@ export default function Dashboard(props) {
     setEditRatingEnabled(false);
     setModalShow(false);
   }
+  const showAddRatingDialog = () => {
+    console.log("============================================================")
+
+  }
 
   return (
     <div>
@@ -425,7 +429,7 @@ export default function Dashboard(props) {
                         .format("DD")}`}</th>
                   );
                 })}
-              <th  style={{ color: "green" }}>Average</th>
+              <th style={{ color: "green" }}>Average</th>
             </tr>
           </thead>
           <tbody>
@@ -475,24 +479,17 @@ export default function Dashboard(props) {
                         return (
 
                           <td key={index}>
-                            <MDBTooltip
-                              tag="a"
-                              wrapperProps={{ href: "#" }}
-                              title={<button>Add Rating</button>}
-                            >
-                              <input
-                                style={{ cursor: "pointer" }}
-                                type="text"
-                                name=""
-                                id=""
-                                className="input_dashboard"
-                                value=""
-                                disabled={true}
-                              // onInput={(e) => handleChange(e, userIndex, dayIndex)}
-                              />
-                            </MDBTooltip>
-
+                            <input
+                              style={{ cursor: "pointer" }}
+                              type="text"
+                              name=""
+                              id=""
+                              className="input_dashboard"
+                              value=""
+                              disabled={true}
+                            />
                           </td>
+
                         );
                       }
                     })}
