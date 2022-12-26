@@ -94,7 +94,7 @@ export default function Login() {
     </form>
     </div> */}
        
-        <div className="content form">
+        <div className="loginContent form">
           
         <img src={require('../assests/img/logo.png')} alt="logo" />
           

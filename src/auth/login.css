@@ -180,7 +180,7 @@ box-shadow:  33px 33px 78px #545652,
 } */
 
 
-.content{
+.loginContent{
   width: 330px;
   background: #dde1e7;
   border-radius: 10px;
@@ -188,7 +188,7 @@ box-shadow:  33px 33px 78px #545652,
   box-shadow: -3px -3px 7px #ffffff73,
               2px 2px 5px rgba(94, 104, 121, 0.288);
 }
-.content img{
+.loginContent img{
   background-color: #7e7c7c;
   width: 90px;
   height: 90px;
@@ -203,14 +203,14 @@ box-shadow:  33px 33px 78px #545652,
   ;
 }
 
-.content .text{
+.loginContent .text{
   font-size: 25px;
   font-weight: 600;
   margin-bottom: 35px;
   color: #000;
 }
 
-.content .field{
+.loginContent .field{
   height: 50px;
   width: 100%;
   display: flex;
@@ -287,7 +287,7 @@ border-radius: 0.3rem !important;
   box-shadow: inset 2px 2px 5px #babecc,
               inset -5px -5px 10px #ffffff73;
 }
-.content .or{
+.loginContent .or{
   color: black;
   margin-top: 9px;
 }

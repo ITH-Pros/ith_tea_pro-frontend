@@ -2,6 +2,7 @@
   font-size: calc(18vw / 1600 * 100) !important;
 } */
 
+
 td {
     /* display: block; */
     width: 52px;
@@ -107,7 +108,7 @@ width: 25px;
 
   .dates{
     
-    font-size: 13px;
+    font-size: 13px !important;
   }
 
   .table > :not(caption) > * > * {
@@ -125,3 +126,112 @@ width: 25px;
     font-style: oblique;
 font-weight: bold;
   }
+
+  .glass-button {
+    position: relative;
+    display: inline-block;
+    border: none;
+    border-radius: 50px;
+    background: none;
+    padding: 25px 75px;
+    margin: 30px;
+  }
+  
+  .glass-button span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, .05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .2);
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 30px;
+    z-index: 1;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: rgb(126, 124, 124);
+
+    text-decoration: none;
+    overflow: hidden;
+    text-transform: uppercase;
+    transition: all .3s ease-in-out;  
+    backdrop-filter: blur(15px)
+  }
+  
+  .glass-button:hover span {
+    letter-spacing: 3px;
+  }
+  
+  .glass-button span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: 
+      linear-gradient(to left, rgba(255, 255, 255, .15), transparent);
+    transform: skewX(40deg) translateX(0);
+    transition: all .5s ease-out;
+  }
+  
+  .glass-button:hover span::before {
+    color: #fff;
+    
+    transform: skewX(40deg) translateX(200%);
+  }
+  
+  .glass-button::before,
+  .glass-button::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 10px;
+    border-radius: 10px;
+    background: #f00;
+    transition: all .4s ease-in-out;
+    transition-delay: 0s;
+  }
+  
+  .glass-button::before {  
+    bottom: -5px;
+  }
+  
+  .glass-button::after {
+    top: -5px;
+  }
+  
+  .glass-button:hover::before,
+  .glass-button:hover::after{  
+    height: 50%;
+    width: 80%;
+    border-radius: 30px;
+    transition-delay: .3s;
+  }
+  
+  .glass-button:hover::before {
+    bottom: 0;
+  }
+  
+  .glass-button:hover::after {
+    top: 0;
+  }
+  
+  .glass-button:nth-child(1)::before,
+  .glass-button:nth-child(1)::after {
+    background: #2bd2ff;
+    box-shadow: 
+      0 0 5px #2bd2ff,
+      0 0 15px #2bd2ff,
+      0 0 30px #2bd2ff,
+      0 0 60px #2bd2ff
+  }
+  
+  

@@ -15,6 +15,7 @@ import Loader from "../../loader/loader";
 import { getAllUsers } from "../../services/user/api";
 import { getComment } from "../../services/user/api";
 import { addComment } from "../../services/user/api";
+// import Particles from '../components/particals';
 
 var month = moment().month();
 
@@ -233,7 +234,7 @@ export default function Dashboard(props) {
                 :
                 <div>
                   <h5>Rating : {selectedRating}</h5>
-                  <span className="spanBtnY spnBtn" onClick={() => { setEditRatingEnabled(true) }}>Edit Rating</span>
+                  <span className="btn btn-gradient-border" onClick={() => { setEditRatingEnabled(true) }}>Edit Rating</span>
                 </div>
             }
 
@@ -350,9 +351,14 @@ export default function Dashboard(props) {
       </h1>
       <div>
         <div>
+          {/* <Link to="/rating" params={{ params: true }}>
+            {props.showBtn && (<button className='glass-button'    style={{ float: "right" }}>Add Rating</button>)}
+          </Link> */}
           <Link to="/rating" params={{ params: true }}>
-            {props.showBtn && (<button className='btn btn-gradient-border btn-glow' style={{ float: "right" }}>Add Rating</button>)}
+            {props.showBtn && ( <button className='glass-button'  style={{ float: "right",position: 'relative',bottom: '53px' }} ><span>Add Rating</span></button>)}
           </Link>
+
+         
         </div>
         {/* <h4 className="text-center">
           Current Date : {`${moment().format("DD MMMM YYYY")}`}
@@ -412,7 +418,7 @@ export default function Dashboard(props) {
                 .fill(0)
                 .map((rating, index) => {
                   return (
-                    <th class="dates" key={`${index}_${index}`} className={`text-center`}>{`${month + 1
+                    <th className="dates text-center"  key={`${index}_${index}`} >{`${month + 1
                       }/${moment()
                         .startOf("month")
                         .add(index, "days")
@@ -429,7 +435,7 @@ export default function Dashboard(props) {
 
               return (
                 <tr key={index}>
-                  <td class="user_names"> {user.name}</td>
+                  <td className="user_names"> {user.name}</td>
                   {Array(days)
                     ?.fill(0)
                     ?.map((day, index) => {
