@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { assignUserToProject, getAllProjects, getAllUsers, getUsersOfProject } from '../../services/user/api';
+import { assignUserToProject, getAllProjects, getAllUsers, getUsersOfProject, unAssignUserToProject } from '../../services/user/api';
 import { toast } from "react-toastify";
 
 import './projects.css';
 import Loader from '../../loader/loader';
 import Modals from '../../components/modal';
+import SureModals from '../../components/sureModal';
+import { MDBTooltip } from 'mdb-react-ui-kit';
 
 export default function Project() {
 	let projectBackColor = ['#ff942e', '#e9e7fd', '#dbf6fd', '#fee4cb', '#ff942e']
@@ -13,8 +15,12 @@ export default function Project() {
 	const [projectList, setProjectListValue] = useState([]);
 	const [allUserList, setAllUserListValue] = useState([]);
 	const [selectedProjectId, setSelectedProjectId] = useState('');
+	const [selectedProject, setSelectedProject] = useState({ name: null, _id: null });
+	const [selectedUser, setSelectedUser] = useState({ name: null, _id: null });
+	const [showMoreUserDropDownId, setShowMoreUserDropDownId] = useState('');
 	const [projectAssignedUsers, setProjectAssignedUsers] = useState([]);
 	const [modalShow, setModalShow] = useState(false);
+	const [sureModalShow, setSureModalShow] = useState(false);
 	const userListToAddInProject = new Set();
 
 
@@ -47,6 +53,39 @@ export default function Project() {
 	const addAndRemveUserFromList = (userId) => {
 		userListToAddInProject.has(userId) ? userListToAddInProject.delete(userId) : userListToAddInProject.add(userId)
 		console.log(userListToAddInProject)
+	}
+
+	const checkAndGetProjectUsers = (element) => {
+		if (element._id === showMoreUserDropDownId) {
+			setShowMoreUserDropDownId('')
+			return
+		}
+		getProjectAssignedUsers(element)
+	}
+	const getProjectAssignedUsers = async (element) => {
+		console.log("element: " + element)
+		try {
+			let dataToSend = {
+				params: { projectId: element._id }
+			}
+			const projectAssignedUsers = await getUsersOfProject(dataToSend);
+			setLoading(false);
+			if (projectAssignedUsers.error) {
+				toast.error(projectAssignedUsers.error.message, {
+					position: toast.POSITION.TOP_CENTER,
+					className: "toast-message",
+				});
+				return
+			} else {
+				setProjectAssignedUsers(projectAssignedUsers.data);
+				setShowMoreUserDropDownId(element._id);
+				setSelectedProject(element);
+				console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
+			}
+		} catch (error) {
+			setLoading(false);
+			return error.message;
+		}
 	}
 
 	const handleAddUserToProjectButton = async function (element) {
@@ -117,31 +156,93 @@ export default function Project() {
 			</>
 		)
 	}
-	const getProjectUserIcons = (projectUsers) => {
+	const GetSureModalBody = () => {
+		console.log('GetSureModalBody', selectedProject)
+		return (
+			<>
+				User <strong>{selectedUser.name}</strong> will be removed from Project <strong>{selectedProject.name}</strong>
+				<hr></hr>
+				<small>Note : <strong>{selectedUser.name}</strong> will not be able add or see tasks  </small>
+			</>
+		)
+	}
+	const removeUserFromProject = (user, project) => {
+		console.log("ON", user, project)
+		setSelectedProject(project)
+		setSelectedUser(user)
+		setSureModalShow(true)
+	}
+	const getProjectUserIcons = (project) => {
 		let rows = [];
-		console.log()
+		let projectUsers = project?.accessibleBy
 		for (let i = 0; i < projectUsers?.length; i++) {
 			let user = projectUsers[i]
 			if (i === 5) {
 				rows.push(
-					//PUT IMAGE/ICON for MORE here...
-					<span key={user._id + i} onClick={handleMoreProjectUser}> (...) </span>
+					<MDBTooltip
+						key={user._id + i}
+						tag="a"
+						wrapperProps={{ href: "#" }}
+						title={"View More..."}
+					>
+						<div >
+							<i className="fa fa-chevron-circle-down" style={{ cursor: 'grab' }} aria-hidden="true" onClick={() => { checkAndGetProjectUsers(project) }}></i>
+						</div>
+					</MDBTooltip>
 				);
 				break
 			}
-			console.log(user)
+			if (showMoreUserDropDownId && showMoreUserDropDownId === project._id) {
+				continue
+			}
 			rows.push(
-				<img key={user._id + i} src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80" alt="participant" />
+				<MDBTooltip
+					tag="a"
+					wrapperProps={{ href: "#" }}
+					title={`click to Remove ${user.name}`}
+					key={user._id + i}
+				>
+					<img
+						onClick={() => { removeUserFromProject({ name: user.name, _id: user._id }, { name: project.name, _id: project._id }) }}
+						src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+						alt="participant" />
+				</MDBTooltip>
 			);
 		}
 		return rows;
 
 	}
-	const handleMoreProjectUser = () => {
-		console.log('handleMoreProjectUser')
+	const GetShowMoreUsersModalBody = () => {
+		console.log('handleMoreProjectUser', allUserList, projectAssignedUsers)
+		return (
+			<div className='moreParticipants'>
+				{
+					projectAssignedUsers && projectAssignedUsers.map((proejctUser, index) => {
+						console.log(proejctUser)
+						return (
+							<MDBTooltip
+								tag="p"
+								wrapperProps={{ href: "#" }}
+								title={`click to Remove ${proejctUser.name}`}
+								key={proejctUser._id + index}
+							>
+								<img
+									className='moreUserDropdownImg'
+									src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+									alt={proejctUser.name}
+									onClick={() => { removeUserFromProject({ name: proejctUser.name, _id: proejctUser._id }, { name: selectedProject.name, _id: selectedProject._id }) }}
+								/>
+								<span> {proejctUser.name}</span>
+							</MDBTooltip>
+						)
+
+					})
+				}
+			</div>
+
+		)
 	}
 	const AddSelectedUsersToProject = async () => {
-		// console.log("AddSelectedUsersToProject", element);
 		setLoading(true);
 		try {
 			let dataToSend = {
@@ -165,6 +266,42 @@ export default function Project() {
 				getAndSetAllProjects();
 				setModalShow(false)
 				userListToAddInProject.clear()
+			}
+		} catch (error) {
+			setLoading(false);
+			return error.message;
+		}
+	}
+	const closeSureModals = () => {
+		setSureModalShow(false);
+		setSelectedProject({});
+		setSelectedUser({});
+	}
+	const removeSelectedUsersFromProject = async () => {
+		setLoading(true);
+		try {
+			let dataToSend = {
+				projectId: selectedProject._id,
+				userId: selectedUser._id
+			}
+			const removeRes = await unAssignUserToProject(dataToSend);
+			console.log("unAssignUserToProject", removeRes);
+			setLoading(false);
+			if (removeRes.error) {
+				toast.error(removeRes.error.message, {
+					position: toast.POSITION.TOP_CENTER,
+					className: "toast-message",
+				});
+				return
+			} else {
+				toast.success(removeRes.message, {
+					position: toast.POSITION.TOP_CENTER,
+					className: "toast-message",
+				});
+				getAndSetAllProjects();
+				setShowMoreUserDropDownId('')
+				// getProjectAssignedUsers(selectedProject);
+				setSureModalShow(false)
 			}
 		} catch (error) {
 			setLoading(false);
@@ -209,7 +346,7 @@ export default function Project() {
 									<div className="project-box-footer">
 										<div className="participants">
 											{
-												getProjectUserIcons(element?.accessibleBy)
+												getProjectUserIcons(element)
 											}
 											<button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProjectButton(element)}>
 												<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
@@ -219,6 +356,7 @@ export default function Project() {
 										</div>
 									</div>
 								</div>
+								{showMoreUserDropDownId === element._id && <GetShowMoreUsersModalBody />}
 							</div>
 						)
 					})
@@ -226,15 +364,30 @@ export default function Project() {
 			</div>
 			{loading ? <Loader /> : null}
 
-			<Modals
-				modalShow={modalShow}
-				keyboardProp={true}
-				backdropProp='static'
-				modalBody={<GetModalBody />}
-				heading='Assign Project'
-				onClick={AddSelectedUsersToProject}
-				onHide={() => setModalShow(false)}
-			/>
+			{
+				modalShow && <Modals
+					modalShow={modalShow}
+					keyboardProp={true}
+					backdropProp='static'
+					modalBody={<GetModalBody />}
+					heading='Assign Project'
+					onClick={AddSelectedUsersToProject}
+					onHide={() => setModalShow(false)}
+				/>
+			}
+			{
+				sureModalShow && <SureModals
+					modalShow={sureModalShow}
+					keyboardProp={true}
+					backdropProp='static'
+					modalBody={<GetSureModalBody />}
+					heading='Are You Sure'
+					onReject={() => { closeSureModals() }}
+					onAccept={removeSelectedUsersFromProject}
+					onHide={() => setSureModalShow(false)}
+				/>
+			}
+
 		</>
 	);
 }
