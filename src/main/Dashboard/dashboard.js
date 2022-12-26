@@ -412,14 +412,14 @@ export default function Dashboard(props) {
                 .fill(0)
                 .map((rating, index) => {
                   return (
-                    <th key={`${index}_${index}`} className={`text-center`}>{`${month + 1
+                    <th class="dates" key={`${index}_${index}`} className={`text-center`}>{`${month + 1
                       }/${moment()
                         .startOf("month")
                         .add(index, "days")
                         .format("DD")}`}</th>
                   );
                 })}
-              <th style={{ color: "green" }}>Average</th>
+              <th  style={{ color: "green" }}>Average</th>
             </tr>
           </thead>
           <tbody>
@@ -429,7 +429,7 @@ export default function Dashboard(props) {
 
               return (
                 <tr key={index}>
-                  <td> {user.name}</td>
+                  <td class="user_names"> {user.name}</td>
                   {Array(days)
                     ?.fill(0)
                     ?.map((day, index) => {
@@ -491,7 +491,7 @@ export default function Dashboard(props) {
                       }
                     })}
 
-                  <td>
+                  <td className="userAverage">
                     {userRatingCount
                       ? Math.round((userRatingSum / userRatingCount) * 100) /
                       100

@@ -84,3 +84,44 @@ td {
   }
 
   .modal-backdrop {background: none !important;}
+
+
+  .input_dashboard{
+/* From https://css.glass */
+background: rgba(238, 210, 210, 0.3);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(3.7px);
+-webkit-backdrop-filter: blur(3.7px) !important;
+border: 1px solid rgba(238, 210, 210, 0.99);
+width: 25px;
+  }
+
+  thead, tbody, tfoot, tr, td, th {
+    border-color: inherit;
+    border-style: dashed black;
+    border-width: 0;
+      border-bottom-width: 0px;
+     
+  }
+
+  .dates{
+    
+    font-size: 13px;
+  }
+
+  .table > :not(caption) > * > * {
+    padding: 7px !important;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+  }
+
+  .user_names{
+    font-variant: all-small-caps;
+  }
+
+  .userAverage{
+    font-style: oblique;
+font-weight: bold;
+  }
