@@ -63,6 +63,7 @@ export default function Project() {
 		getProjectAssignedUsers(element)
 	}
 	const getProjectAssignedUsers = async (element) => {
+		setLoading(true);
 		console.log("element: " + element)
 		try {
 			let dataToSend = {
