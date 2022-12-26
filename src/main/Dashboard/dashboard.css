@@ -4,54 +4,46 @@
 
 
 td {
-    /* display: block; */
-    width: 52px;
-   }
-   .input_dashboard {
-    color: black;
-    margin: 0;
-    padding: 0;
-    border-radius: 10px;
-    text-align: center;
-    width: 100%;
-  }
-  .spnBtn{
-    width: 150px;
-    text-align: center;
-    border-radius: 11px;
-    cursor: pointer;
+  /* display: block; */
+  width: 52px;
+}
+.input_dashboard {
+  color: black;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  text-align: center;
+  width: 100%;
+}
+.spnBtn {
+  width: 150px;
+  text-align: center;
+  border-radius: 11px;
+  cursor: pointer;
+}
 
-  }
+span {
+  font-weight: 500;
+}
+small {
+  float: right;
+}
 
-  span{
-    font-weight: 500;
-    
-  }
-  small{
-    float: right;
+.spanBtnY {
+  border: 2px solid rgb(168, 168, 39);
+  background-color: rgb(168, 168, 39);
+}
 
-  }
-  
-  .spanBtnY{
-    border: 2px solid rgb(168, 168, 39);
-    background-color: rgb(168, 168, 39);
+.btnshort {
+  width: 100px !important;
+}
 
+.btn {
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  color: white !important;
 
-
-  }
-
-
-  
-  .btnshort{
-    width: 100px !important;
-  }
-
-  .btn {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 18px;
-    color:white !important;
-
-    /* padding: 12px 32px;
+  /* padding: 12px 32px;
     margin: 1rem; */
     cursor: pointer;
     border-radius: 4px;
