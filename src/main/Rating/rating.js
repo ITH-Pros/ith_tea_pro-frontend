@@ -11,11 +11,26 @@ import { addRating } from "../../services/user/api";
 import Dashboard from "../Dashboard/dashboard";
 // import { toast } from "react-toastify";
 import Loader from "../../loader/loader";
-
+import 'froala-editor/css/froala_style.min.css';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import FroalaEditorComponent from 'react-froala-wysiwyg';
 import { getAllUsers } from "../../services/user/api";
-
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
+import "animate.css/animate.min.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast, cssTransition } from "react-toastify";
+import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
+const bounce = cssTransition({
+  enter: "animate__animated animate__bounceIn",
+  exit: "animate__animated animate__bounceOut"
+});
+
+const swirl = cssTransition({
+  enter: "swirl-in-fwd",
+  exit: "swirl-out-bck"
+});
+
 
 // let teamOptions = [];
 export default function Rating(props) {
@@ -56,11 +71,17 @@ export default function Rating(props) {
     setDate(date);
   };
 
+  const onChangeOfComments = (e) => {
+    setComments(e)
+   console.log(e)
+  };
+
   const handleRatingChange = (e) => {
     setRating(e.target.value);
   };
 
   const handleSubmit = (e) => {
+    console.log(comments)
     setValidated(true);
     e.preventDefault();
     e.stopPropagation();
@@ -96,21 +117,23 @@ export default function Rating(props) {
 
       if (user.error) {
 
-        // toast.error(user.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        toast.dark(" 👋,"+user?.error?.message, {
+          transition: swirl
+        });
+
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        toast.dark(" 👋, User List Fetched Succesfully ", {
+          transition: swirl
+        });
+
 
         setTeamOptions(user.data);
         console.log(user.data);
       }
     } catch (error) {
-
+      toast.dark(" 👋,"+error?.message, {
+        transition: swirl
+      });
       setLoading(false);
       return error.message;
     }
@@ -122,26 +145,26 @@ export default function Rating(props) {
       const rating = await addRating(data);
       setLoading(false);
       if (rating.error) {
+        toast.dark(" 👋, "+rating.error.message, {
+          transition: swirl
+        });
 
-        // toast.error(rating.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
       } else {
 
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        toast.dark(" 👋, Submitted succesfully ", {
+          transition: swirl
+        });
+
+    
         console.log(rating.data);
       }
     }
     catch (error) {
 
-      // toast.success("Submitted succesfully !", {
-      //   position: toast.POSITION.TOP_CENTER,
-      //   className: "toast-message",
-      // });
+      toast.dark(" 👋,"+error?.message, {
+        transition: swirl
+      });
+
       setLoading(false);
 
       console.log(error?.message)
@@ -156,7 +179,7 @@ export default function Rating(props) {
           <div className="dv-50">
             <Form noValidate validated={validated}>
               <Row className="mb-3">
-                <Form.Group as={Col} md="4" controlId="select_team">
+                <Form.Group as={Col} md="4" >
                   <Form.Label>Select User</Form.Label>
                   <Form.Control
                     required
@@ -210,7 +233,7 @@ export default function Rating(props) {
                 </Form.Group>
               </Row>
 
-              <Row className="mb-3">
+              {/* <Row className="mb-3">
                 <Form.Group as={Col} md="12" controlId="comment">
                   <Form.Label>Comment</Form.Label>
                   <Form.Control
@@ -226,7 +249,12 @@ export default function Rating(props) {
                   </Form.Control.Feedback>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
+              </Row> */}
+              <Row className="mb-3">
+                <Form.Label>Comment</Form.Label>
+                <FroalaEditorComponent tag='textarea'  onKeyUp={onChangeOfComments}/>
               </Row>
+              
 
               <Button
                 className="btn-gradient-border"
@@ -279,6 +307,7 @@ export default function Rating(props) {
         {loading ? <Loader /> : null}
       </div>
       {renderCurrentView()}
+      <ToastContainer transition={bounce} />
     </div>
   );
 }

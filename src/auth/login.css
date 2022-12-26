@@ -181,7 +181,7 @@ box-shadow:  33px 33px 78px #545652,
 
 
 .loginContent{
-  width: 330px;
+  width: 426px;
   background: #dde1e7;
   border-radius: 10px;
   padding: 40px 30px;
@@ -193,6 +193,9 @@ box-shadow:  33px 33px 78px #545652,
   width: 90px;
   height: 90px;
   margin-top: -100px;
+
+  margin-left: 134px;
+
   border-radius: 50px;
   box-shadow: 
 
@@ -207,6 +210,7 @@ box-shadow:  33px 33px 78px #545652,
   font-size: 25px;
   font-weight: 600;
   margin-bottom: 35px;
+  text-align: center;
   color: #000;
 }
 
@@ -245,11 +249,17 @@ border-radius: 0.3rem !important;
 }
 
 .field span{
-  margin-left: 8px !important;
+  margin-left: 9px !important;
+  margin-top: 9px !important;
   position: absolute;
   width: 50px;
   line-height: 50px;
   color: #595959;
+}
+::placeholder{
+  margin-top: 9px !important;
+  
+
 }
 
 .field label{

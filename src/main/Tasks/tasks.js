@@ -229,18 +229,12 @@ export default function Tasks() {
         <div >
 
           <button className='btn btn-gradient-border btn-glow' onClick={() => setModalShow(true)} style={{ float: "left" }}>Filter </button>
-          
-          <Link to="/task/add" >
-            {( <button className='btn btn-gradient-border btn-glow'  style={{ float: "right" }}><span>Add Task</span></button>)}
-          </Link>
-                    {/* <button className='btn btn-gradient-border btn-glow' variant="primary" style={{ float: "right" }}>Add Tasks</button> */}
-        <Form noValidate >
+          <Form noValidate >
                 <Row className="mb-3">
                   <Form.Group as={Col} md="3" >
                     <Form.Control
                       as="select"
                   type="select"
-                  className="project-filter"
                       onChange={onchangeOfProjects}
                       value={project}
                     >
@@ -255,6 +249,12 @@ export default function Tasks() {
             </Form.Group>
           </Row>
           </Form>
+          
+          <Link to="/task/add" >
+            {( <button className='btn btn-gradient-border btn-glow'  style={{ float: "right",position: 'relative',bottom: '25px' }}><span>Add Task</span></button>)}
+          </Link>
+                    {/* <button className='btn btn-gradient-border btn-glow' variant="primary" style={{ float: "right" }}>Add Tasks</button> */}
+      
         </div>
         
         {/* <button className='clrfltr btn btn-gradient-border btn-glow' >Clear Filter</button> */}
