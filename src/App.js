@@ -62,11 +62,11 @@ function App() {
           exact={true}
           element={
             <>
-            {/* <RequireAuth> */}
+            <RequireAuth>
           <Navbar/>
 
               <Task />
-             {/* </RequireAuth> */}
+             </RequireAuth>
             </>
           }
         />
@@ -75,11 +75,11 @@ function App() {
           exact={true}
           element={
             <>
-            {/* <RequireAuth> */}
+            <RequireAuth>/
           <Navbar/>
 
               <AddTask />
-             {/* </RequireAuth> */}
+             </RequireAuth>
             </>
           }
         />
