@@ -72,7 +72,7 @@ export default function Login() {
     <div className="bg1"></div>
     <div className="bg2"></div>
     </div>
-    <div className="form">
+    {/* <div className="form">
         <form>
 
     <label htmlFor="account">User name</label>
@@ -86,19 +86,56 @@ export default function Login() {
       <input type={values.showPassword ? "text" : "password"}  placeholder='Password' id="password" onChange={handlePasswordChange("password")}  value={values.password} />
       <ion-icon   onClick={handleClickShowPassword}  onMouseDown={handleMouseDownPassword} className="switch-btn" name="eye-off-outline"></ion-icon>
     </div>
-    {/* <div className="send-btn" > */}
+
 
     <input className="send-btn" style={{    display: 'flex',width: '150px'}}  type="submit"  onClick={handleLogin}>
-      {/* login */}
+   
     </input>
-      {/* <ion-icon name="arrow-forward-circle-outline"></ion-icon> */}
-    {/* </div> */}
     </form>
-    </div>
+    </div> */}
+       
+        <div className="content form">
+          
+        <img src={require('../assests/img/logo.png')} alt="logo" />
+          
+
+          <div className="text">Tea Pro</div>
+
+        <form >
+        <div className="field">
+          <span className="fa fa-user"></span>
+              <input type="email" onChange={e => setUser(e.target.value)} />
+          <label>Email Id</label>
+        </div>
+
+        <div className="field">
+          <span className="fa fa-lock"></span>
+              <input type={values.showPassword ? "text" : "password"} onChange={handlePasswordChange("password")} >
+
+              </input>
+              <i style={{position: 'relative',top: '25px',right: '28px' , cursor:'pointer'}}  onClick={handleClickShowPassword}  onMouseDown={handleMouseDownPassword} className={values.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
+          <label>Password</label>
+        </div>
+
+         
+            <button className='loginButton' onClick={handleLogin}>Log in</button>
+            <div className="or">Or</div>
+        <div className="icon-button"> 
+
+          <span className="facebook">Forget Password?</span>
+
+
+
+        </div>
+
+         </form>
+      </div>
     </div>
 
 
 
   </div>
+   
+    
   )
 }
