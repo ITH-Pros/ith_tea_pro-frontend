@@ -13,6 +13,7 @@ body,
 div{
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 .modal-header {
   padding: 8px 15px;

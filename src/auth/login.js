@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import React from "react";
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from './AuthProvider'
+import { useAuth } from './AuthProvider';
+import {userLogin} from '../services/auth/api'
 
 // import Particles from '../components/particals';
 import './login.css' 
@@ -27,11 +28,45 @@ export default function Login() {
 
   const redirectPath = location.state?.path || '/'
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    console.log('yash')
+    // let data = {
+    //   email: 'sudhansu@ith.tech',
+    //   password:'12345678'
+    // }
+
+
+    // loginFunc(data);
     auth.login(user)
     navigate(redirectPath, { replace: true })
   }
 
+  async function loginFunc(data) {
+      console.log(data)
+      // setLoading(true);
+  
+      try {
+        const rating = await userLogin(data);
+        // setLoading(false);
+  
+        if (rating.error) {
+          // toast.error(rating.error.message, {
+          //   position: toast.POSITION.TOP_CENTER,
+          //   className: "toast-message",
+          // });
+        } else {
+          // toast.success("Submitted succesfully !", {
+          //   position: toast.POSITION.TOP_CENTER,
+          //   className: "toast-message",
+          // });
+          // setRatings(rating.data);
+        }
+      } catch (error) {
+        // setLoading(false);
+      }
+    }
 
 
   return (
