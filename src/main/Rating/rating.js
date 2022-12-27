@@ -64,7 +64,7 @@ export default function Rating(props) {
 
   const onchangeTeam = (e) => {
     setTeam(e.target.value);
-    setTimeout(() => { }, 1000);
+    // setTimeout(() => { }, 1000);
   };
 
   const handleChangeDate = (date) => {

@@ -25,9 +25,9 @@ td {
 span {
   font-weight: 500;
 }
-small {
+/* small {
   float: right;
-}
+} */
 
 .spanBtnY {
   border: 2px solid rgb(168, 168, 39);
@@ -71,7 +71,7 @@ small {
   }
 
   .modal-body{
-    max-height: 200px !important;
+    max-height: 40vw !important;
     overflow-x: hidden;
     overflow-y: auto;
   }
