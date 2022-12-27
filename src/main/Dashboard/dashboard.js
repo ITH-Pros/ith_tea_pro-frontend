@@ -15,11 +15,12 @@ import Loader from "../../loader/loader";
 import { getAllUsers } from "../../services/user/api";
 import { getComment } from "../../services/user/api";
 import { addComment } from "../../services/user/api";
-// import Particles from '../components/particals';
+// import Particles from '../../components/particals';
 
 var month = moment().month();
-
+let currentYear=moment().year();
 export default function Dashboard(props) {
+  console.log( month)
   const [clickedRatingArray, setclickedRatingArray] = useState([]);
   const [selectedRating, setSelectedRating] = useState('');
   const [selectedRatingId, setSelectedRatingId] = useState([]);
@@ -80,21 +81,8 @@ export default function Dashboard(props) {
     getAllRatings(dataToSend);
   };
 
-  let months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  let years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  let months = moment().year( Number )?._locale?._months
+  let years = [2022, 2023, 2024, 2025 ];
 
   const getUsersList = async function () {
     setLoading(true);
@@ -113,7 +101,7 @@ export default function Dashboard(props) {
         //   className: "toast-message",
         // });
         setTeamOptions(user.data);
-      }
+      } 
     } catch (error) {
       setLoading(false);
       return error.message;
@@ -215,6 +203,7 @@ export default function Dashboard(props) {
   const GetModalBody = () => {
     return (
       <>
+
         <div>
           <div
             style={{
@@ -350,6 +339,7 @@ export default function Dashboard(props) {
 
   return (
     <div>
+      
       <h1 className="h1-text">
         <i className="fa fa-home" aria-hidden="true"></i> Dashboard
       </h1>
@@ -386,9 +376,11 @@ export default function Dashboard(props) {
                 <option value="" disabled>
                   Select Month
                 </option>
-                {months.map((month) => (
-                  <option value={month} key={month}>
-                    {month}
+                {months.map((monthh, index) => (
+
+                  
+                  <option value={monthh} key={monthh} disabled={index>month}>
+                    {monthh}
                   </option>
                 ))}
               </Form.Control>
@@ -406,7 +398,7 @@ export default function Dashboard(props) {
                   Select Year
                 </option>
                 {years.map((year) => (
-                  <option value={year} key={year}>
+                  <option value={year} key={year} disabled={year>currentYear}>
                     {year}
                   </option>
                 ))}

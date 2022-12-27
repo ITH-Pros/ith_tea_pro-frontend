@@ -10,11 +10,14 @@ import { useState } from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { getAllProjects, getProjectsTask, getTaskDetailsByTaskId } from '../../services/user/api';
 import Loader from '../../loader/loader';
+import { MDBTooltip } from 'mdb-react-ui-kit';
+import moment from 'moment';
 
 export default function Tasks() {
 
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = React.useState(false);
+  const [taskModalShow, setTaskModalShow] = React.useState(false);
   const [userAssigned, setUserAssigned] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [stream, setStream] = useState("");
@@ -30,6 +33,7 @@ export default function Tasks() {
   const [projectList, setProjectList] = useState([]);
   const [projectTasks, setProjectTasks] = useState([]);
   const [selectedProject, setSelectedProject] = useState("");
+  const [selectedTaskDetails, setSelectedTaskDetails] = useState({});
 
 
   useEffect(() => {
@@ -107,6 +111,8 @@ export default function Tasks() {
         return
       } else {
         console.log("taskRes.data---", taskRes.data)
+        setSelectedTaskDetails(taskRes.data)
+        setTaskModalShow(true)
       }
     } catch (error) {
       setLoading(false);
@@ -313,6 +319,76 @@ export default function Tasks() {
     );
   }
 
+  function TaskModal(props) {
+    console.log("taskModal")
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Task Filter
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Created By <b>{selectedTaskDetails?.createdBy?.name}</b> on <b>{selectedTaskDetails?.createdAt}</b>
+          </p>
+          <p>Assigned to <b>{selectedTaskDetails?.assignedTo?.name}</b> </p>
+
+          <p>
+            Due Date   <b>{selectedTaskDetails?.dueDate || "Not set"}</b>
+
+          </p>
+          <p>
+            Priority <b> {selectedTaskDetails?.priority || "Not set"}</b>
+          </p>
+          <p>
+            Status  <b> {selectedTaskDetails?.status || "Not set"} </b>
+          </p>
+          <div className='descriptionBox'>
+            <span >
+              {selectedTaskDetails?.description || <i>No description</i>}
+            </span>
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          </div>
+          <div >
+            <p>Comments </p>
+            {
+              selectedTaskDetails?.comments?.map((commentObj) => {
+                return (
+                  <div
+                    key={commentObj?._id}
+                    style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
+                  >
+                    <b>{commentObj?.commentedBy?.name}</b>
+                    <small>
+                      {moment(commentObj?.createdAt).format("Do MMMM  YYYY, h:mm a")}
+                    </small>{" "}
+                    <br />
+                    <p style={{ marginTop: "10px" }}>
+                      {" "}
+                      {commentObj?.comment}
+                    </p>
+
+                  </div>
+                )
+              })
+
+            }
+          </div>
+
+        </Modal.Body>
+        <Modal.Footer>
+          <button className='btn btn-gradient-border ' onClick={props.onHide}>Close</button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
   function getIconClassForStatus(status) {
     let className;
     switch (status) {
@@ -369,6 +445,8 @@ export default function Tasks() {
               </Form.Group>
             </Row>
           </Form>
+
+
         </div>
 
         {/* <button className='clrfltr btn btn-gradient-border btn-glow' >Clear Filter</button> */}
@@ -383,7 +461,7 @@ export default function Tasks() {
 
       <div className='mt-5'>
         {
-            projectTasks?.map((category) => {
+          projectTasks?.map((category) => {
             console.log(category)
             return (
 
@@ -398,7 +476,14 @@ export default function Tasks() {
                           <div className='taskCard' key={task._id}
                             onClick={() => { getProjectsTaskDetails(task) }}
                           >
-                            <i className={getIconClassForStatus(task.status)} aria-hidden="true"></i> {task.title + '.......'}
+                            <MDBTooltip
+                              tag="span"
+                              wrapperProps={{ href: "#" }}
+                              title={task.status}
+                            >
+                              <i className={getIconClassForStatus(task.status)} aria-hidden="true"></i>
+                            </MDBTooltip>
+                            {task.title + '.......'}
                             <i className='fa fa-comments' aria-hidden="true"></i>{'  ' + task.comments?.length}
                           </div>
                         )
@@ -415,9 +500,13 @@ export default function Tasks() {
       </div>
 
       {loading ? <Loader /> : null}
-
-
-
+      {
+        taskModalShow &&
+        <TaskModal
+          show={taskModalShow}
+          onHide={() => setTaskModalShow(false)}
+        />
+      }
     </>
   )
 

@@ -139,17 +139,17 @@ export default function Login() {
         <form >
         <div className="field">
           <span className="fa fa-user"></span>
-              <input type="email" onChange={e => setUser(e.target.value)} />
-          <label>Email Id</label>
+              <input type="email" placeholder="Email Id" onChange={e => setUser(e.target.value)} />
+          {/* <label>Email Id</label> */}
         </div>
 
         <div className="field">
           <span className="fa fa-lock"></span>
-              <input type={values.showPassword ? "text" : "password"} onChange={handlePasswordChange("password")} >
+              <input type={values.showPassword ? "text" : "password"} placeholder="Password" onChange={handlePasswordChange("password")} >
 
               </input>
               <i style={{position: 'relative',top: '25px',right: '28px' , cursor:'pointer'}}  onClick={handleClickShowPassword}  onMouseDown={handleMouseDownPassword} className={values.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
-          <label>Password</label>
+          {/* <label>Password</label> */}
         </div>
 
          
