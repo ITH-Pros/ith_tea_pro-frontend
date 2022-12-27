@@ -5,9 +5,11 @@ import { Button, Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { MDBTooltip } from "mdb-react-ui-kit";
 import { getIconClassForStatus } from "../../helpers/taskStatusIcon";
+import DatePicker from "react-date-picker";
+import './index.css'
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle } = props;
+  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate } = props;
   //   const [formDetails, setFormDetails] = useState({});
   //   const updateFormDetails = (e) => {
   //     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
@@ -143,6 +145,155 @@ function TaskModal(props) {
     )
   }
 
+  const UpdateCategoryBox = () => {
+    const [categoryValue, setCategoryValue] = useState(selectedTaskDetails.category);
+    const [editCategoryEnable, setEditCategoryEnable] = useState(false);
+    console.log("selectedProject", selectedProject)
+
+    const checkAndUpdateCategory = (e) => {
+      if (e.target.value === categoryValue) {
+        return
+      }
+      updateTaskCategory(e.target.value)
+      setCategoryValue(e.target.value)
+      setEditCategoryEnable(false);
+      selectedTaskDetails.category = e.target.value;
+    }
+    return (
+      <>
+        {
+          editCategoryEnable ?
+            <Form.Group as={Col} md="3" >
+              <Form.Control
+                as="select"
+                type="select"
+                autoFocus
+                onBlur={() => setEditCategoryEnable(false)}
+                onChange={checkAndUpdateCategory}
+              >
+                <option value={categoryValue} >Select Category </option>
+                {selectedProject?.categories?.map((category) => {
+                  if (categoryValue === category) {
+                    return (
+                      <option value={category} key={category} disabled >
+                        {category}
+                      </option>
+                    )
+                  }
+                  return (
+                    <option value={category} key={category} >
+                      {category}
+                    </option>
+                  )
+                })
+                }
+              </Form.Control>
+            </Form.Group>
+            :
+            <small style={{ cursor: 'pointer' }} onClick={() => setEditCategoryEnable(true)}
+            >{categoryValue}</small>
+        }
+      </>
+    )
+  }
+
+  const UpdateAssignedToBox = () => {
+    const [assignedToValue, setAssignedToValue] = useState(selectedTaskDetails.assignedTo);
+    const [editAssignedToEnable, setEditAssignedToEnable] = useState(false);
+    console.log("selectedProject", selectedProject)
+
+    const checkAndUpdateAssignedTo = (e) => {
+      console.dir(e.target)
+      if (e.target.value === assignedToValue._id) {
+        return
+      }
+      updateTaskAssignedTo(e.target.value)
+      let assignedToObj = selectedProject?.accessibleBy?.find((el) => el._id === e.target.value)
+      setAssignedToValue({ _id: e.target.value, name: assignedToObj.name })
+      setEditAssignedToEnable(false);
+      selectedTaskDetails.assignedTo = { _id: e.target.value, name: assignedToObj.name }
+    }
+    return (
+      <>
+        {
+          editAssignedToEnable ?
+            <Form.Group as={Col} md="3" >
+              <Form.Control
+                as="select"
+                type="select"
+                autoFocus
+                onBlur={() => setEditAssignedToEnable(false)}
+                onChange={checkAndUpdateAssignedTo}
+              >
+                <option value={assignedToValue._id} >Assign to </option>
+                {selectedProject?.accessibleBy?.map((user) => {
+                  if (assignedToValue._id === user._id) {
+                    return (
+                      <option id={user.name} value={user._id} key={user._id} name={user.name} disabled >
+                        {user.name}
+                      </option>
+                    )
+                  }
+                  return (
+                    <option value={user._id} key={user._id} text={user.name} label={user.name} name={user.name} username={user.name}>
+                      {user.name}
+                    </option>
+                  )
+                })
+                }
+              </Form.Control>
+            </Form.Group>
+            :
+            <p style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)} >
+              Assigned to <b>{assignedToValue.name}</b>{" "}
+            </p>
+        }
+      </>
+    )
+  }
+
+  const UpdateDueDateBox = () => {
+    const [dueDateValue, setDueDateValue] = useState(selectedTaskDetails.dueDate ? new Date(selectedTaskDetails.dueDate) : new Date());
+    const [editDueDateEnable, setEditDueDateEnable] = useState(false);
+    console.log("selectedProject", dueDateValue)
+
+    const checkAndUpdateDueDate = (e) => {
+      if (!e || e?.toDateString() === dueDateValue?.toDateString()) {
+        return
+      }
+      updateTaskDueDate(e.toDateString())
+      setDueDateValue(e)
+      setEditDueDateEnable(false);
+      selectedTaskDetails.dueDate = e
+    }
+    return (
+      <>
+        {
+          editDueDateEnable ?
+            <div className="taskDueDate">
+              <DatePicker
+                autoFocus
+                format="dd-MM-y"
+                // selected={dueDateValue}
+                value={dueDateValue}
+                // selected={dueDateValue}
+                onCalendarClose={() => setEditDueDateEnable(false)}
+                // onBlur={() => setEditDueDateEnable(false)}
+                onChange={checkAndUpdateDueDate}
+              >
+
+              </DatePicker>
+            </div>
+            :
+            <p style={{ cursor: 'pointer' }} onClick={() => setEditDueDateEnable(true)} >
+              Due Date <b>{dueDateValue.toDateString() || "Not set"}</b>{" "}
+            </p>
+        }
+      </>
+    )
+  }
+
+
   return (
     <Modal
       show={show}
@@ -157,7 +308,11 @@ function TaskModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <small>{selectedTaskDetails.category}</small><br></br>
+
+
+        <UpdateCategoryBox />
+
+
         <MDBTooltip
           tag="span"
           wrapperProps={{ href: "#" }}
@@ -171,15 +326,12 @@ function TaskModal(props) {
         <div>
           <p>
             Created By <b>{selectedTaskDetails?.createdBy?.name}</b> on{" "}
-            <b>{selectedTaskDetails?.createdAt}</b>
+            <b>{selectedTaskDetails?.createdAt ? new Date(selectedTaskDetails?.createdAt).toDateString() : ''}</b>
           </p>
-          <p>
-            Assigned to <b>{selectedTaskDetails?.assignedTo?.name}</b>{" "}
-          </p>
+          <UpdateAssignedToBox />
+          <UpdateDueDateBox />
 
-          <p>
-            Due Date <b>{selectedTaskDetails?.dueDate || "Not set"}</b>
-          </p>
+
           <p>
             Priority <b> {selectedTaskDetails?.priority || "Not set"}</b>
           </p>
