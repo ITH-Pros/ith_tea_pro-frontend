@@ -50,3 +50,15 @@
   border:1px solid rgb(177, 12, 12);
 
 }
+
+.neo-box{
+  box-shadow: inset -15px -16px 19px 20px rgb(255 255 255 / 45%), inset 5px 5px 9px rgb(94 104 121 / 30%);
+  margin-left: 250px;
+  margin-right: 250px;
+  border: 2px solid #6f42c1;
+  /* border-radius: 20px; */
+}
+.accorback-neo{
+  box-shadow: -9px 12px 7px 0px #b8b9be, -3px -3px 6px #fff;
+}
+

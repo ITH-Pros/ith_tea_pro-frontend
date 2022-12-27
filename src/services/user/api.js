@@ -1,6 +1,6 @@
 import axios from 'axios';
 // let url = 'http://192.168.1.38:9000'
-let url = 'http://localhost:9000'
+let url = 'http://192.168.29.78:9000'
 
 export function addRating(data) {
   return (axios.post(url + '/rating/v1/user/insert', data).then(res => res.data))

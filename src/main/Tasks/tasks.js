@@ -413,10 +413,10 @@ export default function Tasks() {
             console.log(category)
             return (
 
-              <Accordion key={category._id} defaultActiveKey="1" className='mt-5'>
+              <Accordion key={category._id} defaultActiveKey="1" className='mt-3 neo-box'>
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>{category._id}</Accordion.Header>
-                  <Accordion.Body>
+                  <Accordion.Body className="accorback-neo">
                     {
                       category.tasks?.map((task) => {
                         console.log(task)
