@@ -212,6 +212,88 @@ export default function Tasks() {
 
   }
 
+  const updateTaskCategory = async (category) => {
+    console.log("updateTaskCategory", category)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        category
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+
+
+  }
+
+  const updateTaskAssignedTo = async (assignedTo) => {
+    console.log("updateTaskAssignedTo", assignedTo)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        assignedTo
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  }
+
+  const updateTaskDueDate = async (dueDate) => {
+    console.log("updateTaskDueDate", dueDate)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        dueDate
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+
+
+  }
+
   // const FilterModal = (props) => {
   //   return (
   //     <Modal
@@ -457,6 +539,9 @@ export default function Tasks() {
           updateTaskDescription={updateTaskDescription}
           addCommentOnTask={addCommentOnTask}
           updateTaskTitle={updateTaskTitle}
+          updateTaskCategory={updateTaskCategory}
+          updateTaskAssignedTo={updateTaskAssignedTo}
+          updateTaskDueDate={updateTaskDueDate}
           onHide={() => setTaskModalShow(false)}
         />
       }
@@ -465,8 +550,6 @@ export default function Tasks() {
 
 
 };
-
-
 
 
 
