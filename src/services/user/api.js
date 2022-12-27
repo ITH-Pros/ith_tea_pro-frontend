@@ -41,7 +41,12 @@ export async function getProjectsTask(data) {
 export async function getTaskDetailsByTaskId(data) {
   return (axios.get(url + '/task/v1/by/taskId', data).then(res => res.data))
 }
-
+export async function updateTaskDetails(data) {
+  return (axios.patch(url + '/task/v1/edit', data).then(res => res.data))
+}
+export function addCommentOnTaskById(data) {
+  return (axios.post(url + '/comment/v1/user/task/insert', data).then(res => res.data))
+}
 
 export async function getRatings(data) {
   console.log(data, '-------------------------------------------------------------------data from api')

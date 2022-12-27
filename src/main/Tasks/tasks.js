@@ -8,31 +8,33 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useState } from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import { getAllProjects, getProjectsTask, getTaskDetailsByTaskId } from '../../services/user/api';
+import { getAllProjects, getProjectsTask, getTaskDetailsByTaskId, updateTaskDetails, addCommentOnTaskById } from '../../services/user/api';
 import Loader from '../../loader/loader';
 import { MDBTooltip } from 'mdb-react-ui-kit';
-import moment from 'moment';
+import TaskModal from '../../components/TaskModal';
+import { getIconClassForStatus } from './../../../src/helpers/taskStatusIcon'
+
 
 export default function Tasks() {
 
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = React.useState(false);
   const [taskModalShow, setTaskModalShow] = React.useState(false);
-  const [userAssigned, setUserAssigned] = useState("");
-  const [createdBy, setCreatedBy] = useState("");
-  const [stream, setStream] = useState("");
-  const [status, setStatus] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [searchText, setSearchText] = useState("");
-  const [priority, setPriority] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [priorityList, setpriorityList] = useState([]);
-  const [streamList, setstreamList] = useState([]);
-  const [statusList, setStatusList] = useState([]);
+  // const [userAssigned, setUserAssigned] = useState("");
+  // const [createdBy, setCreatedBy] = useState("");
+  // const [stream, setStream] = useState("");
+  // const [status, setStatus] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
+  // const [searchText, setSearchText] = useState("");
+  // const [priority, setPriority] = useState("");
+  // const [userList, setUserList] = useState([]);
+  // const [priorityList, setpriorityList] = useState([]);
+  // const [streamList, setstreamList] = useState([]);
+  // const [statusList, setStatusList] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [projectTasks, setProjectTasks] = useState([]);
-  const [selectedProject, setSelectedProject] = useState("");
+  const [selectedProject, setSelectedProject] = useState({});
   const [selectedTaskDetails, setSelectedTaskDetails] = useState({});
 
 
@@ -58,7 +60,7 @@ export default function Tasks() {
       } else {
         setProjectList(projectList.data)
         console.log("projectList.data---", projectList.data, projectList.data?.[0]._id)
-        setSelectedProject(projectList.data?.[0]._id)
+        setSelectedProject(projectList.data?.[0])
       }
     } catch (error) {
       setLoading(false);
@@ -71,7 +73,7 @@ export default function Tasks() {
       let dataToSend = {
         params: {
           groupBy: "category",
-          projectId: selectedProject
+          projectId: selectedProject._id
         }
       }
       console.log("000000000000", selectedProject)
@@ -91,8 +93,8 @@ export default function Tasks() {
       setLoading(false);
       return error.message;
     }
-
   }
+
   const getProjectsTaskDetails = async (task) => {
     setLoading(true)
     try {
@@ -118,298 +120,247 @@ export default function Tasks() {
       setLoading(false);
       return error.message;
     }
-
   }
+  const addCommentOnTask = async (comment) => {
+    let dataToSend = {
+      comment,
+      taskId: selectedTaskDetails._id,
+    };
+    setLoading(true);
+    try {
+      const comment = await addCommentOnTaskById(dataToSend);
+      setLoading(false);
+
+      if (comment.error) {
+        console.log(comment.error);
+        // toast.error(rating.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        console.log("comment added succesfully ");
+        // getProjectList()
+        getProjectsTaskDetails(selectedTaskDetails)
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  }
+
 
   const onchangeOfSelectedProject = (e) => {
-    setSelectedProject(e.target.value);
-    console.log("onchangeOfSelectedProject", e.target.value);
+    let project = projectList.find((el) => el._id === e.target.value)
+    setSelectedProject(project);
+    console.log("onchangeOfSelectedProject", project);
 
   };
-
-  const onChangeOfUserAssigned = (e) => {
-    setUserAssigned(e.target.value);
-  };
-
-  const onChangeOfCreatedBy = (e) => {
-    setCreatedBy(e.target.value);
-  };
-
-  const onChangeOfStream = (e) => {
-    setStream(e.target.value);
-  };
-
-  const onchangeOfPriority = (e) => {
-    setPriority(e.target.value);
-  };
-
-  const onchangeOfStatus = (e) => {
-    setStatus(e.target.value);
-  };
-  const onchangeOfStartDate = (e) => {
-    setStartDate(e.target.value);
-  };
-  const onchangeOfEndDate = (e) => {
-    setEndDate(e.target.value);
-  };
-
-  const onchangeOfSearchText = (e) => {
-    setSearchText(e.target.value);
-  };
-
-  const handleFormReset = (e) => {
-    e.preventDefault();
-
-    console.log('filter reseted succesfully')
-
-  }
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('filter form searched  succesfully')
-
-  }
-
-  function FilterModal(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Task Filter
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form noValidate >
-            <Row className="mb-3">
-              <Form.Group as={Col} md="3" >
-                <Form.Control
-                  as="select"
-                  type="select"
-                  onChange={onChangeOfCreatedBy}
-                  value={createdBy}
-                >
-                  <option value="">Created By</option>
-                  {userList.map((module) => (
-                    <option value={module._id} key={module._id}>
-                      {module.name}
-                    </option>
-                  ))}
-                </Form.Control>
-
-              </Form.Group>
-              <Form.Group as={Col} md="3" >
-                <Form.Control
-                  as="select"
-                  type="select"
-                  onChange={onChangeOfUserAssigned}
-                  value={userAssigned}
-                >
-                  <option value="">User Assigned</option>
-                  {userList.map((module) => (
-                    <option value={module._id} key={module._id}>
-                      {module.name}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-              <Form.Group as={Col} md="3" >
-                <Form.Control
-                  as="select"
-                  type="select"
-                  onChange={onChangeOfStream}
-                  value={stream}
-                >
-                  <option value="">Select Stream</option>
-                  {streamList.map((module) => (
-                    <option value={module._id} key={module._id}>
-                      {module.name}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-              <Form.Group as={Col} md="3" >
-                <Form.Control
-                  as="select"
-                  type="select"
-                  onChange={onchangeOfPriority}
-                  value={priority}
-                >
-                  <option value="">Select Priority</option>
-                  {priorityList.map((module) => (
-                    <option value={module._id} key={module._id}>
-                      {module.name}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} md="3" >
-                <Form.Control
-                  as="select"
-                  type="select"
-                  onChange={onchangeOfStatus}
-                  value={status}
-                >
-                  <option value="">Select Status</option>
-                  {statusList.map((module) => (
-                    <option value={module._id} key={module._id}>
-                      {module.name}
-                    </option>
-                  ))}
-                </Form.Control>
-
-              </Form.Group>
-              <Form.Group as={Col} md="3" >
-                {/* <Form.Label>Start Date</Form.Label> */}
-
-                <Form.Control
-                  type="date"
-                  placeholder="Start Date"
-                  onChange={onchangeOfStartDate}
-                />
-
-              </Form.Group>
-              <Form.Group as={Col} md="3" >
-                {/* <Form.Label>End Date</Form.Label> */}
-
-                <Form.Control
-                  type="date"
-                  placeholder="End Date"
-                  onChange={onchangeOfEndDate}
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="3" >
-                <Form.Control
-                  type="text"
-                  placeholder="Search Text"
-                  value={searchText}
-                  onChange={onchangeOfSearchText}
-                />
-
-              </Form.Group>
-            </Row>
-
-            <Button
-              className="btnDanger"
-              type="submit"
-              onClick={handleSubmit}
-            >
-              Search
-            </Button>
-            <Button
-              className="btn-gradient-border btnDanger"
-              type="submit"
-              onClick={handleFormReset}
-            >
-              Clear Filter
-            </Button>
-
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <button className='btn btn-gradient-border ' onClick={props.onHide}>Close</button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-  function TaskModal(props) {
-    console.log("taskModal")
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Task Filter
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Created By <b>{selectedTaskDetails?.createdBy?.name}</b> on <b>{selectedTaskDetails?.createdAt}</b>
-          </p>
-          <p>Assigned to <b>{selectedTaskDetails?.assignedTo?.name}</b> </p>
-
-          <p>
-            Due Date   <b>{selectedTaskDetails?.dueDate || "Not set"}</b>
-
-          </p>
-          <p>
-            Priority <b> {selectedTaskDetails?.priority || "Not set"}</b>
-          </p>
-          <p>
-            Status  <b> {selectedTaskDetails?.status || "Not set"} </b>
-          </p>
-          <div className='descriptionBox'>
-            <span >
-              {selectedTaskDetails?.description || <i>No description</i>}
-            </span>
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-          </div>
-          <div >
-            <p>Comments </p>
-            {
-              selectedTaskDetails?.comments?.map((commentObj) => {
-                return (
-                  <div
-                    key={commentObj?._id}
-                    style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
-                  >
-                    <b>{commentObj?.commentedBy?.name}</b>
-                    <small>
-                      {moment(commentObj?.createdAt).format("Do MMMM  YYYY, h:mm a")}
-                    </small>{" "}
-                    <br />
-                    <p style={{ marginTop: "10px" }}>
-                      {" "}
-                      {commentObj?.comment}
-                    </p>
-
-                  </div>
-                )
-              })
-
-            }
-          </div>
-
-        </Modal.Body>
-        <Modal.Footer>
-          <button className='btn btn-gradient-border ' onClick={props.onHide}>Close</button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-
-  function getIconClassForStatus(status) {
-    let className;
-    switch (status) {
-      case 'COMPLETED':
-        className = 'fa fa-check-circle'
-        break;
-      case 'ONHOLD':
-        className = 'fa fa-stop'
-        break;
-      case 'NO_PROGRESS':
-        className = 'fa fa-bath'
-        break;
-      case "ONGOING":
-        className = 'fa fa-line-chart'
-        break;
-      default:
-        className = "fa fa-exclamation-circle"
+  const updateTaskDescription = async (description) => {
+    console.log("updateTaskDescription", description)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        description
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
     }
-    return className
   }
 
+  const updateTaskTitle = async (title) => {
+    console.log("updateTaskTitle", title)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        title
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        getAllTaskOfProject()
+
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+
+
+  }
+
+  // const FilterModal = (props) => {
+  //   return (
+  //     <Modal
+  //       {...props}
+  //       size="lg"
+  //       aria-labelledby="contained-modal-title-vcenter"
+  //       centered
+  //     >
+  //       <Modal.Header closeButton>
+  //         <Modal.Title id="contained-modal-title-vcenter">
+  //           Task Filter
+  //         </Modal.Title>
+  //       </Modal.Header>
+  //       <Modal.Body>
+  //         <Form noValidate >
+  //           <Row className="mb-3">
+  //             <Form.Group as={Col} md="3" >
+  //               <Form.Control
+  //                 as="select"
+  //                 type="select"
+  //                 onChange={onChangeOfCreatedBy}
+  //                 value={createdBy}
+  //               >
+  //                 <option value="">Created By</option>
+  //                 {userList.map((module) => (
+  //                   <option value={module._id} key={module._id}>
+  //                     {module.name}
+  //                   </option>
+  //                 ))}
+  //               </Form.Control>
+
+  //             </Form.Group>
+  //             <Form.Group as={Col} md="3" >
+  //               <Form.Control
+  //                 as="select"
+  //                 type="select"
+  //                 onChange={onChangeOfUserAssigned}
+  //                 value={userAssigned}
+  //               >
+  //                 <option value="">User Assigned</option>
+  //                 {userList.map((module) => (
+  //                   <option value={module._id} key={module._id}>
+  //                     {module.name}
+  //                   </option>
+  //                 ))}
+  //               </Form.Control>
+  //             </Form.Group>
+  //             <Form.Group as={Col} md="3" >
+  //               <Form.Control
+  //                 as="select"
+  //                 type="select"
+  //                 onChange={onChangeOfStream}
+  //                 value={stream}
+  //               >
+  //                 <option value="">Select Stream</option>
+  //                 {streamList.map((module) => (
+  //                   <option value={module._id} key={module._id}>
+  //                     {module.name}
+  //                   </option>
+  //                 ))}
+  //               </Form.Control>
+  //             </Form.Group>
+  //             <Form.Group as={Col} md="3" >
+  //               <Form.Control
+  //                 as="select"
+  //                 type="select"
+  //                 onChange={onchangeOfPriority}
+  //                 value={priority}
+  //               >
+  //                 <option value="">Select Priority</option>
+  //                 {priorityList.map((module) => (
+  //                   <option value={module._id} key={module._id}>
+  //                     {module.name}
+  //                   </option>
+  //                 ))}
+  //               </Form.Control>
+  //             </Form.Group>
+  //           </Row>
+
+  //           <Row className="mb-3">
+  //             <Form.Group as={Col} md="3" >
+  //               <Form.Control
+  //                 as="select"
+  //                 type="select"
+  //                 onChange={onchangeOfStatus}
+  //                 value={status}
+  //               >
+  //                 <option value="">Select Status</option>
+  //                 {statusList.map((module) => (
+  //                   <option value={module._id} key={module._id}>
+  //                     {module.name}
+  //                   </option>
+  //                 ))}
+  //               </Form.Control>
+
+  //             </Form.Group>
+  //             <Form.Group as={Col} md="3" >
+  //               {/* <Form.Label>Start Date</Form.Label> */}
+
+  //               <Form.Control
+  //                 type="date"
+  //                 placeholder="Start Date"
+  //                 onChange={onchangeOfStartDate}
+  //               />
+
+  //             </Form.Group>
+  //             <Form.Group as={Col} md="3" >
+  //               {/* <Form.Label>End Date</Form.Label> */}
+
+  //               <Form.Control
+  //                 type="date"
+  //                 placeholder="End Date"
+  //                 onChange={onchangeOfEndDate}
+  //               />
+  //             </Form.Group>
+  //             <Form.Group as={Col} md="3" >
+  //               <Form.Control
+  //                 type="text"
+  //                 placeholder="Search Text"
+  //                 value={searchText}
+  //                 onChange={onchangeOfSearchText}
+  //               />
+
+  //             </Form.Group>
+  //           </Row>
+
+  //           <Button
+  //             className="btnDanger"
+  //             type="submit"
+  //             onClick={handleSubmit}
+  //           >
+  //             Search
+  //           </Button>
+  //           <Button
+  //             className="btn-gradient-border btnDanger"
+  //             type="submit"
+  //             onClick={handleFormReset}
+  //           >
+  //             Clear Filter
+  //           </Button>
+
+  //         </Form>
+  //       </Modal.Body>
+  //       <Modal.Footer>
+  //         <button className='btn btn-gradient-border ' onClick={props.onHide}>Close</button>
+  //       </Modal.Footer>
+  //     </Modal>
+  //   );
+  // }
 
   return (
     <>
@@ -426,9 +377,8 @@ export default function Tasks() {
                 <Form.Control
                   as="select"
                   type="select"
-                  // className="project-filter"
                   onChange={onchangeOfSelectedProject}
-                  value={selectedProject}
+                  value={selectedProject._id}
                 >
                   <option value="">Select project</option>
                   {
@@ -445,19 +395,17 @@ export default function Tasks() {
               </Form.Group>
             </Row>
           </Form>
-
-
         </div>
 
         {/* <button className='clrfltr btn btn-gradient-border btn-glow' >Clear Filter</button> */}
       </div>
 
-      <FilterModal
+      {/* <FilterModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         backdrop="static"
         keyboard={false}
-      />
+      /> */}
 
       <div className='mt-5'>
         {
@@ -504,6 +452,11 @@ export default function Tasks() {
         taskModalShow &&
         <TaskModal
           show={taskModalShow}
+          selectedTaskDetails={selectedTaskDetails}
+          selectedProject={selectedProject}
+          updateTaskDescription={updateTaskDescription}
+          addCommentOnTask={addCommentOnTask}
+          updateTaskTitle={updateTaskTitle}
           onHide={() => setTaskModalShow(false)}
         />
       }
