@@ -18,9 +18,9 @@ import { addComment } from "../../services/user/api";
 // import Particles from '../../components/particals';
 
 var month = moment().month();
-let currentYear=moment().year();
+let currentYear = moment().year();
 export default function Dashboard(props) {
-  console.log( month)
+  console.log(month)
   const [clickedRatingArray, setclickedRatingArray] = useState([]);
   const [selectedRating, setSelectedRating] = useState('');
   const [selectedRatingId, setSelectedRatingId] = useState([]);
@@ -81,8 +81,8 @@ export default function Dashboard(props) {
     getAllRatings(dataToSend);
   };
 
-  let months = moment().year( Number )?._locale?._months
-  let years = [2022, 2023, 2024, 2025 ];
+  let months = moment().year(Number)?._locale?._months
+  let years = [2022, 2023, 2024, 2025];
 
   const getUsersList = async function () {
     setLoading(true);
@@ -101,7 +101,7 @@ export default function Dashboard(props) {
         //   className: "toast-message",
         // });
         setTeamOptions(user.data);
-      } 
+      }
     } catch (error) {
       setLoading(false);
       return error.message;
@@ -339,7 +339,7 @@ export default function Dashboard(props) {
 
   return (
     <div>
-      
+
       <h1 className="h1-text">
         <i className="fa fa-home" aria-hidden="true"></i> Dashboard
       </h1>
@@ -349,10 +349,10 @@ export default function Dashboard(props) {
             {props.showBtn && (<button className='glass-button'    style={{ float: "right" }}>Add Rating</button>)}
           </Link> */}
           <Link to="/rating" params={{ params: true }}>
-            {props.showBtn && ( <button className='glass-button'  style={{ float: "right",position: 'relative',bottom: '53px' }} ><span>Add Rating</span></button>)}
+            {props.showBtn && (<button className='glass-button' style={{ float: "right", position: 'relative', bottom: '53px' }} ><span>Add Rating</span></button>)}
           </Link>
 
-         
+
         </div>
         {/* <h4 className="text-center">
           Current Date : {`${moment().format("DD MMMM YYYY")}`}
@@ -378,8 +378,8 @@ export default function Dashboard(props) {
                 </option>
                 {months.map((monthh, index) => (
 
-                  
-                  <option value={monthh} key={monthh} disabled={index>month}>
+
+                  <option value={monthh} key={monthh} disabled={index > month}>
                     {monthh}
                   </option>
                 ))}
@@ -398,7 +398,7 @@ export default function Dashboard(props) {
                   Select Year
                 </option>
                 {years.map((year) => (
-                  <option value={year} key={year} disabled={year>currentYear}>
+                  <option value={year} key={year} disabled={year > currentYear}>
                     {year}
                   </option>
                 ))}
@@ -414,7 +414,7 @@ export default function Dashboard(props) {
                 .fill(0)
                 .map((rating, index) => {
                   return (
-                    <th className="dates text-center"  key={`${index}_${index}`} >{`${month + 1
+                    <th className="dates text-center" key={`${index}_${index}`} >{`${month + 1
                       }/${moment()
                         .startOf("month")
                         .add(index, "days")
@@ -470,16 +470,25 @@ export default function Dashboard(props) {
                       } else {
                         return (
 
+
                           <td key={index}>
-                            <input
-                              style={{ cursor: "pointer" }}
-                              type="text"
-                              name=""
-                              id=""
-                              className="input_dashboard"
-                              value=""
-                              disabled={true}
-                            />
+                            <MDBTooltip
+                              tag="p"
+                              wrapperProps={{ href: "#" }}
+                              title={"click to Add Rating"}
+                            >
+
+                              <Link to={{
+                                pathname: "/rating",
+                              }}
+                                state={{ userId: user._id, date: `${yearUse}-${months.indexOf(monthUse) + 1}-${(index + 1) < 9 ? '0' + (index + 1) : index + 1}` }}>
+                                <input
+                                  style={{ cursor: "pointer" }}
+                                  className="input_dashboard"
+                                  disabled={true}
+                                />
+                              </Link>
+                            </MDBTooltip>
                           </td>
 
                         );
