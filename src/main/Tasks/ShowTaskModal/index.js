@@ -4,12 +4,12 @@ import moment from "moment";
 import { Button, Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { MDBTooltip } from "mdb-react-ui-kit";
-import { getIconClassForStatus } from "../../helpers/taskStatusIcon";
+import { getIconClassForStatus } from "../../../helpers/taskStatusIcon";
 import DatePicker from "react-date-picker";
 import './index.css'
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskAndCompletedStatus } = props;
+  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskCompletedStatusAndDate } = props;
   //   const [formDetails, setFormDetails] = useState({});
   //   const updateFormDetails = (e) => {
   //     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
@@ -308,7 +308,7 @@ function TaskModal(props) {
         return
       }
       if (e.target?.value === "COMPLETED") {
-        updateTaskAndCompletedStatus({ status: e.target?.value, completedDate: new Date() })
+        updateTaskCompletedStatusAndDate({ status: e.target?.value, completedDate: new Date() })
         // selectedTaskDetails.status = e.target?.value
         // selectedTaskDetails.completedDate = new Date()
       } else {

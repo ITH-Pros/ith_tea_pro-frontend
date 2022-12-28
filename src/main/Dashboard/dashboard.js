@@ -1,5 +1,7 @@
 import React from "react";
 import moment from "moment";
+import ReactDOM from 'react-dom/client';
+
 import { useState, useEffect } from "react";
 import { getRatings, updateUserRating } from "../../services/user/api";
 import "./dashboard.css";
@@ -232,20 +234,18 @@ export default function Dashboard(props) {
         </div>
         {
           clickedRatingArray?.map((comments, index) => {
-            console.log(comments);
+            console.log(comments?.comments?.comment);
             return (
               <div
                 key={comments?.comments?._id}
                 style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
               >
-                <span>{comments?.comments?.commentedBy?.[0]?.name}</span>
+                <span>{comments?.comments?.commentedBy?.[0]?.name + '  '}</span>
                 <small>
                   {moment(comments?.comments?.createdAt).format("Do MMMM  YYYY, h:mm a")}
                 </small>{" "}
                 <br />
-                <p style={{ marginTop: "10px" }}>
-                  {" "}
-                  {comments?.comments?.comment}
+                <p style={{ marginTop: "10px" }} dangerouslySetInnerHTML={{ __html : comments?.comments?.comment}}>
                 </p>
                 {/* <span>Comment:- </span> {comments?.comment}<br/>
 								<span> Commented By:- </span>{clickedRatingArray.commentedByArray?.[index]?.name}<br/>
