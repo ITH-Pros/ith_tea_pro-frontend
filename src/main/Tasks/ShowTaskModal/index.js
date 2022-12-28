@@ -4,12 +4,12 @@ import moment from "moment";
 import { Button, Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { MDBTooltip } from "mdb-react-ui-kit";
-import { getIconClassForStatus } from "../../helpers/taskStatusIcon";
+import { getIconClassForStatus } from "../../../helpers/taskStatusIcon";
 import DatePicker from "react-date-picker";
 import './index.css'
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskAndCompletedStatus } = props;
+  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskCompletedStatusAndDate } = props;
 
   const CommentsForm = () => {
     const [commentValue, setCommentValue] = useState('');
@@ -163,8 +163,9 @@ function TaskModal(props) {
                 autoFocus
                 onBlur={() => setEditCategoryEnable(false)}
                 onChange={checkAndUpdateCategory}
+                value={categoryValue}
               >
-                <option value={categoryValue} >Select Category </option>
+                <option value='' disabled >Select Category </option>
                 {selectedProject?.categories?.map((category) => {
                   if (categoryValue === category) {
                     return (
@@ -183,7 +184,7 @@ function TaskModal(props) {
               </Form.Control>
             </Form.Group>
             :
-            <small style={{ cursor: 'pointer' }} className='pop-category' onClick={() => setEditCategoryEnable(true)}>{categoryValue}</small> 
+            <small style={{ cursor: 'pointer' }} className='pop-category' onClick={() => setEditCategoryEnable(true)}>{categoryValue}</small>
         }
       </>
     )
@@ -216,18 +217,20 @@ function TaskModal(props) {
                 autoFocus
                 onBlur={() => setEditAssignedToEnable(false)}
                 onChange={checkAndUpdateAssignedTo}
+                value={assignedToValue._id}
+
               >
-                <option value={assignedToValue._id} >Assign to </option>
+                <option value='' disabled>Assign to </option>
                 {selectedProject?.accessibleBy?.map((user) => {
                   if (assignedToValue._id === user._id) {
                     return (
-                      <option id={user.name} value={user._id} key={user._id} name={user.name} disabled >
+                      <option value={user._id} key={user._id} disabled >
                         {user.name}
                       </option>
                     )
                   }
                   return (
-                    <option value={user._id} key={user._id} text={user.name} label={user.name} name={user.name} username={user.name}>
+                    <option value={user._id} key={user._id}>
                       {user.name}
                     </option>
                   )
@@ -238,9 +241,9 @@ function TaskModal(props) {
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)} >
               <span className="pop-2-span">
-                
-              Assigned to
-             </span>
+
+                Assigned to
+              </span>
               <b>{assignedToValue.name}</b>{" "}
             </p>
         }
@@ -287,7 +290,7 @@ function TaskModal(props) {
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)} >
               <span className="pop-2-span">
-              Priority
+                Priority
 
               </span>
               <b>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>{" "}
@@ -308,7 +311,7 @@ function TaskModal(props) {
         return
       }
       if (e.target?.value === "COMPLETED") {
-        updateTaskAndCompletedStatus({ status: e.target?.value, completedDate: new Date() })
+        updateTaskCompletedStatusAndDate({ status: e.target?.value, completedDate: new Date() })
         // selectedTaskDetails.status = e.target?.value
         // selectedTaskDetails.completedDate = new Date()
       } else {
@@ -327,7 +330,7 @@ function TaskModal(props) {
                 type="select"
                 autoFocus
                 // clearAriaLabel
-                onBlur={() => setEditStatusEnable(false)}
+                // onBlur={() => setEditStatusEnable(false)}
                 onChange={checkAndUpdateStatus}
                 value={statusValue}
               >
@@ -344,9 +347,9 @@ function TaskModal(props) {
               <div style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} >
                 <p>
 
-              <span className="pop-2-span">  Status</span>
-                <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
-                <b> {statusValue || "Not set"} </b>
+                  <span className="pop-2-span">  Status</span>
+                  <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
+                  <b> {statusValue || "Not set"} </b>
                 </p>
               </div>
               {statusValue === 'COMPLETED' && <UpdateCompletedDateBox />}
@@ -390,9 +393,9 @@ function TaskModal(props) {
             </div>
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditDueDateEnable(true)} >
-             
+
               <span className="pop-2-span">
-              Due Date
+                Due Date
 
               </span>
               <b>{dueDateValue.toDateString() || "Not set"}</b>{" "}
@@ -437,7 +440,7 @@ function TaskModal(props) {
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditCompletedDateEnable(true)} >
               <span className="pop-2-span">
-              Completed Date
+                Completed Date
 
               </span>
 
@@ -490,7 +493,7 @@ function TaskModal(props) {
       <Modal.Body>
 
 
-        <UpdateCategoryBox /><br/>
+        <UpdateCategoryBox /><br />
 
 
         <MDBTooltip
@@ -506,19 +509,19 @@ function TaskModal(props) {
 
         <div className="pop-2-div">
           <div>
-          <p>
-             <span className="pop-2-span">Created By</span> 
+            <p>
+              <span className="pop-2-span">Created By</span>
               <b>{selectedTaskDetails?.createdBy?.name}</b> on{" "}
-            <b>{selectedTaskDetails?.createdAt ? new Date(selectedTaskDetails?.createdAt).toDateString() : ''}</b>
-          </p>
-          <UpdateAssignedToBox />
-          <UpdateDueDateBox />
+              <b>{selectedTaskDetails?.createdAt ? new Date(selectedTaskDetails?.createdAt).toDateString() : ''}</b>
+            </p>
+            <UpdateAssignedToBox />
+            <UpdateDueDateBox />
 
           </div>
           <div>
 
-          <UpdatePriorityBox />
-          <UpdateStatusBox />
+            <UpdatePriorityBox />
+            <UpdateStatusBox />
           </div>
 
         </div>

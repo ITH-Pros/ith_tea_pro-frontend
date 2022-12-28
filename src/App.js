@@ -11,7 +11,7 @@ import Rating from './main/Rating/rating'
 import Task from './main/Tasks/tasks'
 import Team from './main/Teams/teams'
 import NoMatch from './main/404/index'
-import AddTask from './main/Tasks/add-task';
+// import AddTask from './main/Tasks/add-task';
 
 // const LazyAbout = React.lazy(() => import('./components/About'))
 
@@ -70,7 +70,7 @@ function App() {
             </>
           }
         />
-        <Route
+        {/* <Route
           path='/task/add'
           exact={true}
           element={
@@ -82,7 +82,7 @@ function App() {
              </RequireAuth>
             </>
           }
-        />
+        /> */}
        
         {/* <Route path='order-summary' element={<OrderSummary />} />
         <Route path='products' element={<Products />}>
