@@ -143,7 +143,7 @@ export default function Tasks() {
         //   className: "toast-message",
         // });
         console.log("comment added succesfully ");
-        // getProjectList()
+        getProjectList()
         getProjectsTaskDetails(selectedTaskDetails)
       }
     } catch (error) {
@@ -290,8 +290,32 @@ export default function Tasks() {
       setLoading(false);
       return error.message;
     }
+  }
 
-
+  const updateTaskPriority = async (priority) => {
+    console.log("updateTaskPriority", priority)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        priority
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
   }
 
   // const FilterModal = (props) => {
@@ -542,6 +566,7 @@ export default function Tasks() {
           updateTaskCategory={updateTaskCategory}
           updateTaskAssignedTo={updateTaskAssignedTo}
           updateTaskDueDate={updateTaskDueDate}
+          updateTaskPriority={updateTaskPriority}
           onHide={() => setTaskModalShow(false)}
         />
       }

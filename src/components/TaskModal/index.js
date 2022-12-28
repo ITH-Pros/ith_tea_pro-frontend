@@ -9,7 +9,7 @@ import DatePicker from "react-date-picker";
 import './index.css'
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate } = props;
+  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority } = props;
   //   const [formDetails, setFormDetails] = useState({});
   //   const updateFormDetails = (e) => {
   //     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
@@ -252,6 +252,48 @@ function TaskModal(props) {
     )
   }
 
+  const UpdatePriorityBox = () => {
+    const [priorityValue, setPriorityValue] = useState(selectedTaskDetails.priority);
+    const [editPriorityEnable, setEditPriorityEnable] = useState(false);
+    console.log("selectedProject", priorityValue)
+
+    const checkAndUpdatePriority = (e) => {
+      console.log("updatePriority", e.target.value, priorityValue)
+      if (e.target?.value === priorityValue) {
+        return
+      }
+      updateTaskPriority(e.target?.value)
+      setEditPriorityEnable(false);
+      selectedTaskDetails.priority = e.target?.value
+    }
+    return (
+      <>
+        {
+          editPriorityEnable ?
+            <Form.Group as={Col} md="3" >
+              <Form.Control
+                as="select"
+                type="select"
+                autoFocus
+                onBlur={() => setEditPriorityEnable(false)}
+                onChange={checkAndUpdatePriority}
+              >
+                <option value={priorityValue} >Set Priority </option>
+                <option value='LOW' disabled={priorityValue === 'LOW'}>Low </option>
+                <option value='MEDIUM' disabled={priorityValue === 'MEDIUM'}>Medium </option>
+                <option value='HIGH' disabled={priorityValue === 'HIGH'} >High </option>
+                <option value='REPEATED' disabled={priorityValue === 'REPEATED'} >Repeated </option>
+
+              </Form.Control>
+            </Form.Group>
+            :
+            <p style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)} >
+              Priority <b>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>{" "}
+            </p>
+        }
+      </>
+    )
+  }
   const UpdateDueDateBox = () => {
     const [dueDateValue, setDueDateValue] = useState(selectedTaskDetails.dueDate ? new Date(selectedTaskDetails.dueDate) : new Date());
     const [editDueDateEnable, setEditDueDateEnable] = useState(false);
@@ -330,14 +372,7 @@ function TaskModal(props) {
           </p>
           <UpdateAssignedToBox />
           <UpdateDueDateBox />
-
-
-          <p>
-            Priority <b> {selectedTaskDetails?.priority || "Not set"}</b>
-          </p>
-          <p>
-            Status <b> {selectedTaskDetails?.status || "Not set"} </b>
-          </p>
+          <UpdatePriorityBox />
           <p>
             Status
             <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
