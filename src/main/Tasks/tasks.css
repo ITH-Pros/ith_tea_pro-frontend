@@ -51,10 +51,6 @@
 .descriptionBox {
   border:1px solid rgb(90, 56, 56);
 }
-.editDescBox{
-  border:1px solid rgb(177, 12, 12);
-
-}
 
 .neo-box{
   box-shadow: inset -15px -16px 19px 20px rgb(255 255 255 / 45%), inset 5px 5px 9px rgb(94 104 121 / 30%);
@@ -118,4 +114,8 @@
     border: 1px solid #eaecf1;
     border-radius: 7px;
     background-color: #eaecf1;
+}
+
+.form-control{
+  width: auto !important;
 }

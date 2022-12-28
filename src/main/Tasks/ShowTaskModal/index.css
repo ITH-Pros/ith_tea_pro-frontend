@@ -56,3 +56,45 @@
     display: flex;
     overflow: hidden;
 }
+
+.descriptionBox{
+    color: #36445a;
+    font-size: 14px;
+    font-style: normal;
+    font-variant-ligatures: normal;
+    font-variant-caps: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: 400;
+    font-stretch: normal;
+    line-height: normal;
+    position: relative;
+    padding: 20px 25px;
+    margin: 13px 0 20px!important;
+    background: #fff;
+    box-shadow: 0 2px 11px 0 rgb(15 27 87 / 10%);
+    border-radius: 3px;
+    word-break: break-word;
+}
+
+.edit-box-input{
+    color: #36445a;
+    font-size: 14px;
+    width: 100%;
+    font-style: normal;
+    font-variant-ligatures: normal;
+    font-variant-caps: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: 400;
+    font-stretch: normal;
+    line-height: normal;
+    position: relative;
+    padding: 20px 25px;
+    margin: 13px 0 20px!important;
+    background: #fff;
+    box-shadow: 0 2px 11px 0 rgb(15 27 87 / 10%);
+    border-radius: 3px;
+    word-break: break-word;
+}
+
