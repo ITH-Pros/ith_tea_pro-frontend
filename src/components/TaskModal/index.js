@@ -9,7 +9,7 @@ import DatePicker from "react-date-picker";
 import './index.css'
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority } = props;
+  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskAndCompletedStatus } = props;
   //   const [formDetails, setFormDetails] = useState({});
   //   const updateFormDetails = (e) => {
   //     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
@@ -277,8 +277,10 @@ function TaskModal(props) {
                 autoFocus
                 onBlur={() => setEditPriorityEnable(false)}
                 onChange={checkAndUpdatePriority}
+                value={priorityValue}
               >
-                <option value={priorityValue} >Set Priority </option>
+                <option value='' disabled >Set Priority </option>
+                <option value='' disabled={priorityValue === ''}>None </option>
                 <option value='LOW' disabled={priorityValue === 'LOW'}>Low </option>
                 <option value='MEDIUM' disabled={priorityValue === 'MEDIUM'}>Medium </option>
                 <option value='HIGH' disabled={priorityValue === 'HIGH'} >High </option>
@@ -294,6 +296,63 @@ function TaskModal(props) {
       </>
     )
   }
+
+  const UpdateStatusBox = () => {
+    const [statusValue, setStatusValue] = useState(selectedTaskDetails.status);
+    const [editStatusEnable, setEditStatusEnable] = useState(false);
+    console.log("selectedProject", statusValue)
+
+    const checkAndUpdateStatus = (e) => {
+      console.log("updatePriority", e.target.value, statusValue)
+      if (e.target?.value === statusValue) {
+        return
+      }
+      if (e.target?.value === "COMPLETED") {
+        updateTaskAndCompletedStatus({ status: e.target?.value, completedDate: new Date() })
+        // selectedTaskDetails.status = e.target?.value
+        // selectedTaskDetails.completedDate = new Date()
+      } else {
+        updateTaskStatus(e.target?.value)
+        setEditStatusEnable(false);
+      }
+      selectedTaskDetails.status = e.target?.value
+    }
+    return (
+      <>
+        {
+          editStatusEnable ?
+            <Form.Group as={Col} md="3" >
+              <Form.Control
+                as="select"
+                type="select"
+                autoFocus
+                // clearAriaLabel
+                onBlur={() => setEditStatusEnable(false)}
+                onChange={checkAndUpdateStatus}
+                value={statusValue}
+              >
+                <option value='' disabled >Set Status </option>
+                <option value='NO_PROGRESS' disabled={statusValue === 'NO_PROGRESS'}>No Progress </option>
+                <option value='ONGOING' disabled={statusValue === 'ONGOING'}>Ongoing </option>
+                <option value='COMPLETED' disabled={statusValue === 'COMPLETED'} >Completed </option>
+                <option value='ONHOLD' disabled={statusValue === 'ONHOLD'} >On Hold </option>
+
+              </Form.Control>
+            </Form.Group>
+            :
+            <>
+              <div style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} >
+                Status
+                <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
+                <b> {statusValue || "Not set"} </b>
+              </div>
+              {statusValue === 'COMPLETED' && <UpdateCompletedDateBox />}
+            </>
+        }
+      </>
+    )
+  }
+
   const UpdateDueDateBox = () => {
     const [dueDateValue, setDueDateValue] = useState(selectedTaskDetails.dueDate ? new Date(selectedTaskDetails.dueDate) : new Date());
     const [editDueDateEnable, setEditDueDateEnable] = useState(false);
@@ -331,6 +390,72 @@ function TaskModal(props) {
               Due Date <b>{dueDateValue.toDateString() || "Not set"}</b>{" "}
             </p>
         }
+      </>
+    )
+  }
+
+  const UpdateCompletedDateBox = () => {
+    const [completedDateValue, setDueDateValue] = useState(selectedTaskDetails.completedDate ? new Date(selectedTaskDetails.completedDate) : new Date());
+    const [editCompletedDateEnable, setEditCompletedDateEnable] = useState(false);
+    console.log("selectedProject", completedDateValue)
+
+    const checkAndUpdateDueDate = (e) => {
+      if (!e || e?.toDateString() === completedDateValue?.toDateString()) {
+        return
+      }
+      updateTaskCompletedDate(e.toDateString())
+      setDueDateValue(e)
+      setEditCompletedDateEnable(false);
+      selectedTaskDetails.completedDate = e
+    }
+    return (
+      <>
+        {
+          editCompletedDateEnable ?
+            <div className="taskDueDate">
+              <DatePicker
+                autoFocus
+                format="dd-MM-y"
+                // selected={completedDateValue}
+                value={completedDateValue}
+                // selected={completedDateValue}
+                onCalendarClose={() => setEditCompletedDateEnable(false)}
+                // onBlur={() => setEditCompletedDateEnable(false)}
+                onChange={checkAndUpdateDueDate}
+              >
+
+              </DatePicker>
+            </div>
+            :
+            <p style={{ cursor: 'pointer' }} onClick={() => setEditCompletedDateEnable(true)} >
+              Complete Date <b>{completedDateValue.toDateString() || "Not set"}</b>{" "}
+            </p>
+        }
+      </>
+    )
+  }
+
+  const CommentsListBox = () => {
+
+    return (
+      <>
+        {selectedTaskDetails?.comments?.map((commentObj) => {
+          return (
+            <div
+              key={commentObj?._id}
+              style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
+            >
+              <b>{commentObj?.commentedBy?.name}</b>
+              <small>
+                {moment(commentObj?.createdAt).format(
+                  "Do MMMM  YYYY, h:mm a"
+                )}
+              </small>{" "}
+              <br />
+              <p style={{ marginTop: "10px" }}> {commentObj?.comment}</p>
+            </div>
+          );
+        })}
       </>
     )
   }
@@ -373,41 +498,16 @@ function TaskModal(props) {
           <UpdateAssignedToBox />
           <UpdateDueDateBox />
           <UpdatePriorityBox />
-          <p>
-            Status
-            <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
-            <b> {selectedTaskDetails?.status || "Not set"} </b>
-
-            <b> {selectedTaskDetails?.completedDate || "Not set"} </b>
-          </p>
+          <UpdateStatusBox />
           <EditDescriptionBox />
-
-
         </div>
 
         <div>
           <hr></hr>
           <b>Comments </b>
           <CommentsForm />
+          <CommentsListBox />
 
-
-          {selectedTaskDetails?.comments?.map((commentObj) => {
-            return (
-              <div
-                key={commentObj?._id}
-                style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
-              >
-                <b>{commentObj?.commentedBy?.name}</b>
-                <small>
-                  {moment(commentObj?.createdAt).format(
-                    "Do MMMM  YYYY, h:mm a"
-                  )}
-                </small>{" "}
-                <br />
-                <p style={{ marginTop: "10px" }}> {commentObj?.comment}</p>
-              </div>
-            );
-          })}
         </div>
       </Modal.Body>
       {/* <Modal.Footer>
