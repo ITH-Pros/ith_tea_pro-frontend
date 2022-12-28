@@ -396,6 +396,51 @@ export default function Tasks() {
     }
   }
 
+  const getPriorityTag = (task) => {
+    if(task.priority){
+        
+      return (
+       
+        <small className='priority_tag' style={{marginLeft:'10px'}}>
+                                {task?.priority}
+                              </small>
+      )
+    }
+  }
+
+  const getAssignedToTag = (task) => {
+    if(task.assignedTo){
+        
+      return (
+       
+        <span className='assigned_tag' style={{ marginLeft: '10px' }}>
+          <img className='img-logo' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-z3LzM-wYXYiWslzq9RADq0mAdVfFrn91gRqxcl9K&s" alt='img'></img>
+                                {task?.assignedTo?.name}
+                              </span>
+      )
+    }
+  }
+
+  const getDueDateTag = (task) => {
+    if(task.dueDate){
+      return (
+        <span className='date_tag' style={{ marginLeft: '10px' }}>
+                               Due {task?.dueDate?.split('T')[0]}
+                              </span>
+      )
+    }
+  }
+
+  const getCompletedDateTag = (task) => {
+    if(task.completedDate){
+      return (
+        <span className='date_tag' style={{ marginLeft: '10px' }}>
+                              Completed  {task?.completedDate?.split('T')[0]}
+                              </span>
+      )
+    }
+  }
+
   // const FilterModal = (props) => {
   //   return (
   //     <Modal
@@ -612,10 +657,17 @@ export default function Tasks() {
                               wrapperProps={{ href: "#" }}
                               title={task.status}
                             >
-                              <i className={getIconClassForStatus(task.status)} aria-hidden="true"></i>
+                              <i style={{ marginRight: '20px' }} className={getIconClassForStatus(task.status)} aria-hidden="true"></i>
                             </MDBTooltip>
-                            {task.title + '.......'}
-                            <i className='fa fa-comments' aria-hidden="true"></i>{'  ' + task.comments?.length}
+
+                            {task.title?.slice(0, 100) + '.......'}
+
+                            {getPriorityTag(task)}
+                            {getDueDateTag(task)}
+                            {getAssignedToTag(task)}
+                            {getCompletedDateTag(task)}
+
+                            <i style={{ marginLeft: '0px' }} className='fa fa-comments' aria-hidden="true"></i>{'  ' + task.comments?.length}
                           </div>
                         )
                       })
