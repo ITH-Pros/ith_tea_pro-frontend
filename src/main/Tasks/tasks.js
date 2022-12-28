@@ -11,8 +11,9 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import { getAllProjects, getProjectsTask, getTaskDetailsByTaskId, updateTaskDetails, addCommentOnTaskById } from '../../services/user/api';
 import Loader from '../../loader/loader';
 import { MDBTooltip } from 'mdb-react-ui-kit';
-import TaskModal from '../../components/TaskModal';
+import TaskModal from './ShowTaskModal';
 import { getIconClassForStatus } from './../../../src/helpers/taskStatusIcon'
+import AddTaskModal from './AddTaskModal';
 
 
 export default function Tasks() {
@@ -20,6 +21,7 @@ export default function Tasks() {
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = React.useState(false);
   const [taskModalShow, setTaskModalShow] = React.useState(false);
+  const [showAddTaskModal, setShowAddTaskModal] = React.useState(false);
   // const [userAssigned, setUserAssigned] = useState("");
   // const [createdBy, setCreatedBy] = useState("");
   // const [stream, setStream] = useState("");
@@ -348,7 +350,8 @@ export default function Tasks() {
     try {
       let dataToSend = {
         taskId: selectedTaskDetails._id,
-        status
+        status,
+        completedDate: null
       }
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
@@ -368,8 +371,8 @@ export default function Tasks() {
       return error.message;
     }
   }
-  const updateTaskAndCompletedStatus = async (data) => {
-    console.log("updateTaskAndCompletedStatus", data)
+  const updateTaskCompletedStatusAndDate = async (data) => {
+    console.log("updateTaskCompletedStatusAndDate", data)
     setLoading(true)
     try {
       let dataToSend = {
@@ -397,46 +400,46 @@ export default function Tasks() {
   }
 
   const getPriorityTag = (task) => {
-    if(task.priority){
-        
+    if (task.priority) {
+
       return (
-       
-        <small className='priority_tag' style={{marginLeft:'10px'}}>
-                                {task?.priority}
-                              </small>
+
+        <small className='priority_tag' style={{ marginLeft: '10px' }}>
+          {task?.priority}
+        </small>
       )
     }
   }
 
   const getAssignedToTag = (task) => {
-    if(task.assignedTo){
-        
+    if (task.assignedTo) {
+
       return (
-       
+
         <span className='assigned_tag' style={{ marginLeft: '10px' }}>
           <img className='img-logo' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-z3LzM-wYXYiWslzq9RADq0mAdVfFrn91gRqxcl9K&s" alt='img'></img>
-                                {task?.assignedTo?.name}
-                              </span>
+          {task?.assignedTo?.name}
+        </span>
       )
     }
   }
 
   const getDueDateTag = (task) => {
-    if(task.dueDate){
+    if (task.dueDate) {
       return (
         <span className='date_tag' style={{ marginLeft: '10px' }}>
-                               Due {task?.dueDate?.split('T')[0]}
-                              </span>
+          Due {task?.dueDate?.split('T')[0]}
+        </span>
       )
     }
   }
 
   const getCompletedDateTag = (task) => {
-    if(task.completedDate){
+    if (task.completedDate) {
       return (
         <span className='date_tag' style={{ marginLeft: '10px' }}>
-                              Completed  {task?.completedDate?.split('T')[0]}
-                              </span>
+          Completed  {task?.completedDate?.split('T')[0]}
+        </span>
       )
     }
   }
@@ -596,9 +599,10 @@ export default function Tasks() {
       <div className='tasks'>
         <div >
           {/* <button className='btn btn-gradient-border btn-glow' onClick={() => setModalShow(true)} style={{ float: "left" }}>Filter </button> */}
-          <Link to="/task/add" >
+          <button className='btn btn-gradient-border btn-glow' style={{ float: "right" }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
+          {/* <Link to="/task/add" >
             {(<button className='btn btn-gradient-border btn-glow' style={{ float: "right" }}><span>Add Task</span></button>)}
-          </Link>
+          </Link> */}
           {/* <button className='btn btn-gradient-border btn-glow' variant="primary" style={{ float: "right" }}>Add Tasks</button> */}
           <Form noValidate >
             <Row className="mb-3">
@@ -698,8 +702,15 @@ export default function Tasks() {
           updateTaskPriority={updateTaskPriority}
           updateTaskStatus={updateTaskStatus}
           updateTaskCompletedDate={updateTaskCompletedDate}
-          updateTaskAndCompletedStatus={updateTaskAndCompletedStatus}
+          updateTaskCompletedStatusAndDate={updateTaskCompletedStatusAndDate}
           onHide={() => setTaskModalShow(false)}
+        />
+      }
+      {
+        showAddTaskModal &&
+        <AddTaskModal
+          show={showAddTaskModal}
+          onHide={() => setShowAddTaskModal(false)}
         />
       }
     </>

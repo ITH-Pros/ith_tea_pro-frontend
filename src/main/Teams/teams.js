@@ -46,25 +46,25 @@ export default function Teams(props) {
     };
 
     const editUserDetailHandle = async function (userDetail) {
-        setLoading(true);
-        try {
-            let dataToSend = {
-                userId: userDetail._id
-            }
-            const projects = await editUserDetail(dataToSend);
-            setLoading(false);
-            if (projects.error) {
-                toast.error(projects.error.message, {
-                    position: toast.POSITION.TOP_CENTER,
-                    className: "toast-message",
-                });
-            } else {
-                setUsersListValue(projects.data);
-            }
-        } catch (error) {
-            setLoading(false);
-            return error.message;
-        }
+        // setLoading(true);
+        // try {
+        //     let dataToSend = {
+        //         userId: userDetail._id
+        //     }
+        //     const projects = await editUserDetail(dataToSend);
+        //     setLoading(false);
+        //     if (projects.error) {
+        //         toast.error(projects.error.message, {
+        //             position: toast.POSITION.TOP_CENTER,
+        //             className: "toast-message",
+        //         });
+        //     } else {
+        //         setUsersListValue(projects.data);
+        //     }
+        // } catch (error) {
+        //     setLoading(false);
+        //     return error.message;
+        // }
     };
     const handleSelectProject = (projectId) => {
         setSelectedProjectId(projectId)

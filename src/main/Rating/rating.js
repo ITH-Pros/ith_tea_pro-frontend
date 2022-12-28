@@ -78,7 +78,7 @@ export default function Rating(props) {
 
   const onChangeOfComments = (e) => {
     setComments(e)
-    console.log(e)
+    console.log("sejfnweiornwoerfnaifjbsij sijdbfisjbfisa ihsvfgiw", e)
   };
 
   const handleRatingChange = (e) => {
@@ -86,19 +86,20 @@ export default function Rating(props) {
   };
 
   const handleSubmit = (e) => {
-    console.log(comments)
+    console.log("iiiiiiiiiiiiiii", comments, date)
     setValidated(true);
     e.preventDefault();
     e.stopPropagation();
+    // console.log()
 
-    if (!team || !date?.target?.value || !rating || !comments) {
+    if (!team || !date || !rating || !comments) {
       return;
     } else {
       let dataToSend = {
         userId: team,
-        date: date?.target?.value.split("-")[2],
-        year: date?.target?.value.split("-")[0],
-        month: date?.target?.value.split("-")[1],
+        date: date?.split("-")[2],
+        year: date?.split("-")[0],
+        month: date?.split("-")[1],
         rating: rating,
         comment: comments,
         // taggedUsers: tags,
@@ -258,7 +259,7 @@ export default function Rating(props) {
               </Row> */}
               <Row className="mb-3">
                 <Form.Label>Comment</Form.Label>
-                <FroalaEditorComponent tag='textarea' onKeyUp={onChangeOfComments} />
+                <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
               </Row>
 
 
