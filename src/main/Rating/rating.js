@@ -43,11 +43,13 @@ export default function Rating(props) {
   function onInit() {
     getUsersList();
   }
+  let today = new Date();
   const [loading, setLoading] = useState(false);
   const [currentView, setCurrentView] = useState("Add");
   const [teamOptions, setTeamOptions] = useState([]);
   const [team, setTeam] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate());
+  // const [date, setDate] = useState('');
   const [rating, setRating] = useState("");
   const [comments, setComments] = useState("");
   const [validated, setValidated] = useState(false);
@@ -57,6 +59,10 @@ export default function Rating(props) {
   if (!team && location && location.state && location.state.userId) {
     setTeam(location.state.userId)
   }
+  if (location && location.state && location.state.date && location.state.date !== date) {
+    setDate(location.state.date)
+    location.state.date = '';
+  }
 
   const handleViewChange = (view) => {
     setCurrentView(view);
@@ -64,16 +70,15 @@ export default function Rating(props) {
 
   const onchangeTeam = (e) => {
     setTeam(e.target.value);
-    // setTimeout(() => { }, 1000);
   };
 
   const handleChangeDate = (date) => {
-    setDate(date);
+    setDate(date.target.value);
   };
 
   const onChangeOfComments = (e) => {
     setComments(e)
-   console.log(e)
+    console.log(e)
   };
 
   const handleRatingChange = (e) => {
@@ -117,7 +122,7 @@ export default function Rating(props) {
 
       if (user.error) {
 
-        toast.dark(" 👋,"+user?.error?.message, {
+        toast.dark(" 👋," + user?.error?.message, {
           transition: swirl
         });
 
@@ -131,7 +136,7 @@ export default function Rating(props) {
         console.log(user.data);
       }
     } catch (error) {
-      toast.dark(" 👋,"+error?.message, {
+      toast.dark(" 👋," + error?.message, {
         transition: swirl
       });
       setLoading(false);
@@ -145,7 +150,7 @@ export default function Rating(props) {
       const rating = await addRating(data);
       setLoading(false);
       if (rating.error) {
-        toast.dark(" 👋, "+rating.error.message, {
+        toast.dark(" 👋, " + rating.error.message, {
           transition: swirl
         });
 
@@ -155,13 +160,13 @@ export default function Rating(props) {
           transition: swirl
         });
 
-    
+
         console.log(rating.data);
       }
     }
     catch (error) {
 
-      toast.dark(" 👋,"+error?.message, {
+      toast.dark(" 👋," + error?.message, {
         transition: swirl
       });
 
@@ -207,8 +212,9 @@ export default function Rating(props) {
                     required
                     type="date"
                     name="rating_date"
-                    placeholder="Rating due date"
+                    placeholder="Rating  date"
                     onChange={handleChangeDate}
+                    value={date}
                   />
                   <Form.Control.Feedback type="invalid">
                     Date is required !!
@@ -252,9 +258,9 @@ export default function Rating(props) {
               </Row> */}
               <Row className="mb-3">
                 <Form.Label>Comment</Form.Label>
-                <FroalaEditorComponent tag='textarea'  onKeyUp={onChangeOfComments}/>
+                <FroalaEditorComponent tag='textarea' onKeyUp={onChangeOfComments} />
               </Row>
-              
+
 
               <Button
                 className="btn-gradient-border"

@@ -143,7 +143,7 @@ export default function Tasks() {
         //   className: "toast-message",
         // });
         console.log("comment added succesfully ");
-        // getProjectList()
+        getProjectList()
         getProjectsTaskDetails(selectedTaskDetails)
       }
     } catch (error) {
@@ -290,8 +290,110 @@ export default function Tasks() {
       setLoading(false);
       return error.message;
     }
+  }
+  const updateTaskCompletedDate = async (completedDate) => {
+    console.log("updateTaskCompletedDate", completedDate)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        completedDate
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  }
 
-
+  const updateTaskPriority = async (priority) => {
+    console.log("updateTaskPriority", priority)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        priority
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  }
+  const updateTaskStatus = async (status) => {
+    console.log("updateTaskStatus", status)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        status
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getProjectList()
+        getAllTaskOfProject();
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  }
+  const updateTaskAndCompletedStatus = async (data) => {
+    console.log("updateTaskAndCompletedStatus", data)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        ...data
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getProjectList()
+        getAllTaskOfProject();
+        getProjectsTaskDetails(selectedTaskDetails)
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
   }
 
   // const FilterModal = (props) => {
@@ -448,7 +550,7 @@ export default function Tasks() {
     <>
       <div className='tasks'>
         <div >
-          <button className='btn btn-gradient-border btn-glow' onClick={() => setModalShow(true)} style={{ float: "left" }}>Filter </button>
+          {/* <button className='btn btn-gradient-border btn-glow' onClick={() => setModalShow(true)} style={{ float: "left" }}>Filter </button> */}
           <Link to="/task/add" >
             {(<button className='btn btn-gradient-border btn-glow' style={{ float: "right" }}><span>Add Task</span></button>)}
           </Link>
@@ -462,7 +564,7 @@ export default function Tasks() {
                   onChange={onchangeOfSelectedProject}
                   value={selectedProject._id}
                 >
-                  <option value="">Select project</option>
+                  <option value="" disabled>Select project</option>
                   {
                     projectList?.map((project) => {
                       return (
@@ -494,7 +596,6 @@ export default function Tasks() {
           projectTasks?.map((category) => {
             console.log(category)
             return (
-
               <Accordion key={category._id} defaultActiveKey="1" className='mt-3 neo-box'>
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>{category._id}</Accordion.Header>
@@ -542,6 +643,10 @@ export default function Tasks() {
           updateTaskCategory={updateTaskCategory}
           updateTaskAssignedTo={updateTaskAssignedTo}
           updateTaskDueDate={updateTaskDueDate}
+          updateTaskPriority={updateTaskPriority}
+          updateTaskStatus={updateTaskStatus}
+          updateTaskCompletedDate={updateTaskCompletedDate}
+          updateTaskAndCompletedStatus={updateTaskAndCompletedStatus}
           onHide={() => setTaskModalShow(false)}
         />
       }
