@@ -671,7 +671,7 @@ export default function Tasks() {
                             {getAssignedToTag(task)}
                             {getCompletedDateTag(task)}
 
-                            <i style={{ marginLeft: '0px' }} className='fa fa-comments' aria-hidden="true"></i>{'  ' + task.comments?.length}
+                            <i style={{ marginLeft: '20px' }} className='fa fa-comments' aria-hidden="true"></i>{'  ' + task.comments?.length}
                           </div>
                         )
                       })

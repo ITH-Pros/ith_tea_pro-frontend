@@ -42,7 +42,7 @@
 .taskCard {
   cursor: pointer;
   border: 1px solid rgb(80, 78, 78);
-  padding: 14px;
+  padding: 7px;
   margin-bottom: 10px;
   border-radius: 6px;
   box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgb(94 104 121 / 95%);
