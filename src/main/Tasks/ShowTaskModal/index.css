@@ -98,3 +98,7 @@
     word-break: break-word;
 }
 
+.react-date-picker__wrapper{
+    border: double;
+    border-radius: 20px;
+}
