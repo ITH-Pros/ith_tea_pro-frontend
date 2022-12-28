@@ -3,3 +3,32 @@
 .react-date-picker__calendar--open,.react-date-picker__calendar--closed{
     position: absolute
 }
+
+.pop-category{
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    color: #a0a6c7;
+    letter-spacing: 0;
+}
+
+.pop-title{
+    display: inline-block!important;
+    align-items: baseline!important;
+    justify-content: flex-start;
+    font-size: 20px;
+    color: #2a7ac4;
+    line-height: 1.462em;
+    margin-left: 10px;
+    word-break: break-word;
+}
+
+.pop-title-input{
+    margin: 0;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    width: 90%;
+    margin-left: 10px;
+}

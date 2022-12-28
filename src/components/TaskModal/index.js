@@ -10,13 +10,6 @@ import './index.css'
 
 function TaskModal(props) {
   const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskAndCompletedStatus } = props;
-  //   const [formDetails, setFormDetails] = useState({});
-  //   const updateFormDetails = (e) => {
-  //     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
-  //   };
-
-
-
 
   const CommentsForm = () => {
     const [commentValue, setCommentValue] = useState('');
@@ -61,7 +54,7 @@ function TaskModal(props) {
       <>
         {
           editTitleBoxEnable ?
-            <input
+            <input className="pop-title-input"
               autoFocus
               type="text"
               value={titleValue}
@@ -76,7 +69,7 @@ function TaskModal(props) {
             ></input>
             :
             <>
-              <span>{titleValue || <i>No Title</i>}</span>
+              <span className="pop-title">{titleValue || <i>No Title</i>}</span>
               <i
                 className="fa fa-pencil-square-o"
                 style={{ cursor: "pointer", margin: '10px' }}
@@ -160,7 +153,7 @@ function TaskModal(props) {
       selectedTaskDetails.category = e.target.value;
     }
     return (
-      <>
+      < >
         {
           editCategoryEnable ?
             <Form.Group as={Col} md="3" >
@@ -190,8 +183,7 @@ function TaskModal(props) {
               </Form.Control>
             </Form.Group>
             :
-            <small style={{ cursor: 'pointer' }} onClick={() => setEditCategoryEnable(true)}
-            >{categoryValue}</small>
+            <small style={{ cursor: 'pointer' }} className='pop-category' onClick={() => setEditCategoryEnable(true)}>{categoryValue}</small> 
         }
       </>
     )
@@ -477,7 +469,7 @@ function TaskModal(props) {
       <Modal.Body>
 
 
-        <UpdateCategoryBox />
+        <UpdateCategoryBox /><br/>
 
 
         <MDBTooltip
@@ -489,6 +481,7 @@ function TaskModal(props) {
         </MDBTooltip>
 
         <EditTitleBox />
+        <hr></hr>
 
         <div>
           <p>
@@ -504,7 +497,7 @@ function TaskModal(props) {
 
         <div>
           <hr></hr>
-          <b>Comments </b>
+          {/* <b>Comments </b> */}
           <CommentsForm />
           <CommentsListBox />
 
