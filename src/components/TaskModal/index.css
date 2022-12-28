@@ -32,3 +32,19 @@
     width: 90%;
     margin-left: 10px;
 }
+
+.pop-2-div{
+    display: flex;
+    justify-content: space-around;
+}
+
+.pop-2-span{
+    flex: none;
+    width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    color: #6f6f6f;
+    margin-right: 16px;
+    text-align: right;
+}

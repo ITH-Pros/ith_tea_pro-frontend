@@ -237,7 +237,11 @@ function TaskModal(props) {
             </Form.Group>
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)} >
-              Assigned to <b>{assignedToValue.name}</b>{" "}
+              <span className="pop-2-span">
+                
+              Assigned to
+             </span>
+              <b>{assignedToValue.name}</b>{" "}
             </p>
         }
       </>
@@ -282,7 +286,11 @@ function TaskModal(props) {
             </Form.Group>
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)} >
-              Priority <b>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>{" "}
+              <span className="pop-2-span">
+              Priority
+
+              </span>
+              <b>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>{" "}
             </p>
         }
       </>
@@ -334,9 +342,12 @@ function TaskModal(props) {
             :
             <>
               <div style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} >
-                Status
+                <p>
+
+              <span className="pop-2-span">  Status</span>
                 <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
                 <b> {statusValue || "Not set"} </b>
+                </p>
               </div>
               {statusValue === 'COMPLETED' && <UpdateCompletedDateBox />}
             </>
@@ -379,7 +390,12 @@ function TaskModal(props) {
             </div>
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditDueDateEnable(true)} >
-              Due Date <b>{dueDateValue.toDateString() || "Not set"}</b>{" "}
+             
+              <span className="pop-2-span">
+              Due Date
+
+              </span>
+              <b>{dueDateValue.toDateString() || "Not set"}</b>{" "}
             </p>
         }
       </>
@@ -420,7 +436,12 @@ function TaskModal(props) {
             </div>
             :
             <p style={{ cursor: 'pointer' }} onClick={() => setEditCompletedDateEnable(true)} >
-              Complete Date <b>{completedDateValue.toDateString() || "Not set"}</b>{" "}
+              <span className="pop-2-span">
+              Completed Date
+
+              </span>
+
+              <b>{completedDateValue.toDateString() || "Not set"}</b>{" "}
             </p>
         }
       </>
@@ -483,20 +504,28 @@ function TaskModal(props) {
         <EditTitleBox />
         <hr></hr>
 
-        <div>
+        <div className="pop-2-div">
+          <div>
           <p>
-            Created By <b>{selectedTaskDetails?.createdBy?.name}</b> on{" "}
+             <span className="pop-2-span">Created By</span> 
+              <b>{selectedTaskDetails?.createdBy?.name}</b> on{" "}
             <b>{selectedTaskDetails?.createdAt ? new Date(selectedTaskDetails?.createdAt).toDateString() : ''}</b>
           </p>
           <UpdateAssignedToBox />
           <UpdateDueDateBox />
+
+          </div>
+          <div>
+
           <UpdatePriorityBox />
           <UpdateStatusBox />
-          <EditDescriptionBox />
+          </div>
+
         </div>
 
         <div>
           <hr></hr>
+          <EditDescriptionBox />
           {/* <b>Comments </b> */}
           <CommentsForm />
           <CommentsListBox />
