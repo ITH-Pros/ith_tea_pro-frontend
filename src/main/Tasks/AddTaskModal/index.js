@@ -22,7 +22,7 @@ export default function AddTaskModal(props) {
     const [userList, setUserList] = useState([]);
     // const [taskListArray, setTaskListArray] = useState([]);
     const [validated, setValidated] = useState(false);
-    // const [selectedProject, setSelectedProject] = useState({});
+    const [selectedProject, setSelectedProject] = useState({});
 
     const [taskFormValue, setTaskFormValue] = useState({
         projectId: '',
@@ -39,6 +39,13 @@ export default function AddTaskModal(props) {
     useEffect(() => {
         getProjectList();
     }, []);
+    useEffect(() => {
+        setTaskFormValue({ ...taskFormValue, projectId: selectedProject._id, category: selectedProject.categories?.[0] })
+        setTaskFormValue({ ...taskFormValue, projectId: selectedProject._id, category: selectedProject.categories?.[0] })
+        setCategoryList(selectedProject.categories)
+        setUserList(selectedProject.accessibleBy)
+
+    }, [selectedProject]);
 
     const getProjectList = async () => {
         setLoading(true)
@@ -53,9 +60,7 @@ export default function AddTaskModal(props) {
                 return
             } else {
                 setProjectList(projectList.data)
-                setTaskFormValue({ ...taskFormValue, projectId: projectList.data?.[0]._id, category: projectList.data?.[0].categories?.[0] })
-                setCategoryList(projectList.data?.[0].categories)
-                setUserList(projectList.data?.[0].accessibleBy)
+                setSelectedProject(projectList.data?.[0])
             }
         } catch (error) {
             setLoading(false);
@@ -63,7 +68,11 @@ export default function AddTaskModal(props) {
         }
     }
 
-
+    const onchangeSelectedProject = (e) => {
+        let project = projectList.find((el) => el._id === e.target.value)
+        setSelectedProject(project);
+        updateTaskFormValue(e)
+    };
     const updateTaskFormValue = (e) => {
         console.log("updateTaskFormValue", e.target.name, e.target.value);
         setTaskFormValue({ ...taskFormValue, [e.target.name]: e.target.value });
@@ -77,7 +86,6 @@ export default function AddTaskModal(props) {
         setValidated(true);
         setLoading(true)
         try {
-
             const taskRes = await createTask(taskFormValue);
             setLoading(false);
             if (taskRes.error) {
@@ -123,13 +131,13 @@ export default function AddTaskModal(props) {
                                 required
                                 as="select"
                                 type="select"
-                                onChange={updateTaskFormValue}
-                                value={taskFormValue.project}
+                                onChange={onchangeSelectedProject}
+                                value={taskFormValue.projectId}
                                 name="projectId"
                             >
                                 {/* {'jjjjjjjjj' + taskFormValue.project} */}
                                 <option value="" disabled>Select Project</option>
-                                {projectList.map((project) => (
+                                {projectList?.map((project) => (
                                     <option value={project._id} key={project._id}>
                                         {project.name}
                                     </option>
@@ -154,7 +162,7 @@ export default function AddTaskModal(props) {
                                 value={taskFormValue.category}
                             >
                                 <option value="">Select</option>
-                                {categoryList.map((category) => (
+                                {categoryList?.map((category) => (
                                     <option value={category} key={category}>
                                         {category}
                                     </option>
@@ -203,7 +211,7 @@ export default function AddTaskModal(props) {
                                 value={taskFormValue.assignedTo}
                             >
                                 <option value="">Select User</option>
-                                {userList.map((module) => (
+                                {userList?.map((module) => (
                                     <option value={module._id} key={module._id}>
                                         {module.name}
                                     </option>
@@ -299,6 +307,6 @@ export default function AddTaskModal(props) {
 
 
             </div>
-        </Modal>
+        </Modal >
     );
 }

@@ -145,7 +145,8 @@ export default function Tasks() {
         //   className: "toast-message",
         // });
         console.log("comment added succesfully ");
-        getProjectList()
+        // getProjectList()
+        getAllTaskOfProject()
         getProjectsTaskDetails(selectedTaskDetails)
       }
     } catch (error) {
@@ -286,7 +287,7 @@ export default function Tasks() {
         return
       } else {
         console.log("taskRes.data---", taskRes.data)
-        // getAllTaskOfProject();
+        getAllTaskOfProject();
       }
     } catch (error) {
       setLoading(false);
@@ -311,7 +312,7 @@ export default function Tasks() {
         return
       } else {
         console.log("taskRes.data---", taskRes.data)
-        // getAllTaskOfProject();
+        getAllTaskOfProject();
       }
     } catch (error) {
       setLoading(false);
@@ -337,7 +338,7 @@ export default function Tasks() {
         return
       } else {
         console.log("taskRes.data---", taskRes.data)
-        // getAllTaskOfProject();
+        getAllTaskOfProject();
       }
     } catch (error) {
       setLoading(false);
