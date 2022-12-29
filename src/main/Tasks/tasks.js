@@ -123,6 +123,8 @@ export default function Tasks() {
       return error.message;
     }
   }
+
+
   const addCommentOnTask = async (comment) => {
     let dataToSend = {
       comment,
@@ -186,173 +188,13 @@ export default function Tasks() {
     }
   }
 
-  const updateTaskTitle = async (title) => {
-    console.log("updateTaskTitle", title)
+  const updateTaskCompletedStatusAndDate = async (data) => {
+    console.log("updateTaskCompletedStatusAndDate", data)
     setLoading(true)
     try {
       let dataToSend = {
         taskId: selectedTaskDetails._id,
-        title
-      }
-      const taskRes = await updateTaskDetails(dataToSend);
-      setLoading(false);
-      if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        return
-      } else {
-        console.log("taskRes.data---", taskRes.data)
-        getAllTaskOfProject()
-
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
-
-
-  }
-
-  const updateTaskCategory = async (category) => {
-    console.log("updateTaskCategory", category)
-    setLoading(true)
-    try {
-      let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        category
-      }
-      const taskRes = await updateTaskDetails(dataToSend);
-      setLoading(false);
-      if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        return
-      } else {
-        console.log("taskRes.data---", taskRes.data)
-        getAllTaskOfProject();
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
-
-
-  }
-
-  const updateTaskAssignedTo = async (assignedTo) => {
-    console.log("updateTaskAssignedTo", assignedTo)
-    setLoading(true)
-    try {
-      let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        assignedTo
-      }
-      const taskRes = await updateTaskDetails(dataToSend);
-      setLoading(false);
-      if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        return
-      } else {
-        console.log("taskRes.data---", taskRes.data)
-        // getAllTaskOfProject();
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
-  }
-
-  const updateTaskDueDate = async (dueDate) => {
-    console.log("updateTaskDueDate", dueDate)
-    setLoading(true)
-    try {
-      let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        dueDate
-      }
-      const taskRes = await updateTaskDetails(dataToSend);
-      setLoading(false);
-      if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        return
-      } else {
-        console.log("taskRes.data---", taskRes.data)
-        getAllTaskOfProject();
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
-  }
-  const updateTaskCompletedDate = async (completedDate) => {
-    console.log("updateTaskCompletedDate", completedDate)
-    setLoading(true)
-    try {
-      let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        completedDate
-      }
-      const taskRes = await updateTaskDetails(dataToSend);
-      setLoading(false);
-      if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        return
-      } else {
-        console.log("taskRes.data---", taskRes.data)
-        getAllTaskOfProject();
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
-  }
-
-  const updateTaskPriority = async (priority) => {
-    console.log("updateTaskPriority", priority)
-    setLoading(true)
-    try {
-      let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        priority
-      }
-      const taskRes = await updateTaskDetails(dataToSend);
-      setLoading(false);
-      if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        return
-      } else {
-        console.log("taskRes.data---", taskRes.data)
-        getAllTaskOfProject();
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
-  }
-  const updateTaskStatus = async (status) => {
-    console.log("updateTaskStatus", status)
-    setLoading(true)
-    try {
-      let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        status,
-        completedDate: null
+        ...data
       }
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
@@ -366,20 +208,31 @@ export default function Tasks() {
         console.log("taskRes.data---", taskRes.data)
         // getProjectList()
         getAllTaskOfProject();
+        getProjectsTaskDetails(selectedTaskDetails)
       }
     } catch (error) {
       setLoading(false);
       return error.message;
     }
   }
-  const updateTaskCompletedStatusAndDate = async (data) => {
-    console.log("updateTaskCompletedStatusAndDate", data)
+
+  const updateMutipleTaskDetails = async (data, taskDetails) => {
+    console.log("updateMutipleTaskDetails", data)
     setLoading(true)
     try {
       let dataToSend = {
-        taskId: selectedTaskDetails._id,
-        ...data
+        taskId: taskDetails._id,
       }
+      data.projectId && (dataToSend["projectId"] = data.projectId)
+      data.category && (dataToSend["category"] = data.category)
+      data.title && (dataToSend["title"] = data.title)
+      data.description && (dataToSend["description"] = data.description)
+      data.assignedTo && (dataToSend["assignedTo"] = data.assignedTo)
+      data.dueDate && (dataToSend["dueDate"] = data.dueDate)
+      data.priority && (dataToSend["priority"] = data.priority)
+      data.status && (dataToSend["status"] = data.status)
+      data.completedDate && (dataToSend["completedDate"] = data.completedDate)
+
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
@@ -444,6 +297,22 @@ export default function Tasks() {
       )
     }
   }
+
+  const setSelectedProjectFromAddTask = (project, closeAndOpen) => {
+    if (project._id === selectedProject._id) {
+      console.log("project._id === selectedProject._id", project._id === selectedProject._id)
+      setSelectedProject(project)
+      !closeAndOpen && getAllTaskOfProject();
+    } else {
+      setSelectedProject(project)
+    }
+    setShowAddTaskModal(false)
+    if (closeAndOpen) {
+      setShowAddTaskModal(true)
+    }
+  }
+
+
 
   // const FilterModal = (props) => {
   //   return (
@@ -519,7 +388,7 @@ export default function Tasks() {
   //                   <option value={module._id} key={module._id}>
   //                     {module.name}
   //                   </option>
-  //                 ))}
+  //                 ))}assignedTo
   //               </Form.Control>
   //             </Form.Group>
   //           </Row>
@@ -646,10 +515,10 @@ export default function Tasks() {
           projectTasks?.map((category) => {
             console.log(category)
             return (
-              <Accordion key={category._id} defaultActiveKey="1" className='mt-3 neo-box'>
+              <Accordion id="dialog-window" key={category._id} defaultActiveKey="1" className='mt-3 neo-box'>
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>{category._id}</Accordion.Header>
-                  <Accordion.Body className="accorback-neo">
+                  <Accordion.Body id="scrollable-content" className="accorback-neo">
                     {
                       category.tasks?.map((task) => {
                         console.log(task)
@@ -660,7 +529,7 @@ export default function Tasks() {
                             <MDBTooltip
                               tag="span"
                               wrapperProps={{ href: "#" }}
-                              title={task.status}
+                              title={task.status || 'Not Set'}
                             >
                               <i style={{ marginRight: '20px' }} className={getIconClassForStatus(task.status)} aria-hidden="true"></i>
                             </MDBTooltip>
@@ -696,14 +565,8 @@ export default function Tasks() {
           selectedProject={selectedProject}
           updateTaskDescription={updateTaskDescription}
           addCommentOnTask={addCommentOnTask}
-          updateTaskTitle={updateTaskTitle}
-          updateTaskCategory={updateTaskCategory}
-          updateTaskAssignedTo={updateTaskAssignedTo}
-          updateTaskDueDate={updateTaskDueDate}
-          updateTaskPriority={updateTaskPriority}
-          updateTaskStatus={updateTaskStatus}
-          updateTaskCompletedDate={updateTaskCompletedDate}
           updateTaskCompletedStatusAndDate={updateTaskCompletedStatusAndDate}
+          updateMutipleTaskDetails={updateMutipleTaskDetails}
           onHide={() => setTaskModalShow(false)}
         />
       }
@@ -711,6 +574,8 @@ export default function Tasks() {
         showAddTaskModal &&
         <AddTaskModal
           show={showAddTaskModal}
+          selectedProjectFromTask={selectedProject}
+          setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
           onHide={() => setShowAddTaskModal(false)}
         />
       }

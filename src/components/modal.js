@@ -9,8 +9,8 @@ const Modals = (props) => {
             <Modal
                 onHide={onHide}
                 show={modalShow}
-                backdrop={backdropProp}
-                keyboard={keyboardProp}
+                // backdrop={backdropProp}
+                // keyboard={keyboardProp}
                 size={size || 'lg'}
                 aria-labelledby="contained-modal-title-vcenter"
                 centered

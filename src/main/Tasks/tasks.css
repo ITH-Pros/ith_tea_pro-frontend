@@ -119,3 +119,13 @@
 /* .form-control{
   width: auto !important;
 } */
+
+
+#dialog-window {
+  border: 1px black solid;
+}
+
+#scrollable-content {
+  max-height: 500px;
+  overflow: auto;
+}

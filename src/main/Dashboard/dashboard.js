@@ -29,7 +29,6 @@ export default function Dashboard(props) {
   const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [editRatingEnabled, setEditRatingEnabled] = useState(false);
 
   const [loading, setLoading] = useState(false);
   let commentFormValue = ''
@@ -166,46 +165,50 @@ export default function Dashboard(props) {
     }
   }
 
-  const editUserRating = async () => {
-    setLoading(true);
 
-    try {
-      let dataToSend = {
-        ratingId: selectedRatingId,
-        rating: newRating
-      }
-      const rating = await updateUserRating(dataToSend);
-      setLoading(false);
-
-      if (rating.error) {
-        // toast.error(rating.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-      } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        setSelectedRating(newRating);
-        setEditRatingEnabled(false);
-        getAllRatings({
-          month: months.indexOf(monthUse) + 1,
-          year: yearUse,
-        })
-
-
-      }
-    } catch (error) {
-      setLoading(false);
-    }
-
-  }
 
   const GetModalBody = () => {
+    const [editRatingEnabled, setEditRatingEnabled] = useState(false);
+
+    const editUserRating = async () => {
+      setLoading(true);
+
+      try {
+        let dataToSend = {
+          ratingId: selectedRatingId,
+          rating: newRating
+        }
+        const rating = await updateUserRating(dataToSend);
+        setLoading(false);
+
+        if (rating.error) {
+          // toast.error(rating.error.message, {
+          //   position: toast.POSITION.TOP_CENTER,
+          //   className: "toast-message",
+          // });
+        } else {
+          // toast.success("Submitted succesfully !", {
+          //   position: toast.POSITION.TOP_CENTER,
+          //   className: "toast-message",
+          // });
+          setSelectedRating(newRating);
+          setEditRatingEnabled(false);
+          getAllRatings({
+            month: months.indexOf(monthUse) + 1,
+            year: yearUse,
+          })
+
+
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+
+    }
+
+
     return (
       <>
-
         <div>
           <div
             style={{
@@ -245,11 +248,8 @@ export default function Dashboard(props) {
                   {moment(comments?.comments?.createdAt).format("Do MMMM  YYYY, h:mm a")}
                 </small>{" "}
                 <br />
-                <p style={{ marginTop: "10px" }} dangerouslySetInnerHTML={{ __html : comments?.comments?.comment}}>
+                <p style={{ marginTop: "10px" }} dangerouslySetInnerHTML={{ __html: comments?.comments?.comment }}>
                 </p>
-                {/* <span>Comment:- </span> {comments?.comment}<br/>
-								<span> Commented By:- </span>{clickedRatingArray.commentedByArray?.[index]?.name}<br/>
-                <span> Date & Time:- </span>{comments.createdAt?.split('T')[0] +'(' +comments?.createdAt?.split('T')[1]?.split('.')[0]+')'} */}
               </div>
             );
           })
@@ -271,10 +271,6 @@ export default function Dashboard(props) {
               placeholder="Comment"
               onChange={(e) => { commentFormValue = e.target.value }}
             />
-            {/* <Form.Control.Feedback type="invalid">
-                    Comment is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
           </Form.Group>
 
           <Button className="btnshort btn btn-gradient-border" type="submit" onClick={() => { addCommnetFunc() }}>
@@ -315,7 +311,7 @@ export default function Dashboard(props) {
         if (!modalShow) {
           setSelectedRating(rating);
           setSelectedRatingId(ratingId)
-          setModalShow(true);
+          // setModalShow(true);
         }
       }
     } catch (error) {
@@ -325,24 +321,20 @@ export default function Dashboard(props) {
 
   function openShowCommentsModal(data) {
     console.log(data);
+    setModalShow(true);
     getCommentsByRatingId(data?.ratingId, data?.rating);
-  }
-
-  const clearModalVariablesAndCloseModal = () => {
-    setEditRatingEnabled(false);
-    setModalShow(false);
-  }
-  const showAddRatingDialog = () => {
-    console.log("============================================================")
-
   }
 
   return (
     <div>
 
-      <h1 className="h1-text">
-        <i className="fa fa-home" aria-hidden="true"></i> Dashboard
-      </h1>
+      {
+        props.showBtn &&
+
+        <h1 className="h1-text">
+          <i className="fa fa-home" aria-hidden="true"></i> Dashboard
+        </h1>
+      }
       <div>
         <div>
           {/* <Link to="/rating" params={{ params: true }}>
@@ -377,8 +369,6 @@ export default function Dashboard(props) {
                   Select Month
                 </option>
                 {months.map((monthh, index) => (
-
-
                   <option value={monthh} key={monthh} disabled={index > month}>
                     {monthh}
                   </option>
@@ -509,15 +499,16 @@ export default function Dashboard(props) {
       </div>
       {loading ? <Loader /> : null}
 
-      {modalShow && <Modals
-        modalShow={modalShow}
-        modalBody={<GetModalBody />}
-        heading="Rating Details"
-        size="md"
-        btnContent="Close"
-        onClick={() => clearModalVariablesAndCloseModal()}
-        onHide={() => clearModalVariablesAndCloseModal()}
-      />
+      {
+        modalShow && <Modals
+          modalShow={modalShow}
+          modalBody={<GetModalBody />}
+          heading="Rating Details"
+          size="md"
+          btnContent="Close"
+          onClick={() => setModalShow(false)}
+          onHide={() => setModalShow(false)}
+        />
       }
     </div>
   );

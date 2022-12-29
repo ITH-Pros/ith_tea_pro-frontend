@@ -20,7 +20,6 @@ import { useLocation } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast, cssTransition } from "react-toastify";
-import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
 const bounce = cssTransition({
   enter: "animate__animated animate__bounceIn",
   exit: "animate__animated animate__bounceOut"
@@ -49,11 +48,9 @@ export default function Rating(props) {
   const [teamOptions, setTeamOptions] = useState([]);
   const [team, setTeam] = useState("");
   const [date, setDate] = useState(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate());
-  // const [date, setDate] = useState('');
   const [rating, setRating] = useState("");
   const [comments, setComments] = useState("");
   const [validated, setValidated] = useState(false);
-  // const [tags, setTags] = useState([]);
 
 
   if (!team && location && location.state && location.state.userId) {
@@ -182,7 +179,7 @@ export default function Rating(props) {
     switch (currentView) {
       case "Add":
         return (
-          <div className="dv-50">
+          <div className="dv-50-rating">
             <Form noValidate validated={validated}>
               <Row className="mb-3">
                 <Form.Group as={Col} md="4" >

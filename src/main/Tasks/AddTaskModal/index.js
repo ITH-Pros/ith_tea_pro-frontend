@@ -11,7 +11,7 @@ import { Modal } from 'react-bootstrap';
 import { getAllProjects, createTask } from '../../../services/user/api';
 
 export default function AddTaskModal(props) {
-    const { show, onHide } = props;
+    const { show, onHide, setSelectedProjectFromAddTask, selectedProjectFromTask } = props;
 
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
     const priorityList = ["LOW", "REPEATED", "MEDIUM", "HIGH"]
@@ -22,19 +22,14 @@ export default function AddTaskModal(props) {
     const [userList, setUserList] = useState([]);
     // const [taskListArray, setTaskListArray] = useState([]);
     const [validated, setValidated] = useState(false);
-    const [selectedProject, setSelectedProject] = useState({});
+    const [selectedProject, setSelectedProject] = useState(selectedProjectFromTask);
 
     const [taskFormValue, setTaskFormValue] = useState({
-        projectId: '',
-        category: '',
-        title: "",
-        description: "",
-        assignedTo: "",
-        dueDate: "",
-        priority: "",
-        status: "",
-        attachment: "",
+        projectId: '', category: '', title: '', description: '',
+        assignedTo: '', dueDate: '', completedDate: '',
+        priority: '', status: '', attachment: '',
     });
+    console.log("taskFormValue--------------", taskFormValue)
 
     useEffect(() => {
         getProjectList();
@@ -60,7 +55,8 @@ export default function AddTaskModal(props) {
                 return
             } else {
                 setProjectList(projectList.data)
-                setSelectedProject(projectList.data?.[0])
+                console.log("selectedProjectFromTask", selectedProjectFromTask)
+                setSelectedProject(selectedProjectFromTask)
             }
         } catch (error) {
             setLoading(false);
@@ -75,18 +71,42 @@ export default function AddTaskModal(props) {
     };
     const updateTaskFormValue = (e) => {
         console.log("updateTaskFormValue", e.target.name, e.target.value);
-        setTaskFormValue({ ...taskFormValue, [e.target.name]: e.target.value });
+        let updateValue = { ...taskFormValue, [e.target.name]: e.target.value }
+        if (e.target.name === 'status' && !(e.target.value === "COMPLETED")) {
+            updateValue['completedDate'] = null
+        }
+        if (e.target.name === 'status' && e.target.value === "COMPLETED") {
+            let toady = new Date()
+            updateValue['completedDate'] = toady.getFullYear() + '-' + (toady.getMonth() + 1) + '-' + toady.getDate()
+        }
+        setTaskFormValue(updateValue);
     }
     const updateTaskDescriptionValue = (description) => {
         console.log("updateTaskDescriptionValue", description);
+        // console.log(description);
         setTaskFormValue({ ...taskFormValue, description });
     }
 
     const submitTask = async () => {
+        console.log("ddddddddd",)
         setValidated(true);
+        if (!taskFormValue.projectId || !taskFormValue.category || !taskFormValue.title) {
+            return
+        }
         setLoading(true)
         try {
-            const taskRes = await createTask(taskFormValue);
+            let { projectId, category, title, description, assignedTo, dueDate, priority, status, attachment } = taskFormValue
+            let dataToSend = {}
+            projectId && (dataToSend["projectId"] = projectId)
+            category && (dataToSend["category"] = category)
+            title && (dataToSend["title"] = title)
+            description && (dataToSend["description"] = description)
+            assignedTo && (dataToSend["assignedTo"] = assignedTo)
+            dueDate && (dataToSend["dueDate"] = dueDate)
+            priority && (dataToSend["priority"] = priority)
+            status && (dataToSend["status"] = status)
+
+            const taskRes = await createTask(dataToSend);
             setLoading(false);
             if (taskRes.error) {
                 // toast.error(taskRes.error.message, {
@@ -96,6 +116,14 @@ export default function AddTaskModal(props) {
                 return
             } else {
                 console.log("taskRes.data---", taskRes.data)
+                setTaskFormValue({
+                    projectId: '', category: '', title: '', description: '',
+                    assignedTo: '', dueDate: '', completedDate: '',
+                    priority: '', status: '', attachment: '',
+                })
+                setSelectedProjectFromAddTask(selectedProject, false)
+                // createAndAddAnotherTask();
+
                 // getProjectList()
                 // getAllTaskOfProject();
                 // getProjectsTaskDetails(selectedTaskDetails)
@@ -104,8 +132,48 @@ export default function AddTaskModal(props) {
             setLoading(false);
             return error.message;
         }
-        // e.preventDefault();
-        // e.stopPropagation();
+    }
+
+    const submitTaskAnother = async () => {
+        console.log("ddddddddd",)
+        setValidated(true);
+        if (!taskFormValue.projectId || !taskFormValue.category || !taskFormValue.title) {
+            return
+        }
+        setLoading(true)
+        try {
+            let { projectId, category, title, description, assignedTo, dueDate, priority, status, attachment } = taskFormValue
+            let dataToSend = {}
+            projectId && (dataToSend["projectId"] = projectId)
+            category && (dataToSend["category"] = category)
+            title && (dataToSend["title"] = title)
+            description && (dataToSend["description"] = description)
+            assignedTo && (dataToSend["assignedTo"] = assignedTo)
+            dueDate && (dataToSend["dueDate"] = dueDate)
+            priority && (dataToSend["priority"] = priority)
+            status && (dataToSend["status"] = status)
+
+            const taskRes = await createTask(dataToSend);
+            setLoading(false);
+            if (taskRes.error) {
+                // toast.error(taskRes.error.message, {
+                //   position: toast.POSITION.TOP_CENTER,
+                //   className: "toast-message",
+                // });
+                return
+            } else {
+                console.log("taskRes.data---", taskRes.data)
+                setTaskFormValue({
+                    ...taskFormValue,
+                    title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
+                })
+                setValidated(false)
+                setSelectedProjectFromAddTask(selectedProject, true)
+            }
+        } catch (error) {
+            setLoading(false);
+            return error.message;
+        }
     }
 
 
@@ -122,191 +190,230 @@ export default function AddTaskModal(props) {
                     Add Task
                 </Modal.Title>
             </Modal.Header>
-            <div className="dv-50">
-                <Form noValidate validated={validated}>
-                    <Row className="mb-3">
-                        <Form.Group as={Col} md="6">
-                            <Form.Label>Project</Form.Label>
-                            <Form.Control
-                                required
-                                as="select"
-                                type="select"
-                                onChange={onchangeSelectedProject}
-                                value={taskFormValue.projectId}
-                                name="projectId"
-                            >
-                                {/* {'jjjjjjjjj' + taskFormValue.project} */}
-                                <option value="" disabled>Select Project</option>
-                                {projectList?.map((project) => (
-                                    <option value={project._id} key={project._id}>
-                                        {project.name}
-                                    </option>
-                                ))}
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                Task List is required !!
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Modal.Body>
+                <div className="dv-50">
+                    <Form noValidate validated={validated}>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="6">
+                                <Form.Label>Project</Form.Label>
+                                <Form.Control
+                                    required
+                                    as="select"
+                                    type="select"
+                                    onChange={onchangeSelectedProject}
+                                    value={taskFormValue.projectId}
+                                    name="projectId"
+                                >
+                                    {/* {'jjjjjjjjj' + taskFormValue.project} */}
+                                    <option value="" disabled>Select Project</option>
+                                    {projectList?.map((project) => (
+                                        <option value={project._id} key={project._id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    Task List is required !!
+                                </Form.Control.Feedback>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 
-                        </Form.Group>
-                    </Row>
-                    <Row className="mb-3">
-                        <Form.Group as={Col} md="6">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Control
-                                required
-                                as="select"
-                                type="select"
-                                name='category'
-                                onChange={updateTaskFormValue}
-                                value={taskFormValue.category}
-                            >
-                                <option value="">Select</option>
-                                {categoryList?.map((category) => (
-                                    <option value={category} key={category}>
-                                        {category}
-                                    </option>
-                                ))}
-                            </Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                                Task List is required !!
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                            </Form.Group>
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="6">
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control
+                                    required
+                                    as="select"
+                                    type="select"
+                                    name='category'
+                                    onChange={updateTaskFormValue}
+                                    value={taskFormValue.category}
+                                >
+                                    <option value="" disabled>Select Category</option>
+                                    {categoryList?.map((category) => (
+                                        <option value={category} key={category}>
+                                            {category}
+                                        </option>
+                                    ))}
+                                </Form.Control>
+                                <Form.Control.Feedback type="invalid">
+                                    Task List is required !!
+                                </Form.Control.Feedback>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 
-                        </Form.Group>
-                    </Row>
+                            </Form.Group>
+                        </Row>
 
-                    <Row className="mb-3">
-                        <Form.Group as={Col} md="10">
-                            <Form.Label>Task Title</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                placeholder="Title"
-                                value={taskFormValue.title}
-                                name='title'
-                                onChange={updateTaskFormValue}
-                            />
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="10">
+                                <Form.Label>Task Title</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="text"
+                                    placeholder="Title"
+                                    value={taskFormValue.title}
+                                    name='title'
+                                    onChange={updateTaskFormValue}
+                                />
 
-                            <Form.Control.Feedback type="invalid">
-                                Title is required !!
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">
+                                    Title is required !!
+                                </Form.Control.Feedback>
+                                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 
-                        </Form.Group>
-                    </Row>
+                            </Form.Group>
+                        </Row>
 
-                    <Row className="mb-3">
-                        <FroalaEditorComponent tag='textarea' onModelChange={updateTaskDescriptionValue} />
-                    </Row>
+                        <Row className="mb-3">
+                            <FroalaEditorComponent tag='textarea' onModelChange={updateTaskDescriptionValue} />
+                        </Row>
 
-                    <Row className="mb-3">
-                        <Form.Group as={Col} md="3" >
-                            <Form.Label>Assigned To</Form.Label>
-                            <Form.Control
-                                as="select"
-                                type="select"
-                                name='assignedTo'
-                                onChange={updateTaskFormValue}
-                                value={taskFormValue.assignedTo}
-                            >
-                                <option value="">Select User</option>
-                                {userList?.map((module) => (
-                                    <option value={module._id} key={module._id}>
-                                        {module.name}
-                                    </option>
-                                ))}
-                            </Form.Control>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="3" >
+                                <Form.Label>Assigned To</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    type="select"
+                                    name='assignedTo'
+                                    onChange={updateTaskFormValue}
+                                    value={taskFormValue.assignedTo}
+                                >
+                                    <option value="">Select User</option>
+                                    {userList?.map((module) => (
+                                        <option value={module._id} key={module._id}>
+                                            {module.name}
+                                        </option>
+                                    ))}
+                                </Form.Control>
 
-                        </Form.Group>
-                        <Form.Group as={Col} md="3">
-                            <Form.Label>Due Date</Form.Label>
-                            <Form.Control
-                                type="date"
-                                placeholder="Due date"
-                                name='dueDate'
-                                onChange={updateTaskFormValue}
-                            />
+                            </Form.Group>
+                            <Form.Group as={Col} md="4">
+                                <Form.Label>Due Date</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    placeholder="Due date"
+                                    name='dueDate'
+                                    onChange={updateTaskFormValue}
+                                />
 
-                        </Form.Group>
+                            </Form.Group>
 
-                        <Form.Group as={Col} md="3" >
-                            <Form.Label>Priority</Form.Label>
+                            <Form.Group as={Col} md="3" >
+                                <Form.Label>Priority</Form.Label>
 
-                            <Form.Control
-                                as="select"
-                                type="select"
-                                name='priority'
-                                onChange={updateTaskFormValue}
-                                value={taskFormValue.priority}
-                            >
-                                <option value="" disabled>Select Priority</option>
-                                {priorityList.map((priority) => (
-                                    <option value={priority} key={priority}>
-                                        {priority}
-                                    </option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
+                                <Form.Control
+                                    as="select"
+                                    type="select"
+                                    name='priority'
+                                    onChange={updateTaskFormValue}
+                                    value={taskFormValue.priority}
+                                >
+                                    <option value="" disabled>Select Priority</option>
+                                    {priorityList.map((priority) => (
+                                        <option value={priority} key={priority}>
+                                            {priority}
+                                        </option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>
 
-                        <Form.Group as={Col} md="2" >
-                            <Form.Label>Status</Form.Label>
+                            {/* <Form.Group as={Col} md="2" >
+                                <Form.Label>Status</Form.Label>
 
-                            <Form.Control
-                                as="select"
-                                type="select"
-                                name='status'
-                                onChange={updateTaskFormValue}
-                                value={taskFormValue.status}
-                            >
-                                <option value="" disabled>Select Status</option>
-                                {statusList.map((status) => (
-                                    <option value={status} key={status}>
-                                        {status}
-                                    </option>
-                                ))}
-                            </Form.Control>
+                                <Form.Control
+                                    as="select"
+                                    type="select"
+                                    name='status'
+                                    onChange={updateTaskFormValue}
+                                    value={taskFormValue.status}
+                                >
+                                    <option value="" disabled>Select Status</option>
+                                    {statusList.map((status) => (
+                                        <option value={status} key={status}>
+                                            {status}
+                                        </option>
+                                    ))}
+                                </Form.Control>
 
-                        </Form.Group>
-                    </Row>
+                            </Form.Group> */}
+                        </Row>
 
-                    {/* <Row className="mb-3">
+                        <Row className="mb-3">
+                            <Form.Group as={Col} md="2" >
+                                <Form.Label>Status</Form.Label>
+
+                                <Form.Control
+                                    as="select"
+                                    type="select"
+                                    name='status'
+                                    onChange={updateTaskFormValue}
+                                    value={taskFormValue.status}
+                                >
+                                    <option value="" disabled>Select Status</option>
+                                    {statusList.map((status) => (
+                                        <option value={status} key={status}>
+                                            {status}
+                                        </option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>
+                            {
+                                taskFormValue?.status === "COMPLETED" &&
+                                <Form.Group as={Col} md="4">
+                                    <Form.Label>Completed Date</Form.Label>
+                                    <Form.Control
+                                        type="date"
+                                        placeholder="Completed date"
+                                        name='completedDate'
+                                        onChange={updateTaskFormValue}
+                                        value={taskFormValue.completedDate}
+
+                                    />
+                                </Form.Group>
+                            }
+
+                        </Row>
+
+                        {/* <Row className="mb-3">
                         <Form.Group as={Col} md="2" >
                             <Form.Label>Attachment</Form.Label>
                             <input type="file" />
                         </Form.Group>
                         </Row > */}
 
-                    <div style={{ float: 'right', marginRight: '10px' }}>
+                        <div style={{ float: 'right', marginRight: '10px' }}>
 
-                        <Button
-                            className="btn-gradient-border btnDanger"
-                            type="button"
-                            onClick={submitTask}
-                        >
-                            Create
-                        </Button>
-                        <Button
-                            className="btn-gradient-border btnDanger"
-                            type="submit"
-                        // onClick={handleSubmit}
-                        >
-                            Create And Add Another
-                        </Button>
+                            <Button
+                                className="btn-gradient-border btnDanger"
+                                type="button"
+                                onClick={submitTask}
+                            >
+                                Create
+                            </Button>
+                            <Button
+                                className="btn-gradient-border btnDanger"
+                                type="button"
+                                onClick={submitTaskAnother}
+                            // onClick={handleSubmit}
+                            >
+                                Create And Add Another
+                            </Button>
 
-                        {/* <Button
+                            {/* <Button
                             className="btn-gradient-border btnDanger"
                             type="submit"
                             onClick={handleSubmit}
                         >
                             Copy From Another Task
                         </Button> */}
-                    </div>
+                        </div>
 
-                </Form>
+                    </Form>
 
 
-            </div>
+                </div>
+            </Modal.Body>
         </Modal >
     );
 }

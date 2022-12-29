@@ -9,35 +9,34 @@ import DatePicker from "react-date-picker";
 import './index.css'
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateTaskDescription, addCommentOnTask, updateTaskTitle, updateTaskCategory, updateTaskAssignedTo, updateTaskDueDate, updateTaskPriority, updateTaskCompletedDate, updateTaskStatus, updateTaskCompletedStatusAndDate } = props;
+  const { show, selectedTaskDetails, onHide, selectedProject, updateMutipleTaskDetails, addCommentOnTask, updateTaskCompletedStatusAndDate } = props;
 
   const CommentsForm = () => {
     const [commentValue, setCommentValue] = useState('');
     console.log('render comments')
     return (
       <>
-      
-      <Row className="mb-3 mt-6" >
-        <Form.Group as={Col} md="12" className="mt-2" >
+
+        <Row className="mb-3 mt-6" >
+          <Form.Group as={Col} md="12" className="mt-2" >
             {/* <Form.Label>Comment</Form.Label> */}
             <hr></hr>
-          <Form.Control
-            autoFocus
-            as="textarea"
-            // required
-            // type="text"
-            placeholder="Comment"
-            // value={commentValue}
-            onChange={(e) => { setCommentValue(e.target.value) }}
-          />
-        </Form.Group>
+            <Form.Control
+              as="textarea"
+              // required
+              // type="text"
+              placeholder="Comment"
+              // value={commentValue}
+              onChange={(e) => { setCommentValue(e.target.value) }}
+            />
+          </Form.Group>
 
-        <Button className="btn btn-gradient-border" style={{width: '100px', marginTop:'10px'}} onClick={() => { addCommentOnTask(commentValue) }}>
-          Add
-        </Button>
+          <Button className="btn btn-gradient-border" style={{ width: '100px', marginTop: '10px' }} onClick={() => { addCommentOnTask(commentValue) }}>
+            Add
+          </Button>
         </Row >
       </>
-        
+
     )
 
   };
@@ -50,9 +49,8 @@ function TaskModal(props) {
       if (!titleValue) {
         return
       }
-      updateTaskTitle(titleValue);
+      updateMutipleTaskDetails({ title: titleValue }, selectedTaskDetails);
       setEditTitleBoxEnable(false);
-      selectedTaskDetails.title = titleValue;
     }
 
     return (
@@ -111,7 +109,7 @@ function TaskModal(props) {
               ></input>
             </div>
             <div>
-              <button className="btn btn-gradient-border" style={{width: '100px' , padding: '4px 23px'}}
+              <button className="btn btn-gradient-border" style={{ width: '100px', padding: '4px 23px' }}
                 onClick={() => {
                   setDescriptionValue(selectedTaskDetails.description);
                   setEditDescBoxEnable(false);
@@ -119,11 +117,10 @@ function TaskModal(props) {
               >
                 Cancel
               </button>
-              <button className="btn btn-gradient-border" style={{width: '100px',padding: '4px 23px'}}
+              <button className="btn btn-gradient-border" style={{ width: '100px', padding: '4px 23px' }}
                 onClick={() => {
-                  updateTaskDescription(descriptionValue);
+                  updateMutipleTaskDetails({ description: descriptionValue }, selectedTaskDetails);
                   setEditDescBoxEnable(false);
-                  selectedTaskDetails.description = descriptionValue;
                 }}
               >
                 Save
@@ -154,10 +151,8 @@ function TaskModal(props) {
       if (e.target.value === categoryValue) {
         return
       }
-      updateTaskCategory(e.target.value)
-      setCategoryValue(e.target.value)
+      updateMutipleTaskDetails({ category: e.target.value }, selectedTaskDetails)
       setEditCategoryEnable(false);
-      selectedTaskDetails.category = e.target.value;
     }
     return (
       < >
@@ -204,33 +199,35 @@ function TaskModal(props) {
 
     const checkAndUpdateAssignedTo = (e) => {
       console.dir(e.target)
-      if (e.target.value === assignedToValue._id) {
+      if (e.target.value === assignedToValue?._id) {
         return
       }
-      updateTaskAssignedTo(e.target.value)
-      let assignedToObj = selectedProject?.accessibleBy?.find((el) => el._id === e.target.value)
-      setAssignedToValue({ _id: e.target.value, name: assignedToObj.name })
+      updateMutipleTaskDetails({ assignedTo: e.target.value }, selectedTaskDetails)
+      // let assignedToObj = selectedProject?.accessibleBy?.find((el) => el._id === e.target.value)
+      // setAssignedToValue({ _id: e.target.value, name: assignedToObj.name })
       setEditAssignedToEnable(false);
-      selectedTaskDetails.assignedTo = { _id: e.target.value, name: assignedToObj.name }
+      // selectedTaskDetails.assignedTo = { _id: e.target.value, name: assignedToObj.name }
     }
     return (
       <>
+        <span className="pop-2-span">
+          Assigned to
+        </span>
         {
           editAssignedToEnable ?
             <Form.Group as={Col} md="12" >
-                
               <Form.Control
                 as="select"
                 type="select"
                 autoFocus
                 onBlur={() => setEditAssignedToEnable(false)}
                 onChange={checkAndUpdateAssignedTo}
-                value={assignedToValue._id}
+                value={assignedToValue?._id || "Not Assigned"}
 
               >
                 <option value='' disabled>Assign to </option>
                 {selectedProject?.accessibleBy?.map((user) => {
-                  if (assignedToValue._id === user._id) {
+                  if (assignedToValue?._id === user._id) {
                     return (
                       <option value={user._id} key={user._id} disabled >
                         {user.name}
@@ -247,13 +244,10 @@ function TaskModal(props) {
               </Form.Control>
             </Form.Group>
             :
-            <p  >
-              <span className="pop-2-span">
-
-                Assigned to
-              </span>
-              <b style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)}>{assignedToValue.name}</b>{" "}
-            </p>
+            <>
+              <b style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)}>{assignedToValue?.name || "Not Assigned"}</b>
+              <br></br>
+            </>
         }
       </>
     )
@@ -269,12 +263,17 @@ function TaskModal(props) {
       if (e.target?.value === priorityValue) {
         return
       }
-      updateTaskPriority(e.target?.value)
+      // updateTaskPriority(e.target?.value)
+      updateMutipleTaskDetails({ priority: e.target.value }, selectedTaskDetails)
+
       setEditPriorityEnable(false);
-      selectedTaskDetails.priority = e.target?.value
+      // selectedTaskDetails.priority = e.target?.value
     }
     return (
       <>
+        <span className="pop-2-span">
+          Priority
+        </span>
         {
           editPriorityEnable ?
             <Form.Group as={Col} md="12" >
@@ -296,13 +295,10 @@ function TaskModal(props) {
               </Form.Control>
             </Form.Group>
             :
-            <p  >
-              <span className="pop-2-span">
-                Priority
-
-              </span>
-              <b style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)}>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>{" "}
-            </p>
+            <>
+              <b style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)}>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>
+            <br></br>
+            </>
         }
       </>
     )
@@ -323,13 +319,16 @@ function TaskModal(props) {
         // selectedTaskDetails.status = e.target?.value
         // selectedTaskDetails.completedDate = new Date()
       } else {
-        updateTaskStatus(e.target?.value)
+        // updateTaskStatus(e.target?.value)
+        updateMutipleTaskDetails({ status: e.target?.value, completedDate: new Date() }, selectedTaskDetails)
+
         setEditStatusEnable(false);
       }
       selectedTaskDetails.status = e.target?.value
     }
     return (
       <>
+        <span className="pop-2-span">  Status</span>
         {
           editStatusEnable ?
             <Form.Group as={Col} md="12" >
@@ -352,14 +351,10 @@ function TaskModal(props) {
             </Form.Group>
             :
             <>
-              <div  >
-                <p>
-
-                  <span className="pop-2-span">  Status</span>
+              <span >
                   <i style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
                   <b style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)}> {statusValue || "Not set"} </b>
-                </p>
-              </div>
+              </span>
               {statusValue === 'COMPLETED' && <UpdateCompletedDateBox />}
             </>
         }
@@ -376,18 +371,21 @@ function TaskModal(props) {
       if (!e || e?.toDateString() === dueDateValue?.toDateString()) {
         return
       }
-      updateTaskDueDate(e.toDateString())
-      setDueDateValue(e)
+      // updateTaskDueDate(e.toDateString())
+      updateMutipleTaskDetails({ dueDate: e.toDateString() }, selectedTaskDetails)
+      // setDueDateValue(e)
       setEditDueDateEnable(false);
-      selectedTaskDetails.dueDate = e
+      // selectedTaskDetails.dueDate = e
     }
     return (
       <>
-      
+        <span className="pop-2-span">
+          Due Date
+        </span>
         {
           editDueDateEnable ?
             <div className="taskDueDate">
-               <span className="pop-2-span">
+              <span className="pop-2-span">
                 Due Date
 
               </span>
@@ -405,14 +403,7 @@ function TaskModal(props) {
               </DatePicker>
             </div>
             :
-            <p  >
-
-              <span className="pop-2-span">
-                Due Date
-
-              </span>
-              <b style={{ cursor: 'pointer' }}  onClick={() => setEditDueDateEnable(true)}>{dueDateValue.toDateString() || "Not set"}</b>{" "}
-            </p>
+            <b style={{ cursor: 'pointer' }} onClick={() => setEditDueDateEnable(true)}>{dueDateValue.toDateString() || "Not set"}</b>
         }
       </>
     )
@@ -427,17 +418,19 @@ function TaskModal(props) {
       if (!e || e?.toDateString() === completedDateValue?.toDateString()) {
         return
       }
-      updateTaskCompletedDate(e.toDateString())
-      setDueDateValue(e)
+      // updateTaskCompletedDate(e.toDateString())
+      updateMutipleTaskDetails({ completedDate: e.toDateString() }, selectedTaskDetails)
+
+      // setDueDateValue(e)
       setEditCompletedDateEnable(false);
-      selectedTaskDetails.completedDate = e
+      // selectedTaskDetails.completedDate = e
     }
     return (
       <>
         {
           editCompletedDateEnable ?
             <div className="taskDueDate">
-               <span className="pop-2-span">
+              <span className="pop-2-span">
                 Completed Date
 
               </span>
