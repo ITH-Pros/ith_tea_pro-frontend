@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import './modal.css'
 const Modals = (props) => {
@@ -31,4 +31,4 @@ const Modals = (props) => {
     )
 }
 
-export default Modals 
+export default memo(Modals);
