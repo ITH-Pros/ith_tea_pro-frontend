@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import moment from "moment";
 import ReactDOM from 'react-dom/client';
 
@@ -33,6 +33,8 @@ export default function Dashboard(props) {
   const [loading, setLoading] = useState(false);
   let commentFormValue = ''
   let newRating = ''
+
+
 
   useEffect(() => {
     onInit();
@@ -206,7 +208,6 @@ export default function Dashboard(props) {
 
     }
 
-
     return (
       <>
         <div>
@@ -257,6 +258,7 @@ export default function Dashboard(props) {
       </>
     );
   };
+
 
   const CommentsForm = () => {
     return (
@@ -311,7 +313,8 @@ export default function Dashboard(props) {
         if (!modalShow) {
           setSelectedRating(rating);
           setSelectedRatingId(ratingId)
-          // setModalShow(true);
+          setModalShow(true);
+
         }
       }
     } catch (error) {
@@ -321,9 +324,9 @@ export default function Dashboard(props) {
 
   function openShowCommentsModal(data) {
     console.log(data);
-    setModalShow(true);
     getCommentsByRatingId(data?.ratingId, data?.rating);
   }
+
 
   return (
     <div>

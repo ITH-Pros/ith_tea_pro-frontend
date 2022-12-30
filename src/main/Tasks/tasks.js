@@ -19,21 +19,10 @@ import AddTaskModal from './AddTaskModal';
 export default function Tasks() {
 
   const [loading, setLoading] = useState(false);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [filterModalShow, setFilterModalShow] = React.useState(false);
   const [taskModalShow, setTaskModalShow] = React.useState(false);
   const [showAddTaskModal, setShowAddTaskModal] = React.useState(false);
-  // const [userAssigned, setUserAssigned] = useState("");
-  // const [createdBy, setCreatedBy] = useState("");
-  // const [stream, setStream] = useState("");
-  // const [status, setStatus] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [endDate, setEndDate] = useState("");
-  // const [searchText, setSearchText] = useState("");
-  // const [priority, setPriority] = useState("");
-  // const [userList, setUserList] = useState([]);
-  // const [priorityList, setpriorityList] = useState([]);
-  // const [streamList, setstreamList] = useState([]);
-  // const [statusList, setStatusList] = useState([]);
+
   const [projectList, setProjectList] = useState([]);
   const [projectTasks, setProjectTasks] = useState([]);
   const [selectedProject, setSelectedProject] = useState({});
@@ -69,7 +58,7 @@ export default function Tasks() {
       return error.message;
     }
   }
-  const getAllTaskOfProject = async () => {
+  const getAllTaskOfProject = async (data) => {
     setLoading(true)
     try {
       let dataToSend = {
@@ -78,7 +67,7 @@ export default function Tasks() {
           projectId: selectedProject._id
         }
       }
-      console.log("000000000000", selectedProject)
+      console.log("000000000000", selectedProject, dataToSend)
       const projectTasks = await getProjectsTask(dataToSend);
       setLoading(false);
       if (projectTasks.error) {
@@ -314,202 +303,177 @@ export default function Tasks() {
 
 
 
-  // const FilterModal = (props) => {
-  //   return (
-  //     <Modal
-  //       {...props}
-  //       size="lg"
-  //       aria-labelledby="contained-modal-title-vcenter"
-  //       centered
-  //     >
-  //       <Modal.Header closeButton>
-  //         <Modal.Title id="contained-modal-title-vcenter">
-  //           Task Filter
-  //         </Modal.Title>
-  //       </Modal.Header>
-  //       <Modal.Body>
-  //         <Form noValidate >
-  //           <Row className="mb-3">
-  //             <Form.Group as={Col} md="3" >
-  //               <Form.Control
-  //                 as="select"
-  //                 type="select"
-  //                 onChange={onChangeOfCreatedBy}
-  //                 value={createdBy}
-  //               >
-  //                 <option value="">Created By</option>
-  //                 {userList.map((module) => (
-  //                   <option value={module._id} key={module._id}>
-  //                     {module.name}
-  //                   </option>
-  //                 ))}
-  //               </Form.Control>
 
-  //             </Form.Group>
-  //             <Form.Group as={Col} md="3" >
-  //               <Form.Control
-  //                 as="select"
-  //                 type="select"
-  //                 onChange={onChangeOfUserAssigned}
-  //                 value={userAssigned}
-  //               >
-  //                 <option value="">User Assigned</option>
-  //                 {userList.map((module) => (
-  //                   <option value={module._id} key={module._id}>
-  //                     {module.name}
-  //                   </option>
-  //                 ))}
-  //               </Form.Control>
-  //             </Form.Group>
-  //             <Form.Group as={Col} md="3" >
-  //               <Form.Control
-  //                 as="select"
-  //                 type="select"
-  //                 onChange={onChangeOfStream}
-  //                 value={stream}
-  //               >
-  //                 <option value="">Select Stream</option>
-  //                 {streamList.map((module) => (
-  //                   <option value={module._id} key={module._id}>
-  //                     {module.name}
-  //                   </option>
-  //                 ))}
-  //               </Form.Control>
-  //             </Form.Group>
-  //             <Form.Group as={Col} md="3" >
-  //               <Form.Control
-  //                 as="select"
-  //                 type="select"
-  //                 onChange={onchangeOfPriority}
-  //                 value={priority}
-  //               >
-  //                 <option value="">Select Priority</option>
-  //                 {priorityList.map((module) => (
-  //                   <option value={module._id} key={module._id}>
-  //                     {module.name}
-  //                   </option>
-  //                 ))}assignedTo
-  //               </Form.Control>
-  //             </Form.Group>
-  //           </Row>
 
-  //           <Row className="mb-3">
-  //             <Form.Group as={Col} md="3" >
-  //               <Form.Control
-  //                 as="select"
-  //                 type="select"
-  //                 onChange={onchangeOfStatus}
-  //                 value={status}
-  //               >
-  //                 <option value="">Select Status</option>
-  //                 {statusList.map((module) => (
-  //                   <option value={module._id} key={module._id}>
-  //                     {module.name}
-  //                   </option>
-  //                 ))}
-  //               </Form.Control>
+  const FilterModal = (props) => {
+    const { show } = props
+    const [filterFormValue, setFilterFormValue] = useState({
+      createdBy: '',
+    });
 
-  //             </Form.Group>
-  //             <Form.Group as={Col} md="3" >
-  //               {/* <Form.Label>Start Date</Form.Label> */}
+    console.log("filterFormValue", filterFormValue)
+    const updateFilterFormValue = (e) => {
+      console.log("updateFilterFormValue  ", e.target.name, e.target.value);
+      setFilterFormValue({ ...filterFormValue, [e.target.name]: e.target.value })
+    }
+    const closeModalAndgetAllTaskOfProject = () => {
 
-  //               <Form.Control
-  //                 type="date"
-  //                 placeholder="Start Date"
-  //                 onChange={onchangeOfStartDate}
-  //               />
+      getAllTaskOfProject();
+    }
 
-  //             </Form.Group>
-  //             <Form.Group as={Col} md="3" >
-  //               {/* <Form.Label>End Date</Form.Label> */}
-
-  //               <Form.Control
-  //                 type="date"
-  //                 placeholder="End Date"
-  //                 onChange={onchangeOfEndDate}
-  //               />
-  //             </Form.Group>
-  //             <Form.Group as={Col} md="3" >
-  //               <Form.Control
-  //                 type="text"
-  //                 placeholder="Search Text"
-  //                 value={searchText}
-  //                 onChange={onchangeOfSearchText}
-  //               />
-
-  //             </Form.Group>
-  //           </Row>
-
-  //           <Button
-  //             className="btnDanger"
-  //             type="submit"
-  //             onClick={handleSubmit}
-  //           >
-  //             Search
-  //           </Button>
-  //           <Button
-  //             className="btn-gradient-border btnDanger"
-  //             type="submit"
-  //             onClick={handleFormReset}
-  //           >
-  //             Clear Filter
-  //           </Button>
-
-  //         </Form>
-  //       </Modal.Body>
-  //       <Modal.Footer>
-  //         <button className='btn btn-gradient-border ' onClick={props.onHide}>Close</button>
-  //       </Modal.Footer>
-  //     </Modal>
-  //   );
-  // }
-
-  return (
-    <>
-      <div className='tasks'>
-        <div >
-          {/* <button className='btn btn-gradient-border btn-glow' onClick={() => setModalShow(true)} style={{ float: "left" }}>Filter </button> */}
-          <button className='btn btn-gradient-border btn-glow' style={{ float: "right" }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
-          {/* <Link to="/task/add" >
-            {(<button className='btn btn-gradient-border btn-glow' style={{ float: "right" }}><span>Add Task</span></button>)}
-          </Link> */}
-          {/* <button className='btn btn-gradient-border btn-glow' variant="primary" style={{ float: "right" }}>Add Tasks</button> */}
+    return (
+      <Modal
+        show={show}
+        onHide={() => setFilterModalShow(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Task Filter
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           <Form noValidate >
             <Row className="mb-3">
               <Form.Group as={Col} md="3" >
                 <Form.Control
                   as="select"
                   type="select"
-                  onChange={onchangeOfSelectedProject}
-                  value={selectedProject._id}
+                  name='createdBy'
+                  onChange={updateFilterFormValue}
+                  value={filterFormValue.createdBy}
                 >
-                  <option value="" disabled>Select project</option>
-                  {
-                    projectList?.map((project) => {
-                      return (
-                        <option value={project._id} key={project._id} >
-                          {project.name}
-                        </option>
-                      )
-                    })
-                  }
+                  <option value="">Created By</option>
+                  {selectedProject?.accessibleBy?.map((user) => (
+                    <option value={user._id} key={user._id}>
+                      {user.name}
+                    </option>
+                  ))}
                 </Form.Control>
 
               </Form.Group>
+
+              {/* <Form.Group as={Col} md="3" >
+                <Form.Control
+                  as="select"
+                  type="select"
+                  onChange={onChangeOfUserAssigned}
+                  value={userAssigned}
+                >
+                  <option value="">User Assigned</option>
+                  {userList.map((module) => (
+                    <option value={module._id} key={module._id}>
+                      {module.name}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group> */}
+              {/* <Form.Group as={Col} md="3" >
+                <Form.Control
+                  as="select"
+                  type="select"
+                  onChange={onChangeOfStream}
+                  value={stream}
+                >
+                  <option value="">Select Stream</option>
+                  {streamList.map((module) => (
+                    <option value={module._id} key={module._id}>
+                      {module.name}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+              <Form.Group as={Col} md="3" >
+                <Form.Control
+                  as="select"
+                  type="select"
+                  onChange={onchangeOfPriority}
+                  value={priority}
+                >
+                  <option value="">Select Priority</option>
+                  {priorityList.map((module) => (
+                    <option value={module._id} key={module._id}>
+                      {module.name}
+                    </option>
+                  ))}assignedTo
+                </Form.Control>
+              </Form.Group> */}
             </Row>
+
+            {/* <Row className="mb-3">
+              <Form.Group as={Col} md="3" >
+                <Form.Control
+                  as="select"
+                  type="select"
+                  onChange={onchangeOfStatus}
+                  value={status}
+                >
+                  <option value="">Select Status</option>
+                  {statusList.map((module) => (
+                    <option value={module._id} key={module._id}>
+                      {module.name}
+                    </option>
+                  ))}
+                </Form.Control>
+
+              </Form.Group>
+              <Form.Group as={Col} md="3" >
+
+                <Form.Control
+                  type="date"
+                  placeholder="Start Date"
+                  onChange={onchangeOfStartDate}
+                />
+
+              </Form.Group>
+              <Form.Group as={Col} md="3" >
+
+                <Form.Control
+                  type="date"
+                  placeholder="End Date"
+                  onChange={onchangeOfEndDate}
+                />
+              </Form.Group>
+              <Form.Group as={Col} md="3" >
+                <Form.Control
+                  type="text"
+                  placeholder="Search Text"
+                  value={searchText}
+                  onChange={onchangeOfSearchText}
+                />
+
+              </Form.Group>
+            </Row> */}
+
+            {/* <Button
+              className="btnDanger"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Search
+            </Button>
+            <Button
+              className="btn-gradient-border btnDanger"
+              type="submit"
+              onClick={handleFormReset}
+            >
+              Clear Filter
+            </Button> */}
+
           </Form>
-        </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className='btn btn-gradient-border' onClick={() => setFilterModalShow(false)}>Close</button>
+          <button className='btn btn-gradient-border' onClick={closeModalAndgetAllTaskOfProject}>Submit</button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
 
-        {/* <button className='clrfltr btn btn-gradient-border btn-glow' >Clear Filter</button> */}
-      </div>
-
-      {/* <FilterModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        backdrop="static"
-        keyboard={false}
-      /> */}
-
+  const TaskListComponent = () => {
+    return (
       <div className='mt-5'>
         {
           projectTasks?.map((category) => {
@@ -555,6 +519,55 @@ export default function Tasks() {
           })
         }
       </div>
+    )
+  }
+
+  return (
+    <>
+      <div className='tasks'>
+        <div >
+          <button className='btn btn-gradient-border btn-glow' onClick={() => setFilterModalShow(true)} style={{ float: "left" }}>Filter </button>
+
+          <button className='btn btn-gradient-border btn-glow' style={{ float: "right" }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
+          <Form noValidate >
+            <Row className="mb-3">
+              <Form.Group as={Col} md="3" >
+                <Form.Control
+                  as="select"
+                  type="select"
+                  onChange={onchangeOfSelectedProject}
+                  value={selectedProject._id}
+                >
+                  <option value="" disabled>Select project</option>
+                  {
+                    projectList?.map((project) => {
+                      return (
+                        <option value={project._id} key={project._id} >
+                          {project.name}
+                        </option>
+                      )
+                    })
+                  }
+                </Form.Control>
+
+              </Form.Group>
+            </Row>
+          </Form>
+        </div>
+
+      </div>
+      {/* <button className='clrfltr btn btn-gradient-border btn-glow' >Clear Filter</button> */}
+
+      {
+        filterModalShow && <FilterModal
+          show={filterModalShow}
+          // onHide={() => setFilterModalShow(false)}
+          backdrop="static"
+          keyboard={false}
+        />
+      }
+
+      <TaskListComponent />
 
       {loading ? <Loader /> : null}
       {
@@ -584,6 +597,5 @@ export default function Tasks() {
 
 
 };
-
 
 
