@@ -43,16 +43,17 @@ export default function Rating(props) {
     getUsersList();
   }
   let today = new Date();
+  let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
   const [loading, setLoading] = useState(false);
   const [currentView, setCurrentView] = useState("Add");
   const [teamOptions, setTeamOptions] = useState([]);
   const [team, setTeam] = useState("");
-  const [date, setDate] = useState(today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate());
+  const [date, setDate] = useState(patchDateValue);
   const [rating, setRating] = useState("");
   const [comments, setComments] = useState("");
   const [validated, setValidated] = useState(false);
 
-
+  console.log(patchDateValue)
   if (!team && location && location.state && location.state.userId) {
     setTeam(location.state.userId)
   }

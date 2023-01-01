@@ -10,20 +10,19 @@ const Modals = (props) => {
                 
                 onHide={onHide}
                 show={modalShow}
-                // backdrop={backdropProp}
-                // keyboard={keyboardProp}
                 size={size || 'lg'}
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                style={{maxHeight:'400px'}}
+                scrollable={true}
                 animation={false}
-                style={{ maxHeight: "500px" }}
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         {heading}
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body bsPrefix='' >
                     {modalBody}
                 </Modal.Body>
                 <Modal.Footer>

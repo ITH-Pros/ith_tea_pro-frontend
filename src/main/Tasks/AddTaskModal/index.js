@@ -75,9 +75,11 @@ export default function AddTaskModal(props) {
         if (e.target.name === 'status' && !(e.target.value === "COMPLETED")) {
             updateValue['completedDate'] = null
         }
+
         if (e.target.name === 'status' && e.target.value === "COMPLETED") {
-            let toady = new Date()
-            updateValue['completedDate'] = toady.getFullYear() + '-' + (toady.getMonth() + 1) + '-' + toady.getDate()
+            let today = new Date()
+            let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
+            updateValue['completedDate'] = patchDateValue
         }
         setTaskFormValue(updateValue);
     }
