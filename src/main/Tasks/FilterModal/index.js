@@ -4,7 +4,7 @@ import Loader from "../../../loader/loader";
 import { getProjectsTask } from "../../../services/user/api";
 
 const FilterModal = (props) => {
-    const { selectedProject, setProjectTasks } = props
+    const { selectedProject, setTaskFilters } = props
 
 
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
@@ -23,47 +23,12 @@ const FilterModal = (props) => {
     }, [selectedProject])
 
 
-    const getAllTaskOfProject = async () => {
-        setLoading(true)
-        try {
-            let params = {
-                groupBy: "category",
-                projectId: selectedProject._id
-            }
-            filterFormValue.groupBy && (params.groupBy = filterFormValue.groupBy)
-
-            filterFormValue.createdBy && (params.createdBy = filterFormValue.createdBy)
-            filterFormValue.assignedTo && (params.assignedTo = filterFormValue.assignedTo)
-            filterFormValue.category && (params.category = filterFormValue.category)
-            filterFormValue.priority && (params.priority = filterFormValue.priority)
-            filterFormValue.status && (params.status = filterFormValue.status)
-            let dataToSend = {
-                params
-            }
-            console.log("getAllTaskOfProject-kkkkkkkk 1111111111-------------------------", selectedProject, dataToSend)
-            const projectTasks = await getProjectsTask(dataToSend);
-            setLoading(false);
-            if (projectTasks.error) {
-                // toast.error(projectTasks.error.message, {
-                //   position: toast.POSITION.TOP_CENTER,
-                //   className: "toast-message",
-                // });
-                return
-            } else {
-                setProjectTasks(projectTasks.data)
-                console.log("projectTasks.data---", projectTasks.data)
-            }
-        } catch (error) {
-            setLoading(false);
-            return error.message;
-        }
-    }
     const updateFilterFormValue = (e) => {
         console.log("updateFilterFormValue  ", e.target.name, e.target.value);
         setFilterFormValue({ ...filterFormValue, [e.target.name]: e.target.value })
     }
     const closeModalAndgetAllTaskOfProject = () => {
-        getAllTaskOfProject();
+        setTaskFilters(filterFormValue)
     }
     const clearFilterFormValue = () => {
         setFilterFormValue(filterFormFileds)

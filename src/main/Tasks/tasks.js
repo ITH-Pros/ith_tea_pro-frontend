@@ -106,24 +106,32 @@ export default function Tasks() {
     const { selectedProject } = props;
 
     const [projectTasks, setProjectTasks] = useState([]);
+    const [taskFilters, setTaskFilters] = useState({})
 
-
+    console.log("taskFilterstaskFilterstaskFilterstaskFilterstaskFilters", taskFilters)
     useEffect(() => {
       console.log("selectedProjectselectedProjectselectedProjectselectedProjectselectedProjectselectedProject", selectedProject)
       getAllTaskOfProject();
-    }, []);
+    }, [taskFilters]);
 
 
     const getAllTaskOfProject = async () => {
       // setLoading(true)
       try {
-        let dataToSend = {
-          params: {
-            groupBy: "category",
-            projectId: selectedProject._id
-          }
+        let params = {
+          groupBy: "category",
+          projectId: selectedProject._id
         }
-        // filterFormValue.createdBy && (dataToSend.createdBy = filterFormValue.createdBy)
+        taskFilters.groupBy && (params.groupBy = taskFilters.groupBy)
+
+        taskFilters.createdBy && (params.createdBy = taskFilters.createdBy)
+        taskFilters.assignedTo && (params.assignedTo = taskFilters.assignedTo)
+        taskFilters.category && (params.category = taskFilters.category)
+        taskFilters.priority && (params.priority = taskFilters.priority)
+        taskFilters.status && (params.status = taskFilters.status)
+        let dataToSend = {
+          params
+        }
         console.log("000000000000", selectedProject, dataToSend)
         const projectTasks = await getProjectsTask(dataToSend);
         // setLoading(false);
@@ -145,7 +153,7 @@ export default function Tasks() {
       }
     }
 
-    const setSelectedProjectFromAddTask = (project , filterFormValue) => {
+    const setSelectedProjectFromAddTask = (project, filterFormValue) => {
       if (project._id === selectedProject._id) {
         console.log("project._id === selectedProject._id", project._id === selectedProject._id)
         setSelectedProject(project)
@@ -157,7 +165,7 @@ export default function Tasks() {
     console.log(projectTasks)
     return (
       <div className='mt-5'>
-        <FilterModal setProjectTasks={setProjectTasks} selectedProject={selectedProject} />
+        <FilterModal  selectedProject={selectedProject} setTaskFilters={setTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject}
           setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
         />
