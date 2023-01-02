@@ -35,7 +35,7 @@ span {
 }
 
 .btnshort {
-  max-width: 65px !important;
+  max-width: 100px !important;
   max-height: 35px;
   text-align: center;
 }

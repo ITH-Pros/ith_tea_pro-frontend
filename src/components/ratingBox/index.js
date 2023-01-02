@@ -9,7 +9,7 @@ import { Button, Row } from 'react-bootstrap';
 import Loader from '../../loader/loader';
 
 const RatingBox = (props) => {
-    const { ratingCommentObj, index } = props;
+    const { ratingCommentObj, index, getAllRatings  ,ratingsArray} = props;
 
     const [clickedRatingArray, setclickedRatingArray] = useState([]);
     const [selectedRating, setSelectedRating] = useState('');
@@ -17,9 +17,6 @@ const RatingBox = (props) => {
     const [modalShow, setModalShow] = useState(false);
 
     const [loading, setLoading] = useState(false);
-
-    let newRating = ''
-    let commentFormValue = ''
 
     async function getCommentsByRatingId(ratingId, rating) {
         console.log("================================")
@@ -65,44 +62,47 @@ const RatingBox = (props) => {
         getCommentsByRatingId(data?.ratingId, data?.rating);
     }
     const GetModalBody = () => {
-        const [editRatingEnabled, setEditRatingEnabled] = useState(false);
-
-        const editUserRating = async () => {
-            setLoading(true);
-            try {
-                let dataToSend = {
-                    ratingId: selectedRatingId,
-                    rating: newRating
-                }
-                const rating = await updateUserRating(dataToSend);
-                setLoading(false);
-
-                if (rating.error) {
-                    // toast.error(rating.error.message, {
-                    //   position: toast.POSITION.TOP_CENTER,
-                    //   className: "toast-message",
-                    // });
-                } else {
-                    // toast.success("Submitted succesfully !", {
-                    //   position: toast.POSITION.TOP_CENTER,
-                    //   className: "toast-message",
-                    // });
-                    setSelectedRating(newRating);
-                    setEditRatingEnabled(false);
-                    // getAllRatings({
-                    //     month: months.indexOf(monthUse) + 1,
-                    //     year: yearUse,
-                    // })
 
 
-                }
-            } catch (error) {
-                setLoading(false);
-            }
-
-        }
 
         const CommentsForm = () => {
+            const [commentFormValue, setCommentValue] = useState('')
+
+            async function addCommnetFunc() {
+                if (!commentFormValue) {
+                    return
+                }
+                // let ratingId = clickedRatingArray?.ratingId;
+                let dataToSend = {
+                    comment: commentFormValue,
+                    ratingId: selectedRatingId,
+                };
+                setLoading(true);
+
+                try {
+                    const comment = await addComment(dataToSend);
+                    setLoading(false);
+
+                    if (comment.error) {
+                        console.log(comment.error);
+                        // toast.error(rating.error.message, {
+                        //   position: toast.POSITION.TOP_CENTER,
+                        //   className: "toast-message",
+                        // });
+                    } else {
+                        // toast.success("Submitted succesfully !", {
+                        //   position: toast.POSITION.TOP_CENTER,
+                        //   className: "toast-message",
+                        // });
+
+                        console.log("comment added succesfully ");
+                        getCommentsByRatingId(selectedRatingId, selectedRating)
+                    }
+                } catch (error) {
+                    setLoading(false);
+                }
+            }
+
             return (
                 <>
                     <Row className="mb-3">
@@ -113,8 +113,10 @@ const RatingBox = (props) => {
                                 required
                                 type="text-area"
                                 placeholder="Comment"
-                                onChange={(e) => { commentFormValue = e.target.value }}
+                                value={commentFormValue}
+                                onChange={(e) => { setCommentValue(e.target.value) }}
                             />
+                            <Form.Control.Feedback type='invalid'> Required</Form.Control.Feedback>
                         </Form.Group>
 
                         <Button className="btn btn-gradient-border btnshort" type="submit" onClick={() => { addCommnetFunc() }}>
@@ -124,36 +126,61 @@ const RatingBox = (props) => {
                 </>
             );
         };
-        async function addCommnetFunc() {
-            // let ratingId = clickedRatingArray?.ratingId;
-            let dataToSend = {
-                comment: commentFormValue,
-                ratingId: selectedRatingId,
-            };
-            setLoading(true);
 
-            try {
-                const comment = await addComment(dataToSend);
-                setLoading(false);
 
-                if (comment.error) {
-                    console.log(comment.error);
-                    // toast.error(rating.error.message, {
-                    //   position: toast.POSITION.TOP_CENTER,
-                    //   className: "toast-message",
-                    // });
-                } else {
-                    // toast.success("Submitted succesfully !", {
-                    //   position: toast.POSITION.TOP_CENTER,
-                    //   className: "toast-message",
-                    // });
+        const RatingEditBox = () => {
+            const [newRating, setNewRating] = useState('')
+            const [editRatingEnabled, setEditRatingEnabled] = useState(false);
 
-                    console.log("comment added succesfully ");
-                    getCommentsByRatingId(selectedRatingId, selectedRating)
+
+            const editUserRating = async () => {
+                if (newRating > 5 || newRating < 0) {
+                    return
                 }
-            } catch (error) {
-                setLoading(false);
+                setLoading(true);
+                try {
+                    let dataToSend = {
+                        ratingId: selectedRatingId,
+                        rating: newRating
+                    }
+                    const rating = await updateUserRating(dataToSend);
+                    setLoading(false);
+
+                    if (rating.error) {
+                        // toast.error(rating.error.message, {
+                        //   position: toast.POSITION.TOP_CENTER,
+                        //   className: "toast-message",
+                        // });
+                    } else {
+                        // toast.success("Submitted succesfully !", {
+                        //   position: toast.POSITION.TOP_CENTER,
+                        //   className: "toast-message",
+                        // });
+                        setSelectedRating(newRating);
+                        setEditRatingEnabled(false);
+                        getAllRatings()
+                    }
+                } catch (error) {
+                    setLoading(false);
+                }
+
             }
+            return (
+                editRatingEnabled ?
+                    <div>
+                        <input type='number' value={newRating} placeholder={'Previous Rating : ' + selectedRating} onChange={(e) => { setNewRating(e.target.value) }} ></input>
+
+
+                        <button className="btn btn-gradient-border btnshort" onClick={() => setEditRatingEnabled(false)}>Cancel</button>
+                        <button className="btn btn-gradient-border btnshort" onClick={editUserRating} >Submit</button>
+                        {(newRating < 0 || newRating > 5) && <span style={{ color: 'red' }}> Rating must be in range [0,5]</span>}
+                    </div>
+                    :
+                    <div>
+                        <span>Rating : {selectedRating}</span>
+                        <button className="btn btn-gradient-border btnshort" onClick={() => { setEditRatingEnabled(true) }}>Edit </button>
+                    </div>
+            )
         }
 
 
@@ -167,21 +194,7 @@ const RatingBox = (props) => {
                             marginBottom: "20px",
                         }}
                     >
-                        {
-
-                            editRatingEnabled ?
-                                <div>
-                                    <input type='number' placeholder={'Previous Rating : ' + selectedRating} onChange={(e) => { newRating = e.target.value }} ></input>
-                                    <button className="btn btn-gradient-border btnshort" onClick={() => setEditRatingEnabled(false)}>Cancel</button>
-                                    <button className="btn btn-gradient-border btnshort" onClick={editUserRating} >Submit</button>
-                                </div>
-                                :
-                                <div>
-                                    <span>Rating : {selectedRating}</span>
-                                    <button className="btn btn-gradient-border btnshort" onClick={() => { setEditRatingEnabled(true) }}>Edit </button>
-                                </div>
-                        }
-
+                        <RatingEditBox />
                     </div>
                     <CommentsForm />
                 </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
 import { Button, Col, Row } from "react-bootstrap";
@@ -7,9 +7,19 @@ import { MDBTooltip } from "mdb-react-ui-kit";
 import { getIconClassForStatus } from "../../../helpers/taskStatusIcon";
 import DatePicker from "react-date-picker";
 import './index.css'
+import { addCommentOnTaskById, getTaskDetailsByTaskId, updateTaskDetails } from "../../../services/user/api";
+import Loader from "../../../loader/loader";
 
 function TaskModal(props) {
-  const { show, selectedTaskDetails, onHide, selectedProject, updateMutipleTaskDetails, addCommentOnTask, updateTaskCompletedStatusAndDate } = props;
+  const { selectedTaskObj, selectedProject, getAllTaskOfProject } = props;
+
+
+  const [loading, setLoading] = useState(false);
+  const [taskModalShow, setTaskModalShow] = useState(false);
+  const [selectedTaskDetails, setSelectedTaskDetails] = useState(selectedTaskObj);
+
+  console.log("taskModalShow----------------------------------", taskModalShow)
+
 
   const CommentsForm = () => {
     const [commentValue, setCommentValue] = useState('');
@@ -50,7 +60,7 @@ function TaskModal(props) {
         return
       }
       updateMutipleTaskDetails({ title: titleValue }, selectedTaskDetails);
-      setEditTitleBoxEnable(false);
+      // setEditTitleBoxEnable(false);
     }
 
     return (
@@ -87,13 +97,14 @@ function TaskModal(props) {
 
   const EditDescriptionBox = () => {
     const [editDescBoxEnable, setEditDescBoxEnable] = useState(false);
-    const [descriptionValue, setDescriptionValue] = useState(selectedTaskDetails.description);
+    const [descriptionValue, setDescriptionValue] = useState(selectedTaskDetails.description || "");
     function showEditDescriptionBox() {
       setEditDescBoxEnable(true);
     }
     const editTaskDescriptionValue = (e) => {
       setDescriptionValue(e.target.value);
     };
+    console.log("EditDescriptionBox---------------", descriptionValue, '\nselectedTaskDetails=----------', selectedTaskDetails)
     return (
       <>
         {editDescBoxEnable ?
@@ -142,8 +153,11 @@ function TaskModal(props) {
     )
   }
 
-  const UpdateCategoryBox = () => {
-    const [categoryValue, setCategoryValue] = useState(selectedTaskDetails.category);
+  const UpdateCategoryBox = (props) => {
+
+    const { selectedTaskDetails, selectedProject } = props
+
+    const [categoryValue, setCategoryValue] = useState(selectedTaskDetails.category || '');
     const [editCategoryEnable, setEditCategoryEnable] = useState(false);
     console.log("selectedProject", selectedProject)
 
@@ -152,7 +166,8 @@ function TaskModal(props) {
         return
       }
       updateMutipleTaskDetails({ category: e.target.value }, selectedTaskDetails)
-      setEditCategoryEnable(false);
+      // setEditCategoryEnable(false);
+      // console.log()
     }
     return (
       < >
@@ -193,7 +208,7 @@ function TaskModal(props) {
   }
 
   const UpdateAssignedToBox = () => {
-    const [assignedToValue, setAssignedToValue] = useState(selectedTaskDetails.assignedTo);
+    const [assignedToValue, setAssignedToValue] = useState(selectedTaskDetails.assignedTo || '');
     const [editAssignedToEnable, setEditAssignedToEnable] = useState(false);
     console.log("selectedProject", selectedProject)
 
@@ -254,7 +269,7 @@ function TaskModal(props) {
   }
 
   const UpdatePriorityBox = () => {
-    const [priorityValue, setPriorityValue] = useState(selectedTaskDetails.priority);
+    const [priorityValue, setPriorityValue] = useState(selectedTaskDetails.priority || '');
     const [editPriorityEnable, setEditPriorityEnable] = useState(false);
     console.log("selectedProject", priorityValue)
 
@@ -297,7 +312,7 @@ function TaskModal(props) {
             :
             <>
               <b style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)}>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>
-            <br></br>
+              <br></br>
             </>
         }
       </>
@@ -305,7 +320,7 @@ function TaskModal(props) {
   }
 
   const UpdateStatusBox = () => {
-    const [statusValue, setStatusValue] = useState(selectedTaskDetails.status);
+    const [statusValue, setStatusValue] = useState(selectedTaskDetails.status || '');
     const [editStatusEnable, setEditStatusEnable] = useState(false);
     console.log("selectedProject", statusValue)
 
@@ -352,8 +367,8 @@ function TaskModal(props) {
             :
             <>
               <span >
-                  <i style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
-                  <b style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)}> {statusValue || "Not set"} </b>
+                <i style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
+                <b style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)}> {statusValue || "Not set"} </b>
               </span>
               {statusValue === 'COMPLETED' && <UpdateCompletedDateBox />}
             </>
@@ -486,71 +501,268 @@ function TaskModal(props) {
     )
   }
 
+  const getProjectsTaskDetails = async (task) => {
+    // setLoading(true)
+    try {
+      let dataToSend = {
+        params: {
+          taskId: task._id
+        }
+      }
+      const taskRes = await getTaskDetailsByTaskId(dataToSend);
+      // setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        setSelectedTaskDetails(taskRes.data)
+        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNN taskModalShow-----------------------------", taskModalShow)
+        !taskModalShow && setTaskModalShow(true)
+        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNN taskModalShow-----------------------------", taskModalShow)
+
+      }
+    } catch (error) {
+      // setLoading(false);
+      return error.message;
+    }
+  }
+
+  const updateMutipleTaskDetails = async (data, taskDetails) => {
+    console.log("updateMutipleTaskDetails", data)
+    // setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: taskDetails._id,
+      }
+      data.projectId && (dataToSend["projectId"] = data.projectId)
+      data.category && (dataToSend["category"] = data.category)
+      data.title && (dataToSend["title"] = data.title)
+      data.description && (dataToSend["description"] = data.description)
+      data.assignedTo && (dataToSend["assignedTo"] = data.assignedTo)
+      data.dueDate && (dataToSend["dueDate"] = data.dueDate)
+      data.priority && (dataToSend["priority"] = data.priority)
+      data.status && (dataToSend["status"] = data.status)
+      data.completedDate && (dataToSend["completedDate"] = data.completedDate)
+
+      const taskRes = await updateTaskDetails(dataToSend);
+      // setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        console.log("0000000000000000000000000000000000000000000000000000000000000000000000000", taskModalShow)
+        getAllTaskOfProject();
+        console.log("11111111111111111111111111111111111111111111111111111111111111111111111", taskModalShow, selectedTaskDetails)
+        getProjectsTaskDetails(selectedTaskDetails)
+        console.log("222222222222222222222222222222222222222222222222222222222222222222222222", taskModalShow)
+
+      }
+    } catch (error) {
+      // setLoading(false);
+      return error.message;
+    }
+  }
+
+  const addCommentOnTask = async (comment) => {
+    let dataToSend = {
+      comment,
+      taskId: selectedTaskDetails._id,
+    };
+    setLoading(true);
+    try {
+      const comment = await addCommentOnTaskById(dataToSend);
+      setLoading(false);
+
+      if (comment.error) {
+        console.log(comment.error);
+        // toast.error(rating.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        console.log("comment added succesfully ");
+        getAllTaskOfProject()
+        getProjectsTaskDetails(selectedTaskDetails)
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  }
+  const updateTaskCompletedStatusAndDate = async (data) => {
+    console.log("updateTaskCompletedStatusAndDate", data)
+    setLoading(true)
+    try {
+      let dataToSend = {
+        taskId: selectedTaskDetails._id,
+        ...data
+      }
+      const taskRes = await updateTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        // toast.error(taskRes.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        return
+      } else {
+        console.log("taskRes.data---", taskRes.data)
+        // getProjectList()
+        getAllTaskOfProject();
+        getProjectsTaskDetails(selectedTaskDetails)
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  }
+
+  const getPriorityTag = (task) => {
+    if (task.priority) {
+
+      return (
+
+        <small className='priority_tag' style={{ marginLeft: '10px' }}>
+          {task?.priority}
+        </small>
+      )
+    }
+  }
+
+  const getAssignedToTag = (task) => {
+    if (task.assignedTo) {
+
+      return (
+
+        <span className='assigned_tag' style={{ marginLeft: '10px' }}>
+          <img className='img-logo' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-z3LzM-wYXYiWslzq9RADq0mAdVfFrn91gRqxcl9K&s" alt='img'></img>
+          {task?.assignedTo?.name}
+        </span>
+      )
+    }
+  }
+
+  const getDueDateTag = (task) => {
+    if (task.dueDate) {
+      return (
+        <span className='date_tag' style={{ marginLeft: '10px' }}>
+          Due {task?.dueDate?.split('T')[0]}
+        </span>
+      )
+    }
+  }
+
+  const getCompletedDateTag = (task) => {
+    if (task.completedDate) {
+      return (
+        <span className='date_tag' style={{ marginLeft: '10px' }}>
+          Completed  {task?.completedDate?.split('T')[0]}
+        </span>
+      )
+    }
+  }
+
 
   return (
-    <Modal
-      show={show}
-      size="xl"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      onHide={onHide}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          {selectedProject.name}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-
-
-        <UpdateCategoryBox /><br />
-
-
+    <>
+      <div className='taskCard' key={selectedTaskObj._id}
+        onClick={() => { getProjectsTaskDetails(selectedTaskObj) }}
+      >
         <MDBTooltip
           tag="span"
           wrapperProps={{ href: "#" }}
-          title={selectedTaskDetails.status}
+          title={selectedTaskObj.status || 'Not Set'}
         >
-          <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
+          <i style={{ marginRight: '20px' }} className={getIconClassForStatus(selectedTaskObj.status)} aria-hidden="true"></i>
         </MDBTooltip>
 
-        <EditTitleBox />
-        <hr></hr>
+        {selectedTaskObj.title?.slice(0, 100) + '.......'}
 
-        <div className="pop-2-div">
-          <div>
-            <p>
-              <span className="pop-2-span">Created By</span>
-              <b>{selectedTaskDetails?.createdBy?.name}</b> on{" "}
-              <b>{selectedTaskDetails?.createdAt ? new Date(selectedTaskDetails?.createdAt).toDateString() : ''}</b>
-            </p>
-            <UpdateAssignedToBox />
-            <UpdateDueDateBox />
+        {getPriorityTag(selectedTaskObj)}
+        {getDueDateTag(selectedTaskObj)}
+        {getAssignedToTag(selectedTaskObj)}
+        {getCompletedDateTag(selectedTaskObj)}
 
-          </div>
-          <div>
+        <i style={{ marginLeft: '20px' }} className='fa fa-comments' aria-hidden="true"></i>{'  ' + selectedTaskObj.comments?.length}
+      </div>
 
-            <UpdatePriorityBox />
-            <UpdateStatusBox />
-          </div>
 
-        </div>
+      <Modal
+        show={taskModalShow}
+        size="xl"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        onHide={() => setTaskModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            {selectedProject.name}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <UpdateCategoryBox selectedTaskDetails={selectedTaskDetails} selectedProject={selectedProject} /><br />
 
-        <div>
+
+          <MDBTooltip
+            tag="span"
+            wrapperProps={{ href: "#" }}
+            title={selectedTaskDetails.status}
+          >
+            <i className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
+          </MDBTooltip>
+
+          <EditTitleBox />
           <hr></hr>
-          <EditDescriptionBox />
-          {/* <b>Comments </b> */}
-          <CommentsForm />
-          <CommentsListBox />
 
-        </div>
-      </Modal.Body>
-      {/* <Modal.Footer>
+          <div className="pop-2-div">
+            <div>
+              <p>
+                <span className="pop-2-span">Created By</span>
+                <b>{selectedTaskDetails?.createdBy?.name}</b> on{" "}
+                <b>{selectedTaskDetails?.createdAt ? new Date(selectedTaskDetails?.createdAt).toDateString() : ''}</b>
+              </p>
+              <UpdateAssignedToBox />
+              <UpdateDueDateBox />
+
+            </div>
+            <div>
+
+              <UpdatePriorityBox />
+              <UpdateStatusBox />
+            </div>
+
+          </div>
+
+          <div>
+            <hr></hr>
+            <EditDescriptionBox />
+            {/* <b>Comments </b> */}
+            <CommentsForm />
+            <CommentsListBox />
+
+          </div>
+        </Modal.Body>
+        {/* <Modal.Footer>
         <button className="btn btn-gradient-border " onClick={onHide}>
           Close
         </button>
       </Modal.Footer> */}
-    </Modal>
+      </Modal>
+
+      {loading && <Loader />}
+    </>
+
   );
 }
 

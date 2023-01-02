@@ -88,6 +88,12 @@ export default function Dashboard(props) {
     setLoading(true);
 
     try {
+      if (!data) {
+        data = {
+          month: months.indexOf(monthUse) + 1,
+          year: yearUse,
+        };
+      }
       const rating = await getRatings(data);
       setLoading(false);
 
@@ -215,7 +221,7 @@ export default function Dashboard(props) {
                         userRatingCount += 1;
 
                         return (
-                          <RatingBox key={index} index={index} ratingCommentObj={ratingCommentObj} />
+                          <RatingBox key={index} index={index}  getAllRatings={getAllRatings} ratingCommentObj={ratingCommentObj} />
                         );
                       } else {
                         return (
