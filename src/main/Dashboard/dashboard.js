@@ -221,7 +221,7 @@ export default function Dashboard(props) {
                         userRatingCount += 1;
 
                         return (
-                          <RatingBox key={index} index={index}  getAllRatings={getAllRatings} ratingCommentObj={ratingCommentObj} />
+                          <RatingBox key={index} index={index} getAllRatings={getAllRatings} ratingCommentObj={ratingCommentObj} />
                         );
                       } else {
                         return (
@@ -237,7 +237,7 @@ export default function Dashboard(props) {
                               <Link to={{
                                 pathname: "/rating",
                               }}
-                                state={{ userId: user._id, date: `${yearUse}-${months.indexOf(monthUse) + 1}-${(index + 1) < 9 ? '0' + (index + 1) : index + 1}` }}>
+                                state={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
                                 <input
                                   style={{ cursor: "pointer" }}
                                   className="input_dashboard"

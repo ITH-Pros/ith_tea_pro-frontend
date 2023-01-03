@@ -11,8 +11,8 @@ import { Modal } from 'react-bootstrap';
 import { getAllProjects, createTask } from '../../../services/user/api';
 
 export default function AddTaskModal(props) {
+    console.log("iiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
     const { setSelectedProjectFromAddTask, selectedProjectFromTask } = props;
-
 
 
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
@@ -32,20 +32,20 @@ export default function AddTaskModal(props) {
         assignedTo: '', dueDate: '', completedDate: '',
         priority: '', status: '', attachment: '',
     });
-    
+
     useEffect(() => {
         console.log('s*********************************s')
         getProjectList();
     }, []);
-    
+
     useEffect(() => {
         // setTaskFormValue({ ...taskFormValue, projectId: selectedProject._id, category: selectedProject.categories?.[0] })
         setTaskFormValue({ ...taskFormValue, projectId: selectedProject._id, category: selectedProject.categories?.[0] })
         setCategoryList(selectedProject.categories)
         setUserList(selectedProject.accessibleBy)
-        
+
     }, [selectedProject]);
-    
+
     console.log("taskFormValue--------------", taskFormValue, selectedProject, "selectedProjectFromTask--------->", selectedProjectFromTask)
     const getProjectList = async () => {
         setLoading(true)
@@ -129,7 +129,7 @@ export default function AddTaskModal(props) {
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
                 })
                 setValidated(false)
-                setSelectedProjectFromAddTask(selectedProject, false)
+                setSelectedProjectFromAddTask && setSelectedProjectFromAddTask(selectedProject, false)
                 setShowAddTaskModal(false)
             }
         } catch (error) {
@@ -172,7 +172,7 @@ export default function AddTaskModal(props) {
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
                 })
                 setValidated(false)
-                setSelectedProjectFromAddTask(selectedProject, true)
+                setSelectedProjectFromAddTask && setSelectedProjectFromAddTask(selectedProject, true)
                 // setShowAddTaskModal(false)
                 setShowAddTaskModal(true)
 
@@ -276,7 +276,7 @@ export default function AddTaskModal(props) {
                             </Row>
 
                             <Row className="mb-3">
-                                <FroalaEditorComponent  tag='textarea' onModelChange={updateTaskDescriptionValue} />
+                                <FroalaEditorComponent tag='textarea' onModelChange={updateTaskDescriptionValue} />
                             </Row>
 
                             <Row className="mb-3">
@@ -358,11 +358,11 @@ export default function AddTaskModal(props) {
                                         type="select"
                                         name='status'
                                         onChange={updateTaskFormValue}
-                                        value={taskFormValue.status}
+                                        value={taskFormValue.status || statusList[0]}
                                     >
                                         <option value="" disabled>Select Status</option>
-                                        {statusList.map((status) => (
-                                            <option value={status} key={status}>
+                                        {statusList?.map((status) => (
+                                            <option value={status}  key={status}>
                                                 {status}
                                             </option>
                                         ))}
