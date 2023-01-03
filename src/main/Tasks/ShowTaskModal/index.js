@@ -12,6 +12,8 @@ import Loader from "../../../loader/loader";
 
 function TaskModal(props) {
   const { selectedTaskObj, selectedProject, getAllTaskOfProject } = props;
+  const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
+  const priorityList = ["LOW", "REPEATED", "MEDIUM", "HIGH"]
 
 
   const [loading, setLoading] = useState(false);
@@ -354,13 +356,14 @@ function TaskModal(props) {
                 // clearAriaLabel
                 onBlur={() => setEditStatusEnable(false)}
                 onChange={checkAndUpdateStatus}
-                value={statusValue}
+                value={statusValue || statusList[0]}
               >
-                <option value='' disabled >Set Status </option>
-                <option value='NO_PROGRESS' disabled={statusValue === 'NO_PROGRESS'}>No Progress </option>
-                <option value='ONGOING' disabled={statusValue === 'ONGOING'}>Ongoing </option>
-                <option value='COMPLETED' disabled={statusValue === 'COMPLETED'} >Completed </option>
-                <option value='ONHOLD' disabled={statusValue === 'ONHOLD'} >On Hold </option>
+                <option value="" disabled>Select Status</option>
+                {statusList?.map((status) => (
+                  <option value={status}  disabled={statusValue === status} key={status}>
+                    {status}
+                  </option>
+                ))}
 
               </Form.Control>
             </Form.Group>

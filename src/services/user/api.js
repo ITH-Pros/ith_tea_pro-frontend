@@ -50,6 +50,9 @@ export async function updateTaskDetails(data) {
 export async function createTask(data) {
   return (axios.post(url + '/task/v1/user/insert', data).then(res => res.data))
 }
+export async function getTaskStatusAnalytics(data) {
+  return (axios.get(url + '/task/v1/status/analytics', data).then(res => res.data))
+}
 export function addCommentOnTaskById(data) {
   return (axios.post(url + '/comment/v1/user/task/insert', data).then(res => res.data))
 }
