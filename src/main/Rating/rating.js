@@ -16,7 +16,7 @@ import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
 import { getAllUsers } from "../../services/user/api";
 import "react-toastify/dist/ReactToastify.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast, cssTransition } from "react-toastify";
@@ -34,6 +34,8 @@ const swirl = cssTransition({
 // let teamOptions = [];
 export default function Rating(props) {
   const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     onInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,7 +151,7 @@ export default function Rating(props) {
       const rating = await addRating(data);
       setLoading(false);
       if (rating.error) {
-        toast.dark(" 👋, " + rating.error.message, {
+        toast.dark(" 👋, " + rating?.error?.message, {
           transition: swirl
         });
 
@@ -158,8 +160,7 @@ export default function Rating(props) {
         toast.dark(" 👋, Submitted succesfully ", {
           transition: swirl
         });
-
-
+        navigate('/')
         console.log(rating.data);
       }
     }
@@ -168,11 +169,8 @@ export default function Rating(props) {
       toast.dark(" 👋," + error?.message, {
         transition: swirl
       });
-
       setLoading(false);
-
       console.log(error?.message)
-
     }
   }
 

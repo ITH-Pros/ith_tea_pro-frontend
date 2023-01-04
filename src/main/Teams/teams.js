@@ -186,7 +186,7 @@ export default function Teams(props) {
                                 </div>
                                 <div className="btn">
 
-                                    <button className='btn btn-gradient-border btn-glow' onClick={() => { handleAddUserToProject(user._id) }}> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
+                                    <button className='btn-glow' onClick={() => { handleAddUserToProject(user._id) }}> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
 
                                     <Link to={{
                                         pathname: "/rating",
