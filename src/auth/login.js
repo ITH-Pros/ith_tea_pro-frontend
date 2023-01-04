@@ -1,176 +1,107 @@
 import { useState } from 'react'
 import React from "react";
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from './AuthProvider';
-import {userLogin} from '../services/auth/api'
+import { Navigate } from 'react-router-dom'
+import { loginUser } from '../services/auth/api'
 
 // import Particles from '../components/particals';
-import './login.css' 
+import './login.css'
+import { useAuth } from './AuthProvider';
 export default function Login() {
-  const [user, setUser] = useState('')
-  const [values, setValues] = React.useState({
-    password: "",
-    showPassword: false,
-  });
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
+  const { login, accessToken } = useAuth();
+
+
+
+  const [loginFormValue, setLoginFormValue] = useState({
+    email: '',
+    password: '',
+    showPassword: false
+  })
+
+  const updateLoginFormValues = (e) => {
+    console.log("[e.target.name]: e.target.value", e.target.name, e.target.value)
+    setLoginFormValue({ ...loginFormValue, [e.target.name]: e.target.value })
+  }
+  const showHidePassword = () => {
+    setLoginFormValue({ ...loginFormValue, showPassword: !loginFormValue.showPassword })
+  }
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  
-  const handlePasswordChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-  const navigate = useNavigate()
-  const location = useLocation()
-  const auth = useAuth()
-
-  const redirectPath = location.state?.path || '/'
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    console.log('yash')
-    // let data = {
-    //   email: 'sudhansu@ith.tech',
-    //   password:'12345678'
-    // }
 
 
-    // loginFunc(data);
-    auth.login(user)
-    navigate(redirectPath, { replace: true })
-  }
 
-  async function loginFunc(data) {
-      console.log(data)
-      // setLoading(true);
-  
-      try {
-        const rating = await userLogin(data);
-        // setLoading(false);
-  
-        if (rating.error) {
-          // toast.error(rating.error.message, {
-          //   position: toast.POSITION.TOP_CENTER,
-          //   className: "toast-message",
-          // });
-        } else {
-          // toast.success("Submitted succesfully !", {
-          //   position: toast.POSITION.TOP_CENTER,
-          //   className: "toast-message",
-          // });
-          // setRatings(rating.data);
-        }
-      } catch (error) {
-        // setLoading(false);
+  const handleLogin = async (event) => {
+    console.log("handlelogin")
+    event.preventDefault();
+    let dataToSend = loginFormValue
+    try {
+      const userLogin = await loginUser(dataToSend);
+      console.log('userLogin', userLogin)
+      // setLoading(false);
+      if (userLogin.error) {
+        // toast.error(userLogin.error.message, {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+      } else {
+        // toast.success("Submitted succesfully !", {
+        //   position: toast.POSITION.TOP_CENTER,
+        //   className: "toast-message",
+        // });
+        // setRatings(userLogin.data);
+        login(userLogin.data);
       }
+    } catch (error) {
+      // setLoading(false);
     }
 
+  };
 
   return (
-    <div className='login-screen'>
+    <>
+      {
+        accessToken ?
+          <Navigate to="/" replace />
+          :
+          <div className='login-screen'>
 
-{/* <Particles id="tsparticles" /> */}
+            <div className='man-login'>
+              <div className="bg-box">
+                <div className="bg1"></div>
+                <div className="bg2"></div>
+              </div>
+              <div className="loginContent form">
+                <img src={require('../assests/img/logo.png')} alt="logo" />
+                <div className="text">Tea Pro</div>
+                <form >
+                  <div className="field">
+                    <span className="fa fa-user"></span>
+                    <input type="email" placeholder="Email Id" name='email' onChange={updateLoginFormValues} />
+                    {/* <label>Email Id</label> */}
+                  </div>
 
-  {/* <div classNameName="wrapper  fadeInDown" style={{display:'flex',justifyContent:'center',padding:'100px',marginLeft:'16px',marginRight:'16px' , marginTop:'40px',backgroundColor:'transparent',borderRadius:'30px',}}>
-    <div id='formContent'>
-      <h2 style={{color:'#8355ad'}}>Login</h2> 
-        <form>
-        <div>
-            <Input type="text" name="username"  id="username" classNameName="fadeIn second textField" placeholder="Username"  autoComplete='off' onChange={e => setUser(e.target.value)} 
-            />
-        </div>
-        <div>
-              <Input type={values.showPassword ? "text" : "password"}  classNameName="fadeIn second textField"   name="password"  id="password"  onChange={handlePasswordChange("password")} value={values.password} autoComplete='off' placeholder="Password" endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-            >
-              {values.showPassword ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-        </div>
-        <div>
-        <input type="submit"  style={{ cursor: 'pointer', padding: '10px', width: '200px', borderRadius: '10px', backgroundColor: '#8355ad', marginTop: '10px',marginLeft:'10px', boxShadow: 'rgb(249 138 251 / 40%) 20px 18px 13px 0px', color:' #fff', transform: 'translateY(-7px)'}} value="Login" onClick={handleLogin} classNameName="fadeIn  fourth" />
-        </div>
-        </form>
-    </div>
-  </div> */}
- 
-    <div className='man-login'>
-    <div className="bg-box">
-    <div className="bg1"></div>
-    <div className="bg2"></div>
-    </div>
-    {/* <div className="form">
-        <form>
+                  <div className="field">
+                    <span className="fa fa-lock"></span>
+                    <input type={loginFormValue.showPassword ? "text" : "password"} name='password' placeholder="Password" onChange={updateLoginFormValues} >
 
-    <label htmlFor="account">User name</label>
-    <div className="input-box">
-      <ion-icon className="prefix" name="person-outline"></ion-icon>
-      <input type="text" id="account" placeholder='Username' onChange={e => setUser(e.target.value)}  />
-    </div>
-    <label htmlFor="password">Password</label>
-    <div className="input-box">
-      <ion-icon className="prefix" name="lock-closed-outline"></ion-icon>
-      <input type={values.showPassword ? "text" : "password"}  placeholder='Password' id="password" onChange={handlePasswordChange("password")}  value={values.password} />
-      <ion-icon   onClick={handleClickShowPassword}  onMouseDown={handleMouseDownPassword} className="switch-btn" name="eye-off-outline"></ion-icon>
-    </div>
+                    </input>
+                    <i style={{ position: 'relative', top: '25px', right: '28px', cursor: 'pointer' }} name='showPassword' onClick={showHidePassword} onMouseDown={handleMouseDownPassword} className={loginFormValue.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
+                    {/* <label>Password</label> */}
+                  </div>
+                  <button className='loginButton' onClick={handleLogin}>Log in</button>
+                  <div className="or">Or</div>
+                  <div className="icon-button">
+                    <span className="facebook">Forget Password?</span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      }
+
+    </>
 
 
-    <input className="send-btn" style={{    display: 'flex',width: '150px'}}  type="submit"  onClick={handleLogin}>
-   
-    </input>
-    </form>
-    </div> */}
-       
-        <div className="loginContent form">
-          
-        <img src={require('../assests/img/logo.png')} alt="logo" />
-          
-
-          <div className="text">Tea Pro</div>
-
-        <form >
-        <div className="field">
-          <span className="fa fa-user"></span>
-              <input type="email" placeholder="Email Id" onChange={e => setUser(e.target.value)} />
-          {/* <label>Email Id</label> */}
-        </div>
-
-        <div className="field">
-          <span className="fa fa-lock"></span>
-              <input type={values.showPassword ? "text" : "password"} placeholder="Password" onChange={handlePasswordChange("password")} >
-
-              </input>
-              <i style={{position: 'relative',top: '25px',right: '28px' , cursor:'pointer'}}  onClick={handleClickShowPassword}  onMouseDown={handleMouseDownPassword} className={values.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
-          {/* <label>Password</label> */}
-        </div>
-
-         
-            <button className='loginButton' onClick={handleLogin}>Log in</button>
-            <div className="or">Or</div>
-        <div className="icon-button"> 
-
-          <span className="facebook">Forget Password?</span>
-
-
-
-        </div>
-
-         </form>
-      </div>
-    </div>
-
-
-
-  </div>
-   
-    
   )
 }
