@@ -7,9 +7,10 @@ import Modals from '../modal';
 import moment from 'moment';
 import { Button, Row } from 'react-bootstrap';
 import Loader from '../../loader/loader';
+import { useAuth } from '../../auth/AuthProvider';
 
 const RatingBox = (props) => {
-    const { ratingCommentObj, index, getAllRatings  ,ratingsArray} = props;
+    const { ratingCommentObj, index, getAllRatings, ratingsArray } = props;
 
     const [clickedRatingArray, setclickedRatingArray] = useState([]);
     const [selectedRating, setSelectedRating] = useState('');
@@ -131,6 +132,7 @@ const RatingBox = (props) => {
         const RatingEditBox = () => {
             const [newRating, setNewRating] = useState('')
             const [editRatingEnabled, setEditRatingEnabled] = useState(false);
+            const { userDetails } = useAuth()
 
 
             const editUserRating = async () => {
@@ -178,11 +180,12 @@ const RatingBox = (props) => {
                     :
                     <div>
                         <span>Rating : {selectedRating}</span>
-                        <button className="btn btn-gradient-border btnshort" onClick={() => { setEditRatingEnabled(true) }}>Edit </button>
+                        {
+                            userDetails.role !== "USER" && <button className="btn btn-gradient-border btnshort" onClick={() => { setEditRatingEnabled(true) }}>Edit </button>
+                        }
                     </div>
             )
-        }
-
+        }   
 
         return (
             <>

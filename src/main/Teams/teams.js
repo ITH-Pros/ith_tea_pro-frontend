@@ -7,8 +7,11 @@ import Loader from '../../loader/loader';
 import { Link } from 'react-router-dom';
 import Rating from '../Rating/rating';
 import Modals from '../../components/modal';
+import { useAuth } from '../../auth/AuthProvider';
 
 export default function Teams(props) {
+
+    const { userDetails } = useAuth()
 
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(false);
@@ -184,17 +187,21 @@ export default function Teams(props) {
                                     <strong>{user.name}</strong>
                                     <p>{user.email}</p>
                                 </div>
-                                <div className="btn">
+                                {
 
-                                    <button className='btn-glow' onClick={() => { handleAddUserToProject(user._id) }}> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
+                                    userDetails.role !== "USER" &&
+                                    <div className="btn">
 
-                                    <Link to={{
-                                        pathname: "/rating",
-                                    }} state={{ userId: user._id }}>
-                                        Add Rating
-                                    </Link>
+                                        <button className='btn-glow' onClick={() => { handleAddUserToProject(user._id) }}> <i className="fa fa-check" aria-hidden="true"></i>Assign</button>
 
-                                </div>
+                                        <Link to={{
+                                            pathname: "/rating",
+                                        }} state={{ userId: user._id }}>
+                                            Add Rating
+                                        </Link>
+
+                                    </div>
+                                }
                             </div>
 
                         )

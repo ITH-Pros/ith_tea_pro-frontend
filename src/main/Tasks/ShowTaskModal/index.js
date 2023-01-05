@@ -30,15 +30,15 @@ function TaskModal(props) {
       <>
 
         <Row className="mb-3 mt-6" >
+        <hr></hr>
           <Form.Group as={Col} md="12" className="mt-2" >
             {/* <Form.Label>Comment</Form.Label> */}
-            <hr></hr>
             <Form.Control
               as="textarea"
               // required
               // type="text"
               placeholder="Comment"
-              // value={commentValue}
+              // value={commentValune}
               onChange={(e) => { setCommentValue(e.target.value) }}
             />
           </Form.Group>
@@ -99,44 +99,42 @@ function TaskModal(props) {
 
   const EditDescriptionBox = () => {
     const [editDescBoxEnable, setEditDescBoxEnable] = useState(false);
-    const [descriptionValue, setDescriptionValue] = useState(selectedTaskDetails.description || "");
+    const [descriptionValue, setDescriptionValue] = useState(selectedTaskDetails?.description || "");
     function showEditDescriptionBox() {
       setEditDescBoxEnable(true);
     }
     const editTaskDescriptionValue = (e) => {
-      setDescriptionValue(e.target.value);
+      setDescriptionValue(e.target.value || '');
     };
     console.log("EditDescriptionBox---------------", descriptionValue, '\nselectedTaskDetails=----------', selectedTaskDetails)
     return (
       <>
         {editDescBoxEnable ?
           <>
-            <div className="editDescBox">
-              <input className="edit-box-input"
-                autoFocus
-                type="text"
-                value={descriptionValue}
-                onChange={(e) => {
-                  editTaskDescriptionValue(e);
-                }}
-              ></input>
-            </div>
+            <input className="edit-box-input"
+              autoFocus
+              type="text"
+              value={descriptionValue}
+              onChange={(e) => {
+                editTaskDescriptionValue(e);
+              }}
+            ></input>
             <div>
-              <button className="btn btn-gradient-border" style={{ width: '100px', padding: '4px 23px' }}
-                onClick={() => {
-                  setDescriptionValue(selectedTaskDetails.description);
-                  setEditDescBoxEnable(false);
-                }}
-              >
-                Cancel
-              </button>
-              <button className="btn btn-gradient-border" style={{ width: '100px', padding: '4px 23px' }}
+              <button className="btn-gradient-border descBtn" style={{ width: '100px', padding: '4px 23px' }}
                 onClick={() => {
                   updateMutipleTaskDetails({ description: descriptionValue }, selectedTaskDetails);
                   setEditDescBoxEnable(false);
                 }}
               >
                 Save
+              </button>
+              <button className="btn-gradient-border descBtn" style={{ width: '100px', padding: '4px 23px' }}
+                onClick={() => {
+                  setDescriptionValue(selectedTaskDetails.description || '');
+                  setEditDescBoxEnable(false);
+                }}
+              >
+                Cancel
               </button>
             </div>
           </>
@@ -360,7 +358,7 @@ function TaskModal(props) {
               >
                 <option value="" disabled>Select Status</option>
                 {statusList?.map((status) => (
-                  <option value={status}  disabled={statusValue === status} key={status}>
+                  <option value={status} disabled={statusValue === status} key={status}>
                     {status}
                   </option>
                 ))}

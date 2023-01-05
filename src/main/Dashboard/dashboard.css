@@ -130,7 +130,7 @@ th {
   border-radius: 50px;
   background: none;
   padding: 25px 75px;
-  margin: 30px;
+  /* margin: 30px; */
 }
 
 .glass-button span {
@@ -155,7 +155,7 @@ th {
   text-decoration: none;
   overflow: hidden;
   text-transform: uppercase;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
   backdrop-filter: blur(15px);
 }
 
@@ -172,7 +172,7 @@ th {
   height: 100%;
   background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
   transform: skewX(40deg) translateX(0);
-  transition: all 0.5s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .glass-button:hover span::before {
@@ -191,7 +191,7 @@ th {
   height: 10px;
   border-radius: 10px;
   background: #f00;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.3s ease-in-out;
   transition-delay: 0s;
 }
 
@@ -208,7 +208,7 @@ th {
   height: 50%;
   width: 80%;
   border-radius: 30px;
-  transition-delay: 0.3s;
+  transition-delay: 0.1s;
 }
 
 .glass-button:hover::before {

@@ -8,16 +8,20 @@ import Modals from '../../components/modal';
 import SureModals from '../../components/sureModal';
 import { MDBTooltip } from 'mdb-react-ui-kit';
 import AddTaskModal from '../Tasks/AddTaskModal';
+import { useAuth } from '../../auth/AuthProvider';
 
 export default function Project() {
 	let projectBackColor = ['#ff942e', '#e9e7fd', '#dbf6fd', '#fee4cb', '#ff942e']
+	const { userDetails } = useAuth();
+
 
 	const [loading, setLoading] = useState(false);
 	const [projectList, setProjectListValue] = useState([]);
 	const [allUserList, setAllUserListValue] = useState([]);
 	const [selectedProjectId, setSelectedProjectId] = useState('');
-	const [selectedProject, setSelectedProject] = useState({ name: null, _id: null });
 	const [projectTaskAnalytics, setProjectTaskAnalytics] = useState('');
+
+	const [selectedProject, setSelectedProject] = useState({ name: null, _id: null });
 	const [selectedUser, setSelectedUser] = useState({ name: null, _id: null });
 	const [showMoreUserDropDownId, setShowMoreUserDropDownId] = useState('');
 	const [projectAssignedUsers, setProjectAssignedUsers] = useState([]);
@@ -27,19 +31,19 @@ export default function Project() {
 
 
 	useEffect(() => {
-		onInit();
+		getAndSetAllProjects();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+	useEffect(() => {
+		getAndsetTaskStatusAnalytics()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function onInit() {
-		getAndSetAllProjects();
-		getAndsetTaskStatusAnalytics()
-	}
 	const getAndSetAllProjects = async function () {
-		setLoading(true);
+		//setloading(true);
 		try {
 			const projects = await getAllProjects();
-			setLoading(false);
+			//setloading(false);
 			if (projects.error) {
 				toast.error(projects.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -49,15 +53,15 @@ export default function Project() {
 				setProjectListValue(projects.data);
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 	};
 	const getAndsetTaskStatusAnalytics = async () => {
-		setLoading(true);
+		//setloading(true);
 		try {
 			const projects = await getTaskStatusAnalytics();
-			setLoading(false);
+			//setloading(false);
 			if (projects.error) {
 				toast.error(projects.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -67,7 +71,7 @@ export default function Project() {
 				setProjectTaskAnalytics(projects.data);
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 	}
@@ -85,14 +89,14 @@ export default function Project() {
 		getProjectAssignedUsers(element)
 	}
 	const getProjectAssignedUsers = async (element) => {
-		setLoading(true);
+		//setloading(true);
 		console.log("element: " + element)
 		try {
 			let dataToSend = {
 				params: { projectId: element._id }
 			}
 			const projectAssignedUsers = await getUsersOfProject(dataToSend);
-			setLoading(false);
+			//setloading(false);
 			if (projectAssignedUsers.error) {
 				toast.error(projectAssignedUsers.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -106,18 +110,18 @@ export default function Project() {
 				console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 	}
 
 	const handleAddUserToProjectButton = async function (element) {
 		console.log("AddUserToProject", element);
-		setLoading(true);
+		//setloading(true);
 		try {
 
 			const projectUsers = await getAllUsers();
-			setLoading(false);
+			//setloading(false);
 			if (projectUsers.error) {
 				toast.error(projectUsers.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -128,7 +132,7 @@ export default function Project() {
 				setAllUserListValue(projectUsers.data);
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 		try {
@@ -136,7 +140,7 @@ export default function Project() {
 				params: { projectId: element._id }
 			}
 			const projectAssignedUsers = await getUsersOfProject(dataToSend);
-			setLoading(false);
+			//setloading(false);
 			if (projectAssignedUsers.error) {
 				toast.error(projectAssignedUsers.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -151,7 +155,7 @@ export default function Project() {
 				console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 		// setSelectedUserId(userId)
@@ -218,19 +222,35 @@ export default function Project() {
 			if (showMoreUserDropDownId && showMoreUserDropDownId === project._id) {
 				continue
 			}
-			rows.push(
-				<MDBTooltip
-					tag="a"
-					wrapperProps={{ href: "#" }}
-					title={`click to Remove ${user.name}`}
-					key={user._id + i}
-				>
-					<img
-						onClick={() => { removeUserFromProject({ name: user.name, _id: user._id }, { name: project.name, _id: project._id }) }}
-						src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
-						alt="participant" />
-				</MDBTooltip>
-			);
+			if (userDetails.role !== 'USER') {
+				rows.push(
+					<MDBTooltip
+						tag="a"
+						wrapperProps={{ href: "#" }}
+						title={`click to Remove ${user.name}`}
+						key={user._id + i}
+					>
+						<img
+							onClick={() => { removeUserFromProject({ name: user.name, _id: user._id }, { name: project.name, _id: project._id }) }}
+							src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+							alt="participant" />
+					</MDBTooltip>
+				);
+			} else {
+				rows.push(
+					<MDBTooltip
+						tag="a"
+						wrapperProps={{ href: "#" }}
+						title={`${user.name}`}
+						key={user._id + i}
+					>
+						<img
+							src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+							alt="participant" />
+					</MDBTooltip>
+				);
+
+			}
 		}
 		return rows;
 
@@ -243,19 +263,35 @@ export default function Project() {
 						console.log(proejctUser)
 						return (
 							<div key={proejctUser._id + index}>
-								<MDBTooltip
-									tag="p"
-									wrapperProps={{ href: "#" }}
-									title={`click to Remove ${proejctUser.name}`}
-								>
-									<img
-										className='moreUserDropdownImg'
-										src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
-										alt={proejctUser.name}
-										onClick={() => { removeUserFromProject({ name: proejctUser.name, _id: proejctUser._id }, { name: selectedProject.name, _id: selectedProject._id }) }}
-									/>
-									<span> {proejctUser.name}</span>
-								</MDBTooltip>
+								{
+									userDetails.role !== 'USER' ?
+										<MDBTooltip
+											tag="p"
+											wrapperProps={{ href: "#" }}
+											title={`click to Remove ${proejctUser.name}`}
+										>
+											<img
+												className='moreUserDropdownImg'
+												src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+												alt={proejctUser.name}
+												onClick={() => { removeUserFromProject({ name: proejctUser.name, _id: proejctUser._id }, { name: selectedProject.name, _id: selectedProject._id }) }}
+											/>
+											<span> {proejctUser.name}</span>
+										</MDBTooltip>
+										:
+										<MDBTooltip
+											tag="p"
+											wrapperProps={{ href: "#" }}
+											title={`${proejctUser.name}`}
+										>
+											<img
+												className='moreUserDropdownImg'
+												src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+												alt={proejctUser.name}
+											/>
+											<span> {proejctUser.name}</span>
+										</MDBTooltip>
+								}
 							</div>
 						)
 
@@ -266,7 +302,7 @@ export default function Project() {
 		)
 	}
 	const AddSelectedUsersToProject = async () => {
-		setLoading(true);
+		//setloading(true);
 		try {
 			let dataToSend = {
 				projectId: selectedProjectId,
@@ -274,7 +310,7 @@ export default function Project() {
 			}
 			const addRes = await assignUserToProject(dataToSend);
 			console.log("AddSelectedUsersToProject", addRes);
-			setLoading(false);
+			//setloading(false);
 			if (addRes.error) {
 				toast.error(addRes.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -291,7 +327,7 @@ export default function Project() {
 				userListToAddInProject.clear()
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 	}
@@ -301,7 +337,7 @@ export default function Project() {
 		setSelectedUser({});
 	}
 	const removeSelectedUsersFromProject = async () => {
-		setLoading(true);
+		//setloading(true);
 		try {
 			let dataToSend = {
 				projectId: selectedProject._id,
@@ -309,7 +345,7 @@ export default function Project() {
 			}
 			const removeRes = await unAssignUserToProject(dataToSend);
 			console.log("unAssignUserToProject", removeRes);
-			setLoading(false);
+			//setloading(false);
 			if (removeRes.error) {
 				toast.error(removeRes.error.message, {
 					position: toast.POSITION.TOP_CENTER,
@@ -327,7 +363,7 @@ export default function Project() {
 				setSureModalShow(false)
 			}
 		} catch (error) {
-			setLoading(false);
+			//setloading(false);
 			return error.message;
 		}
 	}
@@ -345,13 +381,16 @@ export default function Project() {
 		return (
 			<>
 				<div className="more-wrapper" onClick={handleMenuIconClick} onBlur={handleMenuIconClick} >
-					<button className="project-btn-more">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
-							<circle cx="12" cy="12" r="1" />
-							<circle cx="12" cy="5" r="1" />
-							<circle cx="12" cy="19" r="1" />
-						</svg>
-					</button>
+					{
+						userDetails.role !== "USER" &&
+						<button className="project-btn-more">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
+								<circle cx="12" cy="12" r="1" />
+								<circle cx="12" cy="5" r="1" />
+								<circle cx="12" cy="19" r="1" />
+							</svg>
+						</button>
+					}
 				</div>
 				{
 					showMenuList &&
@@ -374,6 +413,29 @@ export default function Project() {
 
 	}
 
+	const ProgressBarComp = (props) => {
+
+		const { project } = props;
+		return (
+
+			<div className="box-progress-wrapper">
+				<p className="box-progress-header">Progress</p>
+				<div className="progress">
+					<div className="progress-bar bg-success" data-container="body" data-toggle="tooltip" title={`Completed ${projectTaskAnalytics?.[project._id]?.['COMPLETED']?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[project._id]?.["COMPLETED"]?.toFixed(2)}%` }} >
+					</div>
+					<div className="progress-bar bg-warning" data-container="body" data-toggle="tooltip" title={`In Progress ${projectTaskAnalytics?.[project._id]?.["ONGOING"]?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[project._id]?.["ONGOING"]?.toFixed(2)}%` }}>
+					</div>
+					<div className="progress-bar bg-danger" data-container="body" data-toggle="tooltip" title={`On Hold ${projectTaskAnalytics?.[project._id]?.["ONHOLD"]?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[project._id]?.["ONHOLD"]?.toFixed(2)}%` }}>
+					</div>
+					<div className="progress-bar bg-white" data-container="body" data-toggle="tooltip" title={`No Progress ${projectTaskAnalytics?.[project._id]?.["NO_PROGRESS"]?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[project._id]?.["NO_PROGRESS"]?.toFixed(2)}%` }}>
+					</div>
+				</div>
+			</div>
+		)
+
+
+	}
+
 	return (
 		<>
 			<h1 className="h1-text">
@@ -381,7 +443,7 @@ export default function Project() {
 			</h1>
 			<div className="project-boxes jsGridView">
 				{
-					projectTaskAnalytics && projectList && projectList.map((element, projectIndex) => {
+					projectList && projectList.map((element, projectIndex) => {
 						console.log(element)
 						return (
 							<div key={element._id} className="project-box-wrapper">
@@ -390,45 +452,27 @@ export default function Project() {
 
 									<div className="project-box-header">
 										<ProjectMenuIcon project={element} />
-										{/* <div className="more-wrapper" onClick={handleMenuIconClick}>
-											<button className="project-btn-more">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
-													<circle cx="12" cy="12" r="1" />
-													<circle cx="12" cy="5" r="1" />
-													<circle cx="12" cy="19" r="1" />
-												</svg>
-											</button>
-										</div> */}
-
 									</div>
 									<div className="project-box-content-header">
 										<p className="box-content-header">{element.name}</p>
 										<p className="box-content-subheader">{element.description}</p>
 									</div>
-									<div className="box-progress-wrapper">
-										<p className="box-progress-header">Progress</p>
-										<div className="progress">
-											<div className="progress-bar bg-success" data-container="body" data-toggle="tooltip" title={`Completed ${projectTaskAnalytics?.[element._id]?.['COMPLETED']?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[element._id]?.["COMPLETED"]?.toFixed(2)}%` }} >
-											</div>
-											<div className="progress-bar bg-warning" data-container="body" data-toggle="tooltip" title={`In Progress ${projectTaskAnalytics?.[element._id]?.["ONGOING"]?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[element._id]?.["ONGOING"]?.toFixed(2)}%` }}>
-											</div>
-											<div className="progress-bar bg-danger" data-container="body" data-toggle="tooltip" title={`On Hold ${projectTaskAnalytics?.[element._id]?.["ONHOLD"]?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[element._id]?.["ONHOLD"]?.toFixed(2)}%` }}>
-											</div>
-											<div className="progress-bar bg-white" data-container="body" data-toggle="tooltip" title={`No Progress ${projectTaskAnalytics?.[element._id]?.["NO_PROGRESS"]?.toFixed(2)}%`} style={{ width: `${projectTaskAnalytics?.[element._id]?.["NO_PROGRESS"]?.toFixed(2)}%` }}>
-											</div>
-										</div>
-									</div>
+
+									{projectTaskAnalytics && <ProgressBarComp project={element} />}
 
 									<div className="project-box-footer">
 										<div className="participants">
 											{
 												getProjectUserIcons(element)
 											}
-											<button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProjectButton(element)}>
-												<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
-													<path d="M12 5v14M5 12h14" />
-												</svg>
-											</button>
+											{
+												userDetails.role !== 'USER' &&
+												<button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProjectButton(element)}>
+													<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
+														<path d="M12 5v14M5 12h14" />
+													</svg>
+												</button>
+											}
 										</div>
 									</div>
 								</div >

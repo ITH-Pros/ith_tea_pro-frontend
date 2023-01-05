@@ -12,6 +12,7 @@ import Form from "react-bootstrap/Form";
 import Loader from "../../loader/loader";
 import { getAllUsers } from "../../services/user/api";
 import RatingBox from "../../components/ratingBox";
+import { useAuth } from "../../auth/AuthProvider";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -21,6 +22,8 @@ export default function Dashboard(props) {
   const [ratingsArray, setRatings] = useState([]);
 
   const [loading, setLoading] = useState(false);
+
+  const { userDetails } = useAuth();
 
   useEffect(() => {
     onInit();
@@ -124,23 +127,28 @@ export default function Dashboard(props) {
           <i className="fa fa-home" aria-hidden="true"></i> Dashboard
         </h1>
       }
-      <div>
-        <div>
-          {/* <Link to="/rating" params={{ params: true }}>
-            {props.showBtn && (<button className='glass-button'    style={{ float: "right" }}>Add Rating</button>)}
-          </Link> */}
-          <Link to="/rating" params={{ params: true }}>
-            {props.showBtn && (<button className='glass-button' style={{ float: "right", position: 'relative', bottom: '53px' }} ><span>Add Rating</span></button>)}
-          </Link>
-
-
-        </div>
-        {/* <h4 className="text-center">
-          Current Date : {`${moment().format("DD MMMM YYYY")}`}
-        </h4> */}
-      </div>
+        {/* {
+          // userDetails.role !== "USER" &&
+          <div>
+            <Link to="/rating" params={{ params: true }}>
+              {props.showBtn && (
+                <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '53px' }} ><span>Add Rating</span></button>
+                )}
+             </Link> 
+          </div> 
+        } */}
       <div className="m-3 d-flex justify-content-center flex-column">
         <div>
+        {
+          userDetails.role !== "USER" &&
+          <div>
+            <Link to="/rating" params={{ params: true }}>
+              {props.showBtn && (
+                <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '10px' }} ><span>Add Rating</span></button>
+                )}
+             </Link> 
+          </div> 
+        }
           <h5 className="text-center h5cls">
             <p style={{ marginRight: "10px", marginTop: "6px" }}>
               Ratings for{" "}
@@ -228,23 +236,32 @@ export default function Dashboard(props) {
 
 
                           <td key={index}>
-                            <MDBTooltip
-                              tag="div"
-                              wrapperProps={{ href: "#" }}
-                              title={"click to Add Rating"}
-                            >
-
-                              <Link to={{
-                                pathname: "/rating",
-                              }}
-                                state={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
+                            {
+                              userDetails.role === "USER" ?
                                 <input
-                                  style={{ cursor: "pointer" }}
                                   className="input_dashboard"
                                   disabled={true}
                                 />
-                              </Link>
-                            </MDBTooltip>
+                                :
+                                <MDBTooltip
+                                  tag="div"
+                                  wrapperProps={{ href: "#" }}
+                                  title={"click to Add Rating"}
+                                >
+
+                                  <Link to={{
+                                    pathname: "/rating",
+                                  }}
+                                    state={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
+                                    <input
+                                      style={{ cursor: "pointer" }}
+                                      className="input_dashboard"
+                                      disabled={true}
+                                    />
+                                  </Link>
+                                </MDBTooltip>
+                            }
+
                           </td>
 
                         );
