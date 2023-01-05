@@ -32,6 +32,9 @@ export default function Login() {
   const handleLogin = async (event) => {
     console.log("handlelogin")
     event.preventDefault();
+    if (!loginFormValue.email || !loginFormValue.password) {
+      return
+    }
     let dataToSend = loginFormValue
     try {
       const userLogin = await loginUser(dataToSend);

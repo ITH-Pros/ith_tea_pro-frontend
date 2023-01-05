@@ -126,6 +126,7 @@
   display: block;
   height: 4px;
   border-radius: 6px;
+
 }
 .progress {
   width: 100%;
@@ -134,6 +135,8 @@
   /* overflow: hidden; */
   background-color: #fff;
   margin: 8px 0;
+  cursor: pointer;
+
 }
 
 .box-progress-header {

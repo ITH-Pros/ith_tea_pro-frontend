@@ -127,7 +127,7 @@ export default function Dashboard(props) {
           <i className="fa fa-home" aria-hidden="true"></i> Dashboard
         </h1>
       }
-        {/* {
+      {/* {
           // userDetails.role !== "USER" &&
           <div>
             <Link to="/rating" params={{ params: true }}>
@@ -139,16 +139,16 @@ export default function Dashboard(props) {
         } */}
       <div className="m-3 d-flex justify-content-center flex-column">
         <div>
-        {
-          userDetails.role !== "USER" &&
-          <div>
-            <Link to="/rating" params={{ params: true }}>
-              {props.showBtn && (
-                <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '10px' }} ><span>Add Rating</span></button>
+          {
+            userDetails.role !== "USER" &&
+            <div>
+              <Link to="/rating" params={{ params: true }}>
+                {props.showBtn && (
+                  <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '10px' }} ><span>Add Rating</span></button>
                 )}
-             </Link> 
-          </div> 
-        }
+              </Link>
+            </div>
+          }
           <h5 className="text-center h5cls">
             <p style={{ marginRight: "10px", marginTop: "6px" }}>
               Ratings for{" "}
@@ -222,8 +222,13 @@ export default function Dashboard(props) {
                   {Array(days)
                     ?.fill(0)
                     ?.map((day, index) => {
+
                       let ratingUserObj = ratingsArray.find((el) => { return el._id === user._id; });
                       let ratingCommentObj = ratingUserObj?.ratingsAndComment.find((el) => el.date - 1 === index);
+                      // let ratingCommentObj = {
+                      //   rating: '2',
+                      //   ratingId: "63b488d5deeb1cbb03042c65"
+                      // }
                       if (ratingCommentObj) {
                         userRatingSum += ratingCommentObj?.rating;
                         userRatingCount += 1;
@@ -233,8 +238,6 @@ export default function Dashboard(props) {
                         );
                       } else {
                         return (
-
-
                           <td key={index}>
                             {
                               userDetails.role === "USER" ?

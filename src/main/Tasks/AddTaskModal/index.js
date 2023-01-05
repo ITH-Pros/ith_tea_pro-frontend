@@ -12,7 +12,7 @@ import { getAllProjects, createTask } from '../../../services/user/api';
 
 export default function AddTaskModal(props) {
     console.log("iiiiiiiiiiiiiiiiiiiinnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-    const { setSelectedProjectFromAddTask, selectedProjectFromTask } = props;
+    const { setSelectedProjectFromAddTask, selectedProjectFromTask, projectListFromProjectsTab } = props;
 
 
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
@@ -20,8 +20,8 @@ export default function AddTaskModal(props) {
 
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [categoryList, setCategoryList] = useState([]);
-    const [projectList, setProjectList] = useState([]);
+    const [categoryList, setCategoryList] = useState();
+    const [projectList, setProjectList] = useState(projectListFromProjectsTab || []);
     const [userList, setUserList] = useState([]);
     // const [taskListArray, setTaskListArray] = useState([]);
     const [validated, setValidated] = useState(false);
@@ -35,7 +35,7 @@ export default function AddTaskModal(props) {
 
     useEffect(() => {
         console.log('s*********************************s')
-        getProjectList();
+        !projectList?.length && getProjectList();
     }, []);
 
     useEffect(() => {
@@ -362,7 +362,7 @@ export default function AddTaskModal(props) {
                                     >
                                         <option value="" disabled>Select Status</option>
                                         {statusList?.map((status) => (
-                                            <option value={status}  key={status}>
+                                            <option value={status} key={status}>
                                                 {status}
                                             </option>
                                         ))}

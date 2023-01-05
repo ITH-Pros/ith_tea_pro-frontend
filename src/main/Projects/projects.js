@@ -21,6 +21,11 @@ export default function Project() {
 	const [selectedProjectId, setSelectedProjectId] = useState('');
 	const [projectTaskAnalytics, setProjectTaskAnalytics] = useState('');
 
+
+	// const [projectDetails, setProjectTaskAnalytics] = useState('');
+
+
+
 	const [selectedProject, setSelectedProject] = useState({ name: null, _id: null });
 	const [selectedUser, setSelectedUser] = useState({ name: null, _id: null });
 	const [showMoreUserDropDownId, setShowMoreUserDropDownId] = useState('');
@@ -31,13 +36,10 @@ export default function Project() {
 
 
 	useEffect(() => {
-		getAndSetAllProjects();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-	useEffect(() => {
+		getAndSetAllProjects()
 		getAndsetTaskStatusAnalytics()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 
 	const getAndSetAllProjects = async function () {
 		//setloading(true);
@@ -50,7 +52,7 @@ export default function Project() {
 					className: "toast-message",
 				});
 			} else {
-				setProjectListValue(projects.data);
+				setProjectListValue(projects.data)
 			}
 		} catch (error) {
 			//setloading(false);
@@ -68,7 +70,7 @@ export default function Project() {
 					className: "toast-message",
 				});
 			} else {
-				setProjectTaskAnalytics(projects.data);
+				setProjectTaskAnalytics(projects.data)
 			}
 		} catch (error) {
 			//setloading(false);
@@ -403,7 +405,7 @@ export default function Project() {
 					</div>
 				}
 				{
-					<AddTaskModal selectedProjectFromTask={project} />
+					<AddTaskModal selectedProjectFromTask={project} projectListFromProjectsTab={projectList} />
 				}
 
 			</>
