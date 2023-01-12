@@ -6,7 +6,6 @@ import { addComment, getComment, updateUserRating } from '../../services/user/ap
 import Modals from '../modal';
 import moment from 'moment';
 import { Button, Row } from 'react-bootstrap';
-import Loader from '../../loader/loader';
 import { useAuth } from '../../auth/AuthProvider';
 
 const RatingBox = (props) => {

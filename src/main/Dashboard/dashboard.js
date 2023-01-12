@@ -9,10 +9,11 @@ import { MDBTooltip } from "mdb-react-ui-kit";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import Loader from "../../loader/loader";
+import Loader from "../../components/Loader";
 import { getAllUsers } from "../../services/user/api";
 import RatingBox from "../../components/ratingBox";
 import { useAuth } from "../../auth/AuthProvider";
+import Toaster from "../../components/Toaster";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -20,9 +21,10 @@ export default function Dashboard(props) {
   console.log(month)
   const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
-
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
 
   useEffect(() => {
@@ -70,18 +72,14 @@ export default function Dashboard(props) {
       setLoading(false);
 
       if (user.error) {
-        // toast.error(user.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(user?.error?.message||'Something Went Wrong');
+        setShowToaster(true);
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
         setTeamOptions(user.data);
       }
     } catch (error) {
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -101,18 +99,14 @@ export default function Dashboard(props) {
       setLoading(false);
 
       if (rating.error) {
-        // toast.error(rating.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(rating?.error?.message||'Something Went Wrong');
+        setShowToaster(true);
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
         setRatings(rating.data);
       }
     } catch (error) {
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
     }
   }
@@ -140,7 +134,7 @@ export default function Dashboard(props) {
       <div className="m-3 d-flex justify-content-center flex-column">
         <div>
           {
-            userDetails.role !== "USER" &&
+            userDetails?.role !== "USER" &&
             <div>
               <Link to="/rating" params={{ params: true }}>
                 {props.showBtn && (
@@ -240,7 +234,7 @@ export default function Dashboard(props) {
                         return (
                           <td key={index}>
                             {
-                              userDetails.role === "USER" ?
+                              userDetails?.role === "USER" ?
                                 <input
                                   className="input_dashboard"
                                   disabled={true}
@@ -284,6 +278,11 @@ export default function Dashboard(props) {
         </table>
       </div>
       {loading ? <Loader /> : null}
+      {toaster && <Toaster
+                    message={toasterMessage}
+                    show={toaster}
+                    close={() => showToaster(false)} />
+                }
     </div>
   );
 }

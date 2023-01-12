@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { assignUserToProject, getAllProjects, getAllUsers, getTaskStatusAnalytics, getUsersOfProject, unAssignUserToProject } from '../../services/user/api';
 import { toast } from "react-toastify";
-
+import Toaster from "../../components/Toaster";
 import './projects.css';
-import Loader from '../../loader/loader';
+import Loader from '../../components/Loader';
 import Modals from '../../components/modal';
 import SureModals from '../../components/sureModal';
 import { MDBTooltip } from 'mdb-react-ui-kit';
@@ -13,19 +14,14 @@ import { useAuth } from '../../auth/AuthProvider';
 export default function Project() {
 	let projectBackColor = ['#ff942e', '#e9e7fd', '#dbf6fd', '#fee4cb', '#ff942e']
 	const { userDetails } = useAuth();
-
-
+	const [toaster, showToaster] = useState(false);
+	const setShowToaster = (param) => showToaster(param);
+	const [toasterMessage, setToasterMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [projectList, setProjectListValue] = useState([]);
 	const [allUserList, setAllUserListValue] = useState([]);
 	const [selectedProjectId, setSelectedProjectId] = useState('');
 	const [projectTaskAnalytics, setProjectTaskAnalytics] = useState('');
-
-
-	// const [projectDetails, setProjectTaskAnalytics] = useState('');
-
-
-
 	const [selectedProject, setSelectedProject] = useState({ name: null, _id: null });
 	const [selectedUser, setSelectedUser] = useState({ name: null, _id: null });
 	const [showMoreUserDropDownId, setShowMoreUserDropDownId] = useState('');
@@ -47,14 +43,14 @@ export default function Project() {
 			const projects = await getAllProjects();
 			//setloading(false);
 			if (projects.error) {
-				toast.error(projects.error.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(projects?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 			} else {
 				setProjectListValue(projects.data)
 			}
 		} catch (error) {
+			setToasterMessage(error?.error?.message||'Something Went Wrong');
+			setShowToaster(true);
 			//setloading(false);
 			return error.message;
 		}
@@ -65,14 +61,14 @@ export default function Project() {
 			const projects = await getTaskStatusAnalytics();
 			//setloading(false);
 			if (projects.error) {
-				toast.error(projects.error.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(projects?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 			} else {
 				setProjectTaskAnalytics(projects.data)
 			}
 		} catch (error) {
+			setToasterMessage(error?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 			//setloading(false);
 			return error.message;
 		}
@@ -100,10 +96,8 @@ export default function Project() {
 			const projectAssignedUsers = await getUsersOfProject(dataToSend);
 			//setloading(false);
 			if (projectAssignedUsers.error) {
-				toast.error(projectAssignedUsers.error.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(projectAssignedUsers?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 				return
 			} else {
 				setProjectAssignedUsers(projectAssignedUsers.data);
@@ -112,6 +106,8 @@ export default function Project() {
 				console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
 			}
 		} catch (error) {
+			setToasterMessage(error?.error?.message||'Something Went Wrong');
+			setShowToaster(true);
 			//setloading(false);
 			return error.message;
 		}
@@ -125,15 +121,15 @@ export default function Project() {
 			const projectUsers = await getAllUsers();
 			//setloading(false);
 			if (projectUsers.error) {
-				toast.error(projectUsers.error.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(projectUsers?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 				return
 			} else {
 				setAllUserListValue(projectUsers.data);
 			}
 		} catch (error) {
+			setToasterMessage(error?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 			//setloading(false);
 			return error.message;
 		}
@@ -314,22 +310,20 @@ export default function Project() {
 			console.log("AddSelectedUsersToProject", addRes);
 			//setloading(false);
 			if (addRes.error) {
-				toast.error(addRes.error.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(addRes?.error?.message||'Something Went Wrong');
+        		setShowToaster(true);
 				return
 			} else {
-				toast.success(addRes.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(addRes?.message||'Something Went Wrong');
+        		setShowToaster(true);
 				getAndSetAllProjects();
 				setModalShow(false)
 				userListToAddInProject.clear()
 			}
 		} catch (error) {
 			//setloading(false);
+			setToasterMessage(error?.error?.message||'Something Went Wrong');
+			setShowToaster(true);
 			return error.message;
 		}
 	}
@@ -349,22 +343,20 @@ export default function Project() {
 			console.log("unAssignUserToProject", removeRes);
 			//setloading(false);
 			if (removeRes.error) {
-				toast.error(removeRes.error.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(removeRes?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 				return
 			} else {
-				toast.success(removeRes.message, {
-					position: toast.POSITION.TOP_CENTER,
-					className: "toast-message",
-				});
+				setToasterMessage(removeRes?.message||'Something Went Wrong');
+				setShowToaster(true);
 				getAndSetAllProjects();
 				setShowMoreUserDropDownId('')
 				// getProjectAssignedUsers(selectedProject);
 				setSureModalShow(false)
 			}
 		} catch (error) {
+			setToasterMessage(error?.error?.message||'Something Went Wrong');
+			setShowToaster(true);
 			//setloading(false);
 			return error.message;
 		}
@@ -487,6 +479,11 @@ export default function Project() {
 				}
 			</div >
 			{loading ? <Loader /> : null}
+			{toaster && <Toaster
+                    message={toasterMessage}
+                    show={toaster}
+                    close={() => showToaster(false)} />
+                }
 
 			{
 				modalShow && <Modals

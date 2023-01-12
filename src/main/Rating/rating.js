@@ -9,8 +9,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { addRating } from "../../services/user/api";
 import Dashboard from "../Dashboard/dashboard";
-// import { toast } from "react-toastify";
-import Loader from "../../loader/loader";
+import Loader from "../../components/Loader";
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
@@ -19,19 +18,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast, cssTransition } from "react-toastify";
-const bounce = cssTransition({
-  enter: "animate__animated animate__bounceIn",
-  exit: "animate__animated animate__bounceOut"
-});
-
-const swirl = cssTransition({
-  enter: "swirl-in-fwd",
-  exit: "swirl-out-bck"
-});
+import Toaster from "../../components/Toaster";
 
 
-// let teamOptions = [];
+
 export default function Rating(props) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,7 +44,9 @@ export default function Rating(props) {
   const [rating, setRating] = useState("");
   const [comments, setComments] = useState("");
   const [validated, setValidated] = useState(false);
-
+	const [toaster, showToaster] = useState(false);
+	const setShowToaster = (param) => showToaster(param);
+    const [toasterMessage, setToasterMessage] = useState("");
   console.log(patchDateValue)
   if (!team && location && location.state && location.state.userId) {
     setTeam(location.state.userId)
@@ -122,24 +114,15 @@ export default function Rating(props) {
       setLoading(false);
 
       if (user.error) {
-
-        toast.dark(" 👋," + user?.error?.message, {
-          transition: swirl
-        });
-
-      } else {
-        toast.dark(" 👋, User List Fetched Succesfully ", {
-          transition: swirl
-        });
-
+        setToasterMessage(user?.error?.message || 'Something Went Wrong');
+        setShowToaster(true);
+      }else{
 
         setTeamOptions(user.data);
-        console.log(user.data);
       }
     } catch (error) {
-      toast.dark(" 👋," + error?.message, {
-        transition: swirl
-      });
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -151,25 +134,20 @@ export default function Rating(props) {
       const rating = await addRating(data);
       setLoading(false);
       if (rating.error) {
-        toast.dark(" 👋, " + rating?.error?.message, {
-          transition: swirl
-        });
+        setToasterMessage(rating?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
 
       } else {
-
-        toast.dark(" 👋, Submitted succesfully ", {
-          transition: swirl
-        });
+        setToasterMessage('Rating Added Succesfully');
+				setShowToaster(true);
         navigate('/')
         console.log(rating.data);
       }
     }
     catch (error) {
-
-      toast.dark(" 👋," + error?.message, {
-        transition: swirl
-      });
       setLoading(false);
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       console.log(error?.message)
     }
   }
@@ -308,9 +286,12 @@ export default function Rating(props) {
           View{" "}
         </div>
         {loading ? <Loader /> : null}
+        {toaster && <Toaster
+                message={toasterMessage}
+                show={toaster}
+                close={() => showToaster(false)} />}
       </div>
       {renderCurrentView()}
-      <ToastContainer transition={bounce} />
     </div>
   );
 }
