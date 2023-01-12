@@ -5,7 +5,7 @@ import React from "react";
 import { Navbar, Button, Link, Text } from "@nextui-org/react";
 import { Layout } from "./Layout.js";
 import { Logo } from "./Logo.js";
-
+import './navbar.css'
 export default function App() {
   const { accessToken, logout } = useAuth()
   console.log("AUTHHHHHHHHHHHHHHHHHHHHHHHH", accessToken)
@@ -13,7 +13,7 @@ export default function App() {
     return {
       fontWeight: isActive ? 'bold' : 'normal',
       textDecoration: isActive ? 'none' : 'none',
-      backgroundColor: isActive ? '#eadcf8' : 'white',
+      backgroundColor: isActive ? '#eadcf8' : '#9ec6e1',
       padding: isActive ? '10px' : '1  0px',
       marginRight: '45px',
       borderRadius: isActive ? '9px' : '0px',

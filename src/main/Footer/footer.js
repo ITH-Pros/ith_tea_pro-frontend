@@ -1,7 +1,12 @@
-export default function Footer(){
+import './footer.css'
+export default function Footer() {
     return(
-        <>
-        <div>footer</div>
-        </>
+           <footer className="footer-bg-pic">
+        <div className="ocean">
+  <div className="wave"></div>
+  <div className="wave"></div>
+  <div className="wave"></div>
+</div>
+          </footer>
     )
 }

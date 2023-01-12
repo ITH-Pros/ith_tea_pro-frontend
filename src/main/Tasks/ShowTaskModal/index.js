@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
@@ -8,89 +9,59 @@ import { getIconClassForStatus } from "../../../helpers/taskStatusIcon";
 import DatePicker from "react-date-picker";
 import './index.css'
 import { addCommentOnTaskById, getTaskDetailsByTaskId, updateTaskDetails } from "../../../services/user/api";
-import Loader from "../../../loader/loader";
+import Loader from "../../../components/Loader";
+import Toaster from '../../../components/Toaster'
 
 function TaskModal(props) {
   const { selectedTaskObj, selectedProject, getAllTaskOfProject } = props;
   const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
+  // eslint-disable-next-line no-unused-vars
   const priorityList = ["LOW", "REPEATED", "MEDIUM", "HIGH"]
-
-
+	const [toaster, showToaster] = useState(false);
+	const setShowToaster = (param) => showToaster(param);
+  const [toasterMessage, setToasterMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [taskModalShow, setTaskModalShow] = useState(false);
   const [selectedTaskDetails, setSelectedTaskDetails] = useState(selectedTaskObj);
-
-  console.log("taskModalShow----------------------------------", taskModalShow)
-
+  const [titleValue, setTitleValue] = useState(selectedTaskDetails.title);
+  const [editTitleBoxEnable, setEditTitleBoxEnable] = useState(false);
 
   const CommentsForm = () => {
     const [commentValue, setCommentValue] = useState('');
     console.log('render comments')
     return (
       <>
-
         <Row className="mb-3 mt-6" >
-        <hr></hr>
-          <Form.Group as={Col} md="12" className="mt-2" >
-            {/* <Form.Label>Comment</Form.Label> */}
-            <Form.Control
-              as="textarea"
-              // required
-              // type="text"
-              placeholder="Comment"
-              // value={commentValune}
-              onChange={(e) => { setCommentValue(e.target.value) }}
-            />
-          </Form.Group>
-
-          <Button className="btn btn-gradient-border" style={{ width: '100px', marginTop: '10px' }} onClick={() => { addCommentOnTask(commentValue) }}>
-            Add
-          </Button>
+            <hr></hr>
+            <Form.Group as={Col} md="12" className="mt-2" >
+              <Form.Control as="textarea" placeholder="Comment" onChange={(e) => { setCommentValue(e.target.value) }}/>
+            </Form.Group>
+            <Button className="btn btn-gradient-border" style={{ width: '100px', marginTop: '10px' }} onClick={() => { addCommentOnTask(commentValue) }}>
+              Add
+            </Button>
         </Row >
       </>
-
     )
-
   };
 
   const EditTitleBox = () => {
-    const [titleValue, setTitleValue] = useState(selectedTaskDetails.title);
-    const [editTitleBoxEnable, setEditTitleBoxEnable] = useState(false);
 
     const checkAndUpdateTitleValue = () => {
       if (!titleValue) {
         return
       }
       updateMutipleTaskDetails({ title: titleValue }, selectedTaskDetails);
-      // setEditTitleBoxEnable(false);
     }
 
     return (
       <>
         {
           editTitleBoxEnable ?
-            <input className="pop-title-input"
-              autoFocus
-              type="text"
-              value={titleValue}
-              onChange={(e) => { setTitleValue(e.target.value) }}
-              // onMouseLeave={(e) => { console.log('-----------------------', e.target.value) }}
-              onBlur={checkAndUpdateTitleValue}
-              onKeyDown={event => {
-                if (event.key === 'Enter') {
-                  checkAndUpdateTitleValue()
-                }
-              }}
-            ></input>
-            :
+            <input className="pop-title-input" autoFocus type="text" value={titleValue} onChange={(e) => { setTitleValue(e.target.value) }}
+              onBlur={checkAndUpdateTitleValue} onKeyDown={event => { if (event.key === 'Enter') {checkAndUpdateTitleValue()} }}></input> :
             <>
               <span className="pop-title">{titleValue || <i>No Title</i>}</span>
-              <i
-                className="fa fa-pencil-square-o"
-                style={{ cursor: "pointer", margin: '10px' }}
-                aria-hidden="true"
-                onClick={() => setEditTitleBoxEnable(true)}
-              ></i>
+              <i className="fa fa-pencil-square-o" style={{ cursor: "pointer", margin: '10px' }} aria-hidden="true" onClick={() => setEditTitleBoxEnable(true)}></i>
             </>
         }
       </>
@@ -100,54 +71,33 @@ function TaskModal(props) {
   const EditDescriptionBox = () => {
     const [editDescBoxEnable, setEditDescBoxEnable] = useState(false);
     const [descriptionValue, setDescriptionValue] = useState(selectedTaskDetails?.description || "");
+
     function showEditDescriptionBox() {
       setEditDescBoxEnable(true);
     }
+
     const editTaskDescriptionValue = (e) => {
       setDescriptionValue(e.target.value || '');
     };
-    console.log("EditDescriptionBox---------------", descriptionValue, '\nselectedTaskDetails=----------', selectedTaskDetails)
+
     return (
       <>
         {editDescBoxEnable ?
           <>
-            <input className="edit-box-input"
-              autoFocus
-              type="text"
-              value={descriptionValue}
-              onChange={(e) => {
-                editTaskDescriptionValue(e);
-              }}
-            ></input>
+            <input className="edit-box-input" autoFocus type="text" value={descriptionValue}onChange={(e) => {editTaskDescriptionValue(e); }}></input>
             <div>
               <button className="btn-gradient-border descBtn" style={{ width: '100px', padding: '4px 23px' }}
-                onClick={() => {
-                  updateMutipleTaskDetails({ description: descriptionValue }, selectedTaskDetails);
-                  setEditDescBoxEnable(false);
-                }}
-              >
-                Save
+                onClick={() => { updateMutipleTaskDetails({ description: descriptionValue }, selectedTaskDetails); setEditDescBoxEnable(false);}}>Save
               </button>
               <button className="btn-gradient-border descBtn" style={{ width: '100px', padding: '4px 23px' }}
-                onClick={() => {
-                  setDescriptionValue(selectedTaskDetails.description || '');
-                  setEditDescBoxEnable(false);
-                }}
-              >
-                Cancel
+                onClick={() => { setDescriptionValue(selectedTaskDetails.description || ''); setEditDescBoxEnable(false);}}>Cancel
               </button>
             </div>
-          </>
-          :
-          <div className="descriptionBox">
-            <span>{descriptionValue || <i>No description</i>}</span>
-            <i
-              className="fa fa-pencil-square-o"
-              style={{ cursor: "pointer", float: "right" }}
-              aria-hidden="true"
-              onClick={showEditDescriptionBox}
-            ></i>
-          </div>
+          </> : <div className="descriptionBox">
+                  <span>{descriptionValue || <i>No description</i>}</span>
+                  <i className="fa fa-pencil-square-o" style={{ cursor: "pointer", float: "right" }}
+                    aria-hidden="true" onClick={showEditDescriptionBox}></i>
+                </div>
         }
       </>
     )
@@ -156,52 +106,33 @@ function TaskModal(props) {
   const UpdateCategoryBox = (props) => {
 
     const { selectedTaskDetails, selectedProject } = props
-
     const [categoryValue, setCategoryValue] = useState(selectedTaskDetails.category || '');
     const [editCategoryEnable, setEditCategoryEnable] = useState(false);
-    console.log("selectedProject", selectedProject)
-
     const checkAndUpdateCategory = (e) => {
       if (e.target.value === categoryValue) {
         return
       }
       updateMutipleTaskDetails({ category: e.target.value }, selectedTaskDetails)
-      // setEditCategoryEnable(false);
-      // console.log()
     }
     return (
       < >
         {
           editCategoryEnable ?
             <Form.Group as={Col} md="12" >
-              <Form.Control
-                as="select"
-                type="select"
-                autoFocus
-                onBlur={() => setEditCategoryEnable(false)}
-                onChange={checkAndUpdateCategory}
-                value={categoryValue}
-              >
+              <Form.Control as="select" type="select" autoFocus onBlur={() => setEditCategoryEnable(false)} onChange={checkAndUpdateCategory} value={categoryValue}>
                 <option value='' disabled >Select Category </option>
                 {selectedProject?.categories?.map((category) => {
                   if (categoryValue === category) {
                     return (
-                      <option value={category} key={category} disabled >
-                        {category}
-                      </option>
+                      <option value={category} key={category} disabled >{category} </option>
                     )
                   }
                   return (
-                    <option value={category} key={category} >
-                      {category}
-                    </option>
+                    <option value={category} key={category} >{category}</option>
                   )
-                })
-                }
+                })}
               </Form.Control>
-            </Form.Group>
-            :
-            <small style={{ cursor: 'pointer' }} className='pop-category' onClick={() => setEditCategoryEnable(true)}>{categoryValue}</small>
+            </Form.Group> : <small style={{ cursor: 'pointer' }} className='pop-category' onClick={() => setEditCategoryEnable(true)}>{categoryValue}</small>
         }
       </>
     )
@@ -210,59 +141,39 @@ function TaskModal(props) {
   const UpdateAssignedToBox = () => {
     const [assignedToValue, setAssignedToValue] = useState(selectedTaskDetails.assignedTo || '');
     const [editAssignedToEnable, setEditAssignedToEnable] = useState(false);
-    console.log("selectedProject", selectedProject)
-
     const checkAndUpdateAssignedTo = (e) => {
-      console.dir(e.target)
       if (e.target.value === assignedToValue?._id) {
         return
       }
       updateMutipleTaskDetails({ assignedTo: e.target.value }, selectedTaskDetails)
-      // let assignedToObj = selectedProject?.accessibleBy?.find((el) => el._id === e.target.value)
-      // setAssignedToValue({ _id: e.target.value, name: assignedToObj.name })
       setEditAssignedToEnable(false);
-      // selectedTaskDetails.assignedTo = { _id: e.target.value, name: assignedToObj.name }
     }
     return (
       <>
-        <span className="pop-2-span">
-          Assigned to
-        </span>
+        <span className="pop-2-span">Assigned to</span>
         {
           editAssignedToEnable ?
             <Form.Group as={Col} md="12" >
-              <Form.Control
-                as="select"
-                type="select"
-                autoFocus
-                onBlur={() => setEditAssignedToEnable(false)}
-                onChange={checkAndUpdateAssignedTo}
-                value={assignedToValue?._id || "Not Assigned"}
-
-              >
+              <Form.Control as="select" type="select" autoFocus
+                onBlur={() => setEditAssignedToEnable(false)} onChange={checkAndUpdateAssignedTo} value={assignedToValue?._id || "Not Assigned"} >
                 <option value='' disabled>Assign to </option>
                 {selectedProject?.accessibleBy?.map((user) => {
                   if (assignedToValue?._id === user._id) {
                     return (
-                      <option value={user._id} key={user._id} disabled >
-                        {user.name}
-                      </option>
+                      <option value={user._id} key={user._id} disabled > {user.name} </option>
                     )
                   }
                   return (
-                    <option value={user._id} key={user._id}>
-                      {user.name}
-                    </option>
+                    <option value={user._id} key={user._id}> {user.name} </option>
                   )
                 })
                 }
               </Form.Control>
-            </Form.Group>
-            :
-            <>
-              <b style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)}>{assignedToValue?.name || "Not Assigned"}</b>
-              <br></br>
-            </>
+            </Form.Group> :
+                          <>
+                            <b style={{ cursor: 'pointer' }} onClick={() => setEditAssignedToEnable(true)}>{assignedToValue?.name || "Not Assigned"}</b>
+                            <br></br>
+                          </>
         }
       </>
     )
@@ -271,18 +182,12 @@ function TaskModal(props) {
   const UpdatePriorityBox = () => {
     const [priorityValue, setPriorityValue] = useState(selectedTaskDetails.priority || '');
     const [editPriorityEnable, setEditPriorityEnable] = useState(false);
-    console.log("selectedProject", priorityValue)
-
     const checkAndUpdatePriority = (e) => {
-      console.log("updatePriority", e.target.value, priorityValue)
       if (e.target?.value === priorityValue) {
         return
       }
-      // updateTaskPriority(e.target?.value)
       updateMutipleTaskDetails({ priority: e.target.value }, selectedTaskDetails)
-
       setEditPriorityEnable(false);
-      // selectedTaskDetails.priority = e.target?.value
     }
     return (
       <>
@@ -292,28 +197,20 @@ function TaskModal(props) {
         {
           editPriorityEnable ?
             <Form.Group as={Col} md="12" >
-              <Form.Control
-                as="select"
-                type="select"
-                autoFocus
-                onBlur={() => setEditPriorityEnable(false)}
-                onChange={checkAndUpdatePriority}
-                value={priorityValue}
-              >
+              <Form.Control as="select" type="select" autoFocus
+                onBlur={() => setEditPriorityEnable(false)} onChange={checkAndUpdatePriority} value={priorityValue}>
                 <option value='' disabled >Set Priority </option>
                 <option value='' disabled={priorityValue === ''}>None </option>
                 <option value='LOW' disabled={priorityValue === 'LOW'}>Low </option>
                 <option value='MEDIUM' disabled={priorityValue === 'MEDIUM'}>Medium </option>
                 <option value='HIGH' disabled={priorityValue === 'HIGH'} >High </option>
                 <option value='REPEATED' disabled={priorityValue === 'REPEATED'} >Repeated </option>
-
               </Form.Control>
-            </Form.Group>
-            :
-            <>
-              <b style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)}>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>
-              <br></br>
-            </>
+            </Form.Group>:
+                          <>
+                            <b style={{ cursor: 'pointer' }} onClick={() => setEditPriorityEnable(true)}>{priorityValue ? priorityValue.at(0) + priorityValue.slice(1)?.toLowerCase() : "Not set"}</b>
+                            <br></br>
+                          </>
         }
       </>
     )
@@ -322,19 +219,13 @@ function TaskModal(props) {
   const UpdateStatusBox = () => {
     const [statusValue, setStatusValue] = useState(selectedTaskDetails.status || '');
     const [editStatusEnable, setEditStatusEnable] = useState(false);
-    console.log("selectedProject", statusValue)
-
     const checkAndUpdateStatus = (e) => {
-      console.log("updatePriority", e.target.value, statusValue)
       if (e.target?.value === statusValue) {
         return
       }
       if (e.target?.value === "COMPLETED") {
         updateTaskCompletedStatusAndDate({ status: e.target?.value, completedDate: new Date() })
-        // selectedTaskDetails.status = e.target?.value
-        // selectedTaskDetails.completedDate = new Date()
       } else {
-        // updateTaskStatus(e.target?.value)
         updateMutipleTaskDetails({ status: e.target?.value, completedDate: new Date() }, selectedTaskDetails)
 
         setEditStatusEnable(false);
@@ -348,24 +239,12 @@ function TaskModal(props) {
           editStatusEnable ?
             <Form.Group as={Col} md="12" >
               <Form.Control className="pop-class-select"
-                as="select"
-                type="select"
-                autoFocus
-                // clearAriaLabel
-                onBlur={() => setEditStatusEnable(false)}
-                onChange={checkAndUpdateStatus}
-                value={statusValue || statusList[0]}
-              >
+                as="select" type="select" autoFocus onBlur={() => setEditStatusEnable(false)} onChange={checkAndUpdateStatus} value={statusValue || statusList[0]}>
                 <option value="" disabled>Select Status</option>
                 {statusList?.map((status) => (
-                  <option value={status} disabled={statusValue === status} key={status}>
-                    {status}
-                  </option>
-                ))}
-
+                  <option value={status} disabled={statusValue === status} key={status}> {status} </option>))}
               </Form.Control>
-            </Form.Group>
-            :
+            </Form.Group> :
             <>
               <span >
                 <i style={{ cursor: 'pointer' }} onClick={() => setEditStatusEnable(true)} className={getIconClassForStatus(selectedTaskDetails.status)} aria-hidden="true"></i>
@@ -381,17 +260,12 @@ function TaskModal(props) {
   const UpdateDueDateBox = () => {
     const [dueDateValue, setDueDateValue] = useState(selectedTaskDetails.dueDate ? new Date(selectedTaskDetails.dueDate) : new Date());
     const [editDueDateEnable, setEditDueDateEnable] = useState(false);
-    console.log("selectedProject", dueDateValue)
-
     const checkAndUpdateDueDate = (e) => {
       if (!e || e?.toDateString() === dueDateValue?.toDateString()) {
         return
       }
-      // updateTaskDueDate(e.toDateString())
       updateMutipleTaskDetails({ dueDate: e.toDateString() }, selectedTaskDetails)
-      // setDueDateValue(e)
       setEditDueDateEnable(false);
-      // selectedTaskDetails.dueDate = e
     }
     return (
       <>
@@ -513,21 +387,17 @@ function TaskModal(props) {
       const taskRes = await getTaskDetailsByTaskId(dataToSend);
       // setLoading(false);
       if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(taskRes?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
         return
       } else {
-        console.log("taskRes.data---", taskRes.data)
         setSelectedTaskDetails(taskRes.data)
-        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNN taskModalShow-----------------------------", taskModalShow)
         !taskModalShow && setTaskModalShow(true)
-        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNN taskModalShow-----------------------------", taskModalShow)
-
       }
     } catch (error) {
       // setLoading(false);
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       return error.message;
     }
   }
@@ -552,22 +422,19 @@ function TaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       // setLoading(false);
       if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(taskRes?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
         return
       } else {
-        console.log("taskRes.data---", taskRes.data)
-        console.log("0000000000000000000000000000000000000000000000000000000000000000000000000", taskModalShow)
+        
         getAllTaskOfProject();
-        console.log("11111111111111111111111111111111111111111111111111111111111111111111111", taskModalShow, selectedTaskDetails)
         getProjectsTaskDetails(selectedTaskDetails)
-        console.log("222222222222222222222222222222222222222222222222222222222222222222222222", taskModalShow)
 
       }
     } catch (error) {
       // setLoading(false);
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       return error.message;
     }
   }
@@ -583,21 +450,17 @@ function TaskModal(props) {
       setLoading(false);
 
       if (comment.error) {
-        console.log(comment.error);
-        // toast.error(rating.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(comment?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        console.log("comment added succesfully ");
+        setToasterMessage('Comment added succesfully');
+				setShowToaster(true);
         getAllTaskOfProject()
         getProjectsTaskDetails(selectedTaskDetails)
       }
     } catch (error) {
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
     }
   }
@@ -612,18 +475,18 @@ function TaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        // toast.error(taskRes.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(taskRes?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
         return
       } else {
-        console.log("taskRes.data---", taskRes.data)
-        // getProjectList()
+        setToasterMessage('Updated Succesfully');
+				setShowToaster(true);
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails)
       }
     } catch (error) {
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -762,6 +625,11 @@ function TaskModal(props) {
       </Modal>
 
       {loading && <Loader />}
+      {toaster && <Toaster
+                message={toasterMessage}
+                show={toaster}
+                close={() => showToaster(false)} />}
+
     </>
 
   );

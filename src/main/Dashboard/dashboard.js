@@ -9,10 +9,11 @@ import { MDBTooltip } from "mdb-react-ui-kit";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import Loader from "../../loader/loader";
+import Loader from "../../components/Loader";
 import { getAllUsers } from "../../services/user/api";
 import RatingBox from "../../components/ratingBox";
 import { useAuth } from "../../auth/AuthProvider";
+import Toaster from "../../components/Toaster";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -20,9 +21,10 @@ export default function Dashboard(props) {
   console.log(month)
   const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
-
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
 
   useEffect(() => {
@@ -70,18 +72,14 @@ export default function Dashboard(props) {
       setLoading(false);
 
       if (user.error) {
-        // toast.error(user.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(user?.error?.message||'Something Went Wrong');
+        setShowToaster(true);
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        setTeamOptions(user.data);
+        setTeamOptions([...user.data]);
       }
     } catch (error) {
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -101,18 +99,14 @@ export default function Dashboard(props) {
       setLoading(false);
 
       if (rating.error) {
-        // toast.error(rating.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(rating?.error?.message||'Something Went Wrong');
+        setShowToaster(true);
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        setRatings(rating.data);
+        setRatings([...rating.data]);
       }
     } catch (error) {
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       setLoading(false);
     }
   }
@@ -127,41 +121,28 @@ export default function Dashboard(props) {
           <i className="fa fa-home" aria-hidden="true"></i> Dashboard
         </h1>
       }
-      {/* {
-          // userDetails.role !== "USER" &&
-          <div>
-            <Link to="/rating" params={{ params: true }}>
-              {props.showBtn && (
-                <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '53px' }} ><span>Add Rating</span></button>
-                )}
-             </Link> 
-          </div> 
-        } */}
       <div className="m-3 d-flex justify-content-center flex-column">
         <div>
           {
-            userDetails.role !== "USER" &&
-            <div>
+            userDetails?.role !== "USER" &&
               <Link to="/rating" params={{ params: true }}>
                 {props.showBtn && (
                   <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '10px' }} ><span>Add Rating</span></button>
                 )}
               </Link>
-            </div>
           }
           <h5 className="text-center h5cls">
             <p style={{ marginRight: "10px", marginTop: "6px" }}>
               Ratings for{" "}
             </p>
             <Form.Group as={Col} md="1" controlId="select_month">
-              <Form.Control
+              <Form.Control className="month-drop-select"
                 required
                 as="select"
                 type="select"
                 name="select_team"
                 onChange={onchangeMonth}
-                value={monthUse}
-              >
+                value={monthUse}>
                 <option value="" disabled>
                   Select Month
                 </option>
@@ -173,7 +154,7 @@ export default function Dashboard(props) {
               </Form.Control>
             </Form.Group>
             <Form.Group as={Col} md="1" controlId="select_year">
-              <Form.Control
+              <Form.Control className="year-drop-select"
                 required
                 as="select"
                 type="select"
@@ -193,7 +174,7 @@ export default function Dashboard(props) {
             </Form.Group>
           </h5>
         </div>
-        <table className="table">
+        <table className="table fixed_header" >
           <thead>
             <tr>
               <th>Name</th>
@@ -201,8 +182,7 @@ export default function Dashboard(props) {
                 .fill(0)
                 .map((rating, index) => {
                   return (
-                    <th className="dates text-center" key={`${index}_${index}`} >{`${month + 1
-                      }/${moment()
+                    <th className="dates text-center" key={`${index}_${index}`} >{`${moment()
                         .startOf("month")
                         .add(index, "days")
                         .format("DD")}`}</th>
@@ -219,58 +199,29 @@ export default function Dashboard(props) {
               return (
                 <tr key={index}>
                   <td className="user_names"> {user.name}</td>
-                  {Array(days)
-                    ?.fill(0)
-                    ?.map((day, index) => {
-
+                  {Array(days)?.fill(0)?.map((day, index) => {
                       let ratingUserObj = ratingsArray.find((el) => { return el._id === user._id; });
                       let ratingCommentObj = ratingUserObj?.ratingsAndComment.find((el) => el.date - 1 === index);
-                      // let ratingCommentObj = {
-                      //   rating: '2',
-                      //   ratingId: "63b488d5deeb1cbb03042c65"
-                      // }
                       if (ratingCommentObj) {
                         userRatingSum += ratingCommentObj?.rating;
                         userRatingCount += 1;
-
-                        return (
-                          <RatingBox key={index} index={index} getAllRatings={getAllRatings} ratingCommentObj={ratingCommentObj} />
-                        );
+                        return ( <RatingBox key={index} index={index} getAllRatings={getAllRatings} ratingCommentObj={ratingCommentObj} />);
                       } else {
                         return (
                           <td key={index}>
                             {
-                              userDetails.role === "USER" ?
-                                <input
-                                  className="input_dashboard"
-                                  disabled={true}
-                                />
+                              userDetails?.role === "USER" ?<span className="input_dashboard" disabled={true}/>
                                 :
-                                <MDBTooltip
-                                  tag="div"
-                                  wrapperProps={{ href: "#" }}
-                                  title={"click to Add Rating"}
-                                >
-
-                                  <Link to={{
-                                    pathname: "/rating",
-                                  }}
-                                    state={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
-                                    <input
-                                      style={{ cursor: "pointer" }}
-                                      className="input_dashboard"
-                                      disabled={true}
-                                    />
+                                <MDBTooltip tag="div" wrapperProps={{ href: "#" }}title={"click to Add Rating"}>
+                                  <Link to={{ pathname: "/rating"}} tate={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
+                                    <span style={{ cursor: "cell",padding:'10px' }} className="input_dashboard"> </span>
                                   </Link>
                                 </MDBTooltip>
                             }
-
                           </td>
-
                         );
                       }
                     })}
-
                   <td className="userAverage">
                     {userRatingCount
                       ? Math.round((userRatingSum / userRatingCount) * 100) /
@@ -284,6 +235,11 @@ export default function Dashboard(props) {
         </table>
       </div>
       {loading ? <Loader /> : null}
+      {toaster && <Toaster
+                    message={toasterMessage}
+                    show={toaster}
+                    close={() => showToaster(false)} />
+                }
     </div>
   );
 }
