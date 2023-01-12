@@ -15,7 +15,7 @@
     height: 20px;
     position: absolute;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: rgb(247, 139, 139);
     left: 15%;
     transform-origin: 50%;
     animation: loader-circle7124 .5s alternate infinite ease;
@@ -52,12 +52,12 @@
   }
   
   .loader-shadow {
-    width: 20px;
-    height: 4px;
+    width: 30px;
+    height: 10px;
     border-radius: 50%;
     background-color: rgba(0,0,0,0.9);
     position: absolute;
-    top: 62px;
+    top: 50px;
     transform-origin: 50%;
     z-index: -1;
     left: 15%;

@@ -5,31 +5,28 @@ const Modals = (props) => {
     const { heading, modalBody, modalShow, onClick, onHide, keyboardProp, submitBtnDisabled, backdropProp, size, btnContent } = props;
     console.log(`Modals:`, props)
     return (
-        // <>
             <Modal
-                
                 onHide={onHide}
                 show={modalShow}
                 size={size || 'lg'}
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
-                style={{maxHeight:'400px'}}
                 scrollable={true}
-                animation={false}
-            >
+                animation={false}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
+                    <p>
                         {heading}
+                    </p>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body bsPrefix='' >
                     {modalBody}
                 </Modal.Body>
                 <Modal.Footer>
-                    <button disabled={submitBtnDisabled} className='btn btn-gradient-border' onClick={onClick}>{btnContent || 'Submit'}</button>
+                    <button disabled={submitBtnDisabled} className='modal-close-btn' onClick={onClick}>{btnContent || 'Submit'}</button>
                 </Modal.Footer>
             </Modal>
-        // </>
     )
 }
 
