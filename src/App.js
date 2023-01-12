@@ -12,6 +12,8 @@ import Task from './main/Tasks/tasks'
 import Team from './main/Teams/teams'
 import NoMatch from './main/404/index'
 import { ProtectedRoute } from './components/ProtectedRoute';
+import User from './main/User';
+import AddUser from './main/User/AddUser';
 
 // const LazyAbout = React.lazy(() => import('./components/About'))
 
@@ -23,7 +25,7 @@ function App() {
       {
         <Route path='/login' element={
           // <ProtectedRoute>
-            <Login />
+          <Login />
           // </ProtectedRoute>
         }
         />
@@ -78,6 +80,12 @@ function App() {
           </>
         }
       />
+      <Route
+        path='/user'
+        // exact={true}
+        element={<>  <ProtectedRoute>    <Navbar />    <User />  </ProtectedRoute></>}>
+        <Route path="add" element={<AddUser />} />
+      </Route>
       <Route path='*' element={<NoMatch />} />
     </Routes>
   )

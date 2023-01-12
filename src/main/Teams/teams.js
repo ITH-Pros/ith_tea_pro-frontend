@@ -4,7 +4,7 @@ import { getAllUsers, editUserDetail, getAllProjects, getUserAssignedProjects, a
 import { toast } from "react-toastify";
 import './teams.css'
 import Loader from '../../loader/loader';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Rating from '../Rating/rating';
 import Modals from '../../components/modal';
 import { useAuth } from '../../auth/AuthProvider';
@@ -203,10 +203,25 @@ export default function Teams(props) {
                                     </div>
                                 }
                             </div>
-
                         )
                     })
                 }
+                {
+
+                    userDetails.role !== "USER" &&
+                    <div key='AddNewUser' className="box">
+
+                        <div className="content">
+                            <Link to={{
+                                pathname: "/user/add",
+                            }}>
+                                <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i>
+                            </Link>
+                        </div>
+
+                    </div>
+                }
+
 
 
             </div>
