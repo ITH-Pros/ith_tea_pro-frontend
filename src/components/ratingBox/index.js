@@ -6,20 +6,22 @@ import { addComment, getComment, updateUserRating } from '../../services/user/ap
 import Modals from '../modal';
 import moment from 'moment';
 import { Button, Row } from 'react-bootstrap';
-import Loader from '../../loader/loader';
+import { useAuth } from '../../auth/AuthProvider';
+import Toaster from "../Toaster";
 
 const RatingBox = (props) => {
-    const { ratingCommentObj, index, getAllRatings  ,ratingsArray} = props;
+    const { ratingCommentObj, index, getAllRatings, ratingsArray } = props;
 
     const [clickedRatingArray, setclickedRatingArray] = useState([]);
     const [selectedRating, setSelectedRating] = useState('');
     const [selectedRatingId, setSelectedRatingId] = useState([]);
     const [modalShow, setModalShow] = useState(false);
-
     const [loading, setLoading] = useState(false);
+	const [toaster, showToaster] = useState(false);
+	const setShowToaster = (param) => showToaster(param);
+    const [toasterMessage, setToasterMessage] = useState("");
 
     async function getCommentsByRatingId(ratingId, rating) {
-        console.log("================================")
         let dataToSend = {
             params: {
                 ratingId,
@@ -32,19 +34,10 @@ const RatingBox = (props) => {
             setLoading(false);
 
             if (comment.error) {
-                console.log(comment.error);
-                // toast.error(rating.error.message, {
-                //   position: toast.POSITION.TOP_CENTER,
-                //   className: "toast-message",
-                // });
+                setToasterMessage(comment?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
             } else {
-                // toast.success("Submitted succesfully !", {
-                //   position: toast.POSITION.TOP_CENTER,
-                //   className: "toast-message",
-                // });
                 setclickedRatingArray(comment?.data);
-                console.log("=============================222222222222===", modalShow)
-
                 if (!modalShow) {
                     setSelectedRating(rating);
                     setSelectedRatingId(ratingId)
@@ -53,52 +46,52 @@ const RatingBox = (props) => {
                 }
             }
         } catch (error) {
+            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setShowToaster(true);
             setLoading(false);
         }
     }
 
     function openShowCommentsModal(data) {
-        console.log(data);
         getCommentsByRatingId(data?.ratingId, data?.rating);
     }
+
     const GetModalBody = () => {
 
-
-
+        function toTitleCase(str) {
+            return str.replace(
+              /\w\S*/g,
+              function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+              }
+            );
+        }
+        
         const CommentsForm = () => {
             const [commentFormValue, setCommentValue] = useState('')
-
             async function addCommnetFunc() {
                 if (!commentFormValue) {
                     return
                 }
-                // let ratingId = clickedRatingArray?.ratingId;
                 let dataToSend = {
                     comment: commentFormValue,
                     ratingId: selectedRatingId,
                 };
                 setLoading(true);
-
                 try {
                     const comment = await addComment(dataToSend);
                     setLoading(false);
-
                     if (comment.error) {
-                        console.log(comment.error);
-                        // toast.error(rating.error.message, {
-                        //   position: toast.POSITION.TOP_CENTER,
-                        //   className: "toast-message",
-                        // });
+                        setToasterMessage(comment?.error?.message||'Something Went Wrong');
+                        setShowToaster(true);
                     } else {
-                        // toast.success("Submitted succesfully !", {
-                        //   position: toast.POSITION.TOP_CENTER,
-                        //   className: "toast-message",
-                        // });
-
-                        console.log("comment added succesfully ");
+                        setToasterMessage('Comment Added Succesfully');
+                        setShowToaster(true);
                         getCommentsByRatingId(selectedRatingId, selectedRating)
                     }
                 } catch (error) {
+                    setToasterMessage(error?.error?.message||'Something Went Wrong');
+                    setShowToaster(true);
                     setLoading(false);
                 }
             }
@@ -106,32 +99,21 @@ const RatingBox = (props) => {
             return (
                 <>
                     <Row className="mb-3">
-                        <Form.Group as={Col} md="8" controlId="comment" >
-                            {/* <Form.Label>Comment</Form.Label> */}
-                            <Form.Control
-                                as="textarea"
-                                required
-                                type="text-area"
-                                placeholder="Comment"
-                                value={commentFormValue}
-                                onChange={(e) => { setCommentValue(e.target.value) }}
-                            />
+                        <Form.Group as={Col} md="10" controlId="comment" >
+                            <Form.Control as="textarea" required type="text-area" placeholder="Comment"  value={commentFormValue}
+                                onChange={(e) => { setCommentValue(e.target.value) }}/>
                             <Form.Control.Feedback type='invalid'> Required</Form.Control.Feedback>
                         </Form.Group>
-
-                        <Button className="btn btn-gradient-border btnshort" type="submit" onClick={() => { addCommnetFunc() }}>
-                            Add
-                        </Button>
+                        <Button className="btn btn-gradient-border btnshort-modal" style={{marginTop:'12px'}} type="submit" onClick={() => {addCommnetFunc()}}><i className="fa fa-plus" aria-hidden="true"></i> </Button>
                     </Row>
                 </>
             );
         };
 
-
         const RatingEditBox = () => {
             const [newRating, setNewRating] = useState('')
             const [editRatingEnabled, setEditRatingEnabled] = useState(false);
-
+            const { userDetails } = useAuth();
 
             const editUserRating = async () => {
                 if (newRating > 5 || newRating < 0) {
@@ -145,55 +127,43 @@ const RatingBox = (props) => {
                     }
                     const rating = await updateUserRating(dataToSend);
                     setLoading(false);
-
                     if (rating.error) {
-                        // toast.error(rating.error.message, {
-                        //   position: toast.POSITION.TOP_CENTER,
-                        //   className: "toast-message",
-                        // });
+                        setToasterMessage(rating?.error?.message||'Something Went Wrong');
+                        setShowToaster(true);
                     } else {
-                        // toast.success("Submitted succesfully !", {
-                        //   position: toast.POSITION.TOP_CENTER,
-                        //   className: "toast-message",
-                        // });
+                        setToasterMessage('Rating Updated Succesfully');
+                        setShowToaster(true);
                         setSelectedRating(newRating);
                         setEditRatingEnabled(false);
                         getAllRatings()
                     }
                 } catch (error) {
+                    setToasterMessage(error?.error?.message||'Something Went Wrong');
+                    setShowToaster(true);
                     setLoading(false);
                 }
 
             }
             return (
-                editRatingEnabled ?
-                    <div>
-                        <input type='number' value={newRating} placeholder={'Previous Rating : ' + selectedRating} onChange={(e) => { setNewRating(e.target.value) }} ></input>
-
-
-                        <button className="btn btn-gradient-border btnshort" onClick={() => setEditRatingEnabled(false)}>Cancel</button>
-                        <button className="btn btn-gradient-border btnshort" onClick={editUserRating} >Submit</button>
-                        {(newRating < 0 || newRating > 5) && <span style={{ color: 'red' }}> Rating must be in range [0,5]</span>}
-                    </div>
-                    :
-                    <div>
-                        <span>Rating : {selectedRating}</span>
-                        <button className="btn btn-gradient-border btnshort" onClick={() => { setEditRatingEnabled(true) }}>Edit </button>
-                    </div>
+                editRatingEnabled ? <div>
+                                        <input type='number' value={newRating} className='previous-rating' placeholder={'Previous Rating : ' + selectedRating} onChange={(e) => { setNewRating(e.target.value) }} ></input>
+                                        <button className="btn btn-gradient-border btnshort mt-3" onClick={editUserRating} >Submit</button>
+                                        <button className="modal-close-btn" onClick={() => setEditRatingEnabled(false)}><i className='fa fa-times'></i></button>
+                                        {(newRating < 0 || newRating > 5) && <span style={{ color: 'red' }}> Rating must be in range [0,5]</span>}
+                                    </div>:
+                                            <div>
+                                                <span ><b>Rating </b>: <input style={{width:'20px',textAlign:'center'}} value={selectedRating}/></span>
+                                                {
+                                                    userDetails.role !== "USER" && <button className="btn btn-gradient-border btnshort mt-3" onClick={() => { setEditRatingEnabled(true) }}><i className='fa fa-edit'></i> </button>
+                                                }
+                                            </div>
             )
-        }
-
+        }   
 
         return (
             <>
                 <div>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            marginBottom: "20px",
-                        }}
-                    >
+                    <div style={{ display: "flex",marginBottom: "20px"}}>
                         <RatingEditBox />
                     </div>
                     <CommentsForm />
@@ -204,15 +174,11 @@ const RatingBox = (props) => {
                         return (
                             <div
                                 key={comments?.comments?._id}
-                                style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}
-                            >
-                                <span>{comments?.comments?.commentedBy?.[0]?.name + '  '}</span>
-                                <small>
-                                    {moment(comments?.comments?.createdAt).format("Do MMMM  YYYY, h:mm a")}
-                                </small>{" "}
-                                <br />
-                                <p style={{ marginTop: "10px" }} dangerouslySetInnerHTML={{ __html: comments?.comments?.comment }}>
-                                </p>
+                                style={{ borderBottom: "1px solid #b86bff", padding: "10px" }}>
+                                <span style={{ fontWeight: 'bold', fontSize: '16px' }}>{toTitleCase(comments?.comments?.commentedBy?.[0]?.name)}</span>
+                                <img className='img-logo' style={{marginRight:'10px',marginLeft:'5px'}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-z3LzM-wYXYiWslzq9RADq0mAdVfFrn91gRqxcl9K&s" alt='img'></img>
+                                <small className='date-badge'>{moment(comments?.comments?.createdAt).format("Do MMMM  YYYY, h:mm a")}</small>{" "}<br />
+                                <p style={{marginTop: '10px', fontStyle: 'italic',fontSize: '15px' }} dangerouslySetInnerHTML={{ __html: comments?.comments?.comment }}></p>
                             </div>
                         );
                     })
@@ -224,39 +190,22 @@ const RatingBox = (props) => {
     return (
         <>
             <td key={index} >
-                <MDBTooltip
-                    tag="div"
-                    wrapperProps={{ href: "#" }}
-                    title={"click to view details"}
-                >
-                    <div
-                        style={{
-                            cursor: "pointer",
-                            border: "1px solid grey",
-                        }}
-                        className="input_dashboard"
-                        onClick={() =>
-                            openShowCommentsModal(ratingCommentObj)
-                        }
-                    >{`${ratingCommentObj?.rating}`}</div>
+                <MDBTooltip tag="div" wrapperProps={{ href: "#" }} title={"click to view details"}>
+                     <span style={{ cursor: "pointer",padding:'10px' }}   onClick={() => openShowCommentsModal(ratingCommentObj)} className="input_dashboard">{`${ratingCommentObj?.rating}`} </span>
                 </MDBTooltip>
             </td>
-
             {
                 modalShow && <Modals
                     modalShow={modalShow}
                     modalBody={<GetModalBody />}
                     heading="Rating Details"
-                    size="md"
                     btnContent="Close"
                     onClick={() => setModalShow(false)}
-                    onHide={() => setModalShow(false)}
-                />
-
+                    onHide={() => setModalShow(false)} />
             }
+                    {toaster && <Toaster message={toasterMessage} show={toaster} close={() => showToaster(false)} />}
         </>
 
     )
 }
-
 export default RatingBox 

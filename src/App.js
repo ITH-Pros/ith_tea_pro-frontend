@@ -1,105 +1,96 @@
 import './App.css';
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import AuthProvider from './auth/AuthProvider';
+import { Routes, Route, } from 'react-router-dom'
+import AuthProvider, { useAuth } from './auth/AuthProvider';
 import Navbar from '../src/main/Navbar/navbar'
-import { RequireAuth } from './auth/requireAuth'
+// import { ProtectedRoute } from './auth/requireAuth'
 import Login from './auth/login'
 import Dashboard from './main/Dashboard/dashboard'
+import Footer from './main/Footer/footer'
 import Project from './main/Projects/projects'
 import Rating from './main/Rating/rating'
 import Task from './main/Tasks/tasks'
 import Team from './main/Teams/teams'
 import NoMatch from './main/404/index'
-// import AddTask from './main/Tasks/add-task';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import User from './main/User';
+import AddUser from './main/User/AddUser';
 
 // const LazyAbout = React.lazy(() => import('./components/About'))
 
 function App() {
+
+
   return (
-    <AuthProvider>
-        
-      <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/' element={
-        <RequireAuth>
-          <Navbar/>
-         <Dashboard showBtn={true} />
-         </RequireAuth>} />
-        <Route
-          path='/project'
-          element={
-            <RequireAuth>
-          <Navbar/>
-
-              <Project />
-            </RequireAuth>
-          }
+    <Routes>
+      {
+        <Route path='/login' element={
+          // <ProtectedRoute>
+          <Login />
+          // </ProtectedRoute>
+        }
         />
-        <Route
-          path='/rating/'
+      }
 
-          element={
-            <RequireAuth>
-          <Navbar/>
+      <Route path='/' element={
+        <ProtectedRoute>
+          <Navbar />
+          <Dashboard showBtn={true} />
+          <Footer/>
+        </ProtectedRoute>}
+      />
+      <Route
+        path='/project'
+        element={
+          <ProtectedRoute>
+            <Navbar />
+            <Project />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/rating/'
 
-              <Rating />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path='/team'
-          element={
-            <RequireAuth>
-          <Navbar/>
+        element={
+          <ProtectedRoute>
+            <Navbar />
 
-              <Team />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path='/task'
-          exact={true}
-          element={
-            <>
-            <RequireAuth>
-          <Navbar/>
+            <Rating />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/team'
+        element={
+          <ProtectedRoute>
+            <Navbar />
+
+            <Team />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/task'
+        exact={true}
+        element={
+          <>
+            <ProtectedRoute>
+              <Navbar />
 
               <Task />
-             </RequireAuth>
-            </>
-          }
-        />
-        {/* <Route
-          path='/task/add'
-          exact={true}
-          element={
-            <>
-            <RequireAuth>/
-          <Navbar/>
-
-              <AddTask />
-             </RequireAuth>
-            </>
-          }
-        /> */}
-       
-        {/* <Route path='order-summary' element={<OrderSummary />} />
-        <Route path='products' element={<Products />}>
-          <Route index element={<FeaturedProducts />} />
-          <Route path='featured' element={<FeaturedProducts />} />
-          <Route path='new' element={<NewProducts />} />
-        </Route> */}
-        {/* <Route path='users' element={<Users />}>
-          <Route path=':userId' element={<UserDetails />} />
-          <Route path='admin' element={<Admin />} />
-        </Route> */}
-
-        <Route path='*' element={<NoMatch />} />
-      </Routes>
-    </AuthProvider>
+            </ProtectedRoute>
+          </>
+        }
+      />
+      <Route
+        path='/user'
+        // exact={true}
+        element={<>  <ProtectedRoute>    <Navbar />    <User />  </ProtectedRoute></>}>
+        <Route path="add" element={<AddUser />} />
+      </Route>
+      <Route path='*' element={<NoMatch />} />
+    </Routes>
   )
 }
 
-    export default App;
-    
+export default App;

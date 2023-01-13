@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import Loader from "../../../loader/loader";
+import Loader from "../../../components/Loader";
 import { getProjectsTask } from "../../../services/user/api";
 
 const FilterModal = (props) => {

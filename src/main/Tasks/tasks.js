@@ -7,10 +7,11 @@ import Row from "react-bootstrap/Row";
 import { useState } from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { getAllProjects, getProjectsTask } from '../../services/user/api';
-import Loader from '../../loader/loader';
+import Loader from '../../components/Loader';
 import TaskModal from './ShowTaskModal';
 import AddTaskModal from './AddTaskModal';
 import FilterModal from './FilterModal';
+import Toaster from '../../components/Toaster'
 
 
 export default function Tasks() {
@@ -23,7 +24,9 @@ export default function Tasks() {
   // const [projectTasks, setProjectTasks] = useState([]);
   const [selectedProject, setSelectedProject] = useState('');
   // const [selectedTaskDetails, setSelectedTaskDetails] = useState({});
-
+	const [toaster, showToaster] = useState(false);
+	const setShowToaster = (param) => showToaster(param);
+    const [toasterMessage, setToasterMessage] = useState("");
 
   useEffect(() => {
     console.log("CALLLLED CALLED CALLED CALLED ")
@@ -37,18 +40,18 @@ export default function Tasks() {
       const projectList = await getAllProjects();
       setLoading(false);
       if (projectList.error) {
-        // toast.error(projectList.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
+        setToasterMessage(projectList?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
         return
       } else {
         setProjectList(projectList.data)
-        console.log("projectList.data---", projectList.data, projectList.data?.[0]._id)
+        
         setSelectedProject(projectList.data?.[0])
       }
     } catch (error) {
       setLoading(false);
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
       return error.message;
     }
   }
@@ -136,10 +139,8 @@ export default function Tasks() {
         const projectTasks = await getProjectsTask(dataToSend);
         // setLoading(false);
         if (projectTasks.error) {
-          // toast.error(projectTasks.error.message, {
-          //   position: toast.POSITION.TOP_CENTER,
-          //   className: "toast-message",
-          // });
+          setToasterMessage(projectTasks?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
           return
         } else {
           setProjectTasks(projectTasks.data)
@@ -149,6 +150,8 @@ export default function Tasks() {
         }
       } catch (error) {
         // setLoading(false);
+        setToasterMessage(error?.error?.message||'Something Went Wrong');
+				setShowToaster(true);
         return error.message;
       }
     }
@@ -250,6 +253,11 @@ export default function Tasks() {
       </div>
 
       {loading ? <Loader /> : null}
+      {toaster && <Toaster
+                message={toasterMessage}
+                show={toaster}
+                close={() => showToaster(false)} />}
+
 
     </>
   )
