@@ -213,7 +213,7 @@ export default function Dashboard(props) {
                               userDetails?.role === "USER" ?<span className="input_dashboard" disabled={true}/>
                                 :
                                 <MDBTooltip tag="div" wrapperProps={{ href: "#" }}title={"click to Add Rating"}>
-                                  <Link to={{ pathname: "/rating"}} tate={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
+                                  <Link to={{ pathname: "/rating"}} state={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
                                     <span style={{ cursor: "cell",padding:'10px' }} className="input_dashboard"> </span>
                                   </Link>
                                 </MDBTooltip>
