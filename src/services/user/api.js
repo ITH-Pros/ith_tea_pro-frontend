@@ -9,6 +9,9 @@ export function addComment(data) {
 export function editUserDetail(data) {
   return (axiosInstance.patch('/user/v1/edit/', data).then(res => res.data))
 }
+export function addNewUserDetail(data) {
+  return (axiosInstance.post('/user/v1/add/', data).then(res => res.data))
+}
 export async function getAllUsers() {
   return (axiosInstance.get('/user/v1/all').then(res => res.data))
 }

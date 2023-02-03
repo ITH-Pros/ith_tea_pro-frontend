@@ -260,7 +260,7 @@ export default function Project() {
 					projectAssignedUsers && projectAssignedUsers.map((proejctUser, index) => {
 						console.log(proejctUser)
 						return (
-							<div key={proejctUser._id + index}>
+							<div style={{ border: ' 1px solid red', width: '217px'}} key={proejctUser._id + index}>
 								{
 									userDetails.role !== 'USER' ?
 										<MDBTooltip

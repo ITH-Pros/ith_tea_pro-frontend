@@ -30,9 +30,7 @@ axiosInstance.interceptors.response.use(
         return res;
     },
     async function (error) {
-
         if (error.response) {
-
             if (error.response.status === 403 && error.response.data) {
                 return Promise.reject(error.response.data?.message);
             }
@@ -41,8 +39,9 @@ axiosInstance.interceptors.response.use(
                 return Promise.reject(error.response.data?.message);
             }
         }
+        return error.response
 
-        return Promise.reject(error);
+        // return Promise.reject(error);
     }
 );
 
