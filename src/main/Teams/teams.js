@@ -19,8 +19,8 @@ export default function Teams(props) {
     const [usersList, setUsersListValue] = useState([]);
     const [projectList, setProjectListValue] = useState([]);
     const [userAssignedProjects, setUserAssignedProjects] = useState([]);
-	const [toaster, showToaster] = useState(false);
-	const setShowToaster = (param) => showToaster(param);
+    const [toaster, showToaster] = useState(false);
+    const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
 
     useEffect(() => {
@@ -36,40 +36,20 @@ export default function Teams(props) {
             const projects = await getAllUsers();
             setLoading(false);
             if (projects.error) {
-                setToasterMessage(projects?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(projects?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
             } else {
                 setUsersListValue(projects.data);
             }
         } catch (error) {
             setLoading(false);
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             return error.message;
         }
     };
 
-    const editUserDetailHandle = async function (userDetail) {
-        // setLoading(true);
-        // try {
-        //     let dataToSend = {
-        //         userId: userDetail._id
-        //     }
-        //     const projects = await editUserDetail(dataToSend);
-        //     setLoading(false);
-        //     if (projects.error) {
-        //          setToasterMessage(projects?.error?.message||'Something Went Wrong');
-		//          setShowToaster(true);
-        //     } else {
-        //         setUsersListValue(projects.data);
-        //     }
-        // } catch (error) {
-        //     setLoading(false);
-                // setToasterMessage(error?.error?.message||'Something Went Wrong');
-                // setShowToaster(true);
-        //     return error.message;
-        // }
-    };
+
     const handleSelectProject = (projectId) => {
         setSelectedProjectId(projectId)
     }
@@ -80,14 +60,14 @@ export default function Teams(props) {
             const projects = await getAllProjects();
             setLoading(false);
             if (projects.error) {
-                setToasterMessage(projects?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(projects?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
                 return
             } else {
                 setProjectListValue(projects.data);
             }
         } catch (error) {
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             setLoading(false);
             return error.message;
@@ -99,15 +79,15 @@ export default function Teams(props) {
             const userAssignedProjects = await getUserAssignedProjects(dataToSend);
             setLoading(false);
             if (userAssignedProjects.error) {
-                setToasterMessage(userAssignedProjects?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(userAssignedProjects?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
                 return
             } else {
                 setUserAssignedProjects(userAssignedProjects.data);
             }
         } catch (error) {
             setLoading(false);
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             return error.message;
         }
@@ -149,8 +129,8 @@ export default function Teams(props) {
             const assignRes = await assignUserToProject(dataToSend);
             setLoading(false);
             if (assignRes.error) {
-                setToasterMessage(assignRes?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(assignRes?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
                 setModalShow(false);
 
                 return
@@ -159,7 +139,7 @@ export default function Teams(props) {
             }
         } catch (error) {
             setLoading(false);
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             setModalShow(false);
             return error.message;
@@ -179,7 +159,12 @@ export default function Teams(props) {
                             <div key={user._id} className="box">
                                 <div className="top-bar"></div>
                                 <div className="top">
-                                    <i className="fa fa-check-circle" id="heart-btn-1" style={{ cursor: "grab" }} aria-hidden="true" onClick={() => editUserDetailHandle(user)}></i>
+                                    <Link to={{
+                                        pathname: "/user/view/" + user._id,
+                                    }}>
+                                        <i className="fa fa-check-circle" id="heart-btn-1" style={{ cursor: "grab" }} aria-hidden="true"></i>
+                                        {/* <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i> */}
+                                    </Link>
                                     <label className="heart" ></label>
                                 </div>
                                 <div className="content">
@@ -214,6 +199,7 @@ export default function Teams(props) {
                         <div className="content">
                             <Link to={{
                                 pathname: "/user/add",
+
                             }}>
                                 <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i>
                             </Link>
@@ -237,7 +223,7 @@ export default function Teams(props) {
                 heading='Assign Project'
                 onHide={() => setModalShow(false)}
                 submitBtnDisabled={!selectedProjectId}
-                onClick={handleAssignUserProjectSubmit}/>
+                onClick={handleAssignUserProjectSubmit} />
 
         </>
     )

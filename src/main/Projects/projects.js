@@ -329,8 +329,8 @@ export default function Project() {
 	}
 	const closeSureModals = () => {
 		setSureModalShow(false);
-		setSelectedProject({});
-		setSelectedUser({});
+		// setSelectedProject({});
+		// setSelectedUser({});
 	}
 	const removeSelectedUsersFromProject = async () => {
 		//setloading(true);

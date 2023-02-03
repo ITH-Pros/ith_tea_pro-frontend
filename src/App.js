@@ -15,6 +15,7 @@ import NoMatch from './main/404/index'
 import { ProtectedRoute } from './components/ProtectedRoute';
 import User from './main/User';
 import AddUser from './main/User/AddUser';
+import ViewUser from './main/User/ViewUser';
 
 // const LazyAbout = React.lazy(() => import('./components/About'))
 
@@ -87,6 +88,7 @@ function App() {
         // exact={true}
         element={<>  <ProtectedRoute>    <Navbar />    <User />  </ProtectedRoute></>}>
         <Route path="add" element={<AddUser />} />
+        <Route path="view/:userId" element={<ViewUser />} />
       </Route>
       <Route path='*' element={<NoMatch />} />
     </Routes>
