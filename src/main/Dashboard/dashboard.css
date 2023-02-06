@@ -1,8 +1,11 @@
 /* html {
   font-size: calc(18vw / 1600 * 100) !important;
 } */
-
-
+.dashboard_camp>div{
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
 td {
   /* display: block; */
   width: 52px;
@@ -14,6 +17,7 @@ td {
   border-radius: 10px;
   text-align: center;
   width: 100%;
+
 }
 .spnBtn {
   width: 150px;
@@ -109,6 +113,9 @@ th {
   border-style: dashed black;
   border-width: 0;
   border-bottom-width: 0px;
+  margin-top: 2px;
+  height: 59px;
+  padding: 12px;
 }
 
 .dates {

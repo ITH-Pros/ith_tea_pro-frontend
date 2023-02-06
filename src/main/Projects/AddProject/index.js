@@ -170,9 +170,9 @@ export default function AddProject(props) {
                     </div>
                 </Row>
                 <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
+                    <Form.Group as={Col} md="6" >
                         <Form.Label>Assign Managers</Form.Label>
-                        <Select
+                        <Select 
                             isMulti
                             onChange={onAssignManagerChange}
                             getOptionLabel={(options) => options['name']}
