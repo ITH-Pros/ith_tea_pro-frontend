@@ -16,7 +16,7 @@ export default function AddTaskModal(props) {
 
     const { setSelectedProjectFromAddTask, selectedProjectFromTask, projectListFromProjectsTab } = props;
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
-    const priorityList = ["LOW", "REPEATED", "MEDIUM", "HIGH"]
+    const priorityList = ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"]
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [categoryList, setCategoryList] = useState();
@@ -27,14 +27,13 @@ export default function AddTaskModal(props) {
     const [taskFormValue, setTaskFormValue] = useState({
         projectId: '', category: '', title: '', description: '',
         assignedTo: '', dueDate: '', completedDate: '',
-        priority: '', status: '', attachment: '',
+        priority: priorityList[0], status: statusList[0], attachment: '',
     });
-	const [toaster, showToaster] = useState(false);
-	const setShowToaster = (param) => showToaster(param);
+    const [toaster, showToaster] = useState(false);
+    const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
-    
+
     useEffect(() => {
-        console.log('s*********************************s')
         !projectList?.length && getProjectList();
     }, []);
 
@@ -50,17 +49,16 @@ export default function AddTaskModal(props) {
             const projectList = await getAllProjects();
             setLoading(false);
             if (projectList.error) {
-                setToasterMessage(projectList?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(projectList?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
                 return
             } else {
                 setProjectList(projectList.data)
-                console.log("selectedProjectFromTask", selectedProjectFromTask)
                 setSelectedProject(selectedProjectFromTask)
             }
         } catch (error) {
             setLoading(false);
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             return error.message;
         }
@@ -111,8 +109,8 @@ export default function AddTaskModal(props) {
             const taskRes = await createTask(dataToSend);
             setLoading(false);
             if (taskRes.error) {
-                setToasterMessage(taskRes?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(taskRes?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
                 return
             } else {
                 setTaskFormValue({
@@ -125,7 +123,7 @@ export default function AddTaskModal(props) {
             }
         } catch (error) {
             setLoading(false);
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             return error.message;
         }
@@ -152,8 +150,8 @@ export default function AddTaskModal(props) {
             const taskRes = await createTask(dataToSend);
             setLoading(false);
             if (taskRes.error) {
-                setToasterMessage(taskRes?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+                setToasterMessage(taskRes?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
                 return
             } else {
                 console.log("taskRes.data---", taskRes.data)
@@ -168,7 +166,7 @@ export default function AddTaskModal(props) {
             }
         } catch (error) {
             setLoading(false);
-            setToasterMessage(error?.error?.message||'Something Went Wrong');
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
             return error.message;
         }
@@ -290,7 +288,7 @@ export default function AddTaskModal(props) {
                                         type="date"
                                         placeholder="Due date"
                                         name='dueDate'
-                                        onChange={updateTaskFormValue}/>
+                                        onChange={updateTaskFormValue} />
                                 </Form.Group>
 
                                 <Form.Group as={Col} md="3" >
@@ -349,20 +347,20 @@ export default function AddTaskModal(props) {
 
                             <div style={{ float: 'right', marginRight: '10px' }}>
 
-                                <Button style={{marginTop:'13px'}} className=" btn-press  btn-gradient-border btnDanger"
+                                <Button style={{ marginTop: '13px' }} className=" btn-press  btn-gradient-border btnDanger"
                                     type="button"
                                     onClick={submitTask}>Create</Button>
                                 <Button
                                     className="btn-press btn-gradient-border btnDanger"
-                                    type="button"onClick={submitTaskAnother}> Create And Add Another
+                                    type="button" onClick={submitTaskAnother}> Create And Add Another
                                 </Button>
                             </div>
                         </Form>
                         {toaster && <Toaster
-                    message={toasterMessage}
-                    show={toaster}
-                    close={() => showToaster(false)} />
-                }
+                            message={toasterMessage}
+                            show={toaster}
+                            close={() => showToaster(false)} />
+                        }
                     </div>
                 </Modal.Body>
             </Modal>

@@ -60,7 +60,7 @@ export default function AddProject(props) {
 
     function checkAllValuesPresent() {
         return Object.keys(projectFormValue).every(function (x) {
-            if (['description', "selectAccessibleBy"].includes(x)) return true;
+            if (["selectAccessibleBy"].includes(x)) return true;
             console.log(x, projectFormValue[x])
             return projectFormValue[x];
         });
@@ -145,6 +145,7 @@ export default function AddProject(props) {
                             onChange={(e) => setNewCategory(e.target.value)}
                             onKeyDown={addProjectCategory}
                             value={newCategory}
+                            required={!projectFormValue.projectCategories.length}
                         />
                     </Form.Group>
                 </Row>
@@ -152,7 +153,7 @@ export default function AddProject(props) {
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6" >
                         <Form.Label>Assign Managers</Form.Label>
-                        <Select 
+                        <Select
                             isMulti
                             onChange={onAssignManagerChange}
                             getOptionLabel={(options) => options['name']}
