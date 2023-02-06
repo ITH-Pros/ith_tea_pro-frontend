@@ -24,7 +24,7 @@ code {
 
 .modal-content {
   position: relative;
-  bottom: 121px;
+  /* bottom: 121px; */
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -37,9 +37,9 @@ code {
   border-radius: var(--bs-modal-border-radius);
   outline: 0;
   border-radius: 14px;
-background: #993dd6;
-box-shadow: inset 6px 6px 9px #8234b6,
-            inset -6px -6px 9px #b046f6;
+/* background: #993dd6; */
+/* box-shadow: inset 6px 6px 9px #8234b6,
+            inset -6px -6px 9px #b046f6; */
 }
 
 * {

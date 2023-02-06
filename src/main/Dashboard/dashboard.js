@@ -127,7 +127,9 @@ export default function Dashboard(props) {
             userDetails?.role !== "USER" &&
               <Link to="/rating" params={{ params: true }}>
                 {props.showBtn && (
-                  <button className='glass-button' style={{ float: "right", position: 'relative', bottom: '10px' }} ><span>Add Rating</span></button>
+                  <div className="wrap">
+                    <button className='add-rating-button'  ><span>Add Rating</span></button>
+                  </div>
                 )}
               </Link>
           }
