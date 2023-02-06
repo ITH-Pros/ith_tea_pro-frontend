@@ -35,7 +35,7 @@ export default function App() {
             <NavLink to='/' style={navLinkStyles}>
               Dashboard
             </NavLink>
-            <NavLink to='/project' style={navLinkStyles}>
+            <NavLink to='/project/all' style={navLinkStyles}>
               Project
             </NavLink>
             <NavLink to='/rating' style={navLinkStyles}>
