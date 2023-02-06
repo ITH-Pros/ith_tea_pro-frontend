@@ -22,9 +22,7 @@ div{
 border: none !important;
   background-image: linear-gradient(62deg,#8355ad 0%,#b86bff 100%) !important;
 }
-.modal-backdrop.show{
-  opacity: 0.7 !important;
-}
+
 
 
 .tags-input-container{

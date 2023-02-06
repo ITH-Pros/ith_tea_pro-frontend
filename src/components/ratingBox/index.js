@@ -197,6 +197,8 @@ const RatingBox = (props) => {
             {
                 modalShow && <Modals
                     modalShow={modalShow}
+                    keyboardProp={true}
+                    backdropProp='static'
                     modalBody={<GetModalBody />}
                     heading="Rating Details"
                     btnContent="Close"

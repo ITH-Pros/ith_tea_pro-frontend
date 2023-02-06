@@ -8,11 +8,13 @@ const Modals = (props) => {
             <Modal
                 onHide={onHide}
                 show={modalShow}
-                size={size || 'lg'}
+            size={size || 'lg'}
+            backdrop={backdropProp}
+            keyboard={keyboardProp}
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
                 scrollable={true}
-                animation={false}>
+                animation={true}>
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                     <p>
