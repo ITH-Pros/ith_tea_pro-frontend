@@ -65,7 +65,8 @@ export default function AddProject(props) {
             return projectFormValue[x];
         });
     }
-    const submitProjectForm = async () => {
+    const submitProjectForm = async (e) => {
+        e.preventDefault();
         setLoading(true);
         setValidated(true)
         try {
@@ -121,7 +122,8 @@ export default function AddProject(props) {
 
     return (
         <div className="addUserFrom">
-            <Form noValidate validated={validated}>
+            {/* <h4 className='mb-5'>Add Project</h4> */}
+            <Form noValidate className='addUserFormBorder' validated={validated}>
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6">
                         <Form.Label>Name</Form.Label>
@@ -137,19 +139,6 @@ export default function AddProject(props) {
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} >
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" required type="text-area" placeholder="Description"
-                            name="description"
-                            onChange={updateRegisterFormValue}
-                            value={projectFormValue.description}
-                        />
-                    </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
                     <Form.Group as={Col} md="6">
                         <Form.Label>Add Category</Form.Label>
                         <Form.Control type="text" placeholder="Category"
@@ -159,16 +148,7 @@ export default function AddProject(props) {
                         />
                     </Form.Group>
                 </Row>
-                <Row className="mb-3">
-                    <div >Categories :
-                        {
-                            projectFormValue.projectCategories.length ?
-                                projectFormValue.projectCategories.map(el => <button className='ctgrybtn' onClick={() => removeProjectCategory(el)} key={el}>{el}</button>)
-                                :
-                                "  No Categories Added"
-                        }
-                    </div>
-                </Row>
+             
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6" >
                         <Form.Label>Assign Managers</Form.Label>
@@ -191,11 +171,35 @@ export default function AddProject(props) {
                         />
                     </Form.Group>
                 </Row>
-                <div style={{ margin: '10px 500px' }}>
-                    <Button className="btn-gradient-border btnDanger"
+
+                <Row className="mb-3">
+                    <Form.Group as={Col} >
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control as="textarea" required type="text-area" placeholder="Description"
+                            name="description"
+                            onChange={updateRegisterFormValue}
+                            value={projectFormValue.description}
+                        />
+                    </Form.Group>
+                </Row>
+              
+                <Row className="mb-3">
+                    <div >Categories :
+                        {
+                            projectFormValue.projectCategories.length ?
+                                projectFormValue.projectCategories.map(el => <button className='ctgrybtn' onClick={() => removeProjectCategory(el)} key={el}>{el}</button>)
+                                :
+                                "  No Categories Added"
+                        }
+                    </div>
+                </Row>
+                <div  >
+                    {/* <Button className="btn-gradient-border btnDanger"
                         type="button"
                         onClick={submitProjectForm}
-                    >Submit</Button>
+                    >Submit</Button> */}
+                        <button  onClick={submitProjectForm} className="btn-51">Submit</button>
+
                 </div>
             </Form>
             {toaster && <Toaster
