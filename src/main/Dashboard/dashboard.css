@@ -94,13 +94,13 @@ table > :not(caption) > * > * {
 }
 
 .input_dashboard {
-  background: rgba(238, 210, 210, 0.3);
+  /* background: rgba(238, 210, 210, 0.3); */
   -webkit-backdrop-filter: blur(3.7px);
   backdrop-filter: blur(3.7px);
   /* -webkit-backdrop-filter: blur(3.7px) !important; */
-  /* border: 1px solid rgb(126 103 217 / 99%); */
-  width: 25px;
-  box-shadow: 2px 14px 30px rgb(126 103 217 / 99%) !important;
+  border: 1px solid rgb(126 103 217 / 99%);
+  /* width: 25px; */
+  /* box-shadow: 2px 14px 30px rgb(126 103 217 / 99%) !important; */
 }
 
 thead,
