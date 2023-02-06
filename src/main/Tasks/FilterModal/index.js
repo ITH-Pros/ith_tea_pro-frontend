@@ -8,15 +8,13 @@ const FilterModal = (props) => {
 
 
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
-    const priorityList = ["LOW", "REPEATED", "MEDIUM", "HIGH"]
-    // const groupByList = ["category", "status"]
-    const groupByList = ["category"]
+    const priorityList = ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"]
+    const groupByList = ["category", "status", "priority", "assignedTo" , "createdBy"]
     const filterFormFileds = { createdBy: '', assignedTo: '', category: '', priority: '', status: '', groupBy: '' }
 
     const [loading, setLoading] = useState(false);
     const [filterModalShow, setFilterModalShow] = useState(false);
     const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
-    console.log("filterFormValue", filterFormValue)
 
     useEffect(() => {
         clearFilterFormValue(filterFormFileds)
