@@ -4,27 +4,29 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useAuth } from '../../../auth/AuthProvider';
 import Loader from '../../../components/Loader';
 import Toaster from '../../../components/Toaster';
-import { addNewUserDetail, getAllUsers } from '../../../services/user/api';
+import { addNewProject, addNewUserDetail, getAllUsers } from '../../../services/user/api';
 import './index.css'
-import Multiselect from 'react-bootstrap-multiselect'
+import Select from 'react-select';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function AddProject(props) {
 
-    console.log("IIIIIIIIIIIIIIIIIINNNNNNNNNN ADDDDDDDD PROOOOOOOOJEEEECt")
     const { userDetails } = useAuth()
+    const navigate = useNavigate();
+
     const [validated, setValidated] = useState(false);
     const [loading, setLoading] = useState(false);
     const [toasterMessage, setToasterMessage] = useState("");
     const [userList, setUserList] = useState([]);
-    const [newCategory, setNewCategory] = useState([]);
+    const [newCategory, setNewCategory] = useState('');
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
 
 
 
-    const registerFromFields = { name: '', selectManagers: [], projectCategories: [] }
-    const [registerFromValue, setRegisterFromValue] = useState(registerFromFields);
+    const projectFormFields = { name: '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
+    const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
 
     useEffect(() => {
@@ -41,7 +43,7 @@ export default function AddProject(props) {
                 setToasterMessage(user?.error?.message || 'Something Went Wrong');
                 setShowToaster(true);
             } else {
-                setUserList([...user.data]);
+                setUserList(user.data);
             }
         } catch (error) {
             setToasterMessage(error?.error?.message || 'Something Went Wrong');
@@ -53,63 +55,68 @@ export default function AddProject(props) {
 
 
     const updateRegisterFormValue = (e) => {
-        setRegisterFromValue({ ...registerFromValue, [e.target.name]: e.target.value })
+        setProjectFormValue({ ...projectFormValue, [e.target.name]: e.target.value })
     }
 
-    // function checkAllValuesPresent() {
-    //     return Object.keys(registerFromValue).every(function (x) {
-    //         if (x === 'showPassword') return true;
-    //         console.log(x, registerFromValue[x])
-    //         return registerFromValue[x];
-    //     });
-    // }
-    // const submitRegisterFrom = async () => {
-    //     setLoading(true);
-    //     setValidated(true)
-    //     try {
-    //         console.log(checkAllValuesPresent())
-    //         if (!checkAllValuesPresent()) {
-    //             setLoading(false);
-    //             return
-    //         }
-    //         const userRes = await addNewUserDetail(registerFromValue);
-    //         setLoading(false);
-    //         if (userRes.error) {
-    //             setToasterMessage(userRes?.message || 'Something Went Wrong');
-    //             setShowToaster(true);
-    //             return
-    //         } else {
-    //             setToasterMessage('Success');
-    //             setShowToaster(true);
-    //             setRegisterFromValue(registerFromFields)
-    //             setValidated(false)
-    //         }
-    //     } catch (error) {
-    //         setToasterMessage(error?.message || 'Something Went Wrong');
-    //         setShowToaster(true);
-    //         setLoading(false);
-    //         return error.message;
-    //     }
-    // }
+    function checkAllValuesPresent() {
+        return Object.keys(projectFormValue).every(function (x) {
+            if (['description', "selectAccessibleBy"].includes(x)) return true;
+            console.log(x, projectFormValue[x])
+            return projectFormValue[x];
+        });
+    }
+    const submitProjectForm = async () => {
+        setLoading(true);
+        setValidated(true)
+        try {
+            console.log(checkAllValuesPresent())
+            if (!checkAllValuesPresent()) {
+                setLoading(false);
+                return
+            }
+            const userRes = await addNewProject(projectFormValue);
+            setLoading(false);
+            if (userRes.error) {
+                setToasterMessage(userRes?.message || 'Something Went Wrong');
+                setShowToaster(true);
+                return
+            } else {
+                setToasterMessage('Success');
+                navigate('/project/all')
+
+                // setShowToaster(true);
+                // setProjectFormValue(projectFormFields)
+                // setValidated(false)
+            }
+        } catch (error) {
+            setToasterMessage(error?.message || 'Something Went Wrong');
+            setShowToaster(true);
+            setLoading(false);
+            return error.message;
+        }
+    }
     const addProjectCategory = (event) => {
+        console.log("INNNNNN")
         if (event.key === 'Enter') {
             console.log("in add")
             event.preventDefault();
-            let projectCategories = registerFromValue.projectCategories.push(event.target.value)
+            projectFormValue.projectCategories.push(event.target.value)
+            let projectCategories = new Set(projectFormValue.projectCategories)
+            console.log(projectCategories)
             setNewCategory('')
-            setRegisterFromValue({ ...registerFromValue, projectCategories: [...new Set(projectCategories)] })
+            setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
         }
     }
     const removeProjectCategory = (category) => {
         console.log("In remove", category)
-        setRegisterFromValue({ ...registerFromValue, projectCategories: registerFromValue.projectCategories.filter(el => el !== category) })
+        setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
     }
+
     const onAssignManagerChange = (users) => {
-        console.log("In onAssignManagerChange", registerFromValue.selectManagers, users[0].value)
-        let selectManagers = registerFromValue.selectManagers
-        selectManagers = selectManagers.push(users[0].value)
-        console.log("In onAssignManagerChange", selectManagers)
-        setRegisterFromValue({ ...registerFromValue, selectManagers: [...new Set(selectManagers)] })
+        setProjectFormValue({ ...projectFormValue, selectedManagers: users.map(el => el._id) })
+    }
+    const onAssignUserChange = (users) => {
+        setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
     }
 
     return (
@@ -122,7 +129,7 @@ export default function AddProject(props) {
                             required
                             type="text"
                             onChange={updateRegisterFormValue}
-                            value={registerFromValue.name}
+                            value={projectFormValue.name}
                             name="name">
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
@@ -135,8 +142,9 @@ export default function AddProject(props) {
                     <Form.Group as={Col} >
                         <Form.Label>Description</Form.Label>
                         <Form.Control as="textarea" required type="text-area" placeholder="Description"
-                        // value={commentFormValue}
-                        // onChange={(e) => { setCommentValue(e.target.value) }} 
+                            name="description"
+                            onChange={updateRegisterFormValue}
+                            value={projectFormValue.description}
                         />
                     </Form.Group>
                 </Row>
@@ -144,7 +152,7 @@ export default function AddProject(props) {
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6">
                         <Form.Label>Add Category</Form.Label>
-                        <Form.Control required type="text" placeholder="Category"
+                        <Form.Control type="text" placeholder="Category"
                             onChange={(e) => setNewCategory(e.target.value)}
                             onKeyDown={addProjectCategory}
                             value={newCategory}
@@ -152,53 +160,41 @@ export default function AddProject(props) {
                     </Form.Group>
                 </Row>
                 <Row className="mb-3">
-                    {/* <Form.Group > */}
-                    {/* <div></div> */}
                     <div >Categories :
                         {
-                            registerFromValue.projectCategories.length ?
-                                registerFromValue.projectCategories.map(el => <button className='ctgrybtn' onClick={() => removeProjectCategory(el)} key={el}>{el}</button>)
+                            projectFormValue.projectCategories.length ?
+                                projectFormValue.projectCategories.map(el => <button className='ctgrybtn' onClick={() => removeProjectCategory(el)} key={el}>{el}</button>)
                                 :
                                 "  No Categories Added"
                         }
                     </div>
-                    {/* </Form.Group> */}
                 </Row>
-                {/* <form> */}
-                {/* <select multiple={true} value={registerFromValue.selectManagers} onChange={(e) => { onAssignManagerChange(e.target.selectedOptions) }}>
-                    <option value="">Assign Manager</option>
-                    {userList.map((user) => (
-                        <option value={user._id} key={user._id}>
-                            {user.name}
-                        </option>
-                    ))}
-                </select> */}
-                {/* </form> */}
-                <Multiselect data={userList} multiple />
-                {/* <Form.Group as={Col} md="4" > */}
-                {/* <Form.Label>Assign Manager</Form.Label> */}
-
-                {/* <Form.Control
-                        required
-                        as="select"
-                        type="select"
-                        multiple
-                        onChange={onAssignManagerChange}
-                        value={registerFromValue.selectManagers}
-                    >
-                        <option value="">Assign Manager</option>
-                        {userList.map((user) => (
-                            <option value={user._id} key={user._id}>
-                                {user.name}
-                            </option>
-                        ))}
-                    </Form.Control> */}
-                {/* </Form.Group> */}
-
+                <Row className="mb-3">
+                    <Form.Group as={Col} md="6">
+                        <Form.Label>Assign Managers</Form.Label>
+                        <Select
+                            isMulti
+                            onChange={onAssignManagerChange}
+                            getOptionLabel={(options) => options['name']}
+                            getOptionValue={(options) => options['_id']}
+                            options={userList}
+                        />
+                    </Form.Group>
+                    <Form.Group as={Col} md="6">
+                        <Form.Label>Assign Users</Form.Label>
+                        <Select
+                            isMulti
+                            onChange={onAssignUserChange}
+                            getOptionLabel={(options) => options['name']}
+                            getOptionValue={(options) => options['_id']}
+                            options={userList}
+                        />
+                    </Form.Group>
+                </Row>
                 <div style={{ margin: '10px 500px' }}>
                     <Button className="btn-gradient-border btnDanger"
                         type="button"
-                    // onClick={submitRegisterFrom}
+                        onClick={submitProjectForm}
                     >Submit</Button>
                 </div>
             </Form>
@@ -210,6 +206,8 @@ export default function AddProject(props) {
             {loading ? <Loader /> : null}
 
         </div >
+
+
 
     )
 };

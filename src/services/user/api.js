@@ -30,6 +30,9 @@ export async function getUserAssignedProjects(data) {
 export async function assignUserToProject(data) {
     return (axiosInstance.patch('/projects/v1/assign/users', data).then(res => res.data))
 }
+export async function addNewProject(data) {
+    return (axiosInstance.post('/projects/v1/add/new', data).then(res => res.data))
+}
 export async function unAssignUserToProject(data) {
     return (axiosInstance.patch('/projects/v1/remove/user', data).then(res => res.data))
 }

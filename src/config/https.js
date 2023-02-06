@@ -9,10 +9,8 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     function (req) {
-        console.log("INnnnnnnnnnnnnnnnnnnnnnn req reqreq", req,)
         let accessToken = JSON.parse(localStorage.getItem('_u') || '{}')
         let accountId = JSON.parse(localStorage.getItem('user') || '{}')?.accountId
-        console.log("accessToken accountId", accountId, accessToken)
 
         req.headers = {
             'x-access-token': accessToken,

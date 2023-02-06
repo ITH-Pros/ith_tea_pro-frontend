@@ -8,7 +8,6 @@ import { Logo } from "./Logo.js";
 import './navbar.css'
 export default function App() {
   const { accessToken, logout } = useAuth()
-  console.log("AUTHHHHHHHHHHHHHHHHHHHHHHHH", accessToken)
   const navLinkStyles = ({ isActive }) => {
     return {
       fontWeight: isActive ? 'bold' : 'normal',
