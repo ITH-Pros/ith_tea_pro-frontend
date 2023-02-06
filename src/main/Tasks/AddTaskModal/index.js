@@ -349,11 +349,11 @@ export default function AddTaskModal(props) {
 
                             <div style={{ float: 'right', marginRight: '10px' }}>
 
-                                <Button className="btn-gradient-border btnDanger"
+                                <Button style={{marginTop:'13px'}} className=" btn-press  btn-gradient-border btnDanger"
                                     type="button"
                                     onClick={submitTask}>Create</Button>
                                 <Button
-                                    className="btn-gradient-border btnDanger"
+                                    className="btn-press btn-gradient-border btnDanger"
                                     type="button"onClick={submitTaskAnother}> Create And Add Another
                                 </Button>
                             </div>
