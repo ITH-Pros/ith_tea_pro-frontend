@@ -16,7 +16,6 @@ export default function Login() {
   })
 
   const updateLoginFormValues = (e) => {
-    console.log("[e.target.name]: e.target.value", e.target.name, e.target.value)
     setLoginFormValue({ ...loginFormValue, [e.target.name]: e.target.value })
   }
   const showHidePassword = () => {
@@ -30,7 +29,6 @@ export default function Login() {
 
 
   const handleLogin = async (event) => {
-    console.log("handlelogin")
     event.preventDefault();
     if (!loginFormValue.email || !loginFormValue.password) {
       return
@@ -38,7 +36,6 @@ export default function Login() {
     let dataToSend = loginFormValue
     try {
       const userLogin = await loginUser(dataToSend);
-      console.log('userLogin', userLogin)
       // setLoading(false);
       if (userLogin.error) {
         // toast.error(userLogin.error.message, {

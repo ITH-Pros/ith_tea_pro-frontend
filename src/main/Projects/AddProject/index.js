@@ -61,7 +61,6 @@ export default function AddProject(props) {
     function checkAllValuesPresent() {
         return Object.keys(projectFormValue).every(function (x) {
             if (["selectAccessibleBy"].includes(x)) return true;
-            console.log(x, projectFormValue[x])
             return projectFormValue[x];
         });
     }
@@ -70,7 +69,6 @@ export default function AddProject(props) {
         setLoading(true);
         setValidated(true)
         try {
-            console.log(checkAllValuesPresent())
             if (!checkAllValuesPresent()) {
                 setLoading(false);
                 return
@@ -97,19 +95,15 @@ export default function AddProject(props) {
         }
     }
     const addProjectCategory = (event) => {
-        console.log("INNNNNN")
         if (event.key === 'Enter') {
-            console.log("in add")
             event.preventDefault();
             projectFormValue.projectCategories.push(event.target.value)
             let projectCategories = new Set(projectFormValue.projectCategories)
-            console.log(projectCategories)
             setNewCategory('')
             setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
         }
     }
     const removeProjectCategory = (category) => {
-        console.log("In remove", category)
         setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
     }
 

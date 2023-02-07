@@ -28,7 +28,6 @@ function TaskModal(props) {
 
     const CommentsForm = () => {
         const [commentValue, setCommentValue] = useState('');
-        console.log('render comments')
         return (
             <>
                 <Row className="mb-3 mt-6" >
@@ -302,7 +301,6 @@ function TaskModal(props) {
     const UpdateCompletedDateBox = () => {
         const [completedDateValue, setDueDateValue] = useState(selectedTaskDetails.completedDate ? new Date(selectedTaskDetails.completedDate) : new Date());
         const [editCompletedDateEnable, setEditCompletedDateEnable] = useState(false);
-        console.log("selectedProject", completedDateValue)
 
         const checkAndUpdateDueDate = (e) => {
             if (!e || e?.toDateString() === completedDateValue?.toDateString()) {
@@ -403,7 +401,6 @@ function TaskModal(props) {
     }
 
     const updateMutipleTaskDetails = async (data, taskDetails) => {
-        console.log("updateMutipleTaskDetails", data)
         // setLoading(true)
         try {
             let dataToSend = {
@@ -465,7 +462,6 @@ function TaskModal(props) {
         }
     }
     const updateTaskCompletedStatusAndDate = async (data) => {
-        console.log("updateTaskCompletedStatusAndDate", data)
         setLoading(true)
         try {
             let dataToSend = {

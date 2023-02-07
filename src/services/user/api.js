@@ -62,7 +62,6 @@ export function addCommentOnTaskById(data) {
 }
 
 export async function getRatings(data) {
-    console.log(data, '-------------------------------------------------------------------data from api')
     return (axiosInstance.get('/rating/v1/month/all/user', {
         params: {
             month: data?.month,

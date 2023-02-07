@@ -1,14 +1,12 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { useAuth } from '../../../auth/AuthProvider';
 import Loader from '../../../components/Loader';
 import Toaster from '../../../components/Toaster';
 import { addNewUserDetail } from '../../../services/user/api';
 import './index.css'
 
 export default function AddUser(props) {
-    const { userDetails } = useAuth()
     const [validated, setValidated] = useState(false);
     const [loading, setLoading] = useState(false);
     const [toasterMessage, setToasterMessage] = useState("");
@@ -31,7 +29,6 @@ export default function AddUser(props) {
     function checkAllValuesPresent() {
         return Object.keys(registerFromValue).every(function (x) {
             if (x === 'showPassword') return true;
-            console.log(x, registerFromValue[x])
             return registerFromValue[x];
         });
     }
@@ -39,7 +36,6 @@ export default function AddUser(props) {
         setLoading(true);
         setValidated(true)
         try {
-            console.log(checkAllValuesPresent())
             if (!checkAllValuesPresent()) {
                 setLoading(false);
                 return

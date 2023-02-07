@@ -1,47 +1,55 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { useLocalStorage } from "../../../auth/useLocalStorage";
 import Loader from "../../../components/Loader";
-import { getProjectsTask } from "../../../services/user/api";
 
 const FilterModal = (props) => {
     const { selectedProject, setTaskFilters } = props
 
-
     const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
     const priorityList = ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"]
-    const groupByList = ["category", "status", "priority", "assignedTo" , "createdBy"]
+    const groupByList = ["category", "status", "priority", "assignedTo", "createdBy"]
     const filterFormFileds = { createdBy: '', assignedTo: '', category: '', priority: '', status: '', groupBy: '' }
 
     const [loading, setLoading] = useState(false);
     const [filterModalShow, setFilterModalShow] = useState(false);
+    const [localStorageTaskFilters, setLocalStorageTaskFilters] = useLocalStorage("taskFilters");
     const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
 
     useEffect(() => {
-        clearFilterFormValue(filterFormFileds)
-    }, [selectedProject])
+        if (localStorageTaskFilters) {
+            setFilterFormValue(localStorageTaskFilters)
+        }
+    }, [])
 
 
     const updateFilterFormValue = (e) => {
-        console.log("updateFilterFormValue  ", e.target.name, e.target.value);
         setFilterFormValue({ ...filterFormValue, [e.target.name]: e.target.value })
     }
     const closeModalAndgetAllTaskOfProject = () => {
+        //TODO
+        setLocalStorageTaskFilters(filterFormValue)
+        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN closeModalAndgetAllTaskOfProject")
         setTaskFilters(filterFormValue)
     }
     const clearFilterFormValue = () => {
+        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN clearFilterFormValue")
+
         setFilterFormValue(filterFormFileds)
+        setLocalStorageTaskFilters(filterFormFileds)
+        setTaskFilters(filterFormFileds)
     }
 
     return (
         <>
             <button className='btn btn-gradient-border btn-glow' onClick={() => setFilterModalShow(true)} style={{ float: "left" }} > Filter </button >
-            {/* <Button 
+            <Button
                 className="btnDanger"
                 type="button"
                 onClick={clearFilterFormValue}
             >
                 Clear Filter
-            </Button> */}
+            </Button>
             {
                 <Modal
                     show={filterModalShow}
