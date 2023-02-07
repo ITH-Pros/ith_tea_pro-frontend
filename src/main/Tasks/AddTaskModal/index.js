@@ -12,11 +12,12 @@ import FroalaEditorComponent from 'react-froala-wysiwyg';
 import { Modal } from 'react-bootstrap';
 import { getAllProjects, createTask } from '../../../services/user/api';
 import Toaster from '../../../components/Toaster'
+import { CONSTENTS } from '../../../constents';
 export default function AddTaskModal(props) {
 
     const { setSelectedProjectFromAddTask, selectedProjectFromTask, projectListFromProjectsTab } = props;
-    const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
-    const priorityList = ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"]
+    const statusList = CONSTENTS.statusList
+    const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [categoryList, setCategoryList] = useState();
@@ -174,7 +175,7 @@ export default function AddTaskModal(props) {
 
     return (
         <>
-            <button className='btn btn-gradient-border btn-glow btn-press' style={{ float: "right" }}  onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
+            <button className='btn btn-gradient-border btn-glow btn-press' style={{ float: "right" }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
             <Modal
                 show={showAddTaskModal}
                 size="xl"

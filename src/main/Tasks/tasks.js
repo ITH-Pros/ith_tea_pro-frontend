@@ -70,9 +70,6 @@ export default function Tasks() {
         const [localStorageTaskFilters, setLocalStorageTaskFilters] = useLocalStorage("taskFilters");
         const [taskFilters, setTaskFilters] = useState(localStorageTaskFilters || {})
 
-
-        console.log(taskFilters)
-
         useEffect(() => {
             getAllTaskOfProject();
         }, [taskFilters]);

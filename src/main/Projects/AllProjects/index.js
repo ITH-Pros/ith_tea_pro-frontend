@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { assignUserToProject, getAllProjects, getAllUsers, getTaskStatusAnalytics, getUsersOfProject, unAssignUserToProject } from '../../../services/user/api';
+import { assignUserToProject, deleteProjectById, getAllProjects, getAllUsers, getTaskStatusAnalytics, getUsersOfProject, unAssignUserToProject } from '../../../services/user/api';
 import { toast } from "react-toastify";
 import './index.css';
 import Loader from '../../../components/Loader';
@@ -213,7 +213,7 @@ export default function AllProject() {
             if (showMoreUserDropDownId && showMoreUserDropDownId === project._id) {
                 continue
             }
-            if (userDetails.role !== 'USER') {
+            if (userDetails.role === 'SUPER_ADMIN') {
                 rows.push(
                     <MDBTooltip
                         tag="a"
@@ -254,7 +254,7 @@ export default function AllProject() {
                         return (
                             <div key={proejctUser._id + index}>
                                 {
-                                    userDetails.role !== 'USER' ?
+                                    userDetails.role === 'SUPER_ADMIN' ?
                                         <MDBTooltip
                                             tag="p"
                                             wrapperProps={{ href: "#" }}
@@ -357,34 +357,58 @@ export default function AllProject() {
         const { project } = props
         const [showMenuList, setShowMenuList] = useState(false)
 
+
         const handleMenuIconClick = () => {
             setShowMenuList(!showMenuList)
         }
+
+        const deleteProject = async () => {
+            setLoading(true);
+            console.log(project)
+            try {
+                let dataToSend = {
+                    projectId: project._id,
+                }
+                const removeRes = await deleteProjectById(dataToSend);
+                setLoading(false);
+
+                if (removeRes.error) {
+                    setToasterMessage(removeRes?.error?.message || 'Something Went Wrong');
+                    setShowToaster(true);
+                    return
+                } else {
+                    setToasterMessage(removeRes?.message || 'Something Went Wrong');
+                    setShowToaster(true);
+                    getAndSetAllProjects();
+                }
+            } catch (error) {
+                setToasterMessage(error?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
+                setLoading(false);
+                return error.message;
+            }
+        }
+
 
 
         return (
             <>
                 <div className="more-wrapper" onClick={handleMenuIconClick} onBlur={handleMenuIconClick} >
                     {
-                        userDetails.role !== "USER" &&
-                        <button className="project-btn-more">
+                        userDetails.role === "SUPER_ADMIN" &&
+                        <button className="project-btn-more dropdown ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
                                 <circle cx="12" cy="12" r="1" />
                                 <circle cx="12" cy="5" r="1" />
                                 <circle cx="12" cy="19" r="1" />
                             </svg>
+                            <div className='dropdown-content'>
+                                <a href='#1' > Edit</a>
+                                <a href='#1' onClick={() => { console.log("INNN delete"); deleteProject() }}> Delete</a>
+                            </div>
                         </button>
                     }
                 </div>
-                {
-                    showMenuList &&
-                    <div className="context-menu-container"  >
-                        <ul >
-                            <li>Edit</li>
-                            <li>Delete</li>
-                        </ul>
-                    </div>
-                }
                 {
                     <AddTaskModal selectedProjectFromTask={project} projectListFromProjectsTab={projectList} />
                 }
@@ -428,11 +452,12 @@ export default function AllProject() {
                 {
                     projectList && projectList.map((element, projectIndex) => {
                         return (
-                            <div key={element._id} style={{height:'300px'}} className="project-box-wrapper">
+                            <div key={element._id} style={{ height: '300px' }} className="project-box-wrapper">
                                 <div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 5] }}>
 
 
                                     <div className="project-box-header">
+
                                         <ProjectMenuIcon project={element} />
                                     </div>
                                     <div className="project-box-content-header">
@@ -448,7 +473,7 @@ export default function AllProject() {
                                                 getProjectUserIcons(element)
                                             }
                                             {
-                                                userDetails.role !== 'USER' &&
+                                                userDetails.role === 'SUPER_ADMIN' &&
                                                 <button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProjectButton(element)}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
                                                         <path d="M12 5v14M5 12h14" />

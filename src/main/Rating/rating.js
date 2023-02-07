@@ -19,12 +19,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import Toaster from "../../components/Toaster";
+import { useAuth } from "../../auth/AuthProvider";
 
 
 
 export default function Rating(props) {
     const location = useLocation();
     const navigate = useNavigate();
+    const { userDetails } = useAuth();
 
     useEffect(() => {
         onInit();
@@ -37,7 +39,7 @@ export default function Rating(props) {
     let today = new Date();
     let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
     const [loading, setLoading] = useState(false);
-    const [currentView, setCurrentView] = useState("Add");
+    const [currentView, setCurrentView] = useState(userDetails?.role === "USER" ? "View" : "Add");
     const [teamOptions, setTeamOptions] = useState([]);
     const [team, setTeam] = useState("");
     const [date, setDate] = useState(patchDateValue);
@@ -47,7 +49,6 @@ export default function Rating(props) {
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
-    console.log(patchDateValue)
     if (!team && location && location.state && location.state.userId) {
         setTeam(location.state.userId)
     }
@@ -70,7 +71,6 @@ export default function Rating(props) {
 
     const onChangeOfComments = (e) => {
         setComments(e)
-        console.log("sejfnweiornwoerfnaifjbsij sijdbfisjbfisa ihsvfgiw", e)
     };
 
     const handleRatingChange = (e) => {
@@ -78,13 +78,11 @@ export default function Rating(props) {
     };
 
     const handleSubmit = (e) => {
-        console.log("iiiiiiiiiiiiiii", comments, date)
         setValidated(true);
         e.preventDefault();
         e.stopPropagation();
-        // console.log()
 
-        if (!team || !date || !rating || !comments) {
+        if (!team || !date || !rating || rating > 5 || rating < 0) {
             return;
         } else {
             let dataToSend = {
@@ -97,10 +95,6 @@ export default function Rating(props) {
                 // taggedUsers: tags,
             };
 
-            console.log(
-                dataToSend,
-                "==========================================================================data"
-            );
             addRatingFunc(dataToSend);
         }
     };
@@ -141,156 +135,139 @@ export default function Rating(props) {
                 setToasterMessage('Rating Added Succesfully');
                 setShowToaster(true);
                 navigate('/')
-                console.log(rating.data);
             }
         }
         catch (error) {
             setLoading(false);
             setToasterMessage(error?.error?.message || 'Something Went Wrong');
             setShowToaster(true);
-            console.log(error?.message)
         }
     }
 
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case "Add":
-        return (
-          <div className="dv-50-rating ">
-            <Form noValidate validated={validated}>
-              <Row className="mb-3">
-                <Form.Group as={Col} md="4" >
-                  <Form.Label>Select User</Form.Label>
-                  <Form.Control
-                    required
-                    as="select"
-                    type="select"
-                    name="select_team"
-                    onChange={onchangeTeam}
-                    value={team}
-                  >
-                    <option value="">Select User</option>
-                    {teamOptions.map((module) => (
-                      <option value={module._id} key={module._id}>
-                        {module.name}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    User name is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="4" controlId="rating_date">
-                  <Form.Label>Date</Form.Label>
-                  <Form.Control
-                    required
-                    type="date"
-                    name="rating_date"
-                    placeholder="Rating  date"
-                    onChange={handleChangeDate}
-                    value={date}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Date is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustom01">
-                  <Form.Label>Rating</Form.Label>
-                  <Form.Control
-                    required
-                    type="number"
-                    placeholder="Rating"
-                    value={rating}
-                    onChange={handleRatingChange}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                    min="0"
-                    max="5"
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Rating is required, value must be in range [0,5] !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-              </Row>
+    const renderCurrentView = () => {
 
-                            {/* <Row className="mb-3">
-                <Form.Group as={Col} md="12" controlId="comment">
-                  <Form.Label>Comment</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    required
-                    type="text-area"
-                    placeholder="Comment"
-                    value={comments}
-                    onChange={(e) => setComments(e.target.value)}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Comment is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-              </Row> */}
+
+        switch (currentView) {
+            case "Add":
+
+                return (
+                    <div className="dv-50-rating ">
+                        <Form noValidate validated={validated}>
+                            <Row className="mb-3">
+                                <Form.Group as={Col} md="4" >
+                                    <Form.Label>Select User</Form.Label>
+                                    <Form.Control
+                                        required
+                                        as="select"
+                                        type="select"
+                                        name="select_team"
+                                        onChange={onchangeTeam}
+                                        value={team}
+                                    >
+                                        <option value="">Select User</option>
+                                        {teamOptions.map((module) => (
+                                            <option value={module._id} key={module._id}>
+                                                {module.name}
+                                            </option>
+                                        ))}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        User name is required !!
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} md="4" controlId="rating_date">
+                                    <Form.Label>Date</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="date"
+                                        name="rating_date"
+                                        placeholder="Rating  date"
+                                        onChange={handleChangeDate}
+                                        max={new Date().toISOString().split("T")[0]}
+                                        value={date}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Date is required !!
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} md="4" controlId="validationCustom01">
+                                    <Form.Label>Rating</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="number"
+                                        placeholder="Rating"
+                                        value={rating}
+                                        onChange={handleRatingChange}
+                                        pattern="[0-9]*"
+                                        inputMode="numeric"
+                                        min="0"
+                                        max="5"
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Rating is required, value must be in range [0,5] !!
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
+                            </Row>
                             <Row className="mb-3">
                                 <Form.Label>Comment</Form.Label>
                                 <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
                             </Row>
 
 
-              {/* <Button
-                className="btn-gradient-border"
-                type="submit"
-                onClick={handleSubmit}
-              >
-                Submit form
-              </Button> */}
-               <button onClick={handleSubmit} className="btn-51">Submit</button>
-            </Form>
-          </div>
-        );
+                            <button onClick={handleSubmit} className="btn-51">Submit</button>
+                        </Form>
+                    </div>
+                );
 
-      case "View":
-        return (
-          <div>
-            <Dashboard showBtn={false} />
-          </div>
-        );
-      default:
-        return
-    }
-  };
+            case "View":
+                return (
+                    <div>
+                        <Dashboard showBtn={false} />
+                    </div>
+                );
+            default:
+                return
+        }
+    };
 
-  return (
-    <>
-        <div className="   main-div-tab">
-        <div
-          onClick={() => handleViewChange("Add")}
-          className={`p-3  w-50  text-center rounded ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
-            }`}
-          style={{ cursor: "pointer" }}
-        >
-          Add Rating
-        </div>
-        <div
-          onClick={() => handleViewChange("View")}
-          className={`p-3 w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
-            }`}
-          style={{ cursor: "pointer" }}
-        >
-          View{" "}
-        </div>
-        {loading ? <Loader /> : null}
-        {toaster && <Toaster
-                message={toasterMessage}
-                show={toaster}
-                close={() => showToaster(false)} />}
-      </div>
-        <div className="main-rating-contianer">
-    
-      {renderCurrentView()}
-      </div>
-      </>
-  );
+    return (
+        <>
+            {
+                userDetails?.role !== "USER" &&
+                <>
+                    <div className="   main-div-tab">
+                        {userDetails?.role !== "USER" && <div
+                            onClick={() => handleViewChange("Add")}
+                            className={`p-3  w-50  text-center rounded ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
+                                }`}
+                            style={{ cursor: "pointer" }}
+                        >
+                            Add Rating
+                        </div>
+                        }
+                        <div
+                            onClick={() => handleViewChange("View")}
+                            className={`p-3 w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
+                                }`}
+                            style={{ cursor: "pointer" }}
+                        >
+                            View{" "}
+                        </div>
+                        {loading ? <Loader /> : null}
+                        {toaster && <Toaster
+                            message={toasterMessage}
+                            show={toaster}
+                            close={() => showToaster(false)} />}
+                    </div>
+                </>
+            }
+            <div className="main-rating-contianer">
+
+                {renderCurrentView()}
+            </div>
+        </>
+    );
 }

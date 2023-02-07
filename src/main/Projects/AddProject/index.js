@@ -97,11 +97,21 @@ export default function AddProject(props) {
     const addProjectCategory = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
-            projectFormValue.projectCategories.push(event.target.value)
+            console.log()
+            projectFormValue.projectCategories.push(newCategory)
             let projectCategories = new Set(projectFormValue.projectCategories)
             setNewCategory('')
             setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
         }
+    }
+    const addProjectCategoryOnButtonClick = () => {
+        if (!newCategory) {
+            return
+        }
+        projectFormValue.projectCategories.push(newCategory)
+        let projectCategories = new Set(projectFormValue.projectCategories)
+        setNewCategory('')
+        setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
     }
     const removeProjectCategory = (category) => {
         setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
@@ -133,17 +143,8 @@ export default function AddProject(props) {
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group as={Col} md="6">
-                        <Form.Label>Add Category</Form.Label>
-                        <Form.Control type="text" placeholder="Category"
-                            onChange={(e) => setNewCategory(e.target.value)}
-                            onKeyDown={addProjectCategory}
-                            value={newCategory}
-                            required={!projectFormValue.projectCategories.length}
-                        />
-                    </Form.Group>
                 </Row>
-             
+
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6" >
                         <Form.Label>Assign Managers</Form.Label>
@@ -177,12 +178,30 @@ export default function AddProject(props) {
                         />
                     </Form.Group>
                 </Row>
-              
+
                 <Row className="mb-3">
-                    <div >Categories :
+                    <Form.Group as={Col} md="5">
+                        <Form.Label>Add Category
+                        </Form.Label>
+                        <Form.Control type="text"
+                            placeholder="Category"
+                            onChange={(e) => setNewCategory(e.target.value)}
+                            onKeyDown={addProjectCategory}
+                            value={newCategory}
+                            required={!projectFormValue.projectCategories.length}
+                        />
+                    </Form.Group>
+                    <Form.Group as={Col} md="1">
+                        <Button className="btn btn-gradient-border btnshort-modal" style={{ marginTop: '35px' }} type="button" onClick={addProjectCategoryOnButtonClick}><i className="fa fa-plus" aria-hidden="true"></i> </Button>
+                    </Form.Group>
+                    <div>Categories:
                         {
                             projectFormValue.projectCategories.length ?
-                                projectFormValue.projectCategories.map(el => <button className='ctgrybtn' onClick={() => removeProjectCategory(el)} key={el}>{el}</button>)
+                                projectFormValue.projectCategories.map(el =>
+                                    <span className='ctgrybtn' key={el}>{el}
+                                        <i className="fa fa-times-circle" style={{ color: 'red' }} onClick={() => removeProjectCategory(el)} aria-hidden="true" ></i>
+                                    </span>
+                                )
                                 :
                                 "  No Categories Added"
                         }
@@ -193,7 +212,7 @@ export default function AddProject(props) {
                         type="button"
                         onClick={submitProjectForm}
                     >Submit</Button> */}
-                        <button  onClick={submitProjectForm} className="btn-51">Submit</button>
+                    <button onClick={submitProjectForm} className="btn-51">Submit</button>
 
                 </div>
             </Form>

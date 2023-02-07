@@ -191,7 +191,7 @@ export default function Teams(props) {
                 }
                 {
 
-                    userDetails.role !== "USER" &&
+                    userDetails.role === "SUPER_ADMIN" &&
                     <div key='AddNewUser' className="box " style={{padding:'90px'}}>
 
                         <div className="content">

@@ -14,6 +14,7 @@ import { getAllUsers } from "../../services/user/api";
 import RatingBox from "../../components/ratingBox";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
+import { today } from "@internationalized/date";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -207,13 +208,15 @@ export default function Dashboard(props) {
                                             userRatingCount += 1;
                                             return (<RatingBox key={index} index={index} getAllRatings={getAllRatings} ratingCommentObj={ratingCommentObj} />);
                                         } else {
+                                            let dateToSend = `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}`
                                             return (
                                                 <td key={index}>
                                                     {
-                                                        userDetails?.role === "USER" ? <span className="input_dashboard" disabled={true} />
+                                                        userDetails?.role === "USER" || new Date(dateToSend) > new Date() ?
+                                                            <span style={{ padding: '3px', paddingLeft: '18px' }} className="input_dashboard"></span>
                                                             :
                                                             <MDBTooltip tag="div" wrapperProps={{ href: "#" }} title={"click to Add Rating"}>
-                                                                <Link to={{ pathname: "/rating" }} state={{ userId: user._id, date: `${yearUse}-${(months.indexOf(monthUse) + 1) <= 9 ? ('0' + (months.indexOf(monthUse) + 1)) : months.indexOf(monthUse) + 1}-${(index + 1) <= 9 ? '0' + (index + 1) : index + 1}` }}>
+                                                                <Link to={{ pathname: "/rating" }} state={{ userId: user._id, date: dateToSend }}>
                                                                     <span style={{ cursor: "cell", padding: '3px', paddingLeft: '18px' }} className="input_dashboard"></span>
                                                                 </Link>
                                                             </MDBTooltip>

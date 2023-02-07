@@ -152,7 +152,7 @@ const RatingBox = (props) => {
                     {(newRating < 0 || newRating > 5) && <span style={{ color: 'red' }}> Rating must be in range [0,5]</span>}
                 </div> :
                     <div>
-                        <span ><b>Rating </b>: <input style={{ width: '20px', textAlign: 'center' }} onChange={(e) => { }} value={selectedRating} /></span>
+                        <span ><b>Rating </b>: <strong>{selectedRating}</strong> </span>
                         {
                             userDetails.role !== "USER" && <button className="btn btn-gradient-border btnshort mt-3" onClick={() => { setEditRatingEnabled(true) }}><i className='fa fa-edit'></i> </button>
                         }
@@ -190,7 +190,7 @@ const RatingBox = (props) => {
         <>
             <td key={index} >
                 <MDBTooltip tag="div" wrapperProps={{ href: "#" }} title={"click to view details"}>
-                    <span style={{ cursor: "pointer", padding: '3px',paddingLeft:'6px',paddingRight:'6px' }} onClick={() => openShowCommentsModal(ratingCommentObj)} className="input_dashboard">{`${ratingCommentObj?.rating}`} </span>
+                    <span style={{ cursor: "pointer", padding: '3px', paddingLeft: '6px', paddingRight: '6px' }} onClick={() => openShowCommentsModal(ratingCommentObj)} className="input_dashboard">{`${ratingCommentObj?.rating}`} </span>
                 </MDBTooltip>
             </td>
             {

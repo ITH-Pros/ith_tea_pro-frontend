@@ -11,12 +11,12 @@ import './index.css'
 import { addCommentOnTaskById, getTaskDetailsByTaskId, updateTaskDetails } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
 import Toaster from '../../../components/Toaster'
+import { CONSTENTS } from "../../../constents";
 
 function TaskModal(props) {
     const { selectedTaskObj, selectedProject, getAllTaskOfProject, category } = props;
-    const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
-    // eslint-disable-next-line no-unused-vars
-    const priorityList = ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"]
+    const statusList = CONSTENTS.statusList
+    const priorityList = CONSTENTS.priorityList
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
@@ -199,11 +199,11 @@ function TaskModal(props) {
                             <Form.Control as="select" type="select" autoFocus
                                 onBlur={() => setEditPriorityEnable(false)} onChange={checkAndUpdatePriority} value={priorityValue}>
                                 <option value='' disabled >Set Priority </option>
-                                <option value='None' disabled={priorityValue === ''}>None </option>
-                                <option value='LOW' disabled={priorityValue === 'LOW'}>Low </option>
-                                <option value='MEDIUM' disabled={priorityValue === 'MEDIUM'}>Medium </option>
-                                <option value='HIGH' disabled={priorityValue === 'HIGH'} >High </option>
-                                <option value='REPEATED' disabled={priorityValue === 'REPEATED'} >Repeated </option>
+                                {priorityList?.map((priority) => (
+                                    <option value={priority} key={priority}>
+                                        {priority}
+                                    </option>
+                                ))}
                             </Form.Control>
                         </Form.Group> :
                         <>

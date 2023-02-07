@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import Loader from '../../../components/Loader';
 import Toaster from '../../../components/Toaster';
+import { CONSTENTS } from '../../../constents';
 import { addNewUserDetail } from '../../../services/user/api';
 import './index.css'
 
@@ -15,7 +16,7 @@ export default function AddUser(props) {
 
 
 
-    const rolesList = ["USER", "SUPER_ADMIN", "ADMIN", "LEAD"]
+    const rolesList = CONSTENTS.ROLES
     const registerFromFields = { name: '', email: '', employeeId: '', department: '', wings: '', designation: '', role: rolesList[0], showPassword: false, password: '' }
     const [registerFromValue, setRegisterFromValue] = useState(registerFromFields);
 

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useLocalStorage } from "../../../auth/useLocalStorage";
 import Loader from "../../../components/Loader";
+import { CONSTENTS } from "../../../constents";
 
 const FilterModal = (props) => {
     const { selectedProject, setTaskFilters } = props
 
-    const statusList = ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"]
-    const priorityList = ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"]
-    const groupByList = ["category", "status", "priority", "assignedTo", "createdBy"]
+    const statusList = CONSTENTS.statusList
+    const priorityList = CONSTENTS.priorityList
+    const groupByList = CONSTENTS.TASK_GROUPS
     const filterFormFileds = { createdBy: '', assignedTo: '', category: '', priority: '', status: '', groupBy: '' }
 
     const [loading, setLoading] = useState(false);
@@ -29,11 +30,9 @@ const FilterModal = (props) => {
     const closeModalAndgetAllTaskOfProject = () => {
         //TODO
         setLocalStorageTaskFilters(filterFormValue)
-        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN closeModalAndgetAllTaskOfProject")
         setTaskFilters(filterFormValue)
     }
     const clearFilterFormValue = () => {
-        console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN clearFilterFormValue")
 
         setFilterFormValue(filterFormFileds)
         setLocalStorageTaskFilters(filterFormFileds)
