@@ -156,7 +156,7 @@ export default function Rating(props) {
     switch (currentView) {
       case "Add":
         return (
-          <div className="dv-50-rating">
+          <div className="dv-50-rating ">
             <Form noValidate validated={validated}>
               <Row className="mb-3">
                 <Form.Group as={Col} md="4" >
@@ -206,9 +206,11 @@ export default function Rating(props) {
                     onChange={handleRatingChange}
                     pattern="[0-9]*"
                     inputMode="numeric"
+                    min="0"
+                    max="5"
                   />
                   <Form.Control.Feedback type="invalid">
-                    Rating is required !!
+                    Rating is required, value must be in range [0,5] !!
                   </Form.Control.Feedback>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -237,13 +239,14 @@ export default function Rating(props) {
               </Row>
 
 
-              <Button
+              {/* <Button
                 className="btn-gradient-border"
                 type="submit"
                 onClick={handleSubmit}
               >
                 Submit form
-              </Button>
+              </Button> */}
+               <button onClick={handleSubmit} className="btn-51">Submit</button>
             </Form>
           </div>
         );
@@ -251,14 +254,7 @@ export default function Rating(props) {
       case "View":
         return (
           <div>
-            <div className=" dv-40 ">
-              <div className={`d-flex`}>
-                <div className="d-flex justify-content-center flex-grow-1">
-                  <div className="d-flex justify-content-center mt-4"></div>
-                  <Dashboard showBtn={false} />
-                </div>
-              </div>
-            </div>
+            <Dashboard showBtn={false} />
           </div>
         );
       default:
@@ -267,11 +263,11 @@ export default function Rating(props) {
   };
 
   return (
-    <div className="m-3">
-      <div className="d-flex w-100 justify-content-around ">
+    <>
+        <div className="   main-div-tab">
         <div
           onClick={() => handleViewChange("Add")}
-          className={`p-3 border-top border-start border-end w-50  text-center rounded ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
+          className={`p-3  w-50  text-center rounded ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
             }`}
           style={{ cursor: "pointer" }}
         >
@@ -279,7 +275,7 @@ export default function Rating(props) {
         </div>
         <div
           onClick={() => handleViewChange("View")}
-          className={`p-3 border-top border-start border-end w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
+          className={`p-3 w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
             }`}
           style={{ cursor: "pointer" }}
         >
@@ -291,7 +287,10 @@ export default function Rating(props) {
                 show={toaster}
                 close={() => showToaster(false)} />}
       </div>
+        <div className="main-rating-contianer">
+    
       {renderCurrentView()}
-    </div>
+      </div>
+      </>
   );
 }

@@ -441,7 +441,7 @@ export default function AllProject() {
                     projectList && projectList.map((element, projectIndex) => {
                         console.log(element)
                         return (
-                            <div key={element._id} className="project-box-wrapper">
+                            <div key={element._id} style={{height:'300px'}} className="project-box-wrapper">
                                 <div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 5] }}>
 
 
@@ -480,12 +480,12 @@ export default function AllProject() {
                 }
                 {
                     userDetails.role === "SUPER_ADMIN" &&
-                    <div key='AddProject' className="box">
+                    <div key='AddProject' className="box add-project-button">
                         <div className="content">
                             <Link to={{
                                 pathname: "/project/add",
                             }}>
-                                <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i>
+                                <i className="fa fa-plus-circle fa-3x addBtn" title='Add Project' aria-hidden="true" ></i>
                             </Link>
                         </div>
                     </div>

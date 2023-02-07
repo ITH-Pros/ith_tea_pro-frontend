@@ -194,14 +194,14 @@ export default function Teams(props) {
                 {
 
                     userDetails.role !== "USER" &&
-                    <div key='AddNewUser' className="box">
+                    <div key='AddNewUser' className="box " style={{padding:'90px'}}>
 
                         <div className="content">
                             <Link to={{
                                 pathname: "/user/add",
 
                             }}>
-                                <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i>
+                                <i className="fa fa-user-plus fa-3x addBtn " title='Add User' aria-hidden="true" ></i>
                             </Link>
                         </div>
 

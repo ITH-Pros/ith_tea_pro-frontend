@@ -26,8 +26,8 @@ a {
 }
 
 .container-team {
-  width: 100%;
-  height: 80vh;
+  width: 99%;
+  height: 68vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -111,6 +111,7 @@ a {
   /* border-radius:100px; */
   /* overflow: hidden; */
   object-fit: cover;
+  
   /* object-position: top; */
 }
 .addBtn:hover {
@@ -165,4 +166,10 @@ a {
   box-shadow: 2px 5px 15px rgba(80, 123, 252, 0.05);
   background-image: linear-gradient(62deg, #8355ad 0%, #b86bff 100%);
   transition: all ease 0.5s;
+}
+
+
+.add-project-button{
+  box-shadow: rgb(0 0 0 / 17%) 0px -23px 25px 0px inset, rgb(0 0 0 / 15%) 0px -36px 30px 0px inset, rgb(0 0 0 / 10%) 0px -79px 40px 0px inset, rgb(0 0 0 / 6%) 0px 2px 1px, rgb(0 0 0 / 9%) 0px 4px 2px, rgb(0 0 0 / 9%) 0px 8px 4px, rgb(0 0 0 / 9%) 0px 16px 8px, rgb(0 0 0 / 9%) 0px 32px 16px;
+  height: 250px;
 }
