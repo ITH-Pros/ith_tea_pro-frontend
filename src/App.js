@@ -1,7 +1,6 @@
 import './App.css';
 import React from 'react'
 import { Routes, Route, } from 'react-router-dom'
-import AuthProvider, { useAuth } from './auth/AuthProvider';
 import Navbar from '../src/main/Navbar/navbar'
 // import { ProtectedRoute } from './auth/requireAuth'
 import Login from './auth/login'

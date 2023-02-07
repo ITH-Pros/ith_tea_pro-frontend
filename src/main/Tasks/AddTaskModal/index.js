@@ -154,7 +154,6 @@ export default function AddTaskModal(props) {
                 setShowToaster(true);
                 return
             } else {
-                console.log("taskRes.data---", taskRes.data)
                 setTaskFormValue({
                     ...taskFormValue,
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',

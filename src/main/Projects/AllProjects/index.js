@@ -77,7 +77,6 @@ export default function AllProject() {
 
     const addAndRemveUserFromList = (userId) => {
         userListToAddInProject.has(userId) ? userListToAddInProject.delete(userId) : userListToAddInProject.add(userId)
-        console.log(userListToAddInProject)
     }
 
     const checkAndGetProjectUsers = (element) => {
@@ -89,7 +88,6 @@ export default function AllProject() {
     }
     const getProjectAssignedUsers = async (element) => {
         //setloading(true);
-        console.log("element: " + element)
         try {
             let dataToSend = {
                 params: { projectId: element._id }
@@ -104,7 +102,6 @@ export default function AllProject() {
                 setProjectAssignedUsers(projectAssignedUsers.data);
                 setShowMoreUserDropDownId(element._id);
                 setSelectedProject(element);
-                console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
             }
         } catch (error) {
             setToasterMessage(error?.error?.message || 'Something Went Wrong');
@@ -115,7 +112,6 @@ export default function AllProject() {
     }
 
     const handleAddUserToProjectButton = async function (element) {
-        console.log("AddUserToProject", element);
         //setloading(true);
         try {
 
@@ -151,7 +147,6 @@ export default function AllProject() {
                 setSelectedProjectId(element._id);
 
                 setModalShow(true);
-                console.log("projectAssignedUsers.data---", projectAssignedUsers.data)
             }
         } catch (error) {
             //setloading(false);
@@ -164,7 +159,6 @@ export default function AllProject() {
             <>
                 {
                     allUserList && allUserList.map((proejctUser, index) => {
-                        console.log(proejctUser)
                         let checkAlreadyAssigned = projectAssignedUsers.find((ele) => ele._id === proejctUser._id)
                         return (
                             <div key={proejctUser._id} >
@@ -183,7 +177,6 @@ export default function AllProject() {
         )
     }
     const GetSureModalBody = () => {
-        console.log('GetSureModalBody', selectedProject)
         return (
             <>
                 User <strong>{selectedUser.name}</strong> will be removed from Project <strong>{selectedProject.name}</strong>
@@ -193,7 +186,6 @@ export default function AllProject() {
         )
     }
     const removeUserFromProject = (user, project) => {
-        console.log("ON", user, project)
         setSelectedProject(project)
         setSelectedUser(user)
         setSureModalShow(true)
@@ -259,7 +251,6 @@ export default function AllProject() {
             <div className='moreParticipants'>
                 {
                     projectAssignedUsers && projectAssignedUsers.map((proejctUser, index) => {
-                        console.log(proejctUser)
                         return (
                             <div key={proejctUser._id + index}>
                                 {
@@ -308,7 +299,6 @@ export default function AllProject() {
                 userIds: [...userListToAddInProject]
             }
             const addRes = await assignUserToProject(dataToSend);
-            console.log("AddSelectedUsersToProject", addRes);
             //setloading(false);
             if (addRes.error) {
                 setToasterMessage(addRes?.error?.message || 'Something Went Wrong');
@@ -341,7 +331,6 @@ export default function AllProject() {
                 userId: selectedUser._id
             }
             const removeRes = await unAssignUserToProject(dataToSend);
-            console.log("unAssignUserToProject", removeRes);
             //setloading(false);
             if (removeRes.error) {
                 setToasterMessage(removeRes?.error?.message || 'Something Went Wrong');
@@ -391,7 +380,6 @@ export default function AllProject() {
                     showMenuList &&
                     <div className="context-menu-container"  >
                         <ul >
-                            {/* <li onClick={() => { console.log('on click ed'); setAddTaskModal(true) }}>Add Task  </li> */}
                             <li>Edit</li>
                             <li>Delete</li>
                         </ul>
@@ -439,7 +427,6 @@ export default function AllProject() {
             <div className="project-boxes jsGridView">
                 {
                     projectList && projectList.map((element, projectIndex) => {
-                        console.log(element)
                         return (
                             <div key={element._id} style={{height:'300px'}} className="project-box-wrapper">
                                 <div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 5] }}>

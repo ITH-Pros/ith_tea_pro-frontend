@@ -5,28 +5,26 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useState } from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import { getAllProjects, getProjectsTask } from '../../services/user/api';
 import Loader from '../../components/Loader';
 import TaskModal from './ShowTaskModal';
 import AddTaskModal from './AddTaskModal';
 import FilterModal from './FilterModal';
 import Toaster from '../../components/Toaster'
+import { useLocalStorage } from '../../auth/useLocalStorage';
 
 
 export default function Tasks() {
 
-    const [loading, setLoading] = useState(false);
-    // const [taskModalShow, setTaskModalShow] = React.useState(false);
-    // const [showAddTaskModal, setShowAddTaskModal] = React.useState(false);
 
+    const [loading, setLoading] = useState(false);
     const [projectList, setProjectList] = useState([]);
-    // const [projectTasks, setProjectTasks] = useState([]);
+    const [localStorageProject, setLocalStorageProject] = useLocalStorage("selectedProject");
     const [selectedProject, setSelectedProject] = useState('');
-    // const [selectedTaskDetails, setSelectedTaskDetails] = useState({});
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
+
 
     useEffect(() => {
         getProjectList();
@@ -43,8 +41,11 @@ export default function Tasks() {
                 return
             } else {
                 setProjectList(projectList.data)
-
-                setSelectedProject(projectList.data?.[0])
+                let project = projectList.data?.[0]
+                if (localStorageProject) {
+                    project = projectList.data?.find((el) => el._id === localStorageProject)
+                }
+                setSelectedProject(project)
             }
         } catch (error) {
             setLoading(false);
@@ -58,26 +59,19 @@ export default function Tasks() {
     const onchangeOfSelectedProject = (e) => {
         let project = projectList.find((el) => el._id === e.target.value)
         setSelectedProject(project);
-        console.log("onchangeOfSelectedProject", project);
-
+        setLocalStorageProject(project._id)
     };
 
-
-    // const setSelectedProjectFromAddTask = (project) => {
-    //   if (project._id === selectedProject._id) {
-    //     console.log("project._id === selectedProject._id", project._id === selectedProject._id)
-    //     setSelectedProject(project)
-    //     getAllTaskOfProject();
-    //   } else {
-    //     setSelectedProject(project)
-    //   }
-    // }
 
     const TaskListComponent = (props) => {
         const { selectedProject } = props;
 
         const [projectTasks, setProjectTasks] = useState([]);
-        const [taskFilters, setTaskFilters] = useState({})
+        const [localStorageTaskFilters, setLocalStorageTaskFilters] = useLocalStorage("taskFilters");
+        const [taskFilters, setTaskFilters] = useState(localStorageTaskFilters || {})
+
+
+        console.log(taskFilters)
 
         useEffect(() => {
             getAllTaskOfProject();
@@ -121,20 +115,29 @@ export default function Tasks() {
 
         const setSelectedProjectFromAddTask = (project, filterFormValue) => {
             if (project._id === selectedProject._id) {
-                console.log("project._id === selectedProject._id", project._id === selectedProject._id)
                 setSelectedProject(project)
+                setLocalStorageProject(project._id)
                 getAllTaskOfProject();
             } else {
                 setSelectedProject(project)
+                setLocalStorageProject(project._id)
+
+
             }
         }
-        console.log(projectTasks)
         return (
             <div className='mt-5'>
                 <FilterModal selectedProject={selectedProject} setTaskFilters={setTaskFilters} />
                 <AddTaskModal selectedProjectFromTask={selectedProject}
                     setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
                 />
+                {/* {
+                    Object.keys(taskFilters).map(el => {
+                        return (
+                            <button> {taskFilters[el]}{el}</button>
+                        )
+                    })
+                } */}
 
                 {
                     projectTasks?.map((category) => {
@@ -158,7 +161,7 @@ export default function Tasks() {
                         )
                     })
                 }
-            </div>
+            </div >
         )
     }
 
@@ -200,18 +203,11 @@ export default function Tasks() {
                                         })
                                     }
                                 </Form.Control>
-
                             </Form.Group>
                         </Row>
                     </Form>
                     {selectedProject && <TaskListComponent selectedProject={selectedProject} />}
-
-
                 </div>
-
-
-
-
             </div>
 
             {loading ? <Loader /> : null}
@@ -219,8 +215,6 @@ export default function Tasks() {
                 message={toasterMessage}
                 show={toaster}
                 close={() => showToaster(false)} />}
-
-
         </>
     )
 

@@ -170,7 +170,6 @@ const RatingBox = (props) => {
                 </div>
                 {
                     clickedRatingArray?.map((comments, index) => {
-                        console.log(comments?.comments?.comment);
                         return (
                             <div
                                 key={comments?.comments?._id}

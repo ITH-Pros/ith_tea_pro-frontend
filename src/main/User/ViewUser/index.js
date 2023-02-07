@@ -26,7 +26,6 @@ export default function ViewUser(props) {
     const getUserDetails = async () => {
         setLoading(true);
         try {
-            console.log("userId----", userId)
             let params = {
                 userId
             }
@@ -37,7 +36,6 @@ export default function ViewUser(props) {
                 setShowToaster(true);
                 return
             } else {
-                console.log(userDetails)
                 setUserDetails(userDetails.data)
             }
         } catch (error) {

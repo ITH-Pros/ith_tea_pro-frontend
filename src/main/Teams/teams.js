@@ -96,12 +96,10 @@ export default function Teams(props) {
     };
 
     const GetModalBody = () => {
-        console.log("projectList", projectList)
         return (
             <>
                 {
                     projectList && projectList.map((proejct, index) => {
-                        console.log(proejct)
                         let checkAlreadyAssigned = userAssignedProjects.find((ele) => ele._id === proejct._id)
                         return (
                             <div key={proejct._id} >

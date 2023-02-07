@@ -23,134 +23,134 @@ import Toaster from "../../components/Toaster";
 
 
 export default function Rating(props) {
-  const location = useLocation();
-  const navigate = useNavigate();
+    const location = useLocation();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    onInit();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    useEffect(() => {
+        onInit();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-  function onInit() {
-    getUsersList();
-  }
-  let today = new Date();
-  let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
-  const [loading, setLoading] = useState(false);
-  const [currentView, setCurrentView] = useState("Add");
-  const [teamOptions, setTeamOptions] = useState([]);
-  const [team, setTeam] = useState("");
-  const [date, setDate] = useState(patchDateValue);
-  const [rating, setRating] = useState("");
-  const [comments, setComments] = useState("");
-  const [validated, setValidated] = useState(false);
-	const [toaster, showToaster] = useState(false);
-	const setShowToaster = (param) => showToaster(param);
+    function onInit() {
+        getUsersList();
+    }
+    let today = new Date();
+    let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
+    const [loading, setLoading] = useState(false);
+    const [currentView, setCurrentView] = useState("Add");
+    const [teamOptions, setTeamOptions] = useState([]);
+    const [team, setTeam] = useState("");
+    const [date, setDate] = useState(patchDateValue);
+    const [rating, setRating] = useState("");
+    const [comments, setComments] = useState("");
+    const [validated, setValidated] = useState(false);
+    const [toaster, showToaster] = useState(false);
+    const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
-  console.log(patchDateValue)
-  if (!team && location && location.state && location.state.userId) {
-    setTeam(location.state.userId)
-  }
-  if (location && location.state && location.state.date && location.state.date !== date) {
-    setDate(location.state.date)
-    location.state.date = '';
-  }
-
-  const handleViewChange = (view) => {
-    setCurrentView(view);
-  };
-
-  const onchangeTeam = (e) => {
-    setTeam(e.target.value);
-  };
-
-  const handleChangeDate = (date) => {
-    setDate(date.target.value);
-  };
-
-  const onChangeOfComments = (e) => {
-    setComments(e)
-    console.log("sejfnweiornwoerfnaifjbsij sijdbfisjbfisa ihsvfgiw", e)
-  };
-
-  const handleRatingChange = (e) => {
-    setRating(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    console.log("iiiiiiiiiiiiiii", comments, date)
-    setValidated(true);
-    e.preventDefault();
-    e.stopPropagation();
-    // console.log()
-
-    if (!team || !date || !rating || !comments) {
-      return;
-    } else {
-      let dataToSend = {
-        userId: team,
-        date: date?.split("-")[2],
-        year: date?.split("-")[0],
-        month: date?.split("-")[1],
-        rating: rating,
-        comment: comments,
-        // taggedUsers: tags,
-      };
-
-      console.log(
-        dataToSend,
-        "==========================================================================data"
-      );
-      addRatingFunc(dataToSend);
+    console.log(patchDateValue)
+    if (!team && location && location.state && location.state.userId) {
+        setTeam(location.state.userId)
     }
-  };
-
-  const getUsersList = async function () {
-
-    setLoading(true);
-    try {
-
-      const user = await getAllUsers();
-      setLoading(false);
-
-      if (user.error) {
-        setToasterMessage(user?.error?.message || 'Something Went Wrong');
-        setShowToaster(true);
-      }else{
-
-        setTeamOptions(user.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message||'Something Went Wrong');
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
+    if (location && location.state && location.state.date && location.state.date !== date) {
+        setDate(location.state.date)
+        location.state.date = '';
     }
-  };
 
-  async function addRatingFunc(data) {
-    setLoading(true);
-    try {
-      const rating = await addRating(data);
-      setLoading(false);
-      if (rating.error) {
-        setToasterMessage(rating?.error?.message||'Something Went Wrong');
-				setShowToaster(true);
+    const handleViewChange = (view) => {
+        setCurrentView(view);
+    };
 
-      } else {
-        setToasterMessage('Rating Added Succesfully');
-				setShowToaster(true);
-        navigate('/')
-        console.log(rating.data);
-      }
+    const onchangeTeam = (e) => {
+        setTeam(e.target.value);
+    };
+
+    const handleChangeDate = (date) => {
+        setDate(date.target.value);
+    };
+
+    const onChangeOfComments = (e) => {
+        setComments(e)
+        console.log("sejfnweiornwoerfnaifjbsij sijdbfisjbfisa ihsvfgiw", e)
+    };
+
+    const handleRatingChange = (e) => {
+        setRating(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        console.log("iiiiiiiiiiiiiii", comments, date)
+        setValidated(true);
+        e.preventDefault();
+        e.stopPropagation();
+        // console.log()
+
+        if (!team || !date || !rating || !comments) {
+            return;
+        } else {
+            let dataToSend = {
+                userId: team,
+                date: date?.split("-")[2],
+                year: date?.split("-")[0],
+                month: date?.split("-")[1],
+                rating: rating,
+                comment: comments,
+                // taggedUsers: tags,
+            };
+
+            console.log(
+                dataToSend,
+                "==========================================================================data"
+            );
+            addRatingFunc(dataToSend);
+        }
+    };
+
+    const getUsersList = async function () {
+
+        setLoading(true);
+        try {
+
+            const user = await getAllUsers();
+            setLoading(false);
+
+            if (user.error) {
+                setToasterMessage(user?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
+            } else {
+
+                setTeamOptions(user.data);
+            }
+        } catch (error) {
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
+            setShowToaster(true);
+            setLoading(false);
+            return error.message;
+        }
+    };
+
+    async function addRatingFunc(data) {
+        setLoading(true);
+        try {
+            const rating = await addRating(data);
+            setLoading(false);
+            if (rating.error) {
+                setToasterMessage(rating?.error?.message || 'Something Went Wrong');
+                setShowToaster(true);
+
+            } else {
+                setToasterMessage('Rating Added Succesfully');
+                setShowToaster(true);
+                navigate('/')
+                console.log(rating.data);
+            }
+        }
+        catch (error) {
+            setLoading(false);
+            setToasterMessage(error?.error?.message || 'Something Went Wrong');
+            setShowToaster(true);
+            console.log(error?.message)
+        }
     }
-    catch (error) {
-      setLoading(false);
-      setToasterMessage(error?.error?.message||'Something Went Wrong');
-      setShowToaster(true);
-      console.log(error?.message)
-    }
-  }
 
   const renderCurrentView = () => {
     switch (currentView) {
@@ -216,7 +216,7 @@ export default function Rating(props) {
                 </Form.Group>
               </Row>
 
-              {/* <Row className="mb-3">
+                            {/* <Row className="mb-3">
                 <Form.Group as={Col} md="12" controlId="comment">
                   <Form.Label>Comment</Form.Label>
                   <Form.Control
@@ -233,10 +233,10 @@ export default function Rating(props) {
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row> */}
-              <Row className="mb-3">
-                <Form.Label>Comment</Form.Label>
-                <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
-              </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Comment</Form.Label>
+                                <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
+                            </Row>
 
 
               {/* <Button

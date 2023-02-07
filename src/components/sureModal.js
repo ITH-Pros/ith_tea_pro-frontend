@@ -3,7 +3,6 @@ import Modal from 'react-bootstrap/Modal'
 import './modal.css'
 const SureModals = (props) => {
     const { heading, modalBody, modalShow, onHide, keyboardProp, backdropProp, size, onReject, onAccept } = props;
-    console.log(`Modals:`, props)
     return (
         <>
             <Modal
