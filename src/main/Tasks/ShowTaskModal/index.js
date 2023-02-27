@@ -23,8 +23,6 @@ function TaskModal(props) {
     const [loading, setLoading] = useState(false);
     const [taskModalShow, setTaskModalShow] = useState(false);
     const [selectedTaskDetails, setSelectedTaskDetails] = useState(selectedTaskObj);
-    const [titleValue, setTitleValue] = useState(selectedTaskDetails.title);
-    const [editTitleBoxEnable, setEditTitleBoxEnable] = useState(false);
 
     const CommentsForm = () => {
         const [commentValue, setCommentValue] = useState('');
@@ -44,11 +42,13 @@ function TaskModal(props) {
     };
 
     const EditTitleBox = () => {
-
+        const [titleValue, setTitleValue] = useState(selectedTaskDetails.title);
+        const [editTitleBoxEnable, setEditTitleBoxEnable] = useState(false);
         const checkAndUpdateTitleValue = () => {
             if (!titleValue) {
                 return
             }
+            setEditTitleBoxEnable(!editTitleBoxEnable)
             updateMutipleTaskDetails({ title: titleValue }, selectedTaskDetails);
         }
 

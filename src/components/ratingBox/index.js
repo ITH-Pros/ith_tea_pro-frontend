@@ -119,6 +119,10 @@ const RatingBox = (props) => {
                 if (newRating > 5 || newRating < 0) {
                     return
                 }
+                if (newRating === selectedRating) {
+                    setEditRatingEnabled(false);
+                    return
+                }
                 setLoading(true);
                 try {
                     let dataToSend = {
