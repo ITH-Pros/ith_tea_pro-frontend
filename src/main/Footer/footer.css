@@ -4,7 +4,7 @@
     position: absolute;
     bottom: 0px;
 }
-
+.footer-bg-pic{ position: fixed; bottom: 0; width: 100%;}
 
 
   
@@ -26,6 +26,7 @@
     height: 100%;
     animation: wave 10s -3s linear infinite;
     transform: translate3d(0, 0, 0);
+    bottom: 0px;
     opacity: 0.4;
   }
   
