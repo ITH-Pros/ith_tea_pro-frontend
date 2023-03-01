@@ -117,3 +117,52 @@
   transition: all 0.3s ease;
   border-radius: 50px;
 }
+
+
+.date-tag{
+  margin-left: 5px  ;
+      background: #eee;
+    display: inline-block;
+    color: #8b8b8b;
+    font-size: 13px;
+    padding: 2px 4px 3px;
+    height: auto;
+    line-height: 1em;
+    border: 1px solid #eaecf1;
+    border-radius: 3px;
+}
+
+.priority-tag{
+  background-color: #feb739;
+  margin-left: 5px;
+  margin-right: 5px;
+    display: inline-block;
+    color: #8b8b8b;
+    font-size: 13px;
+    padding: 2px 4px 3px;
+    cursor: move !important;
+    height: auto;
+    line-height: 1em;
+    border: 1px solid #eaecf1;
+    border-radius: 3px;
+        color: #f6f6f6 !important;
+    border-color: transparent;
+}
+
+.progress-bar{
+      display: inline-block;
+    height: 6px !important;
+    width: 200px !important;
+    border-radius: 5px;
+    background-color: green !important;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.progress-bar-count{
+      display: inline-block;
+ position: relative;
+ right: 120px;
+ bottom: 6px;
+    float: right;
+}
