@@ -23,6 +23,7 @@ a {
   font-size: 1rem;
   margin: 0 20px;
   border-radius: 8px;
+  margin-left: 0px;
 }
 
 .container-team {
@@ -146,7 +147,7 @@ a {
 }
 
 .btn {
-  margin-top: 5px;
+ 
   display: flex;
   justify-content: space-between;
   align-items: center;
