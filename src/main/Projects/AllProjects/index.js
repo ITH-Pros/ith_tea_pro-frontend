@@ -11,9 +11,23 @@ import AddTaskModal from '../../Tasks/AddTaskModal';
 import { useAuth } from '../../../auth/AuthProvider';
 import { Link } from 'react-router-dom';
 import Toaster from '../../../components/Toaster';
+import ProjectCard from "../ProjectCard/projectCard";
 
 export default function AllProject() {
-    let projectBackColor = ['#ff942e', '#e9e7fd', '#dbf6fd', '#fee4cb', '#ff942e']
+    let projectBackColor = [
+      "#e9e7fd",
+      "#dbf6fd",
+      "#fee4cb",
+      "#ff942e",
+      "#8490a3",
+      "#b477e0",
+      "#f0da37",
+      "#e3595f",
+      "#e3e3e3",
+      "#5fc9de",
+      "#7ae03f",
+      "#9399bf",
+    ];
     const { userDetails } = useAuth();
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
@@ -352,19 +366,11 @@ export default function AllProject() {
         }
     }
 
-    const ProjectMenuIcon = (props) => {
+ 
 
-        const { project } = props
-        const [showMenuList, setShowMenuList] = useState(false)
-
-
-        const handleMenuIconClick = () => {
-            setShowMenuList(!showMenuList)
-        }
-
-        const deleteProject = async () => {
+        const deleteProject = async (project) => {
+console.log(project,'------------------------props')
             setLoading(true);
-            console.log(project)
             try {
                 let dataToSend = {
                     projectId: project._id,
@@ -391,34 +397,7 @@ export default function AllProject() {
 
 
 
-        return (
-            <>
-                <div className="more-wrapper" onClick={handleMenuIconClick} onBlur={handleMenuIconClick} >
-                    {
-                        userDetails.role === "SUPER_ADMIN" &&
-                        <button className="project-btn-more dropdown ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical">
-                                <circle cx="12" cy="12" r="1" />
-                                <circle cx="12" cy="5" r="1" />
-                                <circle cx="12" cy="19" r="1" />
-                            </svg>
-                            <div className='dropdown-content'>
-                                <a href='#1' > Edit</a>
-                                <a href='#1' onClick={() => { console.log("INNN delete"); deleteProject() }}> Delete</a>
-                            </div>
-                        </button>
-                    }
-                </div>
-                {
-                    <AddTaskModal selectedProjectFromTask={project} projectListFromProjectsTab={projectList} />
-                }
-
-            </>
-
-
-        )
-
-    }
+     
 
     const ProgressBarComp = (props) => {
 
@@ -452,22 +431,24 @@ export default function AllProject() {
                 {
                     projectList && projectList.map((element, projectIndex) => {
                         return (
-                            <div key={element._id} style={{ height: '300px' }} className="project-box-wrapper">
-                                <div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 5] }}>
-
-
-                                    <div className="project-box-header">
+                          <div
+                            key={element._id}
+                            style={{ height: "300px" }}
+                            className="project-box-wrapper"
+                          >
+                            {/* <div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 12] }}> */}
+                            {/* <div className="project-box-header">
 
                                         <ProjectMenuIcon project={element} />
                                     </div>
                                     <div className="project-box-content-header">
                                         <p className="box-content-header">{element.name}</p>
-                                        <p className="box-content-subheader">{element.description}</p>
-                                    </div>
+                                        <p className="box-content-subheader">{element.description?.slice(0, 50)+'...'}</p>
+                                    </div> */}
 
-                                    {projectTaskAnalytics && <ProgressBarComp project={element} />}
+                            {/* {projectTaskAnalytics && <ProgressBarComp project={element} />} */}
 
-                                    <div className="project-box-footer">
+                            {/* <div className="project-box-footer">
                                         <div className="participants">
                                             {
                                                 getProjectUserIcons(element)
@@ -480,19 +461,36 @@ export default function AllProject() {
                                                     </svg>
                                                 </button>
                                             }
-                                        </div>
-                                    </div>
-                                </div >
-                                {
-                                    showMoreUserDropDownId === element._id && <GetShowMoreUsersModalBody />
-                                }
-                            </div >
-                        )
+                                        </div> */}
+                            {/* </div> */}
+                            {/* </div > */}
+                            {/* {
+                                    // showMoreUserDropDownId === element._id && <GetShowMoreUsersModalBody />
+                                } */}
+                            {/* <ProjectCard
+                              name="Project Name"
+                              description="Project description goes here."
+                              handleEdit={() => console.log("Edit clicked.")}
+                              handleDelete={() =>
+                                console.log("Delete clicked.")
+                              }
+                            /> */}
+                            <ProjectCard
+                              name={element.name}
+                              description={
+                                element.description?.slice(0, 20) + "..."
+                              }
+                              handleEdit={() => console.log("Edit clicked")}
+                              handleDelete={() => deleteProject(element)}
+                              //   backgroundColor="#00ADEF"
+                            />
+                          </div>
+                        );
                     })
                 }
                 {
                     userDetails.role === "SUPER_ADMIN" &&
-                    <div key='AddProject' className="box add-project-button">
+                    <div key='AddProject' style={{    display: "flex"}} className="project-box add-project-button">
                         <div className="content">
                             <Link to={{
                                 pathname: "/project/add",
