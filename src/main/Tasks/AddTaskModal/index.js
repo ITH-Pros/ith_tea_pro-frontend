@@ -176,11 +176,11 @@ export default function AddTaskModal(props) {
     return (
         <>
             <button className="addTaskBtn" style={{ float: "right",
-    position: "relative",
-    bottom: "40px",
-    right: "40px"
- }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
-            <Modal
+                position: "relative",
+                bottom: "40px",
+                right: "40px"
+            }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
+              <Modal
                 show={showAddTaskModal}
                 size="xl"
                 aria-labelledby="contained-modal-title-vcenter"
