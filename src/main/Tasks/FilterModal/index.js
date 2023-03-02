@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Row, Form, Modal, Col } from "react-bootstrap";
+import { Button, Container, Row, Form, Modal, Col } from "react-bootstrap";
 import { useLocalStorage } from "../../../auth/useLocalStorage";
 import Loader from "../../../components/Loader";
 import { CONSTENTS } from "../../../constents";
@@ -103,55 +103,69 @@ const FilterModal = (props) => {
             >
                 Clear Filter
             </Button> */}
+            
       <div className="filter-main-tag">
-        <div>
-          <img
-            onClick={() => {
-              setFilterModalShow(true);
-            }}
-            style={{
-              width: "18px",
-              height: "18px",
-              marginRight: "2px",
-              cursor: "pointer",
-            }}
-            src={require("../../../assests/img/filter.png")}
-            alt="filter"
-          />
-          <span
-            onClick={() => {
-              setFilterModalShow(true);
-            }}
-            className="filter-task-tag"
-          >
-            Filter
-          </span>
-        </div>
-        <div>
-          {clearFilter && (
-            <img
-              style={{
-                width: "18px",
-                height: "18px",
-                marginRight: "2px",
-                cursor: "pointer",
-              }}
-              src={require("../../../assests/img/removeFilter.jpg")}
-              alt="filter"
-            />
-          )}
-          {clearFilter && (
-            <span
-              onClick={() => {
-                clearFilterFormValue();
-                setClearFilterBoolean(false);
-              }}
-              className="filter-task-tag"
-            >
-              Clear Filter
-            </span>
-          )}
-        </div>
+        <div className="filterWth">
+        <Container>
+          <Row>
+            <Col lg={8}>
+            <div>
+                <img
+                  onClick={() => {
+                    setFilterModalShow(true);
+                  }}
+                  style={{
+                    width: "18px",
+                    height: "18px",
+                    marginRight: "2px",
+                    cursor: "pointer",
+                  }}
+                  src={require("../../../assests/img/filter.png")}
+                  alt="filter"
+                />
+                <span
+                  onClick={() => {
+                    setFilterModalShow(true);
+                  }}
+                  className="filter-task-tag"
+                >
+                  Filter
+                </span>
+              </div>
+            </Col>
+            <Col lg={2}>
+            <div className="text-right">
+                {clearFilter && (
+                  <img
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      marginRight: "2px",
+                      cursor: "pointer",
+                    }}
+                    src={require("../../../assests/img/removeFilter.jpg")}
+                    alt="filter"
+                  />
+                )}
+                {clearFilter && (
+                  <span
+                    onClick={() => {
+                      clearFilterFormValue();
+                      setClearFilterBoolean(false);
+                    }}
+                    className="filter-task-tag"
+                  >
+                    Clear Filter
+                  </span>
+                )}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+         
+      </div>
+        
+     
 
         {/* <Button className="addTaskBtn" type="button">
           Add Task
