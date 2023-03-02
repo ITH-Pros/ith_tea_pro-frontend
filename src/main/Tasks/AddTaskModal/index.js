@@ -181,7 +181,11 @@ export default function AddTaskModal(props) {
 
     return (
         <>
-            {/* <button className='btn btn-gradient-border btn-glow btn-press' style={{ float: "right" }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button> */}
+            <button className="addTaskBtn" style={{ float: "right",
+    position: "relative",
+    bottom: "40px",
+    right: "40px"
+ }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button>
             <Modal
                 show={showAddTaskModal}
                 size="xl"

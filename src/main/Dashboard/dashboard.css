@@ -78,11 +78,6 @@ table > :not(caption) > * > * {
   justify-content: center;
 }
 
-.modal-body {
-  max-height: 40vw !important;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
 
 .input_dashboard {
   /* background: rgba(238, 210, 210, 0.3); */
@@ -214,20 +209,6 @@ th {
   box-shadow: inset 40px 40px 41px #5d6d74, inset -40px -40px 41px #97b1be;
 }
 
-.modal-close-btn {
-  padding: 5px;
-  border-radius: 8px;
-  border: 1px solid red;
-  color: red;
-  background-color: #fff;
-}
-
-.modal-close-btn:hover {
-  cursor: pointer;
-  border: 1px solid #fff;
-  color: #fff;
-  background-color: red;
-}
 
 .previous-rating {
   padding: 4px;
@@ -301,11 +282,7 @@ th {
   /* transform: translateY(-7px); */
 }
 
-.modal-content {
-  max-height: 100%;
-  overflow: hidden;
-  box-shadow: -5px -5px 9px rgb(255 255 255 / 45%), 5px 5px 9px;
-}
+
 
 #nav-filter {
   margin-top: 20px;

@@ -22,25 +22,6 @@ code {
     monospace;
 }
 
-.modal-content {
-  position: relative;
-  /* bottom: 121px; */
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 50%;
-  color: var(--bs-modal-color);
-  pointer-events: auto;
-  background-color:#edf3fe !important;;
-  background-clip: padding-box;
-  border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
-  border-radius: var(--bs-modal-border-radius);
-  outline: 0;
-  border-radius: 14px;
-/* background: #993dd6; */
-/* box-shadow: inset 6px 6px 9px #8234b6,
-            inset -6px -6px 9px #b046f6; */
-}
 
 * {
   scrollbar-width: thin;
