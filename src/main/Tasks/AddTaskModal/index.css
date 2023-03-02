@@ -40,12 +40,6 @@
     width: 249px !important;
   }
   .taskCard {
-    cursor: pointer;
-    border: 1px solid rgb(80, 78, 78);
-    padding: 14px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgb(94 104 121 / 95%);
   }
   
   .descriptionBox {
@@ -88,7 +82,7 @@
       background-color: #e6b41d;
   }
   .assigned_tag{
-    margin-left: 20px !important;
+    margin-left: 5px !important;
     font-weight: bolder;
     font-size: small;
     color: brown;

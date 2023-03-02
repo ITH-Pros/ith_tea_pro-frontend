@@ -123,7 +123,7 @@ export default function Tasks() {
             }
         }
         return (
-            <div className='mt-5'>
+            <div >
                 <FilterModal selectedProject={selectedProject} setTaskFilters={setTaskFilters} />
                 <AddTaskModal selectedProjectFromTask={selectedProject}
                     setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
@@ -140,22 +140,37 @@ export default function Tasks() {
                     projectTasks?.map((category) => {
                         let key = typeof category._id === 'object' ? (category._id?.name || "Not Assigned") : category._id
                         return (
-                            <Accordion id="dialog-window" key={key} defaultActiveKey="1" className='mt-3 neo-box'>
-                                <Accordion.Item eventKey="0">
-                                    <Accordion.Header>{key}</Accordion.Header>
-                                    <Accordion.Body id="scrollable-content" className="accorback-neo">
-                                        {
-                                            category.tasks?.map((task) => {
-                                                return (
-                                                    <TaskModal category={category} key={task._id} selectedTaskObj={task} selectedProject={selectedProject} getAllTaskOfProject={getAllTaskOfProject} />
-                                                )
-                                            })
+                            <>
+                                
+                            <Accordion
+                              id="dialog-window"
+                              key={key}
+                              defaultActiveKey="1"
+                            >
+                              <Accordion.Item eventKey="0">
+                                <Accordion.Header>
+                                  <div className="dotBeforeTitle">&nbsp;</div>
+                                   {key}  ITH Technologies / Recru 2.0
+                                </Accordion.Header>
+                                <Accordion.Body id="scrollable-content">
+                                  {category.tasks?.map((task) => {
+                                    return (
+                                      <TaskModal
+                                        category={category}
+                                        key={task._id}
+                                        selectedTaskObj={task}
+                                        selectedProject={selectedProject}
+                                        getAllTaskOfProject={
+                                          getAllTaskOfProject
                                         }
-                                    </Accordion.Body>
-                                </Accordion.Item>
+                                      />
+                                    );
+                                  })}
+                                </Accordion.Body>
+                              </Accordion.Item>
                             </Accordion>
-
-                        )
+                          </>
+                        );
                     })
                 }
             </div >
@@ -167,20 +182,20 @@ export default function Tasks() {
             <div className='tasks'>
 
                 <div >
-                    {
+                    {/* {
                         selectedProject &&
                         <>
-                            {/* <FilterModal setProjectTasks={setProjectTasks} selectedProject={selectedProject} /> */}
+                            <FilterModal setProjectTasks={setProjectTasks} selectedProject={selectedProject} />
 
-                            {/* <AddTaskModal selectedProjectFromTask={selectedProject}
+                            <AddTaskModal selectedProjectFromTask={selectedProject}
                 setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
-              /> */}
+              />
                         </>
-                    }
+                    } */}
 
 
                     {/* <button className='btn btn-gradient-border btn-glow' style={{ float: "right" }} onClick={() => { setShowAddTaskModal(true) }}>Add Task</button> */}
-                    <Form noValidate >
+                    {/* <Form noValidate >
                         <Row className="mb-3">
                             <Form.Group as={Col} md="3" >
                                 <Form.Control
@@ -202,7 +217,7 @@ export default function Tasks() {
                                 </Form.Control>
                             </Form.Group>
                         </Row>
-                    </Form>
+                    </Form> */}
                     {selectedProject && <TaskListComponent selectedProject={selectedProject} />}
                 </div>
             </div>

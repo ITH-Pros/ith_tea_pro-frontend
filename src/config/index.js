@@ -5,6 +5,6 @@
 // let url = 'http://localhost:9000'
 // let url = 'http://192.168.29.254:9000'
 // let url = 'http://local
-let url = 'https://projectapi.ith.tech'
+let url = "https://projectapi.ith.tech";
 
 exports.baseURL = url
