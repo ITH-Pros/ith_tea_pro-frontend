@@ -40,3 +40,25 @@
     display: flex;
     justify-content: space-around;
 }
+
+
+.form-control{
+    margin-bottom: 5px;
+}
+
+.modal-footer{
+        display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    height: 60px;
+    box-shadow: 0 -3px 3px rgb(0 0 0 / 10%);
+    background: #f7f8fa;
+    z-index: 1;
+    text-align: right;
+    border-top: none;
+    padding-right: 40px;
+    position: fixed;
+    bottom: 36px !important;
+    right: 10px;
+    width: 580px;
+}
