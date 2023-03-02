@@ -3,7 +3,7 @@ import './tasks.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import {Row, Container} from "react-bootstrap";
 import { useState } from "react";
 import { getAllProjects, getProjectsTask } from '../../services/user/api';
 import Loader from '../../components/Loader';
@@ -141,34 +141,35 @@ export default function Tasks() {
                         let key = typeof category._id === 'object' ? (category._id?.name || "Not Assigned") : category._id
                         return (
                             <>
-                                
-                            <Accordion
-                              id="dialog-window"
-                              key={key}
-                              defaultActiveKey="1"
-                            >
-                              <Accordion.Item eventKey="0">
-                                <Accordion.Header>
-                                  <div className="dotBeforeTitle">&nbsp;</div>
-                                   {key}  ITH Technologies / Recru 2.0
-                                </Accordion.Header>
-                                <Accordion.Body id="scrollable-content">
-                                  {category.tasks?.map((task) => {
-                                    return (
-                                      <TaskModal
-                                        category={category}
-                                        key={task._id}
-                                        selectedTaskObj={task}
-                                        selectedProject={selectedProject}
-                                        getAllTaskOfProject={
-                                          getAllTaskOfProject
-                                        }
-                                      />
-                                    );
-                                  })}
-                                </Accordion.Body>
-                              </Accordion.Item>
-                            </Accordion>
+                            <Container>
+                                <Accordion
+                                id="dialog-window"
+                                key={key}
+                                defaultActiveKey="1"
+                                >
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>
+                                    <div className="dotBeforeTitle">&nbsp;</div>
+                                    {key}  ITH Technologies / Recru 2.0
+                                    </Accordion.Header>
+                                    <Accordion.Body id="scrollable-content">
+                                    {category.tasks?.map((task) => {
+                                        return (
+                                        <TaskModal
+                                            category={category}
+                                            key={task._id}
+                                            selectedTaskObj={task}
+                                            selectedProject={selectedProject}
+                                            getAllTaskOfProject={
+                                            getAllTaskOfProject
+                                            }
+                                        />
+                                        );
+                                    })}
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                                </Accordion>
+                            </Container>
                           </>
                         );
                     })

@@ -18,13 +18,14 @@ import ViewUser from './main/User/ViewUser';
 import AddProject from './main/Projects/AddProject';
 import AllProject from './main/Projects/AllProjects';
 import { CheckRole } from './components/checkRole';
-
+import { ProSidebarProvider } from 'react-pro-sidebar';
 // const LazyAbout = React.lazy(() => import('./components/About'))
 
 function App() {
 
 
     return (
+        <ProSidebarProvider>
         <Routes>
             {
                 <Route path='/login' element={
@@ -37,6 +38,7 @@ function App() {
 
             <Route path='/' element={
                 <ProtectedRoute>
+                    
                     <Navbar />
                     <Dashboard showBtn={true} />
                     <Footer />
@@ -93,6 +95,7 @@ function App() {
             </Route>
             <Route path='*' element={<NoMatch />} />
         </Routes>
+        </ProSidebarProvider>
     )
 }
 
