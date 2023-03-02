@@ -25,10 +25,13 @@ export default function AddTaskModal(props) {
     const [userList, setUserList] = useState([]);
     const [validated, setValidated] = useState(false);
     const [selectedProject, setSelectedProject] = useState(selectedProjectFromTask);
+	const leadList = [{name : 'Lead 1', _id : '1'}, {name : 'Lead 2', _id : '2'}, {name : 'Lead 3', _id : '3'}]
+
     const [taskFormValue, setTaskFormValue] = useState({
         projectId: '', category: '', title: '', description: '',
         assignedTo: '', dueDate: '', completedDate: '',
         priority: priorityList[0], status: statusList[0], attachment: '',
+		taskLead: leadList[0]
     });
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
@@ -97,7 +100,7 @@ export default function AddTaskModal(props) {
 
         setLoading(true);
         try {
-            let { projectId, category, title, description, assignedTo, dueDate, priority, status, attachment } = taskFormValue
+            let { projectId, category, title, description, assignedTo, dueDate, priority, status,taskLead, attachment } = taskFormValue
             let dataToSend = {}
             projectId && (dataToSend["projectId"] = projectId)
             category && (dataToSend["category"] = category)
@@ -107,6 +110,8 @@ export default function AddTaskModal(props) {
             dueDate && (dataToSend["dueDate"] = dueDate)
             priority && (dataToSend["priority"] = priority)
             status && (dataToSend["status"] = status)
+            taskLead && (dataToSend["taskLead"] = taskLead)
+
             const taskRes = await createTask(dataToSend);
             setLoading(false);
             if (taskRes.error) {
@@ -137,7 +142,7 @@ export default function AddTaskModal(props) {
         }
         setLoading(true)
         try {
-            let { projectId, category, title, description, assignedTo, dueDate, priority, status, attachment } = taskFormValue
+            let { projectId, category, title, description, assignedTo, dueDate, priority, status, attachment,taskLead } = taskFormValue
             let dataToSend = {}
             projectId && (dataToSend["projectId"] = projectId)
             category && (dataToSend["category"] = category)
@@ -147,6 +152,7 @@ export default function AddTaskModal(props) {
             dueDate && (dataToSend["dueDate"] = dueDate)
             priority && (dataToSend["priority"] = priority)
             status && (dataToSend["status"] = status)
+            taskLead && (dataToSend["taskLead"] = taskLead)
 
             const taskRes = await createTask(dataToSend);
             setLoading(false);
@@ -234,6 +240,29 @@ export default function AddTaskModal(props) {
                                         {categoryList?.map((category) => (
                                             <option value={category} key={category}>
                                                 {category}
+                                            </option>
+                                        ))}
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid">
+                                        Task List is required !!
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                                </Form.Group>
+                            </Row>
+							<Row className="mb-3">
+                                <Form.Group as={Col} md="6">
+                                    <Form.Label>Lead</Form.Label>
+                                    <Form.Control
+                                        required
+                                        as="select"
+                                        type="select"
+                                        name='taskLead'
+                                        onChange={updateTaskFormValue}
+                                        value={taskFormValue.taskLead}>
+                                        <option value="" disabled>Select Lead</option>
+                                        {leadList?.map((lead) => (
+                                            <option value={lead._id} key={lead._id}>
+                                                {lead.name}
                                             </option>
                                         ))}
                                     </Form.Control>
