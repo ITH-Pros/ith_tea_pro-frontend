@@ -164,6 +164,7 @@ export default function AddProject(props) {
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.name}
                 name="name"
+				placeholder='Project Name'
               ></Form.Control>
               <Form.Control.Feedback type="invalid">
                 Name is required !!

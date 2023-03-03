@@ -143,4 +143,9 @@
     box-shadow: 0 0 0 black;
     transform: translate(0, 0);
   }
+
+  .addTask-modal{
+	height: 700px;
+    overflow: scroll;
+  }
   

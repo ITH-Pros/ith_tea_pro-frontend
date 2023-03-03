@@ -234,13 +234,13 @@ export default function Teams(props) {
     };
 
     return (
-      <div className="pagiation ">
+      <div className="pagination ">
         <i
-          className="fa fa-angle-left pagiation-arrow left-arrow"
+          className="fa fa-angle-left pagination-arrow left-arrow"
           aria-hidden="true"
           onClick={() => changePageNumber(-1)}
         ></i>
-        <input className="pagiation-input"
+        <input className="pagination-input"
           type="number"
           value={pageDetails.currentPage}
           name="currentPage"
@@ -248,14 +248,14 @@ export default function Teams(props) {
           onChange={handleOnChange}
           autoFocus
         /> 
-       <span className="pagiation-input" >/</span><span className="pagiation-input"> {pageDetails.totalPages}</span>
+       <span className="pagination-input" >/</span><span className="pagination-input"> {pageDetails.totalPages}</span>
         <i
-          className="fa fa-angle-right pagiation-arrow right-arrow"
+          className="fa fa-angle-right pagination-arrow right-arrow"
           aria-hidden="true"
           onClick={() => changePageNumber(1)}
         ></i>
         <span className="page-per-view"> Per Page View : </span>
-        <select className="pagiation-select"
+        <select className="pagination-select"
           onChange={onChangeRowsPerPage}
           name="rowsPerPage"
           value={pageDetails.rowsPerPage}
