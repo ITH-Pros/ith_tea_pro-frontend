@@ -6,6 +6,7 @@ import Toaster from '../../../components/Toaster';
 import { CONSTENTS } from '../../../constents';
 import { addNewUserDetail } from '../../../services/user/api';
 import './index.css'
+import { useNavigate } from 'react-router-dom';
 
 export default function AddUser(props) {
     const [validated, setValidated] = useState(false);
@@ -13,6 +14,9 @@ export default function AddUser(props) {
     const [toasterMessage, setToasterMessage] = useState("");
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
+	const navigate = useNavigate();
+
+	
 
 
 
@@ -52,6 +56,7 @@ export default function AddUser(props) {
                 setShowToaster(true);
                 setRegisterFromValue(registerFromFields)
                 setValidated(false)
+				navigate("/team")
             }
         } catch (error) {
             setToasterMessage(error?.message || 'Something Went Wrong');

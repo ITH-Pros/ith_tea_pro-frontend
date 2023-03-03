@@ -25,6 +25,9 @@ export async function getAllLeadsWithoutPagination(data) {
     return (axiosInstance.get('/user/v1/leads/list',data).then(res => res.data))
 }
 
+export async function getAllUserDataForRating(data) {
+	return (axiosInstance.get('/user/v1/all/pagination',data).then(res => res.data))
+}
 export async function getAllProjects() {
     return (axiosInstance.get('/projects/v1/all', ).then(res => res.data))
 }

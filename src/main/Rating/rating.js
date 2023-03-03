@@ -13,7 +13,7 @@ import Loader from "../../components/Loader";
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
-import { getAllUsers } from "../../services/user/api";
+import { getAllUserDataForRating } from "../../services/user/api";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
@@ -104,7 +104,7 @@ export default function Rating(props) {
         setLoading(true);
         try {
 
-            const user = await getAllUsers();
+            const user = await getAllUserDataForRating();
             setLoading(false);
 
             if (user.error) {
@@ -112,7 +112,7 @@ export default function Rating(props) {
                 setShowToaster(true);
             } else {
 
-                setTeamOptions(user.data);
+                setTeamOptions(user?.data);
             }
         } catch (error) {
             setToasterMessage(error?.error?.message || 'Something Went Wrong');
