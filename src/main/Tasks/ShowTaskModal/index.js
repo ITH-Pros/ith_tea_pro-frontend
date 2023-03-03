@@ -671,8 +671,7 @@ function TaskModal(props) {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-z3LzM-wYXYiWslzq9RADq0mAdVfFrn91gRqxcl9K&s"
             alt="img"
           ></img>
-          {/* {task?.assignedTo?.name} */}
-          Vijay K.
+          {task?.assignedTo?.name}
         </span>
       );
     }
@@ -684,8 +683,7 @@ function TaskModal(props) {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-z3LzM-wYXYiWslzq9RADq0mAdVfFrn91gRqxcl9K&s"
             alt="img"
           ></img>
-          {/* {category?._id?.name} */}
-          Vijay K.
+          {category?._id?.name}
         </span>
       );
     }
@@ -726,16 +724,16 @@ function TaskModal(props) {
           alt="logo"
         />
 
-        {/* {selectedTaskObj.title?.slice(0, 100) + "......."} */}
-        <del>Functionality Implimentation & Bug Fixing</del>
-        <div className="date-tag">Completed Feb 16, 2022</div>
+        {selectedTaskObj.title?.slice(0, 100) + "......."}
+        {/* <del>Functionality Implimentation & Bug Fixing</del> */}
+        {/* <div className="date-tag">Completed Feb 16, 2022</div> */}
 
         {getPriorityTag(selectedTaskObj)}
 
-        {/* {getDueDateTag(selectedTaskObj)} */}
+        {getDueDateTag(selectedTaskObj)}
         {getAssignedToTag(selectedTaskObj)}
-        {/* {getCompletedDateTag(selectedTaskObj)} */}
-        <div className="date-tag">Due Jun 21, 2022</div>
+        {getCompletedDateTag(selectedTaskObj)}
+        {/* <div className="date-tag">Due Jun 21, 2022</div> */}
         <i
           style={{ marginLeft: "5px" }}
           className="fa fa-comments"

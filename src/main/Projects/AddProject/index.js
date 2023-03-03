@@ -27,7 +27,8 @@ export default function AddProject(props) {
     const [leadList, setLeadList] = useState([]);
     const [newCategory, setNewCategory] = useState('');
     const [toaster, showToaster] = useState(false);
-    const setShowToaster = (param) => showToaster(param);
+  const setShowToaster = (param) => showToaster(param);
+  
 
 
 
