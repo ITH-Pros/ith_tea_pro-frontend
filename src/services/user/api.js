@@ -15,11 +15,11 @@ export function addNewUserDetail(data) {
 export function getUserDetailsByUserId(data) {
     return (axiosInstance.get('/user/v1/userId', data).then(res => res.data))
 }
-export async function getAllUsers() {
-    return (axiosInstance.get('/user/v1/all').then(res => res.data))
+export async function getAllUsers(data) {
+    return (axiosInstance.get('/user/v1/all',data).then(res => res.data))
 }
 export async function getAllProjects() {
-    return (axiosInstance.get('/projects/v1/all').then(res => res.data))
+    return (axiosInstance.get('/projects/v1/all', ).then(res => res.data))
 }
 export async function getUsersOfProject(data) {
     return (axiosInstance.get('/projects/v1/user/all', data).then(res => res.data))

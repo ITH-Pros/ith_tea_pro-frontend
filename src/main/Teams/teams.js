@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   getAllUsers,
   getAllProjects,
@@ -24,26 +24,50 @@ export default function Teams(props) {
   const [projectList, setProjectListValue] = useState([]);
   const [userAssignedProjects, setUserAssignedProjects] = useState([]);
   const [toaster, showToaster] = useState(false);
+  const [pageDetails, setPageDetails] = useState({
+    currentPage: 1,
+    rowsPerPage: 10,
+    totalPages: 1,
+  });
+
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
+
+  //   numberOfRowsArray
 
   useEffect(() => {
     onInit();
   }, []);
 
   function onInit() {
-    getAndSetAllUsers();
+    let options = {
+      currentPage: 1,
+      rowsPerPage: 10,
+    };
+    getAndSetAllUsers(options);
   }
-  const getAndSetAllUsers = async function () {
+  const getAndSetAllUsers = async function (options) {
     setLoading(true);
     try {
-      const projects = await getAllUsers();
+		let params = {
+			limit: options?.rowsPerPage,
+			currentPage: options?.currentPage
+		}
+      const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setUsersListValue(projects.data);
+        setUsersListValue(projects.data?.users || []);
+        let totalPages = Math.ceil(
+          projects.data.totalCount / options?.rowsPerPage
+        );
+        setPageDetails({
+          currentPage: Math.min(options?.currentPage, totalPages),
+          rowsPerPage: options?.rowsPerPage,
+          totalPages,
+        });
       }
     } catch (error) {
       setLoading(false);
@@ -153,6 +177,99 @@ export default function Teams(props) {
     setModalShow(false);
   };
 
+  const CustomPagination = (props) => {
+    const { getAndSetAllUsers, setPageDetails, pageDetails } = props;
+
+    const numberOfRowsArray = [10, 20, 30, 40, 50];
+    const handleOnChange = (e) => {
+      
+      let pageNumber = Math.min(
+        Math.max(e.target.value, 1),
+        pageDetails.totalPages
+      );
+	  if (pageDetails.currentPage === pageNumber) {
+        return;
+      }
+      let dataToSave = { ...pageDetails, [e.target.name]: pageNumber };
+      setPageDetails(dataToSave);
+      getAndSetAllUsers(dataToSave);
+    };
+    // const checkEnterKey = (e) => {
+    //   console.log("e.keyCode", e.key);
+    //   if (e.keyCode === 13) {
+    //     let pageNumber = Math.min(
+    //       Math.max(e.target.value, 1),
+    //       pageDetails.totalPages
+    //     );
+    // 	let dataToSave = { ...pageDetails, [e.target.name]: pageNumber};
+    // 	setPageDetails(dataToSave);
+    //     getAndSetAllUsers(dataToSave);
+    //   }
+    // };
+
+    const onChangeRowsPerPage = (e) => {
+      let dataToSave = {
+        ...pageDetails,
+        [e.target.name]: parseInt(e.target.value),
+      };
+
+      setPageDetails(dataToSave);
+      getAndSetAllUsers(dataToSave);
+    };
+    const changePageNumber = (value) => {
+      if (
+        pageDetails.currentPage + value <= 0 ||
+        pageDetails.currentPage + value > pageDetails.totalPages
+      ) {
+        return;
+      }
+      let dataToSave = {
+        ...pageDetails,
+        currentPage: pageDetails.currentPage + value,
+      };
+      setPageDetails(dataToSave);
+      getAndSetAllUsers(dataToSave);
+    };
+
+    return (
+      <div>
+        <i
+          className="fa fa-angle-left"
+          aria-hidden="true"
+          onClick={() => changePageNumber(-1)}
+        ></i>
+        <input
+          type="number"
+          value={pageDetails.currentPage}
+          name="currentPage"
+          //   onKeyDown={checkEnterKey}
+          onChange={handleOnChange}
+          autoFocus
+        />
+        /<span> {pageDetails.totalPages}</span>
+        <i
+          className="fa fa-angle-right"
+          aria-hidden="true"
+          onClick={() => changePageNumber(1)}
+        ></i>
+        <span> Per Page View : </span>
+        <select
+          onChange={onChangeRowsPerPage}
+          name="rowsPerPage"
+          value={pageDetails.rowsPerPage}
+        >
+          {numberOfRowsArray.map((ele, index) => {
+            return (
+              <option key={ele} value={ele}>
+                {ele}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+
   return (
     <>
       <h1 className="h1-text">
@@ -160,7 +277,11 @@ export default function Teams(props) {
       </h1>
       <div className="container-team">
         {userDetails.role === "SUPER_ADMIN" && (
-          <div key="AddNewUser" className="box " style={{ padding: "90px" }}>
+          <div
+            key="AddNewUser"
+            className="box "
+            style={{ height: 283, width: 274 }}
+          >
             <div className="content">
               <Link
                 to={{
@@ -209,13 +330,13 @@ export default function Teams(props) {
                 {userDetails.role !== "USER" && (
                   <div className="btn">
                     <button
-                      className="btn-glow"
+                      className="btn-glow margin-right btn-color"
                       onClick={() => {
                         handleAddUserToProject(user._id);
                       }}
                     >
                       {" "}
-                      <i className="fa fa-check" aria-hidden="true"></i>Assign
+                      <i className="fa fa-check " aria-hidden="true"></i>Assign
                     </button>
 
                     <Link
@@ -232,6 +353,13 @@ export default function Teams(props) {
             );
           })}
       </div>
+
+      <CustomPagination
+        getAndSetAllUsers={getAndSetAllUsers}
+        pageDetails={pageDetails}
+        setPageDetails={setPageDetails}
+      />
+
       {loading ? <Loader /> : null}
       {toaster && (
         <Toaster
