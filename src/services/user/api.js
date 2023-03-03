@@ -24,6 +24,9 @@ export async function getAllUserWithoutPagination(data) {
 export async function getAllLeadsWithoutPagination(data) {
     return (axiosInstance.get('/user/v1/leads/list',data).then(res => res.data))
 }
+export async function getprojectListWithoutCat(data) {
+  return axiosInstance.get("/projects/v1/list", data).then((res) => res.data);
+}
 
 export async function getAllUserDataForRating(data) {
 	return (axiosInstance.get('/user/v1/list',data).then(res => res.data))
@@ -56,7 +59,14 @@ export async function getComment(data) {
     return (axiosInstance.get('/comment/v1/rating', data).then(res => res.data))
 }
 export async function getProjectsTask(data) {
-    return (axiosInstance.get('/task/v1/groupby', data).then(res => res.data))
+    return axiosInstance
+      .get("/task/v1/groupby", {
+        params: {
+              projectId: data?.projectId,
+            groupBy:data.groupBy
+        },
+      })
+      .then((res) => res.data);
 }
 export async function getTaskDetailsByTaskId(data) {
     return (axiosInstance.get('/task/v1/by/taskId', data).then(res => res.data))

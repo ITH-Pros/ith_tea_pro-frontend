@@ -175,3 +175,23 @@
   padding: 7px !important;
 }
 
+.accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.accordion-item {
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.accordion-header {
+  padding: 1rem;
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+
+.accordion-body {
+  padding: 1rem;
+}

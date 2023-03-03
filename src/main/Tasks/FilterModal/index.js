@@ -202,7 +202,7 @@ const FilterModal = (props) => {
                     >
                       <option value="">Created By</option>
                       {selectedProject?.accessibleBy?.map((user) => (
-                        <option value={user._id} key={user._id}>
+                        <option value={user._id} key={user._id+user.name}>
                           {user.name}
                         </option>
                       ))}
@@ -224,7 +224,7 @@ const FilterModal = (props) => {
                     >
                       <option value="">User Assigned</option>
                       {selectedProject?.accessibleBy?.map((user) => (
-                        <option value={user._id} key={user._id}>
+                        <option value={user._id} key={user._id+user.name}>
                           {user.name}
                         </option>
                       ))}
