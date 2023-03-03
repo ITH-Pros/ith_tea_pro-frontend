@@ -93,3 +93,22 @@
     max-width: 80%;
     max-height: 720px !important;
   }
+
+  .margin-class{
+	margin-right: 10px;
+  }
+
+  .margin-form{
+	margin-top: -79px;
+  }
+
+  .submit{
+	border-radius: 6px;
+    width: 100px;
+    height: 38px;
+  }
+
+  .desc{
+	
+  }
+  

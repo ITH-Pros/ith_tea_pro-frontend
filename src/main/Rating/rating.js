@@ -20,6 +20,7 @@ import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import Toaster from "../../components/Toaster";
 import { useAuth } from "../../auth/AuthProvider";
+import ViewRatings from "./View-Rating";
 
 
 
@@ -152,7 +153,7 @@ export default function Rating(props) {
 
                 return (
                     <div className="dv-50-rating ">
-                        <Form noValidate validated={validated}>
+                        <Form className="margin-form" noValidate validated={validated}>
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="4" >
                                     <Form.Label>Select User</Form.Label>
@@ -211,13 +212,14 @@ export default function Rating(props) {
                                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                                 </Form.Group>
                             </Row>
-                            <Row className="mb-3">
+                            <Row className="mb-3 desc">
                                 <Form.Label>Comment</Form.Label>
                                 <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
                             </Row>
 
-
-                            <button onClick={handleSubmit} className="btn-51">Submit</button>
+											<div className="pull-right ">
+                            <button onClick={handleSubmit} className="btn-gradient-border btnDanger submit">Submit</button>
+							</div>
                         </Form>
                     </div>
                 );
@@ -225,7 +227,7 @@ export default function Rating(props) {
             case "View":
                 return (
                     <div>
-                        <Dashboard showBtn={false} />
+                        <ViewRatings showBtn={false} />
                     </div>
                 );
             default:
@@ -242,7 +244,7 @@ export default function Rating(props) {
                     <div className="   main-div-tab">
                         {userDetails?.role !== "USER" && <div
                             onClick={() => handleViewChange("Add")}
-                            className={`p-3  w-50  text-center rounded ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
+                            className={`p-3  w-50  text-center rounded margin-class ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
                                 }`}
                             style={{ cursor: "pointer" }}
                         >
