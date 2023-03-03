@@ -18,6 +18,13 @@ export function getUserDetailsByUserId(data) {
 export async function getAllUsers(data) {
     return (axiosInstance.get('/user/v1/all',data).then(res => res.data))
 }
+export async function getAllUserWithoutPagination(data) {
+    return (axiosInstance.get('/user/v1/list',data).then(res => res.data))
+}
+export async function getAllLeadsWithoutPagination(data) {
+    return (axiosInstance.get('/user/v1/leads/list',data).then(res => res.data))
+}
+
 export async function getAllProjects() {
     return (axiosInstance.get('/projects/v1/all', ).then(res => res.data))
 }
