@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-
+import MyCalendar from "./weekCalendra";
 import { useState, useEffect } from "react";
 import { getRatings } from "../../services/user/api";
 import "./dashboard.css";
@@ -33,33 +33,7 @@ export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const [tasks, setTasks] = useState([
-  //   {
-  //     title: "Task 1",
-  //     date: "2023-03-01T10:00:00.000Z",
-  //     rating: 3,
-  //   },
-  //   {
-  //     title: "Task 2",
-  //     date: "2023-03-02T14:00:00.000Z",
-  //     rating: 4,
-  //   },
-  //   {
-  //     title: "Task 3",
-  //     date: "2023-03-03T09:00:00.000Z",
-  //     rating: 2,
-  //   },
-  //   {
-  //     title: "Task 4",
-  //     date: "2023-03-05T11:00:00.000Z",
-  //     rating: 5,
-  //   },
-  //   {
-  //     title: "Task 5",
-  //     date: "2023-03-06T13:00:00.000Z",
-  //     rating: 1,
-  //   },
-  // ]);
+
   const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
 
@@ -691,7 +665,7 @@ export default function Dashboard(props) {
               )}
             </Link>
           )}
-          <h5 className="text-center h5cls">
+          {/* <h5 className="text-center h5cls">
             <p style={{ marginRight: "10px", marginTop: "6px" }}>
               Ratings for
             </p>
@@ -739,9 +713,9 @@ export default function Dashboard(props) {
                 ))}
               </Form.Control>
             </Form.Group>
-          </h5>
+          </h5> */}
         </div>
-        <table className="table fixed_header">
+        {/* <table className="table fixed_header">
           <thead>
             <tr>
               <th>Name</th>
@@ -835,8 +809,8 @@ export default function Dashboard(props) {
               );
             })}
           </tbody>
-        </table>
-       
+        </table> */}
+        {<MyCalendar />}
       </div>
       {loading ? <Loader /> : null}
       {toaster && (

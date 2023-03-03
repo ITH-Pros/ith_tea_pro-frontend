@@ -495,3 +495,7 @@ th {
   height: 16px;
   fill: #f1c40f;
 }
+.calendars {
+	display: grid;
+	row-gap: 10rem;
+}
