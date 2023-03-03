@@ -272,87 +272,89 @@ export default function Teams(props) {
 
   return (
     <>
-      <h1 className="h1-text">
-        <i className="fa fa-users" aria-hidden="true"></i>Team Members
-      </h1>
-      <div className="container-team">
-        {userDetails.role === "SUPER_ADMIN" && (
-          <div
-            key="AddNewUser"
-            className="box "
-            style={{ height: 283, width: 274 }}
-          >
-            <div className="content">
-              <Link
-                to={{
-                  pathname: "/user/add",
-                }}
-              >
-                <i
-                  className="fa fa-user-plus fa-3x addBtn "
-                  title="Add User"
-                  aria-hidden="true"
-                ></i>
-              </Link>
+     <div className="w-100">
+        <h1 className="h1-text">
+          <i className="fa fa-users" aria-hidden="true"></i>Team Members
+        </h1>
+        <div className="container-team">
+          {userDetails.role === "SUPER_ADMIN" && (
+            <div
+              key="AddNewUser"
+              className="box "
+              style={{ height: 283, width: 274 }}
+            >
+              <div className="content">
+                <Link
+                  to={{
+                    pathname: "/user/add",
+                  }}
+                >
+                  <i
+                    className="fa fa-user-plus fa-3x addBtn "
+                    title="Add User"
+                    aria-hidden="true"
+                  ></i>
+                </Link>
+              </div>
             </div>
-          </div>
-        )}
-        {usersList &&
-          usersList.map((user) => {
-            return (
-              <div key={user._id} className="box">
-                <div className="top-bar"></div>
-                <div className="top">
-                  <Link
-                    to={{
-                      pathname: "/user/view/" + user._id,
-                    }}
-                  >
-                    <i
-                      className="fa fa-check-circle"
-                      id="heart-btn-1"
-                      style={{ cursor: "grab" }}
-                      aria-hidden="true"
-                    ></i>
-                    {/* <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i> */}
-                  </Link>
-                  <label className="heart"></label>
-                </div>
-                <div className="content">
-                  <img
-                    src="https://images.pexels.com/photos/2570145/pexels-photo-2570145.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                    alt=""
-                  />
-                  <strong>{user.name}</strong>
-                  <p>{user.email}</p>
-                </div>
-
-                {userDetails.role !== "USER" && (
-                  <div className="btn">
-                    <button
-                      className="btn-glow margin-right btn-color"
-                      onClick={() => {
-                        handleAddUserToProject(user._id);
-                      }}
-                    >
-                      {" "}
-                      <i className="fa fa-check " aria-hidden="true"></i>Assign
-                    </button>
-
+          )}
+          {usersList &&
+            usersList.map((user) => {
+              return (
+                <div key={user._id} className="box">
+                  <div className="top-bar"></div>
+                  <div className="top">
                     <Link
                       to={{
-                        pathname: "/rating",
+                        pathname: "/user/view/" + user._id,
                       }}
-                      state={{ userId: user._id }}
                     >
-                      Add Rating
+                      <i
+                        className="fa fa-check-circle"
+                        id="heart-btn-1"
+                        style={{ cursor: "grab" }}
+                        aria-hidden="true"
+                      ></i>
+                      {/* <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i> */}
                     </Link>
+                    <label className="heart"></label>
                   </div>
-                )}
-              </div>
-            );
-          })}
-      </div>
+                  <div className="content">
+                    <img
+                      src="https://images.pexels.com/photos/2570145/pexels-photo-2570145.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
+                      alt=""
+                    />
+                    <strong>{user.name}</strong>
+                    <p>{user.email}</p>
+                  </div>
+
+                  {userDetails.role !== "USER" && (
+                    <div className="btn">
+                      <button
+                        className="btn-glow margin-right btn-color"
+                        onClick={() => {
+                          handleAddUserToProject(user._id);
+                        }}
+                      >
+                        {" "}
+                        <i className="fa fa-check " aria-hidden="true"></i>Assign
+                      </button>
+
+                      <Link
+                        to={{
+                          pathname: "/rating",
+                        }}
+                        state={{ userId: user._id }}
+                      >
+                        Add Rating
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      
 
       <CustomPagination
         getAndSetAllUsers={getAndSetAllUsers}
@@ -377,6 +379,7 @@ export default function Teams(props) {
         submitBtnDisabled={!selectedProjectId}
         onClick={handleAssignUserProjectSubmit}
       />
+      </div>
     </>
   );
 }

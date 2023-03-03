@@ -235,6 +235,7 @@ export default function Rating(props) {
 
     return (
         <>
+          <div className="w-100">
             {
                 userDetails?.role !== "USER" &&
                 <>
@@ -267,6 +268,7 @@ export default function Rating(props) {
             <div className="main-rating-contianer">
 
                 {renderCurrentView()}
+            </div>
             </div>
         </>
     );

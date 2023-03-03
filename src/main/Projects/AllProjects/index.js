@@ -424,6 +424,7 @@ console.log(project,'------------------------props')
 
     return (
         <>
+           <div>
             <h1 className="h1-text">
                 <i className="fa fa-database" aria-hidden="true"></i>  Projects
             </h1>
@@ -501,6 +502,7 @@ console.log(project,'------------------------props')
                     </div>
                 }
             </div >
+            </div>
             {loading ? <Loader /> : null}
             {toaster && <Toaster
                 message={toasterMessage}
