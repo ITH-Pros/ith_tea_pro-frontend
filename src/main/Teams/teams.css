@@ -189,3 +189,56 @@ a {
 	border: 1px;
 	padding: 5px 20px;
   }
+
+  .pagiation{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+  }
+  .pagiation-arrow{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	cursor: pointer;
+  }
+
+  .pagiation-input{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	width: 30px;
+
+  }
+  
+  .left-arrow{
+	margin-right: 10px;
+  }
+
+  .right-arrow{
+	margin-left: 10px;
+  }
+
+  .page-per-view{
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+	width: 120px;
+	margin-left: 10px;
+	
+  }
+
+  .pagiation-select{
+	width: 40px;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+  }
+
+  
+
+  
+
+

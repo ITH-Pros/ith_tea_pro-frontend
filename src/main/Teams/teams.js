@@ -13,9 +13,10 @@ import Modals from "../../components/modal";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
 
+
+
 export default function Teams(props) {
   const { userDetails } = useAuth();
-
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
@@ -211,6 +212,7 @@ export default function Teams(props) {
       let dataToSave = {
         ...pageDetails,
         [e.target.name]: parseInt(e.target.value),
+		currentPage: 1
       };
 
       setPageDetails(dataToSave);
@@ -232,28 +234,28 @@ export default function Teams(props) {
     };
 
     return (
-      <div>
+      <div className="pagiation ">
         <i
-          className="fa fa-angle-left"
+          className="fa fa-angle-left pagiation-arrow left-arrow"
           aria-hidden="true"
           onClick={() => changePageNumber(-1)}
         ></i>
-        <input
+        <input className="pagiation-input"
           type="number"
           value={pageDetails.currentPage}
           name="currentPage"
           //   onKeyDown={checkEnterKey}
           onChange={handleOnChange}
           autoFocus
-        />
-        /<span> {pageDetails.totalPages}</span>
+        /> 
+       <span className="pagiation-input" >/</span><span className="pagiation-input"> {pageDetails.totalPages}</span>
         <i
-          className="fa fa-angle-right"
+          className="fa fa-angle-right pagiation-arrow right-arrow"
           aria-hidden="true"
           onClick={() => changePageNumber(1)}
         ></i>
-        <span> Per Page View : </span>
-        <select
+        <span className="page-per-view"> Per Page View : </span>
+        <select className="pagiation-select"
           onChange={onChangeRowsPerPage}
           name="rowsPerPage"
           value={pageDetails.rowsPerPage}
