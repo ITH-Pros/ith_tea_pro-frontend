@@ -190,13 +190,13 @@ a {
 	padding: 5px 20px;
   }
 
-  .pagiation{
+  .pagination{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin-top: 20px;
   }
-  .pagiation-arrow{
+  .pagination-arrow{
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -204,7 +204,7 @@ a {
 	cursor: pointer;
   }
 
-  .pagiation-input{
+  .pagination-input{
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -230,7 +230,7 @@ a {
 	
   }
 
-  .pagiation-select{
+  .pagination-select{
 	width: 40px;
 	justify-content: center;
 	align-items: center;

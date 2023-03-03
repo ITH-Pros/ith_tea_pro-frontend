@@ -199,7 +199,7 @@ export default function AddTaskModal(props) {
                         Add Task
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='addTask-modal'>
                     <div className="dv-50">
                         <Form noValidate validated={validated}>
                             <Row className="mb-3">
