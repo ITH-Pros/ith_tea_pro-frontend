@@ -16,7 +16,9 @@
     border: 1px solid transparent;
     cursor: pointer;
 }
-
+.text-right{
+    text-align: right;
+}
 .addTaskBtn{
         background-color: #27ae60!important;
     line-height: 16px;
@@ -35,13 +37,17 @@
     max-width: 100px;
 
 }
-
+#dialog-window .accordion-item{
+    background: transparent;
+}
 .filter-main-tag{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-
+.filterWth{ 
+    width: 100%;
+}
 .form-control{
     margin-bottom: 5px;
 }

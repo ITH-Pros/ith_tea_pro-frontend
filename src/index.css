@@ -14,7 +14,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color:#edf3fe !important
+  background-color:#edf3fe !important;
+  overflow-x: hidden;
 }
 
 code {
@@ -42,4 +43,12 @@ code {
   background-color: blue;
   border-radius: 20px;
   border: 3px solid orange;
+}
+.dashboard_camp {
+  width: 95%; 
+  margin-right: 10px;
+  margin-left: auto;
+}
+div#root{
+  display: flex;
 }

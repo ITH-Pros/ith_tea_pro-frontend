@@ -14,7 +14,6 @@ import { getAllUsers } from "../../services/user/api";
 import RatingBox from "../../components/ratingBox";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
-import { today } from "@internationalized/date";
 import {
   Row,
   Container,
@@ -34,6 +33,33 @@ export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const [tasks, setTasks] = useState([
+  //   {
+  //     title: "Task 1",
+  //     date: "2023-03-01T10:00:00.000Z",
+  //     rating: 3,
+  //   },
+  //   {
+  //     title: "Task 2",
+  //     date: "2023-03-02T14:00:00.000Z",
+  //     rating: 4,
+  //   },
+  //   {
+  //     title: "Task 3",
+  //     date: "2023-03-03T09:00:00.000Z",
+  //     rating: 2,
+  //   },
+  //   {
+  //     title: "Task 4",
+  //     date: "2023-03-05T11:00:00.000Z",
+  //     rating: 5,
+  //   },
+  //   {
+  //     title: "Task 5",
+  //     date: "2023-03-06T13:00:00.000Z",
+  //     rating: 1,
+  //   },
+  // ]);
   const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
 
@@ -275,7 +301,7 @@ export default function Dashboard(props) {
         </Row>
 
         <Row className="mt-3">
-          <Col lg={6} style={{paddingLeft:'0px'}}>
+          <Col lg={6} style={{ paddingLeft: "0px" }}>
             <Row>
               <Col lg={6} className="left-add">
                 <span>Work</span>
@@ -321,9 +347,6 @@ export default function Dashboard(props) {
             <Row>
               <Col lg={12} className="mt-3">
                 <Card id="card-task">
-                
-                  
-                  
                   <Row className="d-flex justify-content-start list_task">
                     <Col lg={6} className="middle">
                       <span
@@ -358,7 +381,7 @@ export default function Dashboard(props) {
                       </Button>
                     </Col>
                   </Row>
-                    
+
                   <Row className="d-flex justify-content-start list_task">
                     <Col lg={6} className="middle">
                       <span
@@ -465,7 +488,7 @@ export default function Dashboard(props) {
               </Col>
             </Row>
           </Col>
-          <Col lg={6} style={{paddingRight:'0px'}}>
+          <Col lg={6} style={{ paddingRight: "0px" }}>
             <Row>
               <Col lg={6} className="left-add">
                 <span>Agenda</span>
@@ -511,9 +534,6 @@ export default function Dashboard(props) {
             <Row>
               <Col lg={12} className="mt-3">
                 <Card id="card-task">
-                
-                  
-                  
                   <Row className="d-flex justify-content-start list_task">
                     <Col lg={6} className="middle">
                       <span
@@ -548,7 +568,7 @@ export default function Dashboard(props) {
                       </Button>
                     </Col>
                   </Row>
-                    
+
                   <Row className="d-flex justify-content-start list_task">
                     <Col lg={6} className="middle">
                       <span
@@ -673,7 +693,7 @@ export default function Dashboard(props) {
           )}
           <h5 className="text-center h5cls">
             <p style={{ marginRight: "10px", marginTop: "6px" }}>
-              Ratings for{" "}
+              Ratings for
             </p>
             <Form.Group as={Col} md="1" controlId="select_month">
               <Form.Control
@@ -816,6 +836,7 @@ export default function Dashboard(props) {
             })}
           </tbody>
         </table>
+       
       </div>
       {loading ? <Loader /> : null}
       {toaster && (

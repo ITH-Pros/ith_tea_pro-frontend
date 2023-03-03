@@ -358,3 +358,140 @@ th {
 .right-filter button { padding: 5px; font-size: 13px; margin-left: 20px;}
 .right-filter .dropdown-toggle::after{ display: none;}
 .list_task{ border-bottom: 1px #ccc dashed; padding: 5px 10px;}
+.task-calendar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.task-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.task-calendar-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: #202124;
+}
+
+.task-calendar-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.task-calendar-header button svg {
+  width: 20px;
+  height: 20px;
+  fill: #5f6368;
+}
+
+.task-calendar-header button:hover {
+  background-color: #f1f3f4;
+}
+
+.task-calendar-body {
+  display: flex;
+  flex-direction: row;
+  height: calc(100% - 68px);
+}
+
+.task-calendar-day {
+  flex-grow: 1;
+  border-right: 1px solid #dee2e6;
+  overflow-y: scroll;
+}
+
+.task-calendar-day:last-child {
+  border-right: none;
+}
+
+.task-calendar-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.task-calendar-day-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #202124;
+}
+
+.task-calendar-day-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.task-calendar-day-header button svg {
+  width: 16px;
+  height: 16px;
+  fill: #5f6368;
+}
+
+.task-calendar-day-header button:hover {
+  background-color: #f1f3f4;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: #fff;
+  border: 1px solid #dfe1e5;
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.task .task-info {
+  margin-left: 8px;
+}
+
+.task .task-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #202124;
+}
+
+.task .task-rating {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.task .task-rating span {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.task .task-rating svg {
+  width: 16px;
+  height: 16px;
+  fill: #f1c40f;
+}
