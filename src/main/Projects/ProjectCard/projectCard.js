@@ -64,7 +64,7 @@ const ProjectCard = ({
   description,
   handleEdit,
   handleDelete,
-  backgroundColor,
+  borderColor,
 }) => {
   const generateRandomColor = () => {
     const colors = [
@@ -91,7 +91,7 @@ const ProjectCard = ({
   return (
     <div
       className="project-card"
-      style={{ backgroundColor: backgroundColor || generateRandomColor() }}
+      style={{ borderColor: borderColor || generateRandomColor() }}
     >
       {/* <div className="menu-icon">
         <FontAwesomeIcon icon={faEllipsisH} />
