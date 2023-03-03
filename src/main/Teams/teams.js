@@ -49,7 +49,11 @@ export default function Teams(props) {
   const getAndSetAllUsers = async function (options) {
     setLoading(true);
     try {
-      const projects = await getAllUsers({ params: options });
+		let params = {
+			limit: options?.rowsPerPage,
+			currentPage: options?.currentPage
+		}
+      const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
