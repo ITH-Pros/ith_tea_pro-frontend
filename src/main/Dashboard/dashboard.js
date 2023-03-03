@@ -125,6 +125,166 @@ export default function Dashboard(props) {
 
   return (
     <div className="dashboard_camp">
+      <div className="m-3 d-flex justify-content-center flex-column">
+        <div>
+          {userDetails?.role !== "USER" && (
+            <Link to="/rating" params={{ params: true }}>
+              {props.showBtn && (
+                <div className="wrap">
+                  <button className="add-rating-button">
+                    <span>Add Rating</span>
+                  </button>
+                </div>
+              )}
+            </Link>
+          )}
+          {/* <h5 className="text-center h5cls">
+            <p style={{ marginRight: "10px", marginTop: "6px" }}>
+              Ratings for
+            </p>
+            <Form.Group as={Col} md="1" controlId="select_month">
+              <Form.Control
+                className="month-drop-select"
+                required
+                as="select"
+                type="select"
+                name="select_team"
+                onChange={onchangeMonth}
+                value={monthUse}
+              >
+                <option value="" disabled>
+                  Select Month
+                </option>
+                {months.map((monthh, index) => (
+                  <option
+                    value={monthh}
+                    key={monthh}
+                    disabled={index > month && yearUse >= currentYear}
+                  >
+                    {monthh}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col} md="1" controlId="select_year">
+              <Form.Control
+                className="year-drop-select"
+                required
+                as="select"
+                type="select"
+                name="select_team"
+                onChange={onChangeYear}
+                value={yearUse}
+              >
+                <option value="" disabled>
+                  Select Year
+                </option>
+                {years.map((year) => (
+                  <option value={year} key={year} disabled={year > currentYear}>
+                    {year}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+          </h5> */}
+        </div>
+        {/* <table className="table fixed_header">
+          <thead>
+            <tr>
+              <th>Name</th>
+              {Array(days)
+                .fill(0)
+                .map((rating, index) => {
+                  return (
+                    <th className="dates text-center" key={`${index}_${index}`}>
+                      {index + 1 < 10 ? "0" + (index + 1) : index + 1}
+                    </th>
+                  );
+                })}
+              <th style={{ color: "green" }}>Average</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usersArray.map((user, index) => {
+              let userRatingSum = 0;
+              let userRatingCount = 0;
+
+              return (
+                <tr key={index}>
+                  <td className="user_names"> {user.name}</td>
+                  {Array(days)
+                    ?.fill(0)
+                    ?.map((day, index) => {
+                      let ratingUserObj = ratingsArray.find((el) => {
+                        return el._id === user._id;
+                      });
+                      let ratingCommentObj =
+                        ratingUserObj?.ratingsAndComment.find(
+                          (el) => el.date - 1 === index
+                        );
+                      if (ratingCommentObj) {
+                        userRatingSum += ratingCommentObj?.rating;
+                        userRatingCount += 1;
+                        return (
+                          <RatingBox
+                            key={index}
+                            index={index}
+                            getAllRatings={getAllRatings}
+                            ratingCommentObj={ratingCommentObj}
+                          />
+                        );
+                      } else {
+                        let dateToSend = `${yearUse}-${
+                          months.indexOf(monthUse) + 1 <= 9
+                            ? "0" + (months.indexOf(monthUse) + 1)
+                            : months.indexOf(monthUse) + 1
+                        }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
+                        return (
+                          <td key={index}>
+                            {userDetails?.role === "USER" ||
+                            new Date(dateToSend) > new Date() ? (
+                              <span
+                                style={{ padding: "3px", paddingLeft: "18px" }}
+                                className="input_dashboard"
+                              ></span>
+                            ) : (
+                              <MDBTooltip
+                                tag="div"
+                                wrapperProps={{ href: "#" }}
+                                title={"click to Add Rating"}
+                              >
+                                <Link
+                                  to={{ pathname: "/rating" }}
+                                  state={{ userId: user._id, date: dateToSend }}
+                                >
+                                  <span
+                                    style={{
+                                      cursor: "cell",
+                                      padding: "3px",
+                                      paddingLeft: "18px",
+                                    }}
+                                    className="input_dashboard"
+                                  ></span>
+                                </Link>
+                              </MDBTooltip>
+                            )}
+                          </td>
+                        );
+                      }
+                    })}
+                  <td className="userAverage">
+                    {userRatingCount
+                      ? Math.round((userRatingSum / userRatingCount) * 100) /
+                        100
+                      : "NA"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table> */}
+        {<MyCalendar />}
+        </div>
       <Container>
         <Row>
           <Col lg={6} className="px-0">
@@ -652,7 +812,7 @@ export default function Dashboard(props) {
         </Row>
       </Container>
 
-      <div className="m-3 d-flex justify-content-center flex-column">
+      {/* <div className="m-3 d-flex justify-content-center flex-column">
         <div>
           {userDetails?.role !== "USER" && (
             <Link to="/rating" params={{ params: true }}>
@@ -664,7 +824,7 @@ export default function Dashboard(props) {
                 </div>
               )}
             </Link>
-          )}
+          )} */}
           {/* <h5 className="text-center h5cls">
             <p style={{ marginRight: "10px", marginTop: "6px" }}>
               Ratings for
@@ -714,7 +874,7 @@ export default function Dashboard(props) {
               </Form.Control>
             </Form.Group>
           </h5> */}
-        </div>
+        {/* </div> */}
         {/* <table className="table fixed_header">
           <thead>
             <tr>
@@ -810,8 +970,8 @@ export default function Dashboard(props) {
             })}
           </tbody>
         </table> */}
-        {<MyCalendar />}
-      </div>
+        {/* {<MyCalendar />}
+      </div> */}
       {loading ? <Loader /> : null}
       {toaster && (
         <Toaster

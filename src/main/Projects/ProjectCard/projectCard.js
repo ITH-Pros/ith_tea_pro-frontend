@@ -67,7 +67,7 @@ const ProjectCard = ({
   element,
   accessibleBy,
   handleDelete,
-  backgroundColor,
+  borderColor,
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy)
@@ -96,7 +96,7 @@ const ProjectCard = ({
   return (
     <div
       className="project-card"
-      style={{ backgroundColor: backgroundColor || generateRandomColor() }}
+      style={{ borderColor: borderColor || generateRandomColor() }}
     >
       {/* <div className="menu-icon">
         <FontAwesomeIcon icon={faEllipsisH} />
