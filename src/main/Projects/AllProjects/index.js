@@ -481,6 +481,8 @@ console.log(project,'------------------------props')
                               description={
                                 element.description?.slice(0, 20) + "..."
                               }
+                              accessibleBy={element.accessibleBy}
+                              element={element}
                               handleEdit={() => console.log("Edit clicked")}
                               handleDelete={() => deleteProject(element)}
                               //   backgroundColor="#00ADEF"

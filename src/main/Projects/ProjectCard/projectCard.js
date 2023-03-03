@@ -8,6 +8,7 @@ import { useState } from "react";
 //   faClock,
 // } from "@fortawesome/free-solid-svg-icons";
 import "./projectCard.css";
+import UserIcon from "./profileImage";
 
 // const ProjectCard = (props) => {
 //   return (
@@ -63,10 +64,14 @@ const ProjectCard = ({
   name,
   description,
   handleEdit,
+  element,
+  accessibleBy,
   handleDelete,
   backgroundColor,
 }) => {
   const generateRandomColor = () => {
+    console.log(accessibleBy)
+    console.log(element)
     const colors = [
       "#F94144",
       "#F3722C",
@@ -104,7 +109,7 @@ const ProjectCard = ({
         className="menu-icon"
         onClick={handleMenuIconClick}
         onBlur={handleMenuIconClick}
-      > 
+      >
         {userDetails.role === "SUPER_ADMIN" && (
           <button className="project-btn-more dropdown ">
             <svg
@@ -146,32 +151,25 @@ const ProjectCard = ({
       <div className="project-stats">
         <div className="stat">
           <FontAwesomeIcon icon={faTasks} />
-          <span>3</span>
+          <span>0</span>
         </div>
         <div className="stat">
           <FontAwesomeIcon icon={faCommentDots} />
-          <span>5</span>
+          <span>{element?.tasks?.length}</span>
         </div>
         <div className="stat">
           <FontAwesomeIcon icon={faFlag} />
-          <span>2</span>
+          <span>0</span>
         </div>
         <div className="stat">
           <FontAwesomeIcon icon={faClock} />
-          <span>10</span>
+          <span>0</span>
         </div>
       </div>
       <div className="user-profile-pics">
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
-        <div className="user-pic"></div>
+        {accessibleBy?.map((profile, index) => (
+          <UserIcon firstName={profile?.name} />
+        ))}
       </div>
     </div>
   );

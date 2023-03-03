@@ -23,7 +23,7 @@ export const MyCalendar = () => (
         <Calendar
           events={myevents}
           localizer={localizer}
-          defaultDate={new Date(2021, 5, 8)}
+          defaultDate={new Date(2023, 5, 8)}
           style={{ height: 700 }}
         />
       </div>
