@@ -201,8 +201,8 @@ export default function AddUser(props) {
 
                 </Row>
 
-                <div style={{ margin: '10px 500px' }}>
-                    <Button className="btn-gradient-border btnDanger"
+                <div style={{ marginRight: '10px' }} className="text-right">
+                    <Button className="btn-gradient-border btnDanger "
                         type="button"
                         onClick={submitRegisterFrom}
                     >Submit</Button>

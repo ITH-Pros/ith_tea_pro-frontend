@@ -80,6 +80,7 @@ const Tasks=()=> {
     getTasksDataUsingProjectId(projectId);
   };
   return (
+    <div className="w-100 mr-3">
     <div className="accordion">
       {projects.map((project) => (
         <div className="accordion-item" key={project._id}>
@@ -108,6 +109,7 @@ const Tasks=()=> {
           close={() => showToaster(false)}
         />
       )}
+    </div>
     </div>
   );
 }

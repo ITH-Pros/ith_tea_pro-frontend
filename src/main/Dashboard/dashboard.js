@@ -625,7 +625,7 @@
 			<Col lg={6} style={{ paddingRight: "0px" }}>
 				<Row>
 				<Col lg={6} className="left-add">
-					<span>Agenda</span>
+					<span>Pending Ratings</span>
 
 					<MDBTooltip title={"Start New Item"} variant="light" size="sm">
 					<i className="fa fa-plus-circle"></i>

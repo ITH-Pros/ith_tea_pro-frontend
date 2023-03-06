@@ -4,7 +4,9 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-
+.login-screen{
+  width: 100%;
+}
 .man-login {
 
   min-height: 100vh;
@@ -231,7 +233,7 @@ box-shadow:  33px 33px 78px #545652,
   background: #dde1e7;
   border-radius: 25px;
   width: 100% !important;
-height: 50px !important;
+height: 38px !important;
 margin: 10px 0px 0px 0px;
 border: none !important;
 border-radius: 0.3rem !important;
