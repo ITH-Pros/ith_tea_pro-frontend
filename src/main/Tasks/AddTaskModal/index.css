@@ -5,15 +5,15 @@
   
   .btn {
     font-family: "DM Sans", sans-serif;
-    font-size: 18px;
+ 
     color: white;
   
-    padding: 12px 32px;
-    margin: 1rem;
+ 
+ 
     cursor: pointer;
     border-radius: 4px;
     transition: all 0.3s ease;
-    border-radius: 50px;
+ 
   }
   
   .btn:hover {
@@ -32,6 +32,9 @@
   
   .tasks {
     margin-top: 20px;
+    width: 95%;
+    margin-right: 10px;
+    margin-left: auto;
   }
   
   .project-filter {
@@ -40,12 +43,6 @@
     width: 249px !important;
   }
   .taskCard {
-    cursor: pointer;
-    border: 1px solid rgb(80, 78, 78);
-    padding: 14px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    box-shadow: -3px -3px 7px #ffffffb2, 3px 3px 5px rgb(94 104 121 / 95%);
   }
   
   .descriptionBox {
@@ -88,7 +85,7 @@
       background-color: #e6b41d;
   }
   .assigned_tag{
-    margin-left: 20px !important;
+    margin-left: 5px !important;
     font-weight: bolder;
     font-size: small;
     color: brown;
@@ -119,3 +116,36 @@
       border-radius: 7px;
       background-color: #eaecf1;
   }
+
+
+  .btn-press {
+    color:inherit;
+      font-family:inherit;
+    font-size: inherit;
+    background: white;
+    padding: 0.3rem 3.4rem;
+    border: 3px solid black;
+    margin-right: 2.6rem;
+    box-shadow: 0 0 0 black;
+    transition: all 0.2s;
+  }
+  
+  .btn-press:last-child {
+    margin: 0;
+  }
+  
+  .btn-press:hover {
+    box-shadow: 0.4rem 0.4rem 0 black;
+    transform: translate(-0.4rem, -0.4rem);
+  }
+  
+  .btn-press:active {
+    box-shadow: 0 0 0 black;
+    transform: translate(0, 0);
+  }
+
+  .addTask-modal{
+	height: 700px;
+    overflow: scroll;
+  }
+  

@@ -8,23 +8,23 @@ import './Toaster.css';
 
 function Toaster(props) {
     const { close, show, message } = props;
-  return (
-    <Row>
-      <Col xs={6}>
-        <ToastContainer className="p-3" position={`bottom-end`}>
-          <Toast
-            onClose={close}
-            show={show}
-            delay={4000}
-            autohide >
-                      <Toast.Body >
+    return (
+        <Row>
+            <Col xs={6}>
+                <ToastContainer bg='success' className="p-3" position={`bottom-end`}>
+                    <Toast
+                        onClose={close}
+                        show={show}
+                        delay={4000}
+                        autohide >
+                        <Toast.Body >
                             {message}
-                      </Toast.Body>
-          </Toast>
-        </ToastContainer>
-      </Col>
-    </Row>
-  );
+                        </Toast.Body>
+                    </Toast>
+                </ToastContainer>
+            </Col>
+        </Row>
+    );
 }
 
 export default Toaster;

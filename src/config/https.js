@@ -9,10 +9,8 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     function (req) {
-        console.log("INnnnnnnnnnnnnnnnnnnnnnn req reqreq", req,)
         let accessToken = JSON.parse(localStorage.getItem('_u') || '{}')
         let accountId = JSON.parse(localStorage.getItem('user') || '{}')?.accountId
-        console.log("accessToken accountId", accountId, accessToken)
 
         req.headers = {
             'x-access-token': accessToken,
@@ -30,9 +28,7 @@ axiosInstance.interceptors.response.use(
         return res;
     },
     async function (error) {
-
         if (error.response) {
-
             if (error.response.status === 403 && error.response.data) {
                 return Promise.reject(error.response.data?.message);
             }
@@ -41,8 +37,9 @@ axiosInstance.interceptors.response.use(
                 return Promise.reject(error.response.data?.message);
             }
         }
+        return error.response
 
-        return Promise.reject(error);
+        // return Promise.reject(error);
     }
 );
 

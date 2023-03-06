@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
   const setShowToaster = (param) => showToaster(param);
   // call this function when you want to authenticate the user
   const login = async (data) => {
-    console.log('data in login-----------------------', data)
     setAccessToken(data?.token);
     setUserDetails(data?.user);
     navigate("/");
@@ -26,7 +25,6 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null);
     setUserDetails(null);
 
-    console.log('**************************logout**************************')
   };
 
 
