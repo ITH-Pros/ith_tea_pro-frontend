@@ -2,7 +2,7 @@
 	import moment from "moment";
 	import MyCalendar from "./weekCalendra";
 	import { useState, useEffect } from "react";
-	import { getRatings } from "../../services/user/api";
+	import { getAssignedProjects, getRatings } from "../../services/user/api";
 	import "./dashboard.css";
 	import { MDBTooltip } from "mdb-react-ui-kit";
 	// eslint-disable-next-line no-unused-vars
@@ -49,6 +49,7 @@
 		year: yearUse,
 		};
 		getAllRatings(dataToSend);
+		getAllAssignedProjects();
 	}
 
 	const [days, setDays] = useState(moment().daysInMonth());
@@ -122,7 +123,25 @@
 		setLoading(false);
 		}
 	}
+	const getAllAssignedProjects = async function () {
+		setLoading(true);
+		try {
+		const resp = await getAssignedProjects();
+		setLoading(false);
 
+		if (resp.error) {
+			setToasterMessage(resp?.error?.message || "Something Went Wrong");
+			setShowToaster(true);
+		} else {
+			// setTeamOptions([...user.data]);
+		}
+		} catch (error) {
+		setToasterMessage(error?.error?.message || "Something Went Wrong");
+		setShowToaster(true);
+		setLoading(false);
+		return error.message;
+		}
+	};
 	return (
 		<div className="dashboard_camp">
 		<div className="m-3 d-flex justify-content-center flex-column">
