@@ -129,7 +129,9 @@ const ProjectCard = ({
               <circle cx="12" cy="19" r="1" />
             </svg>
             <div className="dropdown-content">
-              <a href="#1"> Edit</a>
+              <a onClick={() => {
+				handleEdit();
+			  } } > Edit</a>
               <a
                 href="#1"
                 onClick={() => {
