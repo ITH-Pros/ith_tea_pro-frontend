@@ -65,7 +65,7 @@ const Tasks=()=> {
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
-             setTaskData({ [_id]: lead.data })
+             setTaskData({ [_id]: lead.data[0]?.tasks })
          }
        } catch (error) {
          setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -87,10 +87,10 @@ const Tasks=()=> {
   const setSelectedProjectFromAddTask = (project, filterFormValue) => {
 	if (project._id === selectedProject._id) {
 	  console.log("project._id === selectedProject._id", project._id === selectedProject._id)
-	//   setSelectedProject(project)
+	  setSelectedProject(project)
 	//   getAllTaskOfProject();
 	} else {
-	//   setSelectedProject(project)
+	  setSelectedProject(project)
 	}
   }
 
@@ -113,7 +113,7 @@ const Tasks=()=> {
             {taskData[project._id] && (
               <ul>
                 {taskData[project._id].map((task) => (
-                  <li key={task._id}>{task.name}</li>
+                  <li key={task._id}>{task.title}</li>
                 ))}
               </ul>
             )}
