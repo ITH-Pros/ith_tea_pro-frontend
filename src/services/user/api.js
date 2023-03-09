@@ -95,3 +95,6 @@ export async function getRatings(data) {
         }
     }).then(res => res.data))
 }
+export async function getAssignedProjects(data){
+	return (axiosInstance.get('/projects/v1/list/assigned', data).then(res => res.data));
+}

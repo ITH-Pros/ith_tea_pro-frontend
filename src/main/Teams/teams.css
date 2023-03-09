@@ -200,7 +200,7 @@ a {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top: 20px;
+	/* margin-top: 20px; */
 	cursor: pointer;
   }
 
@@ -208,8 +208,9 @@ a {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top: 20px;
+	/* margin-top: 20px; */
 	width: 30px;
+  text-align: center;
 
   }
   
@@ -224,9 +225,10 @@ a {
   .page-per-view{
 	justify-content: center;
 	align-items: center;
-	margin-top: 20px;
+	/* margin-top: 20px; */
 	width: 120px;
-	margin-left: 10px;
+  margin: 10px;
+  width: auto;
 	
   }
 
@@ -234,7 +236,7 @@ a {
 	width: 40px;
 	justify-content: center;
 	align-items: center;
-	margin-top: 20px;
+	/* margin-top: 20px; */
   }
 
   
