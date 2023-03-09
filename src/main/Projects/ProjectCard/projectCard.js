@@ -65,6 +65,7 @@ const ProjectCard = ({
   description,
   handleEdit,
   element,
+  managedBy,
   accessibleBy,
   handleDelete,
   borderColor,
@@ -168,11 +169,25 @@ const ProjectCard = ({
           <span>0</span>
         </div>
       </div>
-      <div className="user-profile-pics">
+	 
+
+	   <div>
+	   <div className="user-profile-pics pull-left">
+	  {/* <label>Accessible By</label> */}
         {accessibleBy?.map((profile, index) => (
           <UserIcon firstName={profile?.name} />
         ))}
       </div>
+
+	  <div className="user-profile-pics pull-right" > 
+	  {/* <label>Managed By</label> */}
+	  {managedBy?.map((profile, index) => (
+          <UserIcon firstName={profile} />
+        ))}
+	   </div>
+	   </div>
+
+     
     </div>
   );
 };
