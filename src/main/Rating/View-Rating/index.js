@@ -16,6 +16,7 @@ import {
   Card,
   Button,
   Badge,
+  Table
 } from "react-bootstrap";
 import Avatar from "react-avatar";
 import { getAllUsers, getRatings } from "../../../services/user/api";
@@ -187,7 +188,7 @@ var month = moment().month();
 			</Form.Group>
 		</h5>
 		</div>
-		<table className="table fixed_header">
+		<Table responsive className="ratingTable">
 		<thead>
 			<tr>
 			<th>Name</th>
@@ -243,7 +244,7 @@ var month = moment().month();
 							{userDetails?.role === "USER" ||
 							new Date(dateToSend) > new Date() ? (
 							<span
-								style={{ padding: "3px", paddingLeft: "18px" }}
+								style={{ padding: "1px", paddingLeft: "20px", paddingRight: "6px" }}
 								className="input_dashboard"
 							></span>
 							) : (
@@ -259,8 +260,9 @@ var month = moment().month();
 								<span
 									style={{
 									cursor: "cell",
-									padding: "3px",
-									paddingLeft: "18px",
+									padding: "1px",
+									paddingLeft: "20px",
+									paddingRight: "6px"
 									}}
 									className="input_dashboard"
 								></span>
@@ -281,7 +283,7 @@ var month = moment().month();
 			);
 			})}
 		</tbody>
-		</table>
+		</Table>
 		
 		</div>
 	
