@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import {AiFillProject} from "react-icons/ai";
 import MyCalendar from "./weekCalendra";
 import { useState, useEffect } from "react";
 import { getAllProjects, getRatings } from "../../services/user/api";
@@ -317,7 +318,8 @@ export default function Dashboard(props) {
             {" "}
             {props.showBtn && (
               <h1 className="h1-text">
-                <i className="fa fa-home" aria-hidden="true"></i> My Projects
+			  <AiFillProject className="project-icon" /> My Projects
+                {/* <i className="fa fa-home" aria-hidden="true"></i> My Projects */}
               </h1>
             )}
           </Col>
