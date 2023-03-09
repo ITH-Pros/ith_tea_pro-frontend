@@ -485,6 +485,7 @@ console.log(project,'------deleteProject')
                               description={
                                 element.description?.slice(0, 20) + "..."
                               }
+							  managedBy={element.managedBy}
                               accessibleBy={element.accessibleBy}
                               element={element}
                               handleEdit={() => editProject(element)}
