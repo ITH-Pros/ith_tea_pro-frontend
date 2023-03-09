@@ -175,7 +175,7 @@ export default function AddProject(props) {
 
           <Row className="mb-3">
             <Form.Group as={Col} md="6">
-              <Form.Label>Assign Managers</Form.Label>
+              <Form.Label>Assign Leads</Form.Label>
               <Select
                 isMulti
                 onChange={onAssignManagerChange}
@@ -233,7 +233,7 @@ export default function AddProject(props) {
                 <i className="fa fa-plus" aria-hidden="true"></i>{" "}
               </Button>
             </Form.Group>
-            <div>
+            <div className='mt-1'>
               Categories:
               {projectFormValue.projectCategories.length
                 ? projectFormValue.projectCategories.map((el) => (

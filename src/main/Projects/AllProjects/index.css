@@ -7,6 +7,7 @@
 .project-boxes.jsGridView {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   padding-right: 15px;
   max-height: 100vh !important;
   width: 98%;
@@ -87,17 +88,18 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    margin: 10px 15px 0 0;
-    padding: 20px 20px 20px;
+    margin: 10px;
+    padding: 20px;
     background-color: #fff;
     height: 287px;
-    width: 225px;
+    width: 380px;
     float: left;
     transition: all .3s cubic-bezier(.25, .8, .25, 1);
     border: 1px solid #ddd;
-    border-radius: 3px;
+    border-radius: 20px;
     box-shadow: 0 2px 0 rgb(0 0 1 / 5%);
     cursor: pointer;
+    justify-content: center;
 }
 .project-box-header {
   display: flex;

@@ -30,16 +30,15 @@ class UserIcon extends React.Component {
     const { backgroundColor } = this.state;
 
     const styles = {
-      width: "50px",
-      height: "50px",
+      width: "40px",
+      height: "40px",
       borderRadius: "50%",
       backgroundColor: backgroundColor,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       color: "#fff",
-      fontSize: "24px",
-      fontWeight: "bold",
+      fontSize: "20px", 
       textTransform: "uppercase",
     };
 

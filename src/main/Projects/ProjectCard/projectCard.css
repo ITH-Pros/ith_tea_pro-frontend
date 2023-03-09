@@ -79,10 +79,10 @@
   flex-direction: column;
   justify-content: space-between;
     height: 286px;
-  width: 252px;
+  width: 380px;
   margin: 10px;
   padding: 20px;
-  border-radius: 6px;
+  border-radius: 20px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   /* color: white; */
   border-top: 5px solid;
@@ -158,4 +158,11 @@
 
 .user-pic:last-child {
   margin-right: 0;
+}
+
+.lableName{
+  font-size: 13px;
+    font-weight: 600;
+    color: #727272;
+    margin-bottom: 10px;
 }
