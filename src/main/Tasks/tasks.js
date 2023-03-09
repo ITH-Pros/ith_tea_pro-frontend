@@ -96,6 +96,9 @@ const Tasks=()=> {
 
   return (
     <div className="w-100 mr-3">
+      <h1 className="h1-text">
+          <i className="fa fa-list-ul" aria-hidden="true"></i>Task
+      </h1>
 		<FilterModal  selectedProject={selectedProject} setTaskFilters={setTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject}
           setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
@@ -107,15 +110,19 @@ const Tasks=()=> {
             className="accordion-header"
             onClick={() => handleClick(project._id)}
           >
-            {project.name}
+            <i class="fa fa-angle-down" aria-hidden="true"></i> {project.name}
           </div>
           <div className="accordion-body">
             {taskData[project._id] && (
-              <ul>
-                {taskData[project._id].map((task) => (
-                  <li key={task._id}>{task.name}</li>
-                ))}
+              <ul className="mb-0">
+                <li><i class="fa fa-check-circle" aria-hidden="true"></i> hello</li>
+                <li><i class="fa fa-check-circle" aria-hidden="true"></i> hello2</li>
               </ul>
+              // <ul>
+              //   {taskData[project._id].map((task) => (
+              //     <li key={task._id}>{task.name}</li>
+              //   ))}
+              // </ul>
             )}
           </div>
         </div>
