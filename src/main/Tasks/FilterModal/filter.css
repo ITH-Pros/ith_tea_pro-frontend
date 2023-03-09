@@ -56,15 +56,41 @@
         display: flex;
     justify-content: flex-end;
     align-items: end;
-    height: 60px;
+    /* height: 60px; */
     box-shadow: 0 -3px 3px rgb(0 0 0 / 10%);
-    background: #f7f8fa;
+    background: #fff !important;
     z-index: 1;
     text-align: right;
     border-top: none;
     padding-right: 40px;
     position: fixed;
-    bottom: 36px !important;
-    right: 10px;
-    width: 580px;
+    bottom: 0 !important;
+    /* right: 10px; */
+    width: 598px;
+}
+ 
+.filterFields{
+    align-items: center;
+    flex-wrap: nowrap !important;
+}
+.filterFields .col-form-label{
+    font-size: 14px;
+    text-transform: capitalize; 
+}
+.filterFields .form-control{ 
+    font-size: 15px;
+    width: 70%;
+}
+.filterModal .modal-body{
+    height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.filterModal.modal.show .modal-dialog{
+    border-radius: 4px;
+    height: 100vh;
+    margin: 0;
+  }
+  .filterFields .react-datepicker-wrapper {
+    padding: 0;
 }
