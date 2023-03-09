@@ -1,4 +1,9 @@
-.addUserFrom {
  
-  margin: 50px 400px !important;
+.addUserFrom {  
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+}
+.text-right{
+  text-align: right;
 }

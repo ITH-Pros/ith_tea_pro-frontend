@@ -43,11 +43,12 @@ export default function App() {
           <Text b color="#8355ad" hideIn="xs">
          Tea Pro
          </Text></MenuItem>
-          <MenuItem  icon={<FaTachometerAlt />}> <NavLink to='/' style={navLinkStyles}>Dashboard </NavLink></MenuItem>
-          <MenuItem icon={<FaGem />}>  <NavLink to='/project/all' style={navLinkStyles}>Project </NavLink> </MenuItem>
-          <MenuItem icon={<FaRegLaughWink />}>   <NavLink to='/rating' style={navLinkStyles} > Rating  </NavLink></MenuItem>
-          <MenuItem icon={<FaList />}>  <NavLink to='/task' style={navLinkStyles}>Task </NavLink> </MenuItem>
-          <MenuItem icon={<FaRegLaughWink />}>   <NavLink to='/team' style={navLinkStyles}> Team </NavLink> </MenuItem>
+         <NavLink to='/' style={navLinkStyles}>
+          <MenuItem  icon={<FaTachometerAlt />}> Dashboard </MenuItem></NavLink>
+          <NavLink to='/project/all' style={navLinkStyles}>   <MenuItem icon={<FaGem />}>  Project  </MenuItem></NavLink>
+          <NavLink to='/rating' style={navLinkStyles} > <MenuItem icon={<FaRegLaughWink />}>    Rating  </MenuItem></NavLink>
+          <NavLink to='/task' style={navLinkStyles}> <MenuItem icon={<FaList />}> Task </MenuItem></NavLink> 
+          <NavLink to='/team' style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   Team  </MenuItem></NavLink>
         </Menu>
       </Sidebar>
         // <Navbar isBordered variant={'floating'}>

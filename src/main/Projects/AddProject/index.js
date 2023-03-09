@@ -156,7 +156,7 @@ export default function AddProject(props) {
         {/* <h4 className='mb-5'>Add Project</h4> */}
         <Form noValidate className="addUserFormBorder" validated={validated}>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6">
+            <Form.Group as={Col} md="12">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 required
@@ -240,7 +240,7 @@ export default function AddProject(props) {
                     <span className="ctgrybtn" key={el}>
                       {el}
                       <i
-                        className="fa fa-times-circle"
+                        className="fa fa-times"
                         style={{ color: "red" }}
                         onClick={() => removeProjectCategory(el)}
                         aria-hidden="true"
