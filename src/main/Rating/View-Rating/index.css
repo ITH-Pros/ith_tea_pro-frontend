@@ -13,7 +13,7 @@ td {
 	border-radius: 10px;
 	text-align: center;
 	width: 100%;
-	box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
+	box-shadow: -5px -5px 9px rgb(204 42 42 / 0%), 4px 3px 7px #0000005e;
 	font-size: large;
 	font-weight: 600;
   }
@@ -75,6 +75,7 @@ td {
   
   .h5cls {
 	display: flex;
+	width: 100%;
 	justify-content: center;
   }
   
@@ -224,7 +225,7 @@ td {
   
   .year-drop-select {
 	margin-left: 10px;
-	width: 75% !important;
+	width: 82% !important;
 	cursor: pointer !important;
 	/* box-shadow: inset -10px -4px 13px 4px rgb(0 0 0 / 20%) !important; */
 	box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
@@ -252,11 +253,17 @@ td {
   }
   
   .wrap {
-	height: 100%;
+	height: auto;
 	display: flex;
 	justify-content: end;
   }
-  
+  .btnWth{
+	width: 220px;
+  }
+  select#select_month {
+    width: 90%;
+    margin: auto;
+}
   .add-rating-button {
 	/* width: 140px;
 	height: 45px; */
@@ -502,33 +509,24 @@ td {
 	  row-gap: 10rem;
   }
    
-  /* .ratingTable{
-    margin-bottom: 0;
-    width: 100%;
-    
-  }
-  .ratingTable th{
-    font-size: 15px; 
-    padding: 6px; 
-    text-transform: capitalize;
-  }
-  .ratingTable td{
-    font-size: 12px;
-    padding: 6px;
-    border-bottom:0;
-  }
-  
 
 .ratingTable td, .ratingTable th {
 	border-bottom: 0;
-	min-width: 176px;
-	height: 25px; 
+	min-width: 54px;
+	/* height: 25px; */
+	/* border: dashed 1px lightblue; */
 	overflow: hidden;
 	text-overflow: ellipsis;
 	max-width: 100%;
+	text-align: center;
+  }
+ .ratingTable td:first-child, .ratingTable th:first-child {
+	text-align: left;
+    font-weight: 600;
+    min-width: 100px;
   }
    
-  .ratingTable table {
+  table.ratingTable {
 	border-collapse: collapse;
 	overflow-x: scroll;
   }
@@ -536,12 +534,11 @@ td {
 	vertical-align: bottom;
 	border-bottom: 1px solid #fff;
   }
-  .ratingTable tbody {
-    display: block;
+  .ratingTable thead, .ratingTable tbody {
+	display: block;
   }
   .ratingTable tbody {
-    overflow-y: auto;
-    overflow-x: hidden;
-	height: 530px;
-    height: 250px;
-  } */
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 422px;
+  } 
