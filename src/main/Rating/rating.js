@@ -3,24 +3,25 @@ import React from "react";
 import { useState, useEffect } from "react";
 import "react-date-picker/dist/DatePicker.css";
 import "./rating.css";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import { addRating } from "../../services/user/api";
-import Dashboard from "../Dashboard/dashboard";
-import Loader from "../../components/Loader";
+// import Button from "react-bootstrap/Button";
+// import Col from "react-bootstrap/Col";
+// import Form from "react-bootstrap/Form";
+// import Row from "react-bootstrap/Row";
+// import Dashboard from "../Dashboard/dashboard";
+// import Loader from "../../components/Loader";
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
-import { getAllUserDataForRating } from "../../services/user/api";
 import "react-toastify/dist/ReactToastify.css";
-import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import Toaster from "../../components/Toaster";
-import { useAuth } from "../../auth/AuthProvider";
 import ViewRatings from "./View-Rating";
+import { addRating, getAllUserDataForRating } from "../../services/user/api";
+import { useAuth } from "../../auth/AuthProvider";
+import Toaster from "../../components/Toaster";
+import { Form, useLocation, useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader";
+import { Col, Row } from "react-bootstrap";
 
 
 
@@ -237,7 +238,7 @@ export default function Rating(props) {
     return (
         <>
           <div className="rightDashboard">
-            {
+            {/* {
                 userDetails?.role !== "USER" &&
                 <>
                     <div className="   main-div-tab">
@@ -250,14 +251,6 @@ export default function Rating(props) {
                             Add Rating
                         </div>
                         }
-                        {/* <div
-                            onClick={() => handleViewChange("View")}
-                            className={`p-3 w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
-                                }`}
-                            style={{ cursor: "pointer" }}
-                        >
-                            Back{" "}
-                        </div> */}
                         {loading ? <Loader /> : null}
                         {toaster && <Toaster
                             message={toasterMessage}
@@ -265,7 +258,7 @@ export default function Rating(props) {
                             close={() => showToaster(false)} />}
                     </div>
                 </>
-            }
+            } */}
             <div className="main-rating-contianer">
 
                 {renderCurrentView()}

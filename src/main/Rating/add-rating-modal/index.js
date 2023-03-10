@@ -2,26 +2,29 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "react-date-picker/dist/DatePicker.css";
-import "./rating.css";
-import Button from "react-bootstrap/Button";
+import "../rating.css";
+// import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { addRating } from "../../services/user/api";
-import Dashboard from "../Dashboard/dashboard";
-import Loader from "../../components/Loader";
+// import { addRating } from "../../services/user/api";
+// import Dashboard from "../Dashboard/dashboard";
+// import Loader from "../../components/Loader";
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
-import { getAllUserDataForRating } from "../../services/user/api";
+// import { getAllUserDataForRating } from "../../services/user/api";
 import "react-toastify/dist/ReactToastify.css";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import Toaster from "../../components/Toaster";
-import { useAuth } from "../../auth/AuthProvider";
-import ViewRatings from "./View-Rating";
-import Modal from "react-modal";
+// import Toaster from "../../components/Toaster";
+// import { useAuth } from "../../auth/AuthProvider";
+// import ViewRatings from "./View-Rating";
+// import Modal from "react-modal";
+import { useAuth } from "../../../auth/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import { addRating, getAllProjects, getAllUserDataForRating } from "../../../services/user/api";
 
 
 
@@ -46,12 +49,18 @@ export default function AddRatingModal(props) {
     }, []);
 
     function onInit() {
+		getAndSetAllProjects();
         getUsersList();
     }
     let today = new Date();
     let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
     const [loading, setLoading] = useState(false);
+	
     // const [currentView, setCurrentView] = useState("View");
+	const [projectOptions, setProjectOptions] = useState([]);
+	const [project, setProject] = useState("");
+	const [taskOptions, setTaskOptions] = useState([]);
+	const [task , setTask] = useState("");
     const [teamOptions, setTeamOptions] = useState([]);
     const [team, setTeam] = useState("");
     const [date, setDate] = useState(patchDateValue);
@@ -72,6 +81,14 @@ export default function AddRatingModal(props) {
     // const handleViewChange = (view) => {
     //     setCurrentView(view);
     // };
+
+	const onChangeOfTask = (e) => {
+		setTask(e.target.value);
+	};
+
+	const onChangeOfProject = (e) => {
+		setProject(e.target.value);
+	};
 
     const onchangeTeam = (e) => {
         setTeam(e.target.value);
@@ -110,6 +127,30 @@ export default function AddRatingModal(props) {
             addRatingFunc(dataToSend);
         }
     };
+
+
+	const getAndSetAllProjects = async function () {
+		//setloading(true);
+		try {
+		  const projects = await getAllProjects();
+		  //setloading(false);
+		  if (projects.error) {
+			setToasterMessage(projects?.error?.message || "Something Went Wrong");
+			setShowToaster(true);
+		  } else {
+			setProjectOptions(projects.data);
+		  }
+		} catch (error) {
+		  setToasterMessage(error?.error?.message || "Something Went Wrong");
+		  setShowToaster(true);
+		  //setloading(false);
+		  return error.message;
+		}
+	  };
+
+
+
+
 
     const getUsersList = async function () {
 
@@ -162,6 +203,30 @@ export default function AddRatingModal(props) {
 			<div className="dv-50-rating ">
 				<Form className="margin-form" noValidate validated={validated}>
 					<Row className="mb-3">
+
+					<Form.Group as={Col} md="4" >
+							<Form.Label>Select Project</Form.Label>
+							<Form.Control
+								required
+								as="select"
+								type="select"
+								name="select_project"
+								onChange={onChangeOfProject}
+								value={project}
+							>
+								<option value="">Select Project</option>
+								{projectOptions.map((module) => (
+									<option value={module._id} key={module._id}>
+										{module.name}
+									</option>
+								))}
+							</Form.Control>
+							<Form.Control.Feedback type="invalid">
+								User name is required !!
+							</Form.Control.Feedback>
+							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+						</Form.Group>
+
 						<Form.Group as={Col} md="4" >
 							<Form.Label>Select User</Form.Label>
 							<Form.Control
@@ -200,6 +265,35 @@ export default function AddRatingModal(props) {
 							</Form.Control.Feedback>
 							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 						</Form.Group>
+
+
+						<Form.Group as={Col} md="4" >
+							<Form.Label>Select Task</Form.Label>
+							<Form.Control
+								required
+								as="select"
+								type="select"
+								name="select_task"
+								onChange={onChangeOfTask}
+								value={task}
+							>
+								<option value="">Select Task</option>
+								{taskOptions.map((module) => (
+									<option value={module._id} key={module._id}>
+										{module.name}
+									</option>
+								))}
+							</Form.Control>
+							<Form.Control.Feedback type="invalid">
+								User name is required !!
+							</Form.Control.Feedback>
+							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+						</Form.Group>
+
+
+
+
+
 						<Form.Group as={Col} md="4" controlId="validationCustom01">
 							<Form.Label>Rating</Form.Label>
 							<Form.Control

@@ -110,7 +110,11 @@ export default function AddProject(props) {
                 setLoading(false);
                 return
             }
-            const userRes = await updateProjectForm(projectFormValue);
+			const updatedProjectFormValue = {
+				...projectFormValue,
+				projectId: params.projectId,
+			};
+            const userRes = await updateProjectForm(updatedProjectFormValue);
             setLoading(false);
             if (userRes.error) {
                 setToasterMessage(userRes?.message || 'Something Went Wrong');
