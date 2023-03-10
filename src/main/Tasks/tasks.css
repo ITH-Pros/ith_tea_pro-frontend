@@ -295,7 +295,7 @@ button.accordion-button{
   height: 20px;
   border-radius: 50%;
 }
-.accordion-header .dropdown-toggle::after{
+.accordion-item .dropdown-toggle::after{
   display: none;
 }
 .dropdown .dropdown-toggle, .dropdown  .dropdown-toggle.btn:hover {

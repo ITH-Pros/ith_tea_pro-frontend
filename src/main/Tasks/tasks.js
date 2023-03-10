@@ -24,11 +24,15 @@ const Tasks=()=> {
       getAllProjectsData();
   }, []);
     
-    const getAllProjectsData =async (data) => {
+    const getAllProjectsData =async () => {
         
            setLoading(true);
 		   
            try {
+			let data = {}
+			if(localStorage.getItem('taskFilters')){
+				data = JSON.parse(localStorage.getItem('taskFilters'))
+			}
              const lead = await getAllProjects(data);
              setLoading(false);
 
@@ -69,7 +73,7 @@ console.log(data)
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
-             setTaskData({ [_id]: lead.data[0]?.tasks })
+             setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
          setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -82,12 +86,10 @@ console.log(data)
 
   const handleClick = (project) => {
     // If we already have task data for this project, don't fetch it again
+	console.log(taskData)
     if (taskData[project?._id]) {
-      return;
+	  return;
     }
-	// if(selectedProject?._id == project?._id){
-
-	// }
 	console.log(selectedProject)
 	setSelectedProject(project)
     getTasksDataUsingProjectId(project?._id);
@@ -96,8 +98,8 @@ console.log(data)
 const getNewTasks = (id)=>{
 	getTasksDataUsingProjectId(id);
 }
-const getTaskFilters = (data)=>{
-	getAllProjectsData( data)
+const getTaskFilters = ()=>{
+	getAllProjectsData();
 }
   return (
     <div className="w-100 mr-3">
@@ -106,9 +108,9 @@ const getTaskFilters = (data)=>{
       </h1>
 		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} />
-        <Accordion>
+        <Accordion  >
         {projects.map((project) => (
-      <Accordion.Item key={project._id}>
+      <Accordion.Item key={project._id} eventKey={project._id}>
       <Accordion.Header onClick={() => handleClick(project)}>  
        {project.name} 
       </Accordion.Header>
@@ -133,11 +135,11 @@ const getTaskFilters = (data)=>{
       
         </div>
         </div>
-     {taskData[project._id] && <Accordion.Body>
+     { taskData[project._id] && <Accordion.Body  >
       
             <ul className="mb-0">
-             {taskData[project._id].map((task)=>
-       <li><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
+             {taskData[project._id]?.map((task)=>
+       <li key={task?._id}><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
        <span className="completeTag">completed Dec 22,2022</span>
        <span className="priorityTag">High</span>
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> chandan s</span>
