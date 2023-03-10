@@ -1,8 +1,7 @@
-.addUserFrom {
-    margin: 50px 400px !important;
-    margin: 50px 25px 50px 18px !important;
-    
-    width: 100%;
+.addUserFrom { 
+    margin: 50px 0; 
+    margin-right: 1rem;
+    margin-left: auto;
   }
 
 .emp-profile{

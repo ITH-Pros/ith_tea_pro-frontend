@@ -274,7 +274,7 @@ export default function Teams(props) {
 
   return (
     <>
-     <div className="w-100">
+     <div className="rightDashboard">
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
         </h1>

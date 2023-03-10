@@ -236,8 +236,7 @@ export default function AddTaskModal(props) {
         <button
           className="addTaskBtn"
           style={{
-            float: "right",
-            position: "relative",
+            float: "right", 
             bottom: "40px",
             right: "40px",
           }}
@@ -459,7 +458,7 @@ export default function AddTaskModal(props) {
                     {" "}
                     Create And Add Another
                   </Button>
-                </div>
+                </div> 
               </Form>
               {toaster && (
                 <Toaster

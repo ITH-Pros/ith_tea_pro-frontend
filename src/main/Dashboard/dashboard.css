@@ -512,6 +512,10 @@ th {
 .rbc-label {
 	display: none;
 	} 
+
+  .rbc-time-view{
+    background: #fff;
+  }
 .rbc-time-view	.rbc-allday-cell {
 		height: 134px;
 		max-height: unset;

@@ -102,7 +102,7 @@ const getTaskFilters = ()=>{
 	getAllProjectsData();
 }
   return (
-    <div className="w-100 mr-3">
+    <div className="rightDashboard">
       <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
       </h1>

@@ -504,7 +504,7 @@ export default function AllProject() {
 
   return (
     <>
-      <div>
+      <div className="rightDashboard">
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
         </h1>

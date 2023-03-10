@@ -154,8 +154,8 @@ const getNewTasks = (data)=>{
 	getAndSetAllProjects();
 }
   return (
-    <div className="dashboard_camp">
-      <div className="m-3 d-flex justify-content-center flex-column">
+    <div className="dashboard_camp rightDashboard">
+      <div className="my-3 d-flex justify-content-center flex-column">
         <div>
           {userDetails?.role !== "USER" && (
             <Link to="/rating" params={{ params: true }}>
