@@ -9,7 +9,7 @@
   flex-wrap: wrap;
   justify-content: center;
   padding-right: 15px;
-  max-height: 100vh !important;
+  /* max-height: 100vh !important; */
   width: 98%;
   /* margin-left: 5%; */
   margin-top: 2%;
