@@ -305,30 +305,31 @@ th {
   padding: 10px 0px;
   border-radius: 10px;
 }
-#card-task {
+#card-task, #card-undefined {
   padding: 10px;
   background: #fff;
     box-shadow: 0 2px 13px 0 rgb(0 0 0 / 6%);
     border-radius: 4px;
+    margin: .25rem 0;
 }
-#card-task h5 {
+#card-task h5, #card-undefined h5 {
   margin: 0;
   font-size: 16px;
   color: #6590ad;
 }
-#card-task p {
+#card-task p, #card-undefined p {
   margin: 0;
   font-size: 14px;
 }
-#card-task .sb-avatar {
+#card-task .sb-avatar, #card-undefined .sb-avatar {
   float: left;
   margin-right: 10px;
 }
-#card-task .middle {
+#card-task .middle, #card-undefined .middle {
   display: flex;
   align-items: center;
 }
-#card-task:hover {
+#card-task:hover, #card-undefined:hover {
   border: 1px #0dcaf0 solid;
   cursor: pointer;
 }
@@ -499,4 +500,12 @@ th {
 .calendars {
 	display: grid;
 	row-gap: 10rem;
+}
+
+.project-icon{
+  /* increase icon size */
+  font-size: 2rem;
+}
+.add-task{
+	bottom: 0 !important;
 }

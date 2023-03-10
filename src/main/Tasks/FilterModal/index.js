@@ -7,7 +7,7 @@ import "./filter.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 const FilterModal = (props) => {
-  const { selectedProject, setTaskFilters } = props;
+  const { selectedProject, getTaskFilters } = props;
 
   const statusList = CONSTENTS.statusList;
   const priorityList = CONSTENTS.priorityList;
@@ -75,7 +75,7 @@ const FilterModal = (props) => {
     );
     //TODO
     setLocalStorageTaskFilters(filterFormValue);
-    setTaskFilters(filterFormValue);
+    getTaskFilters(filterFormValue);
   };
   const clearFilterFormValue = () => {
     console.log("key pressed");
@@ -90,7 +90,7 @@ const FilterModal = (props) => {
 
     setFilterFormValue(filterFormFileds);
     setLocalStorageTaskFilters(filterFormFileds);
-    setTaskFilters(filterFormFileds);
+    getTaskFilters(filterFormFileds);
   };
 
   return (
@@ -179,6 +179,7 @@ const FilterModal = (props) => {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"
+          className="filterModal"
         >
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
@@ -189,9 +190,9 @@ const FilterModal = (props) => {
             <Form noValidate>
               <Row>
                 <Form.Group as={Row} controlId="formDateCreated">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
-				  createdBy
+                  <Row sm="9" className="filterFields">
+                    <Form.Label column sm="4">
+                    createdBy
                     </Form.Label>
                     <Form.Control className="form-control"
                       as="select"
@@ -211,8 +212,8 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDateCreated">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  assignedTo
 					</Form.Label>
                     <Form.Control
@@ -233,8 +234,8 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDateCreated">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  Category
 					</Form.Label>
                     <Form.Control
@@ -255,8 +256,8 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDateCreated">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  Priority
 					</Form.Label>
                     <Form.Control
@@ -278,8 +279,8 @@ const FilterModal = (props) => {
               </Row>
               <Row>
                 <Form.Group as={Row} controlId="formDateCreated">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  Status
 					</Form.Label>
                     <Form.Control
@@ -300,8 +301,8 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDateCreated">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  Group By
 					</Form.Label>
                     <Form.Control
@@ -322,8 +323,8 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formSelectProjectGroup">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  Project Group
 					</Form.Label>
                     <Form.Control
@@ -340,8 +341,8 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formSelectProject">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
 				  Project
 					</Form.Label>
                     <Form.Control
@@ -358,10 +359,10 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formSortBy">
-                  <Row sm="9">
-				  <Form.Label column sm="3">
-				  Sort By
-					</Form.Label>
+                  <Row sm="9" className="filterFields">
+                  <Form.Label column sm="4">
+                  Sort By
+                  </Form.Label>
                     <Form.Control
                       as="select"
                       value={sortBy}
@@ -376,26 +377,27 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDueDate">
-				<Form.Label column sm="3">
-				  Due Date
-					</Form.Label>
-                  <Row sm="9">
-				
+                <Row sm="9" className="filterFields">
+                <Form.Label column sm="4">
+                  Due Date
+                  </Form.Label> 		
                     <DatePicker
                       selected={dueDate}
                       onChange={(date) => setDueDate(date)}
                       className="form-control"
                       placeholderText="Select Due Date"
                     />
+                
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateCreated">
-				<Form.Label column sm="3">
-				  Date Created
-					</Form.Label>
-                  <Row sm="9">
-				 
+                <Form.Group as={Row} controlId="formDateCreated" >
+
+            
+                  <Row sm="9" className="filterFields">
+                  <Form.Label column sm="4">
+                   Date Created
+                   </Form.Label>
                     <DatePicker
                       selected={dateCreated}
                       onChange={(date) => setDateCreated(date)}
@@ -406,11 +408,11 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDateUpdated">
-				<Form.Label column sm="3">
-				  Date Updated
-					</Form.Label>
-                  <Row sm="9">
-				
+             
+                  <Row sm="9" className="filterFields">
+                  <Form.Label column sm="4">
+                    Date Updated
+                    </Form.Label>
                     <DatePicker
                       selected={dateUpdated}
                       onChange={(date) => setDateUpdated(date)}
@@ -421,11 +423,11 @@ const FilterModal = (props) => {
                 </Form.Group>
 
                 <Form.Group as={Row} controlId="formDateCompleted">
-				<Form.Label column sm="3">
-				  Date Completed
-					</Form.Label>
-                  <Row sm="9">
-				
+               
+                  <Row sm="9" className="filterFields">
+                  <Form.Label column sm="4">
+                  Date Completed
+                  </Form.Label>
                     <DatePicker
                       selected={dateCompleted}
                       onChange={(date) => setDateCompleted(date)}

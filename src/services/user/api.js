@@ -31,8 +31,8 @@ export async function getprojectListWithoutCat(data) {
 export async function getAllUserDataForRating(data) {
 	return (axiosInstance.get('/user/v1/list',data).then(res => res.data))
 }
-export async function getAllProjects() {
-    return (axiosInstance.get('/projects/v1/all', ).then(res => res.data))
+export async function getAllProjects(data) {
+    return (axiosInstance.get('/projects/v1/all', data).then(res => res.data))
 }
 export async function getUsersOfProject(data) {
     return (axiosInstance.get('/projects/v1/user/all', data).then(res => res.data))
@@ -45,6 +45,9 @@ export async function assignUserToProject(data) {
 }
 export async function deleteProjectById(data) {
     return (axiosInstance.patch('/projects/v1/delete', data).then(res => res.data))
+}
+export async function getProjectDetailsById(data) {
+	return (axiosInstance.get('/projects/v1/by/projectId', data).then(res => res.data))
 }
 export async function addNewProject(data) {
     return (axiosInstance.post('/projects/v1/add/new', data).then(res => res.data))

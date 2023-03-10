@@ -65,6 +65,7 @@ const ProjectCard = ({
   description,
   handleEdit,
   element,
+  managedBy,
   accessibleBy,
   handleDelete,
   borderColor,
@@ -129,7 +130,9 @@ const ProjectCard = ({
               <circle cx="12" cy="19" r="1" />
             </svg>
             <div className="dropdown-content">
-              <a href="#1"> Edit</a>
+              <a onClick={() => {
+				handleEdit();
+			  } } > Edit</a>
               <a
                 href="#1"
                 onClick={() => {
@@ -166,11 +169,30 @@ const ProjectCard = ({
           <span>0</span>
         </div>
       </div>
-      <div className="user-profile-pics">
+	 
+
+	   <div>
+	   <div className=" pull-left w-50 text-center">
+        <label className="lableName">Accessible By</label>
+        <div className="user-profile-pics">
         {accessibleBy?.map((profile, index) => (
-          <UserIcon firstName={profile?.name} />
-        ))}
+              <UserIcon firstName={profile?.name} />
+            ))}
+        </div>
+        
       </div>
+
+	  <div className=" pull-right w-50 text-center" > 
+      <label className="lableName">Managed By</label>
+      <div className="user-profile-pics">
+      {managedBy?.map((profile, index) => (
+            <UserIcon firstName={profile} />
+          ))}
+      </div>
+	   </div>
+	   </div>
+
+     
     </div>
   );
 };

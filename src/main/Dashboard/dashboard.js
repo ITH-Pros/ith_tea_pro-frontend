@@ -1,163 +1,174 @@
-	import React from "react";
-	import moment from "moment";
-	import MyCalendar from "./weekCalendra";
-	import { useState, useEffect } from "react";
-	import { getAssignedProjects, getRatings } from "../../services/user/api";
-	import "./dashboard.css";
-	import { MDBTooltip } from "mdb-react-ui-kit";
-	// eslint-disable-next-line no-unused-vars
-	import { BrowserRouter as Router, Link } from "react-router-dom";
-	import Col from "react-bootstrap/Col";
-	import Form from "react-bootstrap/Form";
-	import Loader from "../../components/Loader";
-	import { getAllUsers } from "../../services/user/api";
-	import RatingBox from "../../components/ratingBox";
-	import { useAuth } from "../../auth/AuthProvider";
-	import Toaster from "../../components/Toaster";
-	import {
-	Row,
-	Container,
-	Nav,
-	Dropdown,
-	Card,
-	Button,
-	Badge,
-	} from "react-bootstrap";
-	import Avatar from "react-avatar";
+import React from "react";
+import moment from "moment";
+import {AiFillProject} from "react-icons/ai";
+import MyCalendar from "./weekCalendra";
+import { useState, useEffect } from "react";
+import { getAllProjects, getRatings } from "../../services/user/api";
+import "./dashboard.css";
+import { MDBTooltip } from "mdb-react-ui-kit";
+// eslint-disable-next-line no-unused-vars
+import { BrowserRouter as Router, Link } from "react-router-dom";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Loader from "../../components/Loader";
+import { getAllUsers } from "../../services/user/api";
+import RatingBox from "../../components/ratingBox";
+import { useAuth } from "../../auth/AuthProvider";
+import Toaster from "../../components/Toaster";
+import {
+  Row,
+  Container,
+  Nav,
+  Dropdown,
+  Card,
+  Button,
+  Badge,
+} from "react-bootstrap";
+import Avatar from "react-avatar";
+import { useNavigate } from 'react-router-dom';
+import AddTaskModal from "../Tasks/AddTaskModal";
 
-	var month = moment().month();
-	let currentYear = moment().year();
-	export default function Dashboard(props) {
-	const [usersArray, setTeamOptions] = useState([]);
-	const [ratingsArray, setRatings] = useState([]);
-	const [toasterMessage, setToasterMessage] = useState("");
-	const [toaster, showToaster] = useState(false);
-	const [loading, setLoading] = useState(false);
+var month = moment().month();
+let currentYear = moment().year();
+export default function Dashboard(props) {
+  const [usersArray, setTeamOptions] = useState([]);
+  const [ratingsArray, setRatings] = useState([]);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [projectList, setProjectListValue] = useState([]);
+  const setShowToaster = (param) => showToaster(param);
+  const { userDetails } = useAuth();
+  const navigate = useNavigate();
 
-	const setShowToaster = (param) => showToaster(param);
-	const { userDetails } = useAuth();
+  useEffect(() => {
+    getAndSetAllProjects();
+    onInit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-	useEffect(() => {
-		onInit();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+  function onInit() {
+    getUsersList();
+    let dataToSend = {
+      month: months.indexOf(monthUse) + 1,
+      year: yearUse,
+    };
+    getAllRatings(dataToSend);
+  }
 
-	function onInit() {
-		getUsersList();
-		let dataToSend = {
-		month: months.indexOf(monthUse) + 1,
-		year: yearUse,
-		};
-		getAllRatings(dataToSend);
-		getAllAssignedProjects();
-	}
+  const [days, setDays] = useState(moment().daysInMonth());
+  const [monthUse, setMonth] = useState(moment().format("MMMM"));
+  const [yearUse, setYear] = useState(currentYear);
 
-	const [days, setDays] = useState(moment().daysInMonth());
-	const [monthUse, setMonth] = useState(moment().format("MMMM"));
-	const [yearUse, setYear] = useState(currentYear);
+  const handleShowAllProjects = () => {
+    navigate('/project/all');
+  };
 
-	const onchangeMonth = (e) => {
-		setMonth(e.target.value);
-		let dataToSend = {
-		month: months.indexOf(e.target.value) + 1,
-		year: yearUse,
-		};
-		let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
-		setDays(monthDays.getDate());
-		getAllRatings(dataToSend);
-	};
-	const onChangeYear = (e) => {
-		setYear(e.target.value);
-		let dataToSend = {
-		month: months.indexOf(monthUse) + 1,
-		year: e.target.value,
-		};
-		getAllRatings(dataToSend);
-	};
+  const onchangeMonth = (e) => {
+    setMonth(e.target.value);
+    let dataToSend = {
+      month: months.indexOf(e.target.value) + 1,
+      year: yearUse,
+    };
+    let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
+    setDays(monthDays.getDate());
+    getAllRatings(dataToSend);
+  };
+  const onChangeYear = (e) => {
+    setYear(e.target.value);
+    let dataToSend = {
+      month: months.indexOf(monthUse) + 1,
+      year: e.target.value,
+    };
+    getAllRatings(dataToSend);
+  };
 
-	let months = moment().year(Number)?._locale?._months;
-	let years = [2022, 2023, 2024, 2025];
+  let months = moment().year(Number)?._locale?._months;
+  let years = [2022, 2023, 2024, 2025];
 
-	const getUsersList = async function () {
-		setLoading(true);
-		try {
-		const user = await getAllUsers();
-		setLoading(false);
+  const getUsersList = async function () {
+    setLoading(true);
+    try {
+      const user = await getAllUsers();
+      setLoading(false);
 
-		if (user.error) {
-			setToasterMessage(user?.error?.message || "Something Went Wrong");
-			setShowToaster(true);
-		} else {
-			setTeamOptions([...user.data]);
-		}
-		} catch (error) {
-		setToasterMessage(error?.error?.message || "Something Went Wrong");
-		setShowToaster(true);
-		setLoading(false);
-		return error.message;
-		}
-	};
+      if (user.error) {
+        setToasterMessage(user?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setTeamOptions([...user.data]);
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      setLoading(false);
+      return error.message;
+    }
+  };
 
-	async function getAllRatings(data) {
-		setLoading(true);
+  async function getAllRatings(data) {
+    setLoading(true);
 
-		try {
-		if (!data) {
-			data = {
-			month: months.indexOf(monthUse) + 1,
-			year: yearUse,
-			};
-		}
-		const rating = await getRatings(data);
-		setLoading(false);
+    try {
+      if (!data) {
+        data = {
+          month: months.indexOf(monthUse) + 1,
+          year: yearUse,
+        };
+      }
+      const rating = await getRatings(data);
+      setLoading(false);
 
-		if (rating.error) {
-			setToasterMessage(rating?.error?.message || "Something Went Wrong");
-			setShowToaster(true);
-		} else {
-			setRatings([...rating.data]);
-		}
-		} catch (error) {
-		setToasterMessage(error?.error?.message || "Something Went Wrong");
-		setShowToaster(true);
-		setLoading(false);
-		}
-	}
-	const getAllAssignedProjects = async function () {
-		setLoading(true);
-		try {
-		const resp = await getAssignedProjects();
-		setLoading(false);
+      if (rating.error) {
+        setToasterMessage(rating?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setRatings([...rating.data]);
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      setLoading(false);
+    }
+  }
 
-		if (resp.error) {
-			setToasterMessage(resp?.error?.message || "Something Went Wrong");
-			setShowToaster(true);
-		} else {
-			// setTeamOptions([...user.data]);
-		}
-		} catch (error) {
-		setToasterMessage(error?.error?.message || "Something Went Wrong");
-		setShowToaster(true);
-		setLoading(false);
-		return error.message;
-		}
-	};
-	return (
-		<div className="dashboard_camp">
-		<div className="m-3 d-flex justify-content-center flex-column">
-			<div>
-			{userDetails?.role !== "USER" && (
-				<Link to="/rating" params={{ params: true }}>
-				{props.showBtn && (
-					<div className="wrap">
-					<button className="add-rating-button">
-						<span>Add Rating</span>
-					</button>
-					</div>
-				)}
-				</Link>
-			)}
-			{/* <h5 className="text-center h5cls">
+  const getAndSetAllProjects = async function () {
+    //setloading(true);
+    try {
+      const projects = await getAllProjects();
+      //setloading(false);
+      if (projects.error) {
+        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setProjectListValue(projects.data);
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      //setloading(false);
+      return error.message;
+    }
+  };
+const getNewTasks = (data)=>{
+	getAndSetAllProjects();
+}
+  return (
+    <div className="dashboard_camp">
+      <div className="m-3 d-flex justify-content-center flex-column">
+        <div>
+          {userDetails?.role !== "USER" && (
+            <Link to="/rating" params={{ params: true }}>
+              {props.showBtn && (
+                <div className="wrap">
+                  <button className="add-rating-button">
+                    <span>Add Rating</span>
+                  </button>
+                </div>
+              )}
+            </Link>
+          )}
+          {/* <h5 className="text-center h5cls">
 				<p style={{ marginRight: "10px", marginTop: "6px" }}>
 				Ratings for
 				</p>
@@ -206,8 +217,8 @@
 				</Form.Control>
 				</Form.Group>
 			</h5> */}
-			</div>
-			{/* <table className="table fixed_header">
+        </div>
+        {/* <table className="table fixed_header">
 			<thead>
 				<tr>
 				<th>Name</th>
@@ -302,106 +313,106 @@
 				})}
 			</tbody>
 			</table> */}
-			{<MyCalendar />}
-			</div>
-		<Container>
-			<Row>
-			<Col lg={6} className="px-0">
-				{" "}
-				{props.showBtn && (
-				<h1 className="h1-text">
-					<i className="fa fa-home" aria-hidden="true"></i> My Projects
-				</h1>
-				)}
-			</Col>
-			<Col lg={6} id="nav-filter" className="px-0">
-				<Nav className="justify-content-end" activeKey="/home">
-				<Nav.Item>
-					<Nav.Link href="">
-					<Dropdown>
-						<Dropdown.Toggle variant="secondary" id="dropdown-basic">
-						Filter <i className="fa fa-filter"></i>
-						</Dropdown.Toggle>
+        {<MyCalendar />}
+      </div>
+      <Container>
+        <Row>
+          <Col lg={6} className="px-0">
+            {" "}
+            {props.showBtn && (
+              <h1 className="h1-text">
+			  <AiFillProject className="project-icon" /> My Projects
+                {/* <i className="fa fa-home" aria-hidden="true"></i> My Projects */}
+              </h1>
+            )}
+          </Col>
+          <Col lg={6} id="nav-filter" className="px-0">
+            <Nav className="justify-content-end" activeKey="/home">
+              <Nav.Item>
+                {/* <Nav.Link href="">
+                  <Dropdown>
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                      Filter <i className="fa fa-filter"></i>
+                    </Dropdown.Toggle>
 
-						<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-							Another action
-						</Dropdown.Item>
-						<Dropdown.Item href="#/action-3">
-							Something else
-						</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
-					</Nav.Link>
-				</Nav.Item>
-				<Nav.Item>
-					<Nav.Link eventKey="link-1">
-					<Dropdown>
-						<Dropdown.Toggle variant="secondary" id="dropdown-basic">
-						Show All Project
-						</Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                        Another action
+                      </Dropdown.Item>
+                      <Dropdown.Item href="#/action-3">
+                        Something else
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Nav.Link> */}
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="link-1">
+                  <Dropdown>
+                    <Dropdown.Toggle  variant="secondary" onClick={handleShowAllProjects} id="dropdown-basic">
+                      Show All Project 
+                    </Dropdown.Toggle>
 
-						<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-							Favorite Projects
-						</Dropdown.Item>
-						<Dropdown.Item href="#/action-3">
-							Recent Projects
-						</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
-					</Nav.Link>
-				</Nav.Item>
-				<Nav.Item>
-					<Nav.Link eventKey="link-2">
-					<Dropdown>
-						<Dropdown.Toggle variant="secondary" id="dropdown-basic">
-						Sort : Custom
-						</Dropdown.Toggle>
+                    {/* <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                        Favorite Projects
+                      </Dropdown.Item>
+                      <Dropdown.Item href="#/action-3">
+                        Recent Projects
+                      </Dropdown.Item>
+                    </Dropdown.Menu> */}
+                  </Dropdown>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                {/* <Nav.Link eventKey="link-2">
+                  <Dropdown>
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                      Sort : Custom
+                    </Dropdown.Toggle>
 
-						<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Custom</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-							Alphabetical
-						</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
-					</Nav.Link>
-				</Nav.Item>
-				</Nav>
-			</Col>
-			</Row>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Custom</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">
+                        Alphabetical
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Nav.Link> */}
+              </Nav.Item>
+            </Nav>
+          </Col>
+        </Row>
 
-			<Row className="row-bg">
-			<Col lg={6}>
-				<Card id="card-task">
-				<Row className="d-flex justify-content-start">
-					<Col lg={6} className="middle">
-					<Avatar name="R" size={40} round="20px" />{" "}
-					<h5 className="text-truncate">EMS (Web & Mobile)</h5>
-					</Col>
-					<Col lg={4} className="middle">
-					<p className="text-truncate">ITH Technologies</p>
-					</Col>
-					<Col
-					lg={2}
-					className="text-end middle"
-					style={{ justifyContent: "end" }}
-					>
-					<Button variant="light" size="sm">
-						<i className="fa fa-star"></i>
-					</Button>
-					<Button variant="light" size="sm">
-						<i className="fa fa-ellipsis-v"></i>
-					</Button>
-					</Col>
-				</Row>
-				</Card>
-			</Col>
+        <Row className="row-bg">
+		{projectList.slice(0, 4).map((project) => (
+  <Col lg={6}>
+    <Card id={`card-${project.id}`} key={project?.id}>
+      <Row className="d-flex justify-content-start">
+        <Col lg={6} className="middle">
+          <Avatar name={project.name} size={40} round="20px" />{" "}
+          <h5 className="text-truncate">{project?.name}</h5>
+        </Col>
+        <Col lg={4} className="middle">
+          <p className="text-truncate">{project?.description}</p>
+        </Col>
+        <Col
+          lg={2}
+          className="text-end middle"
+          style={{ justifyContent: "end"}}
+        >
+           <AddTaskModal  selectedProjectFromTask={project} getNewTasks={getNewTasks} />
+        
+        </Col>
+      </Row>
+    </Card>
+  </Col>
+))}
 
-			<Col lg={6}>
+
+          {/* <Col lg={6}>
 				<Card id="card-task">
 				<Row className="d-flex justify-content-start">
 					<Col lg={6} className="middle">
@@ -450,388 +461,388 @@
 					</Col>
 				</Row>
 				</Card>
-			</Col>
-			</Row>
+			</Col> */}
+        </Row>
 
-			<Row className="mt-3">
-			<Col lg={6} style={{ paddingLeft: "0px" }}>
-				<Row>
-				<Col lg={6} className="left-add">
-					<span>Work</span>
+        <Row className="mt-3">
+          <Col lg={6} style={{ paddingLeft: "0px" }}>
+            <Row>
+              <Col lg={6} className="left-add">
+                <span>Work</span>
 
-					<MDBTooltip title={"Start New Item"} variant="light" size="sm">
-					<i className="fa fa-plus-circle"></i>
-					</MDBTooltip>
-					<Link to="./">Full Recap</Link>
-				</Col>
-				<Col lg={6} className="right-filter">
-					<Dropdown>
-					<Dropdown.Toggle variant="defult" id="dropdown-basic">
-						Filter <i className="fa fa-filter"></i>
-					</Dropdown.Toggle>
+                <MDBTooltip title={"Start New Item"} variant="light" size="sm">
+                  <i className="fa fa-plus-circle"></i>
+                </MDBTooltip>
+                <Link to="./">Full Recap</Link>
+              </Col>
+              <Col lg={6} className="right-filter">
+                <Dropdown>
+                  <Dropdown.Toggle variant="defult" id="dropdown-basic">
+                    Filter <i className="fa fa-filter"></i>
+                  </Dropdown.Toggle>
 
-					<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-						Another action
-						</Dropdown.Item>
-						<Dropdown.Item href="#/action-3">
-						Something else
-						</Dropdown.Item>
-					</Dropdown.Menu>
-					</Dropdown>
-					<Dropdown>
-					<Dropdown.Toggle variant="defult" id="dropdown-basic">
-						<i className="fa fa-ellipsis-v"></i>
-					</Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Dropdown>
+                  <Dropdown.Toggle variant="defult" id="dropdown-basic">
+                    <i className="fa fa-ellipsis-v"></i>
+                  </Dropdown.Toggle>
 
-					<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-						Another action
-						</Dropdown.Item>
-						<Dropdown.Item href="#/action-3">
-						Something else
-						</Dropdown.Item>
-					</Dropdown.Menu>
-					</Dropdown>
-				</Col>
-				</Row>
-				<Row>
-				<Col lg={12} className="mt-3">
-					<Card id="card-task">
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="danger">TODAY</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={12} className="mt-3">
+                <Card id="card-task">
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="danger">TODAY</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
 
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="success">COMPLLETED</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="danger">TODAY</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="warning">PROGRESS</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
-					</Card>
-				</Col>
-				</Row>
-			</Col>
-			<Col lg={6} style={{ paddingRight: "0px" }}>
-				<Row>
-				<Col lg={6} className="left-add">
-					<span>Pending Ratings</span>
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="success">COMPLLETED</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="danger">TODAY</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="warning">PROGRESS</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+          <Col lg={6} style={{ paddingRight: "0px" }}>
+            <Row>
+              <Col lg={6} className="left-add">
+                <span>Pending Ratings</span>
 
-					<MDBTooltip title={"Start New Item"} variant="light" size="sm">
-					<i className="fa fa-plus-circle"></i>
-					</MDBTooltip>
-					<Link to="./">Full Recap</Link>
-				</Col>
-				<Col lg={6} className="right-filter">
-					<Dropdown>
-					<Dropdown.Toggle variant="defult" id="dropdown-basic">
-						Filter <i className="fa fa-filter"></i>
-					</Dropdown.Toggle>
+                <MDBTooltip title={"Start New Item"} variant="light" size="sm">
+                  <i className="fa fa-plus-circle"></i>
+                </MDBTooltip>
+                <Link to="./">Full Recap</Link>
+              </Col>
+              <Col lg={6} className="right-filter">
+                <Dropdown>
+                  <Dropdown.Toggle variant="defult" id="dropdown-basic">
+                    Filter <i className="fa fa-filter"></i>
+                  </Dropdown.Toggle>
 
-					<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-						Another action
-						</Dropdown.Item>
-						<Dropdown.Item href="#/action-3">
-						Something else
-						</Dropdown.Item>
-					</Dropdown.Menu>
-					</Dropdown>
-					<Dropdown>
-					<Dropdown.Toggle variant="defult" id="dropdown-basic">
-						<i className="fa fa-ellipsis-v"></i>
-					</Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Dropdown>
+                  <Dropdown.Toggle variant="defult" id="dropdown-basic">
+                    <i className="fa fa-ellipsis-v"></i>
+                  </Dropdown.Toggle>
 
-					<Dropdown.Menu>
-						<Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-						<Dropdown.Item href="#/action-2">
-						Another action
-						</Dropdown.Item>
-						<Dropdown.Item href="#/action-3">
-						Something else
-						</Dropdown.Item>
-					</Dropdown.Menu>
-					</Dropdown>
-				</Col>
-				</Row>
-				<Row>
-				<Col lg={12} className="mt-3">
-					<Card id="card-task">
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="danger">TODAY</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg={12} className="mt-3">
+                <Card id="card-task">
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="danger">TODAY</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
 
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="success">COMPLLETED</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="danger">TODAY</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
-					<Row className="d-flex justify-content-start list_task">
-						<Col lg={6} className="middle">
-						<span
-							style={{ fontSize: "20PX", marginRight: "10px" }}
-							round="20px"
-						>
-							<i
-							className="fa fa-check-circle"
-							aria-hidden="true"
-							></i>
-						</span>
-						<h5 className="text-truncate">
-							And here's some amazing content. It's very engaging.
-							right?
-						</h5>
-						</Col>
-						<Col lg={4} className="middle">
-						<small className="text-truncate">
-							Due To <Badge bg="warning">PROGRESS</Badge>
-						</small>
-						</Col>
-						<Col
-						lg={2}
-						className="text-end middle"
-						style={{ justifyContent: "end" }}
-						>
-						<Button variant="light" size="sm">
-							<i className="fa fa-star"></i>
-						</Button>
-						<Button variant="light" size="sm">
-							<i className="fa fa-ellipsis-v"></i>
-						</Button>
-						</Col>
-					</Row>
-					</Card>
-				</Col>
-				</Row>
-			</Col>
-			</Row>
-		</Container>
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="success">COMPLLETED</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="danger">TODAY</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row className="d-flex justify-content-start list_task">
+                    <Col lg={6} className="middle">
+                      <span
+                        style={{ fontSize: "20PX", marginRight: "10px" }}
+                        round="20px"
+                      >
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                      <h5 className="text-truncate">
+                        And here's some amazing content. It's very engaging.
+                        right?
+                      </h5>
+                    </Col>
+                    <Col lg={4} className="middle">
+                      <small className="text-truncate">
+                        Due To <Badge bg="warning">PROGRESS</Badge>
+                      </small>
+                    </Col>
+                    <Col
+                      lg={2}
+                      className="text-end middle"
+                      style={{ justifyContent: "end" }}
+                    >
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-star"></i>
+                      </Button>
+                      <Button variant="light" size="sm">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
 
-		{/* <div className="m-3 d-flex justify-content-center flex-column">
+      {/* <div className="m-3 d-flex justify-content-center flex-column">
 			<div>
 			{userDetails?.role !== "USER" && (
 				<Link to="/rating" params={{ params: true }}>
@@ -844,7 +855,7 @@
 				)}
 				</Link>
 			)} */}
-			{/* <h5 className="text-center h5cls">
+      {/* <h5 className="text-center h5cls">
 				<p style={{ marginRight: "10px", marginTop: "6px" }}>
 				Ratings for
 				</p>
@@ -893,8 +904,8 @@
 				</Form.Control>
 				</Form.Group>
 			</h5> */}
-			{/* </div> */}
-			{/* <table className="table fixed_header">
+      {/* </div> */}
+      {/* <table className="table fixed_header">
 			<thead>
 				<tr>
 				<th>Name</th>
@@ -989,16 +1000,16 @@
 				})}
 			</tbody>
 			</table> */}
-			{/* {<MyCalendar />}
+      {/* {<MyCalendar />}
 		</div> */}
-		{loading ? <Loader /> : null}
-		{toaster && (
-			<Toaster
-			message={toasterMessage}
-			show={toaster}
-			close={() => showToaster(false)}
-			/>
-		)}
-		</div>
-	);
-	}
+      {loading ? <Loader /> : null}
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+      )}
+    </div>
+  );
+}

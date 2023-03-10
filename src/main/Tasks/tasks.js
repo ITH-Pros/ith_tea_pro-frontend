@@ -13,18 +13,21 @@ const Tasks=()=> {
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const [taskFilters, setTaskFilters] = useState({});
-  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedProject, setSelectedProject] = useState({});
+  const [taskData, setTaskData] = useState({});
+
   const setShowToaster = (param) => showToaster(param);
     
   useEffect(() => {
       getAllProjectsData();
   }, []);
     
-    const getAllProjectsData =async () => {
+    const getAllProjectsData =async (data) => {
         
            setLoading(true);
+		   
            try {
-             const lead = await getAllProjects();
+             const lead = await getAllProjects(data);
              setLoading(false);
 
              if (lead.error) {
@@ -34,7 +37,7 @@ const Tasks=()=> {
                setShowToaster(true);
              } else {
                  setProjects(lead.data);
-                 console.log(lead.data)
+				 setSelectedProject(lead?.data[0]);
              }
            } catch (error) {
              setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -45,11 +48,10 @@ const Tasks=()=> {
 
     }
 
-  const [taskData, setTaskData] = useState({});
 
 
     
-     const getTasksDataUsingProjectId = async (_id) => {
+     const getTasksDataUsingProjectId = async (_id, filterData) => {
          setLoading(true);
          try {
              let data = {};
@@ -57,10 +59,10 @@ const Tasks=()=> {
                  groupBy:'projectId',
                   projectId: _id
              };
-             console.log(data)
+            
          const lead = await getProjectsTask(data);
          setLoading(false);
-
+console.log(data)
          if (lead.error) {
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
@@ -76,45 +78,44 @@ const Tasks=()=> {
      };
     
 
-  const handleClick = (projectId) => {
+  const handleClick = (project) => {
     // If we already have task data for this project, don't fetch it again
-    if (taskData[projectId]) {
+    if (taskData[project?._id]) {
       return;
     }
-
-    getTasksDataUsingProjectId(projectId);
+	console.log(selectedProject)
+	setSelectedProject(project)
+    getTasksDataUsingProjectId(project?._id);
   };
-  const setSelectedProjectFromAddTask = (project, filterFormValue) => {
-	if (project._id === selectedProject._id) {
-	  console.log("project._id === selectedProject._id", project._id === selectedProject._id)
-	  setSelectedProject(project)
-	//   getAllTaskOfProject();
-	} else {
-	  setSelectedProject(project)
-	}
-  }
-
+ 
+const getNewTasks = (id)=>{
+	getTasksDataUsingProjectId(id);
+}
+const getTaskFilters = (data)=>{
+	getAllProjectsData( data)
+}
   return (
     <div className="w-100 mr-3">
-		<FilterModal  selectedProject={selectedProject} setTaskFilters={setTaskFilters} />
-        <AddTaskModal selectedProjectFromTask={selectedProject}
-          setSelectedProjectFromAddTask={setSelectedProjectFromAddTask}
-        />
+      <h1 className="h1-text">
+          <i className="fa fa-list-ul" aria-hidden="true"></i>Task
+      </h1>
+		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
+        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} />
     <div className="accordion">
       {projects.map((project) => (
         <div className="accordion-item" key={project._id}>
           <div
             className="accordion-header"
-            onClick={() => handleClick(project._id)}
+            onClick={() => handleClick(project)}
           >
-            {project.name}
+            <i className="fa fa-angle-down" aria-hidden="true"></i> {project.name}
           </div>
           <div className="accordion-body">
             {taskData[project._id] && (
-              <ul>
-                {taskData[project._id].map((task) => (
-                  <li key={task._id}>{task.title}</li>
-                ))}
+              <ul className="mb-0">
+               {taskData[project._id].map((task)=>
+			   <li><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title}</li>
+ )} 
               </ul>
             )}
           </div>

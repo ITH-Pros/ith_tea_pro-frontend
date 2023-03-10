@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { assignUserToProject, deleteProjectById, getAllProjects, getAllUsers, getTaskStatusAnalytics, getUsersOfProject, unAssignUserToProject } from '../../../services/user/api';
+import { assignUserToProject, deleteProjectById, getAllProjects, getAllUsers, getProjectDetailsById, getTaskStatusAnalytics, getUsersOfProject, unAssignUserToProject } from '../../../services/user/api';
+import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import './index.css';
 import Loader from '../../../components/Loader';
@@ -12,6 +13,8 @@ import { useAuth } from '../../../auth/AuthProvider';
 import { Link } from 'react-router-dom';
 import Toaster from '../../../components/Toaster';
 import ProjectCard from "../ProjectCard/projectCard";
+// import { useNavigate } from 'react-router-dom';
+
 
 export default function AllProject() {
     let projectBackColor = [
@@ -44,6 +47,8 @@ export default function AllProject() {
     const [modalShow, setModalShow] = useState(false);
     const [sureModalShow, setSureModalShow] = useState(false);
     const userListToAddInProject = new Set();
+	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -366,10 +371,8 @@ export default function AllProject() {
         }
     }
 
- 
-
         const deleteProject = async (project) => {
-console.log(project,'------------------------props')
+console.log(project,'------deleteProject')
             setLoading(true);
             try {
                 let dataToSend = {
@@ -394,6 +397,33 @@ console.log(project,'------------------------props')
                 return error.message;
             }
         }
+
+		const editProject = async (project) => {
+			console.log(project, '------------------------props');
+			setLoading(true);
+			try {
+			  const dataToSend = {
+				projectId: project._id,
+			  };
+			  const projectDetails = await getProjectDetailsById(dataToSend.projectId);
+			  setLoading(false);
+		
+			  if (projectDetails.error) {
+				setToasterMessage(projectDetails?.error?.message || 'Something Went Wrong');
+				setShowToaster(true);
+			  } else {
+				navigate('/project/add');
+			  }
+			} catch (error) {
+			  setToasterMessage(error?.error?.message || 'Something Went Wrong');
+			  setShowToaster(true);
+			  setLoading(false);
+			  return error.message;
+			}
+		  };
+
+		
+		
 
 
 
@@ -429,69 +459,8 @@ console.log(project,'------------------------props')
                 <i className="fa fa-database" aria-hidden="true"></i>  Projects
             </h1>
             <div className="project-boxes jsGridView">
-                {
-                    projectList && projectList.map((element, projectIndex) => {
-                        return (
-                          <div
-                            key={element._id}
-                            style={{ height: "300px" }}
-                            className="project-box-wrapper"
-                          >
-                            {/* <div className="project-box" style={{ backgroundColor: projectBackColor[projectIndex % 12] }}> */}
-                            {/* <div className="project-box-header">
 
-                                        <ProjectMenuIcon project={element} />
-                                    </div>
-                                    <div className="project-box-content-header">
-                                        <p className="box-content-header">{element.name}</p>
-                                        <p className="box-content-subheader">{element.description?.slice(0, 50)+'...'}</p>
-                                    </div> */}
-
-                            {/* {projectTaskAnalytics && <ProgressBarComp project={element} />} */}
-
-                            {/* <div className="project-box-footer">
-                                        <div className="participants">
-                                            {
-                                                getProjectUserIcons(element)
-                                            }
-                                            {
-                                                userDetails.role === 'SUPER_ADMIN' &&
-                                                <button className="add-participant" style={{ color: '#ff942e' }} onClick={() => handleAddUserToProjectButton(element)}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus">
-                                                        <path d="M12 5v14M5 12h14" />
-                                                    </svg>
-                                                </button>
-                                            }
-                                        </div> */}
-                            {/* </div> */}
-                            {/* </div > */}
-                            {/* {
-                                    // showMoreUserDropDownId === element._id && <GetShowMoreUsersModalBody />
-                                } */}
-                            {/* <ProjectCard
-                              name="Project Name"
-                              description="Project description goes here."
-                              handleEdit={() => console.log("Edit clicked.")}
-                              handleDelete={() =>
-                                console.log("Delete clicked.")
-                              }
-                            /> */}
-                            <ProjectCard
-                              name={element.name}
-                              description={
-                                element.description?.slice(0, 20) + "..."
-                              }
-                              accessibleBy={element.accessibleBy}
-                              element={element}
-                              handleEdit={() => console.log("Edit clicked")}
-                              handleDelete={() => deleteProject(element)}
-                              //   backgroundColor="#00ADEF"
-                            />
-                          </div>
-                        );
-                    })
-                }
-                {
+			{
                     userDetails.role === "SUPER_ADMIN" &&
                     <div key='AddProject' style={{    display: "flex"}} className="project-box add-project-button">
                         <div className="content">
@@ -503,6 +472,31 @@ console.log(project,'------------------------props')
                         </div>
                     </div>
                 }
+                {
+                    projectList && projectList.map((element, projectIndex) => {
+                        return (
+                          <div
+                            key={element._id}
+                            style={{ height: "300px" }}
+                            className="project-box-wrapper"
+                          >
+                            <ProjectCard
+                              name={element.name}
+                              description={
+                                element.description?.slice(0, 20) + "..."
+                              }
+							  managedBy={element.managedBy}
+                              accessibleBy={element.accessibleBy}
+                              element={element}
+                              handleEdit={() => editProject(element)}
+                              handleDelete={() => deleteProject(element)}
+                              //   backgroundColor="#00ADEF"
+                            />
+                          </div>
+                        );
+                    })
+                }
+               
             </div >
             </div>
             {loading ? <Loader /> : null}

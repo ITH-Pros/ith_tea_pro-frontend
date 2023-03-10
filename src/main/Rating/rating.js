@@ -217,7 +217,7 @@ export default function Rating(props) {
                                 <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
                             </Row>
 
-											<div className="pull-right ">
+											<div className="text-right">
                             <button onClick={handleSubmit} className="btn-gradient-border btnDanger submit">Submit</button>
 							</div>
                         </Form>
@@ -237,7 +237,7 @@ export default function Rating(props) {
 
     return (
         <>
-          <div className="w-100">
+          <div className="w-100 px-3">
             {
                 userDetails?.role !== "USER" &&
                 <>

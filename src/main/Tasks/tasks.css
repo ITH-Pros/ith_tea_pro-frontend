@@ -178,11 +178,13 @@
 }
 
 .accordion {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .accordion .accordion-item {
+  background: transparent;
   margin-bottom: 1rem;
   /* border: 1px solid #ccc;
   border-radius: 0.25rem; */
@@ -197,4 +199,19 @@
 
 .accordion-body {
   padding: 1rem;
+  margin: 0 1.5rem;
+}
+.accordion-body ul{
+  list-style: none;
+  padding: 0;
+}
+.accordion-body ul li {
+  padding: 3px 0px;
+  border-bottom: 1px solid #ddd;
+}
+.accordion-body ul li:last-child{
+  border: none;
+}
+.accordion-header .fa-angle-down {
+  margin-right: 6px;
 }
