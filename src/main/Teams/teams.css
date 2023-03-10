@@ -241,8 +241,37 @@ a {
   .modal-dialog-scrollable .modal-content{
     border-bottom: 0;
   }
-  
-
-  
-
-
+  .assignPro{
+    border: 1px solid #b7b7b7;
+    padding: 6px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    text-transform: capitalize;
+    color: #7f7f7f;
+  }
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+button.modal-close-btn{
+  padding: 6px 20px;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 600;
+    font-size: medium; 
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgb(0 0 0 / 10%);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+button.modal-close-btn:hover{
+  background-color: #2ee59d;
+  box-shadow: 0px 15px 20px rgb(46 229 157 / 40%);
+  color: #fff;
+}
