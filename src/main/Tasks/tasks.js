@@ -83,6 +83,9 @@ console.log(data)
     if (taskData[project?._id]) {
       return;
     }
+	// if(selectedProject?._id == project?._id){
+
+	// }
 	console.log(selectedProject)
 	setSelectedProject(project)
     getTasksDataUsingProjectId(project?._id);

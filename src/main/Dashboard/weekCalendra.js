@@ -16,6 +16,7 @@ const localizer = dateFnsLocalizer({
 });
 
 export const MyCalendar = () => (
+	
   <>
     <div className="calendars">
       <div>
@@ -23,8 +24,13 @@ export const MyCalendar = () => (
         <Calendar
           events={myevents}
           localizer={localizer}
+		  views={['week']}
+		  view={'week'}
           defaultDate={new Date(2023, 5, 8)}
-          style={{ height: 700 }}
+          style={{ height: 200 }}
+		  onView={(view)=>{
+			this.setState({view})
+		}}
         />
       </div>
 
