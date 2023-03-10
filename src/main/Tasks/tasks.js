@@ -6,6 +6,8 @@ import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
 import TaskModal from "./ShowTaskModal";
+import {Accordion, ProgressBar, Row, Col, Dropdown } from 'react-bootstrap'
+import avtar from '../../assests/img/avtar.png'
 
 const Tasks=()=> {
   const [projects, setProjects] = useState([]);
@@ -101,14 +103,81 @@ const getTaskFilters = (data)=>{
       </h1>
 		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} />
-    <div className="accordion">
+        <Accordion>
+        {projects.map((project) => (
+      <Accordion.Item key={project._id}>
+      <Accordion.Header onClick={() => handleClick(project)}>  
+       {project.name} 
+      </Accordion.Header>
+      <div className="d-flex rightTags">
+        <ProgressBar>
+          <ProgressBar striped variant="success" now={35} key={1} />
+          <ProgressBar variant="warning" now={20} key={2} />
+          <ProgressBar striped variant="danger" now={10} key={3} />
+        </ProgressBar>
+        <div>
+        <Dropdown>
+        <Dropdown.Toggle id="dropdown-basic">
+        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item href="#/action-1">Add Task</Dropdown.Item>
+          {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+        </Dropdown.Menu>
+      </Dropdown>
+      
+        </div>
+        </div>
+     {taskData[project._id] && <Accordion.Body>
+      
+            <ul className="mb-0">
+             {taskData[project._id].map((task)=>
+       <li><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
+       <span className="completeTag">completed Dec 22,2022</span>
+       <span className="priorityTag">High</span>
+       <span className="nameTag"> <img src={avtar} alt="userAvtar" /> chandan s</span>
+       <span className="completeTag">Due Dec 22,2022</span>
+      
+       </li>
+       )}
+            </ul>
+         
+      </Accordion.Body>} 
+    </Accordion.Item> 
+      ))}
+            
+    </Accordion>
+    {/* <div className="accordion">
       {projects.map((project) => (
         <div className="accordion-item" key={project._id}>
           <div
             className="accordion-header"
             onClick={() => handleClick(project)}
           >
-            <i className="fa fa-angle-down" aria-hidden="true"></i> {project.name}
+            <Row>
+              <Col sm={7}>
+              <div>
+               <i className="fa fa-angle-down" aria-hidden="true"></i> {project.name}              
+              </div> 
+              </Col>
+              <Col sm={5}>
+                <div className="d-flex">
+                <ProgressBar>
+                  <ProgressBar striped variant="success" now={35} key={1} />
+                  <ProgressBar variant="warning" now={20} key={2} />
+                  <ProgressBar striped variant="danger" now={10} key={3} />
+                </ProgressBar>
+                <div>
+                <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                </div>
+                </div>
+              </Col>
+               
+            </Row>
+                      
+           
           </div>
           <div className="accordion-body">
             {taskData[project._id] && (
@@ -129,7 +198,7 @@ const getTaskFilters = (data)=>{
           close={() => showToaster(false)}
         />
       )}
-    </div>
+    </div> */}
     </div>
   );
 }
