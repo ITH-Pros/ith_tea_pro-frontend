@@ -509,3 +509,13 @@ th {
 .add-task{
 	bottom: 0 !important;
 }
+.rbc-label {
+	display: none;
+	} 
+.rbc-time-view	.rbc-allday-cell {
+		height: 134px;
+		max-height: unset;
+		}
+	.rbc-time-view	.rbc-time-content {
+			display: none;
+			}

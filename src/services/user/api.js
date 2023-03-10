@@ -52,6 +52,9 @@ export async function getProjectDetailsById(data) {
 export async function addNewProject(data) {
     return (axiosInstance.post('/projects/v1/add/new', data).then(res => res.data))
 }
+export async function updateProjectForm(data) {
+	return (axiosInstance.patch('/projects/v1/edit', data).then(res => res.data))
+}
 export async function unAssignUserToProject(data) {
     return (axiosInstance.patch('/projects/v1/remove/user', data).then(res => res.data))
 }

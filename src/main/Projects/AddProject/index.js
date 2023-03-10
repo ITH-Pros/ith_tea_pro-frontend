@@ -8,16 +8,19 @@ import {
   addNewProject,
     addNewUserDetail,
   getAllLeadsWithoutPagination,
+  getAllProjects,
   getAllUserWithoutPagination,
+  updateProjectForm,
 } from "../../../services/user/api";
 import './index.css'
 import Select from 'react-select';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useLocation, useParams } from 'react-router-dom';
+
 
 
 export default function AddProject(props) {
 
-    const { userDetails } = useAuth()
+    // const { userDetails } = useAuth()
     const navigate = useNavigate();
 
     const [validated, setValidated] = useState(false);
@@ -27,19 +30,108 @@ export default function AddProject(props) {
     const [leadList, setLeadList] = useState([]);
     const [newCategory, setNewCategory] = useState('');
     const [toaster, showToaster] = useState(false);
+	const [projectList, setProjectListValue] = useState([]);
+	const params = useParams()
   const setShowToaster = (param) => showToaster(param);
+
+  const projectById = projectList.find((project) => project._id === params.projectId);
+  console.log(projectById,'projectById')
+  console.log(params,'params')
+
+//   const projectDetails = location.state.project;
+//   console.log(projectDetails,'locations')
+	// Render the component using the projectDetails prop
+
   
 
 
 
-    const projectFormFields = { name: '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
+    const projectFormFields = { name:  '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
 
     useEffect(() => {
+		getAndSetAllProjects();
         getUsersList();
         getLeadsList();
+		// console.log("projectDetails", projectDetails);
     }, [])
+
+	useEffect(() => {
+		if (projectById) {
+		  setProjectFormValue({
+			...projectFormValue,
+			name: projectById.name,
+			description: projectById.description,
+			selectedManagers: projectById.managedBy,
+			projectCategories: projectById.categories,
+			selectAccessibleBy: projectById.accessibleBy,
+		  });
+		//   patch selectedManagers and selectAccessibleBy with the values from projectById 
+	
+			
+		  console.log(leadList,'leadList')
+		}
+	  }, [projectById]);
+
+
+	  
+
+	
+
+
+
+	const getAndSetAllProjects = async function () {
+		//setloading(true);
+		try {
+		  const projects = await getAllProjects();
+		  //setloading(false);
+		  if (projects.error) {
+			setToasterMessage(projects?.error?.message || "Something Went Wrong");
+			setShowToaster(true);
+		  } else {
+			setProjectListValue(projects.data);
+
+		  }
+		} catch (error) {
+		  setToasterMessage(error?.error?.message || "Something Went Wrong");
+		  setShowToaster(true);
+		  //setloading(false);
+		  return error.message;
+		}
+	  };
+
+	const handleUpdateProject = async (e) => {
+		e.preventDefault();
+        setLoading(true);
+        setValidated(true)
+        try {
+            if (!checkAllValuesPresent()) {
+                setLoading(false);
+                return
+            }
+            const userRes = await updateProjectForm(projectFormValue);
+            setLoading(false);
+            if (userRes.error) {
+                setToasterMessage(userRes?.message || 'Something Went Wrong');
+                setShowToaster(true);
+                return
+            } else {
+                setToasterMessage('Success');
+                navigate('/project/all')
+
+                // setShowToaster(true);
+                // setProjectFormValue(projectFormFields)
+                // setValidated(false)
+            }
+        } catch (error) {
+            setToasterMessage(error?.message || 'Something Went Wrong');
+            setShowToaster(true);
+            setLoading(false);
+            return error.message;
+        }
+	}
+
 
     const getUsersList = async function () {
         setLoading(true);
@@ -71,6 +163,9 @@ export default function AddProject(props) {
           setShowToaster(true);
         } else {
           setLeadList(lead.data);
+
+
+		  
         }
       } catch (error) {
         setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -95,6 +190,10 @@ export default function AddProject(props) {
         e.preventDefault();
         setLoading(true);
         setValidated(true)
+		if (params.projectId) {
+			handleUpdateProject(e);
+			return;
+		}
         try {
             if (!checkAllValuesPresent()) {
                 setLoading(false);
@@ -182,6 +281,8 @@ export default function AddProject(props) {
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={leadList}
+
+				
               />
             </Form.Group>
             <Form.Group as={Col} md="6">

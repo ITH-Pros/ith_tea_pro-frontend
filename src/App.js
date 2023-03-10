@@ -45,11 +45,24 @@ function App() {
                     <Footer />
                 </ProtectedRoute>}
             />
+
+
+{/* <Route path='/project/add/:projectId' element={ 
+                <ProtectedRoute>
+					<Navbar /> 
+                    <AddProject />
+					
+                  
+                </ProtectedRoute>}
+            /> */}
+
             <Route
                 path='/project'
                 // exact={true}
                 element={<>  <ProtectedRoute>    <Navbar />    <Project />  </ProtectedRoute></>}>
                 <Route path="add" element={<><CheckRole role="SUPER_ADMIN"><AddProject /></CheckRole></>} />
+                <Route path="add/:projectId" element={<><CheckRole role="SUPER_ADMIN"><AddProject /></CheckRole></>} />
+
                 <Route path="all" element={<AllProject />} />
                 {/* <Route path="view/:projectId" element={<ViewUser />} /> */}
             </Route>
