@@ -45,8 +45,8 @@ code {
   border: 3px solid orange;
 }
 .dashboard_camp {
-  width: 95%; 
-  margin-right: 10px;
+  /* width: 95%;  */
+  /* margin-right: 10px; */
   margin-left: auto;
 }
 div#root{

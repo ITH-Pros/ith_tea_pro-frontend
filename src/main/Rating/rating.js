@@ -40,7 +40,7 @@ export default function Rating(props) {
     let today = new Date();
     let patchDateValue = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
     const [loading, setLoading] = useState(false);
-    const [currentView, setCurrentView] = useState(userDetails?.role === "USER" ? "View" : "Add");
+    const [currentView, setCurrentView] = useState("View");
     const [teamOptions, setTeamOptions] = useState([]);
     const [team, setTeam] = useState("");
     const [date, setDate] = useState(patchDateValue);
@@ -150,7 +150,6 @@ export default function Rating(props) {
 
         switch (currentView) {
             case "Add":
-
                 return (
                     <div className="dv-50-rating ">
                         <Form className="margin-form" noValidate validated={validated}>
@@ -217,7 +216,7 @@ export default function Rating(props) {
                                 <FroalaEditorComponent tag='textarea' onModelChange={onChangeOfComments} />
                             </Row>
 
-											<div className="pull-right ">
+											<div className="text-right">
                             <button onClick={handleSubmit} className="btn-gradient-border btnDanger submit">Submit</button>
 							</div>
                         </Form>
@@ -237,7 +236,7 @@ export default function Rating(props) {
 
     return (
         <>
-          <div className="w-100">
+          <div className="w-100 px-3">
             {
                 userDetails?.role !== "USER" &&
                 <>
@@ -251,14 +250,14 @@ export default function Rating(props) {
                             Add Rating
                         </div>
                         }
-                        <div
+                        {/* <div
                             onClick={() => handleViewChange("View")}
                             className={`p-3 w-50 text-center rounded ${currentView === "View" ? "text-white bg-active" : "border-bottom "
                                 }`}
                             style={{ cursor: "pointer" }}
                         >
-                            View{" "}
-                        </div>
+                            Back{" "}
+                        </div> */}
                         {loading ? <Loader /> : null}
                         {toaster && <Toaster
                             message={toasterMessage}

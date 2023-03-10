@@ -248,6 +248,7 @@ td {
   .fixed_header th,
   .fixed_header td {
 	width: 73px;
+	vertical-align: middle;
   }
   
   .wrap {
@@ -500,4 +501,47 @@ td {
 	  display: grid;
 	  row-gap: 10rem;
   }
+   
+  /* .ratingTable{
+    margin-bottom: 0;
+    width: 100%;
+    
+  }
+  .ratingTable th{
+    font-size: 15px; 
+    padding: 6px; 
+    text-transform: capitalize;
+  }
+  .ratingTable td{
+    font-size: 12px;
+    padding: 6px;
+    border-bottom:0;
+  }
   
+
+.ratingTable td, .ratingTable th {
+	border-bottom: 0;
+	min-width: 176px;
+	height: 25px; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+  }
+   
+  .ratingTable table {
+	border-collapse: collapse;
+	overflow-x: scroll;
+  }
+  .ratingTable thead {
+	vertical-align: bottom;
+	border-bottom: 1px solid #fff;
+  }
+  .ratingTable tbody {
+    display: block;
+  }
+  .ratingTable tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+	height: 530px;
+    height: 250px;
+  } */
