@@ -22,11 +22,15 @@ const Tasks=()=> {
       getAllProjectsData();
   }, []);
     
-    const getAllProjectsData =async (data) => {
+    const getAllProjectsData =async () => {
         
            setLoading(true);
 		   
            try {
+			let data = {}
+			if(localStorage.getItem('taskFilters')){
+				data = JSON.parse(localStorage.getItem('taskFilters'))
+			}
              const lead = await getAllProjects(data);
              setLoading(false);
 
@@ -94,8 +98,8 @@ console.log(data)
 const getNewTasks = (id)=>{
 	getTasksDataUsingProjectId(id);
 }
-const getTaskFilters = (data)=>{
-	getAllProjectsData( data)
+const getTaskFilters = ()=>{
+	getAllProjectsData();
 }
   return (
     <div className="w-100 mr-3">
