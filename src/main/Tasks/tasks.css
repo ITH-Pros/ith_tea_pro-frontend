@@ -298,7 +298,8 @@ button.accordion-button{
 .accordion-item .dropdown-toggle::after{
   display: none;
 }
-.dropdown .dropdown-toggle, .dropdown  .dropdown-toggle.btn:hover {
+.dropdown .dropdown-toggle, .dropdown  .dropdown-toggle.btn:hover,
+.dropdown .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .dropdown .btn:first-child:active, .dropdown  .btn.active, .dropdown  .btn.show {
   background: transparent;
   border: 0;
   color: #000;

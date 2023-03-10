@@ -251,7 +251,7 @@ export default function AddProject(props) {
     }
 
     return (
-      <div className="addUserFrom">
+      <div className="addUserFrom rightDashboard">
         {/* <h4 className='mb-5'>Add Project</h4> */}
         <Form noValidate className="addUserFormBorder" validated={validated}>
           <Row className="mb-3">

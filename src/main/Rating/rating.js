@@ -236,7 +236,7 @@ export default function Rating(props) {
 
     return (
         <>
-          <div className="w-100 px-3">
+          <div className="rightDashboard">
             {
                 userDetails?.role !== "USER" &&
                 <>

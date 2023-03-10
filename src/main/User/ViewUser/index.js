@@ -57,7 +57,7 @@ export default function ViewUser(props) {
 
 
     return (
-        <><div className="container emp-profile">
+        <><div className="emp-profile rightDashboard">
         <form method="post">
             <div className="row">
                 <div className="col-md-4">

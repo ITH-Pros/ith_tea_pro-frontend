@@ -67,7 +67,7 @@ export default function AddUser(props) {
     }
 
     return (
-        <div className="addUserFrom">
+        <div className="addUserFrom rightDashboard">
             <Form noValidate validated={validated}>
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6">

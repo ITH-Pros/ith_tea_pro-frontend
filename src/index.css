@@ -44,11 +44,14 @@ code {
   border-radius: 20px;
   border: 3px solid orange;
 }
-.dashboard_camp {
-  /* width: 95%;  */
-  /* margin-right: 10px; */
+.dashboard_camp{ 
   margin-left: auto;
 }
-div#root{
-  display: flex;
+.rightDashboard {
+  width: 85%; 
+  margin-right: 1rem;
+  margin-left: auto;
 }
+/* div#root{
+  display: flex;
+} */
