@@ -57,9 +57,12 @@
 }
 
 .accordion-button:not(.collapsed) {
-  background-color: #c0c9dd;
+  /* background-color: #c0c9dd; */
+  color: #000 !important;
+  border: 0;
+  box-shadow: none !important;
 }
-
+ 
 .priority_tag {
   margin-left: 10px;
   background: #eee;
@@ -129,6 +132,9 @@
     border: none;
   background-color:#edf3fe !important
 }
+.accordion-header .row{
+  width: 100%;
+}
 .accordion-button{
          justify-content: space-between;
     align-items: center;
@@ -140,9 +146,11 @@
     /* margin: 0; */
     padding: 10px;
     /* max-height: 80vh; */
-    max-width: 80vw !important;
+    /* max-width: 80vw !important; */
       background-color:#edf3fe !important;
-
+}
+button.accordion-button{
+  width: auto;
 }
 .accordion-body{
       background: #fff;
@@ -184,6 +192,7 @@
 }
 
 .accordion .accordion-item {
+  position: relative;
   background: transparent;
   margin-bottom: 1rem;
   /* border: 1px solid #ccc;
@@ -192,26 +201,111 @@
 }
 
 .accordion-header {
-  padding: 1rem;
+  padding: .5rem 1rem;
   background-color: #f7f7f7;
   cursor: pointer;
 }
 
 .accordion-body {
-  padding: 1rem;
-  margin: 0 1.5rem;
+  padding: 1rem; 
+  margin: 0;
 }
 .accordion-body ul{
   list-style: none;
   padding: 0;
 }
 .accordion-body ul li {
-  padding: 3px 0px;
+  padding: 5px 0px;
   border-bottom: 1px solid #ddd;
+  line-height: 24px;
+  color: #999;
+  font-size: 15px;
+  white-space: normal;
+  word-break: break-word;
 }
 .accordion-body ul li:last-child{
   border: none;
 }
 .accordion-header .fa-angle-down {
   margin-right: 6px;
+}
+.accordion-header .progress { 
+  margin: auto 12px;
+}
+.accordion-button:not(.collapsed)::before {
+  /* background-image: var(--bs-accordion-btn-active-icon); */
+  transform: rotate(0deg);
+  text-align: left;
+  float: left;
+}
+.accordion-item .accordion-button:focus{
+  border: 0;
+  box-shadow: none;
+}
+.accordion-button::before {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 10px;
+  content: "";
+  background-image: url('../../assests/img/accordionIcon.svg');
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease-in-out;
+}
+.accordion-button::after{
+  display: none;
+}
+.completeTag{
+  background: #eee;
+    display: inline-block;
+    color: #8b8b8b;
+    font-size: 13px;
+    padding: 2px 4px 3px;
+    height: auto;
+    line-height: 1em;
+    border: 1px solid #eaecf1;
+    border-radius: 3px;   
+    text-transform: capitalize; 
+    margin: 0 8px;
+}
+.priorityTag{
+  background: #eee;
+  display: inline-block;
+  font-size: 13px;
+  padding: 2px 4px 3px;
+  cursor: move !important;
+  height: auto;
+  line-height: 1em;
+  border: 1px solid #eaecf1;
+  border-radius: 3px;
+  color: #f6f6f6;
+  border-color: transparent;
+  background-color: red; 
+}
+.nameTag{
+  text-transform: capitalize; 
+  color: #8e8e8e;
+  font-size: 12px;
+  font-weight: 500;
+}
+.nameTag img{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.accordion-header .dropdown-toggle::after{
+  display: none;
+}
+.dropdown .dropdown-toggle, .dropdown  .dropdown-toggle.btn:hover {
+  background: transparent;
+  border: 0;
+  color: #000;
+}
+.rightTags{
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-items: center;
 }
