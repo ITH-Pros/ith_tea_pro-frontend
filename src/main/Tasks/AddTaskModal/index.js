@@ -18,7 +18,7 @@ import Select from "react-select";
 import { getAllLeadsWithoutPagination } from '../../../services/user/api';
 export default function AddTaskModal(props) {
 
-    const {  selectedProjectFromTask,getNewTasks } = props;
+    const {  selectedProjectFromTask,getNewTasks, shoowAddTask } = props;
     const statusList = CONSTENTS.statusList
     const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -49,16 +49,22 @@ export default function AddTaskModal(props) {
     const [toasterMessage, setToasterMessage] = useState("");
 
     useEffect(() => {
+		console.log(shoowAddTask)
         getLeadsList();
          getProjectList();
     }, []);
 
+
     useEffect(() => {
+		if(shoowAddTask){
+			setShowAddTaskModal(true);
+		}
+		console.log(selectedProjectFromTask)
 		setSelectedProject(selectedProjectFromTask)
         setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] })
         setCategoryList(selectedProjectFromTask.categories)
         setUserList(selectedProjectFromTask.accessibleBy)
-    }, [selectedProjectFromTask]);
+    }, [shoowAddTask,selectedProjectFromTask]);
 
     const getLeadsList = async function () {
       setLoading(true);
@@ -91,13 +97,10 @@ export default function AddTaskModal(props) {
                 return
             } else {
                 setProjectList(projects.data)
-
-				if(!selectedProjectFromTask){
-					setSelectedProject(projects.data[0]);
-					setCategoryList(projects.data[0]?.categories);
-					setUserList(projects.data[0]?.accessibleBy)
-					setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] });
-				}
+				setCategoryList(projects.data[0]?.categories);
+				setUserList(projects.data[0]?.accessibleBy)
+					
+				
             }
         } catch (error) {
             setLoading(false);
