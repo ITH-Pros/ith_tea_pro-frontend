@@ -186,7 +186,7 @@ const ProjectCard = ({
       <label className="lableName">Managed By</label>
       <div className="user-profile-pics">
       {managedBy?.map((profile, index) => (
-            <UserIcon firstName={profile} />
+            <UserIcon firstName={profile.name} />
           ))}
       </div>
 	   </div>
