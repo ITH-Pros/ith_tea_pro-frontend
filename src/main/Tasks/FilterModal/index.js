@@ -133,8 +133,8 @@ const FilterModal = (props) => {
                 </span>
               </div>
             </Col>
-            <Col lg={2}>
-            <div className="text-right">
+            <Col lg={3}>
+            <div className="text-right me-2">
                 {clearFilter  && (
                   <img
                     style={{
@@ -160,6 +160,14 @@ const FilterModal = (props) => {
                 )}
               </div>
             </Col>
+            <Col lg={1}>
+            <button className="addTaskBtn"
+              style={{
+                float: "right" 
+              }} >
+              Add Task
+            </button>
+              </Col>
           </Row>
         </Container>
          
