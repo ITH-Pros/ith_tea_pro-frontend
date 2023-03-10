@@ -17,6 +17,7 @@ const Tasks=()=> {
   const [taskFilters, setTaskFilters] = useState({});
   const [selectedProject, setSelectedProject] = useState({});
   const [taskData, setTaskData] = useState({});
+  const [shoowAddTask, setShoowAddTask] = useState(false);
 
   const setShowToaster = (param) => showToaster(param);
     
@@ -87,9 +88,7 @@ console.log(data)
   const handleClick = (project) => {
     // If we already have task data for this project, don't fetch it again
 	console.log(taskData)
-    if (taskData[project?._id]) {
-	  return;
-    }
+    
 	console.log(selectedProject)
 	setSelectedProject(project)
     getTasksDataUsingProjectId(project?._id);
@@ -107,8 +106,8 @@ const getTaskFilters = ()=>{
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
       </h1>
 		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
-        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} />
-        <Accordion  >
+        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} shoowAddTask={shoowAddTask} />
+        <Accordion  alwaysOpen="true">
         {projects.map((project) => (
       <Accordion.Item key={project._id} eventKey={project._id}>
       <Accordion.Header onClick={() => handleClick(project)}>  
@@ -127,7 +126,10 @@ const getTaskFilters = ()=>{
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item href="#/action-1">Add Task</Dropdown.Item>
+          <Dropdown.Item onClick={(project) => {
+            setShoowAddTask(true);
+			setSelectedProject(project);
+          }}>Add Task</Dropdown.Item>
           {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
           <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
         </Dropdown.Menu>
@@ -135,7 +137,7 @@ const getTaskFilters = ()=>{
       
         </div>
         </div>
-     { taskData[project._id] && <Accordion.Body  >
+      <Accordion.Body  >
       
             <ul className="mb-0">
              {taskData[project._id]?.map((task)=>
@@ -149,7 +151,7 @@ const getTaskFilters = ()=>{
        )}
             </ul>
          
-      </Accordion.Body>} 
+      </Accordion.Body>
     </Accordion.Item> 
       ))}
             

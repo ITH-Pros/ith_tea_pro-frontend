@@ -18,7 +18,7 @@ import Select from "react-select";
 import { getAllLeadsWithoutPagination } from '../../../services/user/api';
 export default function AddTaskModal(props) {
 
-    const {  selectedProjectFromTask,getNewTasks } = props;
+    const {  selectedProjectFromTask,getNewTasks, shoowAddTask } = props;
     const statusList = CONSTENTS.statusList
     const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -49,9 +49,15 @@ export default function AddTaskModal(props) {
     const [toasterMessage, setToasterMessage] = useState("");
 
     useEffect(() => {
+		console.log(shoowAddTask)
         getLeadsList();
          getProjectList();
     }, []);
+	useEffect(() => {
+		if(shoowAddTask){
+			setShowAddTaskModal(true);
+		}
+    }, [shoowAddTask]);
 
     useEffect(() => {
 		setSelectedProject(selectedProjectFromTask)
