@@ -58,13 +58,13 @@ const Tasks=()=> {
 
 
     
-     const getTasksDataUsingProjectId = async (_id, filterData) => {
+     const getTasksDataUsingProjectId = async ( filterData) => {
          setLoading(true);
          try {
              let data = {};
              data = {
-                 groupBy:'projectId',
-                  projectId: _id
+                 groupBy:"['projectId','category']"
+               
              };
             
          const lead = await getProjectsTask(data);
@@ -74,7 +74,7 @@ console.log(data)
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
-             setTaskData({[_id]:lead.data[0]?.tasks})
+            //  setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
          setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -85,17 +85,17 @@ console.log(data)
      };
     
 
-  const handleClick = (project) => {
-    // If we already have task data for this project, don't fetch it again
-	console.log(taskData)
+//   const handleClick = (project) => {
+//     // If we already have task data for this project, don't fetch it again
+// 	console.log(taskData)
     
-	console.log(selectedProject)
-	setSelectedProject(project)
-    getTasksDataUsingProjectId(project?._id);
-  };
+// 	console.log(selectedProject)
+// 	setSelectedProject(project)
+//     getTasksDataUsingProjectId(project?._id);
+//   };
  
 const getNewTasks = (id)=>{
-	getTasksDataUsingProjectId(id);
+	getTasksDataUsingProjectId();
 }
 const getTaskFilters = ()=>{
 	getAllProjectsData();
@@ -110,7 +110,9 @@ const getTaskFilters = ()=>{
         <Accordion  alwaysOpen="true">
         {projects.map((project) => (
       <Accordion.Item key={project._id} eventKey={project._id}>
-      <Accordion.Header onClick={() => handleClick(project)}>  
+      {/* <Accordion.Header onClick={() => handleClick(project)}>  */}
+      <Accordion.Header >  
+
        {project.name} 
       </Accordion.Header>
       <div className="d-flex rightTags">
@@ -126,7 +128,7 @@ const getTaskFilters = ()=>{
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item onClick={(project) => {
+          <Dropdown.Item onClick={() => {
             setShoowAddTask(true);
 			setSelectedProject(project);
           }}>Add Task</Dropdown.Item>

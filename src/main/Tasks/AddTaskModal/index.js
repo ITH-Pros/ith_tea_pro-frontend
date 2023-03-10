@@ -53,18 +53,18 @@ export default function AddTaskModal(props) {
         getLeadsList();
          getProjectList();
     }, []);
-	useEffect(() => {
+
+
+    useEffect(() => {
 		if(shoowAddTask){
 			setShowAddTaskModal(true);
 		}
-    }, [shoowAddTask]);
-
-    useEffect(() => {
+		console.log(selectedProjectFromTask)
 		setSelectedProject(selectedProjectFromTask)
         setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] })
         setCategoryList(selectedProjectFromTask.categories)
         setUserList(selectedProjectFromTask.accessibleBy)
-    }, [selectedProjectFromTask]);
+    }, [shoowAddTask,selectedProjectFromTask]);
 
     const getLeadsList = async function () {
       setLoading(true);
@@ -97,13 +97,10 @@ export default function AddTaskModal(props) {
                 return
             } else {
                 setProjectList(projects.data)
-
-				if(!selectedProjectFromTask){
-					setSelectedProject(projects.data[0]);
-					setCategoryList(projects.data[0]?.categories);
-					setUserList(projects.data[0]?.accessibleBy)
-					setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] });
-				}
+				setCategoryList(projects.data[0]?.categories);
+				setUserList(projects.data[0]?.accessibleBy)
+					
+				
             }
         } catch (error) {
             setLoading(false);
