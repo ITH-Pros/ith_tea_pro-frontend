@@ -18,7 +18,7 @@ import Select from "react-select";
 import { getAllLeadsWithoutPagination } from '../../../services/user/api';
 export default function AddTaskModal(props) {
 
-    const {  selectedProjectFromTask,getNewTasks, shoowAddTask,closeModal } = props;
+    const {  selectedProjectFromTask,getNewTasks, showAddTask,closeModal } = props;
     const statusList = CONSTENTS.statusList
     const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -28,7 +28,6 @@ export default function AddTaskModal(props) {
     const [userList, setUserList] = useState([]);
     const [validated, setValidated] = useState(false);
     const [leadLists, setLeadList] = useState([]);
-    const [selectedProject, setSelectedProject] = useState(selectedProjectFromTask);
 	// const leadList = [{name : 'Lead 1', _id : '1'}, {name : 'Lead 2', _id : '2'}, {name : 'Lead 3', _id : '3'}]
 
     const [taskFormValue, setTaskFormValue] = useState({
@@ -49,23 +48,28 @@ export default function AddTaskModal(props) {
     const [toasterMessage, setToasterMessage] = useState("");
 
     useEffect(() => {
-		console.log(shoowAddTask)
+		console.log(showAddTask)
         getLeadsList();
-         getProjectList();
+        getProjectList();
     }, []);
 
 
     useEffect(() => {
-		if(shoowAddTask){
+		if(showAddTask){
 			setShowAddTaskModal(true);
-			console.log("calling function")
-		setSelectedProject(selectedProjectFromTask)
-        setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] })
-        setCategoryList(selectedProjectFromTask.categories)
-        setUserList(selectedProjectFromTask.accessibleBy)
+if(selectedProjectFromTask){
+	let project = projectList?.filter((item)=> item?._id == selectedProjectFromTask?._id);
+	console.log(project, projectList,selectedProjectFromTask);
+	setCategoryList(project[0].categories)
+	setUserList(project[0].accessibleBy)
+	setTaskFormValue({ ...taskFormValue, projectId: project[0]._id, category: project[0].categories?.[0] });
+	
+}else{
+	resetFormValue();
+}
 		}
 
-    }, [shoowAddTask,selectedProjectFromTask]);
+    }, [showAddTask,selectedProjectFromTask]);
 
     const getLeadsList = async function () {
       setLoading(true);
@@ -99,9 +103,7 @@ export default function AddTaskModal(props) {
             } else {
                 setProjectList(projects.data)
 				setCategoryList(projects.data[0]?.categories);
-				setUserList(projects.data[0]?.accessibleBy)
-					
-				
+				setUserList(projects.data[0]?.accessibleBy)				
             }
         } catch (error) {
             setLoading(false);
@@ -113,7 +115,6 @@ export default function AddTaskModal(props) {
 
     const onchangeSelectedProject = (e) => {
         let project = projectList.find((el) => el._id === e.target.value)
-        setSelectedProject(project);
 		setCategoryList(project?.categories);
         updateTaskFormValue(e);
     };
@@ -235,7 +236,7 @@ export default function AddTaskModal(props) {
     });
   };
 
- const reSetModalData=()=>{
+ const resetModalData=()=>{
 	closeModal();
 	resetFormValue();
 	setShowAddTaskModal(false);
@@ -259,12 +260,13 @@ export default function AddTaskModal(props) {
 
     return (
       <>
-        <button
+        {/* <button
           className="addTaskBtn"
           style={{
             float: "right", 
             bottom: "40px",
             right: "40px",
+            marginTop:"10px"
           }}
           onClick={() => {
 			resetFormValue();
@@ -272,13 +274,13 @@ export default function AddTaskModal(props) {
           }}
         >
           Add Task
-        </button>
+        </button> */}
         <Modal
           show={showAddTaskModal}
           size="xl"
+          className='taskModalForm'
           aria-labelledby="contained-modal-title-vcenter"
-          centered
-          onHide={() => reSetModalData()}
+          onHide={() => resetModalData()}
           backdrop="static"
         >
           <Modal.Header closeButton>
@@ -289,6 +291,7 @@ export default function AddTaskModal(props) {
           <Modal.Body>
             <div className="dv-50">
               <Form noValidate validated={validated}>
+                                
                 <Row className="mb-3">
                   <Form.Group as={Col} md="6">
                     <Form.Label>Project</Form.Label>
@@ -314,8 +317,6 @@ export default function AddTaskModal(props) {
                     </Form.Control.Feedback>
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
-                </Row>
-                <Row className="mb-3">
                   <Form.Group as={Col} md="6">
                     <Form.Label>Category</Form.Label>
                     <Form.Control
@@ -340,9 +341,7 @@ export default function AddTaskModal(props) {
                     </Form.Control.Feedback>
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="6">
+                  <Form.Group as={Col} md="12">
                     <Form.Label>Lead</Form.Label>
                     <Select
                       onChange={onLeadChange}
@@ -356,9 +355,10 @@ export default function AddTaskModal(props) {
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                   </Form.Group>
                 </Row>
+               
 
                 <Row className="mb-3">
-                  <Form.Group as={Col} md="10">
+                  <Form.Group as={Col} md="12">
                     <Form.Label>Task Title</Form.Label>
                     <Form.Control
                       required
@@ -381,10 +381,10 @@ export default function AddTaskModal(props) {
                     tag="textarea"
                     onModelChange={updateTaskDescriptionValue}
                   />
-                </Row>
+                </Row> 
 
                 <Row className="mb-3">
-                  <Form.Group as={Col} md="3">
+                <Form.Group as={Col} md="3">
                     <Form.Label>Assigned To</Form.Label>
                     <Form.Control
                       as="select"
@@ -401,7 +401,7 @@ export default function AddTaskModal(props) {
                       ))}
                     </Form.Control>
                   </Form.Group>
-                  <Form.Group as={Col} md="4">
+                  <Form.Group as={Col} md="3" className='px-0'>
                     <Form.Label>Due Date</Form.Label>
                     <Form.Control
                       type="date"
@@ -431,10 +431,7 @@ export default function AddTaskModal(props) {
                       ))}
                     </Form.Control>
                   </Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="2">
+                  <Form.Group as={Col} md="3" className='ps-0'>
                     <Form.Label>Status</Form.Label>
 
                     <Form.Control
@@ -468,9 +465,8 @@ export default function AddTaskModal(props) {
                   )}
                 </Row>
 
-                <div style={{ float: "right", marginRight: "10px" }}>
-                  <Button
-                    style={{ marginTop: "13px" }}
+                <div className='addFormBtn'>
+                  <Button 
                     className=" btn-press  btn-gradient-border btnDanger"
                     type="button"
                     onClick={submitTask}

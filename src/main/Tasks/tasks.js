@@ -17,7 +17,7 @@ const Tasks=()=> {
   const [taskFilters, setTaskFilters] = useState({});
   const [selectedProject, setSelectedProject] = useState({});
   const [taskData, setTaskData] = useState({});
-  const [shoowAddTask, setShoowAddTask] = useState(false);
+  const [showAddTask, setShowAddTask] = useState(false);
 
   const setShowToaster = (param) => showToaster(param);
     
@@ -25,32 +25,32 @@ const Tasks=()=> {
 	getTasksDataUsingProjectId();
   }, []);
     
-    const getAllProjectsData =async () => {
+    // const getAllProjectsData =async () => {
         
-           setLoading(true);
+    //        setLoading(true);
 		   
-           try {
-			let data = {}
+    //        try {
+	// 		let data = {}
 			
-             const lead = await getAllProjects(data);
-             setLoading(false);
+    //          const lead = await getAllProjects(data);
+    //          setLoading(false);
 
-             if (lead.error) {
-               setToasterMessage(
-                 lead?.error?.message || "Something Went Wrong"
-               );
-               setShowToaster(true);
-             } else {
-                 setProjects(lead.data);
-             }
-           } catch (error) {
-             setToasterMessage(error?.error?.message || "Something Went Wrong");
-             setShowToaster(true);
-             setLoading(false);
-             return error.message;
-           }
+    //          if (lead.error) {
+    //            setToasterMessage(
+    //              lead?.error?.message || "Something Went Wrong"
+    //            );
+    //            setShowToaster(true);
+    //          } else {
+    //              setProjects(lead.data);
+    //          }
+    //        } catch (error) {
+    //          setToasterMessage(error?.error?.message || "Something Went Wrong");
+    //          setShowToaster(true);
+    //          setLoading(false);
+    //          return error.message;
+    //        }
 
-    }
+    // }
 
 
 
@@ -68,11 +68,12 @@ const Tasks=()=> {
 			}
          const lead = await getProjectsTask(data);
          setLoading(false);
-console.log(data)
+
          if (lead.error) {
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
+			setProjects(lead?.data)
             //  setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
@@ -97,25 +98,27 @@ const getNewTasks = (id)=>{
 	getTasksDataUsingProjectId();
 }
 const getTaskFilters = ()=>{
-	getAllProjectsData();
+	getTasksDataUsingProjectId();
 }
 const closeModal=()=>{
-	setShoowAddTask(false);
+	setShowAddTask(false);
 }
   return (
     <div className="rightDashboard">
-      <h1 className="h1-text">
-          <i className="fa fa-list-ul" aria-hidden="true"></i>Task
+      <h1 className="h1-text" >
+          <i onClick={() => {
+            setShowAddTask(true);
+			setSelectedProject();
+          }} className="fa fa-list-ul" aria-hidden="true"></i>Task
       </h1>
 		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
-        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} shoowAddTask={shoowAddTask} closeModal={closeModal} />
+        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
         <Accordion  alwaysOpen="true">
-        {projects.map((project) => (
-      <Accordion.Item key={project._id} eventKey={project._id}>
-      {/* <Accordion.Header onClick={() => handleClick(project)}>  */}
+        {projects.map((project, index) => (
+      <Accordion.Item key={index} eventKey={index}>
       <Accordion.Header >  
 
-       {project.name} 
+       {project?._id?.projectId?.name} / {project?._id?.category}
       </Accordion.Header>
       <div className="d-flex rightTags">
         <ProgressBar>
@@ -131,8 +134,8 @@ const closeModal=()=>{
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => {
-            setShoowAddTask(true);
-			setSelectedProject(project);
+            setShowAddTask(true);
+			setSelectedProject(project?._id?.projectId);
           }}>Add Task</Dropdown.Item>
           {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
           <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
@@ -144,7 +147,7 @@ const closeModal=()=>{
       <Accordion.Body  >
       
             <ul className="mb-0">
-             {taskData[project._id]?.map((task)=>
+             {project?.tasks?.map((task)=>
        <li key={task?._id}><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
        <span className="completeTag">completed Dec 22,2022</span>
        <span className="priorityTag">High</span>
