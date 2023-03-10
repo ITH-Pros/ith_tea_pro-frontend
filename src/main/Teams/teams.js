@@ -134,7 +134,7 @@ export default function Teams(props) {
               (ele) => ele._id === proejct._id
             );
             return (
-              <div key={proejct._id}>
+              <div key={proejct._id} className="assignPro">
                 <input
                   disabled={checkAlreadyAssigned}
                   checked={
