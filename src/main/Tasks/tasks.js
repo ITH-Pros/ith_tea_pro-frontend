@@ -22,7 +22,7 @@ const Tasks=()=> {
   const setShowToaster = (param) => showToaster(param);
     
   useEffect(() => {
-      getAllProjectsData();
+	getTasksDataUsingProjectId();
   }, []);
     
     const getAllProjectsData =async () => {
@@ -31,9 +31,7 @@ const Tasks=()=> {
 		   
            try {
 			let data = {}
-			if(localStorage.getItem('taskFilters')){
-				data = JSON.parse(localStorage.getItem('taskFilters'))
-			}
+			
              const lead = await getAllProjects(data);
              setLoading(false);
 
@@ -44,7 +42,6 @@ const Tasks=()=> {
                setShowToaster(true);
              } else {
                  setProjects(lead.data);
-				 setSelectedProject(lead?.data[0]);
              }
            } catch (error) {
              setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -63,10 +60,12 @@ const Tasks=()=> {
          try {
              let data = {};
              data = {
-                 groupBy:"['projectId','category']"
-               
+                 groupBy:"default"
              };
-            
+			 if(localStorage.getItem('taskFilters')){
+				let filterData = JSON.parse(localStorage.getItem('taskFilters'))
+				data = {...data, ...filterData}
+			}
          const lead = await getProjectsTask(data);
          setLoading(false);
 console.log(data)
@@ -100,13 +99,16 @@ const getNewTasks = (id)=>{
 const getTaskFilters = ()=>{
 	getAllProjectsData();
 }
+const closeModal=()=>{
+	setShoowAddTask(false);
+}
   return (
     <div className="rightDashboard">
       <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
       </h1>
 		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
-        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} shoowAddTask={shoowAddTask} />
+        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} shoowAddTask={shoowAddTask} closeModal={closeModal} />
         <Accordion  alwaysOpen="true">
         {projects.map((project) => (
       <Accordion.Item key={project._id} eventKey={project._id}>

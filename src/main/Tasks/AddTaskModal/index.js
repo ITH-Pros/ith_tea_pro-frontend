@@ -18,7 +18,7 @@ import Select from "react-select";
 import { getAllLeadsWithoutPagination } from '../../../services/user/api';
 export default function AddTaskModal(props) {
 
-    const {  selectedProjectFromTask,getNewTasks, shoowAddTask } = props;
+    const {  selectedProjectFromTask,getNewTasks, shoowAddTask,closeModal } = props;
     const statusList = CONSTENTS.statusList
     const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -58,12 +58,13 @@ export default function AddTaskModal(props) {
     useEffect(() => {
 		if(shoowAddTask){
 			setShowAddTaskModal(true);
-		}
-		console.log(selectedProjectFromTask)
+			console.log("calling function")
 		setSelectedProject(selectedProjectFromTask)
         setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] })
         setCategoryList(selectedProjectFromTask.categories)
         setUserList(selectedProjectFromTask.accessibleBy)
+		}
+
     }, [shoowAddTask,selectedProjectFromTask]);
 
     const getLeadsList = async function () {
@@ -234,6 +235,28 @@ export default function AddTaskModal(props) {
     });
   };
 
+ const reSetModalData=()=>{
+	closeModal();
+	resetFormValue();
+	setShowAddTaskModal(false);
+
+  }
+  const resetFormValue=()=>{
+	setTaskFormValue({
+		projectId: "",
+		category: "",
+		title: "",
+		description: "",
+		assignedTo: "",
+		dueDate: "",
+		completedDate: "",
+		priority: priorityList[0],
+		status: statusList[0],
+		attachment: "",
+		tasklead: ""
+	  })
+  }
+
     return (
       <>
         <button
@@ -244,6 +267,7 @@ export default function AddTaskModal(props) {
             right: "40px",
           }}
           onClick={() => {
+			resetFormValue();
             setShowAddTaskModal(true);
           }}
         >
@@ -254,7 +278,7 @@ export default function AddTaskModal(props) {
           size="xl"
           aria-labelledby="contained-modal-title-vcenter"
           centered
-          onHide={() => setShowAddTaskModal(false)}
+          onHide={() => reSetModalData()}
           backdrop="static"
         >
           <Modal.Header closeButton>
