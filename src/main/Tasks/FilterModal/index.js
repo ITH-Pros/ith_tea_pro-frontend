@@ -31,13 +31,13 @@ const FilterModal = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [filterModalShow, setFilterModalShow] = useState(false);
-  const [localStorageTaskFilters, setLocalStorageTaskFilters] =
-    useLocalStorage("taskFilters");
+
   const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
 
   useEffect(() => {
-    if (localStorageTaskFilters) {
-      setFilterFormValue(localStorageTaskFilters);
+    if (localStorage.getItem('taskFilters')) {
+      setFilterFormValue(JSON.parse(localStorage.getItem('taskFilters')));
+	  setClearFilterBoolean(true);
     }
   }, []);
 
@@ -74,8 +74,9 @@ const FilterModal = (props) => {
       "---------------------------filter form value"
     );
     //TODO
-    setLocalStorageTaskFilters(filterFormValue);
-    getTaskFilters(filterFormValue);
+	localStorage.setItem('taskFilters', JSON.stringify(filterFormValue))
+    getTaskFilters();
+	setFilterModalShow(false);
   };
   const clearFilterFormValue = () => {
     console.log("key pressed");
@@ -86,11 +87,10 @@ const FilterModal = (props) => {
     setDueDate("");
     setDateUpdated("");
     setSortBy("");  
-
-
-    setFilterFormValue(filterFormFileds);
-    setLocalStorageTaskFilters(filterFormFileds);
-    getTaskFilters(filterFormFileds);
+	setFilterFormValue(filterFormFileds);
+	localStorage.removeItem('taskFilters');
+	setClearFilterBoolean(false);
+	getTaskFilters();
   };
 
   return (
@@ -135,7 +135,7 @@ const FilterModal = (props) => {
             </Col>
             <Col lg={2}>
             <div className="text-right">
-                {clearFilter && (
+                {clearFilter  && (
                   <img
                     style={{
                       width: "18px",
@@ -147,7 +147,7 @@ const FilterModal = (props) => {
                     alt="filter"
                   />
                 )}
-                {clearFilter && (
+                {clearFilter  && (
                   <span
                     onClick={() => {
                       clearFilterFormValue();

@@ -6,6 +6,8 @@ import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
 import TaskModal from "./ShowTaskModal";
+import {Accordion, ProgressBar, Row, Col, Dropdown } from 'react-bootstrap'
+import avtar from '../../assests/img/avtar.png'
 
 const Tasks=()=> {
   const [projects, setProjects] = useState([]);
@@ -22,11 +24,15 @@ const Tasks=()=> {
       getAllProjectsData();
   }, []);
     
-    const getAllProjectsData =async (data) => {
+    const getAllProjectsData =async () => {
         
            setLoading(true);
 		   
            try {
+			let data = {}
+			if(localStorage.getItem('taskFilters')){
+				data = JSON.parse(localStorage.getItem('taskFilters'))
+			}
              const lead = await getAllProjects(data);
              setLoading(false);
 
@@ -67,7 +73,7 @@ console.log(data)
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
-             setTaskData({ [_id]: lead.data[0]?.tasks })
+             setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
          setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -80,8 +86,9 @@ console.log(data)
 
   const handleClick = (project) => {
     // If we already have task data for this project, don't fetch it again
+	console.log(taskData)
     if (taskData[project?._id]) {
-      return;
+	  return;
     }
 	console.log(selectedProject)
 	setSelectedProject(project)
@@ -91,8 +98,8 @@ console.log(data)
 const getNewTasks = (id)=>{
 	getTasksDataUsingProjectId(id);
 }
-const getTaskFilters = (data)=>{
-	getAllProjectsData( data)
+const getTaskFilters = ()=>{
+	getAllProjectsData();
 }
   return (
     <div className="w-100 mr-3">
@@ -101,14 +108,81 @@ const getTaskFilters = (data)=>{
       </h1>
 		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} />
-    <div className="accordion">
+        <Accordion  >
+        {projects.map((project) => (
+      <Accordion.Item key={project._id} eventKey={project._id}>
+      <Accordion.Header onClick={() => handleClick(project)}>  
+       {project.name} 
+      </Accordion.Header>
+      <div className="d-flex rightTags">
+        <ProgressBar>
+          <ProgressBar striped variant="success" now={35} key={1} />
+          <ProgressBar variant="warning" now={20} key={2} />
+          <ProgressBar striped variant="danger" now={10} key={3} />
+        </ProgressBar>
+        <div>
+        <Dropdown>
+        <Dropdown.Toggle id="dropdown-basic">
+        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item href="#/action-1">Add Task</Dropdown.Item>
+          {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
+        </Dropdown.Menu>
+      </Dropdown>
+      
+        </div>
+        </div>
+     { taskData[project._id] && <Accordion.Body  >
+      
+            <ul className="mb-0">
+             {taskData[project._id]?.map((task)=>
+       <li key={task?._id}><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
+       <span className="completeTag">completed Dec 22,2022</span>
+       <span className="priorityTag">High</span>
+       <span className="nameTag"> <img src={avtar} alt="userAvtar" /> chandan s</span>
+       <span className="completeTag">Due Dec 22,2022</span>
+      
+       </li>
+       )}
+            </ul>
+         
+      </Accordion.Body>} 
+    </Accordion.Item> 
+      ))}
+            
+    </Accordion>
+    {/* <div className="accordion">
       {projects.map((project) => (
         <div className="accordion-item" key={project._id}>
           <div
             className="accordion-header"
             onClick={() => handleClick(project)}
           >
-            <i className="fa fa-angle-down" aria-hidden="true"></i> {project.name}
+            <Row>
+              <Col sm={7}>
+              <div>
+               <i className="fa fa-angle-down" aria-hidden="true"></i> {project.name}              
+              </div> 
+              </Col>
+              <Col sm={5}>
+                <div className="d-flex">
+                <ProgressBar>
+                  <ProgressBar striped variant="success" now={35} key={1} />
+                  <ProgressBar variant="warning" now={20} key={2} />
+                  <ProgressBar striped variant="danger" now={10} key={3} />
+                </ProgressBar>
+                <div>
+                <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                </div>
+                </div>
+              </Col>
+               
+            </Row>
+                      
+           
           </div>
           <div className="accordion-body">
             {taskData[project._id] && (
@@ -129,7 +203,7 @@ const getTaskFilters = (data)=>{
           close={() => showToaster(false)}
         />
       )}
-    </div>
+    </div> */}
     </div>
   );
 }
