@@ -18,13 +18,13 @@ import Select from "react-select";
 import { getAllLeadsWithoutPagination } from '../../../services/user/api';
 export default function AddTaskModal(props) {
 
-    const { setSelectedProjectFromAddTask, selectedProjectFromTask, projectListFromProjectsTab } = props;
+    const {  selectedProjectFromTask,getNewTasks } = props;
     const statusList = CONSTENTS.statusList
     const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [categoryList, setCategoryList] = useState();
-    const [projectList, setProjectList] = useState(projectListFromProjectsTab || []);
+    const [projectList, setProjectList] = useState([]);
     const [userList, setUserList] = useState([]);
     const [validated, setValidated] = useState(false);
     const [leadLists, setLeadList] = useState([]);
@@ -50,14 +50,15 @@ export default function AddTaskModal(props) {
 
     useEffect(() => {
         getLeadsList();
-        !projectList?.length && getProjectList();
+         getProjectList();
     }, []);
 
     useEffect(() => {
-        setTaskFormValue({ ...taskFormValue, projectId: selectedProject._id, category: selectedProject.categories?.[0] })
-        setCategoryList(selectedProject.categories)
-        setUserList(selectedProject.accessibleBy)
-    }, [selectedProject]);
+		setSelectedProject(selectedProjectFromTask)
+        setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] })
+        setCategoryList(selectedProjectFromTask.categories)
+        setUserList(selectedProjectFromTask.accessibleBy)
+    }, [selectedProjectFromTask]);
 
     const getLeadsList = async function () {
       setLoading(true);
@@ -82,15 +83,21 @@ export default function AddTaskModal(props) {
     const getProjectList = async () => {
         setLoading(true)
         try {
-            const projectList = await getAllProjects();
+            const projects = await getAllProjects();
             setLoading(false);
-            if (projectList.error) {
-                setToasterMessage(projectList?.error?.message || 'Something Went Wrong');
+            if (projects.error) {
+                setToasterMessage(projects?.error?.message || 'Something Went Wrong');
                 setShowToaster(true);
                 return
             } else {
-                setProjectList(projectList.data)
-                setSelectedProject(selectedProjectFromTask)
+                setProjectList(projects.data)
+
+				if(!selectedProjectFromTask){
+					setSelectedProject(projects.data[0]);
+					setCategoryList(projects.data[0]?.categories);
+					setUserList(projects.data[0]?.accessibleBy)
+					setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] });
+				}
             }
         } catch (error) {
             setLoading(false);
@@ -103,7 +110,8 @@ export default function AddTaskModal(props) {
     const onchangeSelectedProject = (e) => {
         let project = projectList.find((el) => el._id === e.target.value)
         setSelectedProject(project);
-        updateTaskFormValue(e)
+		setCategoryList(project?.categories);
+        updateTaskFormValue(e);
     };
 
     const updateTaskFormValue = (e) => {
@@ -156,9 +164,10 @@ export default function AddTaskModal(props) {
                     ...taskFormValue,
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
                 })
-                setValidated(false)
-                setSelectedProjectFromAddTask && setSelectedProjectFromAddTask(selectedProject, false)
-                setShowAddTaskModal(false)
+                setValidated(false);
+               
+                setShowAddTaskModal(false);
+				getNewTasks(projectId);
             }
         } catch (error) {
             setLoading(false);
@@ -201,8 +210,10 @@ export default function AddTaskModal(props) {
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
                 })
                 setValidated(false)
-                setSelectedProjectFromAddTask && setSelectedProjectFromAddTask(selectedProject, true)
+      
                 setShowAddTaskModal(true)
+				getNewTasks(projectId);
+
 
             }
         } catch (error) {

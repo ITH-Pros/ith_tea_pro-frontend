@@ -26,6 +26,7 @@ import {
 } from "react-bootstrap";
 import Avatar from "react-avatar";
 import { useNavigate } from 'react-router-dom';
+import AddTaskModal from "../Tasks/AddTaskModal";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -149,7 +150,9 @@ export default function Dashboard(props) {
       return error.message;
     }
   };
-
+const getNewTasks = (data)=>{
+	getAndSetAllProjects();
+}
   return (
     <div className="dashboard_camp">
       <div className="m-3 d-flex justify-content-center flex-column">
@@ -310,7 +313,7 @@ export default function Dashboard(props) {
 				})}
 			</tbody>
 			</table> */}
-        {/* {<MyCalendar />} */}
+        {<MyCalendar />}
       </div>
       <Container>
         <Row>
@@ -386,26 +389,22 @@ export default function Dashboard(props) {
         <Row className="row-bg">
 		{projectList.slice(0, 4).map((project) => (
   <Col lg={6}>
-    <Card id={`card-${project.id}`} key={project.id}>
+    <Card id={`card-${project.id}`} key={project?.id}>
       <Row className="d-flex justify-content-start">
         <Col lg={6} className="middle">
           <Avatar name={project.name} size={40} round="20px" />{" "}
-          <h5 className="text-truncate">{project.name}</h5>
+          <h5 className="text-truncate">{project?.name}</h5>
         </Col>
         <Col lg={4} className="middle">
-          <p className="text-truncate">{project.description}</p>
+          <p className="text-truncate">{project?.description}</p>
         </Col>
         <Col
           lg={2}
           className="text-end middle"
-          style={{ justifyContent: "end" }}
+          style={{ justifyContent: "end"}}
         >
-          <Button variant="light" size="sm">
-            <i className="fa fa-star"></i>
-          </Button>
-          <Button variant="light" size="sm">
-            <i className="fa fa-ellipsis-v"></i>
-          </Button>
+           <AddTaskModal  selectedProjectFromTask={project} getNewTasks={getNewTasks} />
+        
         </Col>
       </Row>
     </Card>

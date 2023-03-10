@@ -7,7 +7,7 @@ import "./filter.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 const FilterModal = (props) => {
-  const { selectedProject, setTaskFilters } = props;
+  const { selectedProject, getTaskFilters } = props;
 
   const statusList = CONSTENTS.statusList;
   const priorityList = CONSTENTS.priorityList;
@@ -75,7 +75,7 @@ const FilterModal = (props) => {
     );
     //TODO
     setLocalStorageTaskFilters(filterFormValue);
-    setTaskFilters(filterFormValue);
+    getTaskFilters(filterFormValue);
   };
   const clearFilterFormValue = () => {
     console.log("key pressed");
@@ -90,7 +90,7 @@ const FilterModal = (props) => {
 
     setFilterFormValue(filterFormFileds);
     setLocalStorageTaskFilters(filterFormFileds);
-    setTaskFilters(filterFormFileds);
+    getTaskFilters(filterFormFileds);
   };
 
   return (

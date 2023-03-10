@@ -31,8 +31,8 @@ export async function getprojectListWithoutCat(data) {
 export async function getAllUserDataForRating(data) {
 	return (axiosInstance.get('/user/v1/list',data).then(res => res.data))
 }
-export async function getAllProjects() {
-    return (axiosInstance.get('/projects/v1/all', ).then(res => res.data))
+export async function getAllProjects(data) {
+    return (axiosInstance.get('/projects/v1/all', data).then(res => res.data))
 }
 export async function getUsersOfProject(data) {
     return (axiosInstance.get('/projects/v1/user/all', data).then(res => res.data))

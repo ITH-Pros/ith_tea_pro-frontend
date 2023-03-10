@@ -506,3 +506,6 @@ th {
   /* increase icon size */
   font-size: 2rem;
 }
+.add-task{
+	bottom: 0 !important;
+}
