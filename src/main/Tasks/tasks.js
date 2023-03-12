@@ -95,6 +95,7 @@ const Tasks=()=> {
 //   };
  
 const getNewTasks = (id)=>{
+	closeModal();
 	getTasksDataUsingProjectId();
 }
 const getTaskFilters = ()=>{
@@ -104,14 +105,23 @@ const closeModal=()=>{
 	setShowAddTask(false);
 }
   return (
+	
     <div className="rightDashboard">
       <h1 className="h1-text" >
-          <i onClick={() => {
-            setShowAddTask(true);
-			setSelectedProject();
-          }} className="fa fa-list-ul" aria-hidden="true"></i>Task
+          <i  className="fa fa-list-ul" aria-hidden="true"></i>Task
       </h1>
-		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
+
+            <button className="addTaskBtn"
+              style={{
+                float: "right" 
+              }}  onClick={() => {
+				setShowAddTask(true);
+				setSelectedProject();
+			  }}>
+              Add Task
+            </button>
+            
+		<FilterModal   getTaskFilters={getTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
         <Accordion  alwaysOpen="true">
         {projects.map((project, index) => (
@@ -135,7 +145,7 @@ const closeModal=()=>{
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => {
             setShowAddTask(true);
-			setSelectedProject(project?._id?.projectId);
+			setSelectedProject({_id: project?._id?.projectId?._id, category: project?._id?.category});
           }}>Add Task</Dropdown.Item>
           {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
           <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}

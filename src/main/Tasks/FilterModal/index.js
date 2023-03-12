@@ -160,14 +160,7 @@ const FilterModal = (props) => {
                 )}
               </div>
             </Col>
-            <Col lg={1}>
-            <button className="addTaskBtn"
-              style={{
-                float: "right" 
-              }} >
-              Add Task
-            </button>
-              </Col>
+           
           </Row>
         </Container>
          

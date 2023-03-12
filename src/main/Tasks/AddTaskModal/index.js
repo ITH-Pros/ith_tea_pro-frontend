@@ -57,19 +57,23 @@ export default function AddTaskModal(props) {
     useEffect(() => {
 		if(showAddTask){
 			setShowAddTaskModal(true);
-if(selectedProjectFromTask){
-	let project = projectList?.filter((item)=> item?._id == selectedProjectFromTask?._id);
-	console.log(project, projectList,selectedProjectFromTask);
-	setCategoryList(project[0].categories)
-	setUserList(project[0].accessibleBy)
-	setTaskFormValue({ ...taskFormValue, projectId: project[0]._id, category: project[0].categories?.[0] });
-	
-}else{
-	resetFormValue();
-}
+			patchFormForAdd();
 		}
 
-    }, [showAddTask,selectedProjectFromTask]);
+    }, [showAddTask]);
+
+	const patchFormForAdd=()=>{
+		if(selectedProjectFromTask){
+			let project = projectList?.filter((item)=> item?._id == selectedProjectFromTask?._id);
+			console.log(project, projectList,selectedProjectFromTask);
+			setCategoryList(project[0]?.categories)
+			setUserList(project[0]?.accessibleBy)
+			setTaskFormValue({ ...taskFormValue, projectId: project[0]?._id, category: selectedProjectFromTask?.category || project[0]?.categories?.[0] });
+			
+		}else{
+			resetFormValue();
+		}
+	}
 
     const getLeadsList = async function () {
       setLoading(true);
