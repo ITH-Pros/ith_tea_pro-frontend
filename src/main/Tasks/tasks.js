@@ -18,6 +18,7 @@ const Tasks=()=> {
   const [selectedProject, setSelectedProject] = useState({});
   const [taskData, setTaskData] = useState({});
   const [showAddTask, setShowAddTask] = useState(false);
+  const [selectedTask, setSelectedTask] = useState({});
 
   const setShowToaster = (param) => showToaster(param);
     
@@ -105,6 +106,8 @@ const getTaskFilters = ()=>{
 }
 const closeModal=()=>{
 	setShowAddTask(false);
+	setSelectedProject();
+	setSelectedTask();
 }
   return (
 	
@@ -124,7 +127,7 @@ const closeModal=()=>{
             </button>
             
 		<FilterModal   getTaskFilters={getTaskFilters} />
-        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
+        <AddTaskModal selectedProjectFromTask={selectedProject} selectedTask={selectedTask} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
         <Accordion  alwaysOpen="true">
         {projects.map((project, index) => (
       <Accordion.Item key={index} eventKey={index}>
@@ -149,6 +152,7 @@ const closeModal=()=>{
             setShowAddTask(true);
 			setSelectedProject({_id: project?._id?.projectId?._id, category: project?._id?.category});
           }}>Add Task</Dropdown.Item>
+		  
           {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
           <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
         </Dropdown.Menu>
@@ -165,6 +169,11 @@ const closeModal=()=>{
        <span className="priorityTag">High</span>
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> chandan s</span>
        <span className="completeTag">Due Dec 22,2022</span>
+	   <span onClick={() => {
+		setSelectedProject();
+            setShowAddTask(true);
+			setSelectedTask(task);
+          }}>edit</span>
       
        </li>
        )}
