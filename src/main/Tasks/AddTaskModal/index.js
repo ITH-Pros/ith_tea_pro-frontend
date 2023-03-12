@@ -118,7 +118,11 @@ export default function AddTaskModal(props) {
     }
 
     const onchangeSelectedProject = (e) => {
-        let project = projectList.find((el) => el._id === e.target.value)
+        let project = projectList.find((el) => el._id === e.target.value);
+		setTaskFormValue({
+			...taskFormValue,
+			category: '', assignedTo: '', 
+		})
 		setCategoryList(project?.categories);
 		setUserList(project?.accessibleBy);	
         updateTaskFormValue(e);
