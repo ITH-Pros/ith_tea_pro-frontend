@@ -64,7 +64,9 @@ const Tasks=()=> {
              };
 			 if(localStorage.getItem('taskFilters')){
 				let filterData = JSON.parse(localStorage.getItem('taskFilters'))
-				data = {...data, ...filterData}
+				data = filterData;
+				data.groupBy = "default"
+				console.log(data, "filter data")
 			}
          const lead = await getProjectsTask(data);
          setLoading(false);

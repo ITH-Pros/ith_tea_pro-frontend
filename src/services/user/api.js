@@ -67,10 +67,7 @@ export async function getComment(data) {
 export async function getProjectsTask(data) {
     return axiosInstance
       .get("/task/v1/groupby", {
-        params: {
-              projectId: data?.projectId,
-            groupBy:data.groupBy
-        },
+        params: data,
       })
       .then((res) => res.data);
 }
