@@ -57,6 +57,11 @@ import {
   faCommentDots,
   faFlag,
   faClock,
+  faSpellCheck,
+  faCheckCircle,
+  faCheck,
+  faBarChart,
+  faIcons,
 } from "@fortawesome/free-solid-svg-icons";
 // import "./ProjectCard.css";
 
@@ -153,19 +158,19 @@ const ProjectCard = ({
       </div>
       <div className="project-stats">
         <div className="stat">
-          <FontAwesomeIcon icon={faTasks} />
-          <span>0</span>
-        </div>
-        <div className="stat">
-          <FontAwesomeIcon icon={faCommentDots} />
-          <span>{element?.tasks?.length}</span>
-        </div>
-        <div className="stat">
           <FontAwesomeIcon icon={faFlag} />
           <span>0</span>
         </div>
         <div className="stat">
-          <FontAwesomeIcon icon={faClock} />
+          <FontAwesomeIcon icon={faTasks} />
+          <span>{element?.tasks?.length}</span>
+        </div>
+        <div className="stat">
+          <FontAwesomeIcon icon={faCheck} />
+          <span>0</span>
+        </div>
+        <div className="stat">
+          <FontAwesomeIcon icon={faBarChart} />
           <span>0</span>
         </div>
       </div>
@@ -178,6 +183,8 @@ const ProjectCard = ({
         {accessibleBy?.map((profile, index) => (
               <UserIcon firstName={profile?.name} />
             ))}
+
+			<FontAwesomeIcon icon={faEllipsisH} />
         </div>
         
       </div>
@@ -188,6 +195,8 @@ const ProjectCard = ({
       {managedBy?.map((profile, index) => (
             <UserIcon firstName={profile.name} />
           ))}
+
+		  {/* <UserIcon firstName={profile.name} /> */}
       </div>
 	   </div>
 	   </div>

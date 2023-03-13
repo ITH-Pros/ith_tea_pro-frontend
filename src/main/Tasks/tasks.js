@@ -71,7 +71,6 @@ const Tasks=()=> {
 			}
          const lead = await getProjectsTask(data);
          setLoading(false);
-
          if (lead.error) {
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);

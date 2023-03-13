@@ -22,6 +22,8 @@ import { useAuth } from "../../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
+// import { Button } from "bootstrap";
+import { Modal ,  Button } from "react-bootstrap";
 // import { useNavigate } from 'react-router-dom';
 
 export default function AllProject() {
@@ -57,6 +59,10 @@ export default function AllProject() {
   const [projectAssignedUsers, setProjectAssignedUsers] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [sureModalShow, setSureModalShow] = useState(false);
+  const [confirmModalShow , setConfirmModalShow] = useState(false);
+
+
+
   const userListToAddInProject = new Set();
   const navigate = useNavigate();
   // const navigate = useNavigate();
@@ -406,12 +412,26 @@ export default function AllProject() {
     }
   };
 
-  const deleteProject = async (project) => {
-    console.log(project, "------deleteProject");
+  const confirmation = (project) => {
+	setSelectedProject(project);
+	setConfirmModalShow(true);
+	};
+
+
+
+
+  const deleteProject = async () => {
+
+	// setSelectedProject(project);
+
+	// setConfirmModalShow(true);
+
+
+    // console.log(project, "------deleteProject");
     setLoading(true);
     try {
       let dataToSend = {
-        projectId: project._id,
+        projectId: selectedProject._id,
       };
       const removeRes = await deleteProjectById(dataToSend);
       setLoading(false);
@@ -424,6 +444,7 @@ export default function AllProject() {
         setToasterMessage(removeRes?.message || "Something Went Wrong");
         setShowToaster(true);
         getAndSetAllProjects();
+		setConfirmModalShow(false);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -545,7 +566,7 @@ export default function AllProject() {
                     accessibleBy={element.accessibleBy}
                     element={element}
                     handleEdit={() => editProject(element)}
-                    handleDelete={() => deleteProject(element)}
+                    handleDelete={() => confirmation(element)}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
@@ -587,6 +608,30 @@ export default function AllProject() {
           onHide={() => setSureModalShow(false)}
         />
       )}
+	  
+        <Modal
+          show={confirmModalShow}
+          onHide={() => setConfirmModalShow(false)}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div >
+			  <p>Are you sure you want to delete this project?</p>
+			</div>
+          </Modal.Body>
+		  <Button onClick={() => deleteProject()}>
+            Delete
+          </Button>
+
+          <Button  onClick={() => setConfirmModalShow(false)}>
+            Cancel
+          </Button>
+        </Modal>
+    
     </>
   );
+  
 }

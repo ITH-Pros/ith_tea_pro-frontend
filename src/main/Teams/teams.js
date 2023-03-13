@@ -311,23 +311,24 @@ export default function Teams(props) {
                         pathname: "/user/view/" + user._id,
                       }}
                     >
-                      <i
+                      {/* <i
                         className="fa fa-check-circle"
                         id="heart-btn-1"
                         style={{ cursor: "grab" }}
                         aria-hidden="true"
-                      ></i>
+                      ></i> */}
                       {/* <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i> */}
                     </Link>
-                    <label className="heart"></label>
+                    {/* <label className="heart"></label> */}
                   </div>
                   <div className="content">
                     <img
                       src="https://images.pexels.com/photos/2570145/pexels-photo-2570145.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
                       alt=""
                     />
-                    <strong>{user.name}</strong>
+                    <strong>{user.name} ({user.role})</strong>
                     <p>{user.email}</p>
+					
                   </div>
 
                   {userDetails.role !== "USER" && (

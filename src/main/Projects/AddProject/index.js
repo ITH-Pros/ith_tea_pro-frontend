@@ -23,6 +23,8 @@ export default function AddProject(props) {
     // const { userDetails } = useAuth()
     const navigate = useNavigate();
 
+
+
     const [validated, setValidated] = useState(false);
     const [loading, setLoading] = useState(false);
     const [toasterMessage, setToasterMessage] = useState("");
@@ -42,9 +44,6 @@ export default function AddProject(props) {
 //   console.log(projectDetails,'locations')
 	// Render the component using the projectDetails prop
 
-  
-
-
 
     const projectFormFields = { name:  '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
@@ -63,22 +62,19 @@ export default function AddProject(props) {
 			...projectFormValue,
 			name: projectById.name,
 			description: projectById.description,
-			selectedManagers: projectById.managedBy,
+			// selectedManagers: projectById.managedBy,
 			projectCategories: projectById.categories,
-			selectAccessibleBy: projectById.accessibleBy,
+			// selectAccessibleBy: projectById.accessibleBy,
 		  });
+
+		//   onAssignUserChange(projectById.accessibleBy);
+		//   onAssignManagerChange(projectById.managedBy);
 		//   patch selectedManagers and selectAccessibleBy with the values from projectById 
 	
 			
 		  console.log(leadList,'leadList')
 		}
 	  }, [projectById]);
-
-
-	  
-
-	
-
 
 
 	const getAndSetAllProjects = async function () {
@@ -252,6 +248,12 @@ export default function AddProject(props) {
     }
     const onAssignUserChange = (users) => {
         setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
+
+
+			
+		
+
+		
     }
 
     return (
@@ -363,6 +365,8 @@ export default function AddProject(props) {
             <button onClick={submitProjectForm} className="btn-51">
               Submit
             </button>
+
+			
           </div>
         </Form>
         {toaster && (

@@ -24,7 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import Modal from "react-modal";
 import { useAuth } from "../../../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addRating, getAllProjects, getAllUserDataForRating } from "../../../services/user/api";
+import { addRating, getAllAssignedProject, getAllProjects, getAllUserDataForRating } from "../../../services/user/api";
 
 
 
@@ -32,6 +32,15 @@ export default function AddRatingModal(props) {
     const location = useLocation();
     const navigate = useNavigate();
     const { userDetails } = useAuth();
+
+
+	function splitDate(dateStr) {
+		const dateList = dateStr.split("T")[0].split("-");
+		const year = dateList[0];
+		const month = dateList[1];
+		const day = dateList[2];
+		return `${year}-${month}-${day}`;
+	  }
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -70,6 +79,8 @@ export default function AddRatingModal(props) {
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
+
+	const [selectedProject, setSelectedProject] = useState({});
     if (!team && location && location.state && location.state.userId) {
         setTeam(location.state.userId)
     }
@@ -84,18 +95,42 @@ export default function AddRatingModal(props) {
 
 	const onChangeOfTask = (e) => {
 		setTask(e.target.value);
+		
 	};
 
 	const onChangeOfProject = (e) => {
 		setProject(e.target.value);
+		console.log("e.target.value", e.target.value);
+		// get project on basis of project id
+		const selectedProject = projectOptions.find((project) => project._id === e.target.value);
+		console.log("selectedProject", selectedProject);
+		setSelectedProject(selectedProject);
+
+
+
+		setTeamOptions(selectedProject?.accessibleBy);
+		console.log("projectOptions", projectOptions);
+		
 	};
 
     const onchangeTeam = (e) => {
         setTeam(e.target.value);
+		console.log("team", e.target.value);
     };
 
     const handleChangeDate = (date) => {
         setDate(date.target.value);
+		console.log("date", date.target.value);
+		// filter task on basis of user id and date
+		const selectedTask = selectedProject.tasks.find((task) => {
+			const taskDate = new Date(task.completedDate).toISOString().substring(0, 10);
+			return task.assignedTo === team && taskDate === date.target.value;
+		  });
+		console.log("selectedTask" , selectedTask);
+
+		// setTaskOptions(selectedTask)
+		
+
     };
 
     const onChangeOfComments = (e) => {
@@ -132,7 +167,11 @@ export default function AddRatingModal(props) {
 	const getAndSetAllProjects = async function () {
 		//setloading(true);
 		try {
-		  const projects = await getAllProjects();
+			const dataToSend = {
+				alphabetical:true
+			}
+
+		  const projects = await getAllAssignedProject(dataToSend);
 		  //setloading(false);
 		  if (projects.error) {
 			setToasterMessage(projects?.error?.message || "Something Went Wrong");
