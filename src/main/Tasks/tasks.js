@@ -60,15 +60,24 @@ const Tasks=()=> {
 					if(task?.dueDate){
 						let dateMonth = task?.dueDate?.split('T')[0]
 						let today = new Date();
+						
 						today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
 						console.log(dateMonth, today, dateMonth == today, new Date().getTime() > new Date(task?.dueDate).getTime(), task?.dueDate)
 						if(dateMonth == today){
 							task.dueToday = true;
 						}else if(new Date().getTime() > new Date(task?.dueDate).getTime()){
 							task.dueToday = true;
-						}else{
+						}
+					   else{
 							task.dueToday = false;
 						}
+						if(task?.completedDate && new Date(task?.completedDate).getTime() > new Date(task?.dueDate).getTime() ){
+							task.dueToday = true;
+						}
+						 if( task?.completedDate && dateMonth == task?.completedDate?.split('T')[0]){
+							task.dueToday = false;
+						}
+						console.log( dateMonth == task?.completedDate?.split('T')[0])
 					}
 			})	
 			allTask[i].tasks = item?.tasks
@@ -170,10 +179,10 @@ const closeModal=()=>{
 	   {task?.status === 'NO_PROGRESS'  && <i className="fa fa-check-circle secondary" aria-hidden="true"></i>}
 	   { task?.status === 'ONHOLD'  && <i className="fa fa-check-circle primary" aria-hidden="true"></i>}
 	   {task?.status === 'COMPLETED' && <i className="fa fa-check-circle" aria-hidden="true"></i>} {task?.title} 
-	  {task?.status === 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
+	  {task?.status === 'NO_PROGRESS' &&  <Badge  bg="secondary">NO PROGRESS</Badge>}
                         {task?.status === 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
                         {task?.status === 'COMPLETED' &&  <Badge bg="success">completed {moment(task?.completedDate).format('MMM DD,YYYY')}</Badge>}
-                        {task?.status === 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
+                        {task?.status === 'ONHOLD' &&  <Badge  bg="primary">ON HOLD</Badge>}
 	  {/* {task?.priority === 'None' &&  <Badge  bg="secondary">None</Badge>} */}
 	  {task?.priority === 'LOW' &&  <Badge  bg="primary">LOW</Badge>}
 	  {task?.priority === 'REPEATED' &&  <Badge  bg="warning">REPEATED</Badge>}
@@ -181,7 +190,7 @@ const closeModal=()=>{
                         {task?.priority === 'MEDIUM' &&  <Badge  bg="warning">MEDIUM</Badge>}
                         {task?.priority === 'HIGH' &&  <Badge  bg="danger">HIGH</Badge>}
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> {task?.assignedTo?.name}</span>
-     {task?.dueDate && <Badge bg={ task?.dueToday && task?.status != 'COMPLETED' ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>}
+     {task?.dueDate && <Badge bg={ task?.dueToday  ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>}
 	   <span onClick={() => {
 		setSelectedProject();
             setShowAddTask(true);

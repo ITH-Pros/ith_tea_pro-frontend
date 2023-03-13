@@ -279,29 +279,26 @@ export default function Teams(props) {
      <div className="rightDashboard">
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
-        </h1>
-        <div className="container-team">
+
           {userDetails.role === "SUPER_ADMIN" && (
-            <div
-              key="AddNewUser"
-              className="box "
-              style={{ height: 283, width: 274 }}
-            >
-              <div className="content">
-                <Link
-                  to={{
-                    pathname: "/user/add",
-                  }}
-                >
-                  <i
-                    className="fa fa-user-plus fa-3x addBtn "
-                    title="Add User"
-                    aria-hidden="true"
-                  ></i>
-                </Link>
-              </div>
-            </div>
+           <Link
+           to={{
+             pathname: "/user/add",
+           }}
+
+         >
+         
+           <i
+             className="fa fa-user-plus fa-3x addBtn w-125p"
+             title="Add User"
+             aria-hidden="true"
+           >  Add User </i> 
+         </Link>
           )}
+        </h1>
+        
+        <div className="container-team">
+         
           {usersList &&
             usersList.map((user) => {
               return (
@@ -333,7 +330,7 @@ export default function Teams(props) {
 					<p>{user.email}</p>
 					<p>{user.employeeId} ({user.department}) </p>
 					  <p>{user.designation}</p>
-					  <p>{user.wings}</p>
+					  {/* <p>{user.wings}</p> */}
                 </div>
 
 				<div>
@@ -363,17 +360,18 @@ export default function Teams(props) {
                         }}
                       >
                         {" "}
-                        <i className="fa fa-check " aria-hidden="true"></i>Assign
+                        <i className="fa fa-check " aria-hidden="true"></i> Assign
                       </button>
 
-                      <Link
+                      <button
+                        className="btn-glow margin-right btn-color"
                         to={{
                           pathname: "/rating",
                         }}
                         state={{ userId: user._id }}
                       >
                         Add Rating
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>

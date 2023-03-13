@@ -224,7 +224,7 @@ export default function AddTaskModal(props) {
         }
         setLoading(true)
         try {
-            let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead } = taskFormValue
+            let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead,completedDate } = taskFormValue
             let dataToSend = {}
             projectId && (dataToSend["projectId"] = projectId)
             category && (dataToSend["category"] = category)
@@ -235,6 +235,7 @@ export default function AddTaskModal(props) {
             priority && (dataToSend["priority"] = priority)
             status && (dataToSend["status"] = status)
             tasklead && (dataToSend["tasklead"] = tasklead)
+			completedDate && (dataToSend["completedDate"] = completedDate)
 
 
 
@@ -302,7 +303,7 @@ export default function AddTaskModal(props) {
 
 	setLoading(true);
 	try {
-		let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead, attachment } = taskFormValue
+		let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead, attachment,completedDate } = taskFormValue
 		let dataToSend = {}
 		projectId && (dataToSend["projectId"] = projectId)
 		category && (dataToSend["category"] = category)
@@ -313,7 +314,8 @@ export default function AddTaskModal(props) {
 		priority && (dataToSend["priority"] = priority)
 		status && (dataToSend["status"] = status)
 		tasklead && (dataToSend["tasklead"] = tasklead)
-		selectedTask && (dataToSend["taskId"] = selectedTask?._id)
+		selectedTask && (dataToSend["taskId"]= selectedTask?._id)
+		completedDate && (dataToSend["completedDate"] = completedDate)
 
 		const taskRes = await updateTaskDetails(dataToSend);
 		setLoading(false);

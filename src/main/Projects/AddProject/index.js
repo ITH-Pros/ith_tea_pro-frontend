@@ -49,7 +49,7 @@ export default function AddProject(props) {
 	// Render the component using the projectDetails prop
 
 
-    const projectFormFields = { name:  '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
+    const projectFormFields = { name:  '', description: '',shortDescription:'', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
 
@@ -68,6 +68,7 @@ export default function AddProject(props) {
         ...projectFormValue,
         name: projectById.name,
         description: projectById.description,
+        shortDescription: projectById.shortDescription,
         selectedManagers: projectById.managedBy.map((el) => el._id),
         projectCategories: projectById.categories,
         selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
@@ -268,14 +269,14 @@ export default function AddProject(props) {
     }
   const onAssignUserChange = (users) => {
     
-    setAssignedByValue(projectById.assignedby);
+    setAssignedByValue(projectById?.assignedby);
 
     setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
 
     }
 
     return (
-     <div className="addUserFrom rightDashboard">
+      <div className="addUserFrom rightDashboard">
         {/* <h4 className='mb-5'>Add Project</h4> */}
         <Form noValidate className="addUserFormBorder" validated={validated}>
           <Row className="mb-3">
@@ -320,22 +321,6 @@ export default function AddProject(props) {
               />
             </Form.Group>
           </Row>
-
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                required
-                type="text-area"
-                placeholder="Description"
-                name="description"
-                onChange={updateRegisterFormValue}
-                value={projectFormValue.description}
-              />
-            </Form.Group>
-          </Row>
-
           <Row className="mb-3">
             <Form.Group as={Col} md="5">
               <Form.Label>Add Category</Form.Label>
@@ -352,47 +337,83 @@ export default function AddProject(props) {
               <Button
                 className="btn btn-gradient-border btnshort-modal"
                 style={{ marginTop: "35px" }}
-								type="button"
-								onClick={addProjectCategoryOnButtonClick}
-							>
-								<i className="fa fa-plus" aria-hidden="true"></i>{" "}
-							</Button>
-						</Form.Group>
-						<div className="mt-1">
-							Categories:
-							{projectFormValue.projectCategories.length
-								? projectFormValue.projectCategories.map((el) => (
-									<span className="ctgrybtn" key={el}>
-										{el}
-										<i
-											className="fa fa-times"
-											style={{ color: "red" }}
-											onClick={() => removeProjectCategory(el)}
-											aria-hidden="true"
-										></i>
-									</span>
-								))
-								: "  No Categories Added"}
-						</div>
-					</Row>
-					<div>
-						{/* <Button className="btn-gradient-border btnDanger"
+                type="button"
+                onClick={addProjectCategoryOnButtonClick}
+              >
+                <i className="fa fa-plus" aria-hidden="true"></i>{" "}
+              </Button>
+            </Form.Group>
+            <div className="mt-1">
+              Categories:
+              {projectFormValue.projectCategories.length
+                ? projectFormValue.projectCategories.map((el) => (
+                    <span className="ctgrybtn" key={el}>
+                      {el}
+                      <i
+                        className="fa fa-times"
+                        style={{ color: "red" }}
+                        onClick={() => removeProjectCategory(el)}
+                        aria-hidden="true"
+                      ></i>
+                    </span>
+                  ))
+                : "  No Categories Added"}
+            </div>
+            <Form.Group as={Col} md="5">
+              <Form.Label>Short Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                required
+                type="text-area"
+                placeholder="Short Description"
+                name="shortDescription"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.shortDescription}
+              />
+            </Form.Group>
+          </Row>
+
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                required
+                type="text-area"
+                placeholder="Description"
+                name="description"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.description}
+              />
+            </Form.Group>
+          </Row>
+
+          <div>
+            {/* <Button className="btn-gradient-border btnDanger"
                 type="button"
                 onClick={submitProjectForm}
             >Submit</Button> */}
-						<button onClick={submitProjectForm} className="btn-51">
-							Submit
-						</button>
-					</div>
-				</Form>
-				{toaster && (
-					<Toaster
-						message={toasterMessage}
-						show={toaster}
-						close={() => showToaster(false)} />
-				)}
-				{loading ? <Loader /> : null}
-			</div>
+            {projectById && (
+              <button onClick={submitProjectForm} className="btn-51">
+                Update
+              </button>
+            )}
+            {!projectById && (
+              <button onClick={submitProjectForm} className="btn-51">
+                Submit
+              </button>
+            )}
+          </div>
+        </Form>
+        {toaster && (
+          <Toaster
+            message={toasterMessage}
+            show={toaster}
+            close={() => showToaster(false)}
+          />
+        )}
+        {loading ? <Loader /> : null}
+      </div>
     );
 };
 
