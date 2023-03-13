@@ -329,7 +329,7 @@ export default function Teams(props) {
                   
 					<p>{user.email}</p>
 					<p>{user.employeeId} ({user.department}) </p>
-					  {/* <p>{user.designation}</p> */}
+					  <p>{user.designation}</p>
 					  {/* <p>{user.wings}</p> */}
                 </div>
 
