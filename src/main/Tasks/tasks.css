@@ -310,3 +310,12 @@ button.accordion-button{
   top: 0;
   align-items: center;
 }
+.warning{
+	color:  #ffc107 !important;
+}
+.primary{
+	color:  #0e6dfd !important;
+}
+.secondary{
+	color:  #6d757d !important;
+}
