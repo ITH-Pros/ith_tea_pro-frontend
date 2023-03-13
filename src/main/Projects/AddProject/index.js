@@ -275,7 +275,7 @@ export default function AddProject(props) {
     }
 
     return (
-     <div className="addUserFrom rightDashboard">
+      <div className="addUserFrom rightDashboard">
         {/* <h4 className='mb-5'>Add Project</h4> */}
         <Form noValidate className="addUserFormBorder" validated={validated}>
           <Row className="mb-3">
@@ -352,47 +352,55 @@ export default function AddProject(props) {
               <Button
                 className="btn btn-gradient-border btnshort-modal"
                 style={{ marginTop: "35px" }}
-								type="button"
-								onClick={addProjectCategoryOnButtonClick}
-							>
-								<i className="fa fa-plus" aria-hidden="true"></i>{" "}
-							</Button>
-						</Form.Group>
-						<div className="mt-1">
-							Categories:
-							{projectFormValue.projectCategories.length
-								? projectFormValue.projectCategories.map((el) => (
-									<span className="ctgrybtn" key={el}>
-										{el}
-										<i
-											className="fa fa-times"
-											style={{ color: "red" }}
-											onClick={() => removeProjectCategory(el)}
-											aria-hidden="true"
-										></i>
-									</span>
-								))
-								: "  No Categories Added"}
-						</div>
-					</Row>
-					<div>
-						{/* <Button className="btn-gradient-border btnDanger"
+                type="button"
+                onClick={addProjectCategoryOnButtonClick}
+              >
+                <i className="fa fa-plus" aria-hidden="true"></i>{" "}
+              </Button>
+            </Form.Group>
+            <div className="mt-1">
+              Categories:
+              {projectFormValue.projectCategories.length
+                ? projectFormValue.projectCategories.map((el) => (
+                    <span className="ctgrybtn" key={el}>
+                      {el}
+                      <i
+                        className="fa fa-times"
+                        style={{ color: "red" }}
+                        onClick={() => removeProjectCategory(el)}
+                        aria-hidden="true"
+                      ></i>
+                    </span>
+                  ))
+                : "  No Categories Added"}
+            </div>
+          </Row>
+          <div>
+            {/* <Button className="btn-gradient-border btnDanger"
                 type="button"
                 onClick={submitProjectForm}
             >Submit</Button> */}
-						<button onClick={submitProjectForm} className="btn-51">
-							Submit
-						</button>
-					</div>
-				</Form>
-				{toaster && (
-					<Toaster
-						message={toasterMessage}
-						show={toaster}
-						close={() => showToaster(false)} />
-				)}
-				{loading ? <Loader /> : null}
-			</div>
+            {projectById && (
+              <button onClick={submitProjectForm} className="btn-51">
+                Update
+              </button>
+            )}
+            {!projectById && (
+              <button onClick={submitProjectForm} className="btn-51">
+                Submit
+              </button>
+            )}
+          </div>
+        </Form>
+        {toaster && (
+          <Toaster
+            message={toasterMessage}
+            show={toaster}
+            close={() => showToaster(false)}
+          />
+        )}
+        {loading ? <Loader /> : null}
+      </div>
     );
 };
 

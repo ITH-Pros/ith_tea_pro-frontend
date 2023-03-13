@@ -9,45 +9,8 @@ import { useState } from "react";
 // } from "@fortawesome/free-solid-svg-icons";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
-
-// const ProjectCard = (props) => {
-//   return (
-//     <div className="project-card">
-//       <div className="menu-icon">
-//         <FontAwesomeIcon icon={faEllipsisV} />
-//         <div className="menu-options">
-//           <div onClick={() => props.handleEdit()}>Edit</div>
-//           <div onClick={() => props.handleDelete()}>Delete</div>
-//         </div>
-//       </div>
-//       <div className="project-info">
-//         <div className="project-name">{props.name}</div>
-//         <div className="project-description">{props.description}</div>
-//       </div>
-//       <div className="project-icons">
-//         <FontAwesomeIcon icon={faTasks} />
-//         <FontAwesomeIcon icon={faComments} />
-//         <FontAwesomeIcon icon={faFlag} />
-//         <FontAwesomeIcon icon={faClock} />
-//       </div>
-//       <div className="user-profile-pictures">
-//         <img src="user1.jpg" alt="user1" />
-//         <img src="user2.jpg" alt="user2" />
-//         <img src="user3.jpg" alt="user3" />
-//         <img src="user4.jpg" alt="user4" />
-//         <img src="user5.jpg" alt="user5" />
-//         <img src="user6.jpg" alt="user6" />
-//         <img src="user7.jpg" alt="user7" />
-//         <img src="user8.jpg" alt="user8" />
-//         <img src="user9.jpg" alt="user9" />
-//         <img src="user10.jpg" alt="user10" />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProjectCard;
 import { useAuth } from "../../../auth/AuthProvider";
+import Modal from "react-bootstrap/Modal";
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -90,14 +53,24 @@ const ProjectCard = ({
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
+  const [modalshow, setModalShow] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [modalTitle, SetModalTitle] = useState('');
     
        const [showMenuList, setShowMenuList] = useState(false);
 
        const handleMenuIconClick = () => {
          setShowMenuList(!showMenuList);
        };
-    const { userDetails } = useAuth();
-
+  const { userDetails } = useAuth();
+  
+  const onClickOfIcons = (user, type) => {
+    console.log(user, "---------------------suer");
+    setUsers(user);
+    SetModalTitle(type);
+    setModalShow(true);
+  };
+ 
 
   return (
     <div
@@ -135,9 +108,14 @@ const ProjectCard = ({
               <circle cx="12" cy="19" r="1" />
             </svg>
             <div className="dropdown-content">
-              <a onClick={() => {
-				handleEdit();
-			  } } > Edit</a>
+              <a
+                onClick={() => {
+                  handleEdit();
+                }}
+              >
+                {" "}
+                Edit
+              </a>
               <a
                 href="#1"
                 onClick={() => {
@@ -174,34 +152,99 @@ const ProjectCard = ({
           <span>0</span>
         </div>
       </div>
-	 
 
-	   <div>
-	   <div className=" pull-left w-50 text-center">
-        <label className="lableName">Accessible By</label>
-        <div className="user-profile-pics">
-        {accessibleBy?.map((profile, index) => (
-              <UserIcon firstName={profile?.name} />
-            ))}
+      <div>
+        <div className=" pull-left w-50 text-center">
+          <label className="lableName">Accessible By</label>
+          <div className="user-profile-pics">
+            {accessibleBy.length && (
+              <UserIcon
+                key="accessibleBy[0]._id"
+                firstName={accessibleBy[0]?.name}
+              />
+            )}
+            {accessibleBy.length > 1 && (
+              <UserIcon
+                key="accessibleBy[1]._id"
+                firstName={accessibleBy[1]?.name}
+              />
+            )}
+            {accessibleBy.length > 2 && (
+              <span
+                onClick={() => {
+                  onClickOfIcons(accessibleBy, "Assined By");
+                }}
+              >
+                <UserIcon firstName={"..."} />
+              </span>
+            )}
 
-			<FontAwesomeIcon icon={faEllipsisH} />
+            {/* <FontAwesomeIcon icon={faEllipsisH} /> */}
+          </div>
         </div>
-        
+
+        <div className=" pull-right w-50 text-center">
+          <label className="lableName">Managed By</label>
+          <div className="user-profile-pics">
+            {managedBy.length && (
+              <UserIcon
+                key="accessibleBy[0]._id"
+                firstName={managedBy[0]?.name}
+              />
+            )}
+            {managedBy.length > 1 && (
+              <UserIcon
+                key="accessibleBy[1]._id"
+                firstName={managedBy[1]?.name}
+              />
+            )}
+            {managedBy.length > 2 && (
+              <span
+                onClick={() => {
+                  onClickOfIcons(managedBy, "Managed By");
+                }}
+              >
+                <UserIcon firstName={"..."} />
+              </span>
+            )}
+
+            {/* <UserIcon firstName={profile.name} /> */}
+          </div>
+        </div>
       </div>
+      {modalshow && (
+        <Modal
+          show={modalshow}
+          onHide={() => setModalShow(false)}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>{modalTitle}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+              {users.map((user, index) => {
+                return (
+                  <div>
+                    <UserIcon firstName={user.name} />
+                    <p>{user?.name}</p>
+                  </div>
+                );
+              })}
+              <UserIcon firstName={"+"} />
+              <p>{"Add User"}</p>
+            </div>
+          </Modal.Body>
 
-	  <div className=" pull-right w-50 text-center" > 
-      <label className="lableName">Managed By</label>
-      <div className="user-profile-pics">
-      {managedBy?.map((profile, index) => (
-            <UserIcon firstName={profile.name} />
-          ))}
-
-		  {/* <UserIcon firstName={profile.name} /> */}
-      </div>
-	   </div>
-	   </div>
-
-     
+          <button
+            style={{ marginLeft: "16px" }}
+            className="btn mr-3"
+            onClick={() => setModalShow(false)}
+          >
+            Close
+          </button>
+        </Modal>
+      )}
     </div>
   );
 };
