@@ -166,3 +166,6 @@
     color: #727272;
     margin-bottom: 10px;
 }
+.stat{
+	cursor: pointer;
+}
