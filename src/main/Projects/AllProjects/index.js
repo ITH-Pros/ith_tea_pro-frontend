@@ -609,7 +609,7 @@ export default function AllProject() {
         />
       )}
 	  
-        <Modal
+        <Modal 
           show={confirmModalShow}
           onHide={() => setConfirmModalShow(false)}
           animation={false}
@@ -618,15 +618,17 @@ export default function AllProject() {
             <Modal.Title>Confirmation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div >
+            <div>
 			  <p>Are you sure you want to delete this project?</p>
-			</div>
+
+       
+		   	</div>
           </Modal.Body>
-		  <Button onClick={() => deleteProject()}>
+          <Button className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
             Delete
           </Button>
 
-          <Button  onClick={() => setConfirmModalShow(false)}>
+          <Button className="btn mr-3"  onClick={() => setConfirmModalShow(false)}>
             Cancel
           </Button>
         </Modal>
