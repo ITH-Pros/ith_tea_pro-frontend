@@ -76,6 +76,13 @@ export default function AddTaskModal(props) {
 			setCategoryList(project[0]?.categories);
 			setUserList(project[0]?.accessibleBy);
 			let dueDateData = new Date(selectedTask?.dueDate);
+			let completedDateData = new Date(selectedTask?.completedDate);
+			if(selectedTask?.completedDate){
+				completedDateData = completedDateData.getFullYear() + '-' + (completedDateData.getMonth() + 1 <= 9 ? '0' + (completedDateData.getMonth() + 1) : (completedDateData.getMonth() + 1)) + '-' + (completedDateData.getDate() <= 9 ? '0' + completedDateData.getDate() : completedDateData.getDate())
+
+			}else{
+				completedDateData = ''
+			}
 			dueDateData = dueDateData.getFullYear() + '-' + (dueDateData.getMonth() + 1 <= 9 ? '0' + (dueDateData.getMonth() + 1) : (dueDateData.getMonth() + 1)) + '-' + (dueDateData.getDate() <= 9 ? '0' + dueDateData.getDate() : dueDateData.getDate())
 			setTaskFormValue({projectId: selectedTask?.projectId,
 			category: selectedTask?.category,
@@ -83,11 +90,11 @@ export default function AddTaskModal(props) {
 			description: selectedTask?.description,
 			assignedTo: selectedTask?.assignedTo?._id,
 			dueDate:dueDateData,
-			completedDate: selectedTask?.completedDate,
+			completedDate: completedDateData ? completedDateData : '',
 			priority: selectedTask?.priority,
 			status: selectedTask?.status,
 			attachment: selectedTask?.attachment,
-			tasklead:selectedTask?.lead[0] || ""})
+			tasklead: selectedTask?.lead?.length ? selectedTask?.lead[0] : ""})
 		}else{
 			resetFormValue();
 		}

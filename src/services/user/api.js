@@ -34,6 +34,9 @@ export async function getAllUserDataForRating(data) {
 export async function getAllProjects(data) {
     return (axiosInstance.get('/projects/v1/all', { params: data,}).then(res => res.data))
 }
+export async function getAllMyWorks(data) {
+    return (axiosInstance.get('task/v1/list/homepage', { params: data,}).then(res => res.data))
+}
 export async function getAllAssignedProject(data) {
 	return (axiosInstance.get('/projects/v1/list/assigned', { params: data,}).then(res => res.data))
 }
