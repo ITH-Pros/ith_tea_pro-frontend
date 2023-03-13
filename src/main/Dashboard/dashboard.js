@@ -249,9 +249,9 @@ const openAddtask=(project)=>{
             <Link to="/rating" params={{ params: true }}>
               {props.showBtn && (
                 <div className="wrap">
-                  <button className="add-rating-button">
+                  {/* <button className="add-rating-button">
                     <span>Add Rating</span>
-                  </button>
+                  </button> */}
                 </div>
               )}
             </Link>
@@ -565,7 +565,7 @@ const openAddtask=(project)=>{
           <Col lg={6} style={{ paddingLeft: "0px" }}>
             <Row>
               <Col lg={6} className="left-add">
-                <span>Work</span>
+                <span>My Work</span>
 
                 
                   <i  onClick={() => {

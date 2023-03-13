@@ -32,6 +32,8 @@ export default function AddProject(props) {
     const [leadList, setLeadList] = useState([]);
     const [newCategory, setNewCategory] = useState('');
     const [toaster, showToaster] = useState(false);
+    const [assignedby, setAssignedByValue] = useState([]);
+    const [managedby, setManagedByValue] = useState([]);
 	const [projectList, setProjectListValue] = useState([]);
 	const params = useParams()
   const setShowToaster = (param) => showToaster(param);
@@ -58,15 +60,15 @@ export default function AddProject(props) {
 
 	useEffect(() => {
 		if (projectById) {
+      setAssignedByValue(projectById.accessibleBy);
+      setManagedByValue(projectById.managedBy)
 		  setProjectFormValue({
         ...projectFormValue,
         name: projectById.name,
         description: projectById.description,
-        // selectedManagers: projectById.managedBy,
+        selectedManagers: projectById.managedBy.map((el) => el._id),
         projectCategories: projectById.categories,
-        selectedManagers: projectById.managedBy,
-        selectAccessibleBy: projectById.accessibleBy,
-        // selectAccessibleBy: projectById.accessibleBy,
+        selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
       });
 
 		//   onAssignUserChange(projectById.accessibleBy);
@@ -245,17 +247,29 @@ export default function AddProject(props) {
         setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
     }
 
-    const onAssignManagerChange = (users) => {
-        setProjectFormValue({ ...projectFormValue, selectedManagers: users.map(el => el._id) })
+  const onAssignManagerChange = (users) => {
+    // setManagedByValue(...managedby, ...users);
+    //   setTimeout(() => {
+    //      console.log(managedby, users, "--------------------managed by");
+
+    //   }, 1000);
+    setManagedByValue(users);
+      
+    setProjectFormValue({ ...projectFormValue, selectedManagers: users.map(el => el._id) })
+    setTimeout(() => {
+      console.log(
+        projectFormValue,users,
+        "-----------------------------------projectFormValue"
+      );
+      
+    },1000)
     }
-    const onAssignUserChange = (users) => {
-        setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
+  const onAssignUserChange = (users) => {
+    
+    setAssignedByValue(projectById.assignedby);
 
+    setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
 
-			
-		
-
-		
     }
 
     return (
@@ -289,7 +303,7 @@ export default function AddProject(props) {
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={leadList}
-                value={projectFormValue.selectedManagers}
+                value={managedby}
               />
             </Form.Group>
             <Form.Group as={Col} md="6">
@@ -300,7 +314,7 @@ export default function AddProject(props) {
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={userList}
-                value={projectFormValue.selectAccessibleBy}
+                value={assignedby}
               />
             </Form.Group>
           </Row>
