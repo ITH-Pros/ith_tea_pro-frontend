@@ -89,10 +89,6 @@ export default function AddRatingModal(props) {
         location.state.date = '';
     }
 
-    // const handleViewChange = (view) => {
-    //     setCurrentView(view);
-    // };
-
 	const onChangeOfTask = (e) => {
 		setTask(e.target.value);
 		
@@ -105,9 +101,6 @@ export default function AddRatingModal(props) {
 		const selectedProject = projectOptions.find((project) => project._id === e.target.value);
 		console.log("selectedProject", selectedProject);
 		setSelectedProject(selectedProject);
-
-
-
 		setTeamOptions(selectedProject?.accessibleBy);
 		console.log("projectOptions", projectOptions);
 		
@@ -115,23 +108,14 @@ export default function AddRatingModal(props) {
 
     const onchangeTeam = (e) => {
         setTeam(e.target.value);
-		console.log("team", e.target.value);
+		console.log("team", team);
+		getTaskList();
     };
 
     const handleChangeDate = (date) => {
         setDate(date.target.value);
 		console.log("date", date.target.value);
-		// filter task on basis of user id and date
-		// const selectedTask = selectedProject.tasks.find((task) => {
-		// 	const taskDate = new Date(task.completedDate).toISOString().substring(0, 10);
-		// 	return task.assignedTo === team && taskDate === date.target.value;
-		//   });
-		// console.log("selectedTask" , selectedTask);
-
-		// setTaskOptions(selectedTask)
 		getTaskList();
-		
-
     };
 
 	const getTaskList = async function () {
@@ -142,15 +126,22 @@ export default function AddRatingModal(props) {
 			const dataToSend = {
 				projectId: project,
 				userId: team,
-				date: date?.split("-")[2],
-				year: date?.split("-")[0],
-				month: date?.split("-")[1],
+				dateCompleted: date,
+				groupBy: 'default'
+				
+
 			};
 			const response = await getProjectsTask(dataToSend);
 			console.log("response", response);
-			if (response && response.data && response.data.data) {
-				setTaskOptions(response.data.data);
+			if (response.error ) {
+				// setToasterMessage(response.error);
+				// setShowToaster(true);
+				console.log("error", response.error);
+				
+			}else {
+				setTaskOptions(response.data);
 			}
+			
 		} catch (error) {
 			console.log("error", error);
 		}
@@ -186,6 +177,8 @@ export default function AddRatingModal(props) {
                 month: date?.split("-")[1],
                 rating: rating,
                 comment: comments,
+				task: task,
+				projectId: project,
                 // taggedUsers: tags,
             };
 
