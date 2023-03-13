@@ -59,13 +59,15 @@ export default function AddProject(props) {
 	useEffect(() => {
 		if (projectById) {
 		  setProjectFormValue({
-			...projectFormValue,
-			name: projectById.name,
-			description: projectById.description,
-			// selectedManagers: projectById.managedBy,
-			projectCategories: projectById.categories,
-			// selectAccessibleBy: projectById.accessibleBy,
-		  });
+        ...projectFormValue,
+        name: projectById.name,
+        description: projectById.description,
+        // selectedManagers: projectById.managedBy,
+        projectCategories: projectById.categories,
+        selectedManagers: projectById.managedBy,
+        selectAccessibleBy: projectById.accessibleBy,
+        // selectAccessibleBy: projectById.accessibleBy,
+      });
 
 		//   onAssignUserChange(projectById.accessibleBy);
 		//   onAssignManagerChange(projectById.managedBy);
@@ -269,7 +271,7 @@ export default function AddProject(props) {
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.name}
                 name="name"
-				placeholder='Project Name'
+                placeholder="Project Name"
               ></Form.Control>
               <Form.Control.Feedback type="invalid">
                 Name is required !!
@@ -287,8 +289,7 @@ export default function AddProject(props) {
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={leadList}
-
-				
+                value={projectFormValue.selectedManagers}
               />
             </Form.Group>
             <Form.Group as={Col} md="6">
@@ -299,6 +300,7 @@ export default function AddProject(props) {
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={userList}
+                value={projectFormValue.selectAccessibleBy}
               />
             </Form.Group>
           </Row>
@@ -340,7 +342,7 @@ export default function AddProject(props) {
                 <i className="fa fa-plus" aria-hidden="true"></i>{" "}
               </Button>
             </Form.Group>
-            <div className='mt-1'>
+            <div className="mt-1">
               Categories:
               {projectFormValue.projectCategories.length
                 ? projectFormValue.projectCategories.map((el) => (
@@ -365,8 +367,6 @@ export default function AddProject(props) {
             <button onClick={submitProjectForm} className="btn-51">
               Submit
             </button>
-
-			
           </div>
         </Form>
         {toaster && (
