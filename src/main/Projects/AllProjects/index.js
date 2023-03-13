@@ -624,11 +624,11 @@ export default function AllProject() {
        
 		   	</div>
           </Modal.Body>
-          <Button className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
+          <Button style={{marginLeft:"15px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
             Delete
           </Button>
 
-          <Button className="btn mr-3"  onClick={() => setConfirmModalShow(false)}>
+          <Button style={{marginLeft:"15px"}} className="btn mr-3"  onClick={() => setConfirmModalShow(false)}>
             Cancel
           </Button>
         </Modal>
