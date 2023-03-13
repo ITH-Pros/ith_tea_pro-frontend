@@ -44,6 +44,21 @@ const Tasks=()=> {
 				if(filterData?.projectIds){
 					filterData.projectIds = JSON.stringify(filterData?.projectIds)
 				}
+				if(filterData?.createdBy){
+					filterData.createdBy = JSON.stringify(filterData?.createdBy)
+				}
+				if(filterData?.assignedTo){
+					filterData.assignedTo = JSON.stringify(filterData?.assignedTo)
+				}
+				if(filterData?.category){
+					filterData.category = JSON.stringify(filterData?.category)
+				}
+				if(filterData?.priority){
+					filterData.priority = JSON.stringify(filterData?.priority)
+				}
+				if(filterData?.status){
+					filterData.status = JSON.stringify(filterData?.status)
+				}
 				data = filterData;
 				data.groupBy = "default"
 				console.log(data, "filter data")
@@ -62,7 +77,6 @@ const Tasks=()=> {
 						let today = new Date();
 						
 						today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
-						console.log(dateMonth, today, dateMonth == today, new Date().getTime() > new Date(task?.dueDate).getTime(), task?.dueDate)
 						if(dateMonth == today){
 							task.dueToday = true;
 						}else if(new Date().getTime() > new Date(task?.dueDate).getTime()){
@@ -77,16 +91,12 @@ const Tasks=()=> {
 						 if( task?.completedDate && dateMonth == task?.completedDate?.split('T')[0]){
 							task.dueToday = false;
 						}
-						console.log( dateMonth == task?.completedDate?.split('T')[0])
 					}
 			})	
 			allTask[i].tasks = item?.tasks
-			console.log(item?.tasks)
 			
 		})
 			setProjects(allTask)
-			console.log(allTask)
-            //  setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
          setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -97,14 +107,7 @@ const Tasks=()=> {
      };
     
 
-//   const handleClick = (project) => {
-//     // If we already have task data for this project, don't fetch it again
-// 	console.log(taskData)
-    
-// 	console.log(selectedProject)
-// 	setSelectedProject(project)
-//     getTasksDataUsingProjectId(project?._id);
-//   };
+
  
 const getNewTasks = (id)=>{
 	closeModal();
@@ -190,12 +193,13 @@ const closeModal=()=>{
                         {task?.priority === 'MEDIUM' &&  <Badge  bg="warning">MEDIUM</Badge>}
                         {task?.priority === 'HIGH' &&  <Badge  bg="danger">HIGH</Badge>}
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> {task?.assignedTo?.name}</span>
-     {task?.dueDate && <Badge bg={ task?.dueToday  ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>}
-	   <span onClick={() => {
+      {task?.dueDate && <Badge bg={ task?.dueToday ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>}
+	   <a style={{float: "right",
+    color: "#8602ff", cursor:"pointer", marginRight: "10px"}} onClick={() => {
 		setSelectedProject();
             setShowAddTask(true);
 			setSelectedTask(task);
-          }}>edit</span>
+          }}>Edit</a>
       
        </li>
        )}

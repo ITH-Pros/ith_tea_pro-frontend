@@ -523,3 +523,12 @@ th {
 	.rbc-time-view	.rbc-time-content {
 			display: none;
 			}
+			.warning{
+				color:  #ffc107 !important;
+			}
+			.primary{
+				color:  #0e6dfd !important;
+			}
+			.secondary{
+				color:  #6d757d !important;
+			}

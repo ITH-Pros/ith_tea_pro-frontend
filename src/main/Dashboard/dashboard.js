@@ -634,10 +634,9 @@ const openAddtask=(project)=>{
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
                           >
-                            <i
-                              className="fa fa-check-circle"
-                              aria-hidden="true"
-                            ></i>
+                            {task?.status === 'ONGOING' && <i className="fa fa-check-circle warning" aria-hidden="true"></i>}
+	   {task?.status === 'NO_PROGRESS'  && <i className="fa fa-check-circle secondary" aria-hidden="true"></i>}
+	   { task?.status === 'ONHOLD'  && <i className="fa fa-check-circle primary" aria-hidden="true"></i>}
                           </span>
                           <h5 className="text-truncate">{task?.title}</h5>
                         </Col>
@@ -762,10 +761,12 @@ const openAddtask=(project)=>{
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
                           >
-                            <i
+							
+	   {task?.status === 'COMPLETED' && <i className="fa fa-check-circle" aria-hidden="true"></i>}
+                            {/* <i
                               className="fa fa-check-circle"
                               aria-hidden="true"
-                            ></i>
+                            ></i> */}
                           </span>
                           <h5 className="text-truncate">{task?.title}</h5>
                         </Col>
