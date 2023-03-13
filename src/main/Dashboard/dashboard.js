@@ -3,7 +3,7 @@ import moment from "moment";
 import {AiFillProject} from "react-icons/ai";
 import MyCalendar from "./weekCalendra";
 import { useState, useEffect } from "react";
-import { getAllMyWorks, getAllProjects, getRatings } from "../../services/user/api";
+import { getAllMyWorks, getAllPendingRating, getAllProjects, getRatings } from "../../services/user/api";
 import "./dashboard.css";
 import { MDBTooltip } from "mdb-react-ui-kit";
 // eslint-disable-next-line no-unused-vars
@@ -41,6 +41,8 @@ export default function Dashboard(props) {
   const [selectedProject, setSelectedProject] = useState({});
   const [myWorkList, setMyWorkList]=useState();
   const [selectedTask, setSelectedTask] = useState({});
+  const [pendingRatingList, setPendingRatingList]=useState();
+
 
   const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
@@ -49,6 +51,7 @@ export default function Dashboard(props) {
   useEffect(() => {
     getAndSetAllProjects();
 	getMyWork();
+	getPendingRating();
     onInit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -169,6 +172,40 @@ export default function Dashboard(props) {
       return error.message;
     }
   };
+  
+  const getPendingRating = async function () {
+    //setloading(true);
+    try {
+      const tasks = await getAllPendingRating();
+      //setloading(false);
+      if (tasks.error) {
+        // setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        // setShowToaster(true);
+      } else {
+		let allTask = tasks?.data;
+		allTask?.map((item)=>{
+			let dateMonth = item?.dueDate?.split('T')[0]
+			let today = new Date();
+			today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
+			if(dateMonth == today){
+				item.dueToday = true;
+			}else if(new Date().getTime() > new Date(item?.dueDate).getTime()){
+				item.dueToday = true;
+			}else{
+				item.dueToday = false;
+			}
+		})
+       setPendingRatingList(allTask);
+	   
+      }
+    } catch (error) {
+    //   setToasterMessage(error?.error?.message || "Something Went Wrong");
+    //   setShowToaster(true);
+      //setloading(false);
+      return error.message;
+    }
+  };
+
   const getAndSetAllProjects = async function () {
     //setloading(true);
     try {
@@ -682,143 +719,59 @@ const openAddtask=(project)=>{
             <Row>
               <Col lg={12} className="mt-3">
                 <Card id="card-task">
-                  <Row className="d-flex justify-content-start list_task">
-                    <Col lg={6} className="middle">
-                      <span
-                        style={{ fontSize: "20PX", marginRight: "10px" }}
-                        round="20px"
-                      >
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>
-                      <h5 className="text-truncate">
-                        And here's some amazing content. It's very engaging.
-                        right?
-                      </h5>
-                    </Col>
-                    <Col lg={4} className="middle">
-                      <small className="text-truncate">
-                        Due To <Badge bg="danger">TODAY</Badge>
-                      </small>
-                    </Col>
-                    <Col
-                      lg={2}
-                      className="text-end middle"
-                      style={{ justifyContent: "end" }}
-                    >
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-star"></i>
-                      </Button>
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-ellipsis-v"></i>
-                      </Button>
-                    </Col>
-                  </Row>
+                 
 
-                  <Row className="d-flex justify-content-start list_task">
-                    <Col lg={6} className="middle">
-                      <span
-                        style={{ fontSize: "20PX", marginRight: "10px" }}
-                        round="20px"
-                      >
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>
-                      <h5 className="text-truncate">
-                        And here's some amazing content. It's very engaging.
-                        right?
-                      </h5>
-                    </Col>
-                    <Col lg={4} className="middle">
-                      <small className="text-truncate">
-                        Due To <Badge bg="success">COMPLLETED</Badge>
-                      </small>
+                 {pendingRatingList?.map((task)=>
+				 <Row className="d-flex justify-content-start list_task">
+				 <Col lg={4} className="middle">
+				   <span
+					 style={{ fontSize: "20PX", marginRight: "10px" }}
+					 round="20px"
+				   >
+					 <i
+					   className="fa fa-check-circle"
+					   aria-hidden="true"
+					 ></i>
+				   </span>
+				   <h5 className="text-truncate">
+					{task?.title}
+				   </h5>
+				 </Col>
+				 <Col lg={4} className="middle">
+                     {task?.status != 'COMPLETED' &&  <small className="text-truncate">
+                        Due Date: <Badge bg={ task?.dueToday ? "danger" : "primary"}>{moment(task?.dueDate).format('DD/MM/YYYY')}</Badge>
+                      </small>}
+					  {task?.status == 'COMPLETED' &&  <small className="text-truncate">
+                        Completed: <Badge bg="success">{moment(task?.completedDate).format('DD/MM/YYYY')}</Badge>
+                      </small>}
                     </Col>
                     <Col
-                      lg={2}
+                      lg={3}
                       className="text-end middle"
                       style={{ justifyContent: "end" }}
                     >
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-star"></i>
-                      </Button>
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-ellipsis-v"></i>
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row className="d-flex justify-content-start list_task">
-                    <Col lg={6} className="middle">
-                      <span
-                        style={{ fontSize: "20PX", marginRight: "10px" }}
-                        round="20px"
-                      >
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>
-                      <h5 className="text-truncate">
-                        And here's some amazing content. It's very engaging.
-                        right?
-                      </h5>
-                    </Col>
-                    <Col lg={4} className="middle">
                       <small className="text-truncate">
-                        Due To <Badge bg="danger">TODAY</Badge>
+                        {task?.status == 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
+                        {task?.status == 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
+                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLLETED</Badge>}
+                        {task?.status == 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
+
                       </small>
                     </Col>
-                    <Col
-                      lg={2}
-                      className="text-end middle"
-                      style={{ justifyContent: "end" }}
-                    >
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-star"></i>
-                      </Button>
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-ellipsis-v"></i>
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row className="d-flex justify-content-start list_task">
-                    <Col lg={6} className="middle">
-                      <span
-                        style={{ fontSize: "20PX", marginRight: "10px" }}
-                        round="20px"
-                      >
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>
-                      <h5 className="text-truncate">
-                        And here's some amazing content. It's very engaging.
-                        right?
-                      </h5>
-                    </Col>
-                    <Col lg={4} className="middle">
-                      <small className="text-truncate">
-                        Due To <Badge bg="warning">PROGRESS</Badge>
-                      </small>
-                    </Col>
-                    <Col
-                      lg={2}
-                      className="text-end middle"
-                      style={{ justifyContent: "end" }}
-                    >
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-star"></i>
-                      </Button>
-                      <Button variant="light" size="sm">
-                        <i className="fa fa-ellipsis-v"></i>
-                      </Button>
-                    </Col>
-                  </Row>
+				 <Col
+				   lg={1}
+				   className="text-end middle"
+				   style={{ justifyContent: "end" }}
+				 >
+				   <Button variant="light" size="sm">
+					 Add Rating
+				   </Button>
+				  
+				 </Col>
+			   </Row>
+				 ) }
+               
+                  
                 </Card>
               </Col>
             </Row>
