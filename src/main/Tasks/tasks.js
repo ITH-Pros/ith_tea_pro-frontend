@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './tasks.css';
-import { getAllProjects, getProjectsTask } from "../../services/user/api";
+import {  getProjectsTask } from "../../services/user/api";
 import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
@@ -25,34 +25,9 @@ const Tasks=()=> {
     
   useEffect(() => {
 	getTasksDataUsingProjectId();
-  });
+  }, []);
     
-    // const getAllProjectsData =async () => {
-        
-    //        setLoading(true);
-		   
-    //        try {
-	// 		let data = {}
-			
-    //          const lead = await getAllProjects(data);
-    //          setLoading(false);
-
-    //          if (lead.error) {
-    //            setToasterMessage(
-    //              lead?.error?.message || "Something Went Wrong"
-    //            );
-    //            setShowToaster(true);
-    //          } else {
-    //              setProjects(lead.data);
-    //          }
-    //        } catch (error) {
-    //          setToasterMessage(error?.error?.message || "Something Went Wrong");
-    //          setShowToaster(true);
-    //          setLoading(false);
-    //          return error.message;
-    //        }
-
-    // }
+    
 
 
 
@@ -77,7 +52,7 @@ const Tasks=()=> {
            setShowToaster(true);
          } else {
 			let allTask = tasks?.data;
-		allTask?.map((item)=>{
+			allTask?.map((item)=>{
 			let dateMonth = item?.dueDate?.split('T')[0]
 			let today = new Date();
 			today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
