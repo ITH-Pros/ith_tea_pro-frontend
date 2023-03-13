@@ -24,7 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import Modal from "react-modal";
 import { useAuth } from "../../../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addRating, getAllAssignedProject, getAllProjects, getAllUserDataForRating } from "../../../services/user/api";
+import { addRating, getAllAssignedProject, getAllProjects, getAllUserDataForRating, getProjectsTask } from "../../../services/user/api";
 
 
 
@@ -122,16 +122,46 @@ export default function AddRatingModal(props) {
         setDate(date.target.value);
 		console.log("date", date.target.value);
 		// filter task on basis of user id and date
-		const selectedTask = selectedProject.tasks.find((task) => {
-			const taskDate = new Date(task.completedDate).toISOString().substring(0, 10);
-			return task.assignedTo === team && taskDate === date.target.value;
-		  });
-		console.log("selectedTask" , selectedTask);
+		// const selectedTask = selectedProject.tasks.find((task) => {
+		// 	const taskDate = new Date(task.completedDate).toISOString().substring(0, 10);
+		// 	return task.assignedTo === team && taskDate === date.target.value;
+		//   });
+		// console.log("selectedTask" , selectedTask);
 
 		// setTaskOptions(selectedTask)
+		getTaskList();
 		
 
     };
+
+	const getTaskList = async function () {
+	
+        setLoading(true);
+
+		try {
+			const dataToSend = {
+				projectId: project,
+				userId: team,
+				date: date?.split("-")[2],
+				year: date?.split("-")[0],
+				month: date?.split("-")[1],
+			};
+			const response = await getProjectsTask(dataToSend);
+			console.log("response", response);
+			if (response && response.data && response.data.data) {
+				setTaskOptions(response.data.data);
+			}
+		} catch (error) {
+			console.log("error", error);
+		}
+
+        setLoading(false);
+
+	};
+
+
+
+
 
     const onChangeOfComments = (e) => {
         setComments(e)

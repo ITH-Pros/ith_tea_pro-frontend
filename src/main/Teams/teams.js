@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import Modals from "../../components/modal";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
+import { faGithub, faLinkedin, faFacebook , faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 
@@ -327,11 +329,32 @@ export default function Teams(props) {
                       alt=""
                     />
                     <strong>{user.name} ({user.role})</strong>
-                    <p>{user.email}</p>
-					
-                  </div>
+                  
+					<p>{user.email}</p>
+					<p>{user.employeeId} ({user.department}) </p>
+					  <p>{user.designation}</p>
+					  <p>{user.wings}</p>
+                </div>
 
-                  {userDetails.role !== "USER" && (
+				<div>
+				{user.github &&
+      <FontAwesomeIcon icon={faGithub} />
+    }
+	{user.linkedin &&
+      <FontAwesomeIcon icon={faLinkedin} />
+    }
+	{user.facebook &&
+      <FontAwesomeIcon icon={faFacebook} />
+    }
+	{user.twitter &&
+      <FontAwesomeIcon icon={faTwitter} />
+    }
+    {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />
+    <FontAwesomeIcon  className="brand-icon" icon={faFacebook} />
+	<FontAwesomeIcon className="brand-icon" icon={faTwitter} /> */}
+  </div>
+
+                  {userDetails.role == "SUPER_ADMIN" && "ADMIN"  && (
                     <div className="btn">
                       <button
                         className="btn-glow margin-right btn-color"
