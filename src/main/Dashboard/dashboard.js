@@ -644,7 +644,7 @@ const openAddtask=(project)=>{
                       <small className="text-truncate">
                         {task?.status == 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
                         {task?.status == 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
-                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLLETED</Badge>}
+                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLETED</Badge>}
                         {task?.status == 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
 
                       </small>
@@ -753,7 +753,7 @@ const openAddtask=(project)=>{
                       <small className="text-truncate">
                         {task?.status == 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
                         {task?.status == 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
-                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLLETED</Badge>}
+                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLETED</Badge>}
                         {task?.status == 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
 
                       </small>

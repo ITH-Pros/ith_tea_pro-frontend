@@ -7,6 +7,8 @@ import "./filter.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getAllProjects } from "../../../services/user/api";
+import Select from 'react-select';
+
 const FilterModal = (props) => {
   const {  getTaskFilters } = props;
 
@@ -20,11 +22,11 @@ const FilterModal = (props) => {
     priority: "",
     status: "",
     groupBy: "",
-	projectId: ""
+	projectIds: ''
   };
   const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);
-  const [selectProject, setSelectProject] = useState("");
+  const [projectIds, setProjectIds] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [dateCreated, setDateCreated] = useState("");
@@ -36,12 +38,16 @@ const FilterModal = (props) => {
 
   const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
   const [selectedProject, setSelectedProject] = useState();
+  const [selectedFilterData, setSelectedFilterData] = useState();
+
   const [projects, setProjects] = useState([]);
   const [sortedByArr, setSortedByArr] = useState(CONSTENTS.SORTEDBY);
 
   useEffect(() => {
     if (localStorage.getItem('taskFilters')) {
       setFilterFormValue(JSON.parse(localStorage.getItem('taskFilters')));
+	  let projectData = projects.filter((item)=> filterFormValue?.projectIds?.includes(item?._id))
+	  setProjectIds(projectData);
 	  setClearFilterBoolean(true);
     }
 	getAllProjectsData();
@@ -62,9 +68,6 @@ const FilterModal = (props) => {
     if (dueDate) {
       filterFormValue.dueDate = dueDate;
     }
-    if (selectProject) {
-      filterFormValue.projectId = selectProject;
-    }
     if (dateCreated) {
       filterFormValue.dateCreated = dateCreated;
     }
@@ -74,6 +77,9 @@ const FilterModal = (props) => {
     if (dateCompleted) {
       filterFormValue.dateCompleted = dateCompleted;
     }
+	// if(filterFormValue?.projectIds){
+	// 	filterFormValue.projectIds = JSON.stringify(filterFormValue?.projectIds)
+	// }
 
     console.log(
       filterFormValue,
@@ -87,7 +93,7 @@ const FilterModal = (props) => {
   const clearFilterFormValue = () => {
     console.log("key pressed");
     setSelectProjectGroup("");
-    setSelectProject("");
+    setProjectIds("");
     setDateCompleted("");
     setDateCreated("");
     setDueDate("");
@@ -118,11 +124,15 @@ const FilterModal = (props) => {
            }
 
     }
-	const onSelectProject = (e)=>{
-		updateFilterFormValue(e);
-		setSelectProject(e.target.value);
-		let projectdata = projects?.filter((item)=> item?._id == e.target.value);
-		setSelectedProject(projectdata[0]);
+	const onSelectProject = (projects)=>{
+		setProjectIds(projects);
+		
+		console.log(projects,projects?.map((item)=> item?._id));
+		setFilterFormValue({ ...filterFormValue, projectIds: projects?.map((item)=> item?._id) });
+		// updateFilterFormValue(e);
+		// setProjectIds(e.target.value);
+		// let projectdata = projects?.filter((item)=> item?._id == e.target.value);
+		// setSelectedProject(projectdata[0]);
 	}
 
   return (
@@ -227,17 +237,24 @@ const FilterModal = (props) => {
 				  <Form.Label column sm="4">
 				  Project
 					</Form.Label>
-                    <Form.Control
-                      as="select"
-                      type="select"
-                      name="selectProject"
-					  value={filterFormValue.projectId}
-                      onChange={(e) => onSelectProject(e)}
-                    >
-						  <option value="">Select Project </option>
-                     {projects?.map((project)=><option value={project?._id} key={project?._id}>{project?.name}</option>) }
+                    {/* <Form.Control
+                      name="projectIds"
+					  
+                    > */}
+						<Select
+						 onChange={onSelectProject}
+						value={projectIds}
+						// onChange={(e) => onSelectProject(e)}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={projects}
+               
+              />
+						  {/* <option value="">Select Project </option>
+                     {projects?.map((project)=><option value={project?._id} key={project?._id}>{project?.name}</option>) } */}
                      
-                    </Form.Control>
+                    {/* </Form.Control> */}
                   </Row>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formDateCreated">
