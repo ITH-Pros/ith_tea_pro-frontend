@@ -44,7 +44,8 @@ class UserIcon extends React.Component {
 
     return (
       <div style={styles} className="user-pic">
-        {firstName.charAt(0)}
+        {firstName.charAt(0)!=='.'&&firstName.charAt(0)}
+        {firstName.charAt(0)==='.'&&firstName}
       </div>
     );
   }

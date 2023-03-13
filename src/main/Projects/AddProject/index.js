@@ -34,6 +34,8 @@ export default function AddProject(props) {
     const [leadList, setLeadList] = useState([]);
     const [newCategory, setNewCategory] = useState('');
     const [toaster, showToaster] = useState(false);
+    const [assignedby, setAssignedByValue] = useState([]);
+    const [managedby, setManagedByValue] = useState([]);
 	const [projectList, setProjectListValue] = useState([]);
 	const params = useParams()
   const setShowToaster = (param) => showToaster(param);
@@ -47,7 +49,7 @@ export default function AddProject(props) {
 	// Render the component using the projectDetails prop
 
 
-    const projectFormFields = { name:  '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
+    const projectFormFields = { name:  '', description: '',shortDescription:'', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
 
@@ -60,15 +62,16 @@ export default function AddProject(props) {
 
 	useEffect(() => {
 		if (projectById) {
+      setAssignedByValue(projectById.accessibleBy);
+      setManagedByValue(projectById.managedBy)
 		  setProjectFormValue({
         ...projectFormValue,
         name: projectById.name,
         description: projectById.description,
-        // selectedManagers: projectById.managedBy,
+        shortDescription: projectById.shortDescription,
+        selectedManagers: projectById.managedBy.map((el) => el._id),
         projectCategories: projectById.categories,
-        selectedManagers: projectById.managedBy,
-        selectAccessibleBy: projectById.accessibleBy,
-        // selectAccessibleBy: projectById.accessibleBy,
+        selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
       });
 
 		//   onAssignUserChange(projectById.accessibleBy);
@@ -247,143 +250,170 @@ export default function AddProject(props) {
         setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
     }
 
-    const onAssignManagerChange = (users) => {
-        setProjectFormValue({ ...projectFormValue, selectedManagers: users.map(el => el._id) })
+  const onAssignManagerChange = (users) => {
+    // setManagedByValue(...managedby, ...users);
+    //   setTimeout(() => {
+    //      console.log(managedby, users, "--------------------managed by");
+
+    //   }, 1000);
+    setManagedByValue(users);
+      
+    setProjectFormValue({ ...projectFormValue, selectedManagers: users.map(el => el._id) })
+    setTimeout(() => {
+      console.log(
+        projectFormValue,users,
+        "-----------------------------------projectFormValue"
+      );
+      
+    },1000)
     }
-    const onAssignUserChange = (users) => {
-        setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
+  const onAssignUserChange = (users) => {
+    
+    setAssignedByValue(projectById?.assignedby);
 
+    setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
 
-			
-		
-
-		
     }
 
     return (
+      <div className="addUserFrom rightDashboard">
+        {/* <h4 className='mb-5'>Add Project</h4> */}
+        <Form noValidate className="addUserFormBorder" validated={validated}>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.name}
+                name="name"
+                placeholder="Project Name"
+              ></Form.Control>
+              <Form.Control.Feedback type="invalid">
+                Name is required !!
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
 
-		<><div className="addUserFrom rightDashboard">
+          <Row className="mb-3">
+            <Form.Group as={Col} md="6">
+              <Form.Label>Assign Leads</Form.Label>
+              <Select
+                isMulti
+                onChange={onAssignManagerChange}
+                getOptionLabel={(options) => options["name"]}
+                getOptionValue={(options) => options["_id"]}
+                options={leadList}
+                value={managedby}
+              />
+            </Form.Group>
+            <Form.Group as={Col} md="6">
+              <Form.Label>Assign Users</Form.Label>
+              <Select
+                isMulti
+                onChange={onAssignUserChange}
+                getOptionLabel={(options) => options["name"]}
+                getOptionValue={(options) => options["_id"]}
+                options={userList}
+                value={assignedby}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="5">
+              <Form.Label>Add Category</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Category"
+                onChange={(e) => setNewCategory(e.target.value)}
+                onKeyDown={addProjectCategory}
+                value={newCategory}
+                required={!projectFormValue.projectCategories.length}
+              />
+            </Form.Group>
+            <Form.Group as={Col} md="1">
+              <Button
+                className="btn btn-gradient-border btnshort-modal"
+                style={{ marginTop: "35px" }}
+                type="button"
+                onClick={addProjectCategoryOnButtonClick}
+              >
+                <i className="fa fa-plus" aria-hidden="true"></i>{" "}
+              </Button>
+            </Form.Group>
+            <div className="mt-1">
+              Categories:
+              {projectFormValue.projectCategories.length
+                ? projectFormValue.projectCategories.map((el) => (
+                    <span className="ctgrybtn" key={el}>
+                      {el}
+                      <i
+                        className="fa fa-times"
+                        style={{ color: "red" }}
+                        onClick={() => removeProjectCategory(el)}
+                        aria-hidden="true"
+                      ></i>
+                    </span>
+                  ))
+                : "  No Categories Added"}
+            </div>
+            <Form.Group as={Col} md="5">
+              <Form.Label>Short Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                required
+                type="text-area"
+                placeholder="Short Description"
+                name="shortDescription"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.shortDescription}
+              />
+            </Form.Group>
+          </Row>
 
-<div className="backButton">
-			<Link to="/project/all">
-				<Button variant="outline-primary">
-					<FontAwesomeIcon icon={faArrowLeft} /> Back
-				</Button>
-			</Link>
-		</div>
-				{/* <h4 className='mb-5'>Add Project</h4> */}
-				<Form noValidate className="addUserFormBorder" validated={validated}>
-					<Row className="mb-3">
-						<Form.Group as={Col} md="12">
-							<Form.Label>Name</Form.Label>
-							<Form.Control
-								required
-								type="text"
-								onChange={updateRegisterFormValue}
-								value={projectFormValue.name}
-								name="name"
-								placeholder="Project Name"
-							></Form.Control>
-							<Form.Control.Feedback type="invalid">
-								Name is required !!
-							</Form.Control.Feedback>
-							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-						</Form.Group>
-					</Row>
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                required
+                type="text-area"
+                placeholder="Description"
+                name="description"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.description}
+              />
+            </Form.Group>
+          </Row>
 
-					<Row className="mb-3">
-						<Form.Group as={Col} md="6">
-							<Form.Label>Assign Leads</Form.Label>
-							<Select
-								isMulti
-								onChange={onAssignManagerChange}
-								getOptionLabel={(options) => options["name"]}
-								getOptionValue={(options) => options["_id"]}
-								options={leadList}
-								value={projectFormValue.selectedManagers} />
-						</Form.Group>
-						<Form.Group as={Col} md="6">
-							<Form.Label>Assign Users</Form.Label>
-							<Select
-								isMulti
-								onChange={onAssignUserChange}
-								getOptionLabel={(options) => options["name"]}
-								getOptionValue={(options) => options["_id"]}
-								options={userList}
-								value={projectFormValue.selectAccessibleBy} />
-						</Form.Group>
-					</Row>
-
-					<Row className="mb-3">
-						<Form.Group as={Col}>
-							<Form.Label>Description</Form.Label>
-							<Form.Control
-								as="textarea"
-								required
-								type="text-area"
-								placeholder="Description"
-								name="description"
-								onChange={updateRegisterFormValue}
-								value={projectFormValue.description} />
-						</Form.Group>
-					</Row>
-
-					<Row className="mb-3">
-						<Form.Group as={Col} md="5">
-							<Form.Label>Add Category</Form.Label>
-							<Form.Control
-								type="text"
-								placeholder="Category"
-								onChange={(e) => setNewCategory(e.target.value)}
-								onKeyDown={addProjectCategory}
-								value={newCategory}
-								required={!projectFormValue.projectCategories.length} />
-						</Form.Group>
-						<Form.Group as={Col} md="1">
-							<Button
-								className="btn btn-gradient-border btnshort-modal"
-								style={{ marginTop: "35px" }}
-								type="button"
-								onClick={addProjectCategoryOnButtonClick}
-							>
-								<i className="fa fa-plus" aria-hidden="true"></i>{" "}
-							</Button>
-						</Form.Group>
-						<div className="mt-1">
-							Categories:
-							{projectFormValue.projectCategories.length
-								? projectFormValue.projectCategories.map((el) => (
-									<span className="ctgrybtn" key={el}>
-										{el}
-										<i
-											className="fa fa-times"
-											style={{ color: "red" }}
-											onClick={() => removeProjectCategory(el)}
-											aria-hidden="true"
-										></i>
-									</span>
-								))
-								: "  No Categories Added"}
-						</div>
-					</Row>
-					<div>
-						{/* <Button className="btn-gradient-border btnDanger"
+          <div>
+            {/* <Button className="btn-gradient-border btnDanger"
                 type="button"
                 onClick={submitProjectForm}
             >Submit</Button> */}
-						<button onClick={submitProjectForm} className="btn-51">
-							Submit
-						</button>
-					</div>
-				</Form>
-				{toaster && (
-					<Toaster
-						message={toasterMessage}
-						show={toaster}
-						close={() => showToaster(false)} />
-				)}
-				{loading ? <Loader /> : null}
-			</div></>
+            {projectById && (
+              <button onClick={submitProjectForm} className="btn-51">
+                Update
+              </button>
+            )}
+            {!projectById && (
+              <button onClick={submitProjectForm} className="btn-51">
+                Submit
+              </button>
+            )}
+          </div>
+        </Form>
+        {toaster && (
+          <Toaster
+            message={toasterMessage}
+            show={toaster}
+            close={() => showToaster(false)}
+          />
+        )}
+        {loading ? <Loader /> : null}
+      </div>
     );
 };
 

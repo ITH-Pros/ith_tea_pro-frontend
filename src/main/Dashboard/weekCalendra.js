@@ -20,7 +20,7 @@ export const MyCalendar = () => (
   <>
     <div className="calendars">
       <div>
-        <h1>calendar</h1>
+        <h1>My Ratings</h1>
         <Calendar
           events={myevents}
           localizer={localizer}
