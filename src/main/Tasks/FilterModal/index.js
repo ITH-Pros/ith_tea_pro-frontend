@@ -6,8 +6,9 @@ import { CONSTENTS } from "../../../constents";
 import "./filter.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { getAllProjects } from "../../../services/user/api";
 const FilterModal = (props) => {
-  const { selectedProject, getTaskFilters } = props;
+  const {  getTaskFilters } = props;
 
   const statusList = CONSTENTS.statusList;
   const priorityList = CONSTENTS.priorityList;
@@ -19,6 +20,7 @@ const FilterModal = (props) => {
     priority: "",
     status: "",
     groupBy: "",
+	selectProject: ""
   };
   const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);
@@ -33,12 +35,16 @@ const FilterModal = (props) => {
   const [filterModalShow, setFilterModalShow] = useState(false);
 
   const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
+  const [selectedProject, setSelectedProject] = useState();
+  const [projects, setProjects] = useState([]);
+  const [sortedByArr, setSortedByArr] = useState(CONSTENTS.SORTEDBY);
 
   useEffect(() => {
     if (localStorage.getItem('taskFilters')) {
       setFilterFormValue(JSON.parse(localStorage.getItem('taskFilters')));
 	  setClearFilterBoolean(true);
     }
+	getAllProjectsData();
   }, []);
 
   const updateFilterFormValue = (e) => {
@@ -92,6 +98,32 @@ const FilterModal = (props) => {
 	setClearFilterBoolean(false);
 	getTaskFilters();
   };
+  const getAllProjectsData =async () => {
+        
+           setLoading(true);
+		   
+           try {
+			
+             const lead = await getAllProjects();
+             setLoading(false);
+
+             if (lead.error) {
+               console.log(lead?.error)
+             } else {
+                 setProjects(lead.data);
+             }
+           } catch (error) {
+             setLoading(false);
+             return error.message;
+           }
+
+    }
+	const onSelectProject = (e)=>{
+		updateFilterFormValue(e);
+		setSelectProject(e.target.value);
+		let projectdata = projects?.filter((item)=> item?._id == e.target.value);
+		setSelectedProject(projectdata[0]);
+	}
 
   return (
     <>
@@ -160,14 +192,7 @@ const FilterModal = (props) => {
                 )}
               </div>
             </Col>
-            <Col lg={1}>
-            <button className="addTaskBtn"
-              style={{
-                float: "right" 
-              }} >
-              Add Task
-            </button>
-              </Col>
+           
           </Row>
         </Container>
          
@@ -197,6 +222,24 @@ const FilterModal = (props) => {
           <Modal.Body>
             <Form noValidate>
               <Row>
+			  <Form.Group as={Row} controlId="formSelectProject">
+                  <Row sm="9" className="filterFields">
+				  <Form.Label column sm="4">
+				  Project
+					</Form.Label>
+                    <Form.Control
+                      as="select"
+                      type="select"
+                      name="selectProject"
+					  value={filterFormValue.selectProject}
+                      onChange={(e) => onSelectProject(e)}
+                    >
+						  <option value="">Select Project </option>
+                     {projects?.map((project)=><option value={project?._id} key={project?._id}>{project?.name}</option>) }
+                     
+                    </Form.Control>
+                  </Row>
+                </Form.Group>
                 <Form.Group as={Row} controlId="formDateCreated">
                   <Row sm="9" className="filterFields">
                     <Form.Label column sm="4">
@@ -308,7 +351,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateCreated">
+                {/* <Form.Group as={Row} controlId="formDateCreated">
                   <Row sm="9" className="filterFields">
 				  <Form.Label column sm="4">
 				  Group By
@@ -328,15 +371,16 @@ const FilterModal = (props) => {
                       ))}
                     </Form.Control>
                   </Row>
-                </Form.Group>
+                </Form.Group> */}
 
-                <Form.Group as={Row} controlId="formSelectProjectGroup">
+                {/* <Form.Group as={Row} controlId="formSelectProjectGroup">
                   <Row sm="9" className="filterFields">
 				  <Form.Label column sm="4">
 				  Project Group
 					</Form.Label>
                     <Form.Control
                       as="select"
+					  
                       value={selectProjectGroup}
                       onChange={(e) => setSelectProjectGroup(e.target.value)}
                     >
@@ -346,25 +390,9 @@ const FilterModal = (props) => {
                       <option value="projectGroup3">Project Group 3</option>
                     </Form.Control>
                   </Row>
-                </Form.Group>
+                </Form.Group> */}
 
-                <Form.Group as={Row} controlId="formSelectProject">
-                  <Row sm="9" className="filterFields">
-				  <Form.Label column sm="4">
-				  Project
-					</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={selectProject}
-                      onChange={(e) => setSelectProject(e.target.value)}
-                    >
-                      <option value="">Select Project</option>
-                      <option value="project1">Project 1</option>
-                      <option value="project2">Project 2</option>
-                      <option value="project3">Project 3</option>
-                    </Form.Control>
-                  </Row>
-                </Form.Group>
+               
 
                 <Form.Group as={Row} controlId="formSortBy">
                   <Row sm="9" className="filterFields">
@@ -373,13 +401,17 @@ const FilterModal = (props) => {
                   </Form.Label>
                     <Form.Control
                       as="select"
+					  type="select"
+                      name="sortBy"
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                     >
                       <option value="">Select Sort By</option>
-                      <option value="sort1">Sort 1</option>
-                      <option value="sort2">Sort 2</option>
-                      <option value="sort3">Sort 3</option>
+					  {sortedByArr?.map((type) => (
+                        <option value={type} key={type}>
+                          {type}
+                        </option>
+                      ))}
                     </Form.Control>
                   </Row>
                 </Form.Group>

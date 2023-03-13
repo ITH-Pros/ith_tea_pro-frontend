@@ -10,7 +10,7 @@ import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
 import { Modal } from 'react-bootstrap';
-import { getAllProjects, createTask } from '../../../services/user/api';
+import { getAllProjects, createTask, updateTaskDetails } from '../../../services/user/api';
 import Toaster from '../../../components/Toaster'
 import { CONSTENTS } from '../../../constents';
 import Select from "react-select";
@@ -18,7 +18,7 @@ import Select from "react-select";
 import { getAllLeadsWithoutPagination } from '../../../services/user/api';
 export default function AddTaskModal(props) {
 
-    const {  selectedProjectFromTask,getNewTasks, shoowAddTask } = props;
+    const {  selectedProjectFromTask,getNewTasks, showAddTask,closeModal,selectedTask } = props;
     const statusList = CONSTENTS.statusList
     const priorityList = CONSTENTS.priorityList
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -28,7 +28,6 @@ export default function AddTaskModal(props) {
     const [userList, setUserList] = useState([]);
     const [validated, setValidated] = useState(false);
     const [leadLists, setLeadList] = useState([]);
-    const [selectedProject, setSelectedProject] = useState(selectedProjectFromTask);
 	// const leadList = [{name : 'Lead 1', _id : '1'}, {name : 'Lead 2', _id : '2'}, {name : 'Lead 3', _id : '3'}]
 
     const [taskFormValue, setTaskFormValue] = useState({
@@ -49,22 +48,50 @@ export default function AddTaskModal(props) {
     const [toasterMessage, setToasterMessage] = useState("");
 
     useEffect(() => {
-		console.log(shoowAddTask)
+		console.log(showAddTask)
         getLeadsList();
-         getProjectList();
+        getProjectList();
     }, []);
 
 
     useEffect(() => {
-		if(shoowAddTask){
+		if(showAddTask){
 			setShowAddTaskModal(true);
+			patchFormForAdd();
 		}
-		console.log(selectedProjectFromTask)
-		setSelectedProject(selectedProjectFromTask)
-        setTaskFormValue({ ...taskFormValue, projectId: selectedProjectFromTask._id, category: selectedProjectFromTask.categories?.[0] })
-        setCategoryList(selectedProjectFromTask.categories)
-        setUserList(selectedProjectFromTask.accessibleBy)
-    }, [shoowAddTask,selectedProjectFromTask]);
+
+    }, [showAddTask]);
+
+	const patchFormForAdd=()=>{
+		if(selectedProjectFromTask){
+			let project = projectList?.filter((item)=> item?._id == selectedProjectFromTask?._id);
+			console.log(project, projectList,selectedProjectFromTask);
+			setCategoryList(project[0]?.categories)
+			setUserList(project[0]?.accessibleBy)
+			setTaskFormValue({ ...taskFormValue, projectId: project[0]?._id, category: selectedProjectFromTask?.category || project[0]?.categories?.[0] });
+			
+		}else if (selectedTask){
+			console.log(selectedTask)
+			let project = projectList?.filter((item)=> item?._id == selectedTask?.projectId);
+			setCategoryList(project[0]?.categories);
+			setUserList(project[0]?.accessibleBy);
+			let dueDateData = new Date(selectedTask?.dueDate);
+			dueDateData = dueDateData.getFullYear() + '-' + (dueDateData.getMonth() + 1 <= 9 ? '0' + (dueDateData.getMonth() + 1) : (dueDateData.getMonth() + 1)) + '-' + (dueDateData.getDate() <= 9 ? '0' + dueDateData.getDate() : dueDateData.getDate())
+			setTaskFormValue({projectId: selectedTask?.projectId,
+			category: selectedTask?.category,
+			title: selectedTask?.title,
+			description: selectedTask?.description,
+			assignedTo: selectedTask?.assignedTo?._id,
+			dueDate:dueDateData,
+			completedDate: selectedTask?.completedDate,
+			priority: selectedTask?.priority,
+			status: selectedTask?.status,
+			attachment: selectedTask?.attachment,
+			tasklead:selectedTask?.lead[0] || ""})
+		}else{
+			resetFormValue();
+		}
+	}
 
     const getLeadsList = async function () {
       setLoading(true);
@@ -98,9 +125,7 @@ export default function AddTaskModal(props) {
             } else {
                 setProjectList(projects.data)
 				setCategoryList(projects.data[0]?.categories);
-				setUserList(projects.data[0]?.accessibleBy)
-					
-				
+				setUserList(projects.data[0]?.accessibleBy)				
             }
         } catch (error) {
             setLoading(false);
@@ -111,9 +136,13 @@ export default function AddTaskModal(props) {
     }
 
     const onchangeSelectedProject = (e) => {
-        let project = projectList.find((el) => el._id === e.target.value)
-        setSelectedProject(project);
+        let project = projectList.find((el) => el._id === e.target.value);
+		setTaskFormValue({
+			...taskFormValue,
+			category: '', assignedTo: '', 
+		})
 		setCategoryList(project?.categories);
+		setUserList(project?.accessibleBy);	
         updateTaskFormValue(e);
     };
 
@@ -234,9 +263,77 @@ export default function AddTaskModal(props) {
     });
   };
 
+ const resetModalData=()=>{
+	closeModal();
+	resetFormValue();
+	setShowAddTaskModal(false);
+
+  }
+  const resetFormValue=()=>{
+	setTaskFormValue({
+		projectId: "",
+		category: "",
+		title: "",
+		description: "",
+		assignedTo: "",
+		dueDate: "",
+		completedDate: "",
+		priority: priorityList[0],
+		status: statusList[0],
+		attachment: "",
+		tasklead: ""
+	  })
+  }
+
+  const updateTask = async () => {
+	setValidated(true);
+  
+	if (!taskFormValue.projectId || !taskFormValue.category || !taskFormValue.title||!taskFormValue.tasklead) {
+		return
+	}
+
+	setLoading(true);
+	try {
+		let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead, attachment } = taskFormValue
+		let dataToSend = {}
+		projectId && (dataToSend["projectId"] = projectId)
+		category && (dataToSend["category"] = category)
+		title && (dataToSend["title"] = title)
+		description && (dataToSend["description"] = description)
+		assignedTo && (dataToSend["assignedTo"] = assignedTo)
+		dueDate && (dataToSend["dueDate"] = dueDate)
+		priority && (dataToSend["priority"] = priority)
+		status && (dataToSend["status"] = status)
+		tasklead && (dataToSend["tasklead"] = tasklead)
+		selectedTask && (dataToSend["taskId"] = selectedTask?._id)
+
+		const taskRes = await updateTaskDetails(dataToSend);
+		setLoading(false);
+		if (taskRes.error) {
+			setToasterMessage(taskRes?.error?.message || 'Something Went Wrong');
+			setShowToaster(true);
+			return
+		} else {
+			setTaskFormValue({
+				...taskFormValue,
+				title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
+			})
+			setValidated(false);
+		   
+			setShowAddTaskModal(false);
+			getNewTasks(projectId);
+		}
+	} catch (error) {
+		setLoading(false);
+		setToasterMessage(error?.error?.message || 'Something Went Wrong');
+		setShowToaster(true);
+		return error.message;
+	}
+}
+
     return (
       <>
-        <button
+        {/* <button
           className="addTaskBtn"
           style={{
             float: "right", 
@@ -245,17 +342,18 @@ export default function AddTaskModal(props) {
             marginTop:"10px"
           }}
           onClick={() => {
+			resetFormValue();
             setShowAddTaskModal(true);
           }}
         >
           Add Task
-        </button>
+        </button> */}
         <Modal
           show={showAddTaskModal}
           size="xl"
           className='taskModalForm'
           aria-labelledby="contained-modal-title-vcenter"
-          onHide={() => setShowAddTaskModal(false)}
+          onHide={() => resetModalData()}
           backdrop="static"
         >
           <Modal.Header closeButton>
@@ -318,12 +416,29 @@ export default function AddTaskModal(props) {
                   </Form.Group>
                   <Form.Group as={Col} md="12">
                     <Form.Label>Lead</Form.Label>
-                    <Select
+                    <Form.Control
+                      required
+                      as="select"
+                      type="select"
+                      name="tasklead"
+                      onChange={updateTaskFormValue}
+                      value={taskFormValue.tasklead}
+                    >  
+					{/* <Select
                       onChange={onLeadChange}
                       getOptionLabel={(options) => options["name"]}
                       getOptionValue={(options) => options["_id"]}
                       options={leadLists}
-                    />
+                    /> */}
+					<option value="" disabled>
+                        Select Lead
+                      </option>
+                      {leadLists?.map((lead) => (
+                        <option value={lead?._id} key={lead?._id}>
+                          {lead?.name}
+                        </option>
+                      ))}
+					</Form.Control>
                     <Form.Control.Feedback type="invalid">
                       Task List is required !!
                     </Form.Control.Feedback>
@@ -355,6 +470,7 @@ export default function AddTaskModal(props) {
                   <FroalaEditorComponent
                     tag="textarea"
                     onModelChange={updateTaskDescriptionValue}
+					model = {taskFormValue?.description}
                   />
                 </Row> 
 
@@ -382,6 +498,7 @@ export default function AddTaskModal(props) {
                       type="date"
                       placeholder="Due date"
                       name="dueDate"
+					  value={taskFormValue.dueDate}
                       onChange={updateTaskFormValue}
                     />
                   </Form.Group>
@@ -441,21 +558,28 @@ export default function AddTaskModal(props) {
                 </Row>
 
                 <div className='addFormBtn'>
-                  <Button 
+                  {!selectedTask && <Button 
                     className=" btn-press  btn-gradient-border btnDanger"
                     type="button"
                     onClick={submitTask}
                   >
                     Create
-                  </Button>
-                  <Button
+                  </Button>}
+				  {selectedTask && <Button 
+                    className=" btn-press  btn-gradient-border btnDanger"
+                    type="button"
+                    onClick={updateTask}
+                  >
+                    Update
+                  </Button>}
+                  {!selectedTask && <Button
                     className="btn-press btn-gradient-border btnDanger"
                     type="button"
                     onClick={submitTaskAnother}
                   >
                     {" "}
                     Create And Add Another
-                  </Button>
+                  </Button>}
                 </div> 
               </Form>
               {toaster && (

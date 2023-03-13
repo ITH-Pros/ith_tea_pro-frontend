@@ -157,9 +157,9 @@ const RatingBox = (props) => {
                 </div> :
                     <div>
                         <span ><b>Rating </b>: <strong>{selectedRating}</strong> </span>
-                        {
+                        {/* {
                             userDetails.role !== "USER" && <button className="btn btn-gradient-border btnshort mt-3" onClick={() => { setEditRatingEnabled(true) }}><i className='fa fa-edit'></i> </button>
-                        }
+                        } */}
                     </div>
             )
         }
@@ -170,7 +170,7 @@ const RatingBox = (props) => {
                     <div style={{ display: "flex", marginBottom: "20px" }}>
                         <RatingEditBox />
                     </div>
-                    <CommentsForm />
+                    {/* <CommentsForm /> */}
                 </div>
                 {
                     clickedRatingArray?.map((comments, index) => {

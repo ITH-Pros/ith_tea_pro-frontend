@@ -17,43 +17,41 @@ const Tasks=()=> {
   const [taskFilters, setTaskFilters] = useState({});
   const [selectedProject, setSelectedProject] = useState({});
   const [taskData, setTaskData] = useState({});
-  const [shoowAddTask, setShoowAddTask] = useState(false);
+  const [showAddTask, setShowAddTask] = useState(false);
+  const [selectedTask, setSelectedTask] = useState({});
 
   const setShowToaster = (param) => showToaster(param);
     
   useEffect(() => {
-      getAllProjectsData();
+	getTasksDataUsingProjectId();
   }, []);
     
-    const getAllProjectsData =async () => {
+    // const getAllProjectsData =async () => {
         
-           setLoading(true);
+    //        setLoading(true);
 		   
-           try {
-			let data = {}
-			if(localStorage.getItem('taskFilters')){
-				data = JSON.parse(localStorage.getItem('taskFilters'))
-			}
-             const lead = await getAllProjects(data);
-             setLoading(false);
+    //        try {
+	// 		let data = {}
+			
+    //          const lead = await getAllProjects(data);
+    //          setLoading(false);
 
-             if (lead.error) {
-               setToasterMessage(
-                 lead?.error?.message || "Something Went Wrong"
-               );
-               setShowToaster(true);
-             } else {
-                 setProjects(lead.data);
-				 setSelectedProject(lead?.data[0]);
-             }
-           } catch (error) {
-             setToasterMessage(error?.error?.message || "Something Went Wrong");
-             setShowToaster(true);
-             setLoading(false);
-             return error.message;
-           }
+    //          if (lead.error) {
+    //            setToasterMessage(
+    //              lead?.error?.message || "Something Went Wrong"
+    //            );
+    //            setShowToaster(true);
+    //          } else {
+    //              setProjects(lead.data);
+    //          }
+    //        } catch (error) {
+    //          setToasterMessage(error?.error?.message || "Something Went Wrong");
+    //          setShowToaster(true);
+    //          setLoading(false);
+    //          return error.message;
+    //        }
 
-    }
+    // }
 
 
 
@@ -63,17 +61,21 @@ const Tasks=()=> {
          try {
              let data = {};
              data = {
-                 groupBy:"['projectId','category']"
-               
+                 groupBy:"default"
              };
-            
+			 if(localStorage.getItem('taskFilters')){
+				let filterData = JSON.parse(localStorage.getItem('taskFilters'))
+				data = filterData;
+				data.groupBy = "default"
+				console.log(data, "filter data")
+			}
          const lead = await getProjectsTask(data);
          setLoading(false);
-		 console.log(data)
          if (lead.error) {
            setToasterMessage(lead?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
+			setProjects(lead?.data)
             //  setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
@@ -95,25 +97,42 @@ const Tasks=()=> {
 //   };
  
 const getNewTasks = (id)=>{
+	closeModal();
 	getTasksDataUsingProjectId();
 }
 const getTaskFilters = ()=>{
-	getAllProjectsData();
+	getTasksDataUsingProjectId();
+}
+const closeModal=()=>{
+	setShowAddTask(false);
+	setSelectedProject();
+	setSelectedTask();
 }
   return (
+	
     <div className="rightDashboard">
-      <h1 className="h1-text">
-          <i className="fa fa-list-ul" aria-hidden="true"></i>Task
+      <h1 className="h1-text" >
+          <i  className="fa fa-list-ul" aria-hidden="true"></i>Task
       </h1>
-		<FilterModal  selectedProject={selectedProject} getTaskFilters={getTaskFilters} />
-        <AddTaskModal selectedProjectFromTask={selectedProject} getNewTasks={getNewTasks} shoowAddTask={shoowAddTask} />
+
+            <button className="addTaskBtn"
+              style={{
+                float: "right" 
+              }}  onClick={() => {
+				setShowAddTask(true);
+				setSelectedProject();
+			  }}>
+              Add Task
+            </button>
+            
+		<FilterModal   getTaskFilters={getTaskFilters} />
+        <AddTaskModal selectedProjectFromTask={selectedProject} selectedTask={selectedTask} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
         <Accordion  alwaysOpen="true">
-        {projects.map((project) => (
-      <Accordion.Item key={project._id} eventKey={project._id}>
-      {/* <Accordion.Header onClick={() => handleClick(project)}>  */}
+        {projects.map((project, index) => (
+      <Accordion.Item key={index} eventKey={index}>
       <Accordion.Header >  
 
-       {project.name} 
+       {project?._id?.projectId?.name} / {project?._id?.category}
       </Accordion.Header>
       <div className="d-flex rightTags">
         <ProgressBar>
@@ -129,9 +148,10 @@ const getTaskFilters = ()=>{
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => {
-            setShoowAddTask(true);
-			setSelectedProject(project);
+            setShowAddTask(true);
+			setSelectedProject({_id: project?._id?.projectId?._id, category: project?._id?.category});
           }}>Add Task</Dropdown.Item>
+		  
           {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
           <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
         </Dropdown.Menu>
@@ -142,12 +162,17 @@ const getTaskFilters = ()=>{
       <Accordion.Body  >
       
             <ul className="mb-0">
-             {taskData[project._id]?.map((task)=>
+             {project?.tasks?.map((task)=>
        <li key={task?._id}><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
        <span className="completeTag">completed Dec 22,2022</span>
        <span className="priorityTag">High</span>
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> chandan s</span>
        <span className="completeTag">Due Dec 22,2022</span>
+	   <span onClick={() => {
+		setSelectedProject();
+            setShowAddTask(true);
+			setSelectedTask(task);
+          }}>edit</span>
       
        </li>
        )}
