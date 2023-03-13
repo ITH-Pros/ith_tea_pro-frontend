@@ -24,7 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import Modal from "react-modal";
 import { useAuth } from "../../../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addRating, getAllAssignedProject, getAllProjects, getAllUserDataForRating, getProjectsTask } from "../../../services/user/api";
+import { addRating, getAllAssignedProject, getAllProjects, getAllUserDataForRating, getProjectsTask, getTaskDetailsByProjectId } from "../../../services/user/api";
 
 
 
@@ -126,12 +126,10 @@ export default function AddRatingModal(props) {
 			const dataToSend = {
 				projectId: project,
 				userId: team,
-				dateCompleted: date,
-				groupBy: 'default'
-				
-
+				dueDate: date,
+				// groupBy: 'default'
 			};
-			const response = await getProjectsTask(dataToSend);
+			const response = await getTaskDetailsByProjectId(dataToSend);
 			console.log("response", response);
 			if (response.error ) {
 				// setToasterMessage(response.error);
@@ -177,7 +175,7 @@ export default function AddRatingModal(props) {
                 month: date?.split("-")[1],
                 rating: rating,
                 comment: comments,
-				task: task,
+				taskId: task,
 				projectId: project,
                 // taggedUsers: tags,
             };
@@ -249,7 +247,7 @@ export default function AddRatingModal(props) {
             } else {
                 setToasterMessage('Rating Added Succesfully');
                 setShowToaster(true);
-                navigate('/')
+                navigate('/rating')
             }
         }
         catch (error) {
@@ -342,7 +340,7 @@ export default function AddRatingModal(props) {
 								<option value="">Select Task</option>
 								{taskOptions.map((module) => (
 									<option value={module._id} key={module._id}>
-										{module.name}
+										{module.title}
 									</option>
 								))}
 							</Form.Control>

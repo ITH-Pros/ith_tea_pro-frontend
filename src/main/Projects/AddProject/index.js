@@ -275,6 +275,49 @@ export default function AddProject(props) {
 
     }
 
+	const handleCancel = () => {
+		navigate('/project/all');
+	};
+
+	const UpdateAndCancel = () => {
+		if(params.projectId){
+			return (
+				<div className="d-flex justify-content-end">
+					<Button
+						variant="outline-primary"
+						className="mr-3"
+						onClick={submitProjectForm}
+					>
+						Update
+					</Button>
+					<Button variant="outline-danger" onClick={handleCancel}>
+						Cancel
+					</Button>
+				</div>
+			);
+		}else{
+			return (
+				<div className="d-flex justify-content-end">
+					<Button
+						variant="outline-primary"
+						className="mr-3"
+						onClick={submitProjectForm}
+					>
+						Submit
+					</Button>
+					<Button variant="outline-danger" onClick={handleCancel}>
+						Cancel
+					</Button>
+				</div>
+			);
+		}
+
+	}
+
+
+
+
+
     return (
       <div className="addUserFrom rightDashboard">
         {/* <h4 className='mb-5'>Add Project</h4> */}
@@ -393,27 +436,24 @@ export default function AddProject(props) {
                 type="button"
                 onClick={submitProjectForm}
             >Submit</Button> */}
-            {projectById && (
-              <button onClick={submitProjectForm} className="btn-51">
-                Update
-              </button>
-            )}
-            {!projectById && (
-              <button onClick={submitProjectForm} className="btn-51">
-                Submit
-              </button>
-            )}
-          </div>
-        </Form>
-        {toaster && (
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        )}
-        {loading ? <Loader /> : null}
-      </div>
+						{/* <button onClick={submitProjectForm} className="btn-51">
+							Submit
+						</button> */}
+						<UpdateAndCancel />
+
+						
+					</div>
+				</Form>
+				{toaster && (
+					<Toaster
+						message={toasterMessage}
+						show={toaster}
+						close={() => showToaster(false)} />
+				)}
+				{loading ? <Loader /> : null}
+			</div>
     );
+
+
 };
 

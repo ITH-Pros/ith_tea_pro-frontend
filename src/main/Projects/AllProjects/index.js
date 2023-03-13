@@ -50,6 +50,7 @@ export default function AllProject() {
   const [allUserList, setAllUserListValue] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [projectTaskAnalytics, setProjectTaskAnalytics] = useState("");
+  const [categories, setCategories] = useState([]);
   const [selectedProject, setSelectedProject] = useState({
     name: null,
     _id: null,
@@ -61,6 +62,14 @@ export default function AllProject() {
   const [sureModalShow, setSureModalShow] = useState(false);
   const [confirmModalShow , setConfirmModalShow] = useState(false);
 
+  const [categoriesModalShow, setCategoriesModalShow] = useState(false);
+
+
+  const handleCategorie = (project) => {
+	setCategories(project.categories)
+	setCategoriesModalShow(true);
+	  };
+
 
 
   const userListToAddInProject = new Set();
@@ -68,8 +77,8 @@ export default function AllProject() {
   // const navigate = useNavigate();
 
   useEffect(() => {
+	  getAndsetTaskStatusAnalytics();
     getAndSetAllProjects();
-    getAndsetTaskStatusAnalytics();
   }, []);
 
   const getAndSetAllProjects = async function () {
@@ -564,9 +573,12 @@ export default function AllProject() {
                     description={element.shortDescription||'--'}
                     managedBy={element.managedBy}
                     accessibleBy={element.accessibleBy}
+					categroies={element.categories.length}
                     element={element}
                     handleEdit={() => editProject(element)}
                     handleDelete={() => confirmation(element)}
+                    taskData={projectTaskAnalytics?.[element._id]}
+					handleCategories = {() => handleCategorie(element)}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
@@ -632,6 +644,46 @@ export default function AllProject() {
             Cancel
           </Button>
         </Modal>
+
+
+		<Modal 
+          show={categoriesModalShow}
+          onHide={() => setCategoriesModalShow(false)}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Categories</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+			  {/* Show data list with index  */}
+			  <ul>
+		  		{categories.map((category, index) => (
+					<li key={index}>{category}</li>
+				))}
+				<i
+                    className="fa fa-plus-circle fa-3x addBtn"
+                    title="Add Project"
+                    aria-hidden="true"
+                  ></i>
+			  </ul>
+
+
+
+       
+		   	</div>
+          </Modal.Body>
+          {/* <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
+            Delete
+          </Button> */}
+
+          <Button style={{marginLeft:"16px"}} className="btn mr-3"  onClick={() => setCategoriesModalShow(false)}>
+            Cancel
+          </Button>
+        </Modal>
+
+
+
     
     </>
   );

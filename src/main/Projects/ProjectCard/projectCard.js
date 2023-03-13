@@ -37,6 +37,9 @@ const ProjectCard = ({
   accessibleBy,
   handleDelete,
   borderColor,
+  handleCategories,
+  categroies,
+  taskData,
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy)
@@ -135,21 +138,21 @@ const ProjectCard = ({
         <p>{description}</p>
       </div>
       <div className="project-stats">
-        <div className="stat">
+        <div onClick={()=>handleCategories()} className="stat">
           <FontAwesomeIcon icon={faFlag} />
-          <span>0</span>
+          <span>{categroies}</span>
         </div>
         <div className="stat">
           <FontAwesomeIcon icon={faTasks} />
-          <span>{element?.tasks?.length}</span>
+          <span>{taskData?.ONGOING || 0}</span>
         </div>
         <div className="stat">
           <FontAwesomeIcon icon={faCheck} />
-          <span>0</span>
+          <span>{taskData?.COMPLETED || 0}</span>
         </div>
         <div className="stat">
-          <FontAwesomeIcon icon={faBarChart} />
-          <span>0</span>
+          <FontAwesomeIcon icon={faBarChart || 0} />
+          <span>{taskData?.totalTask || 0}</span>
         </div>
       </div>
 
