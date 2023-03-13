@@ -6,7 +6,10 @@ import Toaster from '../../../components/Toaster';
 import { CONSTENTS } from '../../../constents';
 import { addNewUserDetail } from '../../../services/user/api';
 import './index.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function AddUser(props) {
     const [validated, setValidated] = useState(false);
@@ -68,6 +71,14 @@ export default function AddUser(props) {
 
     return (
         <div className="addUserFrom rightDashboard">
+
+        <div className="backButton">
+			<Link to="/team">
+				<Button variant="outline-primary">
+					<FontAwesomeIcon icon={faArrowLeft} /> Back
+				</Button>
+			</Link>
+		</div>
             <Form noValidate validated={validated}>
                 <Row className="mb-3">
                     <Form.Group as={Col} md="6">
