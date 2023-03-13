@@ -189,13 +189,13 @@ export default function Dashboard(props) {
             </Form.Group>
           </h5>
 
-          <Link to="/rating" params={{ params: true }}>
+          {/* <Link to="/rating" params={{ params: true }}> */}
             <div className="wrap btnWth">
               <button className="add-rating-button">
                 <span onClick={() => setModalShow(true)}>Add Rating</span>
               </button>
             </div>
-          </Link>
+          {/* </Link> */}
         </div>
         <Table responsive className="ratingTable">
           <thead>
@@ -261,13 +261,13 @@ export default function Dashboard(props) {
                                 className="input_dashboard"
                               ></span>
                             ) : (
-                              <MDBTooltip
+                            <MDBTooltip
                                 tag="div"
                                 wrapperProps={{ href: "#" }}
                                 title={"click to Add Rating"}
                               >
                                 <span
-                                  onClick={() => setModalShow(true)}
+                             
                                   style={{
                                     cursor: "cell",
                                     padding: "1px",

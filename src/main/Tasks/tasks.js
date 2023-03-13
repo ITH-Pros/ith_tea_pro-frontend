@@ -144,7 +144,7 @@ const closeModal=()=>{
         <div>
         <Dropdown>
         <Dropdown.Toggle id="dropdown-basic">
-        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
