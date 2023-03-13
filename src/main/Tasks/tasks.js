@@ -170,11 +170,12 @@ const closeModal=()=>{
        <span className="priorityTag">High</span>
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> {task?.assignedTo?.name}</span>
       <Badge bg={ task?.dueToday ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>
-	   <span onClick={() => {
+	   <a style={{float: "right",
+    color: "#8602ff", cursor:"pointer", marginRight: "10px"}} onClick={() => {
 		setSelectedProject();
             setShowAddTask(true);
 			setSelectedTask(task);
-          }}>edit</span>
+          }}>Edit</a>
       
        </li>
        )}

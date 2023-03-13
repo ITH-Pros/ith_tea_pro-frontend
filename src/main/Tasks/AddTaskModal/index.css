@@ -8,14 +8,15 @@
  
     color: white;
   
- 
- 
     cursor: pointer;
     border-radius: 4px;
     transition: all 0.3s ease;
  
   }
-  
+  .fa-check-circle {
+    color: #17b667 !important;
+    margin-right: 10px;
+}
   .btn:hover {
     transition: all 0.3s ease;
   }

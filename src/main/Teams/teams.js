@@ -321,10 +321,12 @@ export default function Teams(props) {
                     {/* <label className="heart"></label> */}
                   </div>
                   <div className="content">
-                    <img
+                    {/* <img
                       src="https://images.pexels.com/photos/2570145/pexels-photo-2570145.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
                       alt=""
-                    />
+                    /> */}
+                 
+                <div id="profileImage"> CKS</div>
                     <strong>{user.name} ({user.role})</strong>
                   
 					<p>{user.email}</p>

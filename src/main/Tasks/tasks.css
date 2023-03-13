@@ -223,6 +223,10 @@ button.accordion-button{
   white-space: normal;
   word-break: break-word;
 }
+.accordion-body ul li span {
+  margin-right: 5px;
+  margin-left: 5px;
+}
 .accordion-body ul li:last-child{
   border: none;
 }
