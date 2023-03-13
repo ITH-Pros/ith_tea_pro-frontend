@@ -20,7 +20,7 @@ const FilterModal = (props) => {
     priority: "",
     status: "",
     groupBy: "",
-	selectProject: ""
+	projectId: ""
   };
   const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);
@@ -63,7 +63,7 @@ const FilterModal = (props) => {
       filterFormValue.dueDate = dueDate;
     }
     if (selectProject) {
-      filterFormValue.selectProject = selectProject;
+      filterFormValue.projectId = selectProject;
     }
     if (dateCreated) {
       filterFormValue.dateCreated = dateCreated;
@@ -231,7 +231,7 @@ const FilterModal = (props) => {
                       as="select"
                       type="select"
                       name="selectProject"
-					  value={filterFormValue.selectProject}
+					  value={filterFormValue.projectId}
                       onChange={(e) => onSelectProject(e)}
                     >
 						  <option value="">Select Project </option>

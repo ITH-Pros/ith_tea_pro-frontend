@@ -6,8 +6,9 @@ import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
 import TaskModal from "./ShowTaskModal";
-import {Accordion, ProgressBar, Row, Col, Dropdown } from 'react-bootstrap'
+import {Accordion, ProgressBar, Row, Col, Dropdown, Badge } from 'react-bootstrap'
 import avtar from '../../assests/img/avtar.png'
+import moment from "moment";
 
 const Tasks=()=> {
   const [projects, setProjects] = useState([]);
@@ -24,7 +25,7 @@ const Tasks=()=> {
     
   useEffect(() => {
 	getTasksDataUsingProjectId();
-  }, []);
+  });
     
     // const getAllProjectsData =async () => {
         
@@ -56,7 +57,7 @@ const Tasks=()=> {
 
 
     
-     const getTasksDataUsingProjectId = async ( filterData) => {
+     const getTasksDataUsingProjectId = async ( ) => {
          setLoading(true);
          try {
              let data = {};
@@ -69,13 +70,26 @@ const Tasks=()=> {
 				data.groupBy = "default"
 				console.log(data, "filter data")
 			}
-         const lead = await getProjectsTask(data);
+         const tasks = await getProjectsTask(data);
          setLoading(false);
-         if (lead.error) {
-           setToasterMessage(lead?.error?.message || "Something Went Wrong");
+         if (tasks.error) {
+           setToasterMessage(tasks?.error?.message || "Something Went Wrong");
            setShowToaster(true);
          } else {
-			setProjects(lead?.data)
+			let allTask = tasks?.data;
+		allTask?.map((item)=>{
+			let dateMonth = item?.dueDate?.split('T')[0]
+			let today = new Date();
+			today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
+			if(dateMonth === today){
+				item.dueToday = true;
+			}else if(new Date().getTime() > new Date(item?.dueDate).getTime()){
+				item.dueToday = true;
+			}else{
+				item.dueToday = false;
+			}
+		})
+			setProjects(allTask)
             //  setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
@@ -119,6 +133,7 @@ const closeModal=()=>{
               style={{
                 float: "right" 
               }}  onClick={() => {
+				setSelectedTask();
 				setShowAddTask(true);
 				setSelectedProject();
 			  }}>
@@ -148,6 +163,7 @@ const closeModal=()=>{
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => {
+			setSelectedTask();
             setShowAddTask(true);
 			setSelectedProject({_id: project?._id?.projectId?._id, category: project?._id?.category});
           }}>Add Task</Dropdown.Item>
@@ -163,11 +179,22 @@ const closeModal=()=>{
       
             <ul className="mb-0">
              {project?.tasks?.map((task)=>
-       <li key={task?._id}><i className="fa fa-check-circle" aria-hidden="true"></i> {task?.title} 
-       <span className="completeTag">completed Dec 22,2022</span>
+       <li key={task?._id}>{task?.status === 'ONGOING' && <i className="fa fa-check-circle warning" aria-hidden="true"></i>}
+	   {(task?.status === 'NO_PROGRESS' || task?.status === 'ONHOLD')  && <i className="fa fa-check-circle secondary" aria-hidden="true"></i>}
+	   {task?.status === 'COMPLETED' && <i className="fa fa-check-circle" aria-hidden="true"></i>} {task?.title} 
+	  {task?.status === 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
+                        {task?.status === 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
+                        {task?.status === 'COMPLETED' &&  <Badge bg="success">completed {moment(task?.completedDate).format('MMM DD,YYYY')}</Badge>}
+                        {task?.status === 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
+	  {task?.priority === 'None' &&  <Badge  bg="secondary">None</Badge>}
+	  {task?.priority === 'LOW' &&  <Badge  bg="primary">LOW</Badge>}
+	  {task?.priority === 'REPEATED' &&  <Badge  bg="warning">REPEATED</Badge>}
+
+                        {task?.priority === 'MEDIUM' &&  <Badge  bg="warning">MEDIUM</Badge>}
+                        {task?.priority === 'HIGH' &&  <Badge  bg="danger">ON HOLD</Badge>}
        <span className="priorityTag">High</span>
-       <span className="nameTag"> <img src={avtar} alt="userAvtar" /> chandan s</span>
-       <span className="completeTag">Due Dec 22,2022</span>
+       <span className="nameTag"> <img src={avtar} alt="userAvtar" /> {task?.assignedTo?.name}</span>
+      <Badge bg={ task?.dueToday ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>
 	   <span onClick={() => {
 		setSelectedProject();
             setShowAddTask(true);
