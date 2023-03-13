@@ -49,7 +49,7 @@ export default function AddProject(props) {
 	// Render the component using the projectDetails prop
 
 
-    const projectFormFields = { name:  '', description: '', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
+    const projectFormFields = { name:  '', description: '',shortDescription:'', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
 
@@ -68,6 +68,7 @@ export default function AddProject(props) {
         ...projectFormValue,
         name: projectById.name,
         description: projectById.description,
+        shortDescription: projectById.shortDescription,
         selectedManagers: projectById.managedBy.map((el) => el._id),
         projectCategories: projectById.categories,
         selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
@@ -268,7 +269,7 @@ export default function AddProject(props) {
     }
   const onAssignUserChange = (users) => {
     
-    setAssignedByValue(projectById.assignedby);
+    setAssignedByValue(projectById?.assignedby);
 
     setProjectFormValue({ ...projectFormValue, selectAccessibleBy: users.map(el => el._id) })
 
@@ -320,22 +321,6 @@ export default function AddProject(props) {
               />
             </Form.Group>
           </Row>
-
-          <Row className="mb-3">
-            <Form.Group as={Col}>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                required
-                type="text-area"
-                placeholder="Description"
-                name="description"
-                onChange={updateRegisterFormValue}
-                value={projectFormValue.description}
-              />
-            </Form.Group>
-          </Row>
-
           <Row className="mb-3">
             <Form.Group as={Col} md="5">
               <Form.Label>Add Category</Form.Label>
@@ -374,7 +359,35 @@ export default function AddProject(props) {
                   ))
                 : "  No Categories Added"}
             </div>
+            <Form.Group as={Col} md="5">
+              <Form.Label>Short Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                required
+                type="text-area"
+                placeholder="Short Description"
+                name="shortDescription"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.shortDescription}
+              />
+            </Form.Group>
           </Row>
+
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                required
+                type="text-area"
+                placeholder="Description"
+                name="description"
+                onChange={updateRegisterFormValue}
+                value={projectFormValue.description}
+              />
+            </Form.Group>
+          </Row>
+
           <div>
             {/* <Button className="btn-gradient-border btnDanger"
                 type="button"

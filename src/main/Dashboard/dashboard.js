@@ -409,7 +409,7 @@ const openAddtask=(project)=>{
             {" "}
             {props.showBtn && (
               <h1 className="h1-text">
-			  <AiFillProject className="project-icon" /> My Projects
+                <AiFillProject className="project-icon" /> My Projects
                 {/* <i className="fa fa-home" aria-hidden="true"></i> My Projects */}
               </h1>
             )}
@@ -438,8 +438,12 @@ const openAddtask=(project)=>{
               <Nav.Item>
                 <Nav.Link eventKey="link-1">
                   <Dropdown>
-                    <Dropdown.Toggle  variant="secondary" onClick={handleShowAllProjects} id="dropdown-basic">
-                      Show All Project 
+                    <Dropdown.Toggle
+                      variant="secondary"
+                      onClick={handleShowAllProjects}
+                      id="dropdown-basic"
+                    >
+                      Show All Project
                     </Dropdown.Toggle>
 
                     {/* <Dropdown.Menu>
@@ -475,39 +479,46 @@ const openAddtask=(project)=>{
         </Row>
 
         <Row className="row-bg">
-		{projectList.slice(0, 4).map((project) => (
-  <Col lg={6}>
-    <Card id={`card-${project.id}`} key={project?.id}>
-      <Row className="d-flex justify-content-start">
-        <Col lg={6} className="middle">
-          <Avatar name={project.name} size={40} round="20px" />{" "}
-          <h5 className="text-truncate">{project?.name}</h5>
-        </Col>
-        <Col lg={4} className="middle">
-          <p className="text-truncate">{project?.description}</p>
-        </Col>
-        <Col
-          lg={2}
-          className="text-end middle"
-          style={{ justifyContent: "end"}}
-        >
-			 <button className="addTaskBtn"
-              style={{
-                float: "right" 
-              }}  onClick={() => {
-				openAddtask(project)
-			  }}>
-              Add Task
-            </button>
-        
-        </Col>
-      </Row>
-    </Card>
-  </Col>
-))}
+          {projectList.slice(0, 4).map((project) => (
+            <Col lg={6}>
+              <Card id={`card-${project.id}`} key={project?.id}>
+                <Row className="d-flex justify-content-start">
+                  <Col lg={6} className="middle">
+                    <Avatar name={project.name} size={40} round="20px" />{" "}
+                    <h5 className="text-truncate">{project?.name}</h5>
+                  </Col>
+                  <Col lg={4} className="middle">
+                    <p className="text-truncate">{project?.shortDescription||'--'}</p>
+                  </Col>
+                  <Col
+                    lg={2}
+                    className="text-end middle"
+                    style={{ justifyContent: "end" }}
+                  >
+                    <button
+                      className="addTaskBtn"
+                      style={{
+                        float: "right",
+                      }}
+                      onClick={() => {
+                        openAddtask(project);
+                      }}
+                    >
+                      Add Task
+                    </button>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          ))}
 
-	<AddTaskModal selectedProjectFromTask={selectedProject} selectedTask={selectedTask} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
-
+          <AddTaskModal
+            selectedProjectFromTask={selectedProject}
+            selectedTask={selectedTask}
+            getNewTasks={getNewTasks}
+            showAddTask={showAddTask}
+            closeModal={closeModal}
+          />
 
           {/* <Col lg={6}>
 				<Card id="card-task">
@@ -567,14 +578,16 @@ const openAddtask=(project)=>{
               <Col lg={6} className="left-add">
                 <span>My Work</span>
 
-                
-                  <i  onClick={() => {
-					console.log("Clicking");
-				setSelectedTask();
-				setShowAddTask(true);
-				setSelectedProject();
-			  }}  className="fa fa-plus-circle"></i>
-             
+                <i
+                  onClick={() => {
+                    console.log("Clicking");
+                    setSelectedTask();
+                    setShowAddTask(true);
+                    setSelectedProject();
+                  }}
+                  className="fa fa-plus-circle"
+                ></i>
+
                 {/* <Link to="./">Full Recap</Link> */}
               </Col>
               <Col lg={6} className="right-filter">
@@ -613,67 +626,89 @@ const openAddtask=(project)=>{
             <Row>
               <Col lg={12} className="mt-3">
                 <Card id="card-task">
-                 {myWorkList && myWorkList?.map((task)=><Row className="d-flex justify-content-start list_task">
-                    <Col lg={4} className="middle">
-                      <span
-                        style={{ fontSize: "20PX", marginRight: "10px" }}
-                        round="20px"
-                      >
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>
-                      <h5 className="text-truncate">
-                        {task?.title}
-                      </h5>
-                    </Col>
-                    <Col lg={4} className="middle">
-                     {task?.status != 'COMPLETED' &&  <small className="text-truncate">
-                        Due Date: <Badge bg={ task?.dueToday ? "danger" : "primary"}>{moment(task?.dueDate).format('DD/MM/YYYY')}</Badge>
-                      </small>}
-					  {task?.status == 'COMPLETED' &&  <small className="text-truncate">
-                        Completed: <Badge bg="success">{moment(task?.completedDate).format('DD/MM/YYYY')}</Badge>
-                      </small>}
-                    </Col>
-                    <Col
-                      lg={3}
-                      className="text-end middle"
-                      style={{ justifyContent: "end" }}
-                    >
-                      <small className="text-truncate">
-                        {task?.status == 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
-                        {task?.status == 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
-                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLLETED</Badge>}
-                        {task?.status == 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
+                  {myWorkList &&
+                    myWorkList?.map((task) => (
+                      <Row className="d-flex justify-content-start list_task">
+                        <Col lg={4} className="middle">
+                          <span
+                            style={{ fontSize: "20PX", marginRight: "10px" }}
+                            round="20px"
+                          >
+                            <i
+                              className="fa fa-check-circle"
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                          <h5 className="text-truncate">{task?.title}</h5>
+                        </Col>
+                        <Col lg={4} className="middle">
+                          {task?.status != "COMPLETED" && (
+                            <small className="text-truncate">
+                              Due Date:{" "}
+                              <Badge bg={task?.dueToday ? "danger" : "primary"}>
+                                {moment(task?.dueDate).format("DD/MM/YYYY")}
+                              </Badge>
+                            </small>
+                          )}
+                          {task?.status == "COMPLETED" && (
+                            <small className="text-truncate">
+                              Completed:{" "}
+                              <Badge bg="success">
+                                {moment(task?.completedDate).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </Badge>
+                            </small>
+                          )}
+                        </Col>
+                        <Col
+                          lg={3}
+                          className="text-end middle"
+                          style={{ justifyContent: "end" }}
+                        >
+                          <small className="text-truncate">
+                            {task?.status == "NO_PROGRESS" && (
+                              <Badge bg="primary">NO PROGRESS</Badge>
+                            )}
+                            {task?.status == "ONGOING" && (
+                              <Badge bg="warning">ONGOING</Badge>
+                            )}
+                            {task?.status == "COMPLETED" && (
+                              <Badge bg="success">COMPLLETED</Badge>
+                            )}
+                            {task?.status == "ONHOLD" && (
+                              <Badge bg="secondary">ON HOLD</Badge>
+                            )}
+                          </small>
+                        </Col>
+                        <Col
+                          lg={1}
+                          className="text-end middle"
+                          style={{ justifyContent: "end" }}
+                        >
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="defult"
+                              id="dropdown-basic"
+                            >
+                              <i className="fa fa-ellipsis-v"></i>
+                            </Dropdown.Toggle>
 
-                      </small>
-                    </Col>
-					<Col
-                      lg={1}
-                      className="text-end middle"
-                      style={{ justifyContent: "end" }}
-                    >
-						  <Dropdown>
-                  <Dropdown.Toggle variant="defult" id="dropdown-basic">
-                    <i className="fa fa-ellipsis-v"></i>
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => {
-		setSelectedProject();
-            setShowAddTask(true);
-			setSelectedTask(task);
-          }} >Edit</Dropdown.Item>
-                   
-                  </Dropdown.Menu>
-                </Dropdown>
-                     
-                      
-                    </Col>
-                  </Row>
-				 ) }
-
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  setSelectedProject();
+                                  setShowAddTask(true);
+                                  setSelectedTask(task);
+                                }}
+                              >
+                                Edit
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Col>
+                      </Row>
+                    ))}
                 </Card>
               </Col>
             </Row>
@@ -719,59 +754,72 @@ const openAddtask=(project)=>{
             <Row>
               <Col lg={12} className="mt-3">
                 <Card id="card-task">
-                 
-
-                 {pendingRatingList && pendingRatingList?.map((task)=>
-				 <Row className="d-flex justify-content-start list_task">
-				 <Col lg={4} className="middle">
-				   <span
-					 style={{ fontSize: "20PX", marginRight: "10px" }}
-					 round="20px"
-				   >
-					 <i
-					   className="fa fa-check-circle"
-					   aria-hidden="true"
-					 ></i>
-				   </span>
-				   <h5 className="text-truncate">
-					{task?.title}
-				   </h5>
-				 </Col>
-				 <Col lg={4} className="middle">
-                     {task?.status != 'COMPLETED' &&  <small className="text-truncate">
-                        Due Date: <Badge bg={ task?.dueToday ? "danger" : "primary"}>{moment(task?.dueDate).format('DD/MM/YYYY')}</Badge>
-                      </small>}
-					  {task?.status == 'COMPLETED' &&  <small className="text-truncate">
-                        Completed: <Badge bg="success">{moment(task?.completedDate).format('DD/MM/YYYY')}</Badge>
-                      </small>}
-                    </Col>
-                    <Col
-                      lg={3}
-                      className="text-end middle"
-                      style={{ justifyContent: "end" }}
-                    >
-                      <small className="text-truncate">
-                        {task?.status == 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
-                        {task?.status == 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
-                        {task?.status == 'COMPLETED' &&  <Badge  bg="success">COMPLLETED</Badge>}
-                        {task?.status == 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
-
-                      </small>
-                    </Col>
-				 <Col
-				   lg={1}
-				   className="text-end middle"
-				   style={{ justifyContent: "end" }}
-				 >
-				   <Button variant="light" size="sm">
-					 Add Rating
-				   </Button>
-				  
-				 </Col>
-			   </Row>
-				 ) }
-               
-                  
+                  {pendingRatingList &&
+                    pendingRatingList?.map((task) => (
+                      <Row className="d-flex justify-content-start list_task">
+                        <Col lg={4} className="middle">
+                          <span
+                            style={{ fontSize: "20PX", marginRight: "10px" }}
+                            round="20px"
+                          >
+                            <i
+                              className="fa fa-check-circle"
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                          <h5 className="text-truncate">{task?.title}</h5>
+                        </Col>
+                        <Col lg={4} className="middle">
+                          {task?.status != "COMPLETED" && (
+                            <small className="text-truncate">
+                              Due Date:{" "}
+                              <Badge bg={task?.dueToday ? "danger" : "primary"}>
+                                {moment(task?.dueDate).format("DD/MM/YYYY")}
+                              </Badge>
+                            </small>
+                          )}
+                          {task?.status == "COMPLETED" && (
+                            <small className="text-truncate">
+                              Completed:{" "}
+                              <Badge bg="success">
+                                {moment(task?.completedDate).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </Badge>
+                            </small>
+                          )}
+                        </Col>
+                        <Col
+                          lg={3}
+                          className="text-end middle"
+                          style={{ justifyContent: "end" }}
+                        >
+                          <small className="text-truncate">
+                            {task?.status == "NO_PROGRESS" && (
+                              <Badge bg="primary">NO PROGRESS</Badge>
+                            )}
+                            {task?.status == "ONGOING" && (
+                              <Badge bg="warning">ONGOING</Badge>
+                            )}
+                            {task?.status == "COMPLETED" && (
+                              <Badge bg="success">COMPLLETED</Badge>
+                            )}
+                            {task?.status == "ONHOLD" && (
+                              <Badge bg="secondary">ON HOLD</Badge>
+                            )}
+                          </small>
+                        </Col>
+                        <Col
+                          lg={1}
+                          className="text-end middle"
+                          style={{ justifyContent: "end" }}
+                        >
+                          <Button variant="light" size="sm">
+                            Add Rating
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
                 </Card>
               </Col>
             </Row>
