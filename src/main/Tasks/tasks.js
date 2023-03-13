@@ -120,6 +120,7 @@ const closeModal=()=>{
               style={{
                 float: "right" 
               }}  onClick={() => {
+				setSelectedTask();
 				setShowAddTask(true);
 				setSelectedProject();
 			  }}>
@@ -149,6 +150,7 @@ const closeModal=()=>{
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={() => {
+			setSelectedTask();
             setShowAddTask(true);
 			setSelectedProject({_id: project?._id?.projectId?._id, category: project?._id?.category});
           }}>Add Task</Dropdown.Item>
