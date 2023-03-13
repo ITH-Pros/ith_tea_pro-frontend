@@ -232,6 +232,10 @@ a {
 	
   }
 
+  .brand-icon{
+	margin-left: 10px;
+  }
+
   .pagination-select{
 	width: 40px;
 	justify-content: center;
