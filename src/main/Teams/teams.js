@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   getAllUsers,
   getAllProjects,
@@ -354,7 +354,7 @@ export default function Teams(props) {
 	<FontAwesomeIcon className="brand-icon" icon={faTwitter} /> */}
   </div>
 
-                  {userDetails.role == "SUPER_ADMIN" && "ADMIN"  && (
+                  {userDetails.role === "SUPER_ADMIN" && "ADMIN"  && (
                     <div className="btn">
                       <button
                         className="btn-glow margin-right btn-color"
