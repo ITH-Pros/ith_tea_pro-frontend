@@ -143,16 +143,16 @@ export default function AddRatingModal(props) {
         setTeam(e.target.value);
 		console.log("e.target.value", e.target.value);
 		console.log("team", team);
-		getTaskList();
+		getTaskList(e.target.value);
     };
 
     const handleChangeDate = (date) => {
         setDate(date.target.value);
 		console.log("date", date.target.value);
-		getTaskList();
+		getTaskList(date.target.value);
     };
 
-	const getTaskList = async function () {
+	const getTaskList = async function (data) {
 	
         setLoading(true);
 
@@ -164,11 +164,17 @@ export default function AddRatingModal(props) {
 				dataToSend.projectId = selectedRating.projectId;
 				dataToSend.userId = selectedRating.assignedTo;
 				dataToSend.dueDate = date;
-			}else {
+			}
+			if(team==''){
+				dataToSend.projectId = project;
+				dataToSend.userId = data;
+				dataToSend.dueDate = date;
+			}
+			else {
 				dataToSend.projectId = project;
 				dataToSend.userId = team;
-				dataToSend.dueDate = date;
-		}
+				dataToSend.dueDate = data;
+			}
 			const response = await getTaskDetailsByProjectId(dataToSend);
 			console.log("response", response);
 			if (response.error ) {
