@@ -318,6 +318,8 @@ td {
 	background: #fff;
 	  box-shadow: 0 2px 13px 0 rgb(0 0 0 / 6%);
 	  border-radius: 4px;
+	  height: 300px;
+	  overflow-y: auto;
   }
   #card-task h5 {
 	margin: 0;

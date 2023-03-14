@@ -3,6 +3,8 @@ import { myevents, myresources } from "./data";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./dashboard.css";
+import { useEffect, useState } from "react";
+import { getRatings } from "../../services/user/api";
 
 const locales = {
   "en-US": require("date-fns"),
@@ -14,10 +16,39 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+export default function MyCalendar(){
+// export const MyCalendar = () => (
+	const [myRatings, setMyRatings]=useState();
+	useEffect(() => {
+		getAllRatings();
+	  }, []);
 
-export const MyCalendar = () => (
+	async function getAllRatings(data) {
+		// setLoading(true);
 	
-  <>
+		try {
+		  if (!data) {
+			// data = {
+			// 	previousWeek: data,
+			// 	weekCount: weekCount
+			// };
+		  }
+		  const rating = await getRatings(data);
+		//   setLoading(false);
+	
+		  if (rating.error) {
+			// setToasterMessage(rating?.error?.message || "Something Went Wrong");
+			// setShowToaster(true);
+		  } else {
+			// setRatings([...rating.data]);
+		  }
+		} catch (error) {
+		//   setToasterMessage(error?.error?.message || "Something Went Wrong");
+		//   setShowToaster(true);
+		//   setLoading(false);
+		}
+	  }
+return (
     <div className="calendars">
       <div>
         <h1>My Ratings</h1>
@@ -26,7 +57,7 @@ export const MyCalendar = () => (
           localizer={localizer}
 		  views={['week']}
 		  view={'week'}
-          defaultDate={new Date(2023, 5, 8)}
+          defaultDate={new Date()}
           style={{ height: 200 }}
 		  onView={(view)=>{
 			this.setState({view})
@@ -34,19 +65,9 @@ export const MyCalendar = () => (
         />
       </div>
 
-      {/* <div>
-        <h1>calendar2</h1>
-        <Calendar
-          events={myevents}
-          resources={myresources}
-          localizer={localizer}
-          defaultView="day"
-          defaultDate={new Date(2021, 5, 8)}
-          style={{ height: 700 }}
-        />
-      </div> */}
+      
     </div>
-  </>
 );
+}
 
-export default MyCalendar;
+// export default MyCalendar;

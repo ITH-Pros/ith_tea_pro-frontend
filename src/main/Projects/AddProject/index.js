@@ -402,7 +402,7 @@ export default function AddProject(props) {
                   ))
                 : "  No Categories Added"}
             </div>
-            <Form.Group as={Col} md="5">
+            <Form.Group as={Col} md="5" className='mt-3'>
               <Form.Label>Short Description</Form.Label>
               <Form.Control
                 as="textarea"

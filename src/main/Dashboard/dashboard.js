@@ -5,15 +5,9 @@ import MyCalendar from "./weekCalendra";
 import { useState, useEffect } from "react";
 import { getAllMyWorks, getAllPendingRating, getAllProjects, getRatings } from "../../services/user/api";
 import "./dashboard.css";
-import { MDBTooltip } from "mdb-react-ui-kit";
-// eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
 import Loader from "../../components/Loader";
 import { getAllUsers } from "../../services/user/api";
-import RatingBox from "../../components/ratingBox";
-import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
 import {
   Row,
@@ -50,29 +44,19 @@ export default function Dashboard(props) {
 
 
   const setShowToaster = (param) => showToaster(param);
-  const { userDetails } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAndSetAllProjects();
-	getMyWork();
-	getPendingRating();
     onInit();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onInit() {
+	getAndSetAllProjects();
+	getMyWork();
+	getPendingRating();
     getUsersList();
-    let dataToSend = {
-      month: months.indexOf(monthUse) + 1,
-      year: yearUse,
-    };
-    getAllRatings(dataToSend);
   }
 
-  const [days, setDays] = useState(moment().daysInMonth());
-  const [monthUse, setMonth] = useState(moment().format("MMMM"));
-  const [yearUse, setYear] = useState(currentYear);
 
   const handleShowAllProjects = () => {
     navigate('/project/all');
@@ -126,31 +110,7 @@ export default function Dashboard(props) {
     }
   };
 
-  async function getAllRatings(data) {
-    setLoading(true);
 
-    try {
-      if (!data) {
-        data = {
-          month: months.indexOf(monthUse) + 1,
-          year: yearUse,
-        };
-      }
-      const rating = await getRatings(data);
-      setLoading(false);
-
-      if (rating.error) {
-        setToasterMessage(rating?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setRatings([...rating.data]);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-    }
-  }
   const getMyWork = async function () {
     //setloading(true);
     try {
@@ -256,163 +216,8 @@ const openAddtask=(project)=>{
   return (
     <div className="dashboard_camp rightDashboard">
       <div className="my-3 d-flex justify-content-center flex-column">
-        <div>
-          {userDetails?.role !== "USER" && (
-            <Link to="/rating" params={{ params: true }}>
-              {props.showBtn && (
-                <div className="wrap">
-                  {/* <button className="add-rating-button">
-                    <span>Add Rating</span>
-                  </button> */}
-                </div>
-              )}
-            </Link>
-          )}
-          {/* <h5 className="text-center h5cls">
-				<p style={{ marginRight: "10px", marginTop: "6px" }}>
-				Ratings for
-				</p>
-				<Form.Group as={Col} md="1" controlId="select_month">
-				<Form.Control
-					className="month-drop-select"
-					required
-					as="select"
-					type="select"
-					name="select_team"
-					onChange={onchangeMonth}
-					value={monthUse}
-				>
-					<option value="" disabled>
-					Select Month
-					</option>
-					{months.map((monthh, index) => (
-					<option
-						value={monthh}
-						key={monthh}
-						disabled={index > month && yearUse >= currentYear}
-					>
-						{monthh}
-					</option>
-					))}
-				</Form.Control>
-				</Form.Group>
-				<Form.Group as={Col} md="1" controlId="select_year">
-				<Form.Control
-					className="year-drop-select"
-					required
-					as="select"
-					type="select"
-					name="select_team"
-					onChange={onChangeYear}
-					value={yearUse}
-				>
-					<option value="" disabled>
-					Select Year
-					</option>
-					{years.map((year) => (
-					<option value={year} key={year} disabled={year > currentYear}>
-						{year}
-					</option>
-					))}
-				</Form.Control>
-				</Form.Group>
-			</h5> */}
-        </div>
-        {/* <table className="table fixed_header">
-			<thead>
-				<tr>
-				<th>Name</th>
-				{Array(days)
-					.fill(0)
-					.map((rating, index) => {
-					return (
-						<th className="dates text-center" key={`${index}_${index}`}>
-						{index + 1 < 10 ? "0" + (index + 1) : index + 1}
-						</th>
-					);
-					})}
-				<th style={{ color: "green" }}>Average</th>
-				</tr>
-			</thead>
-			<tbody>
-				{usersArray.map((user, index) => {
-				let userRatingSum = 0;
-				let userRatingCount = 0;
-
-				return (
-					<tr key={index}>
-					<td className="user_names"> {user.name}</td>
-					{Array(days)
-						?.fill(0)
-						?.map((day, index) => {
-						let ratingUserObj = ratingsArray.find((el) => {
-							return el._id === user._id;
-						});
-						let ratingCommentObj =
-							ratingUserObj?.ratingsAndComment.find(
-							(el) => el.date - 1 === index
-							);
-						if (ratingCommentObj) {
-							userRatingSum += ratingCommentObj?.rating;
-							userRatingCount += 1;
-							return (
-							<RatingBox
-								key={index}
-								index={index}
-								getAllRatings={getAllRatings}
-								ratingCommentObj={ratingCommentObj}
-							/>
-							);
-						} else {
-							let dateToSend = `${yearUse}-${
-							months.indexOf(monthUse) + 1 <= 9
-								? "0" + (months.indexOf(monthUse) + 1)
-								: months.indexOf(monthUse) + 1
-							}-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
-							return (
-							<td key={index}>
-								{userDetails?.role === "USER" ||
-								new Date(dateToSend) > new Date() ? (
-								<span
-									style={{ padding: "3px", paddingLeft: "18px" }}
-									className="input_dashboard"
-								></span>
-								) : (
-								<MDBTooltip
-									tag="div"
-									wrapperProps={{ href: "#" }}
-									title={"click to Add Rating"}
-								>
-									<Link
-									to={{ pathname: "/rating" }}
-									state={{ userId: user._id, date: dateToSend }}
-									>
-									<span
-										style={{
-										cursor: "cell",
-										padding: "3px",
-										paddingLeft: "18px",
-										}}
-										className="input_dashboard"
-									></span>
-									</Link>
-								</MDBTooltip>
-								)}
-							</td>
-							);
-						}
-						})}
-					<td className="userAverage">
-						{userRatingCount
-						? Math.round((userRatingSum / userRatingCount) * 100) /
-							100
-						: "NA"}
-					</td>
-					</tr>
-				);
-				})}
-			</tbody>
-			</table> */}
+      
+        
         {<MyCalendar />}
       </div>
       <Container>
@@ -429,23 +234,7 @@ const openAddtask=(project)=>{
           <Col lg={6} id="nav-filter" className="px-0">
             <Nav className="justify-content-end" activeKey="/home">
               <Nav.Item>
-                {/* <Nav.Link href="">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                      Filter <i className="fa fa-filter"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        Another action
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">
-                        Something else
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Nav.Link> */}
+                
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="link-1">
@@ -458,33 +247,12 @@ const openAddtask=(project)=>{
                       Show All Project
                     </Dropdown.Toggle>
 
-                    {/* <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        Favorite Projects
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">
-                        Recent Projects
-                      </Dropdown.Item>
-                    </Dropdown.Menu> */}
+                    
                   </Dropdown>
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                {/* <Nav.Link eventKey="link-2">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                      Sort : Custom
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Custom</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">
-                        Alphabetical
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Nav.Link> */}
+               
               </Nav.Item>
             </Nav>
           </Col>
@@ -549,17 +317,16 @@ const openAddtask=(project)=>{
                   className="fa fa-plus-circle"
                 ></i>
 
-                {/* <Link to="./">Full Recap</Link> */}
               </Col>
               <Col lg={6} className="right-filter">
               </Col>
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task">
+                <Card id="card-task" className="px-0">
                   {myWorkList &&
                     myWorkList?.map((task) => (
-                      <Row className="d-flex justify-content-start list_task">
+                      <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col lg={4} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
@@ -648,20 +415,17 @@ const openAddtask=(project)=>{
               <Col lg={6} className="left-add">
                 <span>Pending Ratings</span>
 
-                {/* <MDBTooltip title={"Start New Item"} variant="light" size="sm">
-                  <i className="fa fa-plus-circle"></i>
-                </MDBTooltip> */}
-                {/* <Link to="./">Full Recap</Link> */}
+             
               </Col>
               <Col lg={6} className="right-filter">
               </Col>
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task">
+                <Card id="card-task" className="px-0">
                   {pendingRatingList &&
                     pendingRatingList?.map((task) => (
-                      <Row className="d-flex justify-content-start list_task">
+                      <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col lg={4} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
@@ -669,10 +433,7 @@ const openAddtask=(project)=>{
                           >
 							
 	   {task?.status === 'COMPLETED' && <i className="fa fa-check-circle" aria-hidden="true"></i>}
-                            {/* <i
-                              className="fa fa-check-circle"
-                              aria-hidden="true"
-                            ></i> */}
+                           
                           </span>
                           <h5 className="text-truncate">{task?.title}</h5>
                         </Col>
@@ -697,8 +458,8 @@ const openAddtask=(project)=>{
                           )}
                         </Col>
                         <Col
-                          lg={3}
-                          className="text-end middle"
+                          lg={2}
+                          className="text-end middle ps-0"
                           style={{ justifyContent: "end" }}
                         >
                           <small className="text-truncate">
@@ -717,11 +478,11 @@ const openAddtask=(project)=>{
                           </small>
                         </Col>
                         <Col
-                          lg={1}
-                          className="text-end middle"
+                          lg={2}
+                          className="text-end middle px-0"
                           style={{ justifyContent: "end" }}
                         >
-                          <Button onClick={() => openModal(task)} variant="light" size="sm">
+                          <Button onClick={() => openModal(task)} variant="light" size="sm" className="addRatingBtn">
                             Add Rating
                           </Button>
                         </Col>
