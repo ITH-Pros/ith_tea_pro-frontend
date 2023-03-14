@@ -657,15 +657,15 @@ export default function AllProject() {
           <Modal.Body>
             <div>
 			  {/* Show data list with index  */}
-			  <ul>
+			  <ul className="categoriesList">
 		  		{categories.map((category, index) => (
-					<li key={index}>{category}</li>
+					<li key={index}><i class="fa fa-flag" aria-hidden="true"></i> {category}</li>
 				))}
-				<i
+				{/* <i
                     className="fa fa-plus-circle fa-3x addBtn"
                     title="Add Project"
                     aria-hidden="true"
-                  ></i>
+                  ></i> */}
 			  </ul>
 
 
@@ -676,10 +676,14 @@ export default function AllProject() {
           {/* <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
             Delete
           </Button> */}
-
-          <Button style={{marginLeft:"16px"}} className="btn mr-3"  onClick={() => setCategoriesModalShow(false)}>
+         <div className="d-flex justify-content-end">
+         <Button className="btn btn-press btn-gradient-border btn-primary">
+            Add
+          </Button>
+          <Button className="btn btn-press btn-gradient-border btn-primary"  onClick={() => setCategoriesModalShow(false)}>
             Cancel
           </Button>
+         </div>
         </Modal>
 
 

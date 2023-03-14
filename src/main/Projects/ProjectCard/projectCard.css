@@ -159,7 +159,25 @@
 .user-pic:last-child {
   margin-right: 0;
 }
-
+.assignPopup {
+  border: 1px solid #cacaca7d;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  min-height: 61px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+.modal-dialog .modal-content{
+  border: 0;
+}
+.modal-content
+.userEmail{
+  font-size: 13px;
+  margin-bottom: 0;
+  color: #6f6f6f;
+}
 .lableName{
   font-size: 13px;
     font-weight: 600;

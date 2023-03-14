@@ -10,7 +10,7 @@ import { useState } from "react";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
 import { useAuth } from "../../../auth/AuthProvider";
-import Modal from "react-bootstrap/Modal";
+import {Modal, Row, Col} from "react-bootstrap";
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -226,26 +226,40 @@ const ProjectCard = ({
           </Modal.Header>
           <Modal.Body>
             <div>
+            <Row>
               {users.map((user, index) => {
-                return (
-                  <div>
+                return (                 
+                   <Col sm={6}>
+                   <div className="assignPopup">
                     <UserIcon firstName={user.name} />
-                    <p>{user?.name}</p>
+                    <div className="ms-4">
+                      <p className="mb-0">{user?.name}</p>
+                      <p className="userEmail">email@gmail.com</p>
+                    </div>
                   </div>
+                   </Col>
+                
                 );
               })}
-              <UserIcon firstName={"+"} />
-              <p>{"Add User"}</p>
+             <Col sm={6}>
+             <div className="assignPopup">
+             <UserIcon firstName={"+"} />
+              <p className="ms-4 mb-0">{"Add User"}</p>
+              </div>
+             </Col>
+            </Row>
             </div>
           </Modal.Body>
 
-          <button
-            style={{ marginLeft: "16px" }}
-            className="btn mr-3"
+           <div className="text-right me-3">
+           <button
+            style={{ marginLeft: "16px", width: "30%" }}
+            className="btn btn-press  btn-gradient-border btn-primary"
             onClick={() => setModalShow(false)}
           >
             Close
           </button>
+           </div>
         </Modal>
       )}
     </div>
