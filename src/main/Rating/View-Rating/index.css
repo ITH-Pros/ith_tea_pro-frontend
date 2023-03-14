@@ -259,6 +259,7 @@ td {
   }
   .btnWth{
 	width: 220px;
+    align-items: flex-start;
   }
   select#select_month {
     width: 90%;
@@ -319,7 +320,9 @@ td {
 	  box-shadow: 0 2px 13px 0 rgb(0 0 0 / 6%);
 	  border-radius: 4px;
 	  height: 300px;
-	  overflow-y: auto;
+	  overflow-y: auto;	  
+	  margin-bottom: 2rem;
+
   }
   #card-task h5 {
 	margin: 0;

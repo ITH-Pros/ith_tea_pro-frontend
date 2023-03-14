@@ -510,9 +510,9 @@ const openAddtask=(project)=>{
 			
 			 />
           </Modal.Body>
-          <Button variant="secondary" onClick={() => setModalShow(false)}>
+          {/* <Button variant="secondary" onClick={() => setModalShow(false)}>
             Close
-          </Button>
+          </Button> */}
         </Modal>
 
 

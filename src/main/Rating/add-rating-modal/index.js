@@ -330,7 +330,7 @@ export default function AddRatingModal(props) {
 				<Form className="margin-form" noValidate validated={validated}>
 					<Row className="mb-3">
 
-					<Form.Group as={Col} md="4" >
+					<Form.Group as={Col} md="6" >
 							<Form.Label>Select Project</Form.Label>
 							<Form.Control
 								required
@@ -353,7 +353,7 @@ export default function AddRatingModal(props) {
 							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 						</Form.Group>
 
-						<Form.Group as={Col} md="4" >
+						<Form.Group as={Col} md="6" >
 							<Form.Label>Select User</Form.Label>
 							<Form.Control
 								required
@@ -367,6 +367,30 @@ export default function AddRatingModal(props) {
 								{teamOptions.map((module) => (
 									<option value={module._id} key={module._id}>
 										{module.name}
+									</option>
+								))}
+							</Form.Control>
+							<Form.Control.Feedback type="invalid">
+								User name is required !!
+							</Form.Control.Feedback>
+							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+						</Form.Group>		
+
+
+						<Form.Group as={Col} md="6" >
+							<Form.Label>Select Task</Form.Label>
+							<Form.Control
+								required
+								as="select"
+								type="select"
+								name="select_task"
+								onChange={onChangeOfTask}
+								value={task}
+							>
+								<option value="">Select Task</option>
+								{taskOptions.map((module) => (
+									<option value={module._id} key={module._id}>
+										{module.title}
 									</option>
 								))}
 							</Form.Control>
@@ -393,39 +417,13 @@ export default function AddRatingModal(props) {
 						</Form.Group>
 
 
-						<Form.Group as={Col} md="4" >
-							<Form.Label>Select Task</Form.Label>
-							<Form.Control
-								required
-								as="select"
-								type="select"
-								name="select_task"
-								onChange={onChangeOfTask}
-								value={task}
-							>
-								<option value="">Select Task</option>
-								{taskOptions.map((module) => (
-									<option value={module._id} key={module._id}>
-										{module.title}
-									</option>
-								))}
-							</Form.Control>
-							<Form.Control.Feedback type="invalid">
-								User name is required !!
-							</Form.Control.Feedback>
-							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-						</Form.Group>
 
-
-
-
-
-						<Form.Group as={Col} md="4" controlId="validationCustom01">
+						<Form.Group as={Col} md="2" controlId="validationCustom01" className="ps-0">
 							<Form.Label>Rating</Form.Label>
 							<Form.Control
 								required
 								type="number"
-								placeholder="Rating"
+								placeholder="0-5"
 								value={rating}
 								onChange={handleRatingChange}
 								pattern="[0-9]*"
