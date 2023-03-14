@@ -495,7 +495,7 @@ const openAddtask=(project)=>{
         </Row>
       </Container>
 
-	  <Modal
+	  <Modal  
           show={modalShow}
           onHide={() => setModalShow(false)}
           animation={false}

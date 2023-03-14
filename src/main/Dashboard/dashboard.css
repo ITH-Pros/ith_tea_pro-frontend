@@ -219,15 +219,16 @@ th {
 .month-drop-select {
   cursor: pointer !important;
   /* box-shadow: inset -10px -4px 13px 4px rgb(0 0 0 / 20%) !important; */
-  box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
+  
 }
 
 .year-drop-select {
   margin-left: 10px;
   /* width: 75% !important; */
   cursor: pointer !important;
+  text-align: center;
   /* box-shadow: inset -10px -4px 13px 4px rgb(0 0 0 / 20%) !important; */
-  box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
+  
 }
 
 .fixed_header {

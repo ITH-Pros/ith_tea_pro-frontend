@@ -220,7 +220,7 @@ td {
   .month-drop-select {
 	cursor: pointer !important;
 	/* box-shadow: inset -10px -4px 13px 4px rgb(0 0 0 / 20%) !important; */
-	box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
+	 
   }
   
   .year-drop-select {
@@ -228,7 +228,7 @@ td {
 	/* width: 82% !important; */
 	cursor: pointer !important;
 	/* box-shadow: inset -10px -4px 13px 4px rgb(0 0 0 / 20%) !important; */
-	box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
+	 
   }
   
   .fixed_header {
@@ -262,8 +262,9 @@ td {
     align-items: flex-start;
   }
   select#select_month {
-    width: 90%;
+    width: 100%;
     margin: auto;
+	text-align: center;
 }
   .add-rating-button {
 	/* width: 140px;
