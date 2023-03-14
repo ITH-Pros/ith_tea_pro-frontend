@@ -41,6 +41,24 @@ const Tasks=()=> {
              };
 			 if(localStorage.getItem('taskFilters')){
 				let filterData = JSON.parse(localStorage.getItem('taskFilters'))
+				if(filterData?.projectIds){
+					filterData.projectIds = JSON.stringify(filterData?.projectIds)
+				}
+				if(filterData?.createdBy){
+					filterData.createdBy = JSON.stringify(filterData?.createdBy)
+				}
+				if(filterData?.assignedTo){
+					filterData.assignedTo = JSON.stringify(filterData?.assignedTo)
+				}
+				if(filterData?.category){
+					filterData.category = JSON.stringify(filterData?.category)
+				}
+				if(filterData?.priority){
+					filterData.priority = JSON.stringify(filterData?.priority)
+				}
+				if(filterData?.status){
+					filterData.status = JSON.stringify(filterData?.status)
+				}
 				data = filterData;
 				data.groupBy = "default"
 				console.log(data, "filter data")
@@ -52,20 +70,33 @@ const Tasks=()=> {
            setShowToaster(true);
          } else {
 			let allTask = tasks?.data;
-			allTask?.map((item)=>{
-			let dateMonth = item?.dueDate?.split('T')[0]
-			let today = new Date();
-			today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
-			if(dateMonth === today){
-				item.dueToday = true;
-			}else if(new Date().getTime() > new Date(item?.dueDate).getTime()){
-				item.dueToday = true;
-			}else{
-				item.dueToday = false;
-			}
+			allTask?.forEach((item, i)=>{
+				item?.tasks?.map((task, j)=>{
+					if(task?.dueDate){
+						let dateMonth = task?.dueDate?.split('T')[0]
+						let today = new Date();
+						
+						today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
+						if(dateMonth == today){
+							task.dueToday = true;
+						}else if(new Date().getTime() > new Date(task?.dueDate).getTime()){
+							task.dueToday = true;
+						}
+					   else{
+							task.dueToday = false;
+						}
+						if(task?.completedDate && new Date(task?.completedDate).getTime() > new Date(task?.dueDate).getTime() ){
+							task.dueToday = true;
+						}
+						 if( task?.completedDate && dateMonth == task?.completedDate?.split('T')[0]){
+							task.dueToday = false;
+						}
+					}
+			})	
+			allTask[i].tasks = item?.tasks
+			
 		})
 			setProjects(allTask)
-            //  setTaskData({[_id]:lead.data[0]?.tasks})
          }
        } catch (error) {
          setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -76,14 +107,7 @@ const Tasks=()=> {
      };
     
 
-//   const handleClick = (project) => {
-//     // If we already have task data for this project, don't fetch it again
-// 	console.log(taskData)
-    
-// 	console.log(selectedProject)
-// 	setSelectedProject(project)
-//     getTasksDataUsingProjectId(project?._id);
-//   };
+
  
 const getNewTasks = (id)=>{
 	closeModal();
@@ -155,21 +179,21 @@ const closeModal=()=>{
             <ul className="mb-0">
              {project?.tasks?.map((task)=>
        <li key={task?._id}>{task?.status === 'ONGOING' && <i className="fa fa-check-circle warning" aria-hidden="true"></i>}
-	   {(task?.status === 'NO_PROGRESS' || task?.status === 'ONHOLD')  && <i className="fa fa-check-circle secondary" aria-hidden="true"></i>}
+	   {task?.status === 'NO_PROGRESS'  && <i className="fa fa-check-circle secondary" aria-hidden="true"></i>}
+	   { task?.status === 'ONHOLD'  && <i className="fa fa-check-circle primary" aria-hidden="true"></i>}
 	   {task?.status === 'COMPLETED' && <i className="fa fa-check-circle" aria-hidden="true"></i>} {task?.title} 
-	  {task?.status === 'NO_PROGRESS' &&  <Badge  bg="primary">NO PROGRESS</Badge>}
+	  {task?.status === 'NO_PROGRESS' &&  <Badge  bg="secondary">NO PROGRESS</Badge>}
                         {task?.status === 'ONGOING' &&  <Badge  bg="warning">ONGOING</Badge>}
                         {task?.status === 'COMPLETED' &&  <Badge bg="success">completed {moment(task?.completedDate).format('MMM DD,YYYY')}</Badge>}
-                        {task?.status === 'ONHOLD' &&  <Badge  bg="secondary">ON HOLD</Badge>}
-	  {task?.priority === 'None' &&  <Badge  bg="secondary">None</Badge>}
+                        {task?.status === 'ONHOLD' &&  <Badge  bg="primary">ON HOLD</Badge>}
+	  {/* {task?.priority === 'None' &&  <Badge  bg="secondary">None</Badge>} */}
 	  {task?.priority === 'LOW' &&  <Badge  bg="primary">LOW</Badge>}
 	  {task?.priority === 'REPEATED' &&  <Badge  bg="warning">REPEATED</Badge>}
 
                         {task?.priority === 'MEDIUM' &&  <Badge  bg="warning">MEDIUM</Badge>}
-                        {task?.priority === 'HIGH' &&  <Badge  bg="danger">ON HOLD</Badge>}
-       <span className="priorityTag">High</span>
+                        {task?.priority === 'HIGH' &&  <Badge  bg="danger">HIGH</Badge>}
        <span className="nameTag"> <img src={avtar} alt="userAvtar" /> {task?.assignedTo?.name}</span>
-      <Badge bg={ task?.dueToday ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>
+      {task?.dueDate && <Badge bg={ task?.dueToday ? "danger" : "primary"}>Due {moment(task?.dueDate).format('MMM DD,YYYY')}</Badge>}
 	   <a style={{float: "right",
     color: "#8602ff", cursor:"pointer", marginRight: "10px"}} onClick={() => {
 		setSelectedProject();

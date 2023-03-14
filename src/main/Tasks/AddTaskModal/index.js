@@ -46,6 +46,7 @@ export default function AddTaskModal(props) {
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
     const [toasterMessage, setToasterMessage] = useState("");
+	const [selectedLeads, setSelectedLeads] = useState();
 
     useEffect(() => {
 		console.log(showAddTask)
@@ -76,6 +77,11 @@ export default function AddTaskModal(props) {
 
 			setCategoryList(project[0]?.categories);
 			setUserList(project[0]?.accessibleBy);
+			let leads =  [];
+			if(selectedTask?.lead?.length){
+				leads = leadLists?.filter((item)=> selectedTask?.lead?.includes(item?._id))
+			}
+			setSelectedLeads(leads);
 			let dueDateData = new Date(selectedTask?.dueDate);
 			let completedDateData = new Date(selectedTask?.completedDate);
 			if(selectedTask?.completedDate){
@@ -95,7 +101,7 @@ export default function AddTaskModal(props) {
 			priority: selectedTask?.priority,
 			status: selectedTask?.status,
 			attachment: selectedTask?.attachment,
-			tasklead: selectedTask?.lead?.length ? selectedTask?.lead[0] : ""})
+			tasklead: selectedTask?.lead})
 		}else{
 			resetFormValue();
 		}
@@ -205,7 +211,7 @@ export default function AddTaskModal(props) {
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
                 })
                 setValidated(false);
-               
+				setSelectedLeads("");
                 setShowAddTaskModal(false);
 				getNewTasks(projectId);
             }
@@ -224,7 +230,7 @@ export default function AddTaskModal(props) {
         }
         setLoading(true)
         try {
-            let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead } = taskFormValue
+            let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead,completedDate } = taskFormValue
             let dataToSend = {}
             projectId && (dataToSend["projectId"] = projectId)
             category && (dataToSend["category"] = category)
@@ -235,6 +241,7 @@ export default function AddTaskModal(props) {
             priority && (dataToSend["priority"] = priority)
             status && (dataToSend["status"] = status)
             tasklead && (dataToSend["tasklead"] = tasklead)
+			completedDate && (dataToSend["completedDate"] = completedDate)
 
 
 
@@ -250,7 +257,7 @@ export default function AddTaskModal(props) {
                     title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
                 })
                 setValidated(false)
-      
+				setSelectedLeads("");
                 setShowAddTaskModal(true)
 				getNewTasks(projectId);
 
@@ -264,10 +271,12 @@ export default function AddTaskModal(props) {
         }
     }
     const onLeadChange = (users) => {
-      console.log(users)
+		console.log(users)
+      let leads = users?.map((item)=> item?._id)
+	  setSelectedLeads(users)
     setTaskFormValue({
       ...taskFormValue,
-      tasklead: users._id,
+      tasklead: JSON.stringify(leads),
     });
   };
 
@@ -302,7 +311,7 @@ export default function AddTaskModal(props) {
 
 	setLoading(true);
 	try {
-		let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead, attachment } = taskFormValue
+		let { projectId, category, title, description, assignedTo, dueDate, priority, status,tasklead, attachment,completedDate } = taskFormValue
 		let dataToSend = {}
 		projectId && (dataToSend["projectId"] = projectId)
 		category && (dataToSend["category"] = category)
@@ -313,7 +322,8 @@ export default function AddTaskModal(props) {
 		priority && (dataToSend["priority"] = priority)
 		status && (dataToSend["status"] = status)
 		tasklead && (dataToSend["tasklead"] = tasklead)
-		selectedTask && (dataToSend["taskId"] = selectedTask?._id)
+		selectedTask && (dataToSend["taskId"]= selectedTask?._id)
+		completedDate && (dataToSend["completedDate"] = completedDate)
 
 		const taskRes = await updateTaskDetails(dataToSend);
 		setLoading(false);
@@ -322,16 +332,18 @@ export default function AddTaskModal(props) {
 			setShowToaster(true);
 			return
 		} else {
+			setSelectedLeads("");
 			setTaskFormValue({
 				...taskFormValue,
 				title: '', description: '', assignedTo: '', dueDate: '', completedDate: '', priority: '', status: '', attachment: '',
 			})
 			setValidated(false);
-		   
 			setShowAddTaskModal(false);
 			getNewTasks(projectId);
+			
 		}
 	} catch (error) {
+		console.log(error)
 		setLoading(false);
 		setToasterMessage(error?.error?.message || 'Something Went Wrong');
 		setShowToaster(true);
@@ -424,21 +436,23 @@ export default function AddTaskModal(props) {
                   </Form.Group>
                   <Form.Group as={Col} md="12">
                     <Form.Label>Lead</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       required
                       as="select"
                       type="select"
                       name="tasklead"
                       onChange={updateTaskFormValue}
                       value={taskFormValue.tasklead}
-                    >  
-					{/* <Select
+                    >   */}
+					<Select
+					isMulti
+					value={selectedLeads}
                       onChange={onLeadChange}
                       getOptionLabel={(options) => options["name"]}
                       getOptionValue={(options) => options["_id"]}
                       options={leadLists}
-                    /> */}
-					<option value="" disabled>
+                    />
+					{/* <option value="" disabled>
                         Select Lead
                       </option>
                       {leadLists?.map((lead) => (
@@ -446,7 +460,7 @@ export default function AddTaskModal(props) {
                           {lead?.name}
                         </option>
                       ))}
-					</Form.Control>
+					</Form.Control> */}
                     <Form.Control.Feedback type="invalid">
                       Task List is required !!
                     </Form.Control.Feedback>

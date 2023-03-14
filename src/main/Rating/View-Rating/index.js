@@ -20,7 +20,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import Avatar from "react-avatar";
-import { getAllUsers, getRatings } from "../../../services/user/api";
+import { getAllUsers, getAllUserWithoutPagination, getRatings } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import MyCalendar from "../../Dashboard/weekCalendra";
@@ -84,14 +84,14 @@ export default function Dashboard(props) {
   const getUsersList = async function () {
     setLoading(true);
     try {
-      const user = await getAllUsers();
+      const user = await getAllUserWithoutPagination();
       setLoading(false);
 
       if (user.error) {
         setToasterMessage(user?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setTeamOptions([...user.data?.users]);
+        setTeamOptions([...user.data]);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");

@@ -6,12 +6,14 @@ import { CONSTENTS } from "../../../constents";
 import "./filter.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getAllProjects } from "../../../services/user/api";
+import { getAllCategories, getAllProjects, getAllUsersWithoutPagination } from "../../../services/user/api";
+import Select from 'react-select';
+
 const FilterModal = (props) => {
   const {  getTaskFilters } = props;
 
-  const statusList = CONSTENTS.statusList;
-  const priorityList = CONSTENTS.priorityList;
+  const statusList = CONSTENTS.statusListObj;
+  const priorityList = CONSTENTS.priorityListObj;
   const groupByList = CONSTENTS.TASK_GROUPS;
   const filterFormFileds = {
     createdBy: "",
@@ -20,11 +22,17 @@ const FilterModal = (props) => {
     priority: "",
     status: "",
     groupBy: "",
-	projectId: ""
+	projectIds: ''
   };
   const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);
-  const [selectProject, setSelectProject] = useState("");
+  const [projectIds, setProjectIds] = useState([]);
+  const [assignedTo, setAssignedTo] = useState([]);
+  const [createdBy, setCreatedBy] = useState([]);
+  const [statusData, setStatusData] = useState([]);
+  const [priorityData, setPriorityData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+
   const [sortBy, setSortBy] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [dateCreated, setDateCreated] = useState("");
@@ -35,16 +43,43 @@ const FilterModal = (props) => {
   const [filterModalShow, setFilterModalShow] = useState(false);
 
   const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
-  const [selectedProject, setSelectedProject] = useState();
+  const [selectedFilterData, setSelectedFilterData] = useState();
+
   const [projects, setProjects] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [usersList, setUsersList] = useState([]);
+
   const [sortedByArr, setSortedByArr] = useState(CONSTENTS.SORTEDBY);
 
   useEffect(() => {
+	getAllProjectsData();
+	getAllCategoriesData();
+	getAllUsersData();
     if (localStorage.getItem('taskFilters')) {
       setFilterFormValue(JSON.parse(localStorage.getItem('taskFilters')));
+	  let projectData = projects.filter((item)=> filterFormValue?.projectIds?.includes(item?._id))
+	  let assignedToData = usersList.filter((item)=> filterFormValue?.assignedTo?.includes(item?._id))
+	  let createdByData = usersList.filter((item)=> filterFormValue?.createdBy?.includes(item?._id))
+	  let selectedCategory = categories.filter((item)=> filterFormValue?.category?.includes(item?._id))
+	  let selectedStatus = statusList.filter((item)=> filterFormValue?.status?.includes(item?._id))
+	  let selectedPriority = priorityList.filter((item)=> filterFormValue?.priority?.includes(item?._id))
+	  setProjectIds(projectData);
+	  setAssignedTo(assignedToData);
+	  setCategoryData(selectedCategory);
+	  setCreatedBy(createdByData);
+	  setPriorityData(selectedPriority);
+	  setStatusData(selectedStatus);
+	  setSelectedFilterData({
+		projectIds: projectData,
+		assignedTo: assignedToData,
+		createdBy: filterFormValue?.category,
+		category: createdByData,
+		priority: filterFormValue?.priority,
+		status: filterFormValue?.status
+	  })
 	  setClearFilterBoolean(true);
     }
-	getAllProjectsData();
+
   }, []);
 
   const updateFilterFormValue = (e) => {
@@ -62,9 +97,6 @@ const FilterModal = (props) => {
     if (dueDate) {
       filterFormValue.dueDate = dueDate;
     }
-    if (selectProject) {
-      filterFormValue.projectId = selectProject;
-    }
     if (dateCreated) {
       filterFormValue.dateCreated = dateCreated;
     }
@@ -75,19 +107,18 @@ const FilterModal = (props) => {
       filterFormValue.dateCompleted = dateCompleted;
     }
 
-    console.log(
-      filterFormValue,
-      "---------------------------filter form value"
-    );
-    //TODO
 	localStorage.setItem('taskFilters', JSON.stringify(filterFormValue))
     getTaskFilters();
 	setFilterModalShow(false);
   };
   const clearFilterFormValue = () => {
-    console.log("key pressed");
     setSelectProjectGroup("");
-    setSelectProject("");
+    setProjectIds("");
+	setAssignedTo("");
+	setCreatedBy("");
+	setCategoryData("");
+	setPriorityData("");
+	setStatusData("");
     setDateCompleted("");
     setDateCreated("");
     setDueDate("");
@@ -118,23 +149,71 @@ const FilterModal = (props) => {
            }
 
     }
-	const onSelectProject = (e)=>{
-		updateFilterFormValue(e);
-		setSelectProject(e.target.value);
-		let projectdata = projects?.filter((item)=> item?._id == e.target.value);
-		setSelectedProject(projectdata[0]);
+	const getAllCategoriesData =async () => {
+        
+		setLoading(true);
+		
+		try {
+		 
+		  const categories = await getAllCategories();
+		  setLoading(false);
+
+		  if (categories.error) {
+			console.log(categories?.error)
+		  } else {
+
+			categories.data = categories?.data?.map((item,i)=>
+			({name: item, _id:item}))
+			  setCategories(categories.data);
+		  }
+		} catch (error) {
+		  setLoading(false);
+		  return error.message;
+		}
+
+ }
+ const getAllUsersData =async () => {
+        
+	setLoading(true);
+	
+	try {
+	 
+	  const users = await getAllUsersWithoutPagination();
+	  setLoading(false);
+
+	  if (users.error) {
+		console.log(users?.error)
+	  } else {
+		  setUsersList(users.data?.users);
+	  }
+	} catch (error) {
+	  setLoading(false);
+	  return error.message;
+	}
+
+}
+	const onSelectData = (selectedItems, dataType)=>{
+		let data = selectedItems?.map((item)=> item?._id);
+		if(dataType == "projectIds"){
+			setProjectIds(selectedItems);
+		}else if(dataType == "assignedTo"){
+		setAssignedTo(selectedItems);
+
+		}else if(dataType == "createdBy"){
+			setCreatedBy(selectedItems);
+		}else if(dataType == "priority"){
+			setPriorityData(selectedItems)
+		}else if(dataType == "status"){
+			setStatusData(selectedItems)
+		}else if(dataType == "category"){
+			setCategoryData(selectedItems)
+		}
+		setFilterFormValue({ ...filterFormValue, [dataType]:  data});
 	}
 
   return (
     <>
-      {/* <button className='btn btn-gradient-border btn-glow' onClick={() => setFilterModalShow(true)} style={{ float: "left" }} > Filter </button > */}
-      {/* <Button
-                className="btnDanger"
-                type="button"
-                onClick={clearFilterFormValue}
-            >
-                Clear Filter
-            </Button> */}
+   
             
       <div className="filter-main-tag">
         <div className="filterWth">
@@ -200,9 +279,7 @@ const FilterModal = (props) => {
         
      
 
-        {/* <Button className="addTaskBtn" type="button">
-          Add Task
-        </Button> */}
+        
       </div>
       {filterModalShow && (
         <Modal
@@ -227,17 +304,17 @@ const FilterModal = (props) => {
 				  <Form.Label column sm="4">
 				  Project
 					</Form.Label>
-                    <Form.Control
-                      as="select"
-                      type="select"
-                      name="selectProject"
-					  value={filterFormValue.projectId}
-                      onChange={(e) => onSelectProject(e)}
-                    >
-						  <option value="">Select Project </option>
-                     {projects?.map((project)=><option value={project?._id} key={project?._id}>{project?.name}</option>) }
-                     
-                    </Form.Control>
+                
+						<Select
+						 onChange={(e)=>onSelectData(e,"projectIds")}
+						value={projectIds}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={projects}
+               
+              />
+						
                   </Row>
                 </Form.Group>
                 <Form.Group as={Row} controlId="formDateCreated">
@@ -245,20 +322,16 @@ const FilterModal = (props) => {
                     <Form.Label column sm="4">
                     createdBy
                     </Form.Label>
-                    <Form.Control className="form-control"
-                      as="select"
-                      type="select"
-                      name="createdBy"
-                      onChange={updateFilterFormValue}
-                      value={filterFormValue.createdBy}
-                    >
-                      <option value="">Created By</option>
-                      {selectedProject?.accessibleBy?.map((user) => (
-                        <option value={user._id} key={user._id+user.name}>
-                          {user.name}
-                        </option>
-                      ))}
-                    </Form.Control>
+                   
+					  <Select
+						 onChange={(e)=>onSelectData(e,"createdBy")}
+						value={createdBy}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={usersList}
+               
+              />
                   </Row>
                 </Form.Group>
 
@@ -267,20 +340,16 @@ const FilterModal = (props) => {
 				  <Form.Label column sm="4">
 				  assignedTo
 					</Form.Label>
-                    <Form.Control
-                      as="select"
-                      type="select"
-                      name="assignedTo"
-                      onChange={updateFilterFormValue}
-                      value={filterFormValue.assignedTo}
-                    >
-                      <option value="">User Assigned</option>
-                      {selectedProject?.accessibleBy?.map((user) => (
-                        <option value={user._id} key={user._id+user.name}>
-                          {user.name}
-                        </option>
-                      ))}
-                    </Form.Control>
+                   
+					<Select
+						 onChange={(e)=>onSelectData(e,"assignedTo")}
+						value={assignedTo}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={usersList}
+               
+              />
                   </Row>
                 </Form.Group>
 
@@ -289,7 +358,7 @@ const FilterModal = (props) => {
 				  <Form.Label column sm="4">
 				  Category
 					</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       as="select"
                       type="select"
                       name="category"
@@ -302,7 +371,16 @@ const FilterModal = (props) => {
                           {category}
                         </option>
                       ))}
-                    </Form.Control>
+                    </Form.Control> */}
+					<Select
+						 onChange={(e)=>onSelectData(e,"category")}
+						value={categoryData}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={categories}
+               
+              />
                   </Row>
                 </Form.Group>
 
@@ -311,7 +389,7 @@ const FilterModal = (props) => {
 				  <Form.Label column sm="4">
 				  Priority
 					</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       as="select"
                       type="select"
                       name="priority"
@@ -324,7 +402,16 @@ const FilterModal = (props) => {
                           {priority}
                         </option>
                       ))}
-                    </Form.Control>
+                    </Form.Control> */}
+					<Select
+						 onChange={(e)=>onSelectData(e,"priority")}
+						value={priorityData}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={priorityList}
+               
+              />
                   </Row>
                 </Form.Group>
               </Row>
@@ -334,7 +421,7 @@ const FilterModal = (props) => {
 				  <Form.Label column sm="4">
 				  Status
 					</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       as="select"
                       type="select"
                       name="status"
@@ -347,7 +434,16 @@ const FilterModal = (props) => {
                           {status}
                         </option>
                       ))}
-                    </Form.Control>
+                    </Form.Control> */}
+					<Select
+						 onChange={(e)=>onSelectData(e,"status")}
+						value={statusData}
+                		isMulti
+                		getOptionLabel={(options) => options["name"]}
+                		getOptionValue={(options) => options["_id"]}
+                		options={statusList}
+               
+              />
                   </Row>
                 </Form.Group>
 
