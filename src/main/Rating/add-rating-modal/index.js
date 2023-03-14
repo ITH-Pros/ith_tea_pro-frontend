@@ -62,9 +62,9 @@ export default function AddRatingModal(props) {
 	  }, [selectedRating]);
 
 
-	  const patchTask = () => {
-		setTask(selectedRating._id);
-	  };
+	//   const patchTask = () => {
+		
+	//   };
 
 	function splitDate(dateStr) {
 		const dateList = dateStr.split("T")[0].split("-");
@@ -161,14 +161,16 @@ export default function AddRatingModal(props) {
 			};
 
 			if (selectedRating) {
+				console.log("selectedRating.projectId", selectedRating.projectId);
 				dataToSend.projectId = selectedRating.projectId;
 				dataToSend.userId = selectedRating.assignedTo;
 				dataToSend.dueDate = date;
 			}
-			if(team==''){
+			else if(team==''){
 				dataToSend.projectId = project;
 				dataToSend.userId = data;
 				dataToSend.dueDate = date;
+				// console.log("dataToSend", dataToSend);
 			}
 			else {
 				dataToSend.projectId = project;
@@ -185,8 +187,8 @@ export default function AddRatingModal(props) {
 			}else {
 				setTaskOptions(response.data);
 
-				if(selectedRating){
-					patchTask();
+				if(selectedRating._id){
+					setTask(selectedRating._id);
 				}
 			}
 			

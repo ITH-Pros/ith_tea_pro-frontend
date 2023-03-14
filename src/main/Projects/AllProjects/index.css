@@ -159,7 +159,7 @@
   border-radius: 6px;
 }
 .progress {
-  width: 100%;
+  width: 350px;
   height: 6px !important;
   border-radius: 6px;
   /* overflow: hidden; */

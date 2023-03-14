@@ -234,7 +234,7 @@ const ProjectCard = ({
                     <UserIcon firstName={user.name} />
                     <div className="ms-4">
                       <p className="mb-0">{user?.name}</p>
-                      <p className="userEmail">email@gmail.com</p>
+                      <p className="userEmail">{user?.email}</p>
                     </div>
                   </div>
                    </Col>
