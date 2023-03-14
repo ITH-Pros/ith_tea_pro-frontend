@@ -161,14 +161,16 @@ export default function AddRatingModal(props) {
 			};
 
 			if (selectedRating) {
+				console.log("selectedRating.projectId", selectedRating.projectId);
 				dataToSend.projectId = selectedRating.projectId;
 				dataToSend.userId = selectedRating.assignedTo;
 				dataToSend.dueDate = date;
 			}
-			if(team==''){
+			else if(team==''){
 				dataToSend.projectId = project;
 				dataToSend.userId = data;
 				dataToSend.dueDate = date;
+				// console.log("dataToSend", dataToSend);
 			}
 			else {
 				dataToSend.projectId = project;
