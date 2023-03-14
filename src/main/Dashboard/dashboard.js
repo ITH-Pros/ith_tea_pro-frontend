@@ -697,8 +697,8 @@ const openAddtask=(project)=>{
                           )}
                         </Col>
                         <Col
-                          lg={3}
-                          className="text-end middle"
+                          lg={2}
+                          className="text-end middle ps-0"
                           style={{ justifyContent: "end" }}
                         >
                           <small className="text-truncate">
@@ -717,11 +717,11 @@ const openAddtask=(project)=>{
                           </small>
                         </Col>
                         <Col
-                          lg={1}
-                          className="text-end middle"
+                          lg={2}
+                          className="text-end middle px-0"
                           style={{ justifyContent: "end" }}
                         >
-                          <Button onClick={() => openModal(task)} variant="light" size="sm">
+                          <Button onClick={() => openModal(task)} variant="light" size="sm" className="addRatingBtn">
                             Add Rating
                           </Button>
                         </Col>
