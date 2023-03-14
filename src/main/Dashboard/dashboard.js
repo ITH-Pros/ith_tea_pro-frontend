@@ -340,7 +340,7 @@ const openAddtask=(project)=>{
                         </Col>
                         <Col lg={4} className="middle">
                           {task?.status != "COMPLETED" && (
-                            <small className="text-truncate">
+                            <small >
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
                                 {moment(task?.dueDate).format("DD/MM/YYYY")}
@@ -348,7 +348,7 @@ const openAddtask=(project)=>{
                             </small>
                           )}
                           {task?.status == "COMPLETED" && (
-                            <small className="text-truncate">
+                            <small >
                               Completed:{" "}
                               <Badge bg="success">
                                 {moment(task?.completedDate).format(
@@ -363,7 +363,7 @@ const openAddtask=(project)=>{
                           className="text-end middle"
                           style={{ justifyContent: "end" }}
                         >
-                          <small className="text-truncate">
+                          <small >
                             {task?.status == "NO_PROGRESS" && (
                               <Badge bg="primary">NO PROGRESS</Badge>
                             )}
@@ -439,7 +439,7 @@ const openAddtask=(project)=>{
                         </Col>
                         <Col lg={4} className="middle">
                           {task?.status != "COMPLETED" && (
-                            <small className="text-truncate">
+                            <small >
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
                                 {moment(task?.dueDate).format("DD/MM/YYYY")}
@@ -447,7 +447,7 @@ const openAddtask=(project)=>{
                             </small>
                           )}
                           {task?.status == "COMPLETED" && (
-                            <small className="text-truncate">
+                            <small >
                               Completed:{" "}
                               <Badge bg="success">
                                 {moment(task?.completedDate).format(
@@ -462,7 +462,7 @@ const openAddtask=(project)=>{
                           className="text-end middle ps-0"
                           style={{ justifyContent: "end" }}
                         >
-                          <small className="text-truncate">
+                          <small >
                             {task?.status == "NO_PROGRESS" && (
                               <Badge bg="primary">NO PROGRESS</Badge>
                             )}
