@@ -323,10 +323,10 @@ const openAddtask=(project)=>{
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task">
+                <Card id="card-task" className="px-0">
                   {myWorkList &&
                     myWorkList?.map((task) => (
-                      <Row className="d-flex justify-content-start list_task">
+                      <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col lg={4} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
@@ -422,10 +422,10 @@ const openAddtask=(project)=>{
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task">
+                <Card id="card-task" className="px-0">
                   {pendingRatingList &&
                     pendingRatingList?.map((task) => (
-                      <Row className="d-flex justify-content-start list_task">
+                      <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col lg={4} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
