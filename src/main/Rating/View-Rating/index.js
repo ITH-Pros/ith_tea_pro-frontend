@@ -127,10 +127,7 @@ export default function Dashboard(props) {
     }
   }
   return (
-    
-      
     <div className="dashboard_camp">
-    
       <div className="m-3 d-flex justify-content-center flex-column">
         <div className="d-flex">
           {/* {userDetails?.role !== "USER" && (
@@ -193,11 +190,11 @@ export default function Dashboard(props) {
           </h5>
 
           {/* <Link to="/rating" params={{ params: true }}> */}
-            <div className="wrap btnWth">
-              <button className="add-rating-button">
-                <span onClick={() => setModalShow(true)}>Add Rating</span>
-              </button>
-            </div>
+          <div className="wrap btnWth">
+            <button className="add-rating-button">
+              <span onClick={() => setModalShow(true)}>Add Rating</span>
+            </button>
+          </div>
           {/* </Link> */}
         </div>
         <Table responsive className="ratingTable">
@@ -264,22 +261,22 @@ export default function Dashboard(props) {
                                 className="input_dashboard"
                               ></span>
                             ) : (
-                            <MDBTooltip
-                                tag="div"
-                                wrapperProps={{ href: "#" }}
-                                title={"click to Add Rating"}
-                              >
+                              <>
                                 <span
-                             
                                   style={{
-                                    cursor: "cell",
+                                    // cursor: "cell",
                                     padding: "1px",
                                     paddingLeft: "20px",
                                     paddingRight: "6px",
                                   }}
                                   className="input_dashboard"
                                 ></span>
-                              </MDBTooltip>
+                                {/* <MDBTooltip
+                                  tag="div"
+                                  wrapperProps={{ href: "#" }}
+                                  title={"click to Add Rating"}
+                                ></MDBTooltip> */}
+                              </>
                             )}
                           </td>
                         );
