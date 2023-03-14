@@ -548,3 +548,15 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+.categoriesList{
+  list-style: none;
+  padding: 0;
+}
+.categoriesList li{
+  border-bottom: 1px solid #ddd;
+  padding: 6px;
+}
+.categoriesList .fa-flag{
+  color: #8355ad;
+}

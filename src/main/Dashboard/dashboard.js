@@ -17,11 +17,14 @@ import {
   Card,
   Button,
   Badge,
+  Modal,
 } from "react-bootstrap";
 import Avatar from "react-avatar";
 import { useNavigate } from 'react-router-dom';
 import AddTaskModal from "../Tasks/AddTaskModal";
-
+import AddRatingModal from "../Rating/add-rating-modal";
+var month = moment().month();
+let currentYear = moment().year();
 
 export default function Dashboard(props) {
   const [usersArray, setTeamOptions] = useState([]);
@@ -35,7 +38,9 @@ export default function Dashboard(props) {
   const [myWorkList, setMyWorkList]=useState();
   const [selectedTask, setSelectedTask] = useState({});
   const [pendingRatingList, setPendingRatingList]=useState();
-  const [weekCount, setWeekCount] = useState(0);
+  const [selectedRating, setSelectedRating] = useState({});
+
+  const [modalShow, setModalShow] = useState(false);
 
 
   const setShowToaster = (param) => showToaster(param);
@@ -56,6 +61,34 @@ export default function Dashboard(props) {
   const handleShowAllProjects = () => {
     navigate('/project/all');
   };
+
+  const openModal = (project) => {
+	console.log(project , "project");
+	setSelectedRating(project);
+	setModalShow(true);
+	  };
+
+  const onchangeMonth = (e) => {
+    setMonth(e.target.value);
+    let dataToSend = {
+      month: months.indexOf(e.target.value) + 1,
+      year: yearUse,
+    };
+    let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
+    setDays(monthDays.getDate());
+    getAllRatings(dataToSend);
+  };
+  const onChangeYear = (e) => {
+    setYear(e.target.value);
+    let dataToSend = {
+      month: months.indexOf(monthUse) + 1,
+      year: e.target.value,
+    };
+    getAllRatings(dataToSend);
+  };
+
+  let months = moment().year(Number)?._locale?._months;
+  let years = [2022, 2023, 2024, 2025];
 
   const getUsersList = async function () {
     setLoading(true);
@@ -134,6 +167,7 @@ export default function Dashboard(props) {
 			}
 		})
        setPendingRatingList(allTask);
+	   console.log('pendingRatingList',pendingRatingList)
 	   
       }
     } catch (error) {
@@ -265,8 +299,6 @@ const openAddtask=(project)=>{
             showAddTask={showAddTask}
             closeModal={closeModal}
           />
-
-          
         </Row>
 
         <Row className="mt-3">
@@ -287,7 +319,6 @@ const openAddtask=(project)=>{
 
               </Col>
               <Col lg={6} className="right-filter">
-               
               </Col>
             </Row>
             <Row>
@@ -387,7 +418,6 @@ const openAddtask=(project)=>{
              
               </Col>
               <Col lg={6} className="right-filter">
-               
               </Col>
             </Row>
             <Row>
@@ -452,7 +482,7 @@ const openAddtask=(project)=>{
                           className="text-end middle"
                           style={{ justifyContent: "end" }}
                         >
-                          <Button variant="light" size="sm">
+                          <Button onClick={() => openModal(task)} variant="light" size="sm">
                             Add Rating
                           </Button>
                         </Col>
@@ -464,6 +494,28 @@ const openAddtask=(project)=>{
           </Col>
         </Row>
       </Container>
+
+	  <Modal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Add Rating</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AddRatingModal
+				selectedRating = {selectedRating}
+
+			
+			 />
+          </Modal.Body>
+          <Button variant="secondary" onClick={() => setModalShow(false)}>
+            Close
+          </Button>
+        </Modal>
+
+
       {loading ? <Loader /> : null}
       {toaster && (
         <Toaster

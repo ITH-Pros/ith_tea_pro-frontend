@@ -20,7 +20,7 @@ import {
   Modal,
 } from "react-bootstrap";
 import Avatar from "react-avatar";
-import { getAllUsers, getRatings } from "../../../services/user/api";
+import { getAllUsers, getAllUserWithoutPagination, getRatings } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import MyCalendar from "../../Dashboard/weekCalendra";
@@ -84,14 +84,14 @@ export default function Dashboard(props) {
   const getUsersList = async function () {
     setLoading(true);
     try {
-      const user = await getAllUsers();
+      const user = await getAllUserWithoutPagination();
       setLoading(false);
 
       if (user.error) {
         setToasterMessage(user?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setTeamOptions([...user.data?.users]);
+        setTeamOptions([...user.data]);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -127,10 +127,7 @@ export default function Dashboard(props) {
     }
   }
   return (
-    
-      
     <div className="dashboard_camp">
-    
       <div className="m-3 d-flex justify-content-center flex-column">
         <div className="d-flex">
           {/* {userDetails?.role !== "USER" && (
@@ -193,11 +190,11 @@ export default function Dashboard(props) {
           </h5>
 
           {/* <Link to="/rating" params={{ params: true }}> */}
-            <div className="wrap btnWth">
-              <button className="add-rating-button">
-                <span onClick={() => setModalShow(true)}>Add Rating</span>
-              </button>
-            </div>
+          <div className="wrap btnWth">
+            <button className="add-rating-button">
+              <span onClick={() => setModalShow(true)}>Add Rating</span>
+            </button>
+          </div>
           {/* </Link> */}
         </div>
         <Table responsive className="ratingTable">
@@ -264,22 +261,22 @@ export default function Dashboard(props) {
                                 className="input_dashboard"
                               ></span>
                             ) : (
-                            <MDBTooltip
-                                tag="div"
-                                wrapperProps={{ href: "#" }}
-                                title={"click to Add Rating"}
-                              >
+                              <>
                                 <span
-                             
                                   style={{
-                                    cursor: "cell",
+                                    // cursor: "cell",
                                     padding: "1px",
                                     paddingLeft: "20px",
                                     paddingRight: "6px",
                                   }}
                                   className="input_dashboard"
                                 ></span>
-                              </MDBTooltip>
+                                {/* <MDBTooltip
+                                  tag="div"
+                                  wrapperProps={{ href: "#" }}
+                                  title={"click to Add Rating"}
+                                ></MDBTooltip> */}
+                              </>
                             )}
                           </td>
                         );

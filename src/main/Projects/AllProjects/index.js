@@ -667,10 +667,6 @@ export default function AllProject() {
                     aria-hidden="true"
                   ></i>
 			  </ul>
-
-
-
-       
 		   	</div>
           </Modal.Body>
           {/* <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
