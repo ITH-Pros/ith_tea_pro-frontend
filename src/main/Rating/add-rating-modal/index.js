@@ -62,9 +62,9 @@ export default function AddRatingModal(props) {
 	  }, [selectedRating]);
 
 
-	  const patchTask = () => {
-		setTask(selectedRating._id);
-	  };
+	//   const patchTask = () => {
+		
+	//   };
 
 	function splitDate(dateStr) {
 		const dateList = dateStr.split("T")[0].split("-");
@@ -187,8 +187,8 @@ export default function AddRatingModal(props) {
 			}else {
 				setTaskOptions(response.data);
 
-				if(selectedRating){
-					patchTask();
+				if(selectedRating._id){
+					setTask(selectedRating._id);
 				}
 			}
 			
