@@ -149,10 +149,12 @@ const closeModal=()=>{
        {project?._id?.projectId?.name} / {project?._id?.category}
       </Accordion.Header>
       <div className="d-flex rightTags">
-        <ProgressBar>
-          <ProgressBar striped variant="success" now={35} key={1} />
-          <ProgressBar variant="warning" now={20} key={2} />
-          <ProgressBar striped variant="danger" now={10} key={3} />
+        <ProgressBar >
+          <ProgressBar  variant="success" now={100*(project?.completedTasks/project?.total)} key={1} />
+          <ProgressBar variant="warning" now={100*(project?.ongoingTasks/project?.total)} key={2} />
+		  <ProgressBar   variant="info" now={100*(project?.onHoldTasks/project?.total)} key={3} />
+          <ProgressBar   variant="danger" now={100*(project?.noProgressTasks/project?.total)} key={4} />
+
         </ProgressBar>
         <div>
         <Dropdown>

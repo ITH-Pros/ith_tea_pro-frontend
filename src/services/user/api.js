@@ -88,7 +88,7 @@ export async function getProjectsTask(data) {
 }
 
 export async function getTaskDetailsByProjectId(data) {
-	return (axiosInstance.get('task/v1/list/homepage', { params: data}).then(res => res.data) )
+	return (axiosInstance.get('task/v1/list/for/rating', { params: data}).then(res => res.data) )
 }
 
 
@@ -109,11 +109,8 @@ export function addCommentOnTaskById(data) {
 }
 
 export async function getRatings(data) {
-    return (axiosInstance.get('/rating/v1/month/all/user', {
-        params: {
-            month: data?.month,
-            year: data?.year
-        }
+    return (axiosInstance.get('/rating/v1/week/rating', {
+        params: data
     }).then(res => res.data))
 }
 export async function getAssignedProjects(data){

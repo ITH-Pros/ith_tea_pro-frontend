@@ -276,7 +276,7 @@ export default function AddTaskModal(props) {
 	  setSelectedLeads(users)
     setTaskFormValue({
       ...taskFormValue,
-      tasklead: JSON.stringify(leads),
+      tasklead: leads,
     });
   };
 
