@@ -88,7 +88,7 @@ export async function getProjectsTask(data) {
 }
 
 export async function getTaskDetailsByProjectId(data) {
-	return (axiosInstance.get('task/v1/list/homepage', { params: data}).then(res => res.data) )
+	return (axiosInstance.get('task/v1/list/for/rating', { params: data}).then(res => res.data) )
 }
 
 

@@ -150,10 +150,10 @@ const closeModal=()=>{
       </Accordion.Header>
       <div className="d-flex rightTags">
         <ProgressBar >
-          <ProgressBar  variant="success" now={100*(project?.completedTasks/project?.completedTasks)} key={1} />
-          <ProgressBar variant="warning" now={100*(project?.ongoingTasks/project?.completedTasks)} key={2} />
-		  <ProgressBar   variant="info" now={100*(project?.onHoldTasks/project?.completedTasks)} key={3} />
-          <ProgressBar   variant="danger" now={100*(project?.noProgressTasks/project?.completedTasks)} key={3} />
+          <ProgressBar  variant="success" now={100*(project?.completedTasks/project?.total)} key={1} />
+          <ProgressBar variant="warning" now={100*(project?.ongoingTasks/project?.total)} key={2} />
+		  <ProgressBar   variant="info" now={100*(project?.onHoldTasks/project?.total)} key={3} />
+          <ProgressBar   variant="danger" now={100*(project?.noProgressTasks/project?.total)} key={4} />
 
         </ProgressBar>
         <div>

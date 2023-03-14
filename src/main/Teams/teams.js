@@ -277,10 +277,12 @@ export default function Teams(props) {
   return (
     <>
      <div className="rightDashboard">
+
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
 
           {userDetails.role === "SUPER_ADMIN" && (
+            <div className="user-btn">
            <Link
            to={{
              pathname: "/user/add",
@@ -292,8 +294,9 @@ export default function Teams(props) {
              className="fa fa-user-plus fa-3x addBtn w-125p"
              title="Add User"
              aria-hidden="true"
-           >  Add User </i> 
+           >  Add User  </i> 
          </Link>
+         </div>
           )}
         </h1>
         
