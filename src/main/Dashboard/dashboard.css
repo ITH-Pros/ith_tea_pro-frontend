@@ -532,3 +532,9 @@ th {
 			.secondary{
 				color:  #6d757d !important;
 			}
+
+      .btn-light.addRatingBtn{
+        font-size: 13px;
+      font-weight: 500;
+      line-height: 18px;
+      }
