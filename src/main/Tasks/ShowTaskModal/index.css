@@ -152,12 +152,11 @@
 .progress-bar{
       display: inline-block;
     height: 6px !important;
-    width: 200px !important;
     border-radius: 5px;
     background-color: green !important;
     float: right;
-    margin-top: 10px;
-    margin-right: 10px;
+    /* margin-top: 10px;
+    margin-right: 10px; */
 }
 .progress-bar-count{
       display: inline-block;

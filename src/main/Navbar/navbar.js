@@ -17,6 +17,7 @@ import {
   FaHeart
 } from 'react-icons/fa';
 import './navbar.css'
+import { navigationRef } from '../../helpers/logOut';
 export default function App() {
   const { accessToken, logout } = useAuth()
   const navLinkStyles = ({ isActive }) => {
@@ -30,7 +31,10 @@ export default function App() {
       color: isActive ? '#8355ad' : 'black'
     }
   }
-  
+  const logOutFromSystem =()=>{
+	localStorage.clear();
+	navigationRef.current?.navigate('/login');
+  }
   return (
 
     <Layout>
@@ -49,6 +53,8 @@ export default function App() {
           <NavLink to='/rating' style={navLinkStyles} > <MenuItem icon={<FaRegLaughWink />}>    Rating  </MenuItem></NavLink>
           <NavLink to='/task' style={navLinkStyles}> <MenuItem icon={<FaList />}> Task </MenuItem></NavLink> 
           <NavLink to='/team' style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   Team  </MenuItem></NavLink>
+          <NavLink  onclick={logOutFromSystem}   style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   LogOut  </MenuItem></NavLink>
+
         </Menu>
       </Sidebar>
         // <Navbar isBordered variant={'floating'}>

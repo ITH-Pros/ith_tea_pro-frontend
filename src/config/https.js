@@ -1,6 +1,6 @@
 import axios from "axios";
+import { logOut } from "../helpers/logOut";
 import { baseURL } from './index'
-import { useNavigate } from 'react-router-dom';
 
 
 export const axiosInstance = axios.create({
@@ -25,6 +25,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     function (res) {
+
         return res;
     },
     async function (error) {
@@ -33,10 +34,11 @@ axiosInstance.interceptors.response.use(
                 return Promise.reject(error.response.data?.message);
             }
             if (error.response.status === 401 && error.response.data) {
-                useNavigate('/login')
+                logOut();
                 return Promise.reject(error.response.data?.message);
             }
         }
+		
         return error.response
 
         // return Promise.reject(error);
