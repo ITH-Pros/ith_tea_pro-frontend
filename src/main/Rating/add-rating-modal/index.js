@@ -33,6 +33,38 @@ export default function AddRatingModal(props) {
     const navigate = useNavigate();
     const { userDetails } = useAuth();
 
+	const { selectedRating } = props;
+	// console.log(selectedRating, "pendingRating");
+
+	useEffect(() => {
+
+
+		if (selectedRating) {
+			const today = new Date();
+			let patchDateValue =
+			today.getFullYear() +
+			"-" +
+			(today.getMonth() + 1 <= 9 ? "0" + (today.getMonth() + 1) : today.getMonth() + 1) +
+			"-" +
+			(today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
+			setDate(patchDateValue);
+		  	setProject(selectedRating.projectId);
+		  	setTeam(selectedRating.assignedTo);
+		  if (selectedRating.dueDate) {
+			const formattedDate = new Date(selectedRating.dueDate).toISOString().substr(0, 10);
+			setDate(formattedDate);
+		  }
+		//   setRating(selectedRating.rating);
+		  setComments(selectedRating.ratingComments);
+		}
+
+		getTaskList();
+	  }, [selectedRating]);
+
+
+	  const patchTask = () => {
+		setTask(selectedRating._id);
+	  };
 
 	function splitDate(dateStr) {
 		const dateList = dateStr.split("T")[0].split("-");
@@ -102,33 +134,47 @@ export default function AddRatingModal(props) {
 		console.log("selectedProject", selectedProject);
 		setSelectedProject(selectedProject);
 		setTeamOptions(selectedProject?.accessibleBy);
-		console.log("projectOptions", projectOptions);
-		
+		console.log("selectedProject.accessibleBy", selectedProject?.accessibleBy);
+		console.log("teamOptions", teamOptions);
+
 	};
 
     const onchangeTeam = (e) => {
         setTeam(e.target.value);
+		console.log("e.target.value", e.target.value);
 		console.log("team", team);
-		getTaskList();
+		getTaskList(e.target.value);
     };
 
     const handleChangeDate = (date) => {
         setDate(date.target.value);
 		console.log("date", date.target.value);
-		getTaskList();
+		getTaskList(date.target.value);
     };
 
-	const getTaskList = async function () {
+	const getTaskList = async function (data) {
 	
         setLoading(true);
 
 		try {
 			const dataToSend = {
-				projectId: project,
-				userId: team,
-				dueDate: date,
-				// groupBy: 'default'
 			};
+
+			if (selectedRating) {
+				dataToSend.projectId = selectedRating.projectId;
+				dataToSend.userId = selectedRating.assignedTo;
+				dataToSend.dueDate = date;
+			}
+			if(team==''){
+				dataToSend.projectId = project;
+				dataToSend.userId = data;
+				dataToSend.dueDate = date;
+			}
+			else {
+				dataToSend.projectId = project;
+				dataToSend.userId = team;
+				dataToSend.dueDate = data;
+			}
 			const response = await getTaskDetailsByProjectId(dataToSend);
 			console.log("response", response);
 			if (response.error ) {
@@ -138,6 +184,10 @@ export default function AddRatingModal(props) {
 				
 			}else {
 				setTaskOptions(response.data);
+
+				if(selectedRating){
+					patchTask();
+				}
 			}
 			
 		} catch (error) {
