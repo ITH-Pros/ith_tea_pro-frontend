@@ -31,9 +31,11 @@ export default function App() {
       color: isActive ? '#8355ad' : 'black'
     }
   }
-  const logOutFromSystem =()=>{
+  function logOutFromSystem (){
+	console.log("logout");
 	localStorage.clear();
-	navigationRef.current?.navigate('/login');
+	// navigationRef.current?.navigate('/login');
+	window.location.reload();
   }
   return (
 
@@ -53,7 +55,7 @@ export default function App() {
           <NavLink to='/rating' style={navLinkStyles} > <MenuItem icon={<FaRegLaughWink />}>    Rating  </MenuItem></NavLink>
           <NavLink to='/task' style={navLinkStyles}> <MenuItem icon={<FaList />}> Task </MenuItem></NavLink> 
           <NavLink to='/team' style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   Team  </MenuItem></NavLink>
-          <NavLink  onclick={logOutFromSystem}   style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   LogOut  </MenuItem></NavLink>
+          <NavLink  onClick={logOutFromSystem}   style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   LogOut  </MenuItem></NavLink>
 
         </Menu>
       </Sidebar>

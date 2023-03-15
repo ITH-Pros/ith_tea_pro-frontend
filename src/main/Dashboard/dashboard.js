@@ -68,24 +68,24 @@ export default function Dashboard(props) {
 	setModalShow(true);
 	  };
 
-  const onchangeMonth = (e) => {
-    setMonth(e.target.value);
-    let dataToSend = {
-      month: months.indexOf(e.target.value) + 1,
-      year: yearUse,
-    };
-    let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
-    setDays(monthDays.getDate());
-    getAllRatings(dataToSend);
-  };
-  const onChangeYear = (e) => {
-    setYear(e.target.value);
-    let dataToSend = {
-      month: months.indexOf(monthUse) + 1,
-      year: e.target.value,
-    };
-    getAllRatings(dataToSend);
-  };
+//   const onchangeMonth = (e) => {
+//     setMonth(e.target.value);
+//     let dataToSend = {
+//       month: months.indexOf(e.target.value) + 1,
+//       year: yearUse,
+//     };
+//     let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
+//     setDays(monthDays.getDate());
+//     getAllRatings(dataToSend);
+//   };
+//   const onChangeYear = (e) => {
+//     setYear(e.target.value);
+//     let dataToSend = {
+//       month: months.indexOf(monthUse) + 1,
+//       year: e.target.value,
+//     };
+//     getAllRatings(dataToSend);
+//   };
 
   let months = moment().year(Number)?._locale?._months;
   let years = [2022, 2023, 2024, 2025];

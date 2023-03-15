@@ -411,7 +411,7 @@ export default function AddRatingModal(props) {
 								))}
 							</Form.Control>
 							<Form.Control.Feedback type="invalid">
-								User name is required !!
+								Task is required !!
 							</Form.Control.Feedback>
 							<Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 						</Form.Group>
