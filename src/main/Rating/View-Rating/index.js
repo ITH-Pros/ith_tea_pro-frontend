@@ -130,7 +130,7 @@ export default function Dashboard(props) {
     <div className="dashboard_camp">
       <div className="m-3 d-flex justify-content-center flex-column">
         <div className="d-flex">
-          {/* {userDetails?.role !== "USER" && (
+          {/* {userDetails?.role !== "CONTRIBUTOR" && (
 				<Link to="/rating" params={{ params: true }}>
 				{props.showBtn && (
 					<div className="wrap">
@@ -250,7 +250,7 @@ export default function Dashboard(props) {
                         }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
                         return (
                           <td key={index}>
-                            {userDetails?.role === "USER" ||
+                            {userDetails?.role === "CONTRIBUTOR" ||
                             new Date(dateToSend) > new Date() ? (
                               <span
                                 style={{
@@ -297,7 +297,7 @@ export default function Dashboard(props) {
 
       {/* <div className="m-3 d-flex justify-content-center flex-column">
 		<div>
-		{userDetails?.role !== "USER" && (
+		{userDetails?.role !== "CONTRIBUTOR" && (
 			<Link to="/rating" params={{ params: true }}>
 			{props.showBtn && (
 				<div className="wrap">
@@ -411,7 +411,7 @@ export default function Dashboard(props) {
 						}-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
 						return (
 						<td key={index}>
-							{userDetails?.role === "USER" ||
+							{userDetails?.role === "CONTRIBUTOR" ||
 							new Date(dateToSend) > new Date() ? (
 							<span
 								style={{ padding: "3px", paddingLeft: "18px" }}

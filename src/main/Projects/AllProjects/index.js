@@ -70,6 +70,10 @@ export default function AllProject() {
 	setCategoriesModalShow(true);
 	  };
 
+	  const handleToRedirectTask =() => {
+		navigate('/task');
+	}
+
 
 
   const userListToAddInProject = new Set();
@@ -569,16 +573,18 @@ export default function AllProject() {
                   className="project-box-wrapper"
                 >
                   <ProjectCard
+				   
                     name={element.name}
                     description={element.shortDescription||'--'}
-                    managedBy={element.managedBy}
-                    accessibleBy={element.accessibleBy}
-					categroies={element.categories.length}
+                    managedBy={element.managedBy || []}
+                    accessibleBy={element.accessibleBy || []}
+					categroies={element.categories?.length}
                     element={element}
                     handleEdit={() => editProject(element)}
                     handleDelete={() => confirmation(element)}
                     taskData={projectTaskAnalytics?.[element._id]}
 					handleCategories = {() => handleCategorie(element)}
+					handleToRedirectTask = {() => handleToRedirectTask()}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>

@@ -15,8 +15,6 @@ import Toaster from "../../components/Toaster";
 import { faGithub, faLinkedin, faFacebook , faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
-
 export default function Teams(props) {
   const { userDetails } = useAuth();
   const [loading, setLoading] = useState(false);

@@ -116,3 +116,21 @@ export async function getRatings(data) {
 export async function getAssignedProjects(data){
 	return (axiosInstance.get('/projects/v1/list/assigned', data).then(res => res.data));
 }
+
+export async function getLogedInUserDetails(data){
+	return (axiosInstance.get('user/v1/userId', data).then(res => res.data));
+}
+
+export async function editLogedInUserDetails(data){
+	return (axiosInstance.patch('user/v1/edit', data).then(res => res.data));
+}
+
+export async function verifyTokenApi(data){
+	return (axiosInstance.get('auth/v1/verify/token', {
+        params: data
+    }).then(res => res.data))
+}
+
+export async function setPasswordApi(data) {
+	return (axiosInstance.post('auth/v1/set/password', data).then(res => res.data))
+}

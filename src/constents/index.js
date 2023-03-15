@@ -3,7 +3,7 @@ exports.CONSTENTS = {
     statusList: ["NO_PROGRESS", "ONGOING", "COMPLETED", "ONHOLD"],
     priorityList: ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"],
     TASK_GROUPS: ["category", "status", "priority", "assignedTo", "createdBy"],
-    ROLES: ["USER", "SUPER_ADMIN", "ADMIN", "LEAD"],
+    ROLES: ["CONTRIBUTOR", "SUPER_ADMIN", "ADMIN", "LEAD"],
 	SORTEDBY: ["Date","Time"],
 	statusListObj: [{name:"NO_PROGRESS", _id: "NO_PROGRESS"},{name:"ONGOING", _id: "ONGOING"},{name:"COMPLETED", _id: "COMPLETED"},{name:"ONHOLD", _id: "ONHOLD"} ],
     priorityListObj: [

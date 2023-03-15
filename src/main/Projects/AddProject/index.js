@@ -90,7 +90,7 @@ export default function AddProject(props) {
 	// Render the component using the projectDetails prop
 
 
-    const projectFormFields = { name:  '', description: '',shortDescription:'', selectedManagers: [], projectCategories: [], selectAccessibleBy: [] }
+    const projectFormFields = { name:  '', description: '', selectedManagers: [],  selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
 
@@ -109,9 +109,9 @@ export default function AddProject(props) {
         ...projectFormValue,
         name: projectById.name,
         description: projectById.description,
-        shortDescription: projectById.shortDescription,
+        // shortDescription: projectById.shortDescription,
         selectedManagers: projectById.managedBy.map((el) => el._id),
-        projectCategories: projectById.categories,
+        // projectCategories: projectById.categories,
         selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
       });
 
@@ -256,10 +256,6 @@ export default function AddProject(props) {
             } else {
                 setToasterMessage('Success');
                 navigate('/project/all')
-
-                // setShowToaster(true);
-                // setProjectFormValue(projectFormFields)
-                // setValidated(false)
             }
         } catch (error) {
             setToasterMessage(error?.message || 'Something Went Wrong');
@@ -268,35 +264,30 @@ export default function AddProject(props) {
             return error.message;
         }
     }
-    const addProjectCategory = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            console.log()
-            projectFormValue.projectCategories.push(newCategory)
-            let projectCategories = new Set(projectFormValue.projectCategories)
-            setNewCategory('')
-            setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
-        }
-    }
-    const addProjectCategoryOnButtonClick = () => {
-        if (!newCategory) {
-            return
-        }
-        projectFormValue.projectCategories.push(newCategory)
-        let projectCategories = new Set(projectFormValue.projectCategories)
-        setNewCategory('')
-        setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
-    }
-    const removeProjectCategory = (category) => {
-        setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
-    }
+    // const addProjectCategory = (event) => {
+    //     if (event.key === 'Enter') {
+    //         event.preventDefault();
+    //         console.log()
+    //         projectFormValue.projectCategories.push(newCategory)
+    //         let projectCategories = new Set(projectFormValue.projectCategories)
+    //         setNewCategory('')
+    //         setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
+    //     }
+    // }
+    // const addProjectCategoryOnButtonClick = () => {
+    //     if (!newCategory) {
+    //         return
+    //     }
+    //     projectFormValue.projectCategories.push(newCategory)
+    //     let projectCategories = new Set(projectFormValue.projectCategories)
+    //     setNewCategory('')
+    //     setProjectFormValue({ ...projectFormValue, projectCategories: [...projectCategories] })
+    // }
+    // const removeProjectCategory = (category) => {
+    //     setProjectFormValue({ ...projectFormValue, projectCategories: projectFormValue.projectCategories.filter(el => el !== category) })
+    // }
 
   const onAssignManagerChange = (users) => {
-    // setManagedByValue(...managedby, ...users);
-    //   setTimeout(() => {
-    //      console.log(managedby, users, "--------------------managed by");
-
-    //   }, 1000);
     setManagedByValue(users);
       
     setProjectFormValue({ ...projectFormValue, selectedManagers: users.map(el => el._id) })
@@ -407,7 +398,7 @@ export default function AddProject(props) {
               />
             </Form.Group>
           </Row>
-          <Row className="mb-3">
+          {/* <Row className="mb-3">
             <Form.Group as={Col} md="5">
               <Form.Label>Add Category</Form.Label>
               <Form.Control
@@ -457,7 +448,7 @@ export default function AddProject(props) {
                 value={projectFormValue.shortDescription}
               />
             </Form.Group>
-          </Row>
+          </Row> */}
 
           <Row className="mb-3">
             <Form.Group as={Col}>
@@ -475,16 +466,7 @@ export default function AddProject(props) {
           </Row>
 
           <div>
-            {/* <Button className="btn-gradient-border btnDanger"
-                type="button"
-                onClick={submitProjectForm}
-            >Submit</Button> */}
-						{/* <button onClick={submitProjectForm} className="btn-51">
-							Submit
-						</button> */}
-						<UpdateAndCancel />
-
-						
+			<UpdateAndCancel />
 					</div>
 				</Form>
 				{toaster && (

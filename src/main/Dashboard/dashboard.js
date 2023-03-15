@@ -23,6 +23,7 @@ import Avatar from "react-avatar";
 import { useNavigate } from 'react-router-dom';
 import AddTaskModal from "../Tasks/AddTaskModal";
 import AddRatingModal from "../Rating/add-rating-modal";
+import UserForm from "../edit-profile";
 var month = moment().month();
 let currentYear = moment().year();
 
@@ -39,7 +40,7 @@ export default function Dashboard(props) {
   const [selectedTask, setSelectedTask] = useState({});
   const [pendingRatingList, setPendingRatingList]=useState();
   const [selectedRating, setSelectedRating] = useState({});
-
+  const [showAllProjects, setShowAllProjects] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
 
@@ -57,6 +58,10 @@ export default function Dashboard(props) {
     getUsersList();
   }
 
+  const handleToRedirectTask =() => {
+	navigate('/task');
+	  }
+
 
   const handleShowAllProjects = () => {
     navigate('/project/all');
@@ -67,25 +72,6 @@ export default function Dashboard(props) {
 	setSelectedRating(project);
 	setModalShow(true);
 	  };
-
-//   const onchangeMonth = (e) => {
-//     setMonth(e.target.value);
-//     let dataToSend = {
-//       month: months.indexOf(e.target.value) + 1,
-//       year: yearUse,
-//     };
-//     let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
-//     setDays(monthDays.getDate());
-//     getAllRatings(dataToSend);
-//   };
-//   const onChangeYear = (e) => {
-//     setYear(e.target.value);
-//     let dataToSend = {
-//       month: months.indexOf(monthUse) + 1,
-//       year: e.target.value,
-//     };
-//     getAllRatings(dataToSend);
-//   };
 
   let months = moment().year(Number)?._locale?._months;
   let years = [2022, 2023, 2024, 2025];
@@ -167,7 +153,7 @@ export default function Dashboard(props) {
 			}
 		})
        setPendingRatingList(allTask);
-	   console.log('pendingRatingList',pendingRatingList)
+	//    console.log('pendingRatingList',pendingRatingList)
 	   
       }
     } catch (error) {
@@ -218,7 +204,7 @@ const openAddtask=(project)=>{
       <div className="my-3 d-flex justify-content-center flex-column">
       
         
-        {<MyCalendar />}
+        {/* {<MyCalendar />} */}
       </div>
       <Container>
         <Row>
@@ -259,9 +245,9 @@ const openAddtask=(project)=>{
         </Row>
 
         <Row className="row-bg">
-          {projectList.slice(0, 4).map((project) => (
+		{projectList.slice(0, showAllProjects ? projectList.length : 2).map((project) => (
             <Col lg={6}>
-              <Card id={`card-${project.id}`} key={project?.id}>
+              <Card onClick={handleToRedirectTask}  id={`card-${project.id}`} key={project?.id}>
                 <Row className="d-flex justify-content-start">
                   <Col lg={6} className="middle">
                     <Avatar name={project.name} size={40} round="20px" />{" "}
@@ -300,6 +286,9 @@ const openAddtask=(project)=>{
             closeModal={closeModal}
           />
         </Row>
+	<button onClick={() => setShowAllProjects(!showAllProjects)}>
+      {showAllProjects ? "Minimize" : "Maximize"}
+    </button>
 
         <Row className="mt-3">
           <Col lg={6} style={{ paddingLeft: "0px" }}>
@@ -506,15 +495,12 @@ const openAddtask=(project)=>{
           <Modal.Body>
             <AddRatingModal
 				selectedRating = {selectedRating}
-
-			
 			 />
           </Modal.Body>
           {/* <Button variant="secondary" onClick={() => setModalShow(false)}>
             Close
           </Button> */}
         </Modal>
-
 
       {loading ? <Loader /> : null}
       {toaster && (

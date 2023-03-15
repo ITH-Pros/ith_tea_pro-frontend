@@ -6,8 +6,12 @@ import { loginUser } from '../services/auth/api'
 // import Particles from '../components/particals';
 import './login.css'
 import { useAuth } from './AuthProvider';
+import { Button, Modal } from 'react-bootstrap';
+import UserForm from '../main/edit-profile';
 export default function Login() {
   const { login, accessToken } = useAuth();
+
+  const [profileModalShow, setProfileModalShow] = useState(false);
 
   const [loginFormValue, setLoginFormValue] = useState({
     email: '',
@@ -49,6 +53,12 @@ export default function Login() {
         // });
         // setRatings(userLogin.data);
         login(userLogin.data);
+
+		if(userLogin?.data.profileCompleted == false) {
+			setProfileModalShow(true);
+		}
+
+
       }
     } catch (error) {
       // setLoading(false);
@@ -98,7 +108,22 @@ export default function Login() {
           </div>
       }
 
-    </>
+    <Modal className='profile-modal'
+		  show={profileModalShow}
+		  onHide={() => setProfileModalShow(false)}
+		  animation={false}
+	  >
+			  <Modal.Header closeButton>
+				  <Modal.Title>Profile Details</Modal.Title>
+			  </Modal.Header>
+			  <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }} >
+				  <UserForm />
+			  </Modal.Body>
+			  <Button className='skip-button' variant="secondary" onClick={() => setProfileModalShow(false)}>
+				  Skip
+			  </Button>
+			  
+		  </Modal></>
 
 
   )

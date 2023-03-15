@@ -158,7 +158,7 @@ const RatingBox = (props) => {
                     <div>
                         <span ><b>Rating </b>: <strong>{selectedRating}</strong> </span>
                         {/* {
-                            userDetails.role !== "USER" && <button className="btn btn-gradient-border btnshort mt-3" onClick={() => { setEditRatingEnabled(true) }}><i className='fa fa-edit'></i> </button>
+                            userDetails.role !== "CONTRIBUTOR" && <button className="btn btn-gradient-border btnshort mt-3" onClick={() => { setEditRatingEnabled(true) }}><i className='fa fa-edit'></i> </button>
                         } */}
                     </div>
             )

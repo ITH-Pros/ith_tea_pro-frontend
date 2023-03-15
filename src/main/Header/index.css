@@ -1,0 +1,16 @@
+.user-icon{
+	margin-right: 30px;
+}
+
+.profile-modal{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	/* scroll */
+	overflow-y: scroll;
+}
+
+.skip-button{
+	margin-left: 10px;
+}

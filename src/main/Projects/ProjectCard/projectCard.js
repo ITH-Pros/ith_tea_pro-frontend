@@ -10,7 +10,7 @@ import { useState } from "react";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
 import { useAuth } from "../../../auth/AuthProvider";
-import {Modal, Row, Col} from "react-bootstrap";
+import { Modal, Row, Col } from "react-bootstrap";
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,10 +40,11 @@ const ProjectCard = ({
   handleCategories,
   categroies,
   taskData,
+  handleToRedirectTask,
 }) => {
   const generateRandomColor = () => {
-    console.log(accessibleBy)
-    console.log(element)
+    console.log(accessibleBy);
+    console.log(element);
     const colors = [
       "#F94144",
       "#F3722C",
@@ -58,22 +59,21 @@ const ProjectCard = ({
   };
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
-  const [modalTitle, SetModalTitle] = useState('');
-    
-       const [showMenuList, setShowMenuList] = useState(false);
+  const [modalTitle, SetModalTitle] = useState("");
 
-       const handleMenuIconClick = () => {
-         setShowMenuList(!showMenuList);
-       };
+  const [showMenuList, setShowMenuList] = useState(false);
+
+  const handleMenuIconClick = () => {
+    setShowMenuList(!showMenuList);
+  };
   const { userDetails } = useAuth();
-  
+
   const onClickOfIcons = (user, type) => {
     console.log(user, "---------------------suer");
     setUsers(user);
     SetModalTitle(type);
     setModalShow(true);
   };
- 
 
   return (
     <div
@@ -133,12 +133,13 @@ const ProjectCard = ({
           </button>
         )}
       </div>
-      <div className="project-details">
+      <div   onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
         <p>{description}</p>
       </div>
       <div className="project-stats">
-        <div onClick={()=>handleCategories()} className="stat">
+        <div  className="stat">
+		{/* onClick={() => handleCategories()} */}
           <FontAwesomeIcon icon={faFlag} />
           <span>{categroies}</span>
         </div>
@@ -157,7 +158,7 @@ const ProjectCard = ({
       </div>
 
       <div>
-        <div className=" pull-left w-50 text-center">
+        {/* <div className=" pull-left w-50 text-center">
           <label className="lableName">Accessible By</label>
           <div className="user-profile-pics">
             {accessibleBy.length && (
@@ -181,13 +182,11 @@ const ProjectCard = ({
                 <UserIcon firstName={"..."} />
               </span>
             )}
-
-            {/* <FontAwesomeIcon icon={faEllipsisH} /> */}
           </div>
-        </div>
+        </div> */}
 
-        <div className=" pull-right w-50 text-center">
-          <label className="lableName">Managed By</label>
+        {/* <div className=" pull-right w-50 text-center">
+          <label className="lableName">Team</label>
           <div className="user-profile-pics">
             {managedBy.length && (
               <UserIcon
@@ -210,11 +209,32 @@ const ProjectCard = ({
                 <UserIcon firstName={"..."} />
               </span>
             )}
-
-            {/* <UserIcon firstName={profile.name} /> */}
           </div>
-        </div>
-      </div>
+        </div> */}
+
+		<div>
+  <div className="pull-left w-50 text-center">
+    <label className="lableName">Team Members</label>
+    <div className="user-profile-pics">
+      {accessibleBy.concat(managedBy).slice(0, 13).map((user, index) => (
+        <UserIcon key={index} firstName={user.name} />
+      ))}
+      {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
+        <span key={"..."}
+          onClick={() => {
+            onClickOfIcons(
+              accessibleBy.concat(managedBy),
+              "Assigned and Managed By"
+            );
+          }}
+        >
+          <UserIcon firstName={"..."} />
+        </span>
+      {/* )} */}
+    </div>
+  </div>
+</div>
+    </div>
       {modalshow && (
         <Modal
           show={modalshow}
@@ -226,40 +246,39 @@ const ProjectCard = ({
           </Modal.Header>
           <Modal.Body>
             <div>
-            <Row>
-              {users.map((user, index) => {
-                return (                 
-                   <Col sm={6}>
-                   <div className="assignPopup">
-                    <UserIcon firstName={user.name} />
-                    <div className="ms-4">
-                      <p className="mb-0">{user?.name}</p>
-                      <p className="userEmail">{user?.email}</p>
-                    </div>
+              <Row>
+                {users.map((user, index) => {
+                  return (
+                    <Col key={index} sm={6}>
+                      <div className="assignPopup">
+                        <UserIcon firstName={user.name} />
+                        <div className="ms-4">
+                          <p className="mb-0">{user?.name} ({user?.role})</p>
+                          <p className="userEmail">{user?.email}</p>
+                        </div>
+                      </div>
+                    </Col>
+                  );
+                })}
+                <Col sm={6}>
+                  <div className="assignPopup">
+                    <UserIcon firstName={"+"} />
+                    <p className="ms-4 mb-0">{"Add User"}</p>
                   </div>
-                   </Col>
-                
-                );
-              })}
-             <Col sm={6}>
-             <div className="assignPopup">
-             <UserIcon firstName={"+"} />
-              <p className="ms-4 mb-0">{"Add User"}</p>
-              </div>
-             </Col>
-            </Row>
+                </Col>
+              </Row>
             </div>
           </Modal.Body>
 
-           <div className="text-right me-3">
-           <button
-            style={{ marginLeft: "16px", width: "30%" }}
-            className="btn btn-press  btn-gradient-border btn-primary"
-            onClick={() => setModalShow(false)}
-          >
-            Close
-          </button>
-           </div>
+          <div className="text-right me-3">
+            <button
+              style={{ marginLeft: "16px", width: "30%" }}
+              className="btn btn-press  btn-gradient-border btn-primary"
+              onClick={() => setModalShow(false)}
+            >
+              Close
+            </button>
+          </div>
         </Modal>
       )}
     </div>

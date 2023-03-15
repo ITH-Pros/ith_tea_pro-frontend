@@ -242,10 +242,10 @@ export default function Rating(props) {
           <i className="fa fa-database" aria-hidden="true"></i>Rating  
         </h1>
             {/* {
-                userDetails?.role !== "USER" &&
+                userDetails?.role !== "CONTRIBUTOR" &&
                 <>
                     <div className="   main-div-tab">
-                        {userDetails?.role !== "USER" && <div
+                        {userDetails?.role !== "CONTRIBUTOR" && <div
                             onClick={() => handleViewChange("Add")}
                             className={`p-3  w-50  text-center rounded margin-class ${currentView === "Add" ? "text-white bg-active" : "border-bottom "
                                 }`}
