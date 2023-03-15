@@ -323,3 +323,7 @@ button.accordion-button{
 .secondary{
 	color:  #6d757d !important;
 }
+
+.addSectionBtn{
+	margin-right: 5px;
+}

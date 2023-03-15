@@ -3,6 +3,8 @@ import { setPasswordApi, verifyTokenApi } from "../services/user/api";
 
 import {useParams , useNavigate} from "react-router-dom";
 
+import "./index.css";
+
 function PasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -54,7 +56,8 @@ function PasswordForm() {
 
 	let dataToSend = {
 		email: email,
-		password: password
+		password: password,
+		confirmPassword: confirmPassword
 	}
 	try {
 	  const response = await setPasswordApi(dataToSend);
@@ -84,15 +87,28 @@ function PasswordForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+	<div className="addUserFrom rightDashboard">
+    <form className="password-form" onSubmit={handleSubmit}>
 	<h4>Email : {email}</h4>
+	<div className="form-group">
       <label>
         Password:
         <input type="password" value={password} onChange={handleChange} />
       </label>
+	</div>
       <br />
-      <button type="submit">Submit</button>
+	  <div className="form-group">
+	  <label>
+		Confirm Password:
+		<input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
+	  </label>
+	</div>
+	<div className="d-flex justify-content-end">
+      <button variant="outline-primary"
+						className="mr-3" type="submit">Submit</button>
+	</div>
     </form>
+	</div>
   );
 }
 

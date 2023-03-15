@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import './tasks.css';
-import {  getProjectsTask } from "../../services/user/api";
+import {  addSectionApi, getAllProjects, getProjectsTask } from "../../services/user/api";
 import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
 import TaskModal from "./ShowTaskModal";
-import {Accordion, ProgressBar, Row, Col, Dropdown, Badge } from 'react-bootstrap'
+import {Accordion, ProgressBar, Row, Col, Dropdown, Badge, Modal, Button } from 'react-bootstrap'
 import avtar from '../../assests/img/avtar.png'
 import moment from "moment";
 
@@ -20,12 +20,77 @@ const Tasks=()=> {
   const [taskData, setTaskData] = useState({});
   const [showAddTask, setShowAddTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState({});
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedProjectId , setSelectedProjectId] = useState("");
+
+  console.log("selectedProjectId",selectedProjectId)
 
   const setShowToaster = (param) => showToaster(param);
     
   useEffect(() => {
 	getTasksDataUsingProjectId();
   }, []);
+
+
+  const [projectList, setProjectListValue] = useState([]);
+  const [ sectionName , setSectionName] = useState("");
+
+  const showAddSectionModal = () => {
+	setSectionName("");
+	setSelectedProjectId("");
+	getAndSetAllProjects();
+	setModalShow(true);
+};
+
+
+const addSection = async () => {
+	setLoading(true);
+	try {
+		let dataToSend = {
+			name: sectionName,
+			projectId: selectedProjectId
+		};
+		const res = await addSectionApi(dataToSend);
+		setLoading(false);
+		if (res.error) {
+			setToasterMessage(res?.error?.message || "Something Went Wrong");
+			setShowToaster(true);
+		} else {
+			setToasterMessage("Section Added Successfully");
+			setShowToaster(true);
+			setModalShow(false);
+			// getAndSetAllProjects();
+			getTasksDataUsingProjectId();
+		}
+	} catch (error) {
+		setToasterMessage(error?.error?.message || "Something Went Wrong");
+		setShowToaster(true);
+		setLoading(false);
+		return error.message;
+	}
+};
+
+
+
+
+  const getAndSetAllProjects = async function () {
+    //setloading(true);
+    try {
+      const projects = await getAllProjects();
+      //setloading(false);
+      if (projects.error) {
+        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setProjectListValue(projects.data);
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      //setloading(false);
+      return error.message;
+    }
+  };
     
     
 
@@ -138,6 +203,14 @@ const closeModal=()=>{
 			  }}>
               Add Task
             </button>
+			<button className="addTaskBtn addSectionBtn"
+			  style={{
+				float: "right"
+			  }}  onClick={() => {
+				showAddSectionModal(true)
+			  }}>
+			  Add Section
+			</button>
             
 		<FilterModal   getTaskFilters={getTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject} selectedTask={selectedTask} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />
@@ -212,6 +285,52 @@ const closeModal=()=>{
       ))}
             
     </Accordion>
+
+	<Modal 
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div>
+			  {/* select box  */}
+			  <div>
+			  <label>Project</label>
+			  <select required className="form-control" onChange={(e) => setSelectedProjectId(e.target.value)}>
+			  <option value="">Select Project</option>
+			  {projectList.map((project) => (
+				<option value={project._id}>{project.name}</option>
+			  ))}
+			  </select>
+			  </div>
+
+{ selectedProjectId &&
+			  <div>
+			  <label>Section</label>
+			  <input required type="text" className="form-control" onChange={(e) => setSectionName(e.target.value)} />
+			  </div>
+}
+
+		   	</div>
+          </Modal.Body>
+		  {selectedProjectId && sectionName &&
+          <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => addSection()}>
+            Add section
+          </Button>
+		  }
+
+          <Button style={{marginLeft:"16px"}} className="btn mr-3"  onClick={() => setModalShow(false)}>
+            Cancel
+          </Button>
+        </Modal>
+
+
+
+
+
     {/* <div className="accordion">
       {projects.map((project) => (
         <div className="accordion-item" key={project._id}>

@@ -26,6 +26,7 @@ import {
   faBarChart,
   faIcons,
 } from "@fortawesome/free-solid-svg-icons";
+import { assignTeamAPI, getUnassignedUsers } from "../../../services/user/api";
 // import "./ProjectCard.css";
 
 const ProjectCard = ({
@@ -41,6 +42,7 @@ const ProjectCard = ({
   categroies,
   taskData,
   handleToRedirectTask,
+  getAndSetAllProjects
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy);
@@ -62,6 +64,78 @@ const ProjectCard = ({
   const [modalTitle, SetModalTitle] = useState("");
 
   const [showMenuList, setShowMenuList] = useState(false);
+
+  const [showSelectBox, setShowSelectBox] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(null);
+
+  const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
+  const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState('');
+
+  console.log(selectedUnassignedUsers)
+
+
+  const assignTeamUsers = async () => {
+	
+	let dataToSend = {
+	  projectId: element._id,
+	  userIds: [selectedUnassignedUsers]
+	};
+	try {
+	  const response = await assignTeamAPI(dataToSend);
+	  if (response.error) {
+		console.log("Error while getting user details");
+		//   setLoading(false);
+		return;
+	  } else {
+		// setListOfUnassignedUsers(response?.data);
+		console.log("user name", response?.data);
+		setModalShow(false)
+		setSelectedUnassignedUsers('')
+		setShowSelectBox(false)
+		getAndSetAllProjects()
+		setSelectedRole(null)
+		setSelectedUnassignedUsers('') ; setListOfUnassignedUsers([]) ; setSelectedRole(null)
+
+	  }
+	} catch (error) {
+	  console.log("Error while getting user details");
+	  // setLoading(false);
+	  return error.message;
+	}
+	  };
+
+  const getListOfUnassignedUsers = async (role) => {
+    let dataToSend = {
+      projectId: element._id,
+      role: role,
+    };
+    try {
+      const response = await getUnassignedUsers(dataToSend);
+      if (response.error) {
+        console.log("Error while getting user details");
+        //   setLoading(false);
+        return;
+      } else {
+        setListOfUnassignedUsers(response?.data);
+        console.log("user name", response?.data);
+      }
+    } catch (error) {
+      console.log("Error while getting user details");
+      // setLoading(false);
+      return error.message;
+    }
+  };
+
+  function assignTeamUser() {
+    setShowSelectBox(!showSelectBox);
+  }
+
+  function handleRoleChange(event) {
+    setSelectedRole(event.target.value);
+    getListOfUnassignedUsers(event.target.value);
+  }
+
+  const assignTeam = () => {};
 
   const handleMenuIconClick = () => {
     setShowMenuList(!showMenuList);
@@ -133,13 +207,13 @@ const ProjectCard = ({
           </button>
         )}
       </div>
-      <div   onClick={() => handleToRedirectTask()} className="project-details">
+      <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
         <p>{description}</p>
       </div>
       <div className="project-stats">
-        <div  className="stat">
-		{/* onClick={() => handleCategories()} */}
+        <div className="stat">
+          {/* onClick={() => handleCategories()} */}
           <FontAwesomeIcon icon={faFlag} />
           <span>{categroies}</span>
         </div>
@@ -212,33 +286,38 @@ const ProjectCard = ({
           </div>
         </div> */}
 
-		<div>
-  <div className="pull-left w-50 text-center">
-    <label className="lableName">Team Members</label>
-    <div className="user-profile-pics">
-      {accessibleBy.concat(managedBy).slice(0, 13).map((user, index) => (
-        <UserIcon key={index} firstName={user.name} />
-      ))}
-      {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
-        <span key={"..."}
-          onClick={() => {
-            onClickOfIcons(
-              accessibleBy.concat(managedBy),
-              "Assigned and Managed By"
-            );
-          }}
-        >
-          <UserIcon firstName={"..."} />
-        </span>
-      {/* )} */}
-    </div>
-  </div>
-</div>
-    </div>
+        <div>
+          <div className="pull-left w-50 text-center">
+            <label className="lableName">Team Members</label>
+            <div className="user-profile-pics">
+              {accessibleBy
+                .concat(managedBy)
+                .slice(0, 13)
+                .map((user, index) => (
+                  <UserIcon key={index} firstName={user.name} />
+                ))}
+              {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
+              <span
+                key={"..."}
+                onClick={() => {
+                  onClickOfIcons(
+                    accessibleBy.concat(managedBy),
+                    "Assigned and Managed By"
+                  );
+                }}
+              >
+                <UserIcon firstName={"..."} />
+              </span>
+              {/* )} */}
+            </div>
+          </div>
+        </div>
+      </div>
       {modalshow && (
         <Modal
           show={modalshow}
-          onHide={() => setModalShow(false)}
+          onHide={() =>{setModalShow(false);
+			setShowSelectBox(false) ;setSelectedUnassignedUsers('') ; setListOfUnassignedUsers([]) ; setSelectedRole(null)}}
           animation={false}
         >
           <Modal.Header closeButton>
@@ -253,7 +332,9 @@ const ProjectCard = ({
                       <div className="assignPopup">
                         <UserIcon firstName={user.name} />
                         <div className="ms-4">
-                          <p className="mb-0">{user?.name} ({user?.role})</p>
+                          <p className="mb-0">
+                            {user?.name} ({user?.role})
+                          </p>
                           <p className="userEmail">{user?.email}</p>
                         </div>
                       </div>
@@ -261,11 +342,48 @@ const ProjectCard = ({
                   );
                 })}
                 <Col sm={6}>
-                  <div className="assignPopup">
+                  <div onClick={assignTeamUser} className="assignPopup">
                     <UserIcon firstName={"+"} />
-                    <p className="ms-4 mb-0">{"Add User"}</p>
+                    <p className="ms-4 mb-0">{"Add Team"}</p>
                   </div>
                 </Col>
+                <div>
+                  {showSelectBox && (
+                    <><div>
+										  <select value={selectedRole} onChange={handleRoleChange}>
+											  <option value="">Select a role</option>
+											  <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+											  <option value="LEAD">LEAD</option>
+										  </select>
+										  {selectedRole === "CONTRIBUTOR" && (
+											  <select onChange={(e)=>setSelectedUnassignedUsers(e.target.value)}>
+												  <option value="">Select a CONTRIBUTOR</option>
+												  {listOfUnassignedUsers.map((user, index) => {
+													  return (
+														  <option key={index} value={user._id}>{user.name}</option>
+													  );
+												  })}
+											  </select>
+										  )}
+										  {selectedRole === "LEAD" && (
+											  <select onChange={(e)=>setSelectedUnassignedUsers(e.target.value)}>
+												  <option value="">Select a LEAD</option>
+												  {listOfUnassignedUsers.map((user, index) => {
+													  return (
+														  <option key={index} value={user._id}>{user.name}</option>
+													  );
+												  })}
+											  </select>
+										  )}
+									  </div>
+									  {selectedUnassignedUsers && <div> 
+										  <button onClick={assignTeamUsers}>Assign</button>
+									  </div>
+									  }
+									  </>
+
+                  )}
+                </div>
               </Row>
             </div>
           </Modal.Body>
@@ -274,7 +392,7 @@ const ProjectCard = ({
             <button
               style={{ marginLeft: "16px", width: "30%" }}
               className="btn btn-press  btn-gradient-border btn-primary"
-              onClick={() => setModalShow(false)}
+              onClick={() => {setModalShow(false) ;setShowSelectBox(false) ; setSelectedUnassignedUsers("") ; setListOfUnassignedUsers([]) ; setSelectedRole(null)  }}
             >
               Close
             </button>

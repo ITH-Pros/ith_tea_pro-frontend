@@ -585,6 +585,7 @@ export default function AllProject() {
                     taskData={projectTaskAnalytics?.[element._id]}
 					handleCategories = {() => handleCategorie(element)}
 					handleToRedirectTask = {() => handleToRedirectTask()}
+					getAndSetAllProjects = {() => getAndSetAllProjects()}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
