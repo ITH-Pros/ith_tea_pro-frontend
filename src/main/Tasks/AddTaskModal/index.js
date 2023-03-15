@@ -389,6 +389,7 @@ export default function AddTaskModal(props) {
                   <Form.Group as={Col} md="6">
                     <Form.Label>Project</Form.Label>
                     <Form.Control
+                    size='lg'
                       required
                       as="select"
                       type="select"
@@ -413,6 +414,7 @@ export default function AddTaskModal(props) {
                   <Form.Group as={Col} md="6">
                     <Form.Label>Category</Form.Label>
                     <Form.Control
+                     size='lg'
                       required
                       as="select"
                       type="select"
@@ -474,6 +476,7 @@ export default function AddTaskModal(props) {
                     <Form.Label>Task Title</Form.Label>
                     <Form.Control
                       required
+                      size='lg'
                       type="text"
                       placeholder="Title"
                       value={taskFormValue.title}

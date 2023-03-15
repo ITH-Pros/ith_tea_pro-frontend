@@ -18,7 +18,48 @@ import Select from 'react-select';
 import { useNavigate , useLocation, useParams, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+const customStyles = {
+  option: (provided) => ({
+    ...provided,
+ 
+    padding: 5,
+    // background: "none",
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
 
+   
+  }),
+  control: (provided) => ({
+    ...provided,
+    boxShadow: 'none',
+ 
+    maxHeight: '40px',
+    overflowY: 'auto',
+
+   
+    borderRadius: '5px',
+
+    color: '#767474',
+    minHeight: '40px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+   
+ 
+  }),
+  menu: (provided) => ({
+    ...provided,
+    fontSize: 13,
+    borderRadius: '0px 0px 10px 10px',
+    boxShadow: '10px 15px 30px rgba(0, 0, 0, 0.05)',
+    top: '32px',
+    padding: '5px',
+    zIndex: '2',
+  }),
+};
 
 export default function AddProject(props) {
 
@@ -344,6 +385,7 @@ export default function AddProject(props) {
             <Form.Group as={Col} md="6">
               <Form.Label>Assign Leads</Form.Label>
               <Select
+               styles={customStyles}
                 isMulti
                 onChange={onAssignManagerChange}
                 getOptionLabel={(options) => options["name"]}
@@ -355,6 +397,7 @@ export default function AddProject(props) {
             <Form.Group as={Col} md="6">
               <Form.Label>Assign Users</Form.Label>
               <Select
+              styles={customStyles}
                 isMulti
                 onChange={onAssignUserChange}
                 getOptionLabel={(options) => options["name"]}

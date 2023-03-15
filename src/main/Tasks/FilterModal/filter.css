@@ -68,7 +68,7 @@
     /* right: 10px; */
     width: 598px;
 }
- 
+.filterFields{ margin-bottom: 10px;}
 .filterFields{
     align-items: center;
     flex-wrap: nowrap !important;
@@ -79,7 +79,7 @@
 }
 .filterFields .form-control{ 
     font-size: 15px;
-    width: 70%;
+    width: 100%;
 }
 .filterModal .modal-body{
     height: 80vh;
