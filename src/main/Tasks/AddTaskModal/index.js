@@ -194,7 +194,6 @@ export default function AddTaskModal(props) {
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachment: selectedTask?.attachment,
-        // tasklead: selectedTask?.lead,
       });
       console.log(selectedTask?.lead, "selectedTask?.lead", leadLists);
       let leads = project[0]?.managedBy?.filter((item) =>
@@ -308,12 +307,11 @@ export default function AddTaskModal(props) {
 
   const submitTask = async () => {
     setValidated(true);
-
     if (
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.tasklead
+      !selectedLeads
     ) {
       return;
     }
@@ -341,7 +339,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      tasklead && (dataToSend["tasklead"] = tasklead);
+      selectedLeads && (dataToSend["tasklead"] = selectedLeads);
 
       const taskRes = await createTask(dataToSend);
       setLoading(false);
@@ -365,6 +363,8 @@ export default function AddTaskModal(props) {
         setSelectedLeads("");
         setShowAddTaskModal(false);
         getNewTasks(projectId);
+		showToaster(true);
+		setToasterMessage("Task Created Successfully");
       }
     } catch (error) {
       setLoading(false);
@@ -379,7 +379,9 @@ export default function AddTaskModal(props) {
     if (
       !taskFormValue.projectId ||
       !taskFormValue.section ||
-      !taskFormValue.title
+      !taskFormValue.title ||
+	  !      selectedLeads 
+
     ) {
       return;
     }
@@ -406,7 +408,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      tasklead && (dataToSend["tasklead"] = tasklead);
+      selectedLeads && (dataToSend["tasklead"] = selectedLeads);
       completedDate && (dataToSend["completedDate"] = completedDate);
 
       const taskRes = await createTask(dataToSend);
@@ -431,6 +433,8 @@ export default function AddTaskModal(props) {
         setSelectedLeads("");
         setShowAddTaskModal(true);
         getNewTasks(projectId);
+		showToaster(true);
+		setToasterMessage("Task Created Successfully");
       }
     } catch (error) {
       setLoading(false);
@@ -471,14 +475,18 @@ export default function AddTaskModal(props) {
   };
 
   const updateTask = async () => {
+
+	console.log("hello ji ")
     setValidated(true);
+	console.log(taskFormValue , "taskFormValue")
 
     if (
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.tasklead
+      !selectedLeads
     ) {
+		
       return;
     }
 
@@ -506,7 +514,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      tasklead && (dataToSend["tasklead"] = tasklead);
+      selectedLeads && (dataToSend["tasklead"] = selectedLeads);
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
 
@@ -589,7 +597,7 @@ export default function AddTaskModal(props) {
                     onChange={onchangeSelectedProject}
                     value={taskFormValue.projectId}
                     name="projectId"
-                    disabled={selectedTask}
+                    disabled={selectedTask || handleProjectId}
                   >
                     <option value="" disabled>
                       Select Project
