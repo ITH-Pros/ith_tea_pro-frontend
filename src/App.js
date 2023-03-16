@@ -159,6 +159,21 @@ function App() {
             </>
           }
         />
+		<Route
+		  path="/task/:projectId"
+		  element={
+			<>
+			  <ProtectedRoute>
+				<Navbar />
+
+				<Task />
+			  </ProtectedRoute>
+			</>
+		  }
+		/>
+		
+
+
         <Route
           path="/user"
           // exact={true}

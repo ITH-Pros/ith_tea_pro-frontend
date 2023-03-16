@@ -14,7 +14,8 @@ import {
 import Select from "react-select";
 
 const FilterModal = (props) => {
-  const { getTaskFilters } = props;
+  const { getTaskFilters , handleProjectId } = props;
+  console.log ("handleProjectId", handleProjectId)
 
   const statusList = CONSTENTS.statusListObj;
   const priorityList = CONSTENTS.priorityListObj;
@@ -26,7 +27,7 @@ const FilterModal = (props) => {
     priority: "",
     status: "",
     groupBy: "",
-    projectIds: "",
+    projectIds:  "",
   };
   const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);

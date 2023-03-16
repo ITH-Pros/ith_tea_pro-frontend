@@ -148,3 +148,11 @@ export async function assignTeamAPI(data) {
 export async function addSectionApi(data) {
 	return (axiosInstance.post('projects/v1/add/section', data).then(res => res.data));
 }
+
+
+
+export async function getProjectById(data) {
+	return (axiosInstance.get('projects/v1/specific',  {
+        params: data
+    }).then(res => res.data))
+}

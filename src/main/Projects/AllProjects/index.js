@@ -70,8 +70,14 @@ export default function AllProject() {
 	setCategoriesModalShow(true);
 	  };
 
-	  const handleToRedirectTask =() => {
-		navigate('/task');
+	  const editProject = async (project) => {
+  
+		navigate(`/project/add/${project._id}`);
+	
+	  };
+
+	  const handleToRedirectTask =(project) => {
+		navigate(`/task/${project._id}`);
 	}
 
 
@@ -467,11 +473,7 @@ export default function AllProject() {
     }
   };
 
-  const editProject = async (project) => {
-  
-    navigate(`/project/add/${project._id}`);
-
-  };
+ 
 
   const ProgressBarComp = (props) => {
     const { project } = props;
@@ -584,7 +586,7 @@ export default function AllProject() {
                     handleDelete={() => confirmation(element)}
                     taskData={projectTaskAnalytics?.[element._id]}
 					handleCategories = {() => handleCategorie(element)}
-					handleToRedirectTask = {() => handleToRedirectTask()}
+					handleToRedirectTask = {() => handleToRedirectTask(element)}
 					getAndSetAllProjects = {() => getAndSetAllProjects()}
                     //   backgroundColor="#00ADEF"
                   />

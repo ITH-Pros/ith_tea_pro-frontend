@@ -233,60 +233,6 @@ const ProjectCard = ({
       </div>
 
       <div>
-        {/* <div className=" pull-left w-50 text-center">
-          <label className="lableName">Accessible By</label>
-          <div className="user-profile-pics">
-            {accessibleBy.length && (
-              <UserIcon
-                key="accessibleBy[0]._id"
-                firstName={accessibleBy[0]?.name}
-              />
-            )}
-            {accessibleBy.length > 1 && (
-              <UserIcon
-                key="accessibleBy[1]._id"
-                firstName={accessibleBy[1]?.name}
-              />
-            )}
-            {accessibleBy.length > 2 && (
-              <span
-                onClick={() => {
-                  onClickOfIcons(accessibleBy, "Assined By");
-                }}
-              >
-                <UserIcon firstName={"..."} />
-              </span>
-            )}
-          </div>
-        </div> */}
-
-        {/* <div className=" pull-right w-50 text-center">
-          <label className="lableName">Team</label>
-          <div className="user-profile-pics">
-            {managedBy.length && (
-              <UserIcon
-                key="accessibleBy[0]._id"
-                firstName={managedBy[0]?.name}
-              />
-            )}
-            {managedBy.length > 1 && (
-              <UserIcon
-                key="accessibleBy[1]._id"
-                firstName={managedBy[1]?.name}
-              />
-            )}
-            {managedBy.length > 2 && (
-              <span
-                onClick={() => {
-                  onClickOfIcons(managedBy, "Managed By");
-                }}
-              >
-                <UserIcon firstName={"..."} />
-              </span>
-            )}
-          </div>
-        </div> */}
-
         <div>
           <div className="pull-left w-50 text-center">
             <label className="lableName">Team Members</label>
