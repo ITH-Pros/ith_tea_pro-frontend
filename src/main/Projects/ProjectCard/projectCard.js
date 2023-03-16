@@ -26,7 +26,7 @@ import {
   faBarChart,
   faIcons,
 } from "@fortawesome/free-solid-svg-icons";
-import { assignTeamAPI, getUnassignedUsers } from "../../../services/user/api";
+import { assignProjectLead, assignTeamAPI, getUnassignedUsers } from "../../../services/user/api";
 // import "./ProjectCard.css";
 
 const ProjectCard = ({
@@ -42,7 +42,7 @@ const ProjectCard = ({
   categroies,
   taskData,
   handleToRedirectTask,
-  getAndSetAllProjects
+  getAndSetAllProjects,
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy);
@@ -62,7 +62,6 @@ const ProjectCard = ({
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [modalTitle, SetModalTitle] = useState("");
-  
 
   const [showMenuList, setShowMenuList] = useState(false);
 
@@ -70,40 +69,44 @@ const ProjectCard = ({
   const [selectedRole, setSelectedRole] = useState(null);
 
   const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
-  const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState('');
+  const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState("");
 
-  console.log(selectedUnassignedUsers)
-
+  console.log(selectedUnassignedUsers);
 
   const assignTeamUsers = async () => {
-	
-	let dataToSend = {
-	  projectId: element._id,
-	  userIds: [selectedUnassignedUsers]
-	};
-	try {
-	  const response = await assignTeamAPI(dataToSend);
-	  if (response.error) {
-		console.log("Error while getting user details");
-		//   setLoading(false);
-		return;
-	  } else {
-		// setListOfUnassignedUsers(response?.data);
-		console.log("user name", response?.data);
-		setModalShow(false)
-		setSelectedUnassignedUsers('')
-		setShowSelectBox(false)
-		getAndSetAllProjects()
-		setSelectedRole(null)
-		setSelectedUnassignedUsers('') ; setListOfUnassignedUsers([]) ; setSelectedRole(null)
-
-	  }
-	} catch (error) {
-	  console.log("Error while getting user details");
-	  // setLoading(false);
-	  return error.message;
-	}
-	  };
+    let dataToSend = {
+      projectId: element._id,
+      userIds: [selectedUnassignedUsers],
+    };
+    try {
+      let response;
+      if (selectedRole == "LEAD") {
+        response = await assignProjectLead(dataToSend);
+      } else {
+        response = await assignTeamAPI(dataToSend);
+      }
+      if (response.error) {
+        console.log("Error while getting user details");
+        //   setLoading(false);
+        return;
+      } else {
+        // setListOfUnassignedUsers(response?.data);
+        console.log("user name", response?.data);
+        setModalShow(false);
+        setSelectedUnassignedUsers("");
+        setShowSelectBox(false);
+        getAndSetAllProjects();
+        setSelectedRole(null);
+        setSelectedUnassignedUsers("");
+        setListOfUnassignedUsers([]);
+        setSelectedRole(null);
+      }
+    } catch (error) {
+      console.log("Error while getting user details");
+      // setLoading(false);
+      return error.message;
+    }
+  };
 
   const getListOfUnassignedUsers = async (role) => {
     let dataToSend = {
@@ -263,8 +266,13 @@ const ProjectCard = ({
       {modalshow && (
         <Modal
           show={modalshow}
-          onHide={() =>{setModalShow(false);
-			setShowSelectBox(false) ;setSelectedUnassignedUsers('') ; setListOfUnassignedUsers([]) ; setSelectedRole(null)}}
+          onHide={() => {
+            setModalShow(false);
+            setShowSelectBox(false);
+            setSelectedUnassignedUsers("");
+            setListOfUnassignedUsers([]);
+            setSelectedRole(null);
+          }}
           animation={false}
         >
           <Modal.Header closeButton>
@@ -289,48 +297,65 @@ const ProjectCard = ({
                   );
                 })}
                 <Col sm={6}>
-				{userDetails.role !== "CONTRIBUTOR" && userDetails.role!=="LEAD" &&( 
-                  <div onClick={assignTeamUser} className="assignPopup">
-                    <UserIcon firstName={"+"} />
-                    <p className="ms-4 mb-0">{"Add Team"}</p>
-                  </div>
-	  )}
+                  {userDetails.role !== "CONTRIBUTOR" &&
+                    userDetails.role !== "LEAD" && (
+                      <div onClick={assignTeamUser} className="assignPopup">
+                        <UserIcon firstName={"+"} />
+                        <p className="ms-4 mb-0">{"Add Team"}</p>
+                      </div>
+                    )}
                 </Col>
                 <div>
                   {showSelectBox && (
-                    <><div>
-										  <select value={selectedRole} onChange={handleRoleChange}>
-											  <option value="">Select a role</option>
-											  <option value="CONTRIBUTOR">CONTRIBUTOR</option>
-											  <option value="LEAD">LEAD</option>
-										  </select>
-										  {selectedRole === "CONTRIBUTOR" && (
-											  <select onChange={(e)=>setSelectedUnassignedUsers(e.target.value)}>
-												  <option value="">Select a CONTRIBUTOR</option>
-												  {listOfUnassignedUsers.map((user, index) => {
-													  return (
-														  <option key={index} value={user._id}>{user.name}</option>
-													  );
-												  })}
-											  </select>
-										  )}
-										  {selectedRole === "LEAD" && (
-											  <select onChange={(e)=>setSelectedUnassignedUsers(e.target.value)}>
-												  <option value="">Select a LEAD</option>
-												  {listOfUnassignedUsers.map((user, index) => {
-													  return (
-														  <option key={index} value={user._id}>{user.name}</option>
-													  );
-												  })}
-											  </select>
-										  )}
-									  </div>
-									  {selectedUnassignedUsers && <div> 
-										  <button onClick={assignTeamUsers}>Assign</button>
-									  </div>
-									  }
-									  </>
-
+                    <>
+                      <div>
+                        <select
+                          value={selectedRole}
+                          onChange={handleRoleChange}
+                        >
+                          <option value="">Select a role</option>
+                          <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+                          <option value="LEAD">LEAD</option>
+                        </select>
+                        {selectedRole === "CONTRIBUTOR" && (
+                          <select
+                            onChange={(e) =>
+                              setSelectedUnassignedUsers(e.target.value)
+                            }
+                          >
+                            <option value="">Select a CONTRIBUTOR</option>
+                            {listOfUnassignedUsers.map((user, index) => {
+                              return (
+                                <option key={index} value={user._id}>
+                                  {user.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+                        {selectedRole === "LEAD" && (
+                          <select
+                            onChange={(e) =>
+                              setSelectedUnassignedUsers(e.target.value)
+                            }
+                          >
+                            <option value="">Select a LEAD</option>
+                            {listOfUnassignedUsers.map((user, index) => {
+                              return (
+                                <option key={index} value={user._id}>
+                                  {user.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+                      </div>
+                      {selectedUnassignedUsers && (
+                        <div>
+                          <button onClick={assignTeamUsers}>Assign</button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </Row>
@@ -341,7 +366,13 @@ const ProjectCard = ({
             <button
               style={{ marginLeft: "16px", width: "30%" }}
               className="btn btn-press  btn-gradient-border btn-primary"
-              onClick={() => {setModalShow(false) ;setShowSelectBox(false) ; setSelectedUnassignedUsers("") ; setListOfUnassignedUsers([]) ; setSelectedRole(null)  }}
+              onClick={() => {
+                setModalShow(false);
+                setShowSelectBox(false);
+                setSelectedUnassignedUsers("");
+                setListOfUnassignedUsers([]);
+                setSelectedRole(null);
+              }}
             >
               Close
             </button>

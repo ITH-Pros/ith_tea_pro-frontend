@@ -60,7 +60,7 @@ export default function AddTaskModal(props) {
     status: statusList[0],
     attachment: "",
     tasklead: "",
-  }
+  };
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
 
   console.log(taskFormValue, "taskFormValue");
@@ -78,29 +78,36 @@ export default function AddTaskModal(props) {
 
   // ////////////////////////////
 
-//   const getProjectListById = async () => {
-//     setLoading(true);
-//     let dataToSend = {
-//       projectId: handleProjectId,
-//     };
-//     try {
-//       const response = await getProjectById(dataToSend);
-//       console.log(response, "response");
-//       if (response?.error) {
-//         setToasterMessage(response?.error);
-//         setShowToaster(true);
-//         setLoading(false);
-//       } else {
-//         console.log(response, "response");
+  //   const getProjectListById = async () => {
+  //     setLoading(true);
+  //     let dataToSend = {
+  //       projectId: handleProjectId,
+  //     };
+  //     try {
+  //       const response = await getProjectById(dataToSend);
+  //       console.log(response, "response");
+  //       if (response?.error) {
+  //         setToasterMessage(response?.error);
+  //         setShowToaster(true);
+  //         setLoading(false);
+  //       } else {
+  //         console.log(response, "response");
 
-//         setLoading(false);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       setLoading(false);
-//     }
-//   };
+  //         setLoading(false);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //       setLoading(false);
+  //     }
+  //   };
   // const response = await getAllProjects(dataToSend);
+
+  useEffect(() => {
+    if (showAddTask) {
+      setShowAddTaskModal(true);
+      patchFormForAdd();
+    }
+  }, [showAddTask]);
 
   useEffect(() => {
     if (showAddTask) {
@@ -117,6 +124,7 @@ export default function AddTaskModal(props) {
       console.log(project, projectList, selectedProjectFromTask);
       setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
+      setSelectedLeads(project[0]?.managedBy);
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
@@ -128,17 +136,25 @@ export default function AddTaskModal(props) {
         (item) => item?._id == selectedTask?.projectId
       );
       console.log(selectedTask, project);
+      setLeadList(project[0]?.managedBy);
 
       setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
-      let leads = [];
-      if (selectedTask?.lead?.length) {
-        leads = leadLists?.filter((item) =>
-          selectedTask?.lead?.includes(item?._id)
-        );
-      }
-      setSelectedLeads(leads);
-	//   setTaskFormValue()
+
+      //   let leads = [];
+      console.log(
+        selectedTask?.lead,
+        project[0]?.managedBy,
+        "selectedTask?.lead"
+      );
+      //   if (selectedTask?.lead?.length) {
+
+      //     leads = leadLists?.filter((item) =>
+      //       selectedTask?.lead?.includes(item?._id)
+      //     );
+      //   }
+
+      //   setTaskFormValue()
       let dueDateData = new Date(selectedTask?.dueDate);
       let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
@@ -178,26 +194,27 @@ export default function AddTaskModal(props) {
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachment: selectedTask?.attachment,
-        tasklead: selectedTask?.lead,
+        // tasklead: selectedTask?.lead,
       });
-    } else if (handleProjectId) {
-      
-	  let project = projectList?.find(
-        (item) => item?._id == handleProjectId
+      console.log(selectedTask?.lead, "selectedTask?.lead", leadLists);
+      let leads = project[0]?.managedBy?.filter((item) =>
+        selectedTask?.lead?.includes(item?._id)
       );
-	  console.log("MAI AAAYA HU IDHAR", project);
-	  setLeadList(project?.managedBy)
-	  setCategoryList(project?.sections);
+      console.log(leads, "leads");
+      setSelectedLeads(leads || []);
+    } else if (handleProjectId) {
+      let project = projectList?.find((item) => item?._id == handleProjectId);
+      console.log("MAI AAAYA HU IDHAR", project);
+      setLeadList(project?.managedBy);
+      setCategoryList(project?.sections);
       setUserList(project?.accessibleBy);
 
-	  setTaskFormValue({
+      setTaskFormValue({
         ...taskFormValue,
         projectId: handleProjectId,
         assignedTo: userDetails?.id,
-        section: selectedProjectFromTask?.section || project?.sections?.[0],
-
+        section: project?.sections?.[0],
       });
-	  
     } else if (userDetails.role == "CONTRIBUTOR") {
       setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id });
     } else {
@@ -252,9 +269,9 @@ export default function AddTaskModal(props) {
     let project = projectList.find((el) => el._id === e.target.value);
     setTaskFormValue({
       ...taskFormFields,
-      projectId: project._id
+      projectId: project._id,
     });
-	setSelectedLeads('')
+    setSelectedLeads("");
     setCategoryList(project?.sections);
     setUserList(project?.accessibleBy);
     setLeadList(project?.managedBy);
@@ -551,7 +568,12 @@ export default function AddTaskModal(props) {
         backdrop="static"
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Add Task</Modal.Title>
+          
+            <Modal.Title id="contained-modal-title-vcenter">
+              {" "}
+			  {selectedTask ? "Edit Task" : "Add Task"}
+            </Modal.Title>
+          
         </Modal.Header>
         <Modal.Body>
           <div className="dv-50">
@@ -567,6 +589,7 @@ export default function AddTaskModal(props) {
                     onChange={onchangeSelectedProject}
                     value={taskFormValue.projectId}
                     name="projectId"
+                    disabled={selectedTask}
                   >
                     <option value="" disabled>
                       Select Project

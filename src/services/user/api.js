@@ -145,6 +145,10 @@ export async function assignTeamAPI(data) {
 	return (axiosInstance.patch('projects/v1/assign/users', data).then(res => res.data));
 }
 
+export async function assignProjectLead(data) {
+	return (axiosInstance.patch('projects/v1/assign/leads', data).then(res => res.data));
+}
+
 export async function addSectionApi(data) {
 	return (axiosInstance.post('projects/v1/add/section', data).then(res => res.data));
 }

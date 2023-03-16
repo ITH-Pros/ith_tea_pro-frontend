@@ -325,7 +325,7 @@ const Tasks = () => {
             </div>
             <Accordion.Body>
               <ul className="mb-0">
-                {project?.tasks[0]?.map((task) => (
+                {project?.tasks?.map((task) => (
                   <li key={task?._id}>
 				
 
