@@ -8,10 +8,14 @@ import './login.css'
 import { useAuth } from './AuthProvider';
 import { Button, Modal } from 'react-bootstrap';
 import UserForm from '../main/edit-profile';
+import Toaster from '../components/Toaster';
+
+
 export default function Login() {
   const { login, accessToken } = useAuth();
 
-  const [profileModalShow, setProfileModalShow] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
 
   const [loginFormValue, setLoginFormValue] = useState({
     email: '',
@@ -32,6 +36,8 @@ export default function Login() {
 
 
 
+
+
   const handleLogin = async (event) => {
     event.preventDefault();
     if (!loginFormValue.email || !loginFormValue.password) {
@@ -46,6 +52,13 @@ export default function Login() {
         //   position: toast.POSITION.TOP_CENTER,
         //   className: "toast-message",
         // });
+		console.log("userLogin", userLogin.message)
+
+
+		showToaster(true)
+		setToasterMessage(userLogin.message)
+
+
       } else {
         // toast.success("Submitted succesfully !", {
         //   position: toast.POSITION.TOP_CENTER,
@@ -53,14 +66,23 @@ export default function Login() {
         // });
         // setRatings(userLogin.data);
         login(userLogin.data);
+		// console.log("userLogin", userLogin?.data)
+		
+		localStorage.setItem('profileCompleted',userLogin?.data.user.profileCompleted)
 
-		if(userLogin?.data.profileCompleted == false) {
-			setProfileModalShow(true);
-		}
+		console.log("userLogin", userLogin?.data.user.profileCompleted)
+
+		// if(userLogin?.data.profileCompleted == false) {
+		// 	setProfileModalShow(true);
+		// }
 
 
       }
     } catch (error) {
+
+		console.log("error", error.message)
+		showToaster(true)
+		setToasterMessage(error.message)
       // setLoading(false);
     }
 
@@ -108,22 +130,16 @@ export default function Login() {
           </div>
       }
 
-    <Modal className='profile-modal'
-		  show={profileModalShow}
-		  onHide={() => setProfileModalShow(false)}
-		  animation={false}
-	  >
-			  <Modal.Header closeButton>
-				  <Modal.Title>Profile Details</Modal.Title>
-			  </Modal.Header>
-			  <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }} >
-				  <UserForm />
-			  </Modal.Body>
-			  <Button className='skip-button' variant="secondary" onClick={() => setProfileModalShow(false)}>
-				  Skip
-			  </Button>
-			  
-		  </Modal></>
+	  {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+      )}
+
+
+ </>
 
 
   )

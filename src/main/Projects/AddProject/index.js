@@ -65,7 +65,7 @@ export default function AddProject(props) {
 
     // const { userDetails } = useAuth()
     const navigate = useNavigate();
-
+	const [showErrorForLead, setShowErrorForLead] = useState(false);
 
 
     const [validated, setValidated] = useState(false);
@@ -235,18 +235,21 @@ export default function AddProject(props) {
         });
     }
     const submitProjectForm = async (e) => {
-        e.preventDefault();
+		e.preventDefault();    
         setLoading(true);
         setValidated(true)
+
 		if (params.projectId) {
 			handleUpdateProject(e);
 			return;
 		}
         try {
-            if (!checkAllValuesPresent()) {
+            if (!checkAllValuesPresent() && managedby.length === 0) {
                 setLoading(false);
+				setShowErrorForLead(true);
                 return
             }
+
             const userRes = await addNewProject(projectFormValue);
             setLoading(false);
             if (userRes.error) {
@@ -383,7 +386,10 @@ export default function AddProject(props) {
                 getOptionValue={(options) => options["_id"]}
                 options={leadList}
                 value={managedby}
+				required
               />
+			  {showErrorForLead && <p className="text-danger error">Lead is required !!</p>}
+			 
             </Form.Group>
             <Form.Group as={Col} md="6">
               <Form.Label>Assign Users</Form.Label>

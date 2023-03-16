@@ -328,11 +328,14 @@ export default function Teams(props) {
                     /> */}
                  
                 <div id="profileImage"> CKS</div>
-                    <strong>{user.name} ({user.role})</strong>
+                    <strong>{user.name}  ({user.role})</strong>
                   
 					<p>{user.email}</p>
-					<p>{user.employeeId} ({user.department}) </p>
-					  <p>{user.designation}</p>
+					{ user.department && <p> ({user.department}) </p> }
+					{ user.employeeId && <p>{user.employeeId} </p> } 
+					{ user.designation && <p>{user.designation}</p> }
+					{/* <p>{user.employeeId} </p> <p> ({user.department}) </p> 
+					  <p>{user.designation}</p> */}
 					  {/* <p>{user.wings}</p> */}
                 </div>
 

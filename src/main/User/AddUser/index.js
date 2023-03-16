@@ -19,7 +19,7 @@ export default function AddUser(props) {
     const setShowToaster = (param) => showToaster(param);
 	const navigate = useNavigate();
     const rolesList = CONSTENTS.ROLES
-    const registerFromFields = { name: '', email: '', employeeId: '',  role: rolesList[0] }
+    const registerFromFields = { name: '', email: '',  role: rolesList[0] }
     const [registerFromValue, setRegisterFromValue] = useState(registerFromFields);
 
     const updateRegisterFormValue = (e) => {
@@ -106,8 +106,8 @@ export default function AddUser(props) {
                     </Form.Group>
                 </Row>
 
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
+                {/* <Row className="mb-3"> */}
+                    {/* <Form.Group as={Col} md="6">
                         <Form.Label>Employee ID</Form.Label>
                         <Form.Control
                             required
@@ -121,7 +121,7 @@ export default function AddUser(props) {
                             Employee ID is required !!
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                    </Form.Group>
+                    </Form.Group> */}
 
                     {/* <Form.Group as={Col} md="6" >
                         <Form.Label>Department</Form.Label>
@@ -139,7 +139,7 @@ export default function AddUser(props) {
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 
                     </Form.Group> */}
-                </Row>
+                {/* </Row> */}
                 {/* <Row className="mb-3"> */}
                     {/* <Form.Group as={Col} md="6" >
                         <Form.Label>Wing</Form.Label>

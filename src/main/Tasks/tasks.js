@@ -9,6 +9,7 @@ import TaskModal from "./ShowTaskModal";
 import {Accordion, ProgressBar, Row, Col, Dropdown, Badge, Modal, Button } from 'react-bootstrap'
 import avtar from '../../assests/img/avtar.png'
 import moment from "moment";
+import { useAuth } from "../../auth/AuthProvider";
 
 const Tasks=()=> {
   const [projects, setProjects] = useState([]);
@@ -22,6 +23,7 @@ const Tasks=()=> {
   const [selectedTask, setSelectedTask] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [selectedProjectId , setSelectedProjectId] = useState("");
+  const { userDetails } = useAuth();
 
   console.log("selectedProjectId",selectedProjectId)
 
@@ -203,6 +205,7 @@ const closeModal=()=>{
 			  }}>
               Add Task
             </button>
+			{ userDetails?.role !== "CONTRIBUTOR" &&  
 			<button className="addTaskBtn addSectionBtn"
 			  style={{
 				float: "right"
@@ -211,6 +214,7 @@ const closeModal=()=>{
 			  }}>
 			  Add Section
 			</button>
+			}
             
 		<FilterModal   getTaskFilters={getTaskFilters} />
         <AddTaskModal selectedProjectFromTask={selectedProject} selectedTask={selectedTask} getNewTasks={getNewTasks} showAddTask={showAddTask} closeModal={closeModal} />

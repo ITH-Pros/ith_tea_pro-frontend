@@ -113,3 +113,9 @@ i.fa.fa-times{
   height: 50px;
   overflow-y: auto !important;
 } */
+
+.error{
+	  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

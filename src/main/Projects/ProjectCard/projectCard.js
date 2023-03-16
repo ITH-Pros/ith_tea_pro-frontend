@@ -62,6 +62,7 @@ const ProjectCard = ({
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [modalTitle, SetModalTitle] = useState("");
+  
 
   const [showMenuList, setShowMenuList] = useState(false);
 
@@ -342,10 +343,12 @@ const ProjectCard = ({
                   );
                 })}
                 <Col sm={6}>
+				{userDetails.role !== "CONTRIBUTOR" && userDetails.role!=="LEAD" &&( 
                   <div onClick={assignTeamUser} className="assignPopup">
                     <UserIcon firstName={"+"} />
                     <p className="ms-4 mb-0">{"Add Team"}</p>
                   </div>
+	  )}
                 </Col>
                 <div>
                   {showSelectBox && (

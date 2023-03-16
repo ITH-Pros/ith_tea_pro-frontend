@@ -16,6 +16,7 @@ function UserForm() {
   const [designation, setDesignation] = useState('');
   const [department, setDepartment] = useState('');
   const [dob, setDob] = useState('');
+  console.log('dob', dob);
   const [github, setGithub] = useState('');
   const [twitter, setTwitter] = useState('');
   const [linkedin, setLinkedin] = useState('');
@@ -40,10 +41,26 @@ function UserForm() {
 	setEmployeeId(currentUser?.employeeId	|| '');
 	setDesignation(currentUser?.designation	|| '');
 	setDepartment(currentUser?.department	|| '');
-	setDob(currentUser?.dob || '');
-	setGithub(currentUser?.github	|| '');
-	setTwitter(currentUser?.twitter	|| '');
-	setLinkedin(currentUser?.linkedin	|| '');
+	setGithub(currentUser?.githubLink	|| '');
+	setTwitter(currentUser?.twitterLink	|| '');
+	setLinkedin(currentUser?.linkedInLink	|| '');
+
+	setDob(currentUser?.dob	|| '');
+
+	console.log('currentUser?.dob', currentUser?.dob ,dob , new Date(dob)?.toLocaleDateString());
+
+	// const date = new Date(currentUser?.dob);
+	// const year = date.getFullYear();
+	// const month = date.getMonth() + 1;
+	// const day = date.getDate();
+	// const formattedDate = `${year}-${month}-${day}`;
+	// console.log('formattedDate', formattedDate);
+	
+	// setDob(formattedDate);
+	
+
+
+
 	  };
 
 
@@ -88,9 +105,9 @@ function UserForm() {
 		designation: designation,
 		department: department,
 		dob: dob,
-		github: github,
-		twitter: twitter,
-		linkedin: linkedin,
+		githubLink: github,
+		twitterLink: twitter,
+		linkedInLink: linkedin,
 	}
 
 	try {
@@ -104,8 +121,8 @@ function UserForm() {
 		}
 		else {
 			setLoading(false);
-			setToasterMessage("User details updated successfully");
 			showToaster(true);
+			setToasterMessage(response.message);
 			setIsEditable(false);
 			navigate('/');
 		}
@@ -116,6 +133,16 @@ function UserForm() {
 	}
     // Do something with the form data
   };
+
+  function formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
 
   return (
 	<div className="addUserFrom rightDashboard" > 
@@ -186,7 +213,8 @@ function UserForm() {
         <input
           type="date"
           id="dob"
-          value={dob}
+          value={formatDate(dob)}
+		  max={formatDate(new Date())}
           onChange={(event) => setDob(event.target.value)}
 		  readOnly={!isEditable}
         />
@@ -221,11 +249,18 @@ function UserForm() {
 		  readOnly={!isEditable}
         />
       </div>
-      <button onClick={handleSubmit} className="submit-button">Submit
-  </button>
+	  {isEditable && (
+		<button onClick={handleSubmit} className="submit-button"> Update
+  </button>)}
+ 
 
-  <button className="submit-button edit" onClick={handleEditClick} >Edit
-  </button>
+  {/* Edit button */}
+  {!isEditable && (
+	<button className="submit-button edit" onClick={handleEditClick} >Edit
+  </button>)
+	}
+
+ 
 </form>
 
 {toaster && (

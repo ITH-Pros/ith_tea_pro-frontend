@@ -22,6 +22,7 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import Header from "./main/Header";
 import UserForm from "./main/edit-profile";
 import PasswordForm from "./setup-password";
+
 // const LazyAbout = React.lazy(() => import('./components/About'))
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
             path="/login"
             element={
               // <ProtectedRoute>
-              <Login />
+              <Login  />
               // </ProtectedRoute>
             }
           />
