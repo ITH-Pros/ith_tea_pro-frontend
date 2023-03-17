@@ -8,6 +8,7 @@ import {
   getAllPendingRating,
   getAllProjects,
   getRatings,
+  updateTaskStatusById,
 } from "../../services/user/api";
 import "./dashboard.css";
 import Col from "react-bootstrap/Col";
@@ -49,6 +50,7 @@ export default function Dashboard(props) {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [ showModalOnLogin, setShowModalOnLogin ] = useState(true);
+  const { userDetails } = useAuth();
 
 //   const { profileModalShow, setProfileModalShow } = useAuth();
 //   console.log("----",showModalOnLogin, showModalOnLogin && profileModalShow, profileModalShow);
@@ -99,14 +101,16 @@ export default function Dashboard(props) {
       setLoading(false);
 
       if (user.error) {
-        setToasterMessage(user?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
+		  
+		  setToasterMessage(user?.message || "Something Went Wrong");
+		  setShowToaster(true);
       } else {
-        setTeamOptions([...user.data]);
+        setTeamOptions([...user.data?.users]);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+		
+		setToasterMessage(error?.message || "Something Went Wrong");
+		setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -224,6 +228,49 @@ export default function Dashboard(props) {
     setSelectedProject(project);
     setShowAddTask(true);
   };
+  const [showStatusSelect, setShowStatusSelect] = useState(false);
+
+  const handleTaskItemClick = () => {
+    setShowStatusSelect(!showStatusSelect);
+  };
+
+  const handleStatusChange = (e, taskId) => {
+    const newStatus = e.target.value;
+
+    console.log("newStatus", newStatus);
+    // make API call to update task status with newStatus
+    let dataToSend = {
+      taskId: taskId,
+      status: newStatus,
+    };
+	console.log("dataToSend", dataToSend);
+
+	updateTaskStatus(dataToSend);
+  };
+
+  const updateTaskStatus = async (dataToSend) => {
+    try {
+      const res = await updateTaskStatusById(dataToSend);
+      if (res.error) {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+		// getTasksDataUsingProjectId();
+		getMyWork();
+		// if (params?.projectId) {
+		//   setSelectedProjectId(params?.projectId);
+		// }
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
+
+
 
   return (
     <div className="dashboard_camp rightDashboard">
@@ -340,7 +387,27 @@ export default function Dashboard(props) {
                   {myWorkList &&
                     myWorkList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                        <Col lg={4} className="middle">
+					  
+                    <Col onClick={handleTaskItemClick} lg={4} className="middle">
+
+
+					{(userDetails.id === task?.assignedTo || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
+
+					
+							<select className="form-select"
+                        defaultValue={task.status}
+                        onChange={(event) =>
+                          handleStatusChange(event, task?._id)
+                        }
+                      >
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="NOT_STARTED">NOT STARTED</option>
+                        <option value="ONHOLD">On Hold</option>
+                        <option value="COMPLETED">Completed</option>
+                      </select>
+					)}
+				
+						
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
@@ -393,7 +460,7 @@ export default function Dashboard(props) {
                         >
                           <small>
                             {task?.status == "NOT_STARTED" && (
-                              <Badge bg="primary">NO PROGRESS</Badge>
+                              <Badge bg="primary">NOT STARTED</Badge>
                             )}
                             {task?.status == "ONGOING" && (
                               <Badge bg="warning">ONGOING</Badge>
@@ -492,7 +559,7 @@ export default function Dashboard(props) {
                         >
                           <small>
                             {task?.status == "NOT_STARTED" && (
-                              <Badge bg="primary">NO PROGRESS</Badge>
+                              <Badge bg="primary">NOT STARTED</Badge>
                             )}
                             {task?.status == "ONGOING" && (
                               <Badge bg="warning">ONGOING</Badge>

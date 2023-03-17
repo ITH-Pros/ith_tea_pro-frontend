@@ -70,7 +70,7 @@ const Tasks = () => {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        setToasterMessage(res?.error?.message || "Something Went Wrong");
+        setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
@@ -81,7 +81,7 @@ const Tasks = () => {
 		// }
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setToasterMessage(error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
     }
@@ -387,6 +387,8 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id}>
+
+					{(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
                       <select
                         defaultValue={task.status}
                         onChange={(event) =>
@@ -394,10 +396,11 @@ const Tasks = () => {
                         }
                       >
                         <option value="ONGOING">Ongoing</option>
-                        <option value="NOT_STARTED">No Progress</option>
+                        <option value="NOT_STARTED">NOT STARTED</option>
                         <option value="ONHOLD">On Hold</option>
                         <option value="COMPLETED">Completed</option>
                       </select>
+					)}
                       {task?.status === "ONGOING" && (
                         <i
                           className="fa fa-check-circle warning"
@@ -424,7 +427,7 @@ const Tasks = () => {
                       )}{" "}
                       {task?.title}
                       {task?.status === "NOT_STARTED" && (
-                        <Badge bg="secondary">NO PROGRESS</Badge>
+                        <Badge bg="secondary">NOT STARTED</Badge>
                       )}
                       {task?.status === "ONGOING" && (
                         <Badge bg="warning">ONGOING</Badge>
