@@ -160,3 +160,7 @@ export async function getProjectById(data) {
         params: data
     }).then(res => res.data))
 }
+
+export async function updateTaskStatusById(data) {
+	return (axiosInstance.patch('task/v1/update/status', data).then(res => res.data))
+}

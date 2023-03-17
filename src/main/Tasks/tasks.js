@@ -4,6 +4,7 @@ import {
   addSectionApi,
   getAllProjects,
   getProjectsTask,
+  updateTaskStatusById,
 } from "../../services/user/api";
 import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
@@ -38,7 +39,7 @@ const Tasks = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const { userDetails } = useAuth();
-//   console.log("userDetails +++++++++++++++++++++++++++", userDetails.id);
+  //   console.log("userDetails +++++++++++++++++++++++++++", userDetails.id);
   const params = useParams();
   console.log("params", params);
   console.log("selectedProjectId", selectedProjectId);
@@ -51,10 +52,39 @@ const Tasks = () => {
     setShowStatusSelect(!showStatusSelect);
   };
 
-  const handleStatusChange = (e) => {
+  const handleStatusChange = (e, taskId) => {
     const newStatus = e.target.value;
+
+    console.log("newStatus", newStatus);
     // make API call to update task status with newStatus
-	
+    let dataToSend = {
+      taskId: taskId,
+      status: newStatus,
+    };
+	console.log("dataToSend", dataToSend);
+
+	updateTaskStatus(dataToSend);
+  };
+
+  const updateTaskStatus = async (dataToSend) => {
+    try {
+      const res = await updateTaskStatusById(dataToSend);
+      if (res.error) {
+        setToasterMessage(res?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+		getTasksDataUsingProjectId();
+		// if (params?.projectId) {
+		//   setSelectedProjectId(params?.projectId);
+		// }
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
   };
 
   useEffect(() => {
@@ -357,17 +387,17 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id}>
-                    
-                          <select
-                            defaultValue={task.status}
-                            onChange={handleStatusChange}
-                          >
-                            <option value="ONGOING">Ongoing</option>
-                            <option value="NO_PROGRESS">No Progress</option>
-                            <option value="ONHOLD">On Hold</option>
-                            <option value="COMPLETED">Completed</option>
-                          </select>
-                    
+                      <select
+                        defaultValue={task.status}
+                        onChange={(event) =>
+                          handleStatusChange(event, task?._id)
+                        }
+                      >
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="NO_PROGRESS">No Progress</option>
+                        <option value="ONHOLD">On Hold</option>
+                        <option value="COMPLETED">Completed</option>
+                      </select>
                       {task?.status === "ONGOING" && (
                         <i
                           className="fa fa-check-circle warning"
@@ -431,23 +461,21 @@ const Tasks = () => {
                           Due {moment(task?.dueDate).format("MMM DD,YYYY")}
                         </Badge>
                       )}
-                     
-                          <a
-                            style={{
-                              float: "right",
-                              color: "#8602ff",
-                              cursor: "pointer",
-                              marginRight: "10px",
-                            }}
-                            onClick={() => {
-                              setSelectedProject();
-                              setShowAddTask(true);
-                              setSelectedTask(task);
-                            }}
-                          >
-                            Edit {task?.assignedTo?.name}
-                          </a>
-                        
+                      <a
+                        style={{
+                          float: "right",
+                          color: "#8602ff",
+                          cursor: "pointer",
+                          marginRight: "10px",
+                        }}
+                        onClick={() => {
+                          setSelectedProject();
+                          setShowAddTask(true);
+                          setSelectedTask(task);
+                        }}
+                      >
+                        Edit {task?.assignedTo?.name}
+                      </a>
                     </li>
                   ))}
                 </ul>
