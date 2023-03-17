@@ -1,0 +1,186 @@
+// import { Row } from "@nextui-org/react";
+import React, { Component, useEffect } from "react";
+import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import { taskById } from "../../../services/user/api";
+import "./index.css";
+
+export default function ViewTaskModal(props) {
+  const { showViewTask, closeViewTaskModal, selectedTaskId } = props;
+
+  console.log("selectedTaskId", selectedTaskId);
+  console.log("showViewTask", showViewTask);
+  //   console.log("closeViewTaskModal", closeViewTaskModal);
+
+  const [showViewTaskModal, setShowViewTaskModal] = useState(false);
+  const [task, setTaskData] = useState({});
+
+  //   ------------------------- comment --------------------------
+  const [text, setText] = useState("");
+  const [count, setCount] = useState(250);
+
+  const handleTextChange = (e) => {
+    const newText = e.target.value;
+    setText(newText);
+    setCount(250 - newText.length);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Do something with the comment, e.g. post it to a server
+    console.log(text);
+    setText("");
+    setCount(250);
+  };
+
+  // -------------------------   Oninitial load ----------------------------
+  useEffect(() => {
+    if (selectedTaskId) {
+      getTaskDetailsById(selectedTaskId);
+    }
+  }, [selectedTaskId]);
+
+  //-------------------------- get task details by id ----------------------------
+
+  const getTaskDetailsById = async (id) => {
+    let dataToSend = {
+      taskId: id,
+    };
+    try {
+      let response = await taskById(dataToSend);
+      console.log(response);
+      if (response.status === 200) {
+        setTaskData(response?.data);
+        setShowViewTaskModal(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //   -------------------------  reset modal data ----------------------------
+  const resetModalData = () => {
+    setShowViewTaskModal(false);
+  };
+
+  return (
+    <>
+      <Modal
+        show={showViewTaskModal}
+        size="xl"
+        className="taskModalForm"
+        aria-labelledby="contained-modal-title-vcenter"
+        onHide={() => {
+          closeViewTaskModal();
+          setShowViewTaskModal(false);
+        }}
+        backdrop="static"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Task Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="dv-50">
+            <Form>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Project</Form.Label>
+                  <p>{task?.title} </p>
+                </Form.Group>
+                <Form.Group as={Col} md="6">
+                  <Form.Label>Section</Form.Label>
+                  <p>{task?.section?.name} </p>
+                </Form.Group>
+                <Form.Group as={Col} md="12">
+                  <Form.Label>Lead</Form.Label>
+                  {/* task?.lead?.map */}
+                  {task?.lead?.map((item, index) => {
+                    return <p>{item?.name} </p>;
+                  })}
+                </Form.Group>
+              </Row>
+
+              <Row className="mb-3">
+                <Form.Group as={Col} md="12">
+                  <Form.Label>Task Title</Form.Label>
+                  <p>{task?.title} </p>
+                </Form.Group>
+              </Row>
+
+              <Row className="mb-3">
+                <Form.Group className="desc" as={Col} md="12">
+                  <Form.Label>Task Description</Form.Label>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: task?.description }}
+                  ></p>
+                </Form.Group>
+              </Row>
+
+              <Row className="mb-3">
+                <Form.Group as={Col} md="3">
+                  <Form.Label>Assigned To</Form.Label>
+                  <p>{task?.assignedTo?.name} </p>
+                </Form.Group>
+                <Form.Group as={Col} md="3" className="px-0">
+                  <Form.Label>Due Date</Form.Label>
+                  <p>{task?.dueDate} </p>
+                </Form.Group>
+
+                <Form.Group as={Col} md="3">
+                  <Form.Label>Priority</Form.Label>
+                  <p>{task?.priority} </p>
+                </Form.Group>
+                <Form.Group as={Col} md="3" className="ps-0">
+                  <Form.Label>Status</Form.Label>
+                  <p>{task?.status} </p>
+                </Form.Group>
+                {task?.status === "COMPLETED" && (
+                  <Form.Group as={Col} md="4">
+                    <Form.Label>Completed Date</Form.Label>
+                    <p>{task?.completedDate} </p>
+                  </Form.Group>
+                )}
+              </Row>
+            </Form>
+            <div className="container">
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <textarea
+                    className="form-control status-box"
+                    rows="3"
+                    placeholder="Enter your comment here..."
+                    value={text}
+                    onChange={handleTextChange}
+					// value={text}
+                  ></textarea>
+                </div>
+                <div className="button-group pull-right">
+                  <p className="counter">{count}</p>
+                  <button type="submit" className="btn btn-primary">
+                    Post
+                  </button>
+                </div>
+              </form>
+              <ul className="posts"></ul>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              closeViewTaskModal();
+              setShowViewTaskModal(false);
+            }}
+            variant="secondary"
+          >
+            Close
+          </Button>
+          {/* <Button variant="primary">Save Changes</Button> */}
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}

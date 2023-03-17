@@ -25,6 +25,7 @@ import avtar from "../../assests/img/avtar.png";
 import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
 import { useParams } from "react-router-dom";
+import ViewTaskModal from "./view-task";
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -39,6 +40,25 @@ const Tasks = () => {
   const [modalShow, setModalShow] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const { userDetails } = useAuth();
+
+  const [showViewTask , setShowViewTask] = useState(false);
+  const [selectedTaskId , setSelectedTaskId] = useState("");
+
+  const handleViewDetails = (taskId) => {
+	console.log('showViewTask' , showViewTask)
+	setSelectedTaskId(taskId);
+	setShowViewTask(true);
+	console.log('showViewTask =====================' , showViewTask)
+}
+
+  const closeViewTaskModal = () => {
+	setShowViewTask(false);
+	console.log("closeViewTaskModal");
+	
+	}
+
+
+
   //   console.log("userDetails +++++++++++++++++++++++++++", userDetails.id);
   const params = useParams();
   console.log("params", params);
@@ -48,9 +68,9 @@ const Tasks = () => {
 
   const [showStatusSelect, setShowStatusSelect] = useState(false);
 
-  const handleTaskItemClick = () => {
-    setShowStatusSelect(!showStatusSelect);
-  };
+//   const handleTaskItemClick = () => {
+//     setShowStatusSelect(!showStatusSelect);
+//   };
 
   const handleStatusChange = (e, taskId) => {
     const newStatus = e.target.value;
@@ -328,12 +348,26 @@ const Tasks = () => {
           closeModal={closeModal}
           handleProjectId={selectedProjectId}
         />
+
+		<ViewTaskModal
+			showViewTask={showViewTask}
+			closeViewTaskModal={closeViewTaskModal}
+			selectedTaskId={selectedTaskId}
+		/>
+
+		
+
+
+
         <Accordion alwaysOpen="true">
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
-              <Accordion.Header>
+			{project?._id?.projectId && project?._id?.section && (
+				<Accordion.Header>
                 {project?._id?.projectId} / {project?._id?.section}
               </Accordion.Header>
+		  )}
+             
               <div className="d-flex rightTags">
                 <ProgressBar>
                   <ProgressBar
@@ -425,7 +459,8 @@ const Tasks = () => {
                           aria-hidden="true"
                         ></i>
                       )}{" "}
-                      {task?.title}
+					  <i onClick={()=>handleViewDetails(task?._id)} >{task?.title}</i>
+                      
                       {task?.status === "NOT_STARTED" && (
                         <Badge bg="secondary">NOT STARTED</Badge>
                       )}

@@ -76,32 +76,6 @@ export default function AddTaskModal(props) {
     getProjectList();
   }, []);
 
-  // ////////////////////////////
-
-  //   const getProjectListById = async () => {
-  //     setLoading(true);
-  //     let dataToSend = {
-  //       projectId: handleProjectId,
-  //     };
-  //     try {
-  //       const response = await getProjectById(dataToSend);
-  //       console.log(response, "response");
-  //       if (response?.error) {
-  //         setToasterMessage(response?.error);
-  //         setShowToaster(true);
-  //         setLoading(false);
-  //       } else {
-  //         console.log(response, "response");
-
-  //         setLoading(false);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       setLoading(false);
-  //     }
-  //   };
-  // const response = await getAllProjects(dataToSend);
-
   useEffect(() => {
     if (showAddTask) {
       setShowAddTaskModal(true);
@@ -809,6 +783,9 @@ export default function AddTaskModal(props) {
           </div>
         </Modal.Body>
       </Modal>
+
+	  
+
     </>
   );
 }

@@ -164,3 +164,10 @@ export async function getProjectById(data) {
 export async function updateTaskStatusById(data) {
 	return (axiosInstance.patch('task/v1/update/status', data).then(res => res.data))
 }
+
+export async function taskById(data) {
+	return (axiosInstance.get('/task/v1/by/taskId',  {
+        params: data
+    }).then(res => res.data))
+}
+
