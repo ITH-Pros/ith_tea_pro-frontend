@@ -351,7 +351,7 @@ export default function Dashboard(props) {
                                 aria-hidden="true"
                               ></i>
                             )}
-                            {task?.status === "NO_PROGRESS" && (
+                            {task?.status === "NOT_STARTED" && (
                               <i
                                 className="fa fa-check-circle secondary"
                                 aria-hidden="true"
@@ -392,7 +392,7 @@ export default function Dashboard(props) {
                           style={{ justifyContent: "end" }}
                         >
                           <small>
-                            {task?.status == "NO_PROGRESS" && (
+                            {task?.status == "NOT_STARTED" && (
                               <Badge bg="primary">NO PROGRESS</Badge>
                             )}
                             {task?.status == "ONGOING" && (
@@ -491,7 +491,7 @@ export default function Dashboard(props) {
                           style={{ justifyContent: "end" }}
                         >
                           <small>
-                            {task?.status == "NO_PROGRESS" && (
+                            {task?.status == "NOT_STARTED" && (
                               <Badge bg="primary">NO PROGRESS</Badge>
                             )}
                             {task?.status == "ONGOING" && (

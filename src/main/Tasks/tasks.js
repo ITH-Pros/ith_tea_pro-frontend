@@ -394,7 +394,7 @@ const Tasks = () => {
                         }
                       >
                         <option value="ONGOING">Ongoing</option>
-                        <option value="NO_PROGRESS">No Progress</option>
+                        <option value="NOT_STARTED">No Progress</option>
                         <option value="ONHOLD">On Hold</option>
                         <option value="COMPLETED">Completed</option>
                       </select>
@@ -404,7 +404,7 @@ const Tasks = () => {
                           aria-hidden="true"
                         ></i>
                       )}
-                      {task?.status === "NO_PROGRESS" && (
+                      {task?.status === "NOT_STARTED" && (
                         <i
                           className="fa fa-check-circle secondary"
                           aria-hidden="true"
@@ -423,7 +423,7 @@ const Tasks = () => {
                         ></i>
                       )}{" "}
                       {task?.title}
-                      {task?.status === "NO_PROGRESS" && (
+                      {task?.status === "NOT_STARTED" && (
                         <Badge bg="secondary">NO PROGRESS</Badge>
                       )}
                       {task?.status === "ONGOING" && (
@@ -461,7 +461,7 @@ const Tasks = () => {
                           Due {moment(task?.dueDate).format("MMM DD,YYYY")}
                         </Badge>
                       )}
-					  {userDetails.id === task?.assignedTo?._id && (
+					  {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
 						
                       <a
                         style={{
@@ -476,7 +476,7 @@ const Tasks = () => {
                           setSelectedTask(task);
                         }}
                       >
-                        Edit
+                        Edit 
                       </a>
 					  )}
 					  

@@ -8,7 +8,7 @@ exports.getIconClassForStatus = (status) => {
         case 'ONHOLD':
             className = 'fa fa-stop'
             break;
-        case 'NO_PROGRESS':
+        case 'NOT_STARTED':
             className = 'fa fa-bath'
             break;
         case "ONGOING":

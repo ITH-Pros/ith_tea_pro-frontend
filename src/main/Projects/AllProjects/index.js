@@ -525,11 +525,11 @@ export default function AllProject() {
             data-container="body"
             data-toggle="tooltip"
             title={`No Progress ${projectTaskAnalytics?.[project._id]?.[
-              "NO_PROGRESS"
+              "NOT_STARTED"
             ]?.toFixed(2)}%`}
             style={{
               width: `${projectTaskAnalytics?.[project._id]?.[
-                "NO_PROGRESS"
+                "NOT_STARTED"
               ]?.toFixed(2)}%`,
             }}
           ></div>
