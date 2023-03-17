@@ -461,6 +461,8 @@ const Tasks = () => {
                           Due {moment(task?.dueDate).format("MMM DD,YYYY")}
                         </Badge>
                       )}
+					  {userDetails.id === task?.assignedTo?._id && (
+						
                       <a
                         style={{
                           float: "right",
@@ -474,8 +476,11 @@ const Tasks = () => {
                           setSelectedTask(task);
                         }}
                       >
-                        Edit {task?.assignedTo?.name}
+                        Edit
                       </a>
+					  )}
+					  
+				  
                     </li>
                   ))}
                 </ul>

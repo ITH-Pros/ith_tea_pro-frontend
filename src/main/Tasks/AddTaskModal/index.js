@@ -514,7 +514,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads && (dataToSend["tasklead"] = selectedLeads);
+      selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
 
@@ -552,21 +552,6 @@ export default function AddTaskModal(props) {
 
   return (
     <>
-      {/* <button
-          className="addTaskBtn"
-          style={{
-            float: "right", 
-            bottom: "40px",
-            right: "40px",
-            marginTop:"10px"
-          }}
-          onClick={() => {
-			resetFormValue();
-            setShowAddTaskModal(true);
-          }}
-        >
-          Add Task
-        </button> */}
       <Modal
         show={showAddTaskModal}
         size="xl"
