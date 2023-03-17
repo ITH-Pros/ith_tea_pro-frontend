@@ -51,7 +51,7 @@ export default function MyCalendar(){
 return (
     <div className="calendars">
       <div>
-        <h1>My Ratings</h1>
+        <h2>My Ratings</h2>
         <Calendar
           events={myevents}
           localizer={localizer}
