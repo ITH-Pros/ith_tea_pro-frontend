@@ -171,3 +171,11 @@ export async function taskById(data) {
     }).then(res => res.data))
 }
 
+export async function addCommentOnTask(data) {
+	return (axiosInstance.post('task/v1/add/comment', data).then(res => res.data))
+}
+
+export async function addRatingOnTask(data) {
+	return (axiosInstance.post('task/v1/rate', data).then(res => res.data))
+}
+

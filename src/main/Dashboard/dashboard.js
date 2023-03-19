@@ -31,6 +31,7 @@ import AddTaskModal from "../Tasks/AddTaskModal";
 import AddRatingModal from "../Rating/add-rating-modal";
 import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
+import AddRating from "../Rating/add-rating";
 var month = moment().month();
 let currentYear = moment().year();
 
@@ -148,9 +149,6 @@ export default function Dashboard(props) {
         setMyWorkList(allTask);
       }
     } catch (error) {
-      //   setToasterMessage(error?.error?.message || "Something Went Wrong");
-      //   setShowToaster(true);
-      //setloading(false);
       return error.message;
     }
   };
@@ -438,7 +436,7 @@ export default function Dashboard(props) {
                             <small>
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                                {moment(task?.dueDate).format("DD/MM/YYYY")}
+                                {moment(task?.dueDate?.split("T")[0]).format("DD/MM/YYYY")}
                               </Badge>
                             </small>
                           )}
@@ -446,7 +444,7 @@ export default function Dashboard(props) {
                             <small>
                               Completed:{" "}
                               <Badge bg="success">
-                                {moment(task?.completedDate).format(
+                                {moment(task?.completedDate?.split("T")[0]).format(
                                   "DD/MM/YYYY"
                                 )}
                               </Badge>
@@ -537,7 +535,7 @@ export default function Dashboard(props) {
                             <small>
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                                {moment(task?.dueDate).format("DD/MM/YYYY")}
+                                {moment(task?.dueDate?.split("T")[0]).format("DD/MM/YYYY")}
                               </Badge>
                             </small>
                           )}
@@ -545,7 +543,7 @@ export default function Dashboard(props) {
                             <small>
                               Completed:{" "}
                               <Badge bg="success">
-                                {moment(task?.completedDate).format(
+                                {moment(task?.completedDate?.split("T")[0]).format(
                                   "DD/MM/YYYY"
                                 )}
                               </Badge>
@@ -577,14 +575,21 @@ export default function Dashboard(props) {
                           className="text-end middle px-0"
                           style={{ justifyContent: "end" }}
                         >
-                          <Button
+						<Button  variant="light"
+                            size="sm" className="addRatingBtn"><AddRating
+							taskFromDashBoard={task}
+							 /> </Button>
+
+                             
+
+                          {/* <Button
                             onClick={() => openModal(task)}
                             variant="light"
                             size="sm"
                             className="addRatingBtn"
                           >
                             Add Rating
-                          </Button>
+                          </Button> */}
                         </Col>
                       </Row>
                     ))}

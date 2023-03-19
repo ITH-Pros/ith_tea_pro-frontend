@@ -20,13 +20,18 @@ import {
   Modal,
 } from "react-bootstrap";
 import Avatar from "react-avatar";
-import { getAllUsers, getAllUserWithoutPagination, getRatings } from "../../../services/user/api";
+import {
+  getAllUsers,
+  getAllUserWithoutPagination,
+  getRatings,
+} from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import MyCalendar from "../../Dashboard/weekCalendra";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
 import AddRatingModal from "../add-rating-modal";
+import AddRating from "../add-rating";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -39,7 +44,6 @@ export default function Dashboard(props) {
 
   const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
-  const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
     onInit();
@@ -191,8 +195,10 @@ export default function Dashboard(props) {
 
           {/* <Link to="/rating" params={{ params: true }}> */}
           <div className="wrap btnWth">
+		  
             <button className="add-rating-button">
-              <span onClick={() => setModalShow(true)}>Add Rating</span>
+        <AddRating />
+              
             </button>
           </div>
           {/* </Link> */}
@@ -465,21 +471,6 @@ export default function Dashboard(props) {
       )}
 
       <div>
-        <Modal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Add Rating</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <AddRatingModal />
-          </Modal.Body>
-          {/* <Button variant="secondary" onClick={() => setModalShow(false)}>
-            Close
-          </Button> */}
-        </Modal>
       </div>
     </div>
   );

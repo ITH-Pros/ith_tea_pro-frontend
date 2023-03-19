@@ -2,10 +2,16 @@
 import React, { Component, useEffect } from "react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import { taskById } from "../../../services/user/api";
+import {
+  addComment,
+  addCommentOnTask,
+  taskById,
+} from "../../../services/user/api";
+import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
 
 export default function ViewTaskModal(props) {
@@ -28,12 +34,49 @@ export default function ViewTaskModal(props) {
     setCount(250 - newText.length);
   };
 
+//   format date function
+
+function formatDate(dateString) {
+	const date = new Date(dateString);
+	const day = date.getUTCDate().toString().padStart(2, '0');
+	const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+	const year = date.getUTCFullYear();
+	return `${day}/${month}/${year}`;
+  }
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Do something with the comment, e.g. post it to a server
     console.log(text);
     setText("");
     setCount(250);
+
+    //   ------------------------- comment --------------------------
+    addcomment();
+  };
+
+  const addcomment = async () => {
+    let dataToSend = {
+      taskId: selectedTaskId,
+      comment: text,
+    };
+    try {
+      let response = await addCommentOnTask(dataToSend);
+      console.log(response);
+      if (response.error) {
+        // showToaster(true)
+        // setToasterMessage(response.message)
+      } else {
+        // showToaster(true)
+        // setToasterMessage(response.message)
+        if (selectedTaskId) {
+          getTaskDetailsById(selectedTaskId);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // -------------------------   Oninitial load ----------------------------
@@ -98,7 +141,7 @@ export default function ViewTaskModal(props) {
                   <Form.Label>Lead</Form.Label>
                   {/* task?.lead?.map */}
                   {task?.lead?.map((item, index) => {
-                    return <p>{item?.name} </p>;
+                    return <p key={index} >{item?.name} </p>;
                   })}
                 </Form.Group>
               </Row>
@@ -126,7 +169,7 @@ export default function ViewTaskModal(props) {
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
-                  <p>{task?.dueDate} </p>
+                  <p>{formatDate(task?.dueDate)} </p>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
@@ -145,16 +188,49 @@ export default function ViewTaskModal(props) {
                 )}
               </Row>
             </Form>
+
+            <div className="comment-section">
+              <h3>Comments</h3>
+              <div className="container">
+                {/* show comments  */}
+                {task?.comments?.map((item, index) => {
+                  const options = {
+                    timeZone: "Asia/Kolkata",
+                    dateStyle: "medium",
+                    timeStyle: "medium",
+                  };
+                  const createdAt = new Date(item?.createdAt).toLocaleString(
+                    "en-US",
+                    options
+                  );
+
+                  return (
+                    <div className="comment" key={index} >
+					  {/* commentedBy */}
+					  <div className="commentedBy">
+					  <UserIcon key={index} firstName={item?.commentedBy?.name} /> {item?.commentedBy?.name}
+					  </div>
+                      <div className="commentText">
+                        <p className="comment">{item?.comment}</p>{" "}
+                        <span className="date sub-text">{createdAt}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="container">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <textarea
                     className="form-control status-box"
                     rows="3"
+                    maxLength={250}
                     placeholder="Enter your comment here..."
                     value={text}
                     onChange={handleTextChange}
-					// value={text}
+                    // value={text}
                   ></textarea>
                 </div>
                 <div className="button-group pull-right">

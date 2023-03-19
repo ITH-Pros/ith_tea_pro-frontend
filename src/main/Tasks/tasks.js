@@ -470,7 +470,7 @@ const Tasks = () => {
                       {task?.status === "COMPLETED" && (
                         <Badge bg="success">
                           completed{" "}
-                          {moment(task?.completedDate).format("MMM DD,YYYY")}
+                          {moment((task?.completedDate?.split("T")[0])).format("MMM DD,YYYY")}
                         </Badge>
                       )}
                       {task?.status === "ONHOLD" && (
@@ -496,7 +496,7 @@ const Tasks = () => {
                       </span>
                       {task?.dueDate && (
                         <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                          Due {moment(task?.dueDate).format("MMM DD,YYYY")}
+                          Due {moment(task?.dueDate?.split("T")[0]).format("MMM DD,YYYY")}
                         </Badge>
                       )}
 					  {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (

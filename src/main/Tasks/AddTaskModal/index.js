@@ -129,8 +129,8 @@ export default function AddTaskModal(props) {
       //   }
 
       //   setTaskFormValue()
-      let dueDateData = new Date(selectedTask?.dueDate);
-      let completedDateData = new Date(selectedTask?.completedDate);
+      let dueDateData = new Date(selectedTask?.dueDate.split("T")[0]);
+      let completedDateData = new Date(selectedTask?.completedDate.split("T")[0]);
       if (selectedTask?.completedDate) {
         completedDateData =
           completedDateData.getFullYear() +

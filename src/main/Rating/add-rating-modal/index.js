@@ -3,25 +3,15 @@ import React from "react";
 import { useState, useEffect } from "react";
 import "react-date-picker/dist/DatePicker.css";
 import "../rating.css";
-// import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-// import { addRating } from "../../services/user/api";
-// import Dashboard from "../Dashboard/dashboard";
-// import Loader from "../../components/Loader";
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import FroalaEditorComponent from 'react-froala-wysiwyg';
-// import { getAllUserDataForRating } from "../../services/user/api";
 import "react-toastify/dist/ReactToastify.css";
-// import { useLocation, useNavigate } from "react-router-dom";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
-// import Toaster from "../../components/Toaster";
-// import { useAuth } from "../../auth/AuthProvider";
-// import ViewRatings from "./View-Rating";
-// import Modal from "react-modal";
 import { useAuth } from "../../../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addRating, getAllAssignedProject, getAllProjects, getAllUserDataForRating, getProjectsTask, getTaskDetailsByProjectId } from "../../../services/user/api";
@@ -37,8 +27,6 @@ export default function AddRatingModal(props) {
 	// console.log(selectedRating, "pendingRating");
 
 	useEffect(() => {
-
-
 		if (selectedRating) {
 			const today = new Date();
 			let patchDateValue =
@@ -231,7 +219,7 @@ export default function AddRatingModal(props) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (!team || !date || !rating || rating > 5 || rating < 0) {
+        if (!team || !date || !rating || rating > 6 || rating < 0) {
             return;
         } else {
             let dataToSend = {
