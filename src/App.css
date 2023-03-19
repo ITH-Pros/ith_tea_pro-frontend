@@ -89,3 +89,12 @@ color: #fff !important;
   margin: 0 17px 0 2px !important;
 }
 .fr-toolbar .fr-btn-grp{ margin: 0 17px 0 2px !important;}
+.pull-right {
+  /* float: right; */
+  position: absolute;
+  right: 10px;
+  /* width: 137px; */
+  display: flex;
+}
+
+ 

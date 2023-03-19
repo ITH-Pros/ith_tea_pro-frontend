@@ -305,6 +305,8 @@ th {
   background: #ced9eb;
   padding: 10px 0px;
   border-radius: 10px;
+  padding-right: 50px !important;
+  position: relative;
 }
 #card-task, #card-undefined {
   padding: 10px;
@@ -360,7 +362,11 @@ th {
 }
 .right-filter button { padding: 5px; font-size: 13px; margin-left: 20px;}
 .right-filter .dropdown-toggle::after{ display: none;}
-.list_task{ border-bottom: 1px #ccc dashed; padding: 5px 10px;}
+.list_task{     border: 1px #cccccc38 solid !important;
+  padding: 5px 10px;
+  margin: 3px 0px;
+  box-shadow: 3px 4px 1px #cccccc40;
+  border-radius: 10px;}
 .task-calendar {
   display: flex;
   flex-direction: column;
@@ -539,3 +545,16 @@ th {
       font-weight: 500;
       line-height: 18px;
       }
+
+      .expend{    background: #fff;
+        border: 0px;
+        width: 40px !important;
+        border-radius: 50%;
+        border: 1px #ccc solid;
+        position: absolute;
+        right: 12px;
+        top: 24px;
+        height: 40px;}
+
+        .form-select{ width: 100px !important; margin-right: 10px;}
+       #dropdown_action .dropdown-toggle::after{ display: none !important;}

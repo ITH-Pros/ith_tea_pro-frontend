@@ -3,6 +3,7 @@ import moment from "moment";
 import { AiFillProject } from "react-icons/ai";
 import MyCalendar from "./weekCalendra";
 import { useState, useEffect } from "react";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import {
   getAllMyWorks,
   getAllPendingRating,
@@ -32,6 +33,7 @@ import AddRatingModal from "../Rating/add-rating-modal";
 import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
+import Tooltip from "react-bootstrap/Tooltip";
 var month = moment().month();
 let currentYear = moment().year();
 
@@ -50,24 +52,25 @@ export default function Dashboard(props) {
   const [selectedRating, setSelectedRating] = useState({});
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [ showModalOnLogin, setShowModalOnLogin ] = useState(true);
+  const [showModalOnLogin, setShowModalOnLogin] = useState(true);
   const { userDetails } = useAuth();
 
-//   const { profileModalShow, setProfileModalShow } = useAuth();
-//   console.log("----",showModalOnLogin, showModalOnLogin && profileModalShow, profileModalShow);
+  //   const { profileModalShow, setProfileModalShow } = useAuth();
+  //   console.log("----",showModalOnLogin, showModalOnLogin && profileModalShow, profileModalShow);
 
   const setShowToaster = (param) => showToaster(param);
   const navigate = useNavigate();
 
   const handleProfileModalClose = () => {
-	// setShowModalOnLogin(localStorage.setItem('profileCompleted',true));
-	setShowModalOnLogin(false);
-	localStorage.removeItem('profileCompleted');
-	  };
-
+    // setShowModalOnLogin(localStorage.setItem('profileCompleted',true));
+    setShowModalOnLogin(false);
+    localStorage.removeItem("profileCompleted");
+  };
 
   useEffect(() => {
-	setShowModalOnLogin(localStorage.getItem('profileCompleted') == 'false' ? true : false);
+    setShowModalOnLogin(
+      localStorage.getItem("profileCompleted") == "false" ? true : false
+    );
     onInit();
   }, []);
 
@@ -102,16 +105,14 @@ export default function Dashboard(props) {
       setLoading(false);
 
       if (user.error) {
-		  
-		  setToasterMessage(user?.message || "Something Went Wrong");
-		  setShowToaster(true);
+        setToasterMessage(user?.message || "Something Went Wrong");
+        setShowToaster(true);
       } else {
         setTeamOptions([...user.data?.users]);
       }
     } catch (error) {
-		
-		setToasterMessage(error?.message || "Something Went Wrong");
-		setShowToaster(true);
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -241,9 +242,9 @@ export default function Dashboard(props) {
       taskId: taskId,
       status: newStatus,
     };
-	console.log("dataToSend", dataToSend);
+    console.log("dataToSend", dataToSend);
 
-	updateTaskStatus(dataToSend);
+    updateTaskStatus(dataToSend);
   };
 
   const updateTaskStatus = async (dataToSend) => {
@@ -255,11 +256,11 @@ export default function Dashboard(props) {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
-		// getTasksDataUsingProjectId();
-		getMyWork();
-		// if (params?.projectId) {
-		//   setSelectedProjectId(params?.projectId);
-		// }
+        // getTasksDataUsingProjectId();
+        getMyWork();
+        // if (params?.projectId) {
+        //   setSelectedProjectId(params?.projectId);
+        // }
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -267,8 +268,6 @@ export default function Dashboard(props) {
       return error.message;
     }
   };
-
-
 
   return (
     <div className="dashboard_camp rightDashboard">
@@ -356,10 +355,17 @@ export default function Dashboard(props) {
             showAddTask={showAddTask}
             closeModal={closeModal}
           />
+          <button
+            className="expend"
+            onClick={() => setShowAllProjects(!showAllProjects)}
+          >
+            {showAllProjects ? (
+              <i className="fas fa-expand"></i>
+            ) : (
+              <i className="fas fa-expand-alt"></i>
+            )}
+          </button>
         </Row>
-        <button onClick={() => setShowAllProjects(!showAllProjects)}>
-          {showAllProjects ? "Minimize" : "Maximize"}
-        </button>
 
         <Row className="mt-3">
           <Col lg={6} style={{ paddingLeft: "0px" }}>
@@ -381,31 +387,32 @@ export default function Dashboard(props) {
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task" className="px-0">
+                <Card id="card-task" className="px-3">
                   {myWorkList &&
                     myWorkList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
-					  
-                    <Col onClick={handleTaskItemClick} lg={4} className="middle">
+                        <Col
+                          onClick={handleTaskItemClick}
+                          lg={4}
+                          className="middle"
+                        >
+                          {(userDetails.id === task?.assignedTo ||
+                            userDetails.role == "SUPER_ADMIN" ||
+                            userDetails.role == "ADMIN") && (
+                            <select
+                              className="form-select"
+                              defaultValue={task.status}
+                              onChange={(event) =>
+                                handleStatusChange(event, task?._id)
+                              }
+                            >
+                              <option value="ONGOING">Ongoing</option>
+                              <option value="NOT_STARTED">NOT STARTED</option>
+                              <option value="ONHOLD">On Hold</option>
+                              <option value="COMPLETED">Completed</option>
+                            </select>
+                          )}
 
-
-					{(userDetails.id === task?.assignedTo || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
-
-					
-							<select className="form-select"
-                        defaultValue={task.status}
-                        onChange={(event) =>
-                          handleStatusChange(event, task?._id)
-                        }
-                      >
-                        <option value="ONGOING">Ongoing</option>
-                        <option value="NOT_STARTED">NOT STARTED</option>
-                        <option value="ONHOLD">On Hold</option>
-                        <option value="COMPLETED">Completed</option>
-                      </select>
-					)}
-				
-						
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
@@ -473,8 +480,8 @@ export default function Dashboard(props) {
                         </Col>
                         <Col
                           lg={1}
+                          id="dropdown_action"
                           className="text-end middle"
-                          style={{ justifyContent: "end" }}
                         >
                           <Dropdown>
                             <Dropdown.Toggle
@@ -512,7 +519,7 @@ export default function Dashboard(props) {
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task" className="px-0">
+                <Card id="card-task" className="px-3">
                   {pendingRatingList &&
                     pendingRatingList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
@@ -620,7 +627,7 @@ export default function Dashboard(props) {
         className="profile-modal"
         show={showModalOnLogin}
         onHide={() => {
-			handleProfileModalClose();
+          handleProfileModalClose();
         }}
         animation={false}
       >
