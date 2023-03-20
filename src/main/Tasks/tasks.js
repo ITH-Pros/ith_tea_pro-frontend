@@ -45,14 +45,16 @@ const Tasks = () => {
   const [selectedTaskId , setSelectedTaskId] = useState("");
 
   const handleViewDetails = (taskId) => {
-	console.log('showViewTask' , showViewTask)
+	console.log('showViewTask-----------------------------------------------------------' , showViewTask)
 	setSelectedTaskId(taskId);
 	setShowViewTask(true);
 	console.log('showViewTask =====================' , showViewTask)
 }
 
   const closeViewTaskModal = () => {
-	setShowViewTask(false);
+    setShowViewTask(false);
+	  setSelectedTaskId(null);
+    
 	console.log("closeViewTaskModal");
 	
 	}

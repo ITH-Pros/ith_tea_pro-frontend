@@ -203,7 +203,8 @@ const FilterModal = (props) => {
           name: item,
           _id: item,
         }));
-        setCategories(categories.data);
+        console.log(categories.data,'======================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        setCategories(categories?.data);
       }
     } catch (error) {
       setLoading(false);
@@ -388,25 +389,11 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateCreated">
+                {/* <Form.Group as={Row} controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Category</Form.Label>
                     </Col>
-                    {/* <Form.Control
-                      as="select"
-                      type="select"
-                      name="category"
-                      onChange={updateFilterFormValue}
-                      value={filterFormValue.category}
-                    >
-                      <option value="">Category</option>
-                      {selectedProject?.categories?.map((category) => (
-                        <option value={category} key={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </Form.Control> */}
                     <Col sm="9">
                       <Select
                         onChange={(e) => onSelectData(e, "category")}
@@ -418,8 +405,24 @@ const FilterModal = (props) => {
                       />
                     </Col>
                   </Row>
+                </Form.Group> */}
+                <Form.Group as={Row} controlId="category">
+                  <Row className="filterFields">
+                    <Col sm="3">
+                      <Form.Label>Category</Form.Label>
+                    </Col>
+                    <Col sm="9">
+                      <Select
+                        onChange={(e) => onSelectData(e, "assignedTo")}
+                        value={categoryData}
+                        isMulti
+                        getOptionLabel={(options) => options["name"]}
+                        getOptionValue={(options) => options["_id"]}
+                        options={categories}
+                      />
+                    </Col>
+                  </Row>
                 </Form.Group>
-
                 <Form.Group as={Row} controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
