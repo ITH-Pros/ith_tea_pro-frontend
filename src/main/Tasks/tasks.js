@@ -119,11 +119,11 @@ const Tasks = () => {
   const [projectList, setProjectListValue] = useState([]);
   const [sectionName, setSectionName] = useState("");
 
-  const showAddSectionModal = () => {
+  const showAddSectionModal = (isTrue) => {
     setSectionName("");
     // setSelectedProjectId("");
     getAndSetAllProjects();
-    setModalShow(true);
+    setModalShow(isTrue);
   };
 
   const addSection = async () => {
@@ -142,11 +142,13 @@ const Tasks = () => {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
         setModalShow(false);
+		closeModal();
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
 		if (params?.projectId) {
 		  setSelectedProjectId(params?.projectId);
 		}
+		
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
