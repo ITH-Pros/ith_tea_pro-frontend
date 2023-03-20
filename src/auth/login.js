@@ -120,7 +120,7 @@ export default function Login() {
                     {/* <label>Password</label> */}
                   </div>
                   <button className='loginButton' onClick={handleLogin}>Log in</button>
-                  <div className="or">Or</div>
+                  <div className="or">Or </div>
                   <div className="icon-button">
                     <span className="facebook">Forget Password?</span>
                   </div>

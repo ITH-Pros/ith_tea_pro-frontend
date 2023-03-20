@@ -15,7 +15,8 @@
   }
   .fa-check-circle {
     color: #17b667 !important;
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
   .btn:hover {
     transition: all 0.3s ease;
