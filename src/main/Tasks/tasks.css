@@ -201,9 +201,8 @@ button.accordion-button{
 }
 
 .accordion-header {
-  padding: .5rem 1rem;
-  background-color: #f7f7f7;
-  cursor: pointer;
+    padding: 0.5rem 1rem;
+    background-color: #f7f7f7 !important;
 }
 
 .accordion-body {
