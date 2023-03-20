@@ -271,14 +271,13 @@ const FilterModal = (props) => {
                   <img
                     onClick={setProjectAndOpenModal}
                     style={{
-                      width: "18px",
-                      height: "18px",
                       marginRight: "2px",
                       cursor: "pointer",
                     }}
                     src={require("../../../assests/img/filter.png")}
                     alt="filter"
                   />
+                  
                   <span
                     onClick={setProjectAndOpenModal}
                     className="filter-task-tag"
