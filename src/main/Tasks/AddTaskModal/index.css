@@ -53,14 +53,9 @@ select {
   margin-top: 6px;
   width: 249px !important;
 }
-.taskCard {
-}
 
 .descriptionBox {
   border: 1px solid rgb(90, 56, 56);
-}
-.editDescBox {
-  /* border:1px solid rgb(177, 12, 12); */
 }
 
 .neo-box {
