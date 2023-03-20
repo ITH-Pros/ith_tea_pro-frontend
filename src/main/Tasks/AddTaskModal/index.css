@@ -15,12 +15,7 @@
 span.badge {
   font-size: 10px;
 }
-.accordion-button {
-  background-color: #eee !important;
-  border-radius: 3px;
-  font-size: 15px;
-  margin-bottom: 0;
-}
+
 .fa-check-circle {
   color: #17b667 !important;
   margin-right: 5px;
