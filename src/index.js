@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
 import { AuthProvider } from "./auth/AuthProvider";
 // import '../node_modules/font-awesome/css/font-awesome.min.css'; 
+import "react-quill/dist/quill.snow.css";
 
 
 // import 'bootstrap/dist/css/bootstrap.css';

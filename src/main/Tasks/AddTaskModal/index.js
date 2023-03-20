@@ -9,6 +9,9 @@ import Row from "react-bootstrap/Row";
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+
+
+
 import { Modal } from "react-bootstrap";
 import {
   getAllProjects,
@@ -20,7 +23,7 @@ import {
 import Toaster from "../../../components/Toaster";
 import { CONSTENTS } from "../../../constents";
 import Select from "react-select";
-
+import TextEditor from "./textEditor";
 import { getAllLeadsWithoutPagination } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 export default function AddTaskModal(props) {
@@ -540,12 +543,10 @@ export default function AddTaskModal(props) {
         backdrop="static"
       >
         <Modal.Header closeButton>
-          
-            <Modal.Title id="contained-modal-title-vcenter">
-              {" "}
-			  {selectedTask ? "Edit Task" : "Add Task"}
-            </Modal.Title>
-          
+          <Modal.Title id="contained-modal-title-vcenter">
+            {" "}
+            {selectedTask ? "Edit Task" : "Add Task"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="dv-50">
@@ -657,10 +658,16 @@ export default function AddTaskModal(props) {
               </Row>
 
               <Row className="mb-3">
-                <FroalaEditorComponent
+                {/* <FroalaEditorComponent
                   tag="textarea"
                   onModelChange={updateTaskDescriptionValue}
                   model={taskFormValue?.description}
+                /> */}
+
+                <TextEditor
+                  height={100}
+                  width="100%"
+                  placeholder="Enter Description"
                 />
               </Row>
 
@@ -788,9 +795,6 @@ export default function AddTaskModal(props) {
           </div>
         </Modal.Body>
       </Modal>
-
-	  
-
     </>
   );
 }

@@ -13,7 +13,7 @@ import {
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
-
+import CommentBox from "./comments";
 export default function ViewTaskModal(props) {
   const { showViewTask, closeViewTaskModal, selectedTaskId } = props;
 
@@ -55,6 +55,12 @@ function formatDate(dateString) {
     //   ------------------------- comment --------------------------
     addcomment();
   };
+
+    const handleDescSubmit = (comment, attachment) => {
+      console.log(`Comment: ${comment}`);
+      console.log(`Attachment: ${attachment}`);
+      // You can perform any action with the comment and attachment data here
+    };
 
   const addcomment = async () => {
     let dataToSend = {
@@ -141,7 +147,7 @@ function formatDate(dateString) {
                   <Form.Label>Lead Type</Form.Label>
                   {/* task?.lead?.map */}
                   {task?.lead?.map((item, index) => {
-                    return <p key={index} >{item?.name} </p>;
+                    return <p key={index}>{item?.name} </p>;
                   })}
                 </Form.Group>
               </Row>
@@ -205,11 +211,15 @@ function formatDate(dateString) {
                   );
 
                   return (
-                    <div className="comment" key={index} >
-					  {/* commentedBy */}
-					  <div className="commentedBy">
-					  <UserIcon key={index} firstName={item?.commentedBy?.name} /> {item?.commentedBy?.name}
-					  </div>
+                    <div className="comment" key={index}>
+                      {/* commentedBy */}
+                      <div className="commentedBy">
+                        <UserIcon
+                          key={index}
+                          firstName={item?.commentedBy?.name}
+                        />{" "}
+                        {item?.commentedBy?.name}
+                      </div>
                       <div className="commentText">
                         <p className="comment">{item?.comment}</p>{" "}
                         <span className="date sub-text">{createdAt}</span>
@@ -223,7 +233,7 @@ function formatDate(dateString) {
             <div className="container">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <textarea
+                  {/* <textarea
                     className="form-control status-box"
                     rows="3"
                     maxLength={250}
@@ -231,10 +241,11 @@ function formatDate(dateString) {
                     value={text}
                     onChange={handleTextChange}
                     // value={text}
-                  ></textarea>
+                  ></textarea> */}
+                  <CommentBox onSubmit={handleDescSubmit} />
                 </div>
                 <div className="button-group pull-right">
-                  <p className="counter">{count}</p>
+                  {/* <p className="counter">{count}</p> */}
                   <button type="submit" className="btn btn-primary">
                     Post
                   </button>
