@@ -139,11 +139,13 @@
 
 .stat span {
   margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .user-profile-pics {
   display: flex;
-  justify-content: center;
 }
 
 .user-pic {

@@ -571,7 +571,6 @@ export default function AllProject() {
               return (
                 <div
                   key={element._id}
-                  style={{ height: "300px" }}
                   className="project-box-wrapper"
                 >
                   <ProjectCard

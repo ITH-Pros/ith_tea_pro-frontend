@@ -15,12 +15,7 @@
 span.badge {
   font-size: 10px;
 }
-.accordion-button {
-  background-color: #eee !important;
-  border-radius: 3px;
-  font-size: 15px;
-  margin-bottom: 0;
-}
+
 .fa-check-circle {
   color: #17b667 !important;
   margin-right: 5px;
@@ -58,14 +53,9 @@ select {
   margin-top: 6px;
   width: 249px !important;
 }
-.taskCard {
-}
 
 .descriptionBox {
   border: 1px solid rgb(90, 56, 56);
-}
-.editDescBox {
-  /* border:1px solid rgb(177, 12, 12); */
 }
 
 .neo-box {

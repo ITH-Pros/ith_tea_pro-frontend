@@ -215,21 +215,21 @@ const ProjectCard = ({
         <h4>{name}</h4>
         <p>{description}</p>
       </div>
-      <div className="project-stats">
-        <div className="stat">
+      <div className="project-stats row">
+        <div className="stat col-3">
           {/* onClick={() => handleCategories()} */}
           <FontAwesomeIcon icon={faFlag} />
           <span>{categroies}</span>
         </div>
-        <div className="stat">
+        <div className="stat col-3">
           <FontAwesomeIcon icon={faTasks} />
           <span>{taskData?.ONGOING || 0}</span>
         </div>
-        <div className="stat">
+        <div className="stat col-3">
           <FontAwesomeIcon icon={faCheck} />
           <span>{taskData?.COMPLETED || 0}</span>
         </div>
-        <div className="stat">
+        <div className="stat col-3">
           <FontAwesomeIcon icon={faBarChart || 0} />
           <span>{taskData?.totalTask || 0}</span>
         </div>
@@ -237,7 +237,7 @@ const ProjectCard = ({
 
       <div>
         <div>
-          <div className="pull-left w-50 text-center">
+          <div className="pull-left w-100">
             <label className="lableName">Team Members</label>
             <div className="user-profile-pics">
               {accessibleBy

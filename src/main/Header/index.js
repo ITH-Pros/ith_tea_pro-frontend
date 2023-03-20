@@ -58,7 +58,8 @@ function Header() {
     <header>
 		  <div key={userName} className='pull-right'>
 			  <div onClick={redirectToUserDetail} className="user-icon">
-				  <UserIcon firstName={userName} />  <p style={{marginBottom:'0px'}}>{userName}</p>
+				  <UserIcon firstName={userName} />  
+				  <p style={{marginBottom:'0px', marginLeft:'22px'}}>{userName}</p>
 			  </div>
 		  </div>
 	  </header>

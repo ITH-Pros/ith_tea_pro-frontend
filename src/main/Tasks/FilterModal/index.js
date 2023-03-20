@@ -200,8 +200,8 @@ const FilterModal = (props) => {
         console.log(categories?.error);
       } else {
         categories.data = categories?.data?.map((item, i) => ({
-          name: item,
-          _id: item,
+          name: item?.name,
+          _id: item?._id,
         }));
         console.log(categories.data,'======================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         setCategories(categories?.data);
@@ -229,6 +229,7 @@ const FilterModal = (props) => {
     }
   };
   const onSelectData = (selectedItems, dataType) => {
+	// console.log("selectedItems", selectedItems);
     let data = selectedItems?.map((item) => item?._id);
     if (dataType == "projectIds") {
       setProjectIds(selectedItems);
@@ -334,8 +335,7 @@ const FilterModal = (props) => {
           </Modal.Header>
           <Modal.Body>
             <Form noValidate>
-              <Row>
-                <Form.Group as={Row} controlId="formSelectProject">
+                <Form.Group controlId="formSelectProject">
                   <Row>
                     <Col sm="3">
                       <Form.Label>Project</Form.Label>
@@ -353,7 +353,7 @@ const FilterModal = (props) => {
                     </Col>
                   </Row>
                 </Form.Group>
-                <Form.Group as={Row} controlId="formDateCreated">
+                <Form.Group  controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>createdBy</Form.Label>
@@ -371,7 +371,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateCreated">
+                <Form.Group  controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>assignedTo</Form.Label>
@@ -426,7 +426,7 @@ const FilterModal = (props) => {
                 <Form.Group as={Row} controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
-                      <Form.Label column sm="4">
+                      <Form.Label>
                         Priority
                       </Form.Label>
                     </Col>
@@ -456,9 +456,8 @@ const FilterModal = (props) => {
                     </Col>
                   </Row>
                 </Form.Group>
-              </Row>
-              <Row>
-                <Form.Group as={Row} controlId="formDateCreated">
+             
+                <Form.Group  controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Status</Form.Label>
@@ -490,7 +489,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                {/* <Form.Group as={Row} controlId="formDateCreated">
+                {/* <Form.Group  controlId="formDateCreated">
                   <Row sm="9" className="filterFields">
 				  <Form.Label column sm="4">
 				  Group By
@@ -512,7 +511,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group> */}
 
-                {/* <Form.Group as={Row} controlId="formSelectProjectGroup">
+                {/* <Form.Group  controlId="formSelectProjectGroup">
                   <Row sm="9" className="filterFields">
 				  <Form.Label column sm="4">
 				  Project Group
@@ -531,7 +530,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group> */}
 
-                <Form.Group as={Row} controlId="formSortBy">
+                <Form.Group  controlId="formSortBy">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Sort By</Form.Label>
@@ -555,7 +554,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDueDate">
+                <Form.Group  controlId="formDueDate">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Due Date</Form.Label>
@@ -571,7 +570,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateCreated">
+                <Form.Group  controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Date Created</Form.Label>
@@ -587,7 +586,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateUpdated">
+                <Form.Group  controlId="formDateUpdated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Date Updated</Form.Label>
@@ -603,7 +602,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                <Form.Group as={Row} controlId="formDateCompleted">
+                <Form.Group  controlId="formDateCompleted">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Date Completed</Form.Label>
@@ -619,10 +618,10 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
 
-                {/* <Button as={Row} md="2" className="btnDanger" type="submit">
+                {/* <Button  md="2" className="btnDanger" type="submit">
                   Clear Filter
                 </Button> */}
-              </Row>
+             
             </Form>
           </Modal.Body>
           <Modal.Footer>
