@@ -204,7 +204,12 @@ button.accordion-button{
     padding: 0.5rem 1rem;
     background-color: #f7f7f7 !important;
 }
-
+.accordion-button {
+  background-color: #eee !important;
+  border-radius: 3px;
+  font-size: 15px;
+  margin-bottom: 0;
+}
 .accordion-body {
   padding: 1rem; 
   margin: 0;
