@@ -196,10 +196,12 @@ export default function Dashboard(props) {
           {/* <Link to="/rating" params={{ params: true }}> */}
           <div className="wrap btnWth">
 		  
-            <button className="add-rating-button">
+		  {userDetails?.role !== "CONTRIBUTOR" && (
+			<button className="add-rating-button">
         <AddRating />
               
-            </button>
+            </button>)}
+           
           </div>
           {/* </Link> */}
         </div>

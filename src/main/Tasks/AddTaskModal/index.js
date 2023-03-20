@@ -79,6 +79,7 @@ export default function AddTaskModal(props) {
   useEffect(() => {
     if (showAddTask) {
       setShowAddTaskModal(true);
+	  setSelectedLeads('')
       patchFormForAdd();
     }
   }, [showAddTask]);
@@ -129,8 +130,8 @@ export default function AddTaskModal(props) {
       //   }
 
       //   setTaskFormValue()
-      let dueDateData = new Date(selectedTask?.dueDate.split("T")[0]);
-      let completedDateData = new Date(selectedTask?.completedDate.split("T")[0]);
+      let dueDateData = new Date(selectedTask?.dueDate);
+      let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
         completedDateData =
           completedDateData.getFullYear() +
@@ -313,7 +314,8 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads && (dataToSend["tasklead"] = selectedLeads);
+	  selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      selectedTask && (dataToSend["taskId"] = selectedTask?._id);
 
       const taskRes = await createTask(dataToSend);
       setLoading(false);
@@ -382,7 +384,8 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads && (dataToSend["tasklead"] = selectedLeads);
+	  selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
 
       const taskRes = await createTask(dataToSend);

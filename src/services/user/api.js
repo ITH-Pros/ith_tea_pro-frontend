@@ -109,7 +109,7 @@ export function addCommentOnTaskById(data) {
 }
 
 export async function getRatings(data) {
-    return (axiosInstance.get('/rating/v1/week/rating', {
+    return (axiosInstance.get('rating/v1/month/all/user', {
         params: data
     }).then(res => res.data))
 }
