@@ -577,7 +577,7 @@ export default function AllProject() {
                   <ProjectCard
 				   
                     name={element.name}
-                    description={element.shortDescription||'--'}
+                    description={element?.description||'--'}
                     managedBy={element.managedBy || []}
                     accessibleBy={element.accessibleBy || []}
 					categroies={element.categories?.length}

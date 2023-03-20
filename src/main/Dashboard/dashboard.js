@@ -67,6 +67,10 @@ export default function Dashboard(props) {
     localStorage.removeItem("profileCompleted");
   };
 
+ const  handlePendingRatingList = () => {
+	getPendingRating();
+	  };
+
   useEffect(() => {
     setShowModalOnLogin(
       localStorage.getItem("profileCompleted") == "false" ? true : false
@@ -258,6 +262,7 @@ export default function Dashboard(props) {
         setShowToaster(true);
         // getTasksDataUsingProjectId();
         getMyWork();
+		handlePendingRatingList();
         // if (params?.projectId) {
         //   setSelectedProjectId(params?.projectId);
         // }
@@ -323,7 +328,7 @@ export default function Dashboard(props) {
                     </Col>
                     <Col lg={4} className="middle">
                       <p className="text-truncate">
-                        {project?.shortDescription || "--"}
+                        {project?.description || "--"}
                       </p>
                     </Col>
                     <Col
@@ -582,10 +587,13 @@ export default function Dashboard(props) {
                           className="text-end middle px-0"
                           style={{ justifyContent: "end" }}
                         >
-						<Button  variant="light"
+						{userDetails?.role !=="CONTRIBUTOR" && (
+							<Button  variant="light"
                             size="sm" className="addRatingBtn"><AddRating
 							taskFromDashBoard={task}
 							 /> </Button>
+						)}
+						
 
                              
 
@@ -637,7 +645,9 @@ export default function Dashboard(props) {
         <Modal.Body
           style={{ maxHeight: "calc(100vh - 210px)", overflowY: "auto" }}
         >
-          <UserForm />
+          <UserForm
+		handleModalClose = {handleProfileModalClose}
+		   />
         </Modal.Body>
         <Button
           className="skip-button"

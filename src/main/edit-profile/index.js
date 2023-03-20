@@ -5,7 +5,10 @@ import Toaster from '../../components/Toaster';
 import { editLogedInUserDetails, getLogedInUserDetails } from '../../services/user/api';
 import './index.css'
 
-function UserForm() {
+function UserForm(props) {
+
+	const {handleModalClose} = props;
+	
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
@@ -124,6 +127,7 @@ function UserForm() {
 			showToaster(true);
 			setToasterMessage(response.message);
 			setIsEditable(false);
+			handleModalClose();
 			navigate('/');
 		}
 	} catch (error) {
