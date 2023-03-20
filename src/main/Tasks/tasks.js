@@ -286,23 +286,7 @@ const Tasks = () => {
   };
   return (
     <>
-      <div>
-        {!projects?.length &&
-          params?.projectId &&
-          userDetails?.role !== "CONTRIBUTOR" && (
-            <button
-              className=" addTaskBtn addSectionBtn center"
-              style={{
-                float: "right",
-              }}
-              onClick={() => {
-                showAddSectionModal(true);
-              }}
-            >
-              Add Section
-            </button>
-          )}
-      </div>
+   
       <div className="rightDashboard">
         <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
@@ -321,6 +305,23 @@ const Tasks = () => {
         >
           Add Task
         </button>
+        <div>
+        {!projects?.length &&
+          params?.projectId &&
+          userDetails?.role !== "CONTRIBUTOR" && (
+            <button
+              className=" addTaskBtn addSectionBtn center"
+              style={{
+                float: "right",
+              }}
+              onClick={() => {
+                showAddSectionModal(true);
+              }}
+            >
+              Add Section
+            </button>
+          )}
+      </div>
         {projects?.length !== 0 &&
           userDetails?.role !== "CONTRIBUTOR" &&
           selectedProjectId && (
