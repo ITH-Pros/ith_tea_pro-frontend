@@ -144,6 +144,9 @@ const Tasks = () => {
         setModalShow(false);
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
+		if (params?.projectId) {
+		  setSelectedProjectId(params?.projectId);
+		}
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");

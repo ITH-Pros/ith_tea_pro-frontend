@@ -131,7 +131,7 @@ function formatDate(dateString) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="6">
                   <Form.Label>Project Name</Form.Label>
-                  <p>{task?.title} </p>
+                  <p>{task?.projectId?.name} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Section Name</Form.Label>
