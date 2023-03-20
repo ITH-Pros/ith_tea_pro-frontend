@@ -429,7 +429,9 @@ export default function AddTaskModal(props) {
 
   const resetModalData = () => {
     closeModal();
+     setValidated(false);
     resetFormValue();
+    
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
