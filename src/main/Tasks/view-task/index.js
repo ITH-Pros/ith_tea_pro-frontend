@@ -130,15 +130,15 @@ function formatDate(dateString) {
             <Form>
               <Row className="mb-3">
                 <Form.Group as={Col} md="6">
-                  <Form.Label>Project</Form.Label>
+                  <Form.Label>Project Name</Form.Label>
                   <p>{task?.title} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
-                  <Form.Label>Section</Form.Label>
+                  <Form.Label>Section Name</Form.Label>
                   <p>{task?.section?.name} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="12">
-                  <Form.Label>Lead</Form.Label>
+                  <Form.Label>Lead Type</Form.Label>
                   {/* task?.lead?.map */}
                   {task?.lead?.map((item, index) => {
                     return <p key={index} >{item?.name} </p>;
