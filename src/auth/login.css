@@ -251,8 +251,8 @@ border-radius: 0.3rem !important;
 }
 
 .field span{
-  margin-left: 9px !important;
-  margin-top: 9px !important;
+  margin-left: 10px !important;
+  margin-top: 4px !important;
   position: absolute;
   width: 50px;
   line-height: 50px;
