@@ -1,5 +1,5 @@
 .filter-task-tag{
-         line-height: 16px;
+    line-height: 16px;
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
@@ -10,11 +10,12 @@
     margin: 1.5px 0;
     color: #0f1b57;
     padding: 5px;
-    opacity: .5;
     box-shadow: none!important;
     background-color: transparent!important;
     border: 1px solid transparent;
     cursor: pointer;
+    font-weight: 700;
+    opacity: .7;
 }
 .text-right{
     text-align: right;

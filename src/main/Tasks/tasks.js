@@ -356,20 +356,19 @@ const Tasks = () => {
 			selectedTaskId={selectedTaskId}
 		/>
 
-		
-
-
-
         <Accordion alwaysOpen="true">
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
 			{project?._id?.projectId && project?._id?.section && (
 				<Accordion.Header>
-                {project?._id?.projectId} / {project?._id?.section}
+             <p style={{ marginBottom: '0',}}>{project?._id?.projectId} / {project?._id?.section} </p> 
+               {/* <span> collapsed </span> */}
               </Accordion.Header>
+             
 		  )}
              
               <div className="d-flex rightTags">
+             
                 <ProgressBar>
                   <ProgressBar
                     variant="success"
@@ -524,7 +523,9 @@ const Tasks = () => {
                   ))}
                 </ul>
               </Accordion.Body>
+              <div className="collpase">collapsed</div>
             </Accordion.Item>
+           
           ))}
         </Accordion>
 
