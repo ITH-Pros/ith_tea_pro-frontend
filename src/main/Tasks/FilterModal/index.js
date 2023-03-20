@@ -200,10 +200,11 @@ const FilterModal = (props) => {
         console.log(categories?.error);
       } else {
         categories.data = categories?.data?.map((item, i) => ({
-          name: item,
-          _id: item,
+          name: item?.name,
+          _id: item?._id,
         }));
-        setCategories(categories.data);
+        setCategories(categories?.data);
+		console.log("categories",categories?.data);
       }
     } catch (error) {
       setLoading(false);
@@ -228,6 +229,7 @@ const FilterModal = (props) => {
     }
   };
   const onSelectData = (selectedItems, dataType) => {
+	// console.log("selectedItems", selectedItems);
     let data = selectedItems?.map((item) => item?._id);
     if (dataType == "projectIds") {
       setProjectIds(selectedItems);
