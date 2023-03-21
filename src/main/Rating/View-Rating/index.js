@@ -226,6 +226,7 @@ export default function Dashboard(props) {
               return (
                 <tr key={index}>
                   <td className="user_names"> {user.name}</td>
+                  
                   {Array(days)
                     ?.fill(0)
                     ?.map((day, index) => {

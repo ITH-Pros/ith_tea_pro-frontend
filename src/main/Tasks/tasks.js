@@ -142,6 +142,7 @@ const Tasks = () => {
         closeModal();
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
+        // window.location.reload();
         if (params?.projectId) {
           setSelectedProjectId(params?.projectId);
         }
@@ -403,6 +404,8 @@ const Tasks = () => {
                         onClick={() => {
                           setSelectedTask();
                           setShowAddTask(true);
+						  console.log('*********************', project?._id?.projectId?._id,
+                         project?._id?.section)
                           setSelectedProject({
                             _id: project?._id?.projectId?._id,
                             section: project?._id?.section,

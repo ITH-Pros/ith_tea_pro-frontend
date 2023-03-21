@@ -109,7 +109,7 @@ export default function AddTaskModal(props) {
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
-        section: selectedProjectFromTask?.section || project[0]?.sections?.[0],
+        // section: selectedProjectFromTask?.section || project[0]?.sections?.[0],
       });
       console.log(project);
     } else if (selectedTask) {
@@ -118,6 +118,7 @@ export default function AddTaskModal(props) {
       );
       console.log(selectedTask, project);
       setLeadList(project[0]?.managedBy);
+     
 
       setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
@@ -162,6 +163,7 @@ export default function AddTaskModal(props) {
         (dueDateData.getDate() <= 9
           ? "0" + dueDateData.getDate()
           : dueDateData.getDate());
+      
       setTaskFormValue({
         projectId: selectedTask?.projectId,
         section: selectedTask?.section,
@@ -186,6 +188,9 @@ export default function AddTaskModal(props) {
       let project = projectList?.find((item) => item?._id == handleProjectId);
       console.log("MAI AAAYA HU IDHAR", project);
       setLeadList(project?.managedBy);
+        if (leadLists.length === 1) {
+          setSelectedLeads(project?.managedBy);
+        }
       setCategoryList(project?.sections);
       setUserList(project?.accessibleBy);
 
@@ -203,25 +208,6 @@ export default function AddTaskModal(props) {
     }
   };
 
-  const getLeadsList = async function () {
-    setLoading(true);
-    try {
-      const lead = await getAllLeadsWithoutPagination();
-      setLoading(false);
-
-      if (lead.error) {
-        setToasterMessage(lead?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setLeadList(lead.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
-    }
-  };
 
   const getProjectList = async () => {
     setLoading(true);
@@ -292,6 +278,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
+      !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
       return;
@@ -362,8 +349,8 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-	  !      selectedLeads 
-
+      !taskFormValue.assignedTo ||
+      !selectedLeads
     ) {
       return;
     }
@@ -469,6 +456,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
+      !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
 		
@@ -741,6 +729,7 @@ export default function AddTaskModal(props) {
                 <Form.Group as={Col} md="3">
                   <Form.Label>Assigned To</Form.Label>
                   <Form.Control
+                    required
                     as="select"
                     type="select"
                     name="assignedTo"
@@ -754,11 +743,16 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    Assigned To is required !!
+                  </Form.Control.Feedback>
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <Form.Control
                     type="date"
+                    min={new Date().toISOString().split("T")[0]}
                     placeholder="Due date"
                     name="dueDate"
                     value={taskFormValue.dueDate}
@@ -800,7 +794,11 @@ export default function AddTaskModal(props) {
                       Select Status
                     </option>
                     {statusList?.map((status) => (
-                      <option value={status} key={status}>
+                      <option
+                        value={status}
+                        disabled={status === "COMPLETED"}
+                        key={status}
+                      >
                         {status}
                       </option>
                     ))}
