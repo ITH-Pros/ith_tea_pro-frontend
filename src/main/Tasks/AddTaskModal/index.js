@@ -96,6 +96,7 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
+		console.log(selectedProjectFromTask,'selectedProjectFromTask')
       let project = projectList?.filter(
         (item) => item?._id == selectedProjectFromTask?._id
       );
@@ -645,7 +646,7 @@ export default function AddTaskModal(props) {
                 </Form.Group>
               </Row>
 
-              <Row className="mb-3">
+              <Row className="mb-6">
                 {/* <FroalaEditorComponent
                   tag="textarea"
                   onModelChange={updateTaskDescriptionValue}
@@ -653,9 +654,11 @@ export default function AddTaskModal(props) {
                 /> */}
 
                 <TextEditor
-                  height={100}
+                  
                   width="100%"
                   placeholder="Enter Description"
+				  value={taskFormValue?.description}
+				  onChange={updateTaskDescriptionValue}
                 />
               </Row>
 

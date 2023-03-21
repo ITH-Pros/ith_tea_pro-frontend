@@ -41,25 +41,25 @@ const Tasks = () => {
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const { userDetails } = useAuth();
 
-  const [showViewTask , setShowViewTask] = useState(false);
-  const [selectedTaskId , setSelectedTaskId] = useState("");
+  const [showViewTask, setShowViewTask] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState("");
 
   const handleViewDetails = (taskId) => {
-	console.log('showViewTask-----------------------------------------------------------' , showViewTask)
-	setSelectedTaskId(taskId);
-	setShowViewTask(true);
-	console.log('showViewTask =====================' , showViewTask)
-}
+    console.log(
+      "showViewTask-----------------------------------------------------------",
+      showViewTask
+    );
+    setSelectedTaskId(taskId);
+    setShowViewTask(true);
+    console.log("showViewTask =====================", showViewTask);
+  };
 
   const closeViewTaskModal = () => {
     setShowViewTask(false);
-	  setSelectedTaskId(null);
-    
-	console.log("closeViewTaskModal");
-	
-	}
+    setSelectedTaskId(null);
 
-
+    console.log("closeViewTaskModal");
+  };
 
   //   console.log("userDetails +++++++++++++++++++++++++++", userDetails.id);
   const params = useParams();
@@ -70,12 +70,12 @@ const Tasks = () => {
 
   const [showStatusSelect, setShowStatusSelect] = useState(false);
 
-//   const handleTaskItemClick = () => {
-//     setShowStatusSelect(!showStatusSelect);
-//   };
+  //   const handleTaskItemClick = () => {
+  //     setShowStatusSelect(!showStatusSelect);
+  //   };
 
-  const handleStatusChange = (e, taskId) => {
-    const newStatus = e.target.value;
+  const handleStatusChange = (e, taskId , status) => {
+    const newStatus = status ;
 
     console.log("newStatus", newStatus);
     // make API call to update task status with newStatus
@@ -83,9 +83,9 @@ const Tasks = () => {
       taskId: taskId,
       status: newStatus,
     };
-	console.log("dataToSend", dataToSend);
+    console.log("dataToSend", dataToSend);
 
-	updateTaskStatus(dataToSend);
+    updateTaskStatus(dataToSend);
   };
 
   const updateTaskStatus = async (dataToSend) => {
@@ -97,10 +97,7 @@ const Tasks = () => {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
-		getTasksDataUsingProjectId();
-		// if (params?.projectId) {
-		//   setSelectedProjectId(params?.projectId);
-		// }
+        getTasksDataUsingProjectId();
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -119,11 +116,11 @@ const Tasks = () => {
   const [projectList, setProjectListValue] = useState([]);
   const [sectionName, setSectionName] = useState("");
 
-  const showAddSectionModal = () => {
+  const showAddSectionModal = (isTrue) => {
     setSectionName("");
     // setSelectedProjectId("");
     getAndSetAllProjects();
-    setModalShow(true);
+    setModalShow(isTrue);
   };
 
   const addSection = async () => {
@@ -142,9 +139,13 @@ const Tasks = () => {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
         setModalShow(false);
+        closeModal();
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
         window.location.reload();
+        if (params?.projectId) {
+          setSelectedProjectId(params?.projectId);
+        }
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -287,7 +288,6 @@ const Tasks = () => {
   };
   return (
     <>
-   
       <div className="rightDashboard">
         <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
@@ -307,22 +307,22 @@ const Tasks = () => {
           Add Task
         </button>
         <div>
-        {!projects?.length &&
-          params?.projectId &&
-          userDetails?.role !== "CONTRIBUTOR" && (
-            <button
-              className=" addTaskBtn addSectionBtn center"
-              style={{
-                float: "right",
-              }}
-              onClick={() => {
-                showAddSectionModal(true);
-              }}
-            >
-              Add Section
-            </button>
-          )}
-      </div>
+          {!projects?.length &&
+            params?.projectId &&
+            userDetails?.role !== "CONTRIBUTOR" && (
+              <button
+                className=" addTaskBtn addSectionBtn center"
+                style={{
+                  float: "right",
+                }}
+                onClick={() => {
+                  showAddSectionModal(true);
+                }}
+              >
+                Add Section
+              </button>
+            )}
+        </div>
         {projects?.length !== 0 &&
           userDetails?.role !== "CONTRIBUTOR" &&
           selectedProjectId && (
@@ -353,25 +353,24 @@ const Tasks = () => {
           handleProjectId={selectedProjectId}
         />
 
-		<ViewTaskModal
-			showViewTask={showViewTask}
-			closeViewTaskModal={closeViewTaskModal}
-			selectedTaskId={selectedTaskId}
-		/>
+        <ViewTaskModal
+          showViewTask={showViewTask}
+          closeViewTaskModal={closeViewTaskModal}
+          selectedTaskId={selectedTaskId}
+        />
 
         <Accordion alwaysOpen="true">
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
-			{project?._id?.projectId && project?._id?.section && (
-				<Accordion.Header>
-             <p style={{ marginBottom: '0',}}>{project?._id?.projectId} / {project?._id?.section} </p> 
-               {/* <span> collapsed </span> */}
-              </Accordion.Header>
-             
-		  )}
-             
+              {project?._id?.projectId && project?._id?.section && (
+                <Accordion.Header>
+                  <p style={{ marginBottom: "0" }}>
+                    {project?._id?.projectId} / {project?._id?.section}{" "}
+                  </p>
+                </Accordion.Header>
+              )}
+
               <div className="d-flex rightTags">
-             
                 <ProgressBar>
                   <ProgressBar
                     variant="success"
@@ -424,8 +423,7 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id}>
-
-					{(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
+                      {/* {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
                       <select
                         defaultValue={task.status}
                         onChange={(event) =>
@@ -437,33 +435,100 @@ const Tasks = () => {
                         <option value="ONHOLD">On Hold</option>
                         <option value="COMPLETED">Completed</option>
                       </select>
-					)}
-                      {task?.status === "ONGOING" && (
-                        <i
-                          className="fa fa-check-circle warning"
-                          aria-hidden="true"
-                        ></i>
-                      )}
-                      {task?.status === "NOT_STARTED" && (
-                        <i
-                          className="fa fa-check-circle secondary"
-                          aria-hidden="true"
-                        ></i>
-                      )}
-                      {task?.status === "ONHOLD" && (
-                        <i
-                          className="fa fa-check-circle primary"
-                          aria-hidden="true"
-                        ></i>
-                      )}
-                      {task?.status === "COMPLETED" && (
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      )}{" "}
-					  <i onClick={()=>handleViewDetails(task?._id)} >{task?.title}</i>
-                      
+					)} */}
+					{(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          variant="success"
+                          id="dropdown-basic"
+                          style={{ padding: "0" }}
+                        >
+                          {task.status === "NOT_STARTED" && (
+                            <i
+                              className="fa fa-check-circle secondary"
+                              aria-hidden="true"
+                            ></i>
+                          )}
+                          {task.status === "ONGOING" && (
+                            <i
+                              className="fa fa-check-circle warning"
+                              aria-hidden="true"
+                            ></i>
+                          )}
+                          {task.status === "COMPLETED" && (
+                            <i
+                              className="fa fa-check-circle success"
+                              aria-hidden="true"
+                            ></i>
+                          )}
+                          {task.status === "ONHOLD" && (
+                            <i
+                              className="fa fa-check-circle warning"
+                              aria-hidden="true"
+                            ></i>
+                          )}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            onClick={(event) =>
+                              handleStatusChange(
+                                event,
+                                task?._id,
+                                "NOT_STARTED"
+                              )
+                            }
+                          >
+                            <i
+                              className="fa fa-check-circle secondary"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Not Started
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={(event) =>
+                              handleStatusChange(event, task?._id, "ONGOING")
+                            }
+                          >
+                            <i
+                              className="fa fa-check-circle warning"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Ongoing
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={(event) =>
+                              handleStatusChange(event, task?._id, "COMPLETED")
+                            }
+                          >
+                            <i
+                              className="fa fa-check-circle success"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Completed
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={(event) =>
+                              handleStatusChange(event, task?._id, "ONHOLD")
+                            }
+                          >
+                            <i
+                              className="fa fa-check-circle warning"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            On Hold
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+					  )}
+                      <i
+                        className={task?.status === 'COMPLETED' ? 'line-strics' : ''}
+                        onClick={() => handleViewDetails(task?._id)}
+                      >
+                        {task?.title}
+                      </i>
+					  
+
                       {task?.status === "NOT_STARTED" && (
                         <Badge bg="secondary">NOT STARTED</Badge>
                       )}
@@ -473,7 +538,9 @@ const Tasks = () => {
                       {task?.status === "COMPLETED" && (
                         <Badge bg="success">
                           completed{" "}
-                          {moment((task?.completedDate?.split("T")[0])).format("MMM DD,YYYY")}
+                          {moment(task?.completedDate?.split("T")[0]).format(
+                            "MMM DD,YYYY"
+                          )}
                         </Badge>
                       )}
                       {task?.status === "ONHOLD" && (
@@ -499,36 +566,41 @@ const Tasks = () => {
                       </span>
                       {task?.dueDate && (
                         <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                          Due {moment(task?.dueDate?.split("T")[0]).format("MMM DD,YYYY")}
+                          Due{" "}
+                          {moment(task?.dueDate?.split("T")[0]).format(
+                            "MMM DD,YYYY"
+                          )}
                         </Badge>
                       )}
-					  {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
-						
-                      <a
-                        style={{
-                          float: "right",
-                          color: "#8602ff",
-                          cursor: "pointer",
-                          marginRight: "10px",
-                        }}
-                        onClick={() => {
-                          setSelectedProject();
-                          setShowAddTask(true);
-                          setSelectedTask(task);
-                        }}
-                      >
-                        Edit 
-                      </a>
-					  )}
-					  
-				  
+                      {(userDetails.id === task?.assignedTo?._id ||
+                        userDetails.role == "SUPER_ADMIN" ||
+                        userDetails.role == "ADMIN") && (
+                        <a
+                          style={{
+                            float: "right",
+                            color: "#8602ff",
+                            cursor: "pointer",
+                            marginRight: "10px",
+                          }}
+                          onClick={() => {
+                            setSelectedProject();
+                            setShowAddTask(true);
+                            setSelectedTask(task);
+                          }}
+                        >
+                          Edit
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
               </Accordion.Body>
-              <div className="collpase">collapsed</div>
+              {/* <div className="collpase">collapsed</div> */}
+              {/* <div className="addtask">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                Add Task
+              </div> */}
             </Accordion.Item>
-           
           ))}
         </Accordion>
 

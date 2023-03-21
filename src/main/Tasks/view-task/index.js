@@ -2,20 +2,27 @@
 import React, { Component, useEffect } from "react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import TextEditor from "./textEditor";
 
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import Toaster from "../../../components/Toaster";
 import {
   addComment,
   addCommentOnTask,
   taskById,
+  updateTaskStatusById,
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
 import CommentBox from "./comments";
 export default function ViewTaskModal(props) {
   const { showViewTask, closeViewTaskModal, selectedTaskId } = props;
+  const [loading, setLoading] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
+  //   const setShowToaster = (param) => showToaster(param);
 
   console.log("selectedTaskId", selectedTaskId);
   console.log("showViewTask", showViewTask);
@@ -28,22 +35,58 @@ export default function ViewTaskModal(props) {
   const [text, setText] = useState("");
   const [count, setCount] = useState(250);
 
-  const handleTextChange = (e) => {
-    const newText = e.target.value;
+  const handleTextChange = (content) => {
+	// console.log('e.target.value', e.target.value);
+	// console.log('task', task);
+    const newText = content;
     setText(newText);
-    setCount(250 - newText.length);
+    setCount(250 - newText?.length);
   };
 
-//   format date function
+  //   format date function
 
-function formatDate(dateString) {
-	const date = new Date(dateString);
-	const day = date.getUTCDate().toString().padStart(2, '0');
-	const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-	const year = date.getUTCFullYear();
-	return `${day}/${month}/${year}`;
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
   }
-  
+
+  const updateTaskStatus = async (dataToSend) => {
+    try {
+      const res = await updateTaskStatusById(dataToSend);
+      if (res.error) {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        showToaster(true);
+      } else {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        showToaster(true);
+        if (selectedTaskId) {
+          getTaskDetailsById(selectedTaskId);
+        }
+        // getTasksDataUsingProjectId();
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      showToaster(true);
+      return error.message;
+    }
+  };
+
+  const handleStatusChange = (e, taskId) => {
+    const newStatus = e.target.value;
+
+    console.log("newStatus", newStatus);
+    // make API call to update task status with newStatus
+    let dataToSend = {
+      taskId: taskId,
+      status: newStatus,
+    };
+    console.log("dataToSend", dataToSend);
+
+    updateTaskStatus(dataToSend);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,11 +99,11 @@ function formatDate(dateString) {
     addcomment();
   };
 
-    const handleDescSubmit = (comment, attachment) => {
-      console.log(`Comment: ${comment}`);
-      console.log(`Attachment: ${attachment}`);
-      // You can perform any action with the comment and attachment data here
-    };
+  const handleDescSubmit = (comment, attachment) => {
+    console.log(`Comment: ${comment}`);
+    console.log(`Attachment: ${attachment}`);
+    // You can perform any action with the comment and attachment data here
+  };
 
   const addcomment = async () => {
     let dataToSend = {
@@ -76,6 +119,8 @@ function formatDate(dateString) {
       } else {
         // showToaster(true)
         // setToasterMessage(response.message)
+		// setText("");
+		resetTextEditor();
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -115,6 +160,10 @@ function formatDate(dateString) {
     setShowViewTaskModal(false);
   };
 
+  const resetTextEditor = () => {
+	setText("");
+	  };
+
   return (
     <>
       <Modal
@@ -137,7 +186,7 @@ function formatDate(dateString) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="6">
                   <Form.Label>Project Name</Form.Label>
-                  <p>{task?.title} </p>
+                  <p>{task?.projectId?.name} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Section Name</Form.Label>
@@ -184,7 +233,16 @@ function formatDate(dateString) {
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
-                  <p>{task?.status} </p>
+                  {/* <p>{task?.status} </p> */}
+                  <select
+                    defaultValue={task.status}
+                    onChange={(event) => handleStatusChange(event, task?._id)}
+                  >
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="NOT_STARTED">NOT STARTED</option>
+                    <option value="ONHOLD">On Hold</option>
+                    <option value="COMPLETED">Completed</option>
+                  </select>
                 </Form.Group>
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
@@ -221,7 +279,7 @@ function formatDate(dateString) {
                         {item?.commentedBy?.name}
                       </div>
                       <div className="commentText">
-                        <p className="comment">{item?.comment}</p>{" "}
+                        <p dangerouslySetInnerHTML={{__html: item?.comment}} className="comment"></p>
                         <span className="date sub-text">{createdAt}</span>
                       </div>
                     </div>
@@ -242,7 +300,19 @@ function formatDate(dateString) {
                     onChange={handleTextChange}
                     // value={text}
                   ></textarea> */}
-                  <CommentBox onSubmit={handleDescSubmit} />
+                  {/* <CommentBox onSubmit={handleDescSubmit} /> */}
+                  <label>
+                    Comment:
+                    <TextEditor
+                      height={100}
+                      width="100%"
+                      placeholder="Enter text here"
+					  value={text}
+                    onChange={handleTextChange}
+					// reset = {resetTextEditor}
+                    />
+                    {/* <textarea value={comment} onChange={handleCommentChange} /> */}
+                  </label>
                 </div>
                 <div className="button-group pull-right">
                   {/* <p className="counter">{count}</p> */}
@@ -268,6 +338,13 @@ function formatDate(dateString) {
           {/* <Button variant="primary">Save Changes</Button> */}
         </Modal.Footer>
       </Modal>
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+      )}
     </>
   );
 }
