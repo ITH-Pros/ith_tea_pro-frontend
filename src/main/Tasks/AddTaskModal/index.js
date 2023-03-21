@@ -10,8 +10,6 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
-
-
 import { Modal } from "react-bootstrap";
 import {
   getAllProjects,
@@ -82,9 +80,14 @@ export default function AddTaskModal(props) {
   }, []);
 
   useEffect(() => {
+	taskFormValue.projectId && getUsersList()
+  }, [taskFormValue.projectId]);
+
+
+  useEffect(() => {
     if (showAddTask) {
       setShowAddTaskModal(true);
-	  setSelectedLeads('')
+      setSelectedLeads("");
       patchFormForAdd();
     }
   }, [showAddTask]);
@@ -96,14 +99,37 @@ export default function AddTaskModal(props) {
     }
   }, [showAddTask]);
 
+  const getUsersList = async function () {
+	let dataToSend = {
+	  projectId: taskFormValue.projectId,
+	};
+	setLoading(true);
+	try {
+	  const user = await getProjectById(dataToSend);
+	  setLoading(false);
+	  if (user.error) {
+		setToasterMessage(user?.message || "Something Went Wrong");
+		setShowToaster(true);
+	  } else {
+		console.log(user, "user");
+		setCategoryList(user?.data?.sections);
+	}
+	} catch (error) {
+	  setToasterMessage(error?.message || "Something Went Wrong");
+	  setShowToaster(true);
+	  setLoading(false);
+	  return error.message;
+	}
+  };
+
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-		console.log(selectedProjectFromTask,'selectedProjectFromTask')
+      console.log(selectedProjectFromTask, "selectedProjectFromTask");
       let project = projectList?.filter(
         (item) => item?._id == selectedProjectFromTask?._id
       );
       console.log(project, projectList, selectedProjectFromTask);
-      setCategoryList(project[0]?.sections);
+    //   setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
       setSelectedLeads(project[0]?.managedBy);
       setTaskFormValue({
@@ -118,7 +144,6 @@ export default function AddTaskModal(props) {
       );
       console.log(selectedTask, project);
       setLeadList(project[0]?.managedBy);
-     
 
       setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
@@ -163,7 +188,7 @@ export default function AddTaskModal(props) {
         (dueDateData.getDate() <= 9
           ? "0" + dueDateData.getDate()
           : dueDateData.getDate());
-      
+
       setTaskFormValue({
         projectId: selectedTask?.projectId,
         section: selectedTask?.section,
@@ -188,9 +213,9 @@ export default function AddTaskModal(props) {
       let project = projectList?.find((item) => item?._id == handleProjectId);
       console.log("MAI AAAYA HU IDHAR", project);
       setLeadList(project?.managedBy);
-        if (leadLists.length === 1) {
-          setSelectedLeads(project?.managedBy);
-        }
+      if (leadLists.length === 1) {
+        setSelectedLeads(project?.managedBy);
+      }
       setCategoryList(project?.sections);
       setUserList(project?.accessibleBy);
 
@@ -207,7 +232,6 @@ export default function AddTaskModal(props) {
       resetFormValue();
     }
   };
-
 
   const getProjectList = async () => {
     setLoading(true);
@@ -307,7 +331,8 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-	  selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      selectedLeads &&
+        (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
 
       const taskRes = await createTask(dataToSend);
@@ -332,8 +357,8 @@ export default function AddTaskModal(props) {
         setSelectedLeads("");
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-		showToaster(true);
-		setToasterMessage("Task Created Successfully");
+        showToaster(true);
+        setToasterMessage("Task Created Successfully");
       }
     } catch (error) {
       setLoading(false);
@@ -377,7 +402,8 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-	  selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      selectedLeads &&
+        (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
 
@@ -403,8 +429,8 @@ export default function AddTaskModal(props) {
         setSelectedLeads("");
         setShowAddTaskModal(true);
         getNewTasks(projectId);
-		showToaster(true);
-		setToasterMessage("Task Created Successfully");
+        showToaster(true);
+        setToasterMessage("Task Created Successfully");
       }
     } catch (error) {
       setLoading(false);
@@ -425,9 +451,9 @@ export default function AddTaskModal(props) {
 
   const resetModalData = () => {
     closeModal();
-     setValidated(false);
+    setValidated(false);
     resetFormValue();
-    
+
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
@@ -447,10 +473,9 @@ export default function AddTaskModal(props) {
   };
 
   const updateTask = async () => {
-
-	console.log("hello ji ")
+    console.log("hello ji ");
     setValidated(true);
-	console.log(taskFormValue , "taskFormValue")
+    console.log(taskFormValue, "taskFormValue");
 
     if (
       !taskFormValue.projectId ||
@@ -459,7 +484,6 @@ export default function AddTaskModal(props) {
       !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
-		
       return;
     }
 
@@ -487,7 +511,8 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      selectedLeads &&
+        (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
 
@@ -524,41 +549,41 @@ export default function AddTaskModal(props) {
   };
 
   const deleteTask = async () => {
-	setLoading(true);
-	try {
-		let {
-			projectId,
-			section,
-			title,
-			description,
-			assignedTo,
-			dueDate,
-			priority,
-			status,
-			tasklead,
-			attachment,
-			completedDate,
-		  } = taskFormValue;
-		  let dataToSend = {};
-		  projectId && (dataToSend["projectId"] = projectId);
-		//   section && (dataToSend["section"] = section);
-		//   title && (dataToSend["title"] = title);
-		//   description && (dataToSend["description"] = description);
-		//   assignedTo && (dataToSend["assignedTo"] = assignedTo);
-		//   dueDate && (dataToSend["dueDate"] = dueDate);
-		//   priority && (dataToSend["priority"] = priority);
-		//   status && (dataToSend["status"] = status);
-		//   selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
-		  selectedTask && (dataToSend["taskId"] = selectedTask?._id);
-		//   completedDate && (dataToSend["completedDate"] = completedDate);
-	  const taskRes = await deleteTaskDetails(dataToSend);
-	  setLoading(false);
-	  if (taskRes.error) {
-		setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
-		setShowToaster(true);
-		return;
-	  } else {
-		setSelectedLeads("");
+    setLoading(true);
+    try {
+      let {
+        projectId,
+        section,
+        title,
+        description,
+        assignedTo,
+        dueDate,
+        priority,
+        status,
+        tasklead,
+        attachment,
+        completedDate,
+      } = taskFormValue;
+      let dataToSend = {};
+      projectId && (dataToSend["projectId"] = projectId);
+      //   section && (dataToSend["section"] = section);
+      //   title && (dataToSend["title"] = title);
+      //   description && (dataToSend["description"] = description);
+      //   assignedTo && (dataToSend["assignedTo"] = assignedTo);
+      //   dueDate && (dataToSend["dueDate"] = dueDate);
+      //   priority && (dataToSend["priority"] = priority);
+      //   status && (dataToSend["status"] = status);
+      //   selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      selectedTask && (dataToSend["taskId"] = selectedTask?._id);
+      //   completedDate && (dataToSend["completedDate"] = completedDate);
+      const taskRes = await deleteTaskDetails(dataToSend);
+      setLoading(false);
+      if (taskRes.error) {
+        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+        return;
+      } else {
+        setSelectedLeads("");
         setTaskFormValue({
           ...taskFormValue,
           title: "",
@@ -573,16 +598,15 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-	  }
-	} catch (error) {
-	  console.log(error);
-	  setLoading(false);
-	  setToasterMessage(error?.error?.message || "Something Went Wrong");
-	  setShowToaster(true);
-	  return error.message;
-	}
-	  };
-		  
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
 
   return (
     <>
@@ -717,11 +741,10 @@ export default function AddTaskModal(props) {
                 /> */}
 
                 <TextEditor
-                  
                   width="100%"
                   placeholder="Enter Description"
-				  value={taskFormValue?.description}
-				  onChange={updateTaskDescriptionValue}
+                  value={taskFormValue?.description}
+                  onChange={updateTaskDescriptionValue}
                 />
               </Row>
 
@@ -829,24 +852,22 @@ export default function AddTaskModal(props) {
                   </Button>
                 )}
                 {selectedTask && (
-					<div>
-                  <Button
-                    className=" btn-press  btn-gradient-border btnDanger"
-                    type="button"
-                    onClick={updateTask}
-                  >
-                    Update
-                  </Button>
-				  <Button
-                    className=" btn-press  btn-gradient-border btnDanger"
-                    type="button"
-                    onClick={deleteTask}
-                  >
-                    Delete Task
-                  </Button>
-
-				  </div>
-				  
+                  <div>
+                    <Button
+                      className=" btn-press  btn-gradient-border btnDanger"
+                      type="button"
+                      onClick={updateTask}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      className=" btn-press  btn-gradient-border btnDanger"
+                      type="button"
+                      onClick={deleteTask}
+                    >
+                      Delete Task
+                    </Button>
+                  </div>
                 )}
                 {!selectedTask && (
                   <Button

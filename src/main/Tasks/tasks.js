@@ -74,8 +74,8 @@ const Tasks = () => {
   //     setShowStatusSelect(!showStatusSelect);
   //   };
 
-  const handleStatusChange = (e, taskId , status) => {
-    const newStatus = status ;
+  const handleStatusChange = (e, taskId, status) => {
+    const newStatus = status;
 
     console.log("newStatus", newStatus);
     // make API call to update task status with newStatus
@@ -219,9 +219,11 @@ const Tasks = () => {
         let allTask = tasks?.data;
         allTask?.forEach((item, i) => {
           item?.tasks?.map((task, j) => {
+
             if (task?.dueDate) {
               let dateMonth = task?.dueDate?.split("T")[0];
               let today = new Date();
+
 
               today =
                 today.getFullYear() +
@@ -260,6 +262,10 @@ const Tasks = () => {
           allTask[i].tasks = item?.tasks;
         });
         setProjects(allTask);
+		console.log(allTask)
+        if (params.projectId) {
+          setSelectedProject();
+        }
         // if (!allTask?.length && params?.projectId && userDetails?.role !=='CONTRIBUTOR' ) {
         // 	setModalShow(true);
         // }
@@ -399,13 +405,13 @@ const Tasks = () => {
                       <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
+                    {/* <Dropdown.Menu>
                       <Dropdown.Item
                         onClick={() => {
                           setSelectedTask();
                           setShowAddTask(true);
 						  console.log('*********************', project?._id?.projectId?._id,
-                         project?._id?.section)
+                         project?._id?.section);
                           setSelectedProject({
                             _id: project?._id?.projectId?._id,
                             section: project?._id?.section,
@@ -415,9 +421,7 @@ const Tasks = () => {
                         Add Task
                       </Dropdown.Item>
 
-                      {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-  <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
-                    </Dropdown.Menu>
+                    </Dropdown.Menu> */}
                   </Dropdown>
                 </div>
               </div>
@@ -438,98 +442,105 @@ const Tasks = () => {
                         <option value="COMPLETED">Completed</option>
                       </select>
 					)} */}
-					{(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          variant="success"
-                          id="dropdown-basic"
-                          style={{ padding: "0" }}
-                        >
-                          {task.status === "NOT_STARTED" && (
-                            <i
-                              className="fa fa-check-circle secondary"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                          {task.status === "ONGOING" && (
-                            <i
-                              className="fa fa-check-circle warning"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                          {task.status === "COMPLETED" && (
-                            <i
-                              className="fa fa-check-circle success"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                          {task.status === "ONHOLD" && (
-                            <i
-                              className="fa fa-check-circle warning"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                        </Dropdown.Toggle>
+                      {(userDetails.id === task?.assignedTo?._id ||
+                        userDetails.role == "SUPER_ADMIN" ||
+                        userDetails.role == "ADMIN") && (
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="success"
+                            id="dropdown-basic"
+                            style={{ padding: "0" }}
+                          >
+                            {task.status === "NOT_STARTED" && (
+                              <i
+                                className="fa fa-check-circle secondary"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "ONGOING" && (
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "COMPLETED" && (
+                              <i
+                                className="fa fa-check-circle success"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "ONHOLD" && (
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                          </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(
-                                event,
-                                task?._id,
-                                "NOT_STARTED"
-                              )
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle secondary"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Not Started
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(event, task?._id, "ONGOING")
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle warning"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Ongoing
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(event, task?._id, "COMPLETED")
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle success"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Completed
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(event, task?._id, "ONHOLD")
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle warning"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            On Hold
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-					  )}
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(
+                                  event,
+                                  task?._id,
+                                  "NOT_STARTED"
+                                )
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle secondary"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Not Started
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(event, task?._id, "ONGOING")
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Ongoing
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(
+                                  event,
+                                  task?._id,
+                                  "COMPLETED"
+                                )
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle success"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Completed
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(event, task?._id, "ONHOLD")
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              On Hold
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      )}
                       <i
-                        className={task?.status === 'COMPLETED' ? 'line-strics' : ''}
+                        className={
+                          task?.status === "COMPLETED" ? "line-strics" : ""
+                        }
                         onClick={() => handleViewDetails(task?._id)}
                       >
                         {task?.title}
                       </i>
-					  
 
                       {task?.status === "NOT_STARTED" && (
                         <Badge bg="secondary">NOT STARTED</Badge>
