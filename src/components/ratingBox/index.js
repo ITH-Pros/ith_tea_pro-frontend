@@ -193,9 +193,11 @@ const RatingBox = (props) => {
     return (
         <>
             <td key={index} >
-                <MDBTooltip tag="div" wrapperProps={{ href: "#" }} title={"click to view details"}>
+                {/* <MDBTooltip tag="div" wrapperProps={{ href: "#" }} title={"click to view details"}>
                     <span style={{ cursor: "pointer", padding: '3px', paddingLeft: '6px', paddingRight: '6px' }} onClick={() => openShowCommentsModal(ratingCommentObj)} className="input_dashboard">{`${ratingCommentObj?.rating}`} </span>
-                </MDBTooltip>
+                </MDBTooltip> */}
+				<span style={{ cursor: "pointer", padding: '3px', paddingLeft: '6px', paddingRight: '6px' }}  className="input_dashboard">{`${ratingCommentObj?.rating}`} </span>
+
             </td>
             {
                 modalShow && <Modals

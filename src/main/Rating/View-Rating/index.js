@@ -222,10 +222,7 @@ export default function Dashboard(props) {
             </tr>
           </thead>
           <tbody>
-            {usersArray.map((user, index) => {
-              let userRatingSum = 0;
-              let userRatingCount = 0;
-
+            {ratingsArray.map((user, index) => {
               return (
                 <tr key={index}>
                   <td className="user_names"> {user.name}</td>
@@ -233,17 +230,11 @@ export default function Dashboard(props) {
                   {Array(days)
                     ?.fill(0)
                     ?.map((day, index) => {
-                      console.log(days,'-----------------------------------------------map day');
-                      let ratingUserObj = ratingsArray.find((el) => {
-                        return el._id === user._id;
-                      });
-                      let ratingCommentObj =
-                        ratingUserObj?.ratingsAndComment?.find(
+                      let ratingUserObj = user.ratings
+                      let ratingCommentObj = ratingUserObj?.find(
                           (el) => el.date - 1 === index
                         );
                       if (ratingCommentObj) {
-                        userRatingSum += ratingCommentObj?.rating;
-                        userRatingCount += 1;
                         return (
                           <RatingBox
                             key={index}
@@ -293,8 +284,8 @@ export default function Dashboard(props) {
                       }
                     })}
                   <td className="userAverage">
-                    {userRatingCount
-                      ? Math.round((userRatingSum / userRatingCount) * 100) /
+                    {user.monthlyAverage
+                      ? Math.round((user.monthlyAverage) * 100) /
                         100
                       : "NA"}
                   </td>
