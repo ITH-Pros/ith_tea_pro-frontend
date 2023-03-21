@@ -234,7 +234,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
                   {/* <p>{task?.status} </p> */}
-                  <select
+                  <select className="form-control form-control-lg"
                     defaultValue={task.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
                   >
