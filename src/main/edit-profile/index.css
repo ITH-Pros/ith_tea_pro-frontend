@@ -1,4 +1,10 @@
-
+.addUserFrom{
+margin: auto !important;
+    margin-left: 31% !important;
+    width: 50% ;
+    margin-top: 25px !important;
+    margin-bottom: 25px !important;
+}
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -8,7 +14,9 @@ label {
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
-
+.form-group {
+  margin-bottom: 1rem !important;
+}
 input {
   display: block;
   width: 100%;
