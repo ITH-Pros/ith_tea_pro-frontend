@@ -116,14 +116,11 @@ export default function Login() {
                     <input type={loginFormValue.showPassword ? "text" : "password"} name='password' placeholder="Password" onChange={updateLoginFormValues} >
 
                     </input>
-                    <i style={{ position: 'relative', top: '25px', right: '28px', cursor: 'pointer' }} name='showPassword' onClick={showHidePassword} onMouseDown={handleMouseDownPassword} className={loginFormValue.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
+                    <i style={{ position: 'relative', top: '22px', right: '21px', cursor: 'pointer' }} name='showPassword' onClick={showHidePassword} onMouseDown={handleMouseDownPassword} className={loginFormValue.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
                     {/* <label>Password</label> */}
                   </div>
                   <button className='loginButton' onClick={handleLogin}>Log in</button>
-                  <div className="or">Or </div>
-                  <div className="icon-button">
-                    <span className="facebook">Forget Password?</span>
-                  </div>
+                  
                 </form>
               </div>
             </div>

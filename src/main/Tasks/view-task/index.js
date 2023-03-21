@@ -6,16 +6,23 @@ import { Button, Modal } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import Toaster from "../../../components/Toaster";
 import {
   addComment,
   addCommentOnTask,
   taskById,
+  updateTaskStatusById,
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
 
 export default function ViewTaskModal(props) {
   const { showViewTask, closeViewTaskModal, selectedTaskId } = props;
+  const [loading, setLoading] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
+//   const setShowToaster = (param) => showToaster(param);
+
 
   console.log("selectedTaskId", selectedTaskId);
   console.log("showViewTask", showViewTask);
@@ -43,6 +50,42 @@ function formatDate(dateString) {
 	const year = date.getUTCFullYear();
 	return `${day}/${month}/${year}`;
   }
+
+  const updateTaskStatus = async (dataToSend) => {
+    try {
+      const res = await updateTaskStatusById(dataToSend);
+      if (res.error) {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        showToaster(true);
+      } else {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        showToaster(true);
+		if (selectedTaskId) {
+			getTaskDetailsById(selectedTaskId);
+		  }
+		// getTasksDataUsingProjectId();
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      showToaster(true);
+      return error.message;
+    }
+  };
+
+
+  const handleStatusChange = (e, taskId) => {
+    const newStatus = e.target.value;
+
+    console.log("newStatus", newStatus);
+    // make API call to update task status with newStatus
+    let dataToSend = {
+      taskId: taskId,
+      status: newStatus,
+    };
+	console.log("dataToSend", dataToSend);
+
+	updateTaskStatus(dataToSend);
+  };
   
 
   const handleSubmit = (e) => {
@@ -178,7 +221,18 @@ function formatDate(dateString) {
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
-                  <p>{task?.status} </p>
+                  {/* <p>{task?.status} </p> */}
+				  <select
+                        defaultValue={task.status}
+                        onChange={(event) =>
+                          handleStatusChange(event, task?._id)
+                        }
+                      >
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="NOT_STARTED">NOT STARTED</option>
+                        <option value="ONHOLD">On Hold</option>
+                        <option value="COMPLETED">Completed</option>
+                      </select>
                 </Form.Group>
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
@@ -257,6 +311,13 @@ function formatDate(dateString) {
           {/* <Button variant="primary">Save Changes</Button> */}
         </Modal.Footer>
       </Modal>
+	  {toaster && (
+          <Toaster
+            message={toasterMessage}
+            show={toaster}
+            close={() => showToaster(false)}
+          />
+        )}
     </>
   );
 }
