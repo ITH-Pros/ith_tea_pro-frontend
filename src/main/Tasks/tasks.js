@@ -142,6 +142,7 @@ const Tasks = () => {
         closeModal();
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
+        window.location.reload();
         if (params?.projectId) {
           setSelectedProjectId(params?.projectId);
         }

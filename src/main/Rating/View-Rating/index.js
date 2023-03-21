@@ -229,14 +229,16 @@ export default function Dashboard(props) {
               return (
                 <tr key={index}>
                   <td className="user_names"> {user.name}</td>
+                  
                   {Array(days)
                     ?.fill(0)
                     ?.map((day, index) => {
+                      console.log(days,'-----------------------------------------------map day');
                       let ratingUserObj = ratingsArray.find((el) => {
                         return el._id === user._id;
                       });
                       let ratingCommentObj =
-                        ratingUserObj?.ratingsAndComment.find(
+                        ratingUserObj?.ratingsAndComment?.find(
                           (el) => el.date - 1 === index
                         );
                       if (ratingCommentObj) {
