@@ -144,6 +144,7 @@ const Tasks = () => {
         setModalShow(false);
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
+        window.location.reload();
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
