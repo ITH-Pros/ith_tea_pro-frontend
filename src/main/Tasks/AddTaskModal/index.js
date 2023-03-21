@@ -668,6 +668,8 @@ export default function AddTaskModal(props) {
                   height={100}
                   width="100%"
                   placeholder="Enter Description"
+				  value={taskFormValue?.description}
+				  onChange={updateTaskDescriptionValue}
                 />
               </Row>
 
