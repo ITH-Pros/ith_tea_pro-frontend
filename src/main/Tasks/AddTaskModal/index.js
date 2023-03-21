@@ -96,6 +96,7 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
+		console.log(selectedProjectFromTask,'selectedProjectFromTask')
       let project = projectList?.filter(
         (item) => item?._id == selectedProjectFromTask?._id
       );
