@@ -167,9 +167,11 @@ button.btn-press.btn-gradient-border {
   padding-bottom: 1rem;
 }
 .taskModalForm .form-label {
-  font-size: 14px;
-  margin-bottom: 0.25rem;
+  font-size: 14px !important;
+  margin-bottom: 0.25rem !important;
 }
 .taskModalForm .form-control {
-  font-size: 13px;
+  font-size: 14px !important;
+  margin-bottom: 0.5rem !important;
+  font-weight: 600;
 }

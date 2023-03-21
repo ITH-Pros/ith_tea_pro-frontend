@@ -665,7 +665,7 @@ export default function AddTaskModal(props) {
                 /> */}
 
                 <TextEditor
-                  height={100}
+                  
                   width="100%"
                   placeholder="Enter Description"
 				  value={taskFormValue?.description}
