@@ -19,7 +19,9 @@ import {
   updateTaskDetails,
   getProjectDetailsById,
   getProjectById,
+  deleteTaskDetails,
 } from "../../../services/user/api";
+// import {deleteTaskDetails} from '../../../services/user/api'
 import Toaster from "../../../components/Toaster";
 import { CONSTENTS } from "../../../constents";
 import Select from "react-select";
@@ -533,6 +535,67 @@ export default function AddTaskModal(props) {
     }
   };
 
+  const deleteTask = async () => {
+	setLoading(true);
+	try {
+		let {
+			projectId,
+			section,
+			title,
+			description,
+			assignedTo,
+			dueDate,
+			priority,
+			status,
+			tasklead,
+			attachment,
+			completedDate,
+		  } = taskFormValue;
+		  let dataToSend = {};
+		  projectId && (dataToSend["projectId"] = projectId);
+		//   section && (dataToSend["section"] = section);
+		//   title && (dataToSend["title"] = title);
+		//   description && (dataToSend["description"] = description);
+		//   assignedTo && (dataToSend["assignedTo"] = assignedTo);
+		//   dueDate && (dataToSend["dueDate"] = dueDate);
+		//   priority && (dataToSend["priority"] = priority);
+		//   status && (dataToSend["status"] = status);
+		//   selectedLeads && (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+		  selectedTask && (dataToSend["taskId"] = selectedTask?._id);
+		//   completedDate && (dataToSend["completedDate"] = completedDate);
+	  const taskRes = await deleteTaskDetails(dataToSend);
+	  setLoading(false);
+	  if (taskRes.error) {
+		setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+		setShowToaster(true);
+		return;
+	  } else {
+		setSelectedLeads("");
+        setTaskFormValue({
+          ...taskFormValue,
+          title: "",
+          description: "",
+          assignedTo: "",
+          dueDate: "",
+          completedDate: "",
+          priority: "",
+          status: "",
+          attachment: "",
+        });
+        setValidated(false);
+        setShowAddTaskModal(false);
+        getNewTasks(projectId);
+	  }
+	} catch (error) {
+	  console.log(error);
+	  setLoading(false);
+	  setToasterMessage(error?.error?.message || "Something Went Wrong");
+	  setShowToaster(true);
+	  return error.message;
+	}
+	  };
+		  
+
   return (
     <>
       <Modal
@@ -768,6 +831,7 @@ export default function AddTaskModal(props) {
                   </Button>
                 )}
                 {selectedTask && (
+					<div>
                   <Button
                     className=" btn-press  btn-gradient-border btnDanger"
                     type="button"
@@ -775,6 +839,16 @@ export default function AddTaskModal(props) {
                   >
                     Update
                   </Button>
+				  <Button
+                    className=" btn-press  btn-gradient-border btnDanger"
+                    type="button"
+                    onClick={deleteTask}
+                  >
+                    Delete Task
+                  </Button>
+
+				  </div>
+				  
                 )}
                 {!selectedTask && (
                   <Button

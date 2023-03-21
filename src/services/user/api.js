@@ -98,6 +98,10 @@ export async function getTaskDetailsByTaskId(data) {
 export async function updateTaskDetails(data) {
     return (axiosInstance.patch('/task/v1/edit', data).then(res => res.data))
 }
+export async function deleteTaskDetails(data) {
+	return (axiosInstance.patch('/task/v1/delete', data).then(res => res.data))
+}
+
 export async function createTask(data) {
     return (axiosInstance.post('/task/v1/user/insert', data).then(res => res.data))
 }
