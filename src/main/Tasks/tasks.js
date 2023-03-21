@@ -364,7 +364,7 @@ const Tasks = () => {
 			{project?._id?.projectId && project?._id?.section && (
 				<Accordion.Header>
              <p style={{ marginBottom: '0',}}>{project?._id?.projectId} / {project?._id?.section} </p> 
-               {/* <span> collapsed </span> */}
+             
               </Accordion.Header>
              
 		  )}
@@ -424,7 +424,7 @@ const Tasks = () => {
                   {project?.tasks?.map((task) => (
                     <li key={task?._id}>
 
-					{(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
+					{/* {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
                       <select
                         defaultValue={task.status}
                         onChange={(event) =>
@@ -436,8 +436,34 @@ const Tasks = () => {
                         <option value="ONHOLD">On Hold</option>
                         <option value="COMPLETED">Completed</option>
                       </select>
-					)}
-                      {task?.status === "ONGOING" && (
+					)} */}
+            <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic" style={{padding:'0',}}>
+            <i
+                          className="fa fa-check-circle warning"
+                          aria-hidden="true"
+                        ></i>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+            <Dropdown.Item href="#/action-1">
+            <i
+                          className="fa fa-check-circle secondary"
+                          aria-hidden="true"
+                        ></i> No Progress</Dropdown.Item>
+            <Dropdown.Item href="#/action-2"> <i
+                          className="fa fa-check-circle warning"
+                          aria-hidden="true"
+                        ></i> In Progress</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">
+            <i
+                          className="fa fa-check-circle success"
+                          aria-hidden="true"
+                        ></i>
+              Completed</Dropdown.Item>
+            </Dropdown.Menu>
+            </Dropdown>
+                      {/* {task?.status === "ONGOING" && (
                         <i
                           className="fa fa-check-circle warning"
                           aria-hidden="true"
@@ -460,8 +486,8 @@ const Tasks = () => {
                           className="fa fa-check-circle"
                           aria-hidden="true"
                         ></i>
-                      )}{" "}
-					  <i onClick={()=>handleViewDetails(task?._id)} >{task?.title}</i>
+                      )}{" "} */}
+					  <i className="line-strics" onClick={()=>handleViewDetails(task?._id)} >{task?.title}</i>
                       
                       {task?.status === "NOT_STARTED" && (
                         <Badge bg="secondary">NOT STARTED</Badge>
@@ -526,6 +552,9 @@ const Tasks = () => {
                 </ul>
               </Accordion.Body>
               <div className="collpase">collapsed</div>
+               <div className="addtask">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i> 
+                Add Task</div>
             </Accordion.Item>
            
           ))}
