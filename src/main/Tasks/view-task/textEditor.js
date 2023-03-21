@@ -11,12 +11,16 @@ const TextEditor = ({ height, width, placeholder, value, onChange }) => {
     onChange && onChange(content);
   };
 
+  
+  
+
   return (
     <ReactQuill
       style={{ height, width }}
       placeholder={placeholder}
       value={editorContent}
       onChange={handleChange}
+
     />
   );
 };

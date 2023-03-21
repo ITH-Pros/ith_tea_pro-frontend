@@ -35,10 +35,12 @@ export default function ViewTaskModal(props) {
   const [text, setText] = useState("");
   const [count, setCount] = useState(250);
 
-  const handleTextChange = (e) => {
-    const newText = e.target.value;
+  const handleTextChange = (content) => {
+	// console.log('e.target.value', e.target.value);
+	// console.log('task', task);
+    const newText = content;
     setText(newText);
-    setCount(250 - newText.length);
+    setCount(250 - newText?.length);
   };
 
   //   format date function
@@ -117,6 +119,8 @@ export default function ViewTaskModal(props) {
       } else {
         // showToaster(true)
         // setToasterMessage(response.message)
+		// setText("");
+		resetTextEditor();
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -155,6 +159,10 @@ export default function ViewTaskModal(props) {
   const resetModalData = () => {
     setShowViewTaskModal(false);
   };
+
+  const resetTextEditor = () => {
+	setText("");
+	  };
 
   return (
     <>
@@ -271,7 +279,7 @@ export default function ViewTaskModal(props) {
                         {item?.commentedBy?.name}
                       </div>
                       <div className="commentText">
-                        <p className="comment">{item?.comment}</p>{" "}
+                        <p dangerouslySetInnerHTML={{__html: item?.comment}} className="comment"></p>
                         <span className="date sub-text">{createdAt}</span>
                       </div>
                     </div>
@@ -301,6 +309,7 @@ export default function ViewTaskModal(props) {
                       placeholder="Enter text here"
 					  value={text}
                     onChange={handleTextChange}
+					// reset = {resetTextEditor}
                     />
                     {/* <textarea value={comment} onChange={handleCommentChange} /> */}
                   </label>
