@@ -168,10 +168,10 @@ button.btn-press.btn-gradient-border {
 }
 .taskModalForm .form-label {
   font-size: 14px !important;
-  margin-bottom: 0.25rem !important;
+  margin-bottom: 0.5rem !important;
+  font-weight: 600 !important;
 }
 .taskModalForm .form-control {
-  font-size: 14px !important;
-  margin-bottom: 0.5rem !important;
-  font-weight: 600;
+  font-size: 13px;
+    appearance: auto;
 }

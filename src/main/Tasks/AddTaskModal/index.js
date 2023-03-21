@@ -658,7 +658,7 @@ export default function AddTaskModal(props) {
                 </Form.Group>
               </Row>
 
-              <Row className="mb-3">
+              <Row className="mb-6">
                 {/* <FroalaEditorComponent
                   tag="textarea"
                   onModelChange={updateTaskDescriptionValue}
