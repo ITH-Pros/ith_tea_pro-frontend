@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { setPasswordApi, verifyTokenApi } from "../services/user/api";
 
 import { useParams, useNavigate } from "react-router-dom";
-
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import "./index.css";
 import Toaster from "../components/Toaster";
 import { set } from "immutable";
@@ -107,17 +108,17 @@ function PasswordForm() {
   };
 
   return (
-    <div className="addUserFrom rightDashboard">
+    <div className="set-password">
       <form className="password-form" onSubmit={handleSubmit}>
+        <div className="hed-pass">
         <h4>Email : {email}</h4>
-        <div className="form-group">
-          <label>
-            Password:
-            <input type="password" value={password} onChange={handleChange} />
-          </label>
         </div>
-        <br />
-        <div className="form-group">
+    
+         <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password"  value={password} onChange={handleChange} placeholder="Password" />
+      </Form.Group>
+        {/* <div className="form-group">
           <label>
             Confirm Password:
             <input
@@ -126,15 +127,21 @@ function PasswordForm() {
               onChange={(event) => handleChangeConfirmPassword(event)}
             />
           </label>
-        </div>
+        </div> */}
+           <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label> Confirm Password</Form.Label>
+        <Form.Control type="password" value={confirmPassword}
+              onChange={(event) => handleChangeConfirmPassword(event)} placeholder="Confirm Password" />
+      </Form.Group>
         <div className="form-group">
           <p className="error">{validationError}</p>
         </div>
         {password === confirmPassword && (
-          <div className="d-flex justify-content-end">
-            <button variant="outline-primary" className="mr-3" type="submit">
+          <div className="d-flex justify-content-center">
+            <Button variant="primary" className="submit-button" type="submit">
               Submit
-            </button>
+            </Button>
+           
           </div>
         )}
       </form>

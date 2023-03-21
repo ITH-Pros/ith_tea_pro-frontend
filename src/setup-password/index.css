@@ -1,11 +1,40 @@
 .password-form {
-  margin: 0 auto;
-  max-width: 400px;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-  justify-content: center;
+  position: absolute;
+  background: #fff;
+  height: auto;
+  width: 400px;
+  padding: 25px;
+  -moz-box-shadow: 0px 30px 150px;
+  border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+}
+.hed-pass {
+  background-color: #f0f0f0;
+  padding: 10px;
+  color: #7e3794;
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+.hed-pass h4{
+  margin-bottom: 0px;
+  font-size: 1rem;
 }
 .error {
   color: red;
+}
+.set-password{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.submit-button{
+  background: #000;
+}
+.submit-button{
+  background-color: rgb(126, 55, 148) !important;
+  border-color: rgb(126, 55, 148) !important;
+  width: 100px !important;
 }

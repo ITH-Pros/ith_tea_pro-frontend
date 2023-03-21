@@ -75,8 +75,8 @@ export default function AddUser(props) {
 			</Link>
 		</div>
             <Form noValidate validated={validated}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} md="6">
+                <Row className="mb-3 mt-3">
+                    <Form.Group as={Col} md="4">
                         <Form.Label>Name</Form.Label>
                         <Form.Control
                             required
@@ -90,7 +90,7 @@ export default function AddUser(props) {
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group as={Col} md="6">
+                    <Form.Group as={Col} md="4">
                         <Form.Label>Email</Form.Label>
                         <Form.Control
                             required
@@ -104,78 +104,7 @@ export default function AddUser(props) {
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
-                </Row>
-
-                {/* <Row className="mb-3"> */}
-                    {/* <Form.Group as={Col} md="6">
-                        <Form.Label>Employee ID</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            value={registerFromValue.employeeId}
-                            name='employeeId'
-                            onChange={updateRegisterFormValue}
-                        />
-
-                        <Form.Control.Feedback type="invalid">
-                            Employee ID is required !!
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                    </Form.Group> */}
-
-                    {/* <Form.Group as={Col} md="6" >
-                        <Form.Label>Department</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            name='department'
-                            onChange={updateRegisterFormValue}
-                            value={registerFromValue.department}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                            Employee ID is required !!
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-
-                    </Form.Group> */}
-                {/* </Row> */}
-                {/* <Row className="mb-3"> */}
-                    {/* <Form.Group as={Col} md="6" >
-                        <Form.Label>Wing</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            // placeholder="Wing"
-                            name='wings'
-                            value={registerFromValue.wings}
-                            onChange={updateRegisterFormValue}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Employee ID is required !!
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                    </Form.Group> */}
-
-                    {/* <Form.Group as={Col} md="6" >
-                        <Form.Label>Designation</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            name='designation'
-                            onChange={updateRegisterFormValue}
-                            value={registerFromValue.designation}
-                        >
-                        </Form.Control>
-                        <Form.Control.Feedback type="invalid">
-                            Employee ID is required !!
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                    </Form.Group> */}
-                {/* </Row> */}
-
-                <Row className="mb-3 " >
-                    <Form.Group as={Col} md="3"  >
+                    <Form.Group as={Col} md="4"  >
                         <Form.Label>Role</Form.Label>
                         <Form.Control
                             required
@@ -194,19 +123,11 @@ export default function AddUser(props) {
                         </Form.Control>
                     </Form.Group>
 
-                    {/* <Form.Group as={Col} md="3" className="field" >
-                        <div >
-                            <span className="fa fa-lock"></span>
-                            <input autoComplete={registerFromValue.password} type={registerFromValue.showPassword ? "text" : "password"} name='password' placeholder="Password" onChange={updateRegisterFormValue} >
-                            </input>
-                            <span> <i style={{ position: 'relative', cursor: 'pointer' }} name='showPassword' onClick={showHidePassword} className={registerFromValue.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
-                            </span>
-                        </div>
-                    </Form.Group> */}
-
-
                 </Row>
 
+                
+
+              
                 <div style={{ marginRight: '10px' }} className="text-right">
                     <Button className="btn-gradient-border btnDanger "
                         type="button"
