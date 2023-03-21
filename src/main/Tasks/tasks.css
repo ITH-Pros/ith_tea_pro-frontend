@@ -132,6 +132,10 @@
 }
 button.accordion-button{
   width: auto;
+  text-transform: capitalize;
+}
+.line-strics{
+  text-decoration: line-through;
 }
 .accordion-body{
       background: #fff;
@@ -216,6 +220,14 @@ button.accordion-button{
   font-size: 15px;
   white-space: normal;
   word-break: break-word;
+}
+.addtask {
+  margin-left: 34px;
+  cursor: pointer;
+}
+.addtask i{
+  color: green;
+  margin-right: 5px;
 }
 .accordion-body ul li span {
   margin-right: 5px;

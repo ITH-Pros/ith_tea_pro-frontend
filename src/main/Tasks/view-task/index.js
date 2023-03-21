@@ -2,6 +2,7 @@
 import React, { Component, useEffect } from "react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import TextEditor from "./textEditor";
 
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -21,8 +22,7 @@ export default function ViewTaskModal(props) {
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
-//   const setShowToaster = (param) => showToaster(param);
-
+  //   const setShowToaster = (param) => showToaster(param);
 
   console.log("selectedTaskId", selectedTaskId);
   console.log("showViewTask", showViewTask);
@@ -41,14 +41,14 @@ export default function ViewTaskModal(props) {
     setCount(250 - newText.length);
   };
 
-//   format date function
+  //   format date function
 
-function formatDate(dateString) {
-	const date = new Date(dateString);
-	const day = date.getUTCDate().toString().padStart(2, '0');
-	const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-	const year = date.getUTCFullYear();
-	return `${day}/${month}/${year}`;
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
   }
 
   const updateTaskStatus = async (dataToSend) => {
@@ -60,10 +60,10 @@ function formatDate(dateString) {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         showToaster(true);
-		if (selectedTaskId) {
-			getTaskDetailsById(selectedTaskId);
-		  }
-		// getTasksDataUsingProjectId();
+        if (selectedTaskId) {
+          getTaskDetailsById(selectedTaskId);
+        }
+        // getTasksDataUsingProjectId();
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -71,7 +71,6 @@ function formatDate(dateString) {
       return error.message;
     }
   };
-
 
   const handleStatusChange = (e, taskId) => {
     const newStatus = e.target.value;
@@ -82,11 +81,10 @@ function formatDate(dateString) {
       taskId: taskId,
       status: newStatus,
     };
-	console.log("dataToSend", dataToSend);
+    console.log("dataToSend", dataToSend);
 
-	updateTaskStatus(dataToSend);
+    updateTaskStatus(dataToSend);
   };
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,11 +97,11 @@ function formatDate(dateString) {
     addcomment();
   };
 
-    const handleDescSubmit = (comment, attachment) => {
-      console.log(`Comment: ${comment}`);
-      console.log(`Attachment: ${attachment}`);
-      // You can perform any action with the comment and attachment data here
-    };
+  const handleDescSubmit = (comment, attachment) => {
+    console.log(`Comment: ${comment}`);
+    console.log(`Attachment: ${attachment}`);
+    // You can perform any action with the comment and attachment data here
+  };
 
   const addcomment = async () => {
     let dataToSend = {
@@ -228,17 +226,15 @@ function formatDate(dateString) {
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
                   {/* <p>{task?.status} </p> */}
-				  <select
-                        defaultValue={task.status}
-                        onChange={(event) =>
-                          handleStatusChange(event, task?._id)
-                        }
-                      >
-                        <option value="ONGOING">Ongoing</option>
-                        <option value="NOT_STARTED">NOT STARTED</option>
-                        <option value="ONHOLD">On Hold</option>
-                        <option value="COMPLETED">Completed</option>
-                      </select>
+                  <select
+                    defaultValue={task.status}
+                    onChange={(event) => handleStatusChange(event, task?._id)}
+                  >
+                    <option value="ONGOING">Ongoing</option>
+                    <option value="NOT_STARTED">NOT STARTED</option>
+                    <option value="ONHOLD">On Hold</option>
+                    <option value="COMPLETED">Completed</option>
+                  </select>
                 </Form.Group>
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
@@ -296,7 +292,18 @@ function formatDate(dateString) {
                     onChange={handleTextChange}
                     // value={text}
                   ></textarea> */}
-                  <CommentBox onSubmit={handleDescSubmit} />
+                  {/* <CommentBox onSubmit={handleDescSubmit} /> */}
+                  <label>
+                    Comment:
+                    <TextEditor
+                      height={100}
+                      width="100%"
+                      placeholder="Enter text here"
+					  value={text}
+                    onChange={handleTextChange}
+                    />
+                    {/* <textarea value={comment} onChange={handleCommentChange} /> */}
+                  </label>
                 </div>
                 <div className="button-group pull-right">
                   {/* <p className="counter">{count}</p> */}
@@ -322,13 +329,13 @@ function formatDate(dateString) {
           {/* <Button variant="primary">Save Changes</Button> */}
         </Modal.Footer>
       </Modal>
-	  {toaster && (
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        )}
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+      )}
     </>
   );
 }
