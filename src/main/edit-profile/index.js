@@ -150,7 +150,7 @@ function UserForm(props) {
   }
 
   return (
-    <div className="addUserFrom">
+    <div className="addUserFrom-edit">
       <form className="row">
         <div className="form-group col-4">
           <label htmlFor="name">Name:</label>
