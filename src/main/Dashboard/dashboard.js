@@ -401,7 +401,7 @@ export default function Dashboard(props) {
                           lg={4}
                           className="middle"
                         >
-                          {(userDetails.id === task?.assignedTo ||
+                          {/* {(userDetails.id === task?.assignedTo ||
                             userDetails.role == "SUPER_ADMIN" ||
                             userDetails.role == "ADMIN") && (
                             <select
@@ -416,9 +416,100 @@ export default function Dashboard(props) {
                               <option value="ONHOLD">On Hold</option>
                               <option value="COMPLETED">Completed</option>
                             </select>
-                          )}
+                          )} */}
+						  {(userDetails.id === task?.assignedTo?._id ||
+                        userDetails.role == "SUPER_ADMIN" ||
+                        userDetails.role == "ADMIN") && (
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="success"
+                            id="dropdown-basic"
+                            style={{ padding: "0" }}
+                          >
+                            {task.status === "NOT_STARTED" && (
+                              <i
+                                className="fa fa-check-circle secondary"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "ONGOING" && (
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "COMPLETED" && (
+                              <i
+                                className="fa fa-check-circle success"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "ONHOLD" && (
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                          </Dropdown.Toggle>
 
-                          <span
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(
+                                  event,
+                                  task?._id,
+                                  "NOT_STARTED"
+                                )
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle secondary"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Not Started
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(event, task?._id, "ONGOING")
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Ongoing
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(
+                                  event,
+                                  task?._id,
+                                  "COMPLETED"
+                                )
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle success"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Completed
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={(event) =>
+                                handleStatusChange(event, task?._id, "ONHOLD")
+                              }
+                            >
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              On Hold
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      )}
+
+                          {/* <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
                           >
@@ -440,7 +531,7 @@ export default function Dashboard(props) {
                                 aria-hidden="true"
                               ></i>
                             )}
-                          </span>
+                          </span> */}
                           <h5 className="text-truncate">{task?.title}</h5>
                         </Col>
                         <Col lg={4} className="middle">

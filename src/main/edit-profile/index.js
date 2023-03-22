@@ -149,9 +149,9 @@ function UserForm(props) {
   }
 
   return (
-	<div className="addUserFrom rightDashboard" > 
-    <form >
-      <div className="form-group">
+	<div className="addUserFrom"> 
+    <form className='row'>
+      <div className="form-group col-4">
         <label htmlFor="name">Name:</label>
         <input
           type="text"
@@ -161,8 +161,7 @@ function UserForm(props) {
 		  readOnly={!isEditable}
         />
       </div>
-	  {/* Role */}
-	  <div className="form-group">
+	  <div className="form-group col-4">
 		<label htmlFor="role">Role:</label>
 		<input 
 			type="text"
@@ -172,17 +171,8 @@ function UserForm(props) {
 			readOnly={true}
 		/>
 	  </div>
-      <div className="form-group">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-		  readOnly={true}
-        />
-      </div>
-      <div className="form-group">
+     
+      <div className="form-group col-4">
         <label htmlFor="employeeId">Employee ID:</label>
         <input
           type="text"
@@ -192,7 +182,19 @@ function UserForm(props) {
 		  readOnly={!isEditable}
         />
       </div>
-      <div className="form-group">
+     
+      <div className="form-group col-4">
+        <label htmlFor="dob">Date of Birth:</label>
+        <input
+          type="date"
+          id="dob"
+          value={formatDate(dob)}
+		  max={formatDate(new Date())}
+          onChange={(event) => setDob(event.target.value)}
+		  readOnly={!isEditable}
+        />
+      </div>
+      <div className="form-group col-4">
         <label htmlFor="designation">Designation:</label>
         <input
           type="text"
@@ -202,7 +204,7 @@ function UserForm(props) {
 		  readOnly={!isEditable}
         />
       </div>
-      <div className="form-group">
+      <div className="form-group col-4">
         <label htmlFor="department">Department:</label>
         <input
           type="text"
@@ -212,15 +214,17 @@ function UserForm(props) {
 		  readOnly={!isEditable}
         />
       </div>
+     
+      </form>
+      <form className='row'>
       <div className="form-group">
-        <label htmlFor="dob">Date of Birth:</label>
+        <label htmlFor="email">Email:</label>
         <input
-          type="date"
-          id="dob"
-          value={formatDate(dob)}
-		  max={formatDate(new Date())}
-          onChange={(event) => setDob(event.target.value)}
-		  readOnly={!isEditable}
+          type="email"
+          id="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+		  readOnly={true}
         />
       </div>
       <div className="form-group">
@@ -257,8 +261,6 @@ function UserForm(props) {
 		<button onClick={handleSubmit} className="submit-button"> Update
   </button>)}
  
-
-  {/* Edit button */}
   {!isEditable && (
 	<button className="submit-button edit" onClick={handleEditClick} >Edit
   </button>)
