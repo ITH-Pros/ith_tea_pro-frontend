@@ -175,3 +175,6 @@ button.btn-press.btn-gradient-border {
   font-size: 13px;
     appearance: auto;
 }
+.ql-link {
+  display: none !important;
+}

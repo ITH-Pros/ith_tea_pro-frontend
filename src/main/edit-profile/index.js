@@ -152,7 +152,11 @@ function UserForm(props) {
   return (
     <div className="addUserFrom-edit">
       <form className="row">
-        <div className="form-group col-4">
+      <div className='profile-images'>
+      
+          <ImageUpload />
+        </div>
+        <div className="form-group col-12">
           <label htmlFor="name">Name:</label>
           <input
             type="text"
@@ -195,7 +199,7 @@ function UserForm(props) {
             readOnly={!isEditable}
           />
         </div>
-        <div className="form-group col-4">
+        <div className="form-group col-6">
           <label htmlFor="designation">Designation:</label>
           <input
             type="text"
@@ -205,7 +209,7 @@ function UserForm(props) {
             readOnly={!isEditable}
           />
         </div>
-        <div className="form-group col-4">
+        <div className="form-group col-6">
           <label htmlFor="department">Department:</label>
           <input
             type="text"
@@ -257,10 +261,7 @@ function UserForm(props) {
             readOnly={!isEditable}
           />
         </div>
-        <div>
-          <h5>Profile Image</h5>
-          <ImageUpload />
-        </div>
+      
         {isEditable && (
           <button onClick={handleSubmit} className="submit-button">
             {" "}
