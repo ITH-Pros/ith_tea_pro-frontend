@@ -87,6 +87,10 @@ export async function getProjectsTask(data) {
       .then((res) => res.data);
 }
 
+export async function archiveSectionApi(data) {
+	return (axiosInstance.patch('projects/v1/archive/section', data).then(res => res.data))
+}
+
 export async function updateSection(data) {
 	return (axiosInstance.patch('projects/v1/edit/section', data).then(res => res.data))
 }

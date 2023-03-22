@@ -1,7 +1,21 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 const ImageUpload = () => {
   const [image, setImage] = useState(null);
+  const [url, imageURl] = useState(null);
+
+  useEffect(() => {
+    // setImage(localStorage.getItem('imageUrl'));
+    imageURl(localStorage.getItem("imageUrl"));
+    console.log(
+      localStorage.getItem("imageUrl"),
+      '------------------------------localStorage.getItem("imageUrl")'
+    );
+    localStorage.removeItem("imageUrl");
+   
+  }, [])
+  
+
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
@@ -12,44 +26,48 @@ const ImageUpload = () => {
       alert("Please select a valid image file (jpg, png, gif)");
     }
   };
-    const handleSubmit = (event) => {
-      event.preventDefault();
- if (!image) {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!image) {
       alert("Please select an image file");
       return;
     }
 
-      const formData = new FormData();
-      formData.append("file", image);
+    const formData = new FormData();
+    formData.append("file", image);
 
-      fetch("http://192.168.29.240:9000/upload/v1/upload/file", {
-        method: "PUT",
-        body: formData,
+    fetch("http://192.168.29.240:9000/upload/v1/upload/file", {
+      method: "PUT",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        imageURl(data.url);
+        localStorage.setItem("url", data.url);
       })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error(error));
-    };
+      .catch((error) => console.error(error));
+  };
 
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
+  //   const handleSubmit = (event) => {
+  //     event.preventDefault();
 
-//     if (!image) {
-//       alert("Please select an image file");
-//       return;
-//     }
+  //     if (!image) {
+  //       alert("Please select an image file");
+  //       return;
+  //     }
 
-//     const formData = new FormData();
-//     formData.append("image", image);
+  //     const formData = new FormData();
+  //     formData.append("image", image);
 
-//     fetch("http://your-api-endpoint.com/upload", {
-//       method: "POST",
-//       body: formData,
-//     })
-//       .then((response) => response.json())
-//       .then((data) => console.log(data))
-//       .catch((error) => console.error(error));
-//   };
+  //     fetch("http://your-api-endpoint.com/upload", {
+  //       method: "POST",
+  //       body: formData,
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => console.log(data))
+  //       .catch((error) => console.error(error));
+  //   };
 
   return (
     <div className="image-upload">
@@ -57,9 +75,10 @@ const ImageUpload = () => {
         <div className="upload-icon">
           <i className="fas fa-cloud-upload-alt"></i>
         </div>
-        {image ? (
-          <img src={URL.createObjectURL(image)} alt="Preview" />
-        ) : (
+        {(
+          <img src={url} alt="Preview" />
+        )}
+        {!url &&(
           <span>Select an image file</span>
         )}
       </label>
@@ -69,9 +88,11 @@ const ImageUpload = () => {
         accept="image/*"
         onChange={handleImageChange}
       />
-      <button onClick={handleSubmit} disabled={!image}>
-        Upload
-      </button>
+      {!url && (
+        <button onClick={handleSubmit} disabled={!image}>
+          Upload
+        </button>
+      )}
     </div>
   );
 };
