@@ -138,6 +138,7 @@ export default function AddTaskModal(props) {
 	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
       console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
       setSelectedLeads(project[0]?.managedBy);
+	  setUserList(project[0]?.accessibleBy);
     //   console.log(project);
     } else if (selectedTask ) {
       let project = projectList?.filter(
@@ -639,7 +640,7 @@ export default function AddTaskModal(props) {
                     onChange={onchangeSelectedProject}
                     value={taskFormValue.projectId}
                     name="projectId"
-                    disabled={selectedTask || handleProjectId}
+                    disabled={selectedTask || handleProjectId || selectedProjectFromTask}
                   >
                     <option value="" disabled>
                       Select Project
@@ -665,6 +666,7 @@ export default function AddTaskModal(props) {
                     name="section"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.section}
+					disabled={selectedProjectFromTask}
                   >
                     <option value="" disabled>
                       Select Section
