@@ -21,21 +21,22 @@
     text-align: right;
 }
 .addTaskBtn{
-        background-color: #27ae60!important;
+    background-color: #8355ad!important;
     line-height: 16px;
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
-    flex: 1;
+    flex: 1 1;
     text-align: center;
     justify-content: center;
     transition: color .3s linear;
     opacity: .9;
     color: #fff!important;
-    border-color: rgba(0,0,0,.175);
+    border-color: #d1a2fb;
     padding: 8px 12px;
-    border-radius: 4px;
-    max-width: 100px;
+    border-radius: 5px;
+    /* max-width: 100px; */
+    border: 1px solid;
 
 }
 #dialog-window .accordion-item{
