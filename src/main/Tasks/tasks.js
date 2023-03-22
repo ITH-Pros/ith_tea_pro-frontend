@@ -586,7 +586,7 @@ const Tasks = () => {
                           )}
                         </Badge>
                       )}
-                      {(userDetails.id === task?.assignedTo?._id ||
+                      {/* {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role == "SUPER_ADMIN" ||
                         userDetails.role == "ADMIN") && (
                         <a
@@ -604,7 +604,9 @@ const Tasks = () => {
                         >
                           Edit
                         </a>
-                      )}
+                        
+                       
+                      )} */}
                     </li>
                   ))}
                 </ul>
