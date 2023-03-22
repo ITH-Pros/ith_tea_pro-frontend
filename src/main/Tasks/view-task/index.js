@@ -97,6 +97,7 @@ export default function ViewTaskModal(props) {
 
     //   ------------------------- comment --------------------------
     addcomment();
+
   };
 
   const handleDescSubmit = (comment, attachment) => {
