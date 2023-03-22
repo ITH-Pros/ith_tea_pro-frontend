@@ -2,11 +2,18 @@
   margin: auto !important;
   margin-left: 31% !important;
   width: 50%;
-  margin-top: 25px !important;
+  margin-top: 125px !important;
   margin-bottom: 25px !important;
   background-color: #fff;
   padding: 30px;
   border-radius: 15px;
+  position: relative;
+  padding-top: 135px;
+}
+.profile-images {
+  position: absolute;
+  top: -75px;
+  right: 17px;
 }
 .form-group {
   margin-bottom: 1.5rem;
@@ -58,37 +65,30 @@ input:focus {
 /* Base styles for the image upload component */
 .image-upload {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
+  justify-content: center;
 }
 
 .image-upload label {
   display: block;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
-  margin-bottom: 10px;
 }
-
+.image-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
 .image-upload input[type="file"] {
   display: none;
 }
 
 .image-upload button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 300px;
-  height: 200px;
-  margin-bottom: 20px;
-  background-color: #f2f2f2;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: box-shadow 0.2s ease-in-out;
+
+  display: none;
 }
 
 .image-upload button:hover {
@@ -132,8 +132,10 @@ input:focus {
 /* Styles for larger screens */
 @media screen and (min-width: 768px) {
   .image-upload {
-    width: 50%;
-    margin: 50px auto;
+    width: 180px;
+    margin: auto;
+    height: 180px;
+    background: #f9f1ff;
   }
 }
 
