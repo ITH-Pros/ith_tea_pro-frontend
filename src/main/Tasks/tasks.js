@@ -523,7 +523,7 @@ const archiveConFirmation = (sectionId) => {
                   (Number(project?.completedTasks || 0) /
                     Number(project?.totalTasks || 1)) *
                     100
-                ).toFixed(2) + " %"}
+                ).toFixed(2) + " % "}
                 <ProgressBar>
                   <ProgressBar
                     variant="success"
@@ -583,7 +583,7 @@ const archiveConFirmation = (sectionId) => {
               <Accordion.Body>
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
-                    <li key={task?._id}>
+                    <li key={task?._id} className="share-wrapper-ui">
                       {/* {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
                       <select
                         defaultValue={task.status}
@@ -761,6 +761,7 @@ const archiveConFirmation = (sectionId) => {
                         
                        
                       )} */}
+                      <div className="task-hover"> <a > <i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div>
                     </li>
                   ))}
                 </ul>
@@ -786,7 +787,7 @@ const archiveConFirmation = (sectionId) => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>
+            <div className="form-group">
               <label>Section</label>
               <input
                 required
@@ -796,9 +797,10 @@ const archiveConFirmation = (sectionId) => {
                 onChange={(e) => setSectionName(e.target.value)}
               />
             </div>
+            <div className="text-right">
             {selectedProjectId && sectionName && (
               <Button
-                style={{ marginLeft: "16px" }}
+                style={{ marginLeft: "10px" }}
                 className="btn btn-danger mr-3"
                 onClick={() => addSection()}
               >
@@ -807,12 +809,14 @@ const archiveConFirmation = (sectionId) => {
             )}
 
             <Button
-              style={{ marginLeft: "16px" }}
-              className="btn mr-3"
+              style={{ marginLeft: "5px" }}
+              className="btn"
               onClick={() => setModalShow(false)}
             >
               Cancel
             </Button>
+            </div>
+           
           </Modal.Body>
         </Modal>
 
