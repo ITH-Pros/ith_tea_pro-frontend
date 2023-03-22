@@ -6,9 +6,10 @@ import { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
+// import "froala-editor/css/froala_style.min.css";
+// import "froala-editor/css/froala_editor.pkgd.min.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+import AttachmentUploader from "./attachment";
 
 import { Modal } from "react-bootstrap";
 import {
@@ -746,6 +747,9 @@ export default function AddTaskModal(props) {
                   value={taskFormValue?.description}
                   onChange={updateTaskDescriptionValue}
                 />
+              </Row>
+              <Row className="mt-5">
+                <AttachmentUploader />
               </Row>
 
               <Row className="mb-3 mt-5">
