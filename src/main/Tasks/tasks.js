@@ -312,7 +312,7 @@ const Tasks = () => {
         >
           Add Task
         </button>
-       
+
         {projects?.length !== 0 &&
           userDetails?.role !== "CONTRIBUTOR" &&
           selectedProjectId && (
@@ -348,28 +348,30 @@ const Tasks = () => {
           closeViewTaskModal={closeViewTaskModal}
           selectedTaskId={selectedTaskId}
         />
-         
-        
 
         <Accordion alwaysOpen="true">
-		{!projects?.length &&
+          {!projects?.length &&
             params?.projectId &&
             userDetails?.role !== "CONTRIBUTOR" && (
-        <div className="add-section-center">
-          <div className="project-card-section">
-          
-          
-              <a onClick={() => {
-                showAddSectionModal(true);
-              }}>
-                <i class="fa fa-plus-circle fa-3x addBtn-section" title="Add Project" aria-hidden="true"> Add Section</i>
-               
-                </a>
-          </div>
-         
-        </div>
-		)}
-
+              <div className="add-section-center">
+                <div className="project-card-section">
+                  <a
+                    onClick={() => {
+                      showAddSectionModal(true);
+                    }}
+                  >
+                    <i
+                      class="fa fa-plus-circle fa-3x addBtn-section"
+                      title="Add Project"
+                      aria-hidden="true"
+                    >
+                      {" "}
+                      Add Section
+                    </i>
+                  </a>
+                </div>
+              </div>
+            )}
 
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
@@ -382,26 +384,20 @@ const Tasks = () => {
               )}
 
               <div className="d-flex rightTags">
+                {parseFloat(
+                  (Number(project?.completedTasks || 0) /
+                    Number(project?.totalTasks || 1)) *
+                    100
+                ).toFixed(2) + " %"}
                 <ProgressBar>
                   <ProgressBar
                     variant="success"
-                    now={100 * (project?.completedTasks / project?.total)}
+                    now={
+                      100 *
+                      (Number(project?.completedTasks || 0) /
+                        Number(project?.totalTasks || 1))
+                    }
                     key={1}
-                  />
-                  <ProgressBar
-                    variant="warning"
-                    now={100 * (project?.ongoingTasks / project?.total)}
-                    key={2}
-                  />
-                  <ProgressBar
-                    variant="info"
-                    now={100 * (project?.onHoldTasks / project?.total)}
-                    key={3}
-                  />
-                  <ProgressBar
-                    variant="danger"
-                    now={100 * (project?.noProgressTasks / project?.total)}
-                    key={4}
                   />
                 </ProgressBar>
                 <div>
