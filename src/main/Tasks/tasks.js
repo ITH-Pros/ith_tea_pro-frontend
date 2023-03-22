@@ -34,6 +34,7 @@ const Tasks = () => {
   const [toaster, showToaster] = useState(false);
   const [taskFilters, setTaskFilters] = useState({});
   const [selectedProject, setSelectedProject] = useState({});
+
   const [taskData, setTaskData] = useState({});
   const [showAddTask, setShowAddTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState({});
@@ -454,10 +455,11 @@ const Tasks = () => {
                           setSelectedTask();
                           setShowAddTask(true);
 						  console.log('*********************', project?.projectId,
-                         project?._id?.section);
+                         project?.sectionId);
                           setSelectedProject({
                             _id: project?.projectId,
-                            section: project?._id?.section,
+                            section: project?.sectionId,
+
                           });
                         }}
                       >
