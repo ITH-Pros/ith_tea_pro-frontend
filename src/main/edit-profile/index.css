@@ -1,9 +1,12 @@
-.addUserFrom{
-margin: auto !important;
-    margin-left: 31% !important;
-    width: 50% ;
-    margin-top: 25px !important;
-    margin-bottom: 25px !important;
+.addUserFrom-edit{
+  margin: auto !important;
+  margin-left: 31% !important;
+  width: 50%;
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
 }
 .form-group {
   margin-bottom: 1.5rem;
