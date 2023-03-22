@@ -31,6 +31,7 @@ import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
 import { useParams } from "react-router-dom";
 import ViewTaskModal from "./view-task";
+import { truncateString } from "../../helpers/truncet";
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -496,7 +497,7 @@ const archiveConFirmation = (sectionId) => {
                     }}
                   >
                     <i
-                      class="fa fa-plus-circle fa-3x addBtn-section"
+                      className="fa fa-plus-circle fa-3x addBtn-section"
                       title="Add Project"
                       aria-hidden="true"
                     >
@@ -694,7 +695,7 @@ const archiveConFirmation = (sectionId) => {
                         }
                         onClick={() => handleViewDetails(task?._id)}
                       >
-                        {task?.title}
+                        { truncateString(task?.title , 20) }
                       </i>
 
                       {task?.status === "NOT_STARTED" && (
@@ -761,7 +762,7 @@ const archiveConFirmation = (sectionId) => {
                         
                        
                       )} */}
-                      <div className="task-hover"> <a > <i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div>
+                      <div className="task-hover"> <a > <i className="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div>
                     </li>
                   ))}
                 </ul>
