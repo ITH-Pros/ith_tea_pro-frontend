@@ -97,6 +97,7 @@ export default function ViewTaskModal(props) {
 
     //   ------------------------- comment --------------------------
     addcomment();
+
   };
 
   const handleDescSubmit = (comment, attachment) => {
@@ -184,15 +185,15 @@ export default function ViewTaskModal(props) {
           <div className="dv-50">
             <Form>
               <Row className="mb-3">
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="4">
                   <Form.Label>Project Name</Form.Label>
                   <p>{task?.projectId?.name} </p>
                 </Form.Group>
-                <Form.Group as={Col} md="6">
+                <Form.Group as={Col} md="4">
                   <Form.Label>Section Name</Form.Label>
                   <p>{task?.section?.name} </p>
                 </Form.Group>
-                <Form.Group as={Col} md="12">
+                <Form.Group as={Col} md="4">
                   <Form.Label>Lead Type</Form.Label>
                   {/* task?.lead?.map */}
                   {task?.lead?.map((item, index) => {

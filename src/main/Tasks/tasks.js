@@ -312,23 +312,7 @@ const Tasks = () => {
         >
           Add Task
         </button>
-        <div>
-          {!projects?.length &&
-            params?.projectId &&
-            userDetails?.role !== "CONTRIBUTOR" && (
-              <button
-                className=" addTaskBtn addSectionBtn center"
-                style={{
-                  float: "right",
-                }}
-                onClick={() => {
-                  showAddSectionModal(true);
-                }}
-              >
-                Add Section
-              </button>
-            )}
-        </div>
+       
         {projects?.length !== 0 &&
           userDetails?.role !== "CONTRIBUTOR" &&
           selectedProjectId && (
@@ -364,8 +348,29 @@ const Tasks = () => {
           closeViewTaskModal={closeViewTaskModal}
           selectedTaskId={selectedTaskId}
         />
+         
+        
 
         <Accordion alwaysOpen="true">
+		{!projects?.length &&
+            params?.projectId &&
+            userDetails?.role !== "CONTRIBUTOR" && (
+        <div className="add-section-center">
+          <div className="project-card-section">
+          
+          
+              <a onClick={() => {
+                showAddSectionModal(true);
+              }}>
+                <i class="fa fa-plus-circle fa-3x addBtn-section" title="Add Project" aria-hidden="true"> Add Section</i>
+               
+                </a>
+          </div>
+         
+        </div>
+		)}
+
+
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
               {project?._id?.projectId && project?._id?.section && (

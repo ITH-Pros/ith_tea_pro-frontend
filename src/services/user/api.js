@@ -139,6 +139,10 @@ export async function setPasswordApi(data) {
 	return (axiosInstance.post('auth/v1/set/password', data).then(res => res.data))
 }
 
+export async function uploadImage(data) {
+	return (axiosInstance.put('upload/v1/upload/file', data).then(res => res.data))
+}
+
 export async function getUnassignedUsers(data) {
 	return (axiosInstance.get('user/v1/unassigned/list',  {
         params: data
