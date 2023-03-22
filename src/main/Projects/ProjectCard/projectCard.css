@@ -147,7 +147,21 @@
 .user-profile-pics {
   display: flex;
 }
-
+.modal-body {
+  height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.assign-name button{
+  border: 1px solid #ccc;
+  width: 120px;
+  padding: 7px 10px;
+  border-radius: 3px;
+}
+.select-rol-con select{
+  margin-bottom: 15px;
+  font-size: 14px;
+}
 .user-pic {
   height: 30px !important;
   width: 30px !important;

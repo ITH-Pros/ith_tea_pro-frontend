@@ -283,7 +283,7 @@ const ProjectCard = ({
               <Row>
                 {users.map((user, index) => {
                   return (
-                    <Col key={index} sm={6}>
+                    <Col key={index} sm={12}>
                       <div className="assignPopup">
                         <UserIcon firstName={user.name} />
                         <div className="ms-4">
@@ -296,7 +296,7 @@ const ProjectCard = ({
                     </Col>
                   );
                 })}
-                <Col sm={6}>
+                <Col sm={12}>
                   {userDetails.role !== "CONTRIBUTOR" &&
                     userDetails.role !== "LEAD" && (
                       <div onClick={assignTeamUser} className="assignPopup">
@@ -308,8 +308,8 @@ const ProjectCard = ({
                 <div>
                   {showSelectBox && (
                     <>
-                      <div>
-                        <select
+                      <div className="select-rol-con">
+                        <select className="form-control form-control-lg"
                           value={selectedRole}
                           onChange={handleRoleChange}
                         >
@@ -318,7 +318,7 @@ const ProjectCard = ({
                           <option value="LEAD">LEAD</option>
                         </select>
                         {selectedRole === "CONTRIBUTOR" && (
-                          <select
+                          <select className="form-control form-control-lg"
                             onChange={(e) =>
                               setSelectedUnassignedUsers(e.target.value)
                             }
@@ -334,7 +334,7 @@ const ProjectCard = ({
                           </select>
                         )}
                         {selectedRole === "LEAD" && (
-                          <select
+                          <select  className="form-control form-control-lg"
                             onChange={(e) =>
                               setSelectedUnassignedUsers(e.target.value)
                             }
@@ -351,7 +351,7 @@ const ProjectCard = ({
                         )}
                       </div>
                       {selectedUnassignedUsers && (
-                        <div>
+                        <div className="assign-name">
                           <button onClick={assignTeamUsers}>Assign</button>
                         </div>
                       )}

@@ -12,7 +12,12 @@ div{
   padding: 0;
  
 }
-
+select{
+  appearance: auto !important;
+}
+.modal-title {
+  font-size: 1.2rem !important;
+}
 .btn-gradient-border {
 border: none !important;
 color: #fff !important;
