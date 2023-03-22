@@ -132,6 +132,8 @@ export default function AddTaskModal(props) {
       console.log(project, projectList, selectedProjectFromTask);
     //   setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
+	  
+
       setSelectedLeads(project[0]?.managedBy);
       setTaskFormValue({
         ...taskFormValue,
@@ -139,6 +141,7 @@ export default function AddTaskModal(props) {
         // section: selectedProjectFromTask?.section || project[0]?.sections?.[0],
       });
       console.log(project);
+	  setTaskFormValue({ ...taskFormValue, section: selectedProjectFromTask?.section });
     } else if (selectedTask) {
       let project = projectList?.filter(
         (item) => item?._id == selectedTask?.projectId
@@ -303,7 +306,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.assignedTo ||
+    //   !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
       return;

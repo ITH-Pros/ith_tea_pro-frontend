@@ -87,6 +87,14 @@ export async function getProjectsTask(data) {
       .then((res) => res.data);
 }
 
+export async function updateSection(data) {
+	return (axiosInstance.patch('projects/v1/edit/section', data).then(res => res.data))
+}
+
+export async function deleteSectionApi(data) {
+	return (axiosInstance.patch('projects/v1/delete/section', data).then(res => res.data))
+}
+
 export async function getTaskDetailsByProjectId(data) {
 	return (axiosInstance.get('task/v1/list/for/rating', { params: data}).then(res => res.data) )
 }
