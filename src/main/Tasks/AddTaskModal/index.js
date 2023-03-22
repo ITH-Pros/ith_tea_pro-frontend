@@ -302,7 +302,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.assignedTo ||
+    //   !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
       return;
