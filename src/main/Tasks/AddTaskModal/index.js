@@ -125,24 +125,21 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-      console.log(selectedProjectFromTask, "selectedProjectFromTask");
+
       let project = projectList?.filter(
         (item) => item?._id == selectedProjectFromTask?._id
       );
-      console.log(project, projectList, selectedProjectFromTask);
-    //   setCategoryList(project[0]?.sections);
-      setUserList(project[0]?.accessibleBy);
-	  
-
-      setSelectedLeads(project[0]?.managedBy);
-      setTaskFormValue({
+	  setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
-        // section: selectedProjectFromTask?.section || project[0]?.sections?.[0],
       });
-      console.log(project);
+	  console.log(project[0]?._id, 'project[0]?.sections')
+	  
 	  setTaskFormValue({ ...taskFormValue, section: selectedProjectFromTask?.section });
-    } else if (selectedTask) {
+      console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
+      setSelectedLeads(project[0]?.managedBy);
+      console.log(project);
+    } else if (selectedTask ) {
       let project = projectList?.filter(
         (item) => item?._id == selectedTask?.projectId
       );
@@ -633,7 +630,7 @@ export default function AddTaskModal(props) {
             <Form noValidate validated={validated}>
               <Row className="mb-3">
                 <Form.Group as={Col} md="6">
-                  <Form.Label>Project</Form.Label>
+                  <Form.Label>Project </Form.Label>
                   <Form.Control
                     size="lg"
                     required
