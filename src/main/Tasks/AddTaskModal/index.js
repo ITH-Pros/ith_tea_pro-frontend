@@ -129,16 +129,16 @@ export default function AddTaskModal(props) {
       let project = projectList?.filter(
         (item) => item?._id == selectedProjectFromTask?._id
       );
-	  setTaskFormValue({
-        ...taskFormValue,
-        projectId: project[0]?._id,
-      });
+	//   setTaskFormValue({
+    //     ...taskFormValue,
+    //     projectId: project[0]?._id,
+    //   });
 	  console.log(project[0]?._id, 'project[0]?.sections')
 	  
-	  setTaskFormValue({ ...taskFormValue, section: selectedProjectFromTask?.section });
+	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
       console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
       setSelectedLeads(project[0]?.managedBy);
-      console.log(project);
+    //   console.log(project);
     } else if (selectedTask ) {
       let project = projectList?.filter(
         (item) => item?._id == selectedTask?.projectId
