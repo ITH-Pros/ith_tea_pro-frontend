@@ -20,7 +20,7 @@ const ImageUpload = () => {
     }
 
       const formData = new FormData();
-      formData.append("image", image);
+      formData.append("file", image);
 
       fetch("http://192.168.29.240:9000/upload/v1/upload/file", {
         method: "PUT",
