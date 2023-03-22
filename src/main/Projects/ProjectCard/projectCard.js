@@ -216,20 +216,20 @@ const ProjectCard = ({
         <p>{description}</p>
       </div>
       <div className="project-stats row">
-        <div className="stat col-3">
+        <div className="stat col-3" title="Over Due Tasks">
           {/* onClick={() => handleCategories()} */}
           <FontAwesomeIcon icon={faFlag} />
-          <span>{categroies}</span>
+          <span>{taskData?.overDueTasks}</span>
         </div>
-        <div className="stat col-3">
+        <div className="stat col-3" title="Completed Tasks">
           <FontAwesomeIcon icon={faTasks} />
-          <span>{taskData?.ONGOING || 0}</span>
-        </div>
-        <div className="stat col-3">
-          <FontAwesomeIcon icon={faCheck} />
           <span>{taskData?.COMPLETED || 0}</span>
         </div>
-        <div className="stat col-3">
+        <div className="stat col-3" title="On Going Tasks">
+          <FontAwesomeIcon icon={faCheck} />
+          <span>{taskData?.ONGOING || 0}</span>
+        </div>
+        <div className="stat col-3" title="Total Tasks">
           <FontAwesomeIcon icon={faBarChart || 0} />
           <span>{taskData?.totalTask || 0}</span>
         </div>
@@ -309,7 +309,8 @@ const ProjectCard = ({
                   {showSelectBox && (
                     <>
                       <div className="select-rol-con">
-                        <select className="form-control form-control-lg"
+                        <select
+                          className="form-control form-control-lg"
                           value={selectedRole}
                           onChange={handleRoleChange}
                         >
@@ -318,7 +319,8 @@ const ProjectCard = ({
                           <option value="LEAD">LEAD</option>
                         </select>
                         {selectedRole === "CONTRIBUTOR" && (
-                          <select className="form-control form-control-lg"
+                          <select
+                            className="form-control form-control-lg"
                             onChange={(e) =>
                               setSelectedUnassignedUsers(e.target.value)
                             }
@@ -334,7 +336,8 @@ const ProjectCard = ({
                           </select>
                         )}
                         {selectedRole === "LEAD" && (
-                          <select  className="form-control form-control-lg"
+                          <select
+                            className="form-control form-control-lg"
                             onChange={(e) =>
                               setSelectedUnassignedUsers(e.target.value)
                             }

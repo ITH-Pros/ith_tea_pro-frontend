@@ -25,6 +25,7 @@ function UserForm(props) {
   const [twitter, setTwitter] = useState('');
   const [linkedin, setLinkedin] = useState('');
   const [isEditable, setIsEditable] = useState(false);
+  const [profilePicture, setProfileImage] = useState("");
   const navigate = useNavigate();
 
 //   const [currentUser, setCurrentUser] = useState({});
@@ -47,7 +48,9 @@ function UserForm(props) {
 	setDepartment(currentUser?.department	|| '');
 	setGithub(currentUser?.githubLink	|| '');
 	setTwitter(currentUser?.twitterLink	|| '');
-	setLinkedin(currentUser?.linkedInLink	|| '');
+    setLinkedin(currentUser?.linkedInLink || '');
+    localStorage.setItem("imageUrl", currentUser?.profilePicture);
+    console.log(currentUser.profilePicture, "-------------------------------");
 
 	setDob(currentUser?.dob	|| '');
 
@@ -101,18 +104,22 @@ function UserForm(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let url = localStorage.getItem('url');
+    localStorage.removeItem('url')
+    console.log(url,'--------------------------profile url')
 	const dataToSend = {
-		name: name,
-		role: role,
-		email: email,
-		employeeId: employeeId,
-		designation: designation,
-		department: department,
-		dob: dob,
-		githubLink: github,
-		twitterLink: twitter,
-		linkedInLink: linkedin,
-	}
+    name: name,
+    role: role,
+    email: email,
+    employeeId: employeeId,
+    designation: designation,
+    department: department,
+    dob: dob,
+    githubLink: github,
+    twitterLink: twitter,
+    linkedInLink: linkedin,
+    profilePicture:url
+  };
 
 	try {
 		// call API to update the user details
@@ -152,8 +159,7 @@ function UserForm(props) {
   return (
     <div className="addUserFrom-edit">
       <form className="row">
-      <div className='profile-images'>
-      
+        <div className="profile-images">
           <ImageUpload />
         </div>
         <div className="form-group col-12">
@@ -261,7 +267,7 @@ function UserForm(props) {
             readOnly={!isEditable}
           />
         </div>
-      
+
         {isEditable && (
           <button onClick={handleSubmit} className="submit-button">
             {" "}

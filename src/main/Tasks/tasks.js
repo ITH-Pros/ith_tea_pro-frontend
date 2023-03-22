@@ -388,7 +388,7 @@ const Tasks = () => {
                   (Number(project?.completedTasks || 0) /
                     Number(project?.totalTasks || 1)) *
                     100
-                ).toFixed(2) + " %"}
+                ).toFixed(2) + " % "}
                 <ProgressBar>
                   <ProgressBar
                     variant="success"
