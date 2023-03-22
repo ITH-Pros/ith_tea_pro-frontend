@@ -34,15 +34,50 @@ const Tasks = () => {
   const [toaster, showToaster] = useState(false);
   const [taskFilters, setTaskFilters] = useState({});
   const [selectedProject, setSelectedProject] = useState({});
+
   const [taskData, setTaskData] = useState({});
   const [showAddTask, setShowAddTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState({});
   const [modalShow, setModalShow] = useState(false);
+  const [sectionEditMode ,setSectionEditMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const { userDetails } = useAuth();
 
   const [showViewTask, setShowViewTask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState("");
+
+  const editSection = (sectionId , projectId) => {
+	console.log("sectionId", sectionId);
+	console.log("projectId", projectId);
+	setSelectedProjectId(sectionId?.projectId)
+	setSectionName(sectionId?.section);
+	setModalShow(true);
+	setSectionEditMode(true);
+	  };
+
+//   const updateSection = async (dataToSend) => {
+// 	try {
+// 	  const res = await SectionApi(dataToSend);
+// 	  console.log("res", res);
+// 	  if (res.status === 200) {
+// 		setToasterMessage("Section updated successfully");
+// 		setShowToaster(true);
+//         setModalShow(false);
+//         closeModal();
+//         // getAndSetAllProjects();
+//         getTasksDataUsingProjectId();
+//         // window.location.reload();
+//         if (params?.projectId) {
+//           setSelectedProjectId(params?.projectId);
+//         }
+// 	  }else{
+// 		setToasterMessage(res?.message);
+// 		setShowToaster(true);
+// 	  }
+// 	} catch (error) {
+// 	  console.log("error", error);
+// 	}
+// 	  };
 
   const handleViewDetails = (taskId) => {
     console.log(
@@ -130,6 +165,12 @@ const Tasks = () => {
         name: sectionName,
         projectId: selectedProjectId,
       };
+
+	//   if(sectionEditMode){
+	// 	dataToSend.sectionId = sectionId;
+	//   }
+
+
       const res = await addSectionApi(dataToSend);
       setLoading(false);
       if (res.error) {
@@ -154,6 +195,8 @@ const Tasks = () => {
       return error.message;
     }
   };
+
+  
 
   const getAndSetAllProjects = async function () {
     //setloading(true);
@@ -406,23 +449,41 @@ const Tasks = () => {
                       <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
                     </Dropdown.Toggle>
 
-                    {/* <Dropdown.Menu>
+                    <Dropdown.Menu>
                       <Dropdown.Item
                         onClick={() => {
                           setSelectedTask();
                           setShowAddTask(true);
-						  console.log('*********************', project?._id?.projectId?._id,
-                         project?._id?.section);
+						  console.log('*********************', project?.projectId,
+                         project?.sectionId);
                           setSelectedProject({
-                            _id: project?._id?.projectId?._id,
-                            section: project?._id?.section,
+                            _id: project?.projectId,
+                            section: project?.sectionId,
+
                           });
                         }}
                       >
                         Add Task
                       </Dropdown.Item>
+					 
+					  {(userDetails.role == "SUPER_ADMIN" || userDetails.role == "ADMIN") &&  (
+						<>
+						<Dropdown.Item onClick={() =>editSection ({section: project?._id?.section , projectId:project?.projectId})}>
+						Edit Section
+					  </Dropdown.Item>
+						<Dropdown.Item>
+							  Archive Section
+						  </Dropdown.Item><Dropdown.Item>
+								  Copy/Move
+							  </Dropdown.Item><Dropdown.Item>
+								  Edit Section
+							  </Dropdown.Item><Dropdown.Item>
+								  Delete Section
+							  </Dropdown.Item></>
+					  )}
+					
 
-                    </Dropdown.Menu> */}
+                    </Dropdown.Menu>
                   </Dropdown>
                 </div>
               </div>
@@ -635,17 +696,17 @@ const Tasks = () => {
                 required
                 type="text"
                 className="form-control"
+				value={sectionName}
                 onChange={(e) => setSectionName(e.target.value)}
               />
             </div>
-          </Modal.Body>
-          {selectedProjectId && sectionName && (
+			{selectedProjectId && sectionName && (
             <Button
               style={{ marginLeft: "16px" }}
-              className="btn btn-danger mb-3 mr-3"
+              className="btn btn-danger mr-3"
               onClick={() => addSection()}
             >
-              Add section
+               {sectionEditMode?'Update Section':'Add section'}
             </Button>
           )}
 
@@ -656,6 +717,8 @@ const Tasks = () => {
           >
             Cancel
           </Button>
+          </Modal.Body>
+          
         </Modal>
 
         {toaster && (
