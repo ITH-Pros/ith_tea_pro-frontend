@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./tasks.css";
 import {
   addSectionApi,
+  deleteSectionApi,
   getAllProjects,
   getProjectsTask,
   updateSection,
@@ -60,30 +61,30 @@ const deleteConFirmation = (sectionId) => {
 	setDeleteSectionModal(true);
  };
 
-//  const deleteSection = async () => {
-// 	let dataToSend = {
-// 	  sectionId: selectedSectionId,
-// 	};
-// 	try {
-// 	  const res = await deleteSectionApi(dataToSend);
-// 	  console.log("res", res);
-// 	  if (res.status === 200) {
-// 		setToasterMessage("Section deleted successfully");
-// 		setShowToaster(true);
-// 		setDeleteSectionModal(false);
-// 		closeModal();
-// 		getTasksDataUsingProjectId();
-// 		if (params?.projectId) {
-// 			setSelectedProjectId(params?.projectId);
-// 		  }
-// 	  } else {
-// 		setToasterMessage(res?.message);
-// 		setShowToaster(true);
-// 	  }
-// 	} catch (error) {
-// 	  console.log("error", error);
-// 	}
-// 	  };
+ const deleteSection = async () => {
+	let dataToSend = {
+	  sectionId: selectedSectionId,
+	};
+	try {
+	  const res = await deleteSectionApi(dataToSend);
+	  console.log("res", res);
+	  if (res.status === 200) {
+		setToasterMessage("Section deleted successfully");
+		setShowToaster(true);
+		setDeleteSectionModal(false);
+		closeModal();
+		getTasksDataUsingProjectId();
+		if (params?.projectId) {
+			setSelectedProjectId(params?.projectId);
+		  }
+	  } else {
+		setToasterMessage(res?.message);
+		setShowToaster(true);
+	  }
+	} catch (error) {
+	  console.log("error", error);
+	}
+	  };
 
  
 
@@ -794,7 +795,7 @@ const deleteConFirmation = (sectionId) => {
           <Button variant="secondary" onClick={() =>setDeleteSectionModal(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={() =>setDeleteSectionModal(false)}>
+          <Button variant="primary" onClick={() =>deleteSection()}>
             Save Changes
           </Button>
         </Modal.Footer>
