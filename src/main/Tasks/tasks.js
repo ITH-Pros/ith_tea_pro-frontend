@@ -4,6 +4,7 @@ import {
   addSectionApi,
   getAllProjects,
   getProjectsTask,
+  updateSection,
   updateTaskStatusById,
 } from "../../services/user/api";
 import Loader from "../../components/Loader";
@@ -41,6 +42,7 @@ const Tasks = () => {
   const [modalShow, setModalShow] = useState(false);
   const [sectionEditMode ,setSectionEditMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
+  const [selectedSectionId , setSelectedSectionId] = useState("");
   const { userDetails } = useAuth();
 
   const [showViewTask, setShowViewTask] = useState(false);
@@ -51,33 +53,40 @@ const Tasks = () => {
 	console.log("projectId", projectId);
 	setSelectedProjectId(sectionId?.projectId)
 	setSectionName(sectionId?.section);
+	setSelectedSectionId(sectionId?._id);
 	setModalShow(true);
 	setSectionEditMode(true);
 	  };
 
-//   const updateSection = async (dataToSend) => {
-// 	try {
-// 	  const res = await SectionApi(dataToSend);
-// 	  console.log("res", res);
-// 	  if (res.status === 200) {
-// 		setToasterMessage("Section updated successfully");
-// 		setShowToaster(true);
-//         setModalShow(false);
-//         closeModal();
-//         // getAndSetAllProjects();
-//         getTasksDataUsingProjectId();
-//         // window.location.reload();
-//         if (params?.projectId) {
-//           setSelectedProjectId(params?.projectId);
-//         }
-// 	  }else{
-// 		setToasterMessage(res?.message);
-// 		setShowToaster(true);
-// 	  }
-// 	} catch (error) {
-// 	  console.log("error", error);
-// 	}
-// 	  };
+  const sectionUpdate = async () => {
+	let dataToSend = {
+	  name: sectionName,
+	  projectId: selectedProjectId,
+	  sectionId: selectedSectionId,
+	};
+	try {
+	  const res = await updateSection(dataToSend);
+	  console.log("res", res);
+	  if (res.status === 200) {
+		setToasterMessage("Section updated successfully");
+		setSectionEditMode(false);
+		setShowToaster(true);
+        setModalShow(false);
+        closeModal();
+        // getAndSetAllProjects();
+        getTasksDataUsingProjectId();
+        // window.location.reload();
+        if (params?.projectId) {
+          setSelectedProjectId(params?.projectId);
+        }
+	  }else{
+		setToasterMessage(res?.message);
+		setShowToaster(true);
+	  }
+	} catch (error) {
+	  console.log("error", error);
+	}
+	  };
 
   const handleViewDetails = (taskId) => {
     console.log(
@@ -159,6 +168,10 @@ const Tasks = () => {
   };
 
   const addSection = async () => {
+	if(sectionEditMode){
+		sectionUpdate();
+		return;
+	}else{
     setLoading(true);
     try {
       let dataToSend = {
@@ -194,6 +207,7 @@ const Tasks = () => {
       setLoading(false);
       return error.message;
     }
+}
   };
 
   
@@ -468,7 +482,7 @@ const Tasks = () => {
 					 
 					  {(userDetails.role == "SUPER_ADMIN" || userDetails.role == "ADMIN") &&  (
 						<>
-						<Dropdown.Item onClick={() =>editSection ({section: project?._id?.section , projectId:project?.projectId})}>
+						<Dropdown.Item onClick={() =>editSection ({section: project?._id?.section , projectId:project?.projectId , _id:project?.sectionId})}>
 						Edit Section
 					  </Dropdown.Item>
 						<Dropdown.Item>
@@ -685,7 +699,7 @@ const Tasks = () => {
           animation={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Confirmation</Modal.Title>
+            <Modal.Title> {sectionEditMode?'Update Section':'Add section'}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
