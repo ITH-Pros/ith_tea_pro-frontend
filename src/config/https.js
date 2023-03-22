@@ -25,7 +25,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     function (res) {
-
         return res;
     },
     async function (error) {
@@ -34,6 +33,7 @@ axiosInstance.interceptors.response.use(
                 return Promise.reject(error.response.data?.message);
             }
             if (error.response.status === 401 && error.response.data) {
+				console.log("error", error.response.data)
                 logOut();
                 return Promise.reject(error.response.data?.message);
             }
