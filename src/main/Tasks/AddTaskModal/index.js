@@ -777,6 +777,7 @@ export default function AddTaskModal(props) {
                     type="date"
                     min={new Date().toISOString().split("T")[0]}
                     placeholder="Due date"
+                    disabled={selectedTask}
                     name="dueDate"
                     value={taskFormValue.dueDate}
                     onChange={updateTaskFormValue}
