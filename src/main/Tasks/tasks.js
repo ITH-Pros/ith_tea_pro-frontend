@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./tasks.css";
 import {
   addSectionApi,
@@ -21,6 +21,8 @@ import {
   Badge,
   Modal,
   Button,
+  Overlay,
+  Popover,
 } from "react-bootstrap";
 import avtar from "../../assests/img/avtar.png";
 import moment from "moment";
@@ -40,37 +42,80 @@ const Tasks = () => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState({});
   const [modalShow, setModalShow] = useState(false);
-  const [sectionEditMode ,setSectionEditMode] = useState(false);
+  const [sectionEditMode, setSectionEditMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
-  const [selectedSectionId , setSelectedSectionId] = useState("");
+  const [selectedSectionId, setSelectedSectionId] = useState("");
   const { userDetails } = useAuth();
 
   const [showViewTask, setShowViewTask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState("");
+  const [deleteSectionModal, setDeleteSectionModal] = useState(false);
 
-  const editSection = (sectionId , projectId) => {
-	console.log("sectionId", sectionId);
-	console.log("projectId", projectId);
-	setSelectedProjectId(sectionId?.projectId)
-	setSectionName(sectionId?.section);
+
+
+//   ///////////////////////////  confirmation-popup  ///////////////////////////
+
+const deleteConFirmation = (sectionId) => {
 	setSelectedSectionId(sectionId?._id);
-	setModalShow(true);
-	setSectionEditMode(true);
-	  };
+	setDeleteSectionModal(true);
+ };
+
+//  const deleteSection = async () => {
+// 	let dataToSend = {
+// 	  sectionId: selectedSectionId,
+// 	};
+// 	try {
+// 	  const res = await deleteSectionApi(dataToSend);
+// 	  console.log("res", res);
+// 	  if (res.status === 200) {
+// 		setToasterMessage("Section deleted successfully");
+// 		setShowToaster(true);
+// 		setDeleteSectionModal(false);
+// 		closeModal();
+// 		getTasksDataUsingProjectId();
+// 		if (params?.projectId) {
+// 			setSelectedProjectId(params?.projectId);
+// 		  }
+// 	  } else {
+// 		setToasterMessage(res?.message);
+// 		setShowToaster(true);
+// 	  }
+// 	} catch (error) {
+// 	  console.log("error", error);
+// 	}
+// 	  };
+
+ 
+
+
+
+
+
+// ///////////////////////////  confirmation-popup  ///////////////////////////
+
+  const editSection = (sectionId, projectId) => {
+    console.log("sectionId", sectionId);
+    console.log("projectId", projectId);
+    setSelectedProjectId(sectionId?.projectId);
+    setSectionName(sectionId?.section);
+    setSelectedSectionId(sectionId?._id);
+    setModalShow(true);
+    setSectionEditMode(true);
+  };
 
   const sectionUpdate = async () => {
-	let dataToSend = {
-	  name: sectionName,
-	  projectId: selectedProjectId,
-	  sectionId: selectedSectionId,
-	};
-	try {
-	  const res = await updateSection(dataToSend);
-	  console.log("res", res);
-	  if (res.status === 200) {
-		setToasterMessage("Section updated successfully");
-		setSectionEditMode(false);
-		setShowToaster(true);
+    let dataToSend = {
+      name: sectionName,
+      projectId: selectedProjectId,
+      sectionId: selectedSectionId,
+    };
+    try {
+      const res = await updateSection(dataToSend);
+      console.log("res", res);
+      if (res.status === 200) {
+        setToasterMessage("Section updated successfully");
+        setSectionEditMode(false);
+        setShowToaster(true);
         setModalShow(false);
         closeModal();
         // getAndSetAllProjects();
@@ -79,14 +124,14 @@ const Tasks = () => {
         if (params?.projectId) {
           setSelectedProjectId(params?.projectId);
         }
-	  }else{
-		setToasterMessage(res?.message);
-		setShowToaster(true);
-	  }
-	} catch (error) {
-	  console.log("error", error);
-	}
-	  };
+      } else {
+        setToasterMessage(res?.message);
+        setShowToaster(true);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const handleViewDetails = (taskId) => {
     console.log(
@@ -168,49 +213,46 @@ const Tasks = () => {
   };
 
   const addSection = async () => {
-	if(sectionEditMode){
-		sectionUpdate();
-		return;
-	}else{
-    setLoading(true);
-    try {
-      let dataToSend = {
-        name: sectionName,
-        projectId: selectedProjectId,
-      };
+    if (sectionEditMode) {
+      sectionUpdate();
+      return;
+    } else {
+      setLoading(true);
+      try {
+        let dataToSend = {
+          name: sectionName,
+          projectId: selectedProjectId,
+        };
 
-	//   if(sectionEditMode){
-	// 	dataToSend.sectionId = sectionId;
-	//   }
+        //   if(sectionEditMode){
+        // 	dataToSend.sectionId = sectionId;
+        //   }
 
-
-      const res = await addSectionApi(dataToSend);
-      setLoading(false);
-      if (res.error) {
-        setToasterMessage(res?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
-        setModalShow(false);
-        closeModal();
-        // getAndSetAllProjects();
-        getTasksDataUsingProjectId();
-        // window.location.reload();
-        if (params?.projectId) {
-          setSelectedProjectId(params?.projectId);
+        const res = await addSectionApi(dataToSend);
+        setLoading(false);
+        if (res.error) {
+          setToasterMessage(res?.error?.message || "Something Went Wrong");
+          setShowToaster(true);
+        } else {
+          setToasterMessage(res?.message || "Something Went Wrong");
+          setShowToaster(true);
+          setModalShow(false);
+          closeModal();
+          // getAndSetAllProjects();
+          getTasksDataUsingProjectId();
+          // window.location.reload();
+          if (params?.projectId) {
+            setSelectedProjectId(params?.projectId);
+          }
         }
+      } catch (error) {
+        setToasterMessage(error?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+        setLoading(false);
+        return error.message;
       }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
     }
-}
   };
-
-  
 
   const getAndSetAllProjects = async function () {
     //setloading(true);
@@ -276,11 +318,9 @@ const Tasks = () => {
         let allTask = tasks?.data;
         allTask?.forEach((item, i) => {
           item?.tasks?.map((task, j) => {
-
             if (task?.dueDate) {
               let dateMonth = task?.dueDate?.split("T")[0];
               let today = new Date();
-
 
               today =
                 today.getFullYear() +
@@ -319,7 +359,7 @@ const Tasks = () => {
           allTask[i].tasks = item?.tasks;
         });
         setProjects(allTask);
-		console.log(allTask)
+        console.log(allTask);
         if (params.projectId) {
           setSelectedProject();
         }
@@ -468,35 +508,41 @@ const Tasks = () => {
                         onClick={() => {
                           setSelectedTask();
                           setShowAddTask(true);
-						  console.log('*********************', project?.projectId,
-                         project?.sectionId);
+                          console.log(
+                            "*********************",
+                            project?.projectId,
+                            project?.sectionId
+                          );
                           setSelectedProject({
                             _id: project?.projectId,
                             section: project?.sectionId,
-
                           });
                         }}
                       >
                         Add Task
                       </Dropdown.Item>
-					 
-					  {(userDetails.role == "SUPER_ADMIN" || userDetails.role == "ADMIN") &&  (
-						<>
-						<Dropdown.Item onClick={() =>editSection ({section: project?._id?.section , projectId:project?.projectId , _id:project?.sectionId})}>
-						Edit Section
-					  </Dropdown.Item>
-						<Dropdown.Item>
-							  Archive Section
-						  </Dropdown.Item><Dropdown.Item>
-								  Copy/Move
-							  </Dropdown.Item><Dropdown.Item>
-								  Edit Section
-							  </Dropdown.Item><Dropdown.Item>
-								  Delete Section
-							  </Dropdown.Item></>
-					  )}
-					
 
+                      {(userDetails.role == "SUPER_ADMIN" ||
+                        userDetails.role == "ADMIN") && (
+                        <>
+                          <Dropdown.Item
+                            onClick={() =>
+                              editSection({
+                                section: project?._id?.section,
+                                projectId: project?.projectId,
+                                _id: project?.sectionId,
+                              })
+                            }
+                          >
+                            Edit Section
+                          </Dropdown.Item>
+                          <Dropdown.Item>Archive Section</Dropdown.Item>
+                          <Dropdown.Item>Copy/Move</Dropdown.Item>
+                            <Dropdown.Item
+							disabled={project?.tasks?.length > 0}
+							 onClick={()=>deleteConFirmation({ _id: project?.sectionId,})} >Delete Section</Dropdown.Item>
+                        </>
+                      )}
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
@@ -701,7 +747,10 @@ const Tasks = () => {
           animation={false}
         >
           <Modal.Header closeButton>
-            <Modal.Title> {sectionEditMode?'Update Section':'Add section'}</Modal.Title>
+            <Modal.Title>
+              {" "}
+              {sectionEditMode ? "Update Section" : "Add section"}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
@@ -710,30 +759,49 @@ const Tasks = () => {
                 required
                 type="text"
                 className="form-control"
-				value={sectionName}
+                value={sectionName}
                 onChange={(e) => setSectionName(e.target.value)}
               />
             </div>
-			{selectedProjectId && sectionName && (
+            {selectedProjectId && sectionName && (
+              <Button
+                style={{ marginLeft: "16px" }}
+                className="btn btn-danger mr-3"
+                onClick={() => addSection()}
+              >
+                {sectionEditMode ? "Update Section" : "Add section"}
+              </Button>
+            )}
+
             <Button
               style={{ marginLeft: "16px" }}
-              className="btn btn-danger mr-3"
-              onClick={() => addSection()}
+              className="btn mr-3"
+              onClick={() => setModalShow(false)}
             >
-               {sectionEditMode?'Update Section':'Add section'}
+              Cancel
             </Button>
-          )}
-
-          <Button
-            style={{ marginLeft: "16px" }}
-            className="btn mr-3"
-            onClick={() => setModalShow(false)}
-          >
-            Cancel
-          </Button>
           </Modal.Body>
-          
         </Modal>
+
+		<div>
+		<Modal className="confirmation-modal" show={deleteSectionModal} onHide={() =>setDeleteSectionModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Section</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this section
+		</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() =>setDeleteSectionModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={() =>setDeleteSectionModal(false)}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+		</div>
+
+		{/*  */}
 
         {toaster && (
           <Toaster
