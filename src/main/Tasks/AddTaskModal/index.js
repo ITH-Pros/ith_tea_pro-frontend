@@ -611,7 +611,7 @@ export default function AddTaskModal(props) {
 
   return (
     <>
-      <Modal
+      <Modal width={800}
         show={showAddTaskModal}
         size="xl"
         className="taskModalForm"
@@ -625,7 +625,7 @@ export default function AddTaskModal(props) {
             {selectedTask ? "Edit Task" : "Add Task"}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body >
           <div className="dv-50">
             <Form noValidate validated={validated}>
               <Row className="mb-3">

@@ -318,7 +318,7 @@ const FilterModal = (props) => {
         </div>
       </div>
       {filterModalShow && (
-        <Modal
+        <Modal width={600}
           show={filterModalShow}
           onHide={() => setFilterModalShow(false)}
           size="lg"
@@ -405,7 +405,7 @@ const FilterModal = (props) => {
                     </Col>
                   </Row>
                 </Form.Group> */}
-                <Form.Group as={Row} controlId="category">
+                <Form.Group controlId="category">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Category</Form.Label>
@@ -422,7 +422,7 @@ const FilterModal = (props) => {
                     </Col>
                   </Row>
                 </Form.Group>
-                <Form.Group as={Row} controlId="formDateCreated">
+                <Form.Group  controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>
@@ -456,7 +456,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group>
              
-                <Form.Group  controlId="formDateCreated">
+                <Form.Group controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Status</Form.Label>

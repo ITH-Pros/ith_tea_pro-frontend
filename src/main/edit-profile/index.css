@@ -69,6 +69,7 @@ input:focus {
   border: 1px solid #ccc;
   border-radius: 10px;
   justify-content: center;
+  flex-direction: column;
 }
 
 .image-upload label {

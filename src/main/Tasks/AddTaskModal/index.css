@@ -178,3 +178,6 @@ button.btn-press.btn-gradient-border {
 .ql-link {
   display: none !important;
 }
+.taskModalForm.modal.show .modal.show .modal-dialog, .modal-dialog.modal-xl{
+  width: 800px !important;
+}
