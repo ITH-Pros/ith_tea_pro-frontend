@@ -219,7 +219,6 @@ box-shadow:  33px 33px 78px #545652,
 .loginContent .field{
   height: 50px;
   width: 100%;
-  display: flex;
   position: relative;
 }
 
@@ -252,7 +251,7 @@ border-radius: 0.3rem !important;
 
 .field span{
   margin-left: 10px !important;
-  margin-top: 4px !important;
+  margin-top: -5px !important;
   position: absolute;
   width: 50px;
   line-height: 50px;
