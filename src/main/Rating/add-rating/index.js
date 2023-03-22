@@ -224,7 +224,7 @@ export default function AddRating(props) {
       <div className="dv-50-rating ">
         <Form className="margin-form" noValidate validated={validated}>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6">
+            <Form.Group as={Col} md="6" className="form-group">
               <Form.Label>Select Project</Form.Label>
               <Form.Control
                 required
@@ -339,7 +339,8 @@ export default function AddRating(props) {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
-          <Row className="desc">
+
+          <Row className="desc" >
             <Form.Label>Comment</Form.Label>
             <Form.Control
               type="textArea"
@@ -350,7 +351,7 @@ export default function AddRating(props) {
             />
           </Row>
 
-          <div className="text-right">
+          <div className="text-right mt-2">
             <button
               onClick={handleSubmit}
               className="btn-gradient-border btnDanger submit"

@@ -827,7 +827,7 @@ const archiveConFirmation = (sectionId) => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this section
 		</Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{alignItems:'center', justifyContent:'center'}}>
           <Button variant="secondary" onClick={() =>setDeleteSectionModal(false)}>
             Close
           </Button>
@@ -843,7 +843,7 @@ const archiveConFirmation = (sectionId) => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to Archive this section
 		</Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{alignItems:'center', justifyContent:'center'}}>
           <Button variant="secondary" onClick={() =>setArchiveSectionModal(false)}>
             Close
           </Button>
