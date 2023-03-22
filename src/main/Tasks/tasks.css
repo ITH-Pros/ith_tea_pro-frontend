@@ -406,3 +406,9 @@ button.accordion-button{
 .center{
 	text-align: center;
 }
+
+.confirmation-modal {
+	height: 100px;
+	/* max-width: 40px; */
+	/* margin: 1.75rem auto; */
+}
