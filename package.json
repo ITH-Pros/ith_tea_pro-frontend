@@ -33,6 +33,7 @@
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-dropzone": "^14.2.3",
+    "react-event-calendar": "^0.3.0",
     "react-exp-table": "^2.0.5",
     "react-fa-icon": "^0.1.4",
     "react-fontawesome": "^1.7.1",
