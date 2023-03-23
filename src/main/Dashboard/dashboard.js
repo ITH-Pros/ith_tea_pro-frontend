@@ -292,7 +292,6 @@ export default function Dashboard(props) {
           </Col>
           <Col lg={6} id="nav-filter" className="px-0">
             <Nav className="justify-content-end" activeKey="/home">
-              <Nav.Item></Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="link-1">
                   <Dropdown>
@@ -306,7 +305,7 @@ export default function Dashboard(props) {
                   </Dropdown>
                 </Nav.Link>
               </Nav.Item>
-              <Nav.Item></Nav.Item>
+             
             </Nav>
           </Col>
         </Row>
@@ -595,7 +594,7 @@ export default function Dashboard(props) {
                                   setSelectedTask(task);
                                 }}
                               >
-                                Edit
+                             <i class="fa fa-pencil-square" aria-hidden="true"></i>  Edit Task
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -619,7 +618,7 @@ export default function Dashboard(props) {
                   {pendingRatingList &&
                     pendingRatingList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                        <Col lg={4} className="middle">
+                        <Col lg={5} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
@@ -633,7 +632,7 @@ export default function Dashboard(props) {
                           </span>
                           <h5 className="text-truncate">{task?.title}</h5>
                         </Col>
-                        <Col lg={4} className="middle">
+                        <Col lg={2} className="middle">
                           {task?.status != "COMPLETED" && (
                             <small>
                               Due Date:{" "}
@@ -644,7 +643,7 @@ export default function Dashboard(props) {
                           )}
                           {task?.status == "COMPLETED" && (
                             <small>
-                              Completed:{" "}
+                              {" "}
                               <Badge bg="success">
                                 {moment(task?.completedDate?.split("T")[0]).format(
                                   "DD/MM/YYYY"
@@ -654,7 +653,7 @@ export default function Dashboard(props) {
                           )}
                         </Col>
                         <Col
-                          lg={2}
+                          lg={3}
                           className="text-end middle ps-0"
                           style={{ justifyContent: "end" }}
                         >

@@ -371,11 +371,16 @@ th {
 }
 .right-filter button { padding: 5px; font-size: 13px; margin-left: 20px;}
 .right-filter .dropdown-toggle::after{ display: none;}
-.list_task{     border: 1px #cccccc38 solid !important;
-  padding: 5px 10px;
+.list_task{     
+  border: 1px #cccccc solid !important;
+  padding: 5px 10px !important;
   margin: 3px 0px;
-  box-shadow: 3px 4px 1px #cccccc40;
-  border-radius: 10px;}
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+.list_task .middle {
+  padding: 0px 5px !important;
+}
 .task-calendar {
   display: flex;
   flex-direction: column;
@@ -549,12 +554,14 @@ th {
 				color:  #6d757d !important;
 			}
 
-      .btn-light.addRatingBtn{
-        font-size: 13px;
-      font-weight: 500;
-      line-height: 18px;
-      }
-
+      .btn-light.addRatingBtn {
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 18px;
+        border: 1px solid #8355ad;
+        color: #f8f9fa;
+        background: #8355ad;
+    }
       .expend{    background: #fff;
         border: 0px;
         width: 40px !important;

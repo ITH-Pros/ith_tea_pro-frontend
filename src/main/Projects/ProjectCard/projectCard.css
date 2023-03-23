@@ -152,6 +152,12 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+.dropdown-content a{
+  color: #8355ad !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+}
 .assign-name button{
   border: 1px solid #ccc;
   width: 120px;

@@ -156,6 +156,10 @@ select {
 .addTask-modal .user-pic{
   float: left;
 }
+p {
+  font-size: 13px;
+  margin-bottom: 0px !important;
+}
 .taskModalForm .modal-body {
   height: 75vh;
   overflow-y: auto;

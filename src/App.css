@@ -109,11 +109,16 @@ color: #fff !important;
 }
 .fr-toolbar .fr-btn-grp{ margin: 0 17px 0 2px !important;}
 .pull-right {
-  /* float: right; */
+  float: right;
   position: absolute;
   right: 10px;
-  /* width: 137px; */
+  width: 137px;
   display: flex;
 }
-
+.dropdown-item {
+  color: #8355ad !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.8px !important;
+}
  

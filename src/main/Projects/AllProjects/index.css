@@ -522,12 +522,14 @@
   background-color: #f9f9f9;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  width: 150px;
+  border-radius: 10px;
 }
 
 .dropdown-content a {
   float: none;
   color: black;
-  padding: 8px 12px;
+  padding: 6px 12px;
   text-decoration: none;
   display: block;
   text-align: left;

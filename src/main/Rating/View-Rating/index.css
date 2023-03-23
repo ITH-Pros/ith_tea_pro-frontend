@@ -312,15 +312,16 @@ button.add-rating-button {
   
   
   #nav-filter {
-	margin-top: 20px;
+	margin-top: 16px;
   }
   #nav-filter button {
-	margin: 0px;
-	background: none;
-	font-size: 14px;
-	color: #000 !important;
-	border: 0;
-	padding: 5px 10px;
+    margin: 0px;
+    font-size: 14px;
+    color: #fff !important;
+    border: 0;
+    padding: 5px 10px;
+    background: #8355ad;
+    font-size: 12px;
   }
   
   #nav-filter .dropdown-item {
@@ -363,8 +364,10 @@ button.add-rating-button {
 	cursor: pointer;
   }
   .left-add span {
-	margin-right: 10px;
-	font-size: 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
   }
   .left-add a {
 	font-size: 14px;

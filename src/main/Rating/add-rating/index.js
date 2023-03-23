@@ -290,7 +290,7 @@ export default function AddRating(props) {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group as={Col} md="6">
+            <Form.Group as={Col} md="5">
               <Form.Label>Select Task</Form.Label>
               <Form.Control
                 required
@@ -316,7 +316,7 @@ export default function AddRating(props) {
 
             <Form.Group
               as={Col}
-              md="2"
+              md="3"
               controlId="validationCustom01"
               className="ps-0"
             >
