@@ -292,7 +292,7 @@ export default function Teams(props) {
              className="fa fa-user-plus fa-3x addBtn w-125p"
              title="Add User"
              aria-hidden="true"
-           >  Add User  </i> 
+            style={{marginRight:'5'}}>  Add User  </i> 
          </Link>
          </div>
           )}
@@ -311,21 +311,10 @@ export default function Teams(props) {
                         pathname: "/user/view/" + user._id,
                       }}
                     >
-                      {/* <i
-                        className="fa fa-check-circle"
-                        id="heart-btn-1"
-                        style={{ cursor: "grab" }}
-                        aria-hidden="true"
-                      ></i> */}
-                      {/* <i className="fa fa-plus-circle fa-3x addBtn" aria-hidden="true" ></i> */}
                     </Link>
                     {/* <label className="heart"></label> */}
                   </div>
                   <div className="content">
-                    {/* <img
-                      src="https://images.pexels.com/photos/2570145/pexels-photo-2570145.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                      alt=""
-                    /> */}
                  
                 <div id="profileImage"> CKS</div>
                     <strong>{user.name}  ({user.role})</strong>

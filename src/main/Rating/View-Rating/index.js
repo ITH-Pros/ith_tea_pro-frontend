@@ -133,7 +133,7 @@ export default function Dashboard(props) {
   }
   return (
     <div className="dashboard_camp">
-      <div className="m-3 d-flex justify-content-center flex-column">
+      <div className="d-flex justify-content-center flex-column">
         <div className="d-flex">
           {/* {userDetails?.role !== "CONTRIBUTOR" && (
 				<Link to="/rating" params={{ params: true }}>
@@ -147,7 +147,7 @@ export default function Dashboard(props) {
 				</Link>
 			)} */}
           <h5 className="text-center h5cls">
-            <p style={{ marginRight: "10px", marginTop: "6px" }}>Ratings for</p>
+            <p style={{ marginRight: "10px", marginTop: "6px", fontSize:'14' }}>Ratings for</p>
             <Form.Group as={Col} md="2" controlId="select_month">
               <Form.Control
                 className="month-drop-select"
@@ -172,7 +172,7 @@ export default function Dashboard(props) {
                 ))}
               </Form.Control>
             </Form.Group>
-            <Form.Group as={Col} md="1" controlId="select_year">
+            <Form.Group as={Col} md="2" controlId="select_year">
               <Form.Control
                 className="year-drop-select"
                 required
@@ -209,7 +209,7 @@ export default function Dashboard(props) {
         <Table responsive className="ratingTable">
           <thead>
             <tr>
-              <th>Name</th>
+              <th style={{width:'140'}}>Name</th>
               {Array(days)
                 .fill(0)
                 .map((rating, index) => {
@@ -226,7 +226,7 @@ export default function Dashboard(props) {
             {ratingsArray.map((user, index) => {
               return (
                 <tr key={index}>
-                  <td className="user_names"> {user.name}</td>
+                  <td className="user_names" style={{width:'130'}}> {user.name}</td>
                   
                   {Array(days)
                     ?.fill(0)

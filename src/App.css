@@ -4,7 +4,12 @@
   box-sizing: border-box;
   margin-top: 0;
 }
-
+button.btn.btn-outline-primary {
+  border-color: #985dcd !important;
+  background-image: linear-gradient(62deg,#8355ad 0%,#b86bff 100%) !important;
+  color: #fff !important;
+  font-size: 13px !important;
+}
 html,
 body,
 div{
@@ -14,16 +19,25 @@ div{
 }
 select{
   appearance: auto !important;
+  font-size: 14px !important;
+  height: 40px !important;
 }
 .modal-title {
   font-size: 1.2rem !important;
+}
+
+textarea.form-control {
+  min-height: calc(7.5em + 0.75rem + 2px) !important;
 }
 .btn-gradient-border {
 border: none !important;
 color: #fff !important;
   background-image: linear-gradient(62deg,#8355ad 0%,#b86bff 100%) !important;
 }
+.form-control{
+  height: 40px;
 
+}
 
 
 .tags-input-container{

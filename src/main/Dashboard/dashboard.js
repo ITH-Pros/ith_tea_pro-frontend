@@ -237,8 +237,8 @@ export default function Dashboard(props) {
     setShowStatusSelect(!showStatusSelect);
   };
 
-  const handleStatusChange = (e, taskId) => {
-    const newStatus = e.target.value;
+  const handleStatusChange = (e, taskId, status) => {
+	const newStatus = status;
 
     console.log("newStatus", newStatus);
     // make API call to update task status with newStatus
@@ -705,6 +705,8 @@ export default function Dashboard(props) {
           </Col>
         </Row>
       </Container>
+	  
+
 
       <Modal
         show={modalShow}

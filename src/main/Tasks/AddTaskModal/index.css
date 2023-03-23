@@ -166,6 +166,12 @@ button.btn-press.btn-gradient-border {
   text-align: right;
   padding-bottom: 1rem;
 }
+.file-list {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
 .taskModalForm .form-label {
   font-size: 14px !important;
   margin-bottom: 0.5rem !important;
@@ -177,4 +183,7 @@ button.btn-press.btn-gradient-border {
 }
 .ql-link {
   display: none !important;
+}
+.taskModalForm.modal.show .modal.show .modal-dialog, .modal-dialog.modal-xl{
+  width: 800px !important;
 }

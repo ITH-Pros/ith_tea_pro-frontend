@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./tasks.css";
 import {
   addSectionApi,
+  archiveSectionApi,
   deleteSectionApi,
   getAllProjects,
   getProjectsTask,
@@ -30,6 +31,7 @@ import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
 import { useParams } from "react-router-dom";
 import ViewTaskModal from "./view-task";
+import { truncateString } from "../../helpers/truncet";
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -88,21 +90,47 @@ const deleteConFirmation = (sectionId) => {
 
  
 
-
-
-
-
 // ///////////////////////////  confirmation-popup  ///////////////////////////
 
+///////////////////////////  archiveConFirmation  ///////////////////////////
+
+const [archiveSectionModal, setArchiveSectionModal] = useState(false);
 
 
- 
+const archiveConFirmation = (sectionId) => {
+	setSelectedSectionId(sectionId?._id);
+	setArchiveSectionModal(true);
+	 };
+
+	 const archiveSection = async () => {
+		let dataToSend = {
+		  sectionId: selectedSectionId,
+		  isArchived: true,
+		};
+		try {
+		  const res = await archiveSectionApi(dataToSend);
+		  console.log("res", res);
+		  if (res.status === 200) {
+			setToasterMessage("Section archived successfully");
+			setShowToaster(true);
+			setArchiveSectionModal(false);
+			closeModal();
+			getTasksDataUsingProjectId();
+			if (params?.projectId) {
+				setSelectedProjectId(params?.projectId);
+			  }
+		  } else {
+			setToasterMessage(res?.message);
+			setShowToaster(true);
+		  }
+		} catch (error) {
+		  console.log("error", error);
+		}
+		  };
 
 
+///////////////////////////  archiveConFirmation  ///////////////////////////
 
-
-
-// ///////////////////////////  confirmation-popup  ///////////////////////////
 
   const editSection = (sectionId, projectId) => {
     console.log("sectionId", sectionId);
@@ -469,7 +497,7 @@ const deleteConFirmation = (sectionId) => {
                     }}
                   >
                     <i
-                      class="fa fa-plus-circle fa-3x addBtn-section"
+                      className="fa fa-plus-circle fa-3x addBtn-section"
                       title="Add Project"
                       aria-hidden="true"
                     >
@@ -519,11 +547,6 @@ const deleteConFirmation = (sectionId) => {
                         onClick={() => {
                           setSelectedTask();
                           setShowAddTask(true);
-                          console.log(
-                            "*********************",
-                            project?.projectId,
-                            project?.sectionId
-                          );
                           setSelectedProject({
                             _id: project?.projectId,
                             section: project?.sectionId,
@@ -547,11 +570,11 @@ const deleteConFirmation = (sectionId) => {
                           >
                             Edit Section
                           </Dropdown.Item>
-                          <Dropdown.Item>Archive Section</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>archiveConFirmation({ _id: project?.sectionId})} >Archive Section</Dropdown.Item>
                           <Dropdown.Item>Copy/Move</Dropdown.Item>
                             <Dropdown.Item
 							disabled={project?.tasks?.length > 0}
-							 onClick={()=>deleteConFirmation({ _id: project?.sectionId,})} >Delete Section</Dropdown.Item>
+							 onClick={()=>deleteConFirmation({ _id: project?.sectionId})} >Delete Section</Dropdown.Item>
                         </>
                       )}
                     </Dropdown.Menu>
@@ -672,7 +695,7 @@ const deleteConFirmation = (sectionId) => {
                         }
                         onClick={() => handleViewDetails(task?._id)}
                       >
-                        {task?.title}
+                        { truncateString(task?.title , 20) }
                       </i>
 
                       {task?.status === "NOT_STARTED" && (
@@ -739,7 +762,7 @@ const deleteConFirmation = (sectionId) => {
                         
                        
                       )} */}
-                      <div className="task-hover"> <a > <i class="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div>
+                      <div className="task-hover"> <a > <i className="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div>
                     </li>
                   ))}
                 </ul>
@@ -798,14 +821,14 @@ const deleteConFirmation = (sectionId) => {
           </Modal.Body>
         </Modal>
 
-		<div>
+		
 		<Modal className="confirmation-modal" show={deleteSectionModal} onHide={() =>setDeleteSectionModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Section</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this section
 		</Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{alignItems:'center', justifyContent:'center'}}>
           <Button variant="secondary" onClick={() =>setDeleteSectionModal(false)}>
             Close
           </Button>
@@ -814,7 +837,23 @@ const deleteConFirmation = (sectionId) => {
           </Button>
         </Modal.Footer>
       </Modal>
-		</div>
+
+	  <Modal className="confirmation-modal" show={archiveSectionModal} onHide={() =>setArchiveSectionModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Archive Section</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to Archive this section
+		</Modal.Body>
+        <Modal.Footer style={{alignItems:'center', justifyContent:'center'}}>
+          <Button variant="secondary" onClick={() =>setArchiveSectionModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={() =>archiveSection()}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+	
 
 		{/*  */}
 

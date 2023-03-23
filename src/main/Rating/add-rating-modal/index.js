@@ -317,8 +317,9 @@ export default function AddRatingModal(props) {
 			<div className="dv-50-rating ">
 				<Form className="margin-form" noValidate validated={validated}>
 					<Row className="mb-3">
-
-					<Form.Group as={Col} md="6" >
+                    
+					<Form.Group as={Col} md="6">
+						
 							<Form.Label>Select Project</Form.Label>
 							<Form.Control
 								required

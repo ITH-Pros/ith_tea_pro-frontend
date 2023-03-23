@@ -83,7 +83,7 @@ export default function AddUser(props) {
                             type="text"
                             onChange={updateRegisterFormValue}
                             value={registerFromValue.name}
-                            name="name">
+                            name="name" placeholder='Name'>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             Name is required !!
@@ -97,14 +97,14 @@ export default function AddUser(props) {
                             type="email"
                             onChange={updateRegisterFormValue}
                             value={registerFromValue.email}
-                            name='email'>
+                            name='email' placeholder='Email id'>
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
                             Email is required !!
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group as={Col} md="4"  >
+                    <Form.Group as={Col} md="4">
                         <Form.Label>Role</Form.Label>
                         <Form.Control
                             required

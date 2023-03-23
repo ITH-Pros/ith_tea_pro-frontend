@@ -467,7 +467,7 @@ export default function AddProject(props) {
                 name="description"
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.description}
-              />
+               />
             </Form.Group>
           </Row>
 
