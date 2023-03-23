@@ -196,7 +196,7 @@ const ProjectCard = ({
                 }}
               >
                 {" "}
-                Edit
+                <i class="fa fa-pencil-square" aria-hidden="true"></i>  Edit Project
               </a>
 			  <a
                 href="#1"
@@ -207,7 +207,7 @@ const ProjectCard = ({
                 }}
               >
                 {" "}
-                Archive
+                <i class="fa fa-archive" aria-hidden="true"></i>  Archive
               </a>
               <a
                 href="#1"
@@ -217,7 +217,7 @@ const ProjectCard = ({
                 }}
               >
                 {" "}
-                Delete
+                <i class="fa fa-trash" aria-hidden="true"></i>  Delete
               </a>
 			
             </div>

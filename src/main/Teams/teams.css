@@ -3,27 +3,28 @@ a {
 }
 
 .h1-text {
-  font-size: 1rem;
+  font-size: 16px;
   margin: 15px 0;
   color: #2c2c2c;
   font-weight: 500;
   display: flex;
   align-items: center;
+  margin-left: 0px;
  
 }
 
 .h1-text i {
   background-color: #8355ad;
   color: #fff;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   box-shadow: 5px 14px 35px rgb(234 220 248);
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1rem;
   margin: 0 20px;
-  border-radius: 8px;
+  border-radius: 5px;
   margin-left: 0px;
 }
 

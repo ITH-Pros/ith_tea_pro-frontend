@@ -49,7 +49,12 @@
   padding: 2px 18px;
   font-size: 0.9rem;
 }
-
+.d-flex.rightTags {
+  font-size: 12px;
+}
+.d-flex.rightTags .progress {
+  margin-left: 10px !important;
+}
 .btn-glow:hover {
   color: #fff !important;
   color: #fff;
@@ -273,7 +278,6 @@ button.accordion-button{
   white-space: normal;
   word-break: break-word;
   height: 40px;
-  line-height: 40px;
 }
 .addtask {
   margin-left: 34px;

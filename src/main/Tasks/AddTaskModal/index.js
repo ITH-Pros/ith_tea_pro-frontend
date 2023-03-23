@@ -629,7 +629,7 @@ export default function AddTaskModal(props) {
         <Modal.Body >
           <div className="dv-50">
             <Form noValidate validated={validated}>
-              <Row className="mb-3">
+              <Row>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Project </Form.Label>
                   <Form.Control
