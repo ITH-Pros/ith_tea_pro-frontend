@@ -88,9 +88,7 @@
 .tasks {
   margin-top: 20px;
 }
-.confirmation-modal.modal.show .modal.show .modal-dialog, .modal-dialog.modal-xl{
-  width: auto !important;
-}
+
 .project-filter {
   margin-left: 72vw;
   margin-top: 6px;

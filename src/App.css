@@ -25,9 +25,7 @@ select{
 .modal-title {
   font-size: 1.2rem !important;
 }
-.confirmation-modal.modal.show .modal.show .modal-dialog, .modal-dialog.modal-xl{
-  width: auto !important;
-}
+
 textarea.form-control {
   min-height: calc(7.5em + 0.75rem + 2px) !important;
 }
