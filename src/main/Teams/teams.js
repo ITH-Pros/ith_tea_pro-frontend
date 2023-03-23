@@ -5,6 +5,7 @@ import {
   getAllProjects,
   getUserAssignedProjects,
   assignUserToProject,
+  getUserAnalytics,
 } from "../../services/user/api";
 import "./teams.css";
 import Loader from "../../components/Loader";
@@ -15,8 +16,10 @@ import Toaster from "../../components/Toaster";
 import { faGithub, faLinkedin, faFacebook , faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+
 export default function Teams(props) {
   const { userDetails } = useAuth();
+	const [userAnalytics, setUserAnalytics] = useState({});
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
@@ -47,6 +50,28 @@ export default function Teams(props) {
     };
     getAndSetAllUsers(options);
   }
+
+  const getUserAnalitics = async () => {
+	setLoading(true);
+	try {
+		const userAnalytics = await getUserAnalytics();
+		setLoading(false);
+		if (userAnalytics.error) {
+			setToasterMessage(userAnalytics?.message || "Something Went Wrong");
+			setShowToaster(true);
+			return;
+		} else {
+			setUserAnalytics(userAnalytics?.data);
+		}
+	} catch (error) {
+		setLoading(false);
+		setToasterMessage(error?.message || "Something Went Wrong");
+		setShowToaster(true);
+		return error.message;
+	}
+};
+
+
   const getAndSetAllUsers = async function (options) {
     setLoading(true);
     try {
@@ -69,6 +94,8 @@ export default function Teams(props) {
           rowsPerPage: options?.rowsPerPage,
           totalPages,
         });
+	getUserAnalitics();
+
       }
     } catch (error) {
       setLoading(false);
@@ -233,6 +260,10 @@ export default function Teams(props) {
       getAndSetAllUsers(dataToSave);
     };
 
+
+	
+
+
     return (
       <div className="pagination ">
         <i
@@ -316,29 +347,50 @@ export default function Teams(props) {
                   </div>
                   <div className="content">
                  
-                <div id="profileImage"> CKS</div>
+                <div id="profileImage"> </div>
                     <strong>{user.name}  ({user.role})</strong>
                   
 					<p>{user.email}</p>
-					{ user.department && <p> ({user.department}) </p> }
-					{ user.employeeId && <p>{user.employeeId} </p> } 
-					{ user.designation && <p>{user.designation}</p> }
+					{ user.department && <p> ({user?.department}) </p> }
+					{ user.employeeId && <p>{user?.employeeId} </p> } 
+					{ user.designation && <p>{user?.designation}</p> }
 					{/* <p>{user.employeeId} </p> <p> ({user.department}) </p> 
 					  <p>{user.designation}</p> */}
 					  {/* <p>{user.wings}</p> */}
+{/* 
+					  {userAnalytics && userAnalytics.find(analytics => analytics?._id === user._id) && (
+  <div className="user-analytics">
+    <div className="user-analytics-item">
+      <div className="user-analytics-item-value">
+        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id)?.completedAfterDueDatePercentage }%
+      </div>
+    </div>
+  </div>
+)} */}
+
+{userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
+  <div className="user-analytics">
+    <div className="user-analytics-item">
+      <div className="user-analytics-item-value">
+        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)  }%
+      </div>
+    </div>
+  </div>
+)}
+
                 </div>
 
 				<div>
-				{user.github &&
+				{user?.github &&
       <FontAwesomeIcon icon={faGithub} />
     }
-	{user.linkedin &&
+	{user?.linkedin &&
       <FontAwesomeIcon icon={faLinkedin} />
     }
-	{user.facebook &&
+	{user?.facebook &&
       <FontAwesomeIcon icon={faFacebook} />
     }
-	{user.twitter &&
+	{user?.twitter &&
       <FontAwesomeIcon icon={faTwitter} />
     }
     {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />

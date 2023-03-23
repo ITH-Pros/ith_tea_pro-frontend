@@ -55,8 +55,8 @@ return (
         <Calendar
           events={myevents}
           localizer={localizer}
-		  views={['week']}
-		  view={'week'}
+		  views={['month']}
+		  view={'month'}
           defaultDate={new Date()}
           style={{ height: 200 }}
 		  onView={(view)=>{

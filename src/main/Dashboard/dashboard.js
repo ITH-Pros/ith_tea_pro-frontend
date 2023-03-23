@@ -9,6 +9,7 @@ import {
   getAllPendingRating,
   getAllProjects,
   getRatings,
+  getTeamWork,
   updateTaskStatusById,
 } from "../../services/user/api";
 import "./dashboard.css";
@@ -67,9 +68,9 @@ export default function Dashboard(props) {
     localStorage.removeItem("profileCompleted");
   };
 
- const  handlePendingRatingList = () => {
-	getPendingRating();
-	  };
+  const handlePendingRatingList = () => {
+    getPendingRating();
+  };
 
   useEffect(() => {
     setShowModalOnLogin(
@@ -83,6 +84,7 @@ export default function Dashboard(props) {
     getMyWork();
     getPendingRating();
     getUsersList();
+	getTeamWorkList();
   }
 
   const handleToRedirectTask = () => {
@@ -238,7 +240,7 @@ export default function Dashboard(props) {
   };
 
   const handleStatusChange = (e, taskId, status) => {
-	const newStatus = status;
+    const newStatus = status;
 
     console.log("newStatus", newStatus);
     // make API call to update task status with newStatus
@@ -262,7 +264,7 @@ export default function Dashboard(props) {
         setShowToaster(true);
         // getTasksDataUsingProjectId();
         getMyWork();
-		handlePendingRatingList();
+        handlePendingRatingList();
         // if (params?.projectId) {
         //   setSelectedProjectId(params?.projectId);
         // }
@@ -273,6 +275,26 @@ export default function Dashboard(props) {
       return error.message;
     }
   };
+
+  const [teamWorkList ,setTeamWorkList] = useState([]);
+
+  const getTeamWorkList = async () => {
+	try {
+		const res = await getTeamWork();
+		if (res.error) {
+			setToasterMessage(res?.message || "Something Went Wrong");
+			setShowToaster(true);
+		} else {
+			setTeamWorkList(res?.data);
+		}
+	} catch (error) {
+		setToasterMessage(error?.message || "Something Went Wrong");
+		setShowToaster(true);
+		return error.message;
+	}
+};
+
+
 
   return (
     <div className="dashboard_camp rightDashboard">
@@ -416,97 +438,105 @@ export default function Dashboard(props) {
                               <option value="COMPLETED">Completed</option>
                             </select>
                           )} */}
-						  {(userDetails.id === task?.assignedTo?._id ||
-                        userDetails.role == "SUPER_ADMIN" ||
-                        userDetails.role == "ADMIN") && (
-                        <Dropdown>
-                          <Dropdown.Toggle
-                            variant="success"
-                            id="dropdown-basic"
-                            style={{ padding: "0" }}
-                          >
-                            {task.status === "NOT_STARTED" && (
-                              <i
-                                className="fa fa-check-circle secondary"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "ONGOING" && (
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "COMPLETED" && (
-                              <i
-                                className="fa fa-check-circle success"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "ONHOLD" && (
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                          </Dropdown.Toggle>
+                          {(userDetails.id === task?.assignedTo?._id ||
+                            userDetails.role == "SUPER_ADMIN" ||
+                            userDetails.role == "ADMIN") && (
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="success"
+                                id="dropdown-basic"
+                                style={{ padding: "0" }}
+                              >
+                                {task.status === "NOT_STARTED" && (
+                                  <i
+                                    className="fa fa-check-circle secondary"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                                {task.status === "ONGOING" && (
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                                {task.status === "COMPLETED" && (
+                                  <i
+                                    className="fa fa-check-circle success"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                                {task.status === "ONHOLD" && (
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                              </Dropdown.Toggle>
 
-                          <Dropdown.Menu>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(
-                                  event,
-                                  task?._id,
-                                  "NOT_STARTED"
-                                )
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle secondary"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Not Started
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(event, task?._id, "ONGOING")
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Ongoing
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(
-                                  event,
-                                  task?._id,
-                                  "COMPLETED"
-                                )
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle success"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Completed
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(event, task?._id, "ONHOLD")
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              On Hold
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      )}
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "NOT_STARTED"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle secondary"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Not Started
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "ONGOING"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Ongoing
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "COMPLETED"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle success"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Completed
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "ONHOLD"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  On Hold
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          )}
 
                           {/* <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
@@ -538,7 +568,9 @@ export default function Dashboard(props) {
                             <small>
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                                {moment(task?.dueDate?.split("T")[0]).format("DD/MM/YYYY")}
+                                {moment(task?.dueDate?.split("T")[0]).format(
+                                  "DD/MM/YYYY"
+                                )}
                               </Badge>
                             </small>
                           )}
@@ -546,9 +578,9 @@ export default function Dashboard(props) {
                             <small>
                               Completed:{" "}
                               <Badge bg="success">
-                                {moment(task?.completedDate?.split("T")[0]).format(
-                                  "DD/MM/YYYY"
-                                )}
+                                {moment(
+                                  task?.completedDate?.split("T")[0]
+                                ).format("DD/MM/YYYY")}
                               </Badge>
                             </small>
                           )}
@@ -637,7 +669,9 @@ export default function Dashboard(props) {
                             <small>
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                                {moment(task?.dueDate?.split("T")[0]).format("DD/MM/YYYY")}
+                                {moment(task?.dueDate?.split("T")[0]).format(
+                                  "DD/MM/YYYY"
+                                )}
                               </Badge>
                             </small>
                           )}
@@ -645,9 +679,9 @@ export default function Dashboard(props) {
                             <small>
                               {" "}
                               <Badge bg="success">
-                                {moment(task?.completedDate?.split("T")[0]).format(
-                                  "DD/MM/YYYY"
-                                )}
+                                {moment(
+                                  task?.completedDate?.split("T")[0]
+                                ).format("DD/MM/YYYY")}
                               </Badge>
                             </small>
                           )}
@@ -677,15 +711,15 @@ export default function Dashboard(props) {
                           className="text-end middle px-0"
                           style={{ justifyContent: "end" }}
                         >
-						{userDetails?.role !=="CONTRIBUTOR" && (
-							<Button  variant="light"
-                            size="sm" className="addRatingBtn"><AddRating
-							taskFromDashBoard={task}
-							 /> </Button>
-						)}
-						
-
-                             
+                          {userDetails?.role !== "CONTRIBUTOR" && (
+                            <Button
+                              variant="light"
+                              size="sm"
+                              className="addRatingBtn"
+                            >
+                              <AddRating taskFromDashBoard={task} />{" "}
+                            </Button>
+                          )}
 
                           {/* <Button
                             onClick={() => openModal(task)}
@@ -704,8 +738,214 @@ export default function Dashboard(props) {
           </Col>
         </Row>
       </Container>
-	  
 
+      <Container>
+	  <Row className="mt-3">
+          <Col lg={6} style={{ paddingLeft: "0px" }}>
+            <Row>
+              <Col lg={6} className="left-add">
+                <span>Team Work</span>
+
+                <i
+                  onClick={() => {
+                    console.log("Clicking");
+                    setSelectedTask();
+                    setShowAddTask(true);
+                    setSelectedProject();
+                  }}
+                  className="fa fa-plus-circle"
+                ></i>
+              </Col>
+              <Col lg={6} className="right-filter"></Col>
+            </Row>
+            <Row>
+              <Col lg={12} className="mt-3">
+                <Card id="card-task" className="px-3">
+                  {teamWorkList &&
+                    teamWorkList?.map((task) => (
+                      <Row className="d-flex justify-content-start list_task w-100 mx-0">
+                        <Col
+                          onClick={handleTaskItemClick}
+                          lg={4}
+                          className="middle"
+                        >
+                          {(userDetails.id === task?.assignedTo?._id ||
+                            userDetails.role == "SUPER_ADMIN" ||
+                            userDetails.role == "ADMIN") && (
+                            <Dropdown>
+                              <Dropdown.Toggle
+                                variant="success"
+                                id="dropdown-basic"
+                                style={{ padding: "0" }}
+                              >
+                                {task.status === "NOT_STARTED" && (
+                                  <i
+                                    className="fa fa-check-circle secondary"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                                {task.status === "ONGOING" && (
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                                {task.status === "COMPLETED" && (
+                                  <i
+                                    className="fa fa-check-circle success"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                                {task.status === "ONHOLD" && (
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>
+                                )}
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "NOT_STARTED"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle secondary"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Not Started
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "ONGOING"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Ongoing
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "COMPLETED"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle success"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Completed
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "ONHOLD"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  On Hold
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          )}
+                          <h5 className="text-truncate">{task?.title}</h5>
+                        </Col>
+                        <Col lg={4} className="middle">
+                          {task?.status != "COMPLETED" && (
+                            <small>
+                              Due Date:{" "}
+                              <Badge bg={task?.dueToday ? "danger" : "primary"}>
+                                {moment(task?.dueDate?.split("T")[0]).format(
+                                  "DD/MM/YYYY"
+                                )}
+                              </Badge>
+                            </small>
+                          )}
+                          {task?.status == "COMPLETED" && (
+                            <small>
+                              Completed:{" "}
+                              <Badge bg="success">
+                                {moment(
+                                  task?.completedDate?.split("T")[0]
+                                ).format("DD/MM/YYYY")}
+                              </Badge>
+                            </small>
+                          )}
+                        </Col>
+                        <Col
+                          lg={3}
+                          className="text-end middle"
+                          style={{ justifyContent: "end" }}
+                        >
+                          <small>
+                            {task?.status == "NOT_STARTED" && (
+                              <Badge bg="primary">NOT STARTED</Badge>
+                            )}
+                            {task?.status == "ONGOING" && (
+                              <Badge bg="warning">ONGOING</Badge>
+                            )}
+                            {task?.status == "COMPLETED" && (
+                              <Badge bg="success">COMPLLETED</Badge>
+                            )}
+                            {task?.status == "ONHOLD" && (
+                              <Badge bg="secondary">ON HOLD</Badge>
+                            )}
+                          </small>
+                        </Col>
+                        <Col
+                          lg={1}
+                          id="dropdown_action"
+                          className="text-end middle"
+                        >
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="defult"
+                              id="dropdown-basic"
+                            >
+                              <i className="fa fa-ellipsis-v"></i>
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                onClick={() => {
+                                  setSelectedProject();
+                                  setShowAddTask(true);
+                                  setSelectedTask(task);
+                                }}
+                              >
+                                Edit
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Col>
+                      </Row>
+                    ))}
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
 
       <Modal
         show={modalShow}
@@ -737,9 +977,7 @@ export default function Dashboard(props) {
         <Modal.Body
           style={{height: "78vh", overflowY: "scroll", overflowX:'hidden' }}
         >
-          <UserForm
-		handleModalClose = {handleProfileModalClose}
-		   />
+          <UserForm handleModalClose={handleProfileModalClose} />
         </Modal.Body>
         <Button
           className="skip-button"

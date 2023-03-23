@@ -194,6 +194,12 @@ export async function updateTaskStatusById(data) {
 	return (axiosInstance.patch('task/v1/update/status', data).then(res => res.data))
 }
 
+export async function getTeamWork(data) {
+	return (axiosInstance.get('task/v1/get/today/tasks',  {
+		params: data
+	}).then(res => res.data))
+}
+
 export async function taskById(data) {
 	return (axiosInstance.get('/task/v1/by/taskId',  {
         params: data
@@ -206,5 +212,11 @@ export async function addCommentOnTask(data) {
 
 export async function addRatingOnTask(data) {
 	return (axiosInstance.post('task/v1/rate', data).then(res => res.data))
+}
+
+export async function getUserAnalytics(data) {
+	return (axiosInstance.get('user/v1/team/analytics',  {
+		params: data
+	}).then(res => res.data))
 }
 
