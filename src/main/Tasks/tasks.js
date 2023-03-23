@@ -553,7 +553,7 @@ const archiveConFirmation = (sectionId) => {
                           });
                         }}
                       >
-                     <i class="fa fa-plus-square-o" aria-hidden="true"></i>   Add Task
+                     <i class="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
                       </Dropdown.Item>
 
                       {(userDetails.role == "SUPER_ADMIN" ||
@@ -571,10 +571,10 @@ const archiveConFirmation = (sectionId) => {
                           <i class="fa fa-pencil-square" aria-hidden="true"></i>  Edit Section
                           </Dropdown.Item>
                           <Dropdown.Item onClick={()=>archiveConFirmation({ _id: project?.sectionId})} ><i class="fa fa-archive" aria-hidden="true"></i>  Archive Section</Dropdown.Item>
-                          <Dropdown.Item>Copy/Move</Dropdown.Item>
+                          <Dropdown.Item><i class="fa fa-files-o" aria-hidden="true"></i> Copy/Move</Dropdown.Item>
                             <Dropdown.Item
 							disabled={project?.tasks?.length > 0}
-							 onClick={()=>deleteConFirmation({ _id: project?.sectionId})} >Delete Section</Dropdown.Item>
+							 onClick={()=>deleteConFirmation({ _id: project?.sectionId})} ><i class="fa fa-trash" aria-hidden="true"></i> Delete Section</Dropdown.Item>
                         </>
                       )}
                     </Dropdown.Menu>
