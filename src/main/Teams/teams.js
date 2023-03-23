@@ -49,7 +49,6 @@ export default function Teams(props) {
       rowsPerPage: 10,
     };
     getAndSetAllUsers(options);
-	getUserAnalitics();
   }
 
   const getUserAnalitics = async () => {
@@ -95,6 +94,8 @@ export default function Teams(props) {
           rowsPerPage: options?.rowsPerPage,
           totalPages,
         });
+	getUserAnalitics();
+
       }
     } catch (error) {
       setLoading(false);
@@ -346,7 +347,7 @@ export default function Teams(props) {
                   </div>
                   <div className="content">
                  
-                <div id="profileImage"> CKS</div>
+                <div id="profileImage"> </div>
                     <strong>{user.name}  ({user.role})</strong>
                   
 					<p>{user.email}</p>
@@ -356,12 +357,22 @@ export default function Teams(props) {
 					{/* <p>{user.employeeId} </p> <p> ({user.department}) </p> 
 					  <p>{user.designation}</p> */}
 					  {/* <p>{user.wings}</p> */}
-
+{/* 
 					  {userAnalytics && userAnalytics.find(analytics => analytics?._id === user._id) && (
   <div className="user-analytics">
     <div className="user-analytics-item">
       <div className="user-analytics-item-value">
-        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage }%
+        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id)?.completedAfterDueDatePercentage }%
+      </div>
+    </div>
+  </div>
+)} */}
+
+{userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
+  <div className="user-analytics">
+    <div className="user-analytics-item">
+      <div className="user-analytics-item-value">
+        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)  }%
       </div>
     </div>
   </div>
