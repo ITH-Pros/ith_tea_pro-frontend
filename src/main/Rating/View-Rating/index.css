@@ -3,7 +3,6 @@
 } */
 
 td {
-	/* display: block; */
 	width: 52px;
   }
   .input_dashboard {
@@ -14,7 +13,7 @@ td {
 	text-align: center;
 	width: 100%;
 	box-shadow: -5px -5px 9px rgb(204 42 42 / 0%), 4px 3px 7px #0000005e;
-	font-size: large;
+	font-size: 12px;
 	font-weight: 600;
   }
   .spnBtn {
@@ -258,9 +257,24 @@ td {
 	justify-content: end;
   }
   .btnWth{
-	width: 220px;
+    width: 220px;
     align-items: flex-start;
+    font-size: 12px;
+    margin-right: 15px;
   }
+  .user_names{
+	width: 120px;
+  }
+  button.add-rating-button {
+    font-size: 14px;
+    border: 1px solid #8355ad;
+    color: #8355ad;
+}
+button.add-rating-button {
+    font-size: 14px;
+    border: 1px solid #8355ad;
+    color: #8355ad;
+}
   select#select_month {
     width: 100%;
     margin: auto;
@@ -285,12 +299,14 @@ td {
 	cursor: pointer;
 	outline: none;
   }
-  
+  button.add-rating-button {
+    font-size: 14px;
+}
   .add-rating-button:hover {
-	background-color: #2ee59d;
-	box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
-	color: #fff;
-	/* transform: translateY(-7px); */
+	background-color: #8355ad;
+    box-shadow: 0px 8px 15px #c891fa85;
+    color: #fff;
+    transform: translateY(-4px);
   }
   
   

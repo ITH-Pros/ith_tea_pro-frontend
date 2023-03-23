@@ -35,7 +35,7 @@ const AttachmentUploader = () => {
   };
 
   return (
-    <div className="attachment-uploader">
+    <div className="attachment-uploader col-md-4">
       <label htmlFor="file-input">
         <div className="select-file">
           <span className="text">Select file</span>
@@ -46,7 +46,7 @@ const AttachmentUploader = () => {
         type="file"
         multiple
         onChange={handleFileSelect}
-        style={{ display: "none" }}
+       
       />
       <div className="file-list">
         {files.map((file) => (

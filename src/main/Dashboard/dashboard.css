@@ -1,9 +1,6 @@
-/* html {
-  font-size: calc(18vw / 1600 * 100) !important;
-} */
+
 
 td {
-  /* display: block; */
   width: 52px;
 }
 .input_dashboard {
@@ -323,6 +320,7 @@ th {
 #card-task p, #card-undefined p {
   margin: 0;
   font-size: 14px;
+  margin-right: 10px;
 }
 #card-task .sb-avatar, #card-undefined .sb-avatar {
   float: left;
