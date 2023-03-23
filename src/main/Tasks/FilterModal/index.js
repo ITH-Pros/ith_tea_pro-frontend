@@ -14,7 +14,7 @@ import {
 import Select from "react-select";
 import { useAuth } from "../../../auth/AuthProvider";
 import FilterDropdown from "./FilterDropdown";
-
+import SortByDropdown from './SortFilter'
 const FilterModal = (props) => {
   const { getTaskFilters, handleProjectId } = props;
   const { userDetails } = useAuth();
@@ -576,6 +576,11 @@ const FilterModal = (props) => {
                         placeholderText="Select Due Date"
                       />
                     </Col> */}
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDueDate">
+                <Row className="filterFields">
+                  <SortByDropdown />
                 </Row>
               </Form.Group>
 
