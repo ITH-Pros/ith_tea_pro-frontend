@@ -43,6 +43,7 @@ const ProjectCard = ({
   taskData,
   handleToRedirectTask,
   getAndSetAllProjects,
+  handleArchiveModalShow,
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy);
@@ -197,6 +198,17 @@ const ProjectCard = ({
                 {" "}
                 Edit
               </a>
+			  <a
+                href="#1"
+                onClick={() => {
+                  console.log("INNN delete");
+				  handleArchiveModalShow();
+                //   handleDelete();
+                }}
+              >
+                {" "}
+                Archive
+              </a>
               <a
                 href="#1"
                 onClick={() => {
@@ -207,6 +219,7 @@ const ProjectCard = ({
                 {" "}
                 Delete
               </a>
+			
             </div>
           </button>
         )}

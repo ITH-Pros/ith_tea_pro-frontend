@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-// import MyCalendar from "./weekCalendra";
+
 import { useState, useEffect } from "react";
 import "./index.css";
 import { MDBTooltip } from "mdb-react-ui-kit";
@@ -27,7 +27,7 @@ import {
 } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
-import MyCalendar from "../../Dashboard/weekCalendra";
+// import MyCalendar from "../../Dashboard/weekCalendra";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
 import AddRatingModal from "../add-rating-modal";
@@ -130,6 +130,9 @@ export default function Dashboard(props) {
       setLoading(false);
     }
   }
+
+ 
+  
   return (
     <div className="dashboard_camp">
       <div className="m-3 d-flex justify-content-center flex-column">
@@ -469,4 +472,8 @@ export default function Dashboard(props) {
       </div>
     </div>
   );
+
+ 
+
+
 }
