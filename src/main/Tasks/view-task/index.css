@@ -9,7 +9,10 @@
     font-size: 1rem !important;
     font-weight: 500;
   }
-  
+  .commentedBy .user-pic{
+    float: left;
+    margin-right:10px !important;
+  }
   .form-group p {
 	font-size: 1.1rem;
 	margin-bottom: 0;
@@ -106,10 +109,35 @@ body {
 }
 
 .comment{
-    margin-top: 5px;
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #eeeeee80;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.commentedBy {
+  float: left;
+  width: 100%;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+  height: 40px;
+}
+.comment-tex {
+  float: left;
+  width: 100%;
+  margin-bottom: 0rem !important;
+}
+.comment-tex p{
+  margin: 0px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.8px;
+}
+span.date.sub-text {
+  font-size: 12px;
+}
+p {
+  font-size: 13px;
+  margin-bottom: 0px;
 }

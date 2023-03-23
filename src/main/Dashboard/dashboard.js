@@ -724,7 +724,7 @@ export default function Dashboard(props) {
           </Button> */}
       </Modal>
 
-      <Modal
+      <Modal 
         className="profile-modal"
         show={showModalOnLogin}
         onHide={() => {
