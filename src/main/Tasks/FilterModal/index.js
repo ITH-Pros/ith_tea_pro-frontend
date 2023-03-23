@@ -521,20 +521,7 @@ const FilterModal = (props) => {
                   <Col sm="3">
                     <Form.Label>Status</Form.Label>
                   </Col>
-                  {/* <Form.Control
-                      as="select"
-                      type="select"
-                      name="status"
-                      onChange={updateFilterFormValue}
-                      value={filterFormValue.status}
-                    >
-                      <option value="">Status</option>
-                      {statusList?.map((status) => (
-                        <option value={status} key={status}>
-                          {status}
-                        </option>
-                      ))}
-                    </Form.Control> */}
+                
                   <Col sm="9">
                     <Select
                       onChange={(e) => onSelectData(e, "status")}
@@ -548,49 +535,8 @@ const FilterModal = (props) => {
                 </Row>
               </Form.Group>
 
-              {/* <Form.Group  controlId="formDateCreated">
-                  <Row sm="9" className="filterFields">
-				  <Form.Label column sm="4">
-				  Group By
-					</Form.Label>
-                    <Form.Control
-                      as="select"
-                      type="select"
-                      name="groupBy"
-                      onChange={updateFilterFormValue}
-                      value={filterFormValue.groupBy}
-                    >
-                      <option value="">Group By</option>
-                      {groupByList?.map((group) => (
-                        <option value={group} key={group}>
-                          {group}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Row>
-                </Form.Group> */}
-
-              {/* <Form.Group  controlId="formSelectProjectGroup">
-                  <Row sm="9" className="filterFields">
-				  <Form.Label column sm="4">
-				  Project Group
-					</Form.Label>
-                    <Form.Control
-                      as="select"
-					  
-                      value={selectProjectGroup}
-                      onChange={(e) => setSelectProjectGroup(e.target.value)}
-                    >
-                      <option value="">Select Project Group</option>
-                      <option value="projectGroup1">Project Group 1</option>
-                      <option value="projectGroup2">Project Group 2</option>
-                      <option value="projectGroup3">Project Group 3</option>
-                    </Form.Control>
-                  </Row>
-                </Form.Group> */}
-
-              <Form.Group controlId="formSortBy">
-                <Row className="filterFields">
+              <Form.Group controlId="formSortBy" >
+                <Row className="filterFields" style={{marginBottom:'0px'}}>
                   <Col sm="3">
                     <Form.Label>Sort By</Form.Label>
                   </Col>
@@ -614,24 +560,13 @@ const FilterModal = (props) => {
               </Form.Group>
 
               <Form.Group controlId="formDueDate">
-                <Row className="filterFields">
+                <Row className="filterFields due-date">
                   <FilterDropdown onFilterSelect={handleFilterSelect} />
 
-                  {/* <Col sm="3">
-                      <Form.Label>Due Date</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <DatePicker
-                        selected={dueDate}
-                        onChange={(date) => setDueDate(date)}
-                        className="form-control"
-                        placeholderText="Select Due Date"
-                      />
-                    </Col> */}
                 </Row>
               </Form.Group>
               <Form.Group controlId="formDueDate">
-                <Row className="filterFields">
+                <Row className="filterFields due-date" style={{marginTop:'0px'}}>
                   <SortByDropdown
                     onFilterSortSelect={handleFilterSortSelect}
                     onFilterSortOrderSelect={handleFilterSortOrderSelect}
