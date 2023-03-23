@@ -30,6 +30,10 @@ const FilterModal = (props) => {
     status: "",
     groupBy: "",
     projectIds: "",
+    sortOrder: "",
+    sortType: "",
+    fromDate: "",
+    toDate:""
   };
   const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);
@@ -70,14 +74,40 @@ const FilterModal = (props) => {
     getAllUsersData();
     updateFromLocalStorage();
   }, []);
-  const [filteredData, setFilteredData] = useState([]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
+  const [sortType, setSortType] = useState("");
+
 
   const handleFilterSelect = (fromDate, toDate) => {
     console.log(fromDate,'-------------------------From date')
-    console.log(toDate,'-------------------------To date')
+    console.log(toDate, '-------------------------To date')
+    // setFromDate(fromDate);
+    // setToDate(toDate);
+    localStorage.setItem('dueDate',JSON.stringify({'fromDate':fromDate,'toDate':toDate}))
+    // setFilterFormValue({ ...filterFormValue, fromDate:fromDate });
+    // setFilterFormValue({ ...filterFormValue, toDate: toDate });
+    
     // Call your API with the fromDate and toDate values
     // Update the filteredData state with the API response
   };
+  const handleFilterSortOrderSelect = (sortOrder) => {
+    setSortOrder(sortOrder)
+    console.log(sortOrder, '=====================sort order')
+    localStorage.setItem("sortOrder", sortOrder );
+
+    // setFilterFormValue({ ...filterFormValue, sortOrder: sortOrder });
+    
+  }
+  const handleFilterSortSelect = (sortType)=> {
+    console.log(sortType, '=====================sort type')
+    setSortType(sortType)
+    localStorage.setItem("sortType", sortType);
+
+    // setFilterFormValue({ ...filterFormValue, sortOrder: sortType });
+
+  }
 
   const updateFromLocalStorage = () => {
     console.log("filterFormValueFromLocal\n\n\nn\n\n");
@@ -158,7 +188,25 @@ const FilterModal = (props) => {
     if (assignedTo) {
       filterFormValue.assignedTo = assignedTo.map((item) => item._id);
     }
+    let dueDate = JSON.parse(localStorage.getItem("dueDate"));
+    if (dueDate.fromDate && dueDate.toDate) {
+      filterFormValue.fromDate = dueDate.fromDate;
+      filterFormValue.toDate = dueDate.toDate;
+      
+    }
+    if (localStorage.getItem("sortOrder")) {
+      filterFormValue.sortOrder = localStorage.getItem("sortOrder");
+      
+    }
+    if (localStorage.getItem("sortType")) {
+      filterFormValue.sortType = localStorage.getItem("sortType");
+    }
 
+      console.log(
+        filterFormValue,
+       
+        "---------------------filter form value ................................"
+      );
     localStorage.setItem("taskFilters", JSON.stringify(filterFormValue));
     getTaskFilters();
     setFilterModalShow(false);
@@ -178,6 +226,10 @@ const FilterModal = (props) => {
     setSortBy("");
     setFilterFormValue(filterFormFileds);
     localStorage.removeItem("taskFilters");
+    localStorage.removeItem("dueDate");
+    localStorage.removeItem("sortType");
+    localStorage.removeItem("sortOrder");
+    localStorage.removeItem("selectedFilter");
     setClearFilterBoolean(false);
     getTaskFilters();
   };
@@ -580,7 +632,10 @@ const FilterModal = (props) => {
               </Form.Group>
               <Form.Group controlId="formDueDate">
                 <Row className="filterFields">
-                  <SortByDropdown />
+                  <SortByDropdown
+                    onFilterSortSelect={handleFilterSortSelect}
+                    onFilterSortOrderSelect={handleFilterSortOrderSelect}
+                  />
                 </Row>
               </Form.Group>
 

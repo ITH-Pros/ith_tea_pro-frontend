@@ -344,6 +344,18 @@ const archiveConFirmation = (sectionId) => {
         if (filterData?.status) {
           data.status = JSON.stringify(filterData?.status);
         }
+        if (filterData?.sortType) {
+          data.sortType =filterData?.sortType;
+        }
+        if (filterData?.sortOrder) {
+          data.sortOrder = filterData?.sortOrder;
+        }
+        if (filterData?.fromDate) {
+          data.fromDate = filterData?.fromDate;
+        }
+        if (filterData?.toDate) {
+          data.toDate = filterData?.toDate;
+        }
         // data = filterData;
         // data.groupBy = "default";
         console.log(data, "filter data");

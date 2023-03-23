@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function SortByDropdown() {
+function SortByDropdown(props) {
   const [sortBy, setSortBy] = useState(" ");
   const [sortOrder, setSortOrder] = useState(" ");
 
@@ -9,6 +9,17 @@ function SortByDropdown() {
     setSortBy(value);
     sendSortByToBackend(value);
   };
+    useEffect(() => {
+      const sortOrder = localStorage.getItem("sortOrder");
+      const sortType = localStorage.getItem("sortType");
+      const selectedFilter = localStorage.getItem("selectedFilter");
+        if (sortOrder) {
+          setSortOrder(sortOrder)
+      
+      } if (sortType) {
+          setSortBy(sortType)
+      }
+    }, []);
 
   const handleSortOrderChange = (event) => {
     const value = event.target.value;
@@ -21,8 +32,9 @@ function SortByDropdown() {
     const payload = {
       sortBy: sortByValue,
     };
-      console.log(payload, "----------------------------payload");
-      
+       props.onFilterSortSelect(sortByValue);
+    console.log(payload, "----------------------------payload");
+
     // Send the payload to the backend using whatever method you prefer (e.g. fetch(), axios, etc.)
   };
 
@@ -31,7 +43,9 @@ function SortByDropdown() {
     const payload = {
       sortOrder: sortOrderValue,
     };
-      console.log(payload,'----------------------------payload')
+       props.onFilterSortOrderSelect(sortOrderValue);
+      
+    console.log(payload, "----------------------------payload");
     // Send the payload to the backend using whatever method you prefer (e.g. fetch(), axios, etc.)
   };
 
@@ -55,8 +69,8 @@ function SortByDropdown() {
         onChange={handleSortOrderChange}
       >
         <option value=" ">Select By</option>
-        <option value="decreasing">Decreasing</option>
-        <option value="ascending">Increasing</option>
+        <option value="-1">Decreasing</option>
+        <option value="1">Increasing</option>
       </select>
     </div>
   );

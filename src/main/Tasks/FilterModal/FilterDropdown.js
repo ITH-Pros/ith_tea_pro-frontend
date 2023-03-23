@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 // import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-daterangepicker/daterangepicker.css";
@@ -10,12 +10,29 @@ function FilterDropdown(props) {
     toDate: new Date(),
   });
 
+  useEffect(() => {
+    const dueDate = JSON.parse(localStorage.getItem("dueDate"));
+    const selectedFilter = localStorage.getItem("selectedFilter");
+    if (dueDate && selectedFilter==='range') {
+      setDateRange({
+        fromDate: new Date(dueDate.fromDate),
+        toDate: new Date(dueDate.toDate),
+      });
+      setSelectedFilter("range");
+    } else {
+      setSelectedFilter(selectedFilter);
+    }
+
+  }, []);
+
   const handleFilterSelect = (event) => {
     const selectedValue = event.target.value;
     setSelectedFilter(selectedValue);
   };
 
   const handleDateRangeChange = (event, picker) => {
+    localStorage.setItem("selectedFilter", "range");
+
     setDateRange({
       fromDate: picker.startDate.toDate(),
       toDate: picker.endDate.toDate(),
@@ -29,7 +46,6 @@ function FilterDropdown(props) {
         onApply={handleDateRangeChange}
         startDate={dateRange.fromDate}
         endDate={dateRange.toDate}
-        maxDate={new Date()}
       >
         <input type="text" className="form-control" />
       </DateRangePicker>
@@ -39,6 +55,7 @@ function FilterDropdown(props) {
   const renderFilterDropdown = () => {
     let fromDate = new Date();
     let toDate = new Date();
+    localStorage.setItem('selectedFilter', selectedFilter);
     if (selectedFilter === "Tomorrow") {
       toDate.setDate(toDate.getDate() + 1);
       fromDate = toDate;
