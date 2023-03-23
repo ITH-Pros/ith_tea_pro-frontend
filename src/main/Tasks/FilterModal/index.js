@@ -13,6 +13,7 @@ import {
 } from "../../../services/user/api";
 import Select from "react-select";
 import { useAuth } from "../../../auth/AuthProvider";
+import FilterDropdown from "./FilterDropdown";
 
 const FilterModal = (props) => {
   const { getTaskFilters, handleProjectId } = props;
@@ -69,6 +70,14 @@ const FilterModal = (props) => {
     getAllUsersData();
     updateFromLocalStorage();
   }, []);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const handleFilterSelect = (fromDate, toDate) => {
+    console.log(fromDate,'-------------------------From date')
+    console.log(toDate,'-------------------------To date')
+    // Call your API with the fromDate and toDate values
+    // Update the filteredData state with the API response
+  };
 
   const updateFromLocalStorage = () => {
     console.log("filterFormValueFromLocal\n\n\nn\n\n");
@@ -277,7 +286,7 @@ const FilterModal = (props) => {
                     src={require("../../../assests/img/filter.png")}
                     alt="filter"
                   />
-                  
+
                   <span
                     onClick={setProjectAndOpenModal}
                     className="filter-task-tag"
@@ -318,7 +327,8 @@ const FilterModal = (props) => {
         </div>
       </div>
       {filterModalShow && (
-        <Modal width={600}
+        <Modal
+          width={600}
           show={filterModalShow}
           onHide={() => setFilterModalShow(false)}
           size="lg"
@@ -334,61 +344,61 @@ const FilterModal = (props) => {
           </Modal.Header>
           <Modal.Body>
             <Form noValidate>
-                <Form.Group controlId="formSelectProject">
-                  <Row>
-                    <Col sm="3">
-                      <Form.Label>Project</Form.Label>
-                    </Col>
-                    <Col sm="9" className="filterFields">
-                      <Select
-                        onChange={(e) => onSelectData(e, "projectIds")}
-                        value={projectIds}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={projects}
-                        isDisabled={handleProjectId}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
-                <Form.Group  controlId="formDateCreated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>createdBy</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <Select
-                        onChange={(e) => onSelectData(e, "createdBy")}
-                        value={createdBy}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={usersList}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
+              <Form.Group controlId="formSelectProject">
+                <Row>
+                  <Col sm="3">
+                    <Form.Label>Project</Form.Label>
+                  </Col>
+                  <Col sm="9" className="filterFields">
+                    <Select
+                      onChange={(e) => onSelectData(e, "projectIds")}
+                      value={projectIds}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={projects}
+                      isDisabled={handleProjectId}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>createdBy</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                      onChange={(e) => onSelectData(e, "createdBy")}
+                      value={createdBy}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={usersList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                <Form.Group  controlId="formDateCreated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>assignedTo</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <Select
-                        onChange={(e) => onSelectData(e, "assignedTo")}
-                        value={assignedTo}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={usersList}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>assignedTo</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                      onChange={(e) => onSelectData(e, "assignedTo")}
+                      value={assignedTo}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={usersList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                {/* <Form.Group as={Row} controlId="formDateCreated">
+              {/* <Form.Group as={Row} controlId="formDateCreated">
                   <Row className="filterFields">
                     <Col sm="3">
                       <Form.Label>Category</Form.Label>
@@ -405,31 +415,29 @@ const FilterModal = (props) => {
                     </Col>
                   </Row>
                 </Form.Group> */}
-                <Form.Group controlId="category">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Category</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <Select
-                        onChange={(e) => onSelectData(e, "assignedTo")}
-                        value={categoryData}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={categories}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
-                <Form.Group  controlId="formDateCreated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>
-                        Priority
-                      </Form.Label>
-                    </Col>
-                    {/* <Form.Control
+              <Form.Group controlId="category">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Category</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                      onChange={(e) => onSelectData(e, "assignedTo")}
+                      value={categoryData}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={categories}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Priority</Form.Label>
+                  </Col>
+                  {/* <Form.Control
                       as="select"
                       type="select"
                       name="priority"
@@ -443,25 +451,25 @@ const FilterModal = (props) => {
                         </option>
                       ))}
                     </Form.Control> */}
-                    <Col sm="9">
-                      <Select
-                        onChange={(e) => onSelectData(e, "priority")}
-                        value={priorityData}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={priorityList}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
-             
-                <Form.Group controlId="formDateCreated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Status</Form.Label>
-                    </Col>
-                    {/* <Form.Control
+                  <Col sm="9">
+                    <Select
+                      onChange={(e) => onSelectData(e, "priority")}
+                      value={priorityData}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={priorityList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Status</Form.Label>
+                  </Col>
+                  {/* <Form.Control
                       as="select"
                       type="select"
                       name="status"
@@ -475,20 +483,20 @@ const FilterModal = (props) => {
                         </option>
                       ))}
                     </Form.Control> */}
-                    <Col sm="9">
-                      <Select
-                        onChange={(e) => onSelectData(e, "status")}
-                        value={statusData}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={statusList}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
+                  <Col sm="9">
+                    <Select
+                      onChange={(e) => onSelectData(e, "status")}
+                      value={statusData}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={statusList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                {/* <Form.Group  controlId="formDateCreated">
+              {/* <Form.Group  controlId="formDateCreated">
                   <Row sm="9" className="filterFields">
 				  <Form.Label column sm="4">
 				  Group By
@@ -510,7 +518,7 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group> */}
 
-                {/* <Form.Group  controlId="formSelectProjectGroup">
+              {/* <Form.Group  controlId="formSelectProjectGroup">
                   <Row sm="9" className="filterFields">
 				  <Form.Label column sm="4">
 				  Project Group
@@ -529,33 +537,35 @@ const FilterModal = (props) => {
                   </Row>
                 </Form.Group> */}
 
-                <Form.Group  controlId="formSortBy">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Sort By</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <Form.Control
-                        as="select"
-                        type="select"
-                        name="sortBy"
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                      >
-                        <option value="">Select Sort By</option>
-                        {sortedByArr?.map((type) => (
-                          <option value={type} key={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </Col>
-                  </Row>
-                </Form.Group>
+              <Form.Group controlId="formSortBy">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Sort By</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Form.Control
+                      as="select"
+                      type="select"
+                      name="sortBy"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                    >
+                      <option value="">Select Sort By</option>
+                      {sortedByArr?.map((type) => (
+                        <option value={type} key={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                <Form.Group  controlId="formDueDate">
-                  <Row className="filterFields">
-                    <Col sm="3">
+              <Form.Group controlId="formDueDate">
+                <Row className="filterFields">
+                  <FilterDropdown onFilterSelect={handleFilterSelect} />
+
+                  {/* <Col sm="3">
                       <Form.Label>Due Date</Form.Label>
                     </Col>
                     <Col sm="9">
@@ -565,62 +575,61 @@ const FilterModal = (props) => {
                         className="form-control"
                         placeholderText="Select Due Date"
                       />
-                    </Col>
-                  </Row>
-                </Form.Group>
+                    </Col> */}
+                </Row>
+              </Form.Group>
 
-                <Form.Group  controlId="formDateCreated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Date Created</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <DatePicker
-                        selected={dateCreated}
-                        onChange={(date) => setDateCreated(date)}
-                        className="form-control"
-                        placeholderText="Select Date Created"
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Date Created</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <DatePicker
+                      selected={dateCreated}
+                      onChange={(date) => setDateCreated(date)}
+                      className="form-control"
+                      placeholderText="Select Date Created"
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                <Form.Group  controlId="formDateUpdated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Date Updated</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <DatePicker
-                        selected={dateUpdated}
-                        onChange={(date) => setDateUpdated(date)}
-                        className="form-control"
-                        placeholderText="Select Date Updated"
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
+              <Form.Group controlId="formDateUpdated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Date Updated</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <DatePicker
+                      selected={dateUpdated}
+                      onChange={(date) => setDateUpdated(date)}
+                      className="form-control"
+                      placeholderText="Select Date Updated"
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                <Form.Group  controlId="formDateCompleted">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Date Completed</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <DatePicker
-                        selected={dateCompleted}
-                        onChange={(date) => setDateCompleted(date)}
-                        className="form-control"
-                        placeholderText="Select Date Completed"
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group>
+              <Form.Group controlId="formDateCompleted">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Date Completed</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <DatePicker
+                      selected={dateCompleted}
+                      onChange={(date) => setDateCompleted(date)}
+                      className="form-control"
+                      placeholderText="Select Date Completed"
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
 
-                {/* <Button  md="2" className="btnDanger" type="submit">
+              {/* <Button  md="2" className="btnDanger" type="submit">
                   Clear Filter
                 </Button> */}
-             
             </Form>
           </Modal.Body>
           <Modal.Footer>

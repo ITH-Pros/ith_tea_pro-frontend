@@ -13,7 +13,7 @@ const TextEditor = ({ height, width, placeholder, value, onChange }) => {
 
   return (
     <ReactQuill
-      style={{ height, width }}
+      style={{ height, width:'100%' }}
       placeholder={placeholder}
       value={editorContent}
       onChange={handleChange}

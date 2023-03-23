@@ -225,7 +225,7 @@ export default function ViewTaskModal(props) {
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
-                  <p>{formatDate(task?.dueDate)} </p>
+                  <p style={{fontSize:'13px', marginBottom:'0'}}>{formatDate(task?.dueDate)} </p>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
@@ -255,8 +255,8 @@ export default function ViewTaskModal(props) {
             </Form>
 
             <div className="comment-section">
-              <h3>Comments</h3>
-              <div className="container">
+              <h6>Comments</h6>
+              <div className="container" style={{width:'100%', padding:'0px'}}>
                 {/* show comments  */}
                 {task?.comments?.map((item, index) => {
                   const options = {
@@ -273,37 +273,26 @@ export default function ViewTaskModal(props) {
                     <div className="comment" key={index}>
                       {/* commentedBy */}
                       <div className="commentedBy">
-                        <UserIcon
+                        <UserIcon style={{float:'left'}}
                           key={index}
                           firstName={item?.commentedBy?.name}
                         />{" "}
                         {item?.commentedBy?.name}
                       </div>
-                      <div className="commentText">
-                        <p dangerouslySetInnerHTML={{__html: item?.comment}} className="comment"></p>
+                 
+                        <p dangerouslySetInnerHTML={{__html: item?.comment}} className="comment-tex"></p>
                         <span className="date sub-text">{createdAt}</span>
-                      </div>
+                     
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="container">
+            <div className="container" style={{padding:'0', width:'100%'}}>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  {/* <textarea
-                    className="form-control status-box"
-                    rows="3"
-                    maxLength={250}
-                    placeholder="Enter your comment here..."
-                    value={text}
-                    onChange={handleTextChange}
-                    // value={text}
-                  ></textarea> */}
-                  {/* <CommentBox onSubmit={handleDescSubmit} /> */}
-                  <label>
-                    Comment:
+                  <label style={{display:'block'}}>
                     <TextEditor
                       height={100}
                       width="100%"
@@ -315,14 +304,12 @@ export default function ViewTaskModal(props) {
                     {/* <textarea value={comment} onChange={handleCommentChange} /> */}
                   </label>
                 </div>
-                <div className="button-group pull-right">
-                  {/* <p className="counter">{count}</p> */}
-                  <button type="submit" className="btn btn-primary">
-                    Post
-                  </button>
+                <div style={{float:'left', width:'100%', textAlign:'right', marginTop:'50px',  }}>
+                <Button type="submit" className="btn btn-primary"> Post</Button>
                 </div>
+                
               </form>
-              <ul className="posts"></ul>
+             
             </div>
           </div>
         </Modal.Body>

@@ -153,8 +153,11 @@ select {
   height: 700px;
   overflow: scroll;
 }
+.addTask-modal .user-pic{
+  float: left;
+}
 .taskModalForm .modal-body {
-  height: 80vh;
+  height: 75vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -185,5 +188,9 @@ button.btn-press.btn-gradient-border {
   display: none !important;
 }
 .taskModalForm.modal.show .modal.show .modal-dialog, .modal-dialog.modal-xl{
-  width: 800px !important;
+  width: 90% !important;
+}
+
+.taskModalForm.modal.show .modal.show .modal-dialog, .modal-dialog.modal-xl .modal-footer{
+  display: none !important;
 }
