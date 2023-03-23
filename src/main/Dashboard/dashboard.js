@@ -736,7 +736,7 @@ export default function Dashboard(props) {
           <Modal.Title>Profile Details</Modal.Title>
         </Modal.Header>
         <Modal.Body
-          style={{ maxHeight: "calc(100vh - 210px)", overflowY: "auto" }}
+          style={{height: "78vh", overflowY: "scroll", overflowX:'hidden' }}
         >
           <UserForm
 		handleModalClose = {handleProfileModalClose}

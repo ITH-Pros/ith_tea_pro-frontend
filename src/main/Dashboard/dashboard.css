@@ -281,7 +281,18 @@ th {
   /* transform: translateY(-7px); */
 }
 
-
+.profile-modal .addUserFrom-edit {
+  margin-left: 0% !important;
+  width: 100%;
+  margin-top: 80px !important;
+  margin-bottom: 25px !important;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  position: relative;
+  padding-top: 104px;
+  border: 1px solid #ccc;
+}
 
 #nav-filter {
   margin-top: 20px;
