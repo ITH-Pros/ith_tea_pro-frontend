@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import {
+	archiveProjectById,
   assignUserToProject,
   deleteProjectById,
   getAllProjects,
@@ -473,6 +474,48 @@ export default function AllProject() {
     }
   };
 
+
+//   ////////////////////////  Archive project modal  ////////////////////////
+
+const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
+
+const handleArchiveModalShow = (project) => {
+	setSelectedProject(project);
+	console.log(project, "------deleteProject");
+	setConfirmModalShow(true);
+	setIsArchiveModalShow(true);
+};
+
+const archiveProject = async () => {
+	setLoading(true);
+	try {
+		let dataToSend = {
+			projectId: selectedProject._id,
+			isArchived: true,
+		};
+		const removeRes = await archiveProjectById(dataToSend);
+		setLoading(false);
+
+		if (removeRes.error) {
+			setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
+			setShowToaster(true);
+			return;
+		} else {
+			setToasterMessage(removeRes?.message || "Something Went Wrong");
+			setShowToaster(true);
+			getAndSetAllProjects();
+			setConfirmModalShow(false);
+			setIsArchiveModalShow(false);
+		}
+	}
+	catch (error) {
+		setToasterMessage(error?.error?.message || "Something Went Wrong");
+		setShowToaster(true);
+		setLoading(false);
+		return error.message;
+	}
+};
+
  
 
   const ProgressBarComp = (props) => {
@@ -587,6 +630,7 @@ export default function AllProject() {
 					handleCategories = {() => handleCategorie(element)}
 					handleToRedirectTask = {() => handleToRedirectTask(element)}
 					getAndSetAllProjects = {() => getAndSetAllProjects()}
+					handleArchiveModalShow = {() => handleArchiveModalShow(element)}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
@@ -631,7 +675,7 @@ export default function AllProject() {
 	  
         <Modal 
           show={confirmModalShow}
-          onHide={() => setConfirmModalShow(false)}
+          onHide={() => {setConfirmModalShow(false);setIsArchiveModalShow(false)}}
           animation={false}
         >
           <Modal.Header closeButton>
@@ -639,18 +683,29 @@ export default function AllProject() {
           </Modal.Header>
           <Modal.Body>
             <div>
-			  <p>Are you sure you want to delete this project?</p>
+			  <p>Are you sure you want to {isArchiveModalShow?'archive':'delete'} this project?</p>
 
        
 		   	</div>
-          </Modal.Body>
-          <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
+
+			<div className="pull-right">
+
+			   {!isArchiveModalShow && (
+			<Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
             Delete
           </Button>
-
-          <Button style={{marginLeft:"16px"}} className="btn mr-3"  onClick={() => setConfirmModalShow(false)}>
+		  )}
+		  {isArchiveModalShow && (
+			<Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => archiveProject()}>
+			Archive
+		  </Button>
+		  )}
+          <Button style={{marginLeft:"16px"}} className="btn mb-3 mr-3"  onClick={() => {setConfirmModalShow(false) ; setIsArchiveModalShow(false)} }>
             Cancel
           </Button>
+		  </div>
+          </Modal.Body>
+		 
         </Modal>
 
 
