@@ -495,6 +495,7 @@ const archiveConFirmation = (sectionId) => {
           showViewTask={showViewTask}
           closeViewTaskModal={closeViewTaskModal}
           selectedTaskId={selectedTaskId}
+          getTasksDataUsingProjectId={getTasksDataUsingProjectId}
         />
 
         <Accordion alwaysOpen="true">
@@ -503,7 +504,8 @@ const archiveConFirmation = (sectionId) => {
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
                 <div className="project-card-section">
-                  <a
+                  <button
+
                     onClick={() => {
                       showAddSectionModal(true);
                     }}
@@ -516,7 +518,7 @@ const archiveConFirmation = (sectionId) => {
                       {" "}
                       Add Section
                     </i>
-                  </a>
+                  </button>
                 </div>
               </div>
             )}
@@ -565,11 +567,11 @@ const archiveConFirmation = (sectionId) => {
                           });
                         }}
                       >
-                     <i class="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
+                     <i className="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
                       </Dropdown.Item>
 
-                      {(userDetails.role == "SUPER_ADMIN" ||
-                        userDetails.role == "ADMIN") && (
+                      {(userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") && (
                         <>
                           <Dropdown.Item
                             onClick={() =>
@@ -580,13 +582,13 @@ const archiveConFirmation = (sectionId) => {
                               })
                             }
                           >
-                          <i class="fa fa-pencil-square" aria-hidden="true"></i>  Edit Section
+                          <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Section
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={()=>archiveConFirmation({ _id: project?.sectionId})} ><i class="fa fa-archive" aria-hidden="true"></i>  Archive Section</Dropdown.Item>
-                          <Dropdown.Item><i class="fa fa-files-o" aria-hidden="true"></i> Copy/Move</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>archiveConFirmation({ _id: project?.sectionId})} ><i className="fa fa-archive" aria-hidden="true"></i>  Archive Section</Dropdown.Item>
+                          <Dropdown.Item><i className="fa fa-files-o" aria-hidden="true"></i> Copy/Move</Dropdown.Item>
                             <Dropdown.Item
 							disabled={project?.tasks?.length > 0}
-							 onClick={()=>deleteConFirmation({ _id: project?.sectionId})} ><i class="fa fa-trash" aria-hidden="true"></i> Delete Section</Dropdown.Item>
+							 onClick={()=>deleteConFirmation({ _id: project?.sectionId})} ><i className="fa fa-trash" aria-hidden="true"></i> Delete Section</Dropdown.Item>
                         </>
                       )}
                     </Dropdown.Menu>
@@ -610,9 +612,10 @@ const archiveConFirmation = (sectionId) => {
                         <option value="COMPLETED">Completed</option>
                       </select>
 					)} */}
+                    
                       {(userDetails.id === task?.assignedTo?._id ||
-                        userDetails.role == "SUPER_ADMIN" ||
-                        userDetails.role == "ADMIN") && (
+                        userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") && (
                         <Dropdown>
                           <Dropdown.Toggle
                             variant="success"
@@ -645,6 +648,8 @@ const archiveConFirmation = (sectionId) => {
                             )}
                           </Dropdown.Toggle>
 
+                                {
+                                task.status!== "COMPLETED" &&
                           <Dropdown.Menu>
                             <Dropdown.Item
                               onClick={(event) =>
@@ -699,13 +704,15 @@ const archiveConFirmation = (sectionId) => {
                               On Hold
                             </Dropdown.Item>
                           </Dropdown.Menu>
+}
                         </Dropdown>
                       )}
+                      <div className="clickLabelArea" onClick={() => handleViewDetails(task?._id)}>
                       <i
                         className={
                           task?.status === "COMPLETED" ? "line-strics" : ""
                         }
-                        onClick={() => handleViewDetails(task?._id)}
+                        // onClick={() => handleViewDetails(task?._id)}
                       >
                         { truncateString(task?.title , 20) }
                       </i>
@@ -752,10 +759,12 @@ const archiveConFirmation = (sectionId) => {
                             "MMM DD,YYYY"
                           )}
                         </Badge>
+                        // onClick={() => handleViewDetails(task?._id)}
                       )}
+                      </div>
                       {(userDetails.id === task?.assignedTo?._id ||
-                        userDetails.role == "SUPER_ADMIN" ||
-                        userDetails.role == "ADMIN") && (
+                        userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") && (
                         <a
                           style={{
                             float: "right",

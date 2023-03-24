@@ -368,7 +368,7 @@ export default function Teams(props) {
   </div>
 )} */}
 
-{userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
+{ userDetails?.role !== "CONTRIBUTOR" && userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
   <div className="user-analytics">
     <div className="user-analytics-item">
       <div className="user-analytics-item-value">

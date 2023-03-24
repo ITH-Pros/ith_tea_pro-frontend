@@ -87,8 +87,8 @@ export default function Dashboard(props) {
 	getTeamWorkList();
   }
 
-  const handleToRedirectTask = () => {
-    navigate("/task");
+  const handleToRedirectTask = (projectId) => {
+    navigate(`/task/${projectId}`);
   };
 
   const handleShowAllProjects = () => {
@@ -338,7 +338,7 @@ export default function Dashboard(props) {
             .map((project) => (
               <Col lg={6}>
                 <Card
-                  onClick={handleToRedirectTask}
+                  onClick={()=>{handleToRedirectTask(project?._id)}}
                   id={`card-${project.id}`}
                   key={project?.id}
                 >
@@ -626,7 +626,7 @@ export default function Dashboard(props) {
                                   setSelectedTask(task);
                                 }}
                               >
-                             <i class="fa fa-pencil-square" aria-hidden="true"></i>  Edit Task
+                             <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Task
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -665,7 +665,7 @@ export default function Dashboard(props) {
                           <h5 className="text-truncate">{task?.title}</h5>
                         </Col>
                         <Col lg={2} className="middle">
-                          {task?.status != "COMPLETED" && (
+                          {task?.status !== "COMPLETED" && (
                             <small>
                               Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
@@ -675,7 +675,7 @@ export default function Dashboard(props) {
                               </Badge>
                             </small>
                           )}
-                          {task?.status == "COMPLETED" && (
+                          {task?.status === "COMPLETED" && (
                             <small>
                               {" "}
                               <Badge bg="success">

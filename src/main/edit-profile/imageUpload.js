@@ -1,100 +1,104 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import Loader from "../../components/Loader";
+import { uploadProfileImage } from "../../services/user/api";
 
-const ImageUpload = () => {
-  const [image, setImage] = useState(null);
-  const [url, imageURl] = useState(null);
+const ImageUpload = (props) => {
 
-  useEffect(() => {
-    // setImage(localStorage.getItem('imageUrl'));
-    imageURl(localStorage.getItem("imageUrl"));
-    console.log(
-      localStorage.getItem("imageUrl"),
-      '------------------------------localStorage.getItem("imageUrl")'
+    const { setProfileImage, selectedProfilePic } = props
+    console.log(selectedProfilePic)
+    const [selectedImage, setSelectedImage] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [showUploadButton, setShowUploadButton] = useState(false);
+
+
+    useEffect(() => {
+        if (selectedProfilePic) {
+            setImageUrl(selectedProfilePic)
+            setSelectedImage(selectedProfilePic)
+        }
+    }, [selectedProfilePic])
+
+
+
+    const handleImageChange = (event) => {
+        const selectedImage = event.target.files[0];
+        console.log(selectedImage)
+        if (selectedImage && selectedImage.type.startsWith("image/")) {
+            setSelectedImage(selectedImage);
+            setImageUrl(URL.createObjectURL(selectedImage))
+            setShowUploadButton(true)
+        } else {
+            setSelectedImage('');
+            alert("Please select a valid image file (jpg, png, gif)");
+        }
+    };
+
+
+    const uploadProfilePicture = async () => {
+        if (!selectedImage) {
+            alert("Please select an image file");
+            return;
+        }
+        setLoading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", selectedImage);
+
+            const response = await uploadProfileImage(formData);
+            if (response.error) {
+                console.log('Error while Updating details');
+                setLoading(false);
+                return;
+            } else {
+                setProfileImage(response.url);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log('Error while Updating details');
+            setLoading(false);
+            return error.message;
+        }
+    };
+
+    return (
+        <>
+            <div className="image-upload">
+                <label htmlFor="image-input">
+
+                    {imageUrl ?
+                        <div>
+                            <img src={imageUrl} alt="Preview" />
+                            {/* <button onClick={resetImageValues}>Edit</button> */}
+                        </div>
+                        :
+                        <div className="upload-icon">
+                            <i className="fas fa-cloud-upload-alt"></i>
+                            <span>Select an image file</span>
+                        </div>
+                    }
+                </label>
+                {!selectedImage &&
+                    <input
+                        id="image-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                    />
+                }
+                {
+                    showUploadButton && <>
+                        <button type="button" onClick={uploadProfilePicture}> Upload</button>
+                    </>
+                }
+            </div>
+
+            {loading ? <Loader /> : null}
+
+        </>
+
+
     );
-    localStorage.removeItem("imageUrl");
-   
-  }, [])
-  
-
-
-  const handleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    if (selectedImage && selectedImage.type.startsWith("image/")) {
-      setImage(selectedImage);
-    } else {
-      setImage(null);
-      alert("Please select a valid image file (jpg, png, gif)");
-    }
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!image) {
-      alert("Please select an image file");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", image);
-
-    fetch("http://192.168.29.240:9000/upload/v1/upload/file", {
-      method: "PUT",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        imageURl(data.url);
-        localStorage.setItem("url", data.url);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  //   const handleSubmit = (event) => {
-  //     event.preventDefault();
-
-  //     if (!image) {
-  //       alert("Please select an image file");
-  //       return;
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append("image", image);
-
-  //     fetch("http://your-api-endpoint.com/upload", {
-  //       method: "POST",
-  //       body: formData,
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => console.log(data))
-  //       .catch((error) => console.error(error));
-  //   };
-
-  return (
-    <div className="image-upload">
-      <label htmlFor="image-input">
-        <div className="upload-icon">
-          <i className="fas fa-cloud-upload-alt"></i>
-        </div>
-        {(
-          <img src={url} alt="Preview" />
-        )}
-        {!url &&(
-          <span>Select an image file</span>
-        )}
-      </label>
-      <input
-        id="image-input"
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-      />
-      {!url && (
-        <button onClick={handleSubmit} disabled={!image}>
-          Upload
-        </button>
-      )}
-    </div>
-  );
 };
 
 export default ImageUpload;

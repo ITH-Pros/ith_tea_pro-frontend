@@ -27,6 +27,7 @@ import Select from "react-select";
 import TextEditor from "./textEditor";
 import { getAllLeadsWithoutPagination } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
+import Loader from "../../../components/Loader";
 export default function AddTaskModal(props) {
   const {
     selectedProjectFromTask,
@@ -68,7 +69,7 @@ export default function AddTaskModal(props) {
     completedDate: "",
     priority: priorityList[0],
     status: statusList[0],
-    attachment: "",
+    attachments: [],
     tasklead: "",
   };
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
@@ -133,7 +134,7 @@ export default function AddTaskModal(props) {
     if (selectedProjectFromTask) {
 
       let project = projectList?.filter(
-        (item) => item?._id == selectedProjectFromTask?._id
+        (item) => item?._id === selectedProjectFromTask?._id
       );
 	//   setTaskFormValue({
     //     ...taskFormValue,
@@ -209,7 +210,7 @@ export default function AddTaskModal(props) {
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
         status: selectedTask?.status,
-        attachment: selectedTask?.attachment,
+        attachments: selectedTask?.attachments,
       });
       console.log(selectedTask?.lead, "selectedTask?.lead", leadLists);
       let leads = project[0]?.managedBy?.filter((item) =>
@@ -328,7 +329,7 @@ export default function AddTaskModal(props) {
         priority,
         status,
         tasklead,
-        attachment,
+        attachments,
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -342,7 +343,7 @@ export default function AddTaskModal(props) {
       selectedLeads &&
         (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
-uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+    uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
@@ -359,7 +360,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
           completedDate: "",
           priority: "",
           status: "",
-          attachment: "",
+          attachments: [],
         });
         setValidated(false);
         setSelectedLeads("");
@@ -414,6 +415,8 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
         (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
+    uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+
 
       const taskRes = await createTask(dataToSend);
       setLoading(false);
@@ -431,7 +434,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
           completedDate: "",
           priority: "",
           status: "",
-          attachment: "",
+          attachments: [],
         });
         setValidated(false);
         setSelectedLeads("");
@@ -475,7 +478,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
       completedDate: "",
       priority: priorityList[0],
       status: statusList[0],
-      attachment: "",
+      attachments: [],
       tasklead: "",
     });
   };
@@ -507,7 +510,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
         priority,
         status,
         tasklead,
-        attachment,
+        attachments,
         completedDate,
       } = taskFormValue;
       let dataToSend = {};
@@ -523,6 +526,9 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
         (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
+      console.log("uploadedFilesuploadedFilesuploadedFilesuploadedFilesuploadedFilesuploadedFilesuploadedFiles",uploadedFiles)
+    uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+
 
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
@@ -541,7 +547,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
           completedDate: "",
           priority: "",
           status: "",
-          attachment: "",
+          attachments: [],
         });
         setValidated(false);
         setShowAddTaskModal(false);
@@ -569,7 +575,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
         priority,
         status,
         tasklead,
-        attachment,
+        attachments,
         completedDate,
       } = taskFormValue;
       let dataToSend = {};
@@ -601,7 +607,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
           completedDate: "",
           priority: "",
           status: "",
-          attachment: "",
+          attachments: [],
         });
         setValidated(false);
         setShowAddTaskModal(false);
@@ -658,7 +664,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
-                    Task List is required !!
+                    Project is required !!
                   </Form.Control.Feedback>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -684,7 +690,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
                     ))}
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
-                    Task List is required !!
+                    Section is required !!
                   </Form.Control.Feedback>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -716,7 +722,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
                       ))}
 					</Form.Control> */}
                   <Form.Control.Feedback type="invalid">
-                    Task List is required !!
+                    Lead is required !!
                   </Form.Control.Feedback>
                   <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
@@ -757,7 +763,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
                 />
               </Row>
               <Row className="mt-5">
-                <AttachmentUploader uploadedAttachmentsArray={uploadedAttachmentsArray} />
+                <AttachmentUploader uploadedAttachmentsArray={uploadedAttachmentsArray}  taskAttachments={selectedTask?.attachments}  setLoading={setLoading}/>
               </Row>
 
               <Row className="mb-3 mt-5">
@@ -825,6 +831,7 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
                     name="status"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.status || statusList[0]}
+                    disabled={taskFormValue?.status === "COMPLETED"}
                   >
                     <option value="" disabled>
                       Select Status
@@ -904,6 +911,9 @@ uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
           </div>
         </Modal.Body>
       </Modal>
+
+            {loading ? <Loader /> : null}
+
     </>
   );
 }

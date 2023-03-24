@@ -2,6 +2,10 @@
   float: left;
   margin-left: 50px;
 }
+.clickLabelArea{
+    float: left;
+    width: 95%;
+}
 .add-section-center{
   height: 70vh;
   display: flex;
