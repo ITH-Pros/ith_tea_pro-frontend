@@ -46,10 +46,16 @@ export default function AddTaskModal(props) {
   const [userList, setUserList] = useState([]);
   const [validated, setValidated] = useState(false);
   const [leadLists, setLeadList] = useState([]);
+  const[uploadedFiles,setUploadedFiles]=useState([])
 
   const { userDetails } = useAuth();
   console.log(userDetails, "userDetails");
 
+  const uploadedAttachmentsArray = (uploadedFiles) => {
+    setUploadedFiles(uploadedFiles); console.log(
+    uploadedFiles,
+    "-------------------------uploadedFiles--------"
+  );};
   // const
   // const leadList = [{name : 'Lead 1', _id : '1'}, {name : 'Lead 2', _id : '2'}, {name : 'Lead 3', _id : '3'}]
   const taskFormFields = {
@@ -336,7 +342,7 @@ export default function AddTaskModal(props) {
       selectedLeads &&
         (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
-
+uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
@@ -751,7 +757,7 @@ export default function AddTaskModal(props) {
                 />
               </Row>
               <Row className="mt-5">
-                <AttachmentUploader />
+                <AttachmentUploader uploadedAttachmentsArray={uploadedAttachmentsArray} />
               </Row>
 
               <Row className="mb-3 mt-5">

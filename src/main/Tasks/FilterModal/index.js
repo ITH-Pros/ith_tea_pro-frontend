@@ -535,7 +535,7 @@ const FilterModal = (props) => {
                 </Row>
               </Form.Group>
 
-              <Form.Group controlId="formSortBy" >
+              {/* <Form.Group controlId="formSortBy" >
                 <Row className="filterFields" style={{marginBottom:'0px'}}>
                   <Col sm="3">
                     <Form.Label>Sort By</Form.Label>
@@ -557,7 +557,7 @@ const FilterModal = (props) => {
                     </Form.Control>
                   </Col>
                 </Row>
-              </Form.Group>
+              </Form.Group> */}
 
               <Form.Group controlId="formDueDate">
                 <Row className="filterFields due-date">

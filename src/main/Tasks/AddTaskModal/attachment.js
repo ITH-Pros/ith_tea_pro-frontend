@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaFile, FaTrash } from "react-icons/fa";
 
-const AttachmentUploader = () => {
+const AttachmentUploader = (props) => {
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  useEffect(() => { props.uploadedAttachmentsArray(uploadedFiles); console.log(uploadedFiles, "----------------------uploadedFiles");}, [uploadedFiles]);
+  
 
   const handleFileSelect = (event) => {
     const newFiles = [...event.target.files];
@@ -21,6 +23,8 @@ const AttachmentUploader = () => {
           ...prevUploadedFiles,
           response.data.url,
         ]);
+       
+      
       } catch (error) {
         console.error(error);
       }

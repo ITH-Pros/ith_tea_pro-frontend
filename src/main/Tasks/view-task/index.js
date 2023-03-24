@@ -225,7 +225,9 @@ export default function ViewTaskModal(props) {
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
-                  <p style={{fontSize:'13px', marginBottom:'0'}}>{formatDate(task?.dueDate)} </p>
+                  <p style={{ fontSize: "13px", marginBottom: "0" }}>
+                    {formatDate(task?.dueDate)}{" "}
+                  </p>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
@@ -235,7 +237,8 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
                   {/* <p>{task?.status} </p> */}
-                  <select className="form-control form-control-lg"
+                  <select
+                    className="form-control form-control-lg"
                     defaultValue={task.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
                   >
@@ -252,11 +255,32 @@ export default function ViewTaskModal(props) {
                   </Form.Group>
                 )}
               </Row>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="12">
+                  <Form.Label>Attachments</Form.Label>
+                    {/* {task?.attachments.map((file) => {
+                      // <img src="{file}" alt="attachment"></img>
+                      <p>{file}</p>;
+                    })}{" "} */}
+                    {task.attachments && task.attachments.map((file, index) => {
+                      return (
+                        <Col key={index} sm={12}>
+                          <div className="assignPopup">
+                            <a href={`${file}`} target="_blank"> {"Attachment" + " " + (index + 1)}</a>
+                          </div>
+                        </Col>
+                      );
+                    })}
+                </Form.Group>
+              </Row>
             </Form>
 
             <div className="comment-section">
               <h6>Comments</h6>
-              <div className="container" style={{width:'100%', padding:'0px'}}>
+              <div
+                className="container"
+                style={{ width: "100%", padding: "0px" }}
+              >
                 {/* show comments  */}
                 {task?.comments?.map((item, index) => {
                   const options = {
@@ -273,43 +297,54 @@ export default function ViewTaskModal(props) {
                     <div className="comment" key={index}>
                       {/* commentedBy */}
                       <div className="commentedBy">
-                        <UserIcon style={{float:'left'}}
+                        <UserIcon
+                          style={{ float: "left" }}
                           key={index}
                           firstName={item?.commentedBy?.name}
                         />{" "}
                         {item?.commentedBy?.name}
                       </div>
-                 
-                        <p dangerouslySetInnerHTML={{__html: item?.comment}} className="comment-tex"></p>
-                        <span className="date sub-text">{createdAt}</span>
-                     
+
+                      <p
+                        dangerouslySetInnerHTML={{ __html: item?.comment }}
+                        className="comment-tex"
+                      ></p>
+                      <span className="date sub-text">{createdAt}</span>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="container" style={{padding:'0', width:'100%'}}>
+            <div className="container" style={{ padding: "0", width: "100%" }}>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label style={{display:'block'}}>
+                  <label style={{ display: "block" }}>
                     <TextEditor
                       height={100}
                       width="100%"
                       placeholder="Enter text here"
-					  value={text}
-                    onChange={handleTextChange}
-					// reset = {resetTextEditor}
+                      value={text}
+                      onChange={handleTextChange}
+                      // reset = {resetTextEditor}
                     />
                     {/* <textarea value={comment} onChange={handleCommentChange} /> */}
                   </label>
                 </div>
-                <div style={{float:'left', width:'100%', textAlign:'right', marginTop:'50px',  }}>
-                <Button type="submit" className="btn btn-primary"> Post</Button>
+                <div
+                  style={{
+                    float: "left",
+                    width: "100%",
+                    textAlign: "right",
+                    marginTop: "50px",
+                  }}
+                >
+                  <Button type="submit" className="btn btn-primary">
+                    {" "}
+                    Post
+                  </Button>
                 </div>
-                
               </form>
-             
             </div>
           </div>
         </Modal.Body>
