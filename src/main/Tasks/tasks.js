@@ -727,7 +727,6 @@ const archiveConFirmation = (sectionId) => {
                       {task?.status === "ONHOLD" && (
                         <Badge bg="primary">ON HOLD</Badge>
                       )}
-                      {/* {task?.priority === 'None' &&  <Badge  bg="secondary">None</Badge>} */}
                       {task?.priority === "LOW" && (
                         <Badge bg="primary">LOW</Badge>
                       )}
