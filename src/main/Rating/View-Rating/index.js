@@ -151,17 +151,7 @@ export default function Dashboard(props) {
 		<div className="dashboard_camp">
 		<div className="d-flex justify-content-center flex-column">
 		  <div className="d-flex" style={{marginTop:'10px'}}>
-			{/* {userDetails?.role !== "CONTRIBUTOR" && (
-				  <Link to="/rating" params={{ params: true }}>
-				  {props.showBtn && (
-					  <div className="wrap">
-					  <button className="add-rating-button">
-						  <span>Add Rating</span>
-					  </button>
-					  </div>
-				  )}
-				  </Link>
-			  )} */}
+		
 			<h5 className="text-center h5cls">
 			  <p style={{ marginRight: "10px", marginTop: "6px", fontSize:'14' }}>Ratings for</p>
 			  <Form.Group as={Col} md="2" controlId="select_month">
