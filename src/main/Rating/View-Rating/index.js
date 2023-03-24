@@ -139,8 +139,11 @@ export default function Dashboard(props) {
   return (
 
 	<div> 
-	<div className="dashboard_camp">
-	<button className="btn btn-primary" onClick={() => setTeamView(!teamView)}> {teamView?'Self view':'Team View'} </button>
+	<div className="dashboard_camp"> 
+	<h4>My Ratings 
+		<button className="addTaskBtn" onClick={() => setTeamView(!teamView)} style={{float:'right'}}> {teamView?'Self view':'Team View'} </button>
+	</h4>
+	
 	</div>
 	
 

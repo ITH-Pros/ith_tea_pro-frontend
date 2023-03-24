@@ -121,4 +121,11 @@ color: #fff !important;
   font-weight: 700 !important;
   letter-spacing: 0.8px !important;
 }
- 
+span.rbc-toolbar-label {
+  color: #8355ad;
+  font-size: 20px;
+  font-weight: 600;
+}
+.rbc-toolbar {
+  margin-top: 10px;
+}

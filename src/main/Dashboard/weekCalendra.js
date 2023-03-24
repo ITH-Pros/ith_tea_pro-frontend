@@ -51,14 +51,14 @@ export default function MyCalendar(){
 return (
     <div className="calendars">
       <div>
-        <h2>My Ratings</h2>
+        {/* <h4 style={{marginTop:'10px'}}>My Ratings</h4> */}
         <Calendar
           events={myevents}
           localizer={localizer}
 		  views={['month']}
 		  view={'month'}
           defaultDate={new Date()}
-          style={{ height: 200 }}
+          style={{ height: 400 }}
 		  onView={(view)=>{
 			this.setState({view})
 		}}
