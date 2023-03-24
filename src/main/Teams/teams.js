@@ -348,25 +348,13 @@ export default function Teams(props) {
                   <div className="content">
                  
                 <div id="profileImage"> </div>
+                <div className="content-height">
                     <strong>{user.name}  ({user.role})</strong>
                   
 					<p>{user.email}</p>
 					{ user.department && <p> ({user?.department}) </p> }
 					{ user.employeeId && <p>{user?.employeeId} </p> } 
 					{ user.designation && <p>{user?.designation}</p> }
-					{/* <p>{user.employeeId} </p> <p> ({user.department}) </p> 
-					  <p>{user.designation}</p> */}
-					  {/* <p>{user.wings}</p> */}
-{/* 
-					  {userAnalytics && userAnalytics.find(analytics => analytics?._id === user._id) && (
-  <div className="user-analytics">
-    <div className="user-analytics-item">
-      <div className="user-analytics-item-value">
-        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id)?.completedAfterDueDatePercentage }%
-      </div>
-    </div>
-  </div>
-)} */}
 
 { userDetails?.role !== "CONTRIBUTOR" && userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
   <div className="user-analytics">
@@ -377,10 +365,8 @@ export default function Teams(props) {
     </div>
   </div>
 )}
-
                 </div>
-
-				<div>
+              
 				{user?.github &&
       <FontAwesomeIcon icon={faGithub} />
     }

@@ -121,4 +121,26 @@ color: #fff !important;
   font-weight: 700 !important;
   letter-spacing: 0.8px !important;
 }
- 
+span.rbc-toolbar-label {
+  color: #8355ad;
+  font-size: 20px;
+  font-weight: 600;
+}
+.rbc-toolbar {
+  margin-top: 10px;
+}
+.btn-primary {
+  background: #8355ad !important;
+  border-color: #8355ad !important;
+}
+
+.rbc-today {
+  background-color: #f4e9ff;
+}
+.button-center-corformain{
+  float: left;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+}

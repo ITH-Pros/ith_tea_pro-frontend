@@ -152,7 +152,7 @@ function UserForm(props) {
                         id="name"
                         value={name}
                         onChange={(event) => setName(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
                 <div className="form-group col-4">
@@ -173,7 +173,7 @@ function UserForm(props) {
                         id="employeeId"
                         value={employeeId}
                         onChange={(event) => setEmployeeId(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
 
@@ -185,7 +185,7 @@ function UserForm(props) {
                         value={formatDate(dob)}
                         max={formatDate(new Date())}
                         onChange={(event) => setDob(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
                 <div className="form-group col-6">
@@ -195,7 +195,7 @@ function UserForm(props) {
                         id="designation"
                         value={designation}
                         onChange={(event) => setDesignation(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
                 <div className="form-group col-6">
@@ -205,7 +205,7 @@ function UserForm(props) {
                         id="department"
                         value={department}
                         onChange={(event) => setDepartment(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
             </form>
@@ -227,7 +227,7 @@ function UserForm(props) {
                         id="github"
                         value={github}
                         onChange={(event) => setGithub(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
                 <div className="form-group">
@@ -237,7 +237,7 @@ function UserForm(props) {
                         id="twitter"
                         value={twitter}
                         onChange={(event) => setTwitter(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
                 <div className="form-group">
@@ -247,7 +247,7 @@ function UserForm(props) {
                         id="linkedin"
                         value={linkedin}
                         onChange={(event) => setLinkedin(event.target.value)}
-                        readOnly={!isEditable}
+                        // readOnly={!isEditable}
                     />
                 </div>
 

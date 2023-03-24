@@ -373,7 +373,7 @@ button.accordion-button{
 }
 .dropdown .dropdown-toggle, .dropdown  .dropdown-toggle.btn:hover,
 .dropdown .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .dropdown .btn:first-child:active, .dropdown  .btn.active, .dropdown  .btn.show {
-  background: transparent;
+  background: transparent !important;
     border: 0;
     color: #5f5f5fd9;
 }

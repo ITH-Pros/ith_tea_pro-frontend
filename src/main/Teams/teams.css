@@ -105,7 +105,7 @@ a {
 }
 .addBtn {
   padding: 10px;
-  color: #c789ff;
+  color: #8355ad;
   object-fit: cover;
 }
 .w-125p{
@@ -117,7 +117,14 @@ a {
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 210px;
+}
+.content-height {
+  height: 150px;
+  margin-top: 1px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .content strong {
   font-weight: 500;

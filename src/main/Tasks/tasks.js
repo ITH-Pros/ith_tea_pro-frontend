@@ -527,9 +527,9 @@ const archiveConFirmation = (sectionId) => {
             <Accordion.Item key={index} eventKey={index}>
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
-                  <p style={{ marginBottom: "0" }}>
+                  
                     {project?._id?.projectId} / {project?._id?.section}{" "}
-                  </p>
+               
                 </Accordion.Header>
               )}
 
@@ -714,7 +714,7 @@ const archiveConFirmation = (sectionId) => {
                         }
                         // onClick={() => handleViewDetails(task?._id)}
                       >
-                        { truncateString(task?.title , 20) }
+                        { truncateString(task?.title , 80) }
                       </i>
 
                       {task?.status === "NOT_STARTED" && (
@@ -734,7 +734,6 @@ const archiveConFirmation = (sectionId) => {
                       {task?.status === "ONHOLD" && (
                         <Badge bg="primary">ON HOLD</Badge>
                       )}
-                      {/* {task?.priority === 'None' &&  <Badge  bg="secondary">None</Badge>} */}
                       {task?.priority === "LOW" && (
                         <Badge bg="primary">LOW</Badge>
                       )}

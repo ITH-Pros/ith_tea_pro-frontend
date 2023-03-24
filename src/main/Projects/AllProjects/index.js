@@ -688,7 +688,7 @@ const archiveProject = async () => {
        
 		   	</div>
 
-			<div className="pull-right">
+			<div className="button-center-corformain">
 
 			   {!isArchiveModalShow && (
 			<Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>

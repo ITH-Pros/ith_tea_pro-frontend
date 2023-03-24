@@ -153,6 +153,8 @@
   overflow-x: hidden;
 }
 .dropdown-content a{
+  float: left;
+  width: 100%;
   color: #8355ad !important;
   font-size: 14px !important;
   font-weight: 700 !important;
