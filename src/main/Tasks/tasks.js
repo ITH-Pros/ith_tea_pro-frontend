@@ -707,7 +707,7 @@ const archiveConFirmation = (sectionId) => {
                         }
                         onClick={() => handleViewDetails(task?._id)}
                       >
-                        { truncateString(task?.title , 20) }
+                        { truncateString(task?.title , 80) }
                       </i>
 
                       {task?.status === "NOT_STARTED" && (
