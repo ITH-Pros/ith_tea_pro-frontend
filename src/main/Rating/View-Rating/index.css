@@ -315,12 +315,11 @@ button.add-rating-button {
 	margin-top: 16px;
   }
   #nav-filter button {
-    margin: 0px;
-    font-size: 14px;
+	margin: 0px;
     color: #fff !important;
     border: 0;
     padding: 5px 10px;
-    background: #8355ad;
+    background: #8355ad !important;
     font-size: 12px;
   }
   
