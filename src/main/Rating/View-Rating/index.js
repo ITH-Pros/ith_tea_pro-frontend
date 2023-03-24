@@ -150,7 +150,7 @@ export default function Dashboard(props) {
 	{teamView ? (
 		<div className="dashboard_camp">
 		<div className="d-flex justify-content-center flex-column">
-		  <div className="d-flex">
+		  <div className="d-flex" style={{marginTop:'10px'}}>
 			{/* {userDetails?.role !== "CONTRIBUTOR" && (
 				  <Link to="/rating" params={{ params: true }}>
 				  {props.showBtn && (

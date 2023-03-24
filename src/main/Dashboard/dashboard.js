@@ -979,13 +979,7 @@ export default function Dashboard(props) {
         >
           <UserForm handleModalClose={handleProfileModalClose} />
         </Modal.Body>
-        <Button
-          className="skip-button"
-          variant="secondary"
-          onClick={() => handleProfileModalClose()}
-        >
-          Skip
-        </Button>
+       
       </Modal>
 
       {loading ? <Loader /> : null}
