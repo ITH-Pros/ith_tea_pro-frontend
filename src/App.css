@@ -129,3 +129,7 @@ span.rbc-toolbar-label {
 .rbc-toolbar {
   margin-top: 10px;
 }
+button.btn.btn-primary.btn.btn-primary {
+  background: #8355ad !important;
+  border-color: #8355ad !important;
+}

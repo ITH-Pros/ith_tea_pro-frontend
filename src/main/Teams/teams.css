@@ -117,7 +117,10 @@ a {
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 210px;
+}
+.content-height {
+  height: 140px;
+  margin-top: 10px;
 }
 .content strong {
   font-weight: 500;
