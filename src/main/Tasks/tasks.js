@@ -525,9 +525,9 @@ const archiveConFirmation = (sectionId) => {
             <Accordion.Item key={index} eventKey={index}>
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
-                  <p style={{ marginBottom: "0" }}>
+                  
                     {project?._id?.projectId} / {project?._id?.section}{" "}
-                  </p>
+               
                 </Accordion.Header>
               )}
 

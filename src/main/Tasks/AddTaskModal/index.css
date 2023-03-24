@@ -138,7 +138,14 @@ select {
 .btn-press:last-child {
   margin: 0;
 }
-
+button.delete-button {
+  border: none;
+  color: #8355ad;
+  background: none;
+  float: right;
+  position: relative;
+  margin-top: -50px;
+}
 .addTask-modal {
   height: 700px;
   overflow: scroll;
@@ -168,6 +175,7 @@ button.btn-press.btn-gradient-border {
   margin-top: 10px;
   padding: 10px;
   border-radius: 4px;
+  position: relative;
 }
 .taskModalForm .form-label {
   font-size: 14px !important;
