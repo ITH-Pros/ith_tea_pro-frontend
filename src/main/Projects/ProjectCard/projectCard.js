@@ -53,6 +53,8 @@ const ProjectCard = ({
       "#e4ffc5",
       "#ffd9d9",
       "#e3e8ff",
+      "#e3d3ff",
+      "#d3fcff",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   
