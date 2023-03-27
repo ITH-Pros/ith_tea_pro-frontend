@@ -531,13 +531,13 @@ const archiveConFirmation = (sectionId) => {
             params?.projectId &&
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
-                <div className="project-card-section">
-                  <button
+               
+                  <button style={{border:'0px'}}
 
                     onClick={() => {
                       showAddSectionModal(true);
                     }}
-                  >
+                   >
                     <i
                       className="fa fa-plus-circle fa-3x addBtn-section"
                       title="Add Project"
@@ -547,7 +547,6 @@ const archiveConFirmation = (sectionId) => {
                       Add Section
                     </i>
                   </button>
-                </div>
               </div>
             )}
 

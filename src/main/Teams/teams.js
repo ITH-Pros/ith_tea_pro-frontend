@@ -357,8 +357,8 @@ export default function Teams(props) {
                         <div className="user-pic">
                           <img
                             style={{
-                              width: "30px",
-                              height: "30px",
+                              width: "45px",
+                              height: "45px",
                               borderRadius: "50%",
                             }}
                             src={`${user?.profilePicture}`}
