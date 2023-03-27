@@ -257,7 +257,16 @@ const ProjectCard = ({
                 .concat(managedBy)
                 .slice(0, 13)
                 .map((user, index) => (
-                  <UserIcon key={index} firstName={user.name} />
+                  <>
+                    {!user?.profilePicture&&<UserIcon key={index} firstName={user.name} />}
+                    {user?.profilePicture && (
+                      <div className="user-pic">
+                        <img style={{    width: '30px',
+                        height: '30px',
+                        borderRadius: '50%'}} src={`${user?.profilePicture}`} alt="profile"></img>
+                      </div>
+                    )}
+                  </>
                 ))}
               {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
               <span
