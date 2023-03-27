@@ -161,9 +161,7 @@ const ProjectCard = ({
       style={{ background: background || generateRandomColor() }}
     >
 
-{isArchive && (
-  <label>Archived</label>
-)}
+
       <div
         className="menu-icon"
         onClick={handleMenuIconClick}
@@ -222,6 +220,9 @@ const ProjectCard = ({
           </button>
         )}
       </div>
+      {isArchive && (
+  <h3 className="archived">Archived</h3>
+)}
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
         <p>{description}</p>
