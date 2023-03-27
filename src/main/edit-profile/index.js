@@ -143,7 +143,10 @@ function UserForm(props) {
         <div className="addUserFrom-edit">
             <form className="row">
                 <div className="profile-images">
+                    <div className='edit-detle'>
                     <ImageUpload setProfileImage={setProfileImage} selectedProfilePic={profilePicture} />
+                    </div>
+                    
                 </div>
                 <div className="form-group col-12">
                     <label htmlFor="name">Name:</label>

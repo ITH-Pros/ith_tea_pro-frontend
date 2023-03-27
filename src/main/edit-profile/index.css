@@ -72,7 +72,38 @@ input:focus {
   flex-direction: column;
   cursor: pointer;
 }
-
+.edit-detle {
+  position: relative;
+  height: 180px;
+  width: 180px;
+  margin: auto;
+}
+.edit-detle i.fas.fa-trash{
+  position: absolute;
+  left: 10px;
+  top: 128px;
+  border: 1px solid #E91E63;
+  color: #fff;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  border-radius: 5px;
+  background: #E91E63;
+}
+.edit-detle i.fas.fa-edit{
+  position: absolute;
+  right:10px;
+  top: 128px;
+  border: 1px solid #4CAF50;
+  color: #fff;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  border-radius: 5px;
+  background: #4CAF50;
+}
 .image-upload label {
   display: block;
   font-size: 15px;
