@@ -62,8 +62,14 @@ export default function AllProject() {
   const [modalShow, setModalShow] = useState(false);
   const [sureModalShow, setSureModalShow] = useState(false);
   const [confirmModalShow , setConfirmModalShow] = useState(false);
+  const [isArchive , setIsArchive] = useState(false)
 
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
+
+  const handleIsArchive = () =>{
+    setIsArchive(!isArchive)
+    // getAndSetAllProjects()
+  }
 
 
   const handleCategorie = (project) => {
@@ -92,16 +98,24 @@ export default function AllProject() {
     getAndSetAllProjects();
   }, []);
 
+  useEffect(() => {
+    getAndSetAllProjects()
+  }, [isArchive]);
+
   const getAndSetAllProjects = async function () {
+    let dataToSend = {}
+    if(isArchive){
+      dataToSend.isArchive = true
+    }
     //setloading(true);
     try {
-      const projects = await getAllProjects();
+      const projects = await getAllProjects(dataToSend);
       //setloading(false);
       if (projects.error) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setProjectListValue(projects.data);
+        setProjectListValue(projects?.data);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -587,8 +601,9 @@ const archiveProject = async () => {
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
         </h1>
+        <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Back':'Archive List'}</button>
         <div className="project-boxes jsGridView">
-          {userDetails.role === "SUPER_ADMIN" && (
+          {userDetails.role === "SUPER_ADMIN" && !isArchive && (
             <div
               key="AddProject"
               style={{ display: "flex" }}
@@ -740,9 +755,6 @@ const archiveProject = async () => {
             Cancel
           </Button>
         </Modal>
-
-
-
     
     </>
   );
