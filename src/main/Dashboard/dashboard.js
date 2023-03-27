@@ -27,6 +27,9 @@ import {
   Badge,
   Modal,
 } from "react-bootstrap";
+import avtar from "../../assests/img/avtar.png";
+import leadAvatar from "../../assests/img/leadAvatar.jpeg";
+
 import Avatar from "react-avatar";
 import { useNavigate } from "react-router-dom";
 import AddTaskModal from "../Tasks/AddTaskModal";
@@ -327,7 +330,6 @@ export default function Dashboard(props) {
                   </Dropdown>
                 </Nav.Link>
               </Nav.Item>
-             
             </Nav>
           </Col>
         </Row>
@@ -338,7 +340,9 @@ export default function Dashboard(props) {
             .map((project) => (
               <Col lg={6}>
                 <Card
-                  onClick={()=>{handleToRedirectTask(project?._id)}}
+                  onClick={() => {
+                    handleToRedirectTask(project?._id);
+                  }}
                   id={`card-${project.id}`}
                   key={project?.id}
                 >
@@ -626,7 +630,11 @@ export default function Dashboard(props) {
                                   setSelectedTask(task);
                                 }}
                               >
-                             <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Task
+                                <i
+                                  className="fa fa-pencil-square"
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                Edit Task
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
@@ -699,7 +707,19 @@ export default function Dashboard(props) {
                               <Badge bg="warning">ONGOING</Badge>
                             )}
                             {task?.status == "COMPLETED" && (
-                              <Badge bg="success">COMPLLETED</Badge>
+                                // <Badge bg="success">COMPLLETED</Badge>
+                              <>
+                               { task?.lead[0]?.name&&
+                                <span title="Project Lead" className="nameTag">
+                                  <img src={leadAvatar} alt="userAvtar" />{" "}
+                                  {task?.lead[0]?.name}
+                                </span>}
+                               { task?.assignedTo?.name&&
+                                <span  title="Assigned To" className="nameTag">
+                                  <img src={avtar} alt="userAvtar" />{" "}
+                                  {task?.assignedTo?.name}
+                                </span>}
+                              </>
                             )}
                             {task?.status == "ONHOLD" && (
                               <Badge bg="secondary">ON HOLD</Badge>
@@ -740,7 +760,7 @@ export default function Dashboard(props) {
       </Container>
 
       <Container>
-	  <Row className="mt-3">
+        <Row className="mt-3">
           <Col lg={6} style={{ paddingLeft: "0px" }}>
             <Row>
               <Col lg={6} className="left-add">
@@ -963,7 +983,7 @@ export default function Dashboard(props) {
           </Button> */}
       </Modal>
 
-      <Modal 
+      <Modal
         className="profile-modal"
         show={showModalOnLogin}
         onHide={() => {
@@ -975,11 +995,10 @@ export default function Dashboard(props) {
           <Modal.Title>Profile Details</Modal.Title>
         </Modal.Header>
         <Modal.Body
-          style={{height: "78vh", overflowY: "scroll", overflowX:'hidden' }}
+          style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }}
         >
           <UserForm handleModalClose={handleProfileModalClose} />
         </Modal.Body>
-       
       </Modal>
 
       {loading ? <Loader /> : null}
