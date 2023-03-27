@@ -566,3 +566,87 @@ button.add-rating-button {
 	overflow-x: hidden;
 	height: 422px;
   } 
+  .rateing {
+    font-weight: 600;
+    color: #1d1d1d;
+    font-size: 25px;
+}
+
+  
+div.calendar {
+	width: 100%;
+	padding: 20px 0;
+	overflow: hidden;
+	clear: both;
+  }
+  div.calendar .weekdays,
+  div.calendar .footer-weekdays {
+	display: none;
+  }
+  div.calendar ul {
+	margin: 0;
+	padding: 0;
+	list-style-image: none;
+  }
+  li.calendar-day {
+	text-align: center;
+    height: 75px !important;
+}
+  div.calendar li {
+	height: auto;
+	width: 100%;
+	padding: 10px;
+	max-height: 80px;
+	border: 2px solid #fff;
+	background-color: #e2d2ff;
+  }
+  div.calendar li .day,
+  div.calendar li .month {
+	display: inline;
+  }
+  div.calendar li .day {
+	display: inline;
+  }
+  ul.days {
+	float: left;
+	width: 86% !important;
+	
+  }
+  ul.weekdays {
+	float: left;
+	width: 14% !important;
+  }
+  @media (min-width: 628px) {
+	div.calendar .weekdays,
+	div.calendar .footer-weekdays {
+	  display: block;
+	}
+	div.calendar .weekdays li,
+	div.calendar .footer-weekdays li {
+	  background-color: #673AB7;
+	  height: 40px;
+	  text-align: center;
+	  color: #fff;
+	  width: 100%;
+	}
+	div.calendar .footer-weekdays li {
+	  height: 20px;
+	}
+	div.calendar ul {
+	  list-style: none;
+	  padding: 0;
+	  margin: 0;
+	  width: 100%;
+	}
+	div.calendar ul li {
+	  display: block;
+	  float: left;
+	  height: auto;
+	  max-height: 150px;
+	  width: 14.2857142857%;
+	  padding: 10px;
+	}
+	div.calendar ul li.out_of_range {
+	  display: block;
+	}
+  }

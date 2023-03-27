@@ -975,7 +975,7 @@ export default function Dashboard(props) {
       >
         <Modal.Header >
           <Modal.Title>Profile Details</Modal.Title>
-          <button onClick={skipReminder}>SKIP</button>
+          <button onClick={skipReminder} className="skip-button">SKIP</button>
         </Modal.Header>
         <Modal.Body
           style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }}
