@@ -82,7 +82,9 @@ function App() {
               {" "}
               <ProtectedRoute>
                 {" "}
-                <Navbar /> <Project />{" "}
+                <Navbar />
+               <Header />
+                <Project />{" "}
               </ProtectedRoute>
             </>
           }
@@ -116,7 +118,8 @@ function App() {
           element={
             <ProtectedRoute>
               <Navbar />
-
+               <Header />
+      
               <Rating />
             </ProtectedRoute>
           }
@@ -126,7 +129,8 @@ function App() {
 		  element={
 
 			<ProtectedRoute>
-              <Navbar />
+            <Navbar />
+               <Header />
 		  <UserForm />
 		  </ProtectedRoute>
 		  
@@ -141,6 +145,7 @@ function App() {
           element={
             <ProtectedRoute>
               <Navbar />
+               <Header />
 
               <Team />
             </ProtectedRoute>
@@ -152,7 +157,8 @@ function App() {
           element={
             <>
               <ProtectedRoute>
-                <Navbar />
+              <Navbar />
+               <Header />
 
                 <Task />
               </ProtectedRoute>
@@ -164,7 +170,8 @@ function App() {
 		  element={
 			<>
 			  <ProtectedRoute>
-				<Navbar />
+        <Navbar />
+         <Header />
 
 				<Task />
 			  </ProtectedRoute>
