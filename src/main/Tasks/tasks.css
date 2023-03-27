@@ -418,3 +418,6 @@ button.accordion-button{
 	/* max-width: 40px; */
 	/* margin: 1.75rem auto; */
 }
+.clickLabelArea i {
+  font-size: 20px;
+}

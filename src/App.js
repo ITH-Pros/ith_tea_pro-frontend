@@ -166,7 +166,7 @@ function App() {
           }
         />
 		<Route
-		  path="/task/:projectId"
+		  path="/task/:projectId/:isArchive"
 		  element={
 			<>
 			  <ProtectedRoute>

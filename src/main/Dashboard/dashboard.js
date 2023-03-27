@@ -128,10 +128,10 @@ export default function Dashboard(props) {
   };
 
   const getMyWork = async function () {
-    //setloading(true);
+    setLoading(true);
     try {
       const tasks = await getAllMyWorks();
-      //setloading(false);
+      setLoading(false);
       if (tasks.error) {
         // setToasterMessage(projects?.error?.message || "Something Went Wrong");
         // setShowToaster(true);
@@ -159,15 +159,16 @@ export default function Dashboard(props) {
         setMyWorkList(allTask);
       }
     } catch (error) {
+      setLoading(false)
       return error.message;
     }
   };
 
   const getPendingRating = async function () {
-    //setloading(true);
+    setLoading(true);
     try {
       const tasks = await getAllPendingRating();
-      //setloading(false);
+      setLoading(false);
       if (tasks.error) {
         // setToasterMessage(projects?.error?.message || "Something Went Wrong");
         // setShowToaster(true);
@@ -199,15 +200,17 @@ export default function Dashboard(props) {
       //   setToasterMessage(error?.error?.message || "Something Went Wrong");
       //   setShowToaster(true);
       //setloading(false);
+      setLoading(false);
+
       return error.message;
     }
   };
 
   const getAndSetAllProjects = async function () {
-    //setloading(true);
+    setLoading(true);
     try {
       const projects = await getAllProjects();
-      //setloading(false);
+      setLoading(false);
       if (projects.error) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -217,7 +220,7 @@ export default function Dashboard(props) {
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
-      //setloading(false);
+      setLoading(false);
       return error.message;
     }
   };
@@ -277,8 +280,13 @@ export default function Dashboard(props) {
   const [teamWorkList ,setTeamWorkList] = useState([]);
 
   const getTeamWorkList = async () => {
+    setLoading(true);
+
 	try {
-		const res = await getTeamWork();
+    
+    const res = await getTeamWork();
+    setLoading(false);
+    
 		if (res.error) {
 			setToasterMessage(res?.message || "Something Went Wrong");
 			setShowToaster(true);
@@ -287,7 +295,8 @@ export default function Dashboard(props) {
 		}
 	} catch (error) {
 		setToasterMessage(error?.message || "Something Went Wrong");
-		setShowToaster(true);
+    setShowToaster(true);
+    setLoading(false)
 		return error.message;
 	}
   };
@@ -300,14 +309,14 @@ export default function Dashboard(props) {
         try {
             // call API to update the user details
             setLoading(true);
-            const response = await editLogedInUserDetails(dataToSend);
+          const response = await editLogedInUserDetails(dataToSend);
+            setLoading(false);
+          
             if (response.error) {
                 console.log('Error while updating user details');
-                setLoading(false);
                 return;
             }
             else {
-                setLoading(false);
                 showToaster(true);
               setToasterMessage('Skipped Succesfully');
               handleProfileModalClose();
