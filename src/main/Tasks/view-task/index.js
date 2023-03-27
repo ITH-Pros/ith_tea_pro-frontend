@@ -209,7 +209,7 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="3">
                   <Form.Label>Assigned To</Form.Label>
-                  <p>{task?.assignedTo?.name} </p>
+                  <p>{task?.assignedTo?.name||'Not Assigned'} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
