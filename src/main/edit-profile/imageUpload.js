@@ -77,6 +77,12 @@ const ImageUpload = (props) => {
                             <span>Select an image file</span>
                         </div>
                     }
+                    {imageUrl &&
+                        <div className="upload-icon">
+                            <i className="fas fa-edit"></i>
+                            <span>Select an image file</span>
+                        </div>
+                    }
                 </label>
                 {!selectedImage &&
                     <input

@@ -56,7 +56,7 @@ export default function Login() {
 
 
 		showToaster(true)
-		setToasterMessage(userLogin.message)
+		setToasterMessage(userLogin?.message||'Please check login credential')
 
 
       } else {
@@ -65,7 +65,7 @@ export default function Login() {
         //   className: "toast-message",
         // });
         // setRatings(userLogin.data);
-        login(userLogin.data);
+        login(userLogin?.data);
 		// console.log("userLogin", userLogin?.data)
 		
 		localStorage.setItem('profileCompleted',userLogin?.data.user.profileCompleted)
@@ -82,7 +82,7 @@ export default function Login() {
 
 		console.log("error", error.message)
 		showToaster(true)
-		setToasterMessage(error.message)
+		setToasterMessage(error?.message || "Please check login credential");
       // setLoading(false);
     }
 
