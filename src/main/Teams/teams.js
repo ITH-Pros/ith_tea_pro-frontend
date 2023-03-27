@@ -360,7 +360,7 @@ export default function Teams(props) {
   <div className="user-analytics">
     <div className="user-analytics-item">
       <div className="user-analytics-item-value">
-        completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)  }%
+        Completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)  }%
       </div>
     </div>
   </div>

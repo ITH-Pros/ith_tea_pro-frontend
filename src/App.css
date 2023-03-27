@@ -144,3 +144,8 @@ span.rbc-toolbar-label {
   position: absolute;
   bottom: 0;
 }
+
+.profile-modal .modal-dialog{
+  width: 650px !important;
+  max-width: 650px !important;
+ }
