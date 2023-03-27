@@ -598,7 +598,7 @@ div.calendar {
 	padding: 10px;
 	max-height: 80px;
 	border: 2px solid #fff;
-	background-color: #c3eaf6;
+	background-color: #e2d2ff;
   }
   div.calendar li .day,
   div.calendar li .month {
@@ -623,7 +623,7 @@ div.calendar {
 	}
 	div.calendar .weekdays li,
 	div.calendar .footer-weekdays li {
-	  background-color: #21b0dc;
+	  background-color: #673AB7;
 	  height: 40px;
 	  text-align: center;
 	  color: #fff;

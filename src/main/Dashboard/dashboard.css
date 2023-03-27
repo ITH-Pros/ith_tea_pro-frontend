@@ -578,3 +578,9 @@ th {
 		display: none !important;
 	   }
 
+.skip-button {
+      background: #673AB7;
+      color: #fff;
+      padding: 8px;
+      border-radius: 6px;
+  }

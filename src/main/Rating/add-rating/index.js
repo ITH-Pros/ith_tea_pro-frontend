@@ -290,33 +290,11 @@ export default function AddRating(props) {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group as={Col} md="5">
-              <Form.Label>Select Task</Form.Label>
-              <Form.Control
-                required
-                as="select"
-                type="select"
-                name="selectedTask"
-                onChange={handleRatingFormChange}
-                value={ratingForm.selectedTask}
-                disabled={taskFromDashBoard ? true : false}
-              >
-                <option value="">Select Task</option>
-                {ratingForm?.taskList?.map((module) => (
-                  <option value={module?._id} key={module?._id}>
-                    {module?.title}
-                  </option>
-                ))}
-              </Form.Control>
-              <Form.Control.Feedback type="invalid">
-                User name is required !!
-              </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            </Form.Group>
+            
 
             <Form.Group
               as={Col}
-              md="3"
+              md="6"
               controlId="validationCustom01"
               className="ps-0"
             >
@@ -339,9 +317,34 @@ export default function AddRating(props) {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
+          <Row>
+          <Form.Group as={Col} md="12">
+              <Form.Label>Select Task</Form.Label>
+              <Form.Control
+                required
+                as="select"
+                type="select"
+                name="selectedTask"
+                onChange={handleRatingFormChange}
+                value={ratingForm.selectedTask}
+                disabled={taskFromDashBoard ? true : false}
+              >
+                <option value="">Select Task</option>
+                {ratingForm?.taskList?.map((module) => (
+                  <option value={module?._id} key={module?._id}>
+                    {module?.title}
+                  </option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                User name is required !!
+              </Form.Control.Feedback>
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
+          </Row>
 
           <Row className="desc" >
-            <Form.Label>Comment</Form.Label>
+           
             <Form.Control
               type="textArea"
               name="comment"
