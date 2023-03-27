@@ -87,6 +87,7 @@
   /* color: white; */
   border-top: 5px solid;
   background: #fff;
+  border-color: #3333;
 }
 
 .menu-icon {
@@ -178,6 +179,7 @@
   margin-right: -10px;
   border: 1.5px solid white;
   box-shadow: 0px 0px 0px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 .user-pic:last-child {

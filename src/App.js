@@ -83,7 +83,7 @@ function App() {
               <ProtectedRoute>
                 {" "}
                 <Navbar />
-               <Header />
+              
                 <Project />{" "}
               </ProtectedRoute>
             </>
@@ -130,7 +130,7 @@ function App() {
 
 			<ProtectedRoute>
             <Navbar />
-               <Header />
+              
 		  <UserForm />
 		  </ProtectedRoute>
 		  
@@ -171,8 +171,7 @@ function App() {
 			<>
 			  <ProtectedRoute>
         <Navbar />
-         <Header />
-
+     
 				<Task />
 			  </ProtectedRoute>
 			</>
