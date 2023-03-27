@@ -70,6 +70,7 @@ input:focus {
   border-radius: 10px;
   justify-content: center;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .image-upload label {
@@ -82,6 +83,7 @@ input:focus {
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  cursor: pointer;
 }
 .image-upload input[type="file"] {
   display: none;
