@@ -15,7 +15,7 @@ import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
 import { faGithub, faLinkedin, faFacebook , faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import UserIcon from "../Projects/ProjectCard/profileImage";
 
 export default function Teams(props) {
   const { userDetails } = useAuth();
@@ -334,7 +334,7 @@ export default function Teams(props) {
         <div className="container-team">
        
           {usersList &&
-            usersList.map((user) => {
+            usersList.map((user,index) => {
               return (
                 <div key={user._id} className="box">
                   <div className="top-bar"></div>
@@ -343,50 +343,72 @@ export default function Teams(props) {
                       to={{
                         pathname: "/user/view/" + user._id,
                       }}
-                    >
-                    </Link>
+                    ></Link>
                     {/* <label className="heart"></label> */}
                   </div>
                   <div className="content">
-                 
-                <div id="profileImage"> </div>
-                <div className="content-height">
-                    <strong>{user.name}  ({user.role})</strong>
-                  
-					<p>{user.email}</p>
-					{ user.department && <p> ({user?.department}) </p> }
-					{ user.employeeId && <p>{user?.employeeId} </p> } 
-					{ user.designation && <p>{user?.designation}</p> }
+                    {/* <div id="profileImage"> </div> */}
+                    <>
+                      {!user?.profilePicture && (
+                        
+                        <UserIcon  key={index} firstName={user.name} />
+                      )}
+                      {user?.profilePicture && (
+                        <div className="user-pic">
+                          <img
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              borderRadius: "50%",
+                            }}
+                            src={`${user?.profilePicture}`}
+                            alt="profile"
+                          ></img>
+                        </div>
+                      )}
+                    </>
+                    <div className="content-height">
+                      <strong>
+                        {user.name} ({user.role})
+                      </strong>
 
-{ userDetails?.role !== "CONTRIBUTOR" && userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
-  <div className="user-analytics">
-    <div className="user-analytics-item">
-      <div className="user-analytics-item-value">
-        Completed After DueDate: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)  }%
-      </div>
-    </div>
-  </div>
-)}
-                </div>
-              
-				{user?.github &&
-      <FontAwesomeIcon icon={faGithub} />
-    }
-	{user?.linkedin &&
-      <FontAwesomeIcon icon={faLinkedin} />
-    }
-	{user?.facebook &&
-      <FontAwesomeIcon icon={faFacebook} />
-    }
-	{user?.twitter &&
-      <FontAwesomeIcon icon={faTwitter} />
-    }
-    {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />
+                      <p>{user.email}</p>
+                      {user.department && <p> ({user?.department}) </p>}
+                      {user.employeeId && <p>{user?.employeeId} </p>}
+                      {user.designation && <p>{user?.designation}</p>}
+
+                      {userDetails?.role !== "CONTRIBUTOR" &&
+                        userAnalytics &&
+                        Array.isArray(userAnalytics) &&
+                        userAnalytics.find(
+                          (analytics) => analytics?._id === user?._id
+                        ) && (
+                          <div className="user-analytics">
+                            <div className="user-analytics-item">
+                              <div className="user-analytics-item-value">
+                                Completed After DueDate:{" "}
+                                {userAnalytics
+                                  .find(
+                                    (analytics) => analytics?._id === user._id
+                                  )
+                                  .completedAfterDueDatePercentage.toFixed(2)}
+                                %
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                    </div>
+
+                    {user?.github && <FontAwesomeIcon icon={faGithub} />}
+                    {user?.linkedin && <FontAwesomeIcon icon={faLinkedin} />}
+                    {user?.facebook && <FontAwesomeIcon icon={faFacebook} />}
+                    {user?.twitter && <FontAwesomeIcon icon={faTwitter} />}
+                    {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />
     <FontAwesomeIcon  className="brand-icon" icon={faFacebook} />
 	<FontAwesomeIcon className="brand-icon" icon={faTwitter} /> */}
-  </div>
+                  </div>
 
-                  {userDetails.role === "SUPER_ADMIN" && "ADMIN"  && (
+                  {userDetails.role === "SUPER_ADMIN" && "ADMIN" && (
                     <div className="btn">
                       <button
                         className="btn-glow margin-right btn-color"
@@ -395,7 +417,8 @@ export default function Teams(props) {
                         }}
                       >
                         {" "}
-                        <i className="fa fa-check " aria-hidden="true"></i> Assign
+                        <i className="fa fa-check " aria-hidden="true"></i>{" "}
+                        Assign
                       </button>
 
                       <button
