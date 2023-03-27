@@ -45,6 +45,7 @@ const ProjectCard = ({
   handleToRedirectTask,
   getAndSetAllProjects,
   handleArchiveModalShow,
+  isArchive
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy);
@@ -53,6 +54,8 @@ const ProjectCard = ({
       "#e4ffc5",
       "#ffd9d9",
       "#e3e8ff",
+      "#e3d3ff",
+      "#d3fcff",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   
@@ -157,13 +160,10 @@ const ProjectCard = ({
       className="project-card"
       style={{ background: background || generateRandomColor() }}
     >
-      {/* <div className="menu-icon">
-        <FontAwesomeIcon icon={faEllipsisH} />
-        <div className="menu-options">
-          <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>
-        </div>
-      </div> */}
+
+{isArchive && (
+  <label>Archived</label>
+)}
       <div
         className="menu-icon"
         onClick={handleMenuIconClick}

@@ -53,6 +53,8 @@ const Tasks = () => {
   const [showViewTask, setShowViewTask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
+  const [isArchive , setIsArchive] = useState(false)
+
 
 
 
@@ -239,7 +241,7 @@ const archiveConFirmation = (sectionId) => {
     if (params?.projectId) {
       setSelectedProjectId(params?.projectId);
     }
-  }, []);
+  }, [isArchive]);
 
   const [projectList, setProjectListValue] = useState([]);
   const [sectionName, setSectionName] = useState("");
@@ -271,6 +273,7 @@ const archiveConFirmation = (sectionId) => {
         setLoading(false);
         if (res.error) {
           setToasterMessage(res?.error?.message || "Something Went Wrong");
+          console.log( res?.error?.message)
           setShowToaster(true);
         } else {
           setToasterMessage(res?.message || "Something Went Wrong");
@@ -285,7 +288,9 @@ const archiveConFirmation = (sectionId) => {
           }
         }
       } catch (error) {
-        setToasterMessage(error?.error?.message || "Something Went Wrong");
+        setToasterMessage(error?.message || "Something Went Wrong");
+        console.log( error?.error?.message)
+
         setShowToaster(true);
         setLoading(false);
         return error.message;
@@ -319,6 +324,9 @@ const archiveConFirmation = (sectionId) => {
         groupBy: "default",
         // user
       };
+      if(isArchive){
+        data.isArchived = true
+      }
       if (params?.projectId) {
         data.projectId = params?.projectId;
       }
@@ -356,6 +364,7 @@ const archiveConFirmation = (sectionId) => {
         if (filterData?.toDate) {
           data.toDate = filterData?.toDate;
         }
+       
         // data = filterData;
         // data.groupBy = "default";
         console.log(data, "filter data");
@@ -440,6 +449,15 @@ const archiveConFirmation = (sectionId) => {
     setSelectedProject();
     setSelectedTask();
   };
+
+  const handleIsArchive = () =>{
+    setIsArchive(!isArchive)
+    // getAndSetAllProjects()
+  }
+
+  
+
+
   return (
     <>
       <div className="rightDashboard">
@@ -476,6 +494,19 @@ const archiveConFirmation = (sectionId) => {
               Add Section
             </button>
           )}
+          { userDetails?.role !== "CONTRIBUTOR" && (
+            <button
+              className="addTaskBtn addSectionBtn"
+              style={{
+                float: "right",
+              }}
+
+              onClick={handleIsArchive}
+             
+            >
+             {isArchive?'Back': ' Archive list'}
+            </button>
+          )}
 
         <FilterModal
           handleProjectId={selectedProjectId}
@@ -500,7 +531,7 @@ const archiveConFirmation = (sectionId) => {
 
         <Accordion alwaysOpen="true">
           {!projects?.length &&
-            params?.projectId &&
+            params?.projectId && !isArchive &&
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
                 <div className="project-card-section">
@@ -794,6 +825,7 @@ const archiveConFirmation = (sectionId) => {
               </div> */}
             </Accordion.Item>
           ))}
+          {projects && projects.length === 0 && <p> {isArchive ? 'No Task archived.': ''} </p>}
         </Accordion>
 
         <Modal

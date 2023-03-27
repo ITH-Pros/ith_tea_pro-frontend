@@ -105,7 +105,7 @@ export default function AllProject() {
   const getAndSetAllProjects = async function () {
     let dataToSend = {}
     if(isArchive){
-      dataToSend.isArchive = true
+      dataToSend.isArchived = true
     }
     //setloading(true);
     try {
@@ -511,7 +511,7 @@ const archiveProject = async () => {
 		setLoading(false);
 
 		if (removeRes.error) {
-			setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
+			setToasterMessage(removeRes?.message || "Something Went Wrong");
 			setShowToaster(true);
 			return;
 		} else {
@@ -523,7 +523,7 @@ const archiveProject = async () => {
 		}
 	}
 	catch (error) {
-		setToasterMessage(error?.error?.message || "Something Went Wrong");
+		setToasterMessage(error?.message || "Something Went Wrong");
 		setShowToaster(true);
 		setLoading(false);
 		return error.message;
@@ -601,14 +601,11 @@ const archiveProject = async () => {
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
         </h1>
-        <button
-          className="btn btn-primary pull-right"
-          onClick={handleIsArchive}
-          style={{ cursor: "pointer" }}
-        >
-          {" "}
-          {isArchive ? "Back" : "Archive List"}
-        </button>
+        {
+          (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
+        <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Back':'Archive List'}</button>
+
+        }
         <div className="project-boxes jsGridView">
           {userDetails.role === "SUPER_ADMIN" && !isArchive && (
             <div
@@ -645,12 +642,11 @@ const archiveProject = async () => {
                     handleEdit={() => editProject(element)}
                     handleDelete={() => confirmation(element)}
                     taskData={projectTaskAnalytics?.[element._id]}
-                    handleCategories={() => handleCategorie(element)}
-                    handleToRedirectTask={() => handleToRedirectTask(element)}
-                    getAndSetAllProjects={() => getAndSetAllProjects()}
-                    handleArchiveModalShow={() =>
-                      handleArchiveModalShow(element)
-                    }
+					handleCategories = {() => handleCategorie(element)}
+					handleToRedirectTask = {() => handleToRedirectTask(element)}
+					getAndSetAllProjects = {() => getAndSetAllProjects()}
+					handleArchiveModalShow = {() => handleArchiveModalShow(element)}
+          isArchive = {isArchive}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
