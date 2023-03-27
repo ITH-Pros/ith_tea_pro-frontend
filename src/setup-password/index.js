@@ -70,8 +70,12 @@ function PasswordForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!password?.trim() || !confirmPassword?.trim()) {
+      return;
+    }
 
     if (password !== confirmPassword) {
+
       setValidationError("Passwords do not match");
       return;
     } else {
@@ -87,7 +91,8 @@ function PasswordForm() {
 
           return;
         } else {
-          console.log("response", response);
+          console.log("response========================+++++++++++++++++++++", response);
+          localStorage.setItem('passwordReset', true);
           navigate("/login");
         }
       } catch (error) {
