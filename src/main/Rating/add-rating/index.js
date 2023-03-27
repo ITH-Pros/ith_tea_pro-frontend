@@ -341,6 +341,14 @@ export default function AddRating(props) {
               </Form.Control.Feedback>
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
+
+            <Form.Group as={Col} md="12">
+              <Form.Label>Completed Date</Form.Label>
+              <h5>{(ratingForm?.taskList?.find((task) => task._id === ratingForm.selectedTask)?.completedDate)?.split('T')[0]}</h5>
+            </Form.Group>
+
+
+
           </Row>
 
           <Row className="desc" >
