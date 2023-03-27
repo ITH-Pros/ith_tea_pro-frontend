@@ -511,7 +511,7 @@ const archiveProject = async () => {
 		setLoading(false);
 
 		if (removeRes.error) {
-			setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
+			setToasterMessage(removeRes?.message || "Something Went Wrong");
 			setShowToaster(true);
 			return;
 		} else {
@@ -523,7 +523,7 @@ const archiveProject = async () => {
 		}
 	}
 	catch (error) {
-		setToasterMessage(error?.error?.message || "Something Went Wrong");
+		setToasterMessage(error?.message || "Something Went Wrong");
 		setShowToaster(true);
 		setLoading(false);
 		return error.message;
@@ -652,7 +652,7 @@ const archiveProject = async () => {
                 </div>
               );
             })}
-            {projectList && projectList.length === 0 && <p>No projects archived.</p>}
+            {projectList && projectList.length === 0 && <p> {isArchive?'No projects archived.':'No projects found'} </p>}
         </div>
       </div>
       {loading ? <Loader /> : null}
