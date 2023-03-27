@@ -303,6 +303,8 @@ export default function AddTaskModal(props) {
 
   const updateTaskDescriptionValue = (description) => {
     setTaskFormValue({ ...taskFormValue, description });
+    console.log(taskFormValue)
+
   };
 
   const submitTask = async () => {
@@ -426,7 +428,7 @@ export default function AddTaskModal(props) {
         setTaskFormValue({
           ...taskFormValue,
           title: "",
-          description: "",
+          description: null,
           assignedTo: "",
           dueDate: "",
           completedDate: "",
@@ -434,6 +436,8 @@ export default function AddTaskModal(props) {
           status: "",
           attachments: [],
         });
+    
+
         setValidated(false);
         setSelectedLeads("");
         setShowAddTaskModal(true);
@@ -621,7 +625,8 @@ export default function AddTaskModal(props) {
 
   return (
     <>
-      <Modal width={800}
+      <Modal
+        width={800}
         show={showAddTaskModal}
         size="xl"
         className="taskModalForm"
@@ -635,7 +640,7 @@ export default function AddTaskModal(props) {
             {selectedTask ? "Edit Task" : "Add Task"}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body >
+        <Modal.Body>
           <div className="dv-50">
             <Form noValidate validated={validated}>
               <Row>
@@ -649,7 +654,9 @@ export default function AddTaskModal(props) {
                     onChange={onchangeSelectedProject}
                     value={taskFormValue.projectId}
                     name="projectId"
-                    disabled={selectedTask || handleProjectId || selectedProjectFromTask}
+                    disabled={
+                      selectedTask || handleProjectId || selectedProjectFromTask
+                    }
                   >
                     <option value="" disabled>
                       Select Project
@@ -675,7 +682,7 @@ export default function AddTaskModal(props) {
                     name="section"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.section}
-					disabled={selectedProjectFromTask}
+                    disabled={selectedProjectFromTask}
                   >
                     <option value="" disabled>
                       Select Section
@@ -760,7 +767,11 @@ export default function AddTaskModal(props) {
                 />
               </Row>
               <Row className="mt-5">
-                <AttachmentUploader uploadedAttachmentsArray={uploadedAttachmentsArray}  taskAttachments={selectedTask?.attachments}  setLoading={setLoading}/>
+                <AttachmentUploader
+                  uploadedAttachmentsArray={uploadedAttachmentsArray}
+                  taskAttachments={selectedTask?.attachments || []}
+                  setLoading={setLoading}
+                />
               </Row>
 
               <Row className="mb-3 mt-5">
@@ -773,14 +784,15 @@ export default function AddTaskModal(props) {
                     onChange={updateTaskFormValue}
                     value={taskFormValue.assignedTo}
                   >
-                    <option disabled value="">Select User</option>
+                    <option disabled value="">
+                      Select User
+                    </option>
                     {userList?.map((module) => (
                       <option value={module._id} key={module._id}>
                         {module.name}
                       </option>
                     ))}
                   </Form.Control>
-                 
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
@@ -824,7 +836,9 @@ export default function AddTaskModal(props) {
                     name="status"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.status || statusList[0]}
-                    disabled={taskFormValue?.status === "COMPLETED"}
+                    disabled={
+                      taskFormValue?.status === "COMPLETED" 
+                    }
                   >
                     <option value="" disabled>
                       Select Status
@@ -832,7 +846,7 @@ export default function AddTaskModal(props) {
                     {statusList?.map((status) => (
                       <option
                         value={status}
-                        disabled={status === "COMPLETED"}
+                        disabled={status === "COMPLETED" && !selectedTask}
                         key={status}
                       >
                         {status}
@@ -905,8 +919,7 @@ export default function AddTaskModal(props) {
         </Modal.Body>
       </Modal>
 
-            {loading ? <Loader /> : null}
-
+      {loading ? <Loader /> : null}
     </>
   );
 }

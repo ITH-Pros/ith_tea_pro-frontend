@@ -104,3 +104,12 @@ const AttachmentUploader = (props) => {
 };
 
 export default AttachmentUploader;
+//  <div>
+//    <input type="file" onChange={handleFileChange} />
+//    {files.map((file, index) => (
+//      <div key={index}>
+//        <img src={file.preview} alt={file.file.name} width="50" height="50" />
+//        <button onClick={() => handleRemove(file)}>Remove</button>
+//      </div>
+//    ))}
+//  </div>;
