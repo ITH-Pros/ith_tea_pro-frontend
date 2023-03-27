@@ -528,7 +528,7 @@ const archiveConFirmation = (sectionId) => {
 
         <Accordion alwaysOpen="true">
           {!projects?.length &&
-            params?.projectId &&
+            params?.projectId && !isArchive &&
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
                 <div className="project-card-section">
@@ -822,6 +822,7 @@ const archiveConFirmation = (sectionId) => {
               </div> */}
             </Accordion.Item>
           ))}
+          {projects && projects.length === 0 && <p>No Task archived.</p>}
         </Accordion>
 
         <Modal
