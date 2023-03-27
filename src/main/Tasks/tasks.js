@@ -465,7 +465,8 @@ const archiveConFirmation = (sectionId) => {
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
         </h1>
 
-        <button
+        { !isArchive && 
+          <button
           className="addTaskBtn"
           style={{
             float: "right",
@@ -478,9 +479,12 @@ const archiveConFirmation = (sectionId) => {
         >
           Add Task
         </button>
+        }
+
+      
 
         {projects?.length !== 0 &&
-          userDetails?.role !== "CONTRIBUTOR" &&
+          userDetails?.role !== "CONTRIBUTOR" && !isArchive &&
           selectedProjectId && (
             <button
               className="addTaskBtn addSectionBtn"

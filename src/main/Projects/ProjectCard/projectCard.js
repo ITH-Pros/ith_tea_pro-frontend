@@ -335,7 +335,7 @@ const ProjectCard = ({
                   );
                 })}
                 <Col sm={12}>
-                  {userDetails.role !== "CONTRIBUTOR" &&
+                  {userDetails.role !== "CONTRIBUTOR" && !isArchive &&
                     userDetails.role !== "LEAD" && (
                       <div onClick={assignTeamUser} className="assignPopup">
                         <UserIcon firstName={"+"} />
