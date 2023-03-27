@@ -105,7 +105,7 @@ export default function AllProject() {
   const getAndSetAllProjects = async function () {
     let dataToSend = {}
     if(isArchive){
-      dataToSend.isArchive = true
+      dataToSend.isArchived = true
     }
     //setloading(true);
     try {
@@ -646,11 +646,13 @@ const archiveProject = async () => {
 					handleToRedirectTask = {() => handleToRedirectTask(element)}
 					getAndSetAllProjects = {() => getAndSetAllProjects()}
 					handleArchiveModalShow = {() => handleArchiveModalShow(element)}
+          isArchive = {isArchive}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
               );
             })}
+            {projectList && projectList.length === 0 && <p>No projects archived.</p>}
         </div>
       </div>
       {loading ? <Loader /> : null}

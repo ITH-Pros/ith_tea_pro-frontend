@@ -53,6 +53,8 @@ const Tasks = () => {
   const [showViewTask, setShowViewTask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
+  const [isArchive , setIsArchive] = useState(false)
+
 
 
 
@@ -239,7 +241,7 @@ const archiveConFirmation = (sectionId) => {
     if (params?.projectId) {
       setSelectedProjectId(params?.projectId);
     }
-  }, []);
+  }, [isArchive]);
 
   const [projectList, setProjectListValue] = useState([]);
   const [sectionName, setSectionName] = useState("");
@@ -319,6 +321,9 @@ const archiveConFirmation = (sectionId) => {
         groupBy: "default",
         // user
       };
+      if(isArchive){
+        data.isArchived = true
+      }
       if (params?.projectId) {
         data.projectId = params?.projectId;
       }
@@ -356,6 +361,7 @@ const archiveConFirmation = (sectionId) => {
         if (filterData?.toDate) {
           data.toDate = filterData?.toDate;
         }
+       
         // data = filterData;
         // data.groupBy = "default";
         console.log(data, "filter data");
@@ -440,6 +446,15 @@ const archiveConFirmation = (sectionId) => {
     setSelectedProject();
     setSelectedTask();
   };
+
+  const handleIsArchive = () =>{
+    setIsArchive(!isArchive)
+    // getAndSetAllProjects()
+  }
+
+  
+
+
   return (
     <>
       <div className="rightDashboard">
@@ -474,6 +489,19 @@ const archiveConFirmation = (sectionId) => {
               }}
             >
               Add Section
+            </button>
+          )}
+          { userDetails?.role !== "CONTRIBUTOR" && (
+            <button
+              className="addTaskBtn addSectionBtn"
+              style={{
+                float: "right",
+              }}
+
+              onClick={handleIsArchive}
+             
+            >
+             {isArchive?'Back': ' Archive list'}
             </button>
           )}
 
