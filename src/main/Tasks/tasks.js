@@ -273,6 +273,7 @@ const archiveConFirmation = (sectionId) => {
         setLoading(false);
         if (res.error) {
           setToasterMessage(res?.error?.message || "Something Went Wrong");
+          console.log( res?.error?.message)
           setShowToaster(true);
         } else {
           setToasterMessage(res?.message || "Something Went Wrong");
@@ -287,7 +288,9 @@ const archiveConFirmation = (sectionId) => {
           }
         }
       } catch (error) {
-        setToasterMessage(error?.error?.message || "Something Went Wrong");
+        setToasterMessage(error?.message || "Something Went Wrong");
+        console.log( error?.error?.message)
+
         setShowToaster(true);
         setLoading(false);
         return error.message;
@@ -528,7 +531,7 @@ const archiveConFirmation = (sectionId) => {
 
         <Accordion alwaysOpen="true">
           {!projects?.length &&
-            params?.projectId &&
+            params?.projectId && !isArchive &&
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
                
@@ -821,6 +824,7 @@ const archiveConFirmation = (sectionId) => {
               </div> */}
             </Accordion.Item>
           ))}
+          {projects && projects.length === 0 && <p> {isArchive ? 'No Task archived.': ''} </p>}
         </Accordion>
 
         <Modal
