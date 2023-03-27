@@ -311,7 +311,6 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-    //   !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
       return;
@@ -383,7 +382,6 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
       return;
@@ -492,7 +490,6 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.assignedTo ||
       !selectedLeads
     ) {
       return;
@@ -770,24 +767,20 @@ export default function AddTaskModal(props) {
                 <Form.Group as={Col} md="3">
                   <Form.Label>Assigned To</Form.Label>
                   <Form.Control
-                    required
                     as="select"
                     type="select"
                     name="assignedTo"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.assignedTo}
                   >
-                    <option value="">Select User</option>
+                    <option disabled value="">Select User</option>
                     {userList?.map((module) => (
                       <option value={module._id} key={module._id}>
                         {module.name}
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    Assigned To is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                 
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>

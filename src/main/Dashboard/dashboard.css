@@ -372,7 +372,6 @@ th {
 .right-filter button { padding: 5px; font-size: 13px; margin-left: 20px;}
 .right-filter .dropdown-toggle::after{ display: none;}
 .list_task{     
-  border: 1px #cccccc solid !important;
   padding: 5px 10px !important;
   margin: 3px 0px;
   border-radius: 6px;
@@ -579,3 +578,9 @@ th {
 		display: none !important;
 	   }
 
+.skip-button {
+      background: #673AB7;
+      color: #fff;
+      padding: 8px;
+      border-radius: 6px;
+  }
