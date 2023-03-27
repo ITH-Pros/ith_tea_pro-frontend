@@ -272,18 +272,14 @@ export default function Dashboard(props) {
 								<>
 								  <span
 									style={{
-									  // cursor: "cell",
+									 
 									  padding: "1px",
 									  paddingLeft: "20px",
 									  paddingRight: "6px",
 									}}
 									className="input_dashboard"
 								  ></span>
-								  {/* <MDBTooltip
-									tag="div"
-									wrapperProps={{ href: "#" }}
-									title={"click to Add Rating"}
-								  ></MDBTooltip> */}
+						
 								</>
 							  )}
 							</td>
@@ -301,168 +297,170 @@ export default function Dashboard(props) {
 			  })}
 			</tbody>
 		  </Table>
+
+<div class="calendar">
+    <ul class="weekdays">
+        <li>Chandan</li>
+        <li>Manik</li>
+        <li>Manav</li>
+        <li>Mishba</li>
+        <li>Mohit</li>
+        <li>Rashid</li>
+        <li>Chandan</li>
+        <li>Manik</li>
+        
+        
+    </ul>
+    
+    <ul class="days">
+    
+        <li class="out_of_range calendar-day">
+            <div class="date day_cell"></div>
+        </li>
+        <li class="out_of_range calendar-day">
+            <div class="date day_cell"></div>
+        </li>            
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 1  
+			<br/> <span className="rateing">5</span> 
+			</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 2</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 3</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 4</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 5</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 6</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 7</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 8</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 9</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 10</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 11</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 12</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 13</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 14</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 15</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 16</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 17</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 18</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 19</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 20</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 21</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 22</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 23</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 24</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 25</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 26</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 27</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 28</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 29</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 30</div>
+            <div class="show-info"></div>
+        </li>
+        <li class="calendar-day">
+            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 31</div>
+            <div class="show-info"></div>
+        </li>
+                
+   
+        <li class="out_of_range calendar-day">
+            <div class="date day_cell"></div>
+        </li>
+        <li class="out_of_range calendar-day">
+            <div class="date day_cell"></div>
+        </li>
+    </ul>
+    
+   
+</div>
 		</div>
   
-		{/* <div className="m-3 d-flex justify-content-center flex-column">
-		  <div>
-		  {userDetails?.role !== "CONTRIBUTOR" && (
-			  <Link to="/rating" params={{ params: true }}>
-			  {props.showBtn && (
-				  <div className="wrap">
-				  <button className="add-rating-button">
-					  <span>Add Rating</span>
-				  </button>
-				  </div>
-			  )}
-			  </Link>
-		  )}
-		   <h5 className="text-center h5cls">
-			  <p style={{ marginRight: "10px", marginTop: "6px" }}>
-			  Ratings for
-			  </p>
-			  <Form.Group as={Col} md="1" controlId="select_month">
-			  <Form.Control
-				  className="month-drop-select"
-				  required
-				  as="select"
-				  type="select"
-				  name="select_team"
-				  onChange={onchangeMonth}
-				  value={monthUse}
-			  >
-				  <option value="" disabled>
-				  Select Month
-				  </option>
-				  {months.map((monthh, index) => (
-				  <option
-					  value={monthh}
-					  key={monthh}
-					  disabled={index > month && yearUse >= currentYear}
-				  >
-					  {monthh}
-				  </option>
-				  ))}
-			  </Form.Control>
-			  </Form.Group>
-			  <Form.Group as={Col} md="1" controlId="select_year">
-			  <Form.Control
-				  className="year-drop-select"
-				  required
-				  as="select"
-				  type="select"
-				  name="select_team"
-				  onChange={onChangeYear}
-				  value={yearUse}
-			  >
-				  <option value="" disabled>
-				  Select Year
-				  </option>
-				  {years.map((year) => (
-				  <option value={year} key={year} disabled={year > currentYear}>
-					  {year}
-				  </option>
-				  ))}
-			  </Form.Control>
-			  </Form.Group>
-		  </h5> 
-		  </div> 
-		   <table className="table fixed_header">
-		  <thead>
-			  <tr>
-			  <th>Name</th>
-			  {Array(days)
-				  .fill(0)
-				  .map((rating, index) => {
-				  return (
-					  <th className="dates text-center" key={`${index}_${index}`}>
-					  {index + 1 < 10 ? "0" + (index + 1) : index + 1}
-					  </th>
-				  );
-				  })}
-			  <th style={{ color: "green" }}>Average</th>
-			  </tr>
-		  </thead>
-		  <tbody>
-			  {usersArray.map((user, index) => {
-			  let userRatingSum = 0;
-			  let userRatingCount = 0;
-  
-			  return (
-				  <tr key={index}>
-				  <td className="user_names"> {user.name}</td>
-				  {Array(days)
-					  ?.fill(0)
-					  ?.map((day, index) => {
-					  let ratingUserObj = ratingsArray.find((el) => {
-						  return el._id === user._id;
-					  });
-					  let ratingCommentObj =
-						  ratingUserObj?.ratingsAndComment.find(
-						  (el) => el.date - 1 === index
-						  );
-					  if (ratingCommentObj) {
-						  userRatingSum += ratingCommentObj?.rating;
-						  userRatingCount += 1;
-						  return (
-						  <RatingBox
-							  key={index}
-							  index={index}
-							  getAllRatings={getAllRatings}
-							  ratingCommentObj={ratingCommentObj}
-						  />
-						  );
-					  } else {
-						  let dateToSend = `${yearUse}-${
-						  months.indexOf(monthUse) + 1 <= 9
-							  ? "0" + (months.indexOf(monthUse) + 1)
-							  : months.indexOf(monthUse) + 1
-						  }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
-						  return (
-						  <td key={index}>
-							  {userDetails?.role === "CONTRIBUTOR" ||
-							  new Date(dateToSend) > new Date() ? (
-							  <span
-								  style={{ padding: "3px", paddingLeft: "18px" }}
-								  className="input_dashboard"
-							  ></span>
-							  ) : (
-							  <MDBTooltip
-								  tag="div"
-								  wrapperProps={{ href: "#" }}
-								  title={"click to Add Rating"}
-							  >
-								  <Link
-								  to={{ pathname: "/rating" }}
-								  state={{ userId: user._id, date: dateToSend }}
-								  >
-								  <span
-									  style={{
-									  cursor: "cell",
-									  padding: "3px",
-									  paddingLeft: "18px",
-									  }}
-									  className="input_dashboard"
-								  ></span>
-								  </Link>
-							  </MDBTooltip>
-							  )}
-						  </td>
-						  );
-					  }
-					  })}
-				  <td className="userAverage">
-					  {userRatingCount
-					  ? Math.round((userRatingSum / userRatingCount) * 100) /
-						  100
-					  : "NA"}
-				  </td>
-				  </tr>
-			  );
-			  })}
-		  </tbody>
-		  </table> 
-  
-	  </div>  */}
+		
 		{loading ? <Loader /> : null}
 		{toaster && (
 		  <Toaster
