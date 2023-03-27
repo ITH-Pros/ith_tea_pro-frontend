@@ -37,6 +37,13 @@ function UserForm(props) {
 
     const onInit = () => {
         getUserDetails();
+
+        if(localStorage.getItem('isEditProfile') === 'true'){
+            setIsEditable(true);
+            // Rename the key
+        }
+
+
     }
     console.log("profilePicture", profilePicture)
 
@@ -84,7 +91,7 @@ function UserForm(props) {
 
     function handleEditClick(event) {
         event.preventDefault();
-        setIsEditable(true); // Set isEditable to true when Edit button is clicked
+        setIsEditable(!isEditable); // Set isEditable to true when Edit button is clicked
     }
 
     const handleSubmit = async (event) => {
@@ -117,7 +124,9 @@ function UserForm(props) {
                 setLoading(false);
                 showToaster(true);
                 setToasterMessage(response.message);
-                setIsEditable(false);
+                setIsEditable(true);
+            localStorage.removeItem('isEditProfile');
+
                 handleModalClose();
                 navigate('/');
             }
@@ -156,6 +165,7 @@ function UserForm(props) {
                         value={name}
                         onChange={(event) => setName(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
                     />
                 </div>
                 <div className="form-group col-4">
@@ -176,6 +186,8 @@ function UserForm(props) {
                         id="employeeId"
                         value={employeeId}
                         onChange={(event) => setEmployeeId(event.target.value)}
+                        disabled={isEditable}
+
                         // readOnly={!isEditable}
                     />
                 </div>
@@ -189,6 +201,8 @@ function UserForm(props) {
                         max={formatDate(new Date())}
                         onChange={(event) => setDob(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
+
                     />
                 </div>
                 <div className="form-group col-6">
@@ -199,6 +213,8 @@ function UserForm(props) {
                         value={designation}
                         onChange={(event) => setDesignation(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
+
                     />
                 </div>
                 <div className="form-group col-6">
@@ -209,6 +225,8 @@ function UserForm(props) {
                         value={department}
                         onChange={(event) => setDepartment(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
+
                     />
                 </div>
             </form>
@@ -231,6 +249,8 @@ function UserForm(props) {
                         value={github}
                         onChange={(event) => setGithub(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
+
                     />
                 </div>
                 <div className="form-group">
@@ -241,6 +261,8 @@ function UserForm(props) {
                         value={twitter}
                         onChange={(event) => setTwitter(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
+
                     />
                 </div>
                 <div className="form-group">
@@ -251,25 +273,27 @@ function UserForm(props) {
                         value={linkedin}
                         onChange={(event) => setLinkedin(event.target.value)}
                         // readOnly={!isEditable}
+                        disabled={isEditable}
+
                     />
                 </div>
 
-                {/* {isEditable && (
+                {!isEditable && (
                     <button onClick={handleSubmit} className="submit-button">
                         {" "}
                         Update
                     </button>
-                )} */}
-                    <button onClick={handleSubmit} className="submit-button">
+                )}
+                    {/* <button onClick={handleSubmit} className="submit-button">
                         {" "}
                         Update
-                    </button>
+                    </button> */}
 
-                {/* {!isEditable && (
+                {isEditable && (
                     <button className="submit-button edit" onClick={handleEditClick}>
                         Edit
                     </button>
-                )} */}
+                )}
             </form>
 
             {toaster && (
