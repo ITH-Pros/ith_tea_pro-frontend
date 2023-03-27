@@ -216,11 +216,11 @@
 .archived{
   background: #b9b7b7;
   width: 200px;
-  height: 40px;
+  height: 50px;
   text-align: center;
   position: relative;
   right: -160px;
-  line-height: 48px;
+  line-height: 50px;
   top: -48px;
   border-radius: 0px 20px;
 }
