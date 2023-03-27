@@ -344,7 +344,8 @@ export default function AddTaskModal(props) {
       selectedLeads &&
         (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
-    uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+      uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+      
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
@@ -836,9 +837,7 @@ export default function AddTaskModal(props) {
                     name="status"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.status || statusList[0]}
-                    disabled={
-                      taskFormValue?.status === "COMPLETED" 
-                    }
+                    disabled={taskFormValue?.status === "COMPLETED"}
                   >
                     <option value="" disabled>
                       Select Status
@@ -863,6 +862,7 @@ export default function AddTaskModal(props) {
                       name="completedDate"
                       onChange={updateTaskFormValue}
                       value={taskFormValue.completedDate}
+                      disabled={selectedTask.status === "COMPLETED"}
                     />
                   </Form.Group>
                 )}

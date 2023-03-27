@@ -244,7 +244,7 @@ export default function AddProject(props) {
 			return;
 		}
         try {
-            if (!checkAllValuesPresent()|| managedby.length) {
+            if (!checkAllValuesPresent()||!managedby.length) {
                 setLoading(false);
 				setShowErrorForLead(true);
                 return

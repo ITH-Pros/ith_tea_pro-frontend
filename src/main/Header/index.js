@@ -26,6 +26,7 @@ function Header() {
 	const redirectToUserDetail = () => {
 		// navigate(`/project/add/${project._id}`);
 		navigate("/profile")
+		localStorage.setItem('isEditProfile', 'true')
 	}
 
 	useEffect(() => {

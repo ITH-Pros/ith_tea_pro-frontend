@@ -31,11 +31,11 @@ const AttachmentUploader = (props) => {
                     console.log('Error while Updating details');
                     return;
                 } else {
-                    newUrls.push(response?.data?.url)
+                    newUrls.push(response?.url)
                 }
                 console.log("index   ", index, newFiles.length)
                 if (index === newFiles.length - 1) {
-                    setUploadedFiles([...taskAttachments, ...newUrls]);
+                    setUploadedFiles([...files, ...newUrls]);
                     setFiles([...files, ...newUrls]);
                     console.log("UPDADADADAE", taskAttachments, ...newUrls)
                     uploadedAttachmentsArray([...taskAttachments, ...newUrls])
@@ -104,12 +104,3 @@ const AttachmentUploader = (props) => {
 };
 
 export default AttachmentUploader;
-//  <div>
-//    <input type="file" onChange={handleFileChange} />
-//    {files.map((file, index) => (
-//      <div key={index}>
-//        <img src={file.preview} alt={file.file.name} width="50" height="50" />
-//        <button onClick={() => handleRemove(file)}>Remove</button>
-//      </div>
-//    ))}
-//  </div>;

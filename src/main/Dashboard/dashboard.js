@@ -40,6 +40,7 @@ import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
 import Tooltip from "react-bootstrap/Tooltip";
+// import { MDBTooltip } from "mdb-react-ui-kit";
 var month = moment().month();
 let currentYear = moment().year();
 
@@ -92,8 +93,10 @@ export default function Dashboard(props) {
 	getTeamWorkList();
   }
 
-  const handleToRedirectTask = (projectId) => {
-    navigate(`/task/${projectId}`);
+  const handleToRedirectTask = (projectId , isArchive) => {
+    // navigate(`/task/${projectId}`);
+    navigate(`/task/${JSON.stringify({ projectId:projectId,isArchive:isArchive })}/}`);
+
   };
 
   const handleShowAllProjects = () => {
@@ -404,7 +407,7 @@ function formatDate(dateString) {
               <Col lg={6}>
                 <Card
                   onClick={() => {
-                    handleToRedirectTask(project?._id);
+                    handleToRedirectTask(project?._id , project?.isArchived );
                   }}
                   id={`card-${project.id}`}
                   key={project?.id}
@@ -592,7 +595,18 @@ function formatDate(dateString) {
                               </Dropdown.Menu>
                             </Dropdown>
                           )}
-                          <h5 className="text-truncate">{task?.title}</h5>
+
+                          
+
+                          {/* <h5 className="text-truncate">{task?.title}</h5> */}
+                          <OverlayTrigger
+      placement="top"
+      overlay={<Tooltip>{task?.title}</Tooltip>}
+    >
+      <h5 className="text-truncate">{task?.title}</h5>
+    </OverlayTrigger>
+
+
                         </Col>
                         <Col lg={4} className="middle">
                           {task?.status != "COMPLETED" && (
@@ -701,7 +715,13 @@ function formatDate(dateString) {
                               ></i>
                             )}
                           </span>
-                          <h5 className="text-truncate">{task?.title}</h5>
+                          {/* <h5 className="text-truncate">{task?.title}</h5> */}
+                          <OverlayTrigger
+      placement="top"
+      overlay={<Tooltip>{task?.title}</Tooltip>}
+    >
+      <h5 className="text-truncate">{task?.title}</h5>
+    </OverlayTrigger>
                         </Col>
                         <Col lg={2} className="middle">
                           {task?.status !== "COMPLETED" && (
