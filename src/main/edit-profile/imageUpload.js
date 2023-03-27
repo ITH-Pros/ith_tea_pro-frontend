@@ -21,22 +21,14 @@ const ImageUpload = (props) => {
 
 
 
-    const handleImageChange = (event) => {
+    const handleImageChange = async(event) => {
         const selectedImage = event.target.files[0];
         console.log(selectedImage)
         if (selectedImage && selectedImage.type.startsWith("image/")) {
             setSelectedImage(selectedImage);
             setImageUrl(URL.createObjectURL(selectedImage))
             setShowUploadButton(true)
-        } else {
-            setSelectedImage('');
-            alert("Please select a valid image file (jpg, png, gif)");
-        }
-    };
-
-
-    const uploadProfilePicture = async () => {
-        if (!selectedImage) {
+             if (!selectedImage) {
             alert("Please select an image file");
             return;
         }
@@ -58,52 +50,70 @@ const ImageUpload = (props) => {
             console.log('Error while Updating details');
             setLoading(false);
             return error.message;
+            
+        }
+           
+            // document.getElementById("uploadButton")?.click();
+        } else {
+            setSelectedImage('');
+            alert("Please select a valid image file (jpg, png, gif)");
         }
     };
 
+
+    const deleteImage = async () => {
+         setSelectedImage(null);
+         setImageUrl(null);
+        setShowUploadButton(false);
+                setProfileImage(null);
+
+        
+       
+   }
     return (
+      <>
         <>
-            <div className="image-upload">
-                <label htmlFor="image-input">
+          <div className="image-upload">
+            <label htmlFor="image-input">
+              {imageUrl ? (
+                <div>
+                  <img src={imageUrl} alt="Preview" />
+                  <div className="upload-icon">
+                    <i
+                      style={{ cursor: "pointer" }}
+                      className="fas fa-edit"
+                    ></i>
+                  </div>
 
-                    {imageUrl ?
-                        <div>
-                            <img src={imageUrl} alt="Preview" />
-                            {/* <button onClick={resetImageValues}>Edit</button> */}
-                        </div>
-                        :
-                        <div className="upload-icon">
-                            <i className="fas fa-cloud-upload-alt"></i>
-                            <span>Select an image file</span>
-                        </div>
-                    }
-                    {imageUrl &&
-                        <div className="upload-icon">
-                            <i className="fas fa-edit"></i>
-                            <span>Select an image file</span>
-                        </div>
-                    }
-                </label>
-                {!selectedImage &&
-                    <input
-                        id="image-input"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                    />
-                }
-                {
+                  {/* <button onClick={resetImageValues}>Edit</button> */}
+                </div>
+              ) : (
+                <div className="upload-icon">
+                  <i className="fas fa-cloud-upload-alt"></i>
+                  <span>Select an image file</span>
+                </div>
+              )}
+            </label>
+
+            {
+              <input
+                id="image-input"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            }
+            {/* {
                     showUploadButton && <>
-                        <button type="button" onClick={uploadProfilePicture}> Upload</button>
+                        <button type="button" id="uploadButton" onClick={uploadProfilePicture}> Upload</button>
                     </>
-                }
-            </div>
+                } */}
+          </div>
 
-            {loading ? <Loader /> : null}
-
+          {loading ? <Loader /> : null}
         </>
-
-
+            {imageUrl&&<i style={{ cursor: "pointer" }} onClick={deleteImage} className="fas fa-trash"></i>}
+      </>
     );
 };
 

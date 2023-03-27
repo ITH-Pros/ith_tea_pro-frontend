@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import React from "react";
 import { Navigate } from 'react-router-dom'
 import { loginUser } from '../services/auth/api'
@@ -12,6 +12,17 @@ import Toaster from '../components/Toaster';
 
 
 export default function Login() {
+  useEffect(() => {
+    let passwordReset = localStorage.getItem("passwordReset");
+    if (passwordReset) {
+      showToaster(true);
+      setToasterMessage("Password set up successfully");
+      localStorage.removeItem("passwordReset");
+      
+    }
+   
+  }, [])
+  
   const { login, accessToken } = useAuth();
 
   const [toasterMessage, setToasterMessage] = useState("");
