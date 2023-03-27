@@ -4,7 +4,12 @@ import { uploadProfileImage } from "../../services/user/api";
 
 const ImageUpload = (props) => {
 
-    const { setProfileImage, selectedProfilePic } = props
+    const {
+      setProfileImage,
+      selectedProfilePic,
+      showToasterBool,
+      showToasterMessage,
+    } = props;
     console.log(selectedProfilePic)
     const [selectedImage, setSelectedImage] = useState('');
     const [imageUrl, setImageUrl] = useState('');
@@ -43,8 +48,11 @@ const ImageUpload = (props) => {
                 setLoading(false);
                 return;
             } else {
-                setProfileImage(response.url);
-                setLoading(false);
+              setProfileImage(response.url);
+              
+              setLoading(false);
+             showToasterBool();
+              showToasterMessage();
             }
         } catch (error) {
             console.log('Error while Updating details');

@@ -312,7 +312,24 @@ const ProjectCard = ({
                   return (
                     <Col key={index} sm={12}>
                       <div className="assignPopup">
-                        <UserIcon firstName={user.name} />
+                        <>
+                          {!user?.profilePicture && (
+                            <UserIcon key={index} firstName={user.name} />
+                          )}
+                          {user?.profilePicture && (
+                            <div className="user-pic">
+                              <img
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  borderRadius: "50%",
+                                }}
+                                src={`${user?.profilePicture}`}
+                                alt="profile"
+                              ></img>
+                            </div>
+                          )}
+                        </>
                         <div className="ms-4">
                           <p className="mb-0">
                             {user?.name} ({user?.role})

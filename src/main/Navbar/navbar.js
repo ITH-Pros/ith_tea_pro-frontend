@@ -55,7 +55,7 @@ export default function App() {
           <NavLink to='/task' style={navLinkStyles}> <MenuItem icon={<FaList />}> Task </MenuItem></NavLink> 
           <NavLink to='/rating' style={navLinkStyles} > <MenuItem icon={<FaRegLaughWink />}>    Rating  </MenuItem></NavLink>
           <NavLink to='/team' style={navLinkStyles}> <MenuItem icon={<FaUser />}>   Team  </MenuItem></NavLink>
-          <NavLink  onClick={logOutFromSystem}   style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   LogOut  </MenuItem></NavLink>
+          <NavLink  onClick={logOutFromSystem}   style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   Logout  </MenuItem></NavLink>
 
         </Menu>
       </Sidebar>
