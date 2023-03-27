@@ -164,7 +164,9 @@ const ProjectCard = ({
 {isArchive && (
   <label>Archived</label>
 )}
-      <div
+
+{!isArchive && 
+  <div
         className="menu-icon"
         onClick={handleMenuIconClick}
         onBlur={handleMenuIconClick}
@@ -222,6 +224,11 @@ const ProjectCard = ({
           </button>
         )}
       </div>
+ }
+
+    
+
+
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
         <p>{description}</p>
@@ -317,7 +324,7 @@ const ProjectCard = ({
                   );
                 })}
                 <Col sm={12}>
-                  {userDetails.role !== "CONTRIBUTOR" &&
+                  {userDetails.role !== "CONTRIBUTOR" && !isArchive &&
                     userDetails.role !== "LEAD" && (
                       <div onClick={assignTeamUser} className="assignPopup">
                         <UserIcon firstName={"+"} />

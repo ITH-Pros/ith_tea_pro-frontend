@@ -604,7 +604,6 @@ const archiveProject = async () => {
         {
           (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
         <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Back':'Archive List'}</button>
-
         }
         <div className="project-boxes jsGridView">
           {userDetails.role === "SUPER_ADMIN" && !isArchive && (
