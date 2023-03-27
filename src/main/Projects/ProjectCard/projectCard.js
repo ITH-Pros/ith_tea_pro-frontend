@@ -160,74 +160,72 @@ const ProjectCard = ({
       className="project-card"
       style={{ background: background || generateRandomColor() }}
     >
+      {isArchive && <label>Archived</label>}
 
-{isArchive && (
-  <label>Archived</label>
-)}
-
-{!isArchive && 
-  <div
-        className="menu-icon"
-        onClick={handleMenuIconClick}
-        onBlur={handleMenuIconClick}
-      >
-        {userDetails.role === "SUPER_ADMIN" && (
-          <button className="project-btn-more dropdown ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-more-vertical"
-            >
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="12" cy="5" r="1" />
-              <circle cx="12" cy="19" r="1" />
-            </svg>
-            <div className="dropdown-content">
-              <a
-                onClick={() => {
-                  handleEdit();
-                }}
+      {!isArchive && (
+        <div
+          className="menu-icon"
+          onClick={handleMenuIconClick}
+          onBlur={handleMenuIconClick}
+        >
+          {userDetails.role === "SUPER_ADMIN" && (
+            <button className="project-btn-more dropdown ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-more-vertical"
               >
-                {" "}
-                <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Project
-              </a>
-			  <a
-                href="#1"
-                onClick={() => {
-                  console.log("INNN delete");
-				  handleArchiveModalShow();
-                //   handleDelete();
-                }}
-              >
-                {" "}
-                <i className="fa fa-archive" aria-hidden="true"></i>  Archive
-              </a>
-              <a
-                href="#1"
-                onClick={() => {
-                  console.log("INNN delete");
-                  handleDelete();
-                }}
-              >
-                {" "}
-                <i className="fa fa-trash" aria-hidden="true"></i>  Delete
-              </a>
-			
-            </div>
-          </button>
-        )}
-      </div>
- }
-
-    
-
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="19" r="1" />
+              </svg>
+              <div className="dropdown-content">
+                <a
+                  onClick={() => {
+                    handleEdit();
+                  }}
+                >
+                  {" "}
+                  <i
+                    className="fa fa-pencil-square"
+                    aria-hidden="true"
+                  ></i>{" "}
+                  Edit Project
+                </a>
+                <a
+                  href="#1"
+                  onClick={() => {
+                    console.log("INNN delete");
+                    handleArchiveModalShow();
+                    //   handleDelete();
+                  }}
+                >
+                  {" "}
+                  <i className="fa fa-archive" aria-hidden="true"></i> Archive
+                </a>
+                <a
+                  href="#1"
+                  onClick={() => {
+                    console.log("INNN delete");
+                    handleDelete();
+                  }}
+                >
+                  {" "}
+                  <i className="fa fa-trash" aria-hidden="true"></i> Delete
+                </a>
+              </div>
+            </button>
+          )}
+        </div>
+      )}
+      {isArchive && <i onClick={handleDelete} title="delete project" className="fa fa-trash" aria-hidden="true"></i>}
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
@@ -263,12 +261,20 @@ const ProjectCard = ({
                 .slice(0, 13)
                 .map((user, index) => (
                   <>
-                    {!user?.profilePicture&&<UserIcon key={index} firstName={user.name} />}
+                    {!user?.profilePicture && (
+                      <UserIcon key={index} firstName={user.name} />
+                    )}
                     {user?.profilePicture && (
                       <div className="user-pic">
-                        <img style={{    width: '30px',
-                        height: '30px',
-                        borderRadius: '50%'}} src={`${user?.profilePicture}`} alt="profile"></img>
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                          }}
+                          src={`${user?.profilePicture}`}
+                          alt="profile"
+                        ></img>
                       </div>
                     )}
                   </>
@@ -341,7 +347,8 @@ const ProjectCard = ({
                   );
                 })}
                 <Col sm={12}>
-                  {userDetails.role !== "CONTRIBUTOR" && !isArchive &&
+                  {userDetails.role !== "CONTRIBUTOR" &&
+                    !isArchive &&
                     userDetails.role !== "LEAD" && (
                       <div onClick={assignTeamUser} className="assignPopup">
                         <UserIcon firstName={"+"} />

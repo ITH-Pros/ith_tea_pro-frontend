@@ -84,7 +84,8 @@ export default function AllProject() {
 	  };
 
 	  const handleToRedirectTask =(project) => {
-		navigate(`/task/${project._id}`);
+      console.log(isArchive, '------------------------------is archive')
+      navigate(`/task/${JSON.stringify({ projectId:project._id,isArchive:isArchive })}/}`);
 	}
 
 
@@ -603,7 +604,7 @@ const archiveProject = async () => {
         </h1>
         {
           (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
-        <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Back':'Archive List'}</button>
+        <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Active Projects':'Archive List'}</button>
         }
         <div className="project-boxes jsGridView">
           {userDetails.role === "SUPER_ADMIN" && !isArchive && (
@@ -641,17 +642,17 @@ const archiveProject = async () => {
                     handleEdit={() => editProject(element)}
                     handleDelete={() => confirmation(element)}
                     taskData={projectTaskAnalytics?.[element._id]}
-					handleCategories = {() => handleCategorie(element)}
-					handleToRedirectTask = {() => handleToRedirectTask(element)}
-					getAndSetAllProjects = {() => getAndSetAllProjects()}
-					handleArchiveModalShow = {() => handleArchiveModalShow(element)}
-          isArchive = {isArchive}
+                    handleCategories = {() => handleCategorie(element)}
+                    handleToRedirectTask = {() => handleToRedirectTask(element)}
+                    getAndSetAllProjects = {() => getAndSetAllProjects()}
+                    handleArchiveModalShow = {() => handleArchiveModalShow(element)}
+                    isArchive = {isArchive}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
               );
             })}
-          {!projectList?.length &&
+          {!projectList?.length  && userDetails.role === "CONTRIBUTOR"&&
           <h6>No Project Found</h6>}
         </div>
       </div>

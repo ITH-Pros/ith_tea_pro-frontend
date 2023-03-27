@@ -16,7 +16,7 @@ import { useAuth } from "../../../auth/AuthProvider";
 import FilterDropdown from "./FilterDropdown";
 import SortByDropdown from './SortFilter'
 const FilterModal = (props) => {
-  const { getTaskFilters, handleProjectId } = props;
+  const { getTaskFilters, handleProjectId ,isArchive} = props;
   const { userDetails } = useAuth();
 
   const statusList = CONSTENTS.statusListObj;
@@ -328,7 +328,7 @@ const FilterModal = (props) => {
           <Container>
             <Row>
               <Col lg={8}>
-                <div>
+                {!isArchive&&<div>
                   <img
                     onClick={setProjectAndOpenModal}
                     style={{
@@ -345,7 +345,7 @@ const FilterModal = (props) => {
                   >
                     Filter
                   </span>
-                </div>
+                </div>}
               </Col>
               <Col lg={3}>
                 <div className="text-right me-2">

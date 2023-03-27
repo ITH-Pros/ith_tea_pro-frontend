@@ -78,9 +78,14 @@ const deleteConFirmation = (sectionId) => {
 		setDeleteSectionModal(false);
 		closeModal();
 		getTasksDataUsingProjectId();
-		if (params?.projectId) {
-			setSelectedProjectId(params?.projectId);
-		  }
+		let paramsData;
+    if (params?.projectId) {
+      paramsData = JSON.parse(params?.projectId);
+    }
+    if (paramsData?.projectId) {
+      setSelectedProjectId(paramsData?.projectId);
+    }
+   
 	  } else {
 		setToasterMessage(res?.message);
 		setShowToaster(true);
@@ -118,9 +123,14 @@ const archiveConFirmation = (sectionId) => {
 			setArchiveSectionModal(false);
 			closeModal();
 			getTasksDataUsingProjectId();
-			if (params?.projectId) {
-				setSelectedProjectId(params?.projectId);
-			  }
+			let paramsData;
+      if (params?.projectId) {
+        paramsData = JSON.parse(params?.projectId);
+      }
+      if (paramsData?.projectId) {
+        setSelectedProjectId(paramsData?.projectId);
+      }
+    
 		  } else {
 			setToasterMessage(res?.message);
 			setShowToaster(true);
@@ -162,9 +172,14 @@ const archiveConFirmation = (sectionId) => {
         // getAndSetAllProjects();
         getTasksDataUsingProjectId();
         // window.location.reload();
-        if (params?.projectId) {
-          setSelectedProjectId(params?.projectId);
-        }
+       let paramsData;
+       if (params?.projectId) {
+         paramsData = JSON.parse(params?.projectId);
+       }
+       if (paramsData?.projectId) {
+         setSelectedProjectId(paramsData?.projectId);
+       }
+      
       } else {
         setToasterMessage(res?.message);
         setShowToaster(true);
@@ -238,8 +253,16 @@ const archiveConFirmation = (sectionId) => {
 
   useEffect(() => {
     getTasksDataUsingProjectId();
+    let paramsData;
     if (params?.projectId) {
-      setSelectedProjectId(params?.projectId);
+      
+       paramsData=JSON.parse(params?.projectId)
+    }
+    if (paramsData?.projectId) {
+      setSelectedProjectId(paramsData?.projectId);
+    }
+    if (paramsData?.isArchive) {
+      setIsArchive(paramsData?.isArchive);
     }
   }, [isArchive]);
 
@@ -283,9 +306,14 @@ const archiveConFirmation = (sectionId) => {
           // getAndSetAllProjects();
           getTasksDataUsingProjectId();
           // window.location.reload();
-          if (params?.projectId) {
-            setSelectedProjectId(params?.projectId);
-          }
+         let paramsData;
+         if (params?.projectId) {
+           paramsData = JSON.parse(params?.projectId);
+         }
+         if (paramsData?.projectId) {
+           setSelectedProjectId(paramsData?.projectId);
+         }
+        
         }
       } catch (error) {
         setToasterMessage(error?.message || "Something Went Wrong");
@@ -318,6 +346,10 @@ const archiveConFirmation = (sectionId) => {
   };
 
   const getTasksDataUsingProjectId = async () => {
+    let paramsData;
+     if (params?.projectId) {
+       paramsData = JSON.parse(params?.projectId);
+     }
     setLoading(true);
     try {
       let data = {
@@ -328,7 +360,7 @@ const archiveConFirmation = (sectionId) => {
         data.isArchived = true
       }
       if (params?.projectId) {
-        data.projectId = params?.projectId;
+        data.projectId = paramsData?.projectId;
       }
 
       if (localStorage.getItem("taskFilters")) {
@@ -418,11 +450,19 @@ const archiveConFirmation = (sectionId) => {
           });
           allTask[i].tasks = item?.tasks;
         });
+        console.log(
+          tasks?.data[0]?.isArchived,
+          "-----------------------------tasks?.data[0]?.isArchived------------------------------");
         setProjects(allTask);
         console.log(allTask);
-        if (params.projectId) {
-          setSelectedProject();
-        }
+       let paramsData;
+       if (params?.projectId) {
+         paramsData = JSON.parse(params?.projectId);
+       }
+       if (paramsData?.projectId) {
+         setSelectedProjectId(paramsData?.projectId);
+       }
+      
         // if (!allTask?.length && params?.projectId && userDetails?.role !=='CONTRIBUTOR' ) {
         // 	setModalShow(true);
         // }
@@ -498,7 +538,7 @@ const archiveConFirmation = (sectionId) => {
               Add Section
             </button>
           )}
-          { userDetails?.role !== "CONTRIBUTOR" && (
+          {/* { userDetails?.role !== "CONTRIBUTOR" && (
             <button
               className="addTaskBtn addSectionBtn"
               style={{
@@ -510,11 +550,12 @@ const archiveConFirmation = (sectionId) => {
             >
              {isArchive?'Back': ' Archive list'}
             </button>
-          )}
+          )} */}
 
         <FilterModal
           handleProjectId={selectedProjectId}
           getTaskFilters={getTaskFilters}
+          isArchive={isArchive}
         />
 
         <AddTaskModal
@@ -591,7 +632,7 @@ const archiveConFirmation = (sectionId) => {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Dropdown.Item
+                      {!isArchive && <Dropdown.Item
                         onClick={() => {
                           setSelectedTask();
                           setShowAddTask(true);
@@ -601,13 +642,13 @@ const archiveConFirmation = (sectionId) => {
                           });
                         }}
                       >
-                     <i className="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
-                      </Dropdown.Item>
+                        <i className="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
+                      </Dropdown.Item>}
 
                       {(userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
+                        userDetails.role === "ADMIN") &&(
                         <>
-                          <Dropdown.Item
+                          {!isArchive&&<Dropdown.Item
                             onClick={() =>
                               editSection({
                                 section: project?._id?.section,
@@ -616,13 +657,13 @@ const archiveConFirmation = (sectionId) => {
                               })
                             }
                           >
-                          <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Section
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={()=>archiveConFirmation({ _id: project?.sectionId})} ><i className="fa fa-archive" aria-hidden="true"></i>  Archive Section</Dropdown.Item>
-                          <Dropdown.Item><i className="fa fa-files-o" aria-hidden="true"></i> Copy/Move</Dropdown.Item>
+                            <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Section
+                          </Dropdown.Item>}
+                          {!isArchive && <Dropdown.Item onClick={() => archiveConFirmation({ _id: project?.sectionId })} ><i className="fa fa-archive" aria-hidden="true"></i>  Archive Section</Dropdown.Item>}
+                          {!isArchive&& <Dropdown.Item><i className="fa fa-files-o" aria-hidden="true"></i> Copy/Move</Dropdown.Item>}
                             <Dropdown.Item
-							disabled={project?.tasks?.length > 0}
-							 onClick={()=>deleteConFirmation({ _id: project?.sectionId})} ><i className="fa fa-trash" aria-hidden="true"></i> Delete Section</Dropdown.Item>
+                              disabled={project?.tasks?.length > 0}
+                              onClick={()=>deleteConFirmation({ _id:project?.sectionId})} ><i className="fa fa-trash" aria-hidden="true"></i> Delete Section</Dropdown.Item>
                         </>
                       )}
                     </Dropdown.Menu>
@@ -650,169 +691,169 @@ const archiveConFirmation = (sectionId) => {
                       {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") && (
-                        <Dropdown>
-                          <Dropdown.Toggle
-                            variant="success"
-                            id="dropdown-basic"
-                            style={{ padding: "0" }}
-                          >
-                            {task.status === "NOT_STARTED" && (
-                              <i
-                                className="fa fa-check-circle secondary"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "ONGOING" && (
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "COMPLETED" && (
-                              <i
-                                className="fa fa-check-circle success"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "ONHOLD" && (
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                          </Dropdown.Toggle>
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="success"
+                              id="dropdown-basic"
+                              style={{ padding: "0" }}
+                            >
+                              {task.status === "NOT_STARTED" && (
+                                <i
+                                  className="fa fa-check-circle secondary"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                              {task.status === "ONGOING" && (
+                                <i
+                                  className="fa fa-check-circle warning"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                              {task.status === "COMPLETED" && (
+                                <i
+                                  className="fa fa-check-circle success"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                              {task.status === "ONHOLD" && (
+                                <i
+                                  className="fa fa-check-circle warning"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                            </Dropdown.Toggle>
 
-                                {
-                                task.status!== "COMPLETED" &&
-                          <Dropdown.Menu>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(
-                                  event,
-                                  task?._id,
-                                  "NOT_STARTED"
-                                )
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle secondary"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Not Started
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(event, task?._id, "ONGOING")
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Ongoing
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(
-                                  event,
-                                  task?._id,
-                                  "COMPLETED"
-                                )
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle success"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Completed
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={(event) =>
-                                handleStatusChange(event, task?._id, "ONHOLD")
-                              }
-                            >
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              On Hold
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-}
-                        </Dropdown>
-                      )}
+                            {
+                              task.status !== "COMPLETED" &&
+                              <Dropdown.Menu>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "NOT_STARTED"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle secondary"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Not Started
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(event, task?._id, "ONGOING")
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Ongoing
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(
+                                      event,
+                                      task?._id,
+                                      "COMPLETED"
+                                    )
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle success"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Completed
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={(event) =>
+                                    handleStatusChange(event, task?._id, "ONHOLD")
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-check-circle warning"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  On Hold
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            }
+                          </Dropdown>
+                        )}
                       <div className="clickLabelArea" onClick={() => handleViewDetails(task?._id)}>
-                      <i
-                        className={
-                          task?.status === "COMPLETED" ? "line-strics" : ""
-                        }
+                        <i
+                          className={
+                            task?.status === "COMPLETED" ? "line-strics" : ""
+                          }
                         // onClick={() => handleViewDetails(task?._id)}
-                      >
-                        { truncateString(task?.title , 80) }
-                      </i>
+                        >
+                          {truncateString(task?.title, 80)}
+                        </i>
 
-                      {task?.status === "NOT_STARTED" && (
-                        <Badge bg="secondary">NOT STARTED</Badge>
-                      )}
-                      {task?.status === "ONGOING" && (
-                        <Badge bg="warning">ONGOING</Badge>
-                      )}
-                      {task?.status === "COMPLETED" && (
-                        <Badge bg="success">
-                          completed{" "}
-                          {moment(task?.completedDate?.split("T")[0]).format(
-                            "MMM DD,YYYY"
-                          )}
-                        </Badge>
-                      )}
-                      {task?.status === "ONHOLD" && (
-                        <Badge bg="primary">ON HOLD</Badge>
-                      )}
-                      {task?.priority === "LOW" && (
-                        <Badge bg="primary">LOW</Badge>
-                      )}
-                      {task?.priority === "REPEATED" && (
-                        <Badge bg="warning">REPEATED</Badge>
-                      )}
-                      {task?.priority === "MEDIUM" && (
-                        <Badge bg="warning">MEDIUM</Badge>
-                      )}
-                      {task?.priority === "HIGH" && (
-                        <Badge bg="danger">HIGH</Badge>
-                      )}
-                      <span className="nameTag">
-                        {" "}
-                        <img src={avtar} alt="userAvtar" />{" "}
-                        {task?.assignedTo?.name}
-                      </span>
-                      {task?.dueDate && (
-                        <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                          Due{" "}
-                          {moment(task?.dueDate?.split("T")[0]).format(
-                            "MMM DD,YYYY"
-                          )}
-                        </Badge>
-                        // onClick={() => handleViewDetails(task?._id)}
-                      )}
+                        {task?.status === "NOT_STARTED" && (
+                          <Badge bg="secondary">NOT STARTED</Badge>
+                        )}
+                        {task?.status === "ONGOING" && (
+                          <Badge bg="warning">ONGOING</Badge>
+                        )}
+                        {task?.status === "COMPLETED" && (
+                          <Badge bg="success">
+                            completed{" "}
+                            {moment(task?.completedDate?.split("T")[0]).format(
+                              "MMM DD,YYYY"
+                            )}
+                          </Badge>
+                        )}
+                        {task?.status === "ONHOLD" && (
+                          <Badge bg="primary">ON HOLD</Badge>
+                        )}
+                        {task?.priority === "LOW" && (
+                          <Badge bg="primary">LOW</Badge>
+                        )}
+                        {task?.priority === "REPEATED" && (
+                          <Badge bg="warning">REPEATED</Badge>
+                        )}
+                        {task?.priority === "MEDIUM" && (
+                          <Badge bg="warning">MEDIUM</Badge>
+                        )}
+                        {task?.priority === "HIGH" && (
+                          <Badge bg="danger">HIGH</Badge>
+                        )}
+                        <span className="nameTag">
+                          {" "}
+                          <img src={avtar} alt="userAvtar" />{" "}
+                          {task?.assignedTo?.name}
+                        </span>
+                        {task?.dueDate && (
+                          <Badge bg={task?.dueToday ? "danger" : "primary"}>
+                            Due{" "}
+                            {moment(task?.dueDate?.split("T")[0]).format(
+                              "MMM DD,YYYY"
+                            )}
+                          </Badge>
+                          // onClick={() => handleViewDetails(task?._id)}
+                        )}
                       </div>
                       {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
-                        <a
+                        userDetails.role === "ADMIN")&& !isArchive && (
+                          <a
                           style={{
-                            float: "right",
-                            color: "#6c757d",
-                            cursor: "pointer",
-                            marginRight: "10px",
-                          }}
-                          onClick={() => {
-                            setSelectedProject();
-                            setShowAddTask(true);
-                            setSelectedTask(task);
-                          }}
+                        float: "right",
+                        color: "#6c757d",
+                        cursor: "pointer",
+                        marginRight: "10px",
+                      }}
+                      onClick={() => {
+                        setSelectedProject();
+                        setShowAddTask(true);
+                        setSelectedTask(task);
+                      }}
                         >
-                         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
+                      <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </a>
                         
                        
                       )}
