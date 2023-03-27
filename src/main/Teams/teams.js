@@ -306,12 +306,14 @@ export default function Teams(props) {
   return (
     <>
      <div className="rightDashboard">
-
-        <h1 className="h1-text">
+     <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
 
-          {userDetails.role === "SUPER_ADMIN" && (
-            <div className="user-btn">
+       
+        </h1>
+        <h1 style={{textAlign:'right'}}>
+         {userDetails.role === "SUPER_ADMIN" && (
+           
            <Link
            to={{
              pathname: "/user/add",
@@ -320,17 +322,17 @@ export default function Teams(props) {
          >
          
            <i
-             className="fa fa-user-plus fa-3x addBtn w-125p"
+             className="fa fa-user-plus fa-3x addBtn"
              title="Add User"
              aria-hidden="true"
             style={{marginRight:'5'}}>  Add User  </i> 
          </Link>
-         </div>
+       
           )}
-        </h1>
-        
+         </h1>
+
         <div className="container-team">
-         
+       
           {usersList &&
             usersList.map((user) => {
               return (

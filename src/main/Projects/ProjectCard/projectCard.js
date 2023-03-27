@@ -38,6 +38,7 @@ const ProjectCard = ({
   accessibleBy,
   handleDelete,
   borderColor,
+  background,
   handleCategories,
   categroies,
   taskData,
@@ -49,16 +50,13 @@ const ProjectCard = ({
     console.log(accessibleBy);
     console.log(element);
     const colors = [
-      "#F94144",
-      "#F3722C",
-      "#F8961E",
-      "#F9C74F",
-      "#90BE6D",
-      "#43AA8B",
-      "#577590",
-      "#264653",
+      "#e4ffc5",
+      "#ffd9d9",
+      "#e3e8ff",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
+  
+   
   };
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
@@ -157,7 +155,7 @@ const ProjectCard = ({
   return (
     <div
       className="project-card"
-      style={{ borderColor: borderColor || generateRandomColor() }}
+      style={{ background: background || generateRandomColor() }}
     >
       {/* <div className="menu-icon">
         <FontAwesomeIcon icon={faEllipsisH} />
@@ -261,7 +259,7 @@ const ProjectCard = ({
                 ))}
               {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
               <span
-                key={"..."}
+                key={"+"}
                 onClick={() => {
                   onClickOfIcons(
                     accessibleBy.concat(managedBy),
@@ -269,7 +267,7 @@ const ProjectCard = ({
                   );
                 }}
               >
-                <UserIcon firstName={"..."} />
+                <UserIcon firstName={"+"} />
               </span>
               {/* )} */}
             </div>
