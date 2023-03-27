@@ -16,17 +16,12 @@ import {
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
-import CommentBox from "./comments";
 export default function ViewTaskModal(props) {
-  const { showViewTask, closeViewTaskModal, selectedTaskId } = props;
+  const { showViewTask, closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   //   const setShowToaster = (param) => showToaster(param);
-
-  console.log("selectedTaskId", selectedTaskId);
-  console.log("showViewTask", showViewTask);
-  //   console.log("closeViewTaskModal", closeViewTaskModal);
 
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
@@ -36,10 +31,8 @@ export default function ViewTaskModal(props) {
   const [count, setCount] = useState(250);
 
   const handleTextChange = (content) => {
-	// console.log('e.target.value', e.target.value);
-	// console.log('task', task);
     const newText = content;
-    setText(newText);
+    setText(content);
     setCount(250 - newText?.length);
   };
 
@@ -65,7 +58,8 @@ export default function ViewTaskModal(props) {
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
-        // getTasksDataUsingProjectId();
+        // get
+        getTasksDataUsingProjectId();
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -92,8 +86,10 @@ export default function ViewTaskModal(props) {
     e.preventDefault();
     // Do something with the comment, e.g. post it to a server
     console.log(text);
-    setText("");
+    setText(null);
+    setText(null);
     setCount(250);
+    console.log('ssssssssssssssssssssssssssssssss',text)
 
     //   ------------------------- comment --------------------------
     addcomment();
@@ -120,8 +116,8 @@ export default function ViewTaskModal(props) {
       } else {
         // showToaster(true)
         // setToasterMessage(response.message)
-		// setText("");
-		resetTextEditor();
+		setText("");
+		// resetTextEditor();
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -156,14 +152,6 @@ export default function ViewTaskModal(props) {
     }
   };
 
-  //   -------------------------  reset modal data ----------------------------
-  const resetModalData = () => {
-    setShowViewTaskModal(false);
-  };
-
-  const resetTextEditor = () => {
-	setText("");
-	  };
 
   return (
     <>
@@ -241,10 +229,12 @@ export default function ViewTaskModal(props) {
                     className="form-control form-control-lg"
                     defaultValue={task.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
+                    disabled={task.status==='COMPLETED'}
                   >
                     <option value="ONGOING">Ongoing</option>
                     <option value="NOT_STARTED">NOT STARTED</option>
                     <option value="ONHOLD">On Hold</option>
+                    <option value="ONGOING">On Going</option>
                     <option value="COMPLETED">Completed</option>
                   </select>
                 </Form.Group>
@@ -263,6 +253,7 @@ export default function ViewTaskModal(props) {
                       <p>{file}</p>;
                     })}{" "} */}
                     {task.attachments && task.attachments.map((file, index) => {
+                        console.log("attachments------------>",task.attachments)
                       return (
                         <Col key={index} sm={12}>
                           <div className="assignPopup">
@@ -319,17 +310,14 @@ export default function ViewTaskModal(props) {
             <div className="container" style={{ padding: "0", width: "100%" }}>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label style={{ display: "block" }}>
                     <TextEditor
-                      height={100}
+                    //   height={100}
                       width="100%"
                       placeholder="Enter text here"
                       value={text}
                       onChange={handleTextChange}
                       // reset = {resetTextEditor}
                     />
-                    {/* <textarea value={comment} onChange={handleCommentChange} /> */}
-                  </label>
                 </div>
                 <div
                   style={{
