@@ -91,8 +91,10 @@ export default function Dashboard(props) {
 	getTeamWorkList();
   }
 
-  const handleToRedirectTask = (projectId) => {
-    navigate(`/task/${projectId}`);
+  const handleToRedirectTask = (projectId , isArchive) => {
+    // navigate(`/task/${projectId}`);
+    navigate(`/task/${JSON.stringify({ projectId:projectId,isArchive:isArchive })}/}`);
+
   };
 
   const handleShowAllProjects = () => {
@@ -375,7 +377,7 @@ export default function Dashboard(props) {
               <Col lg={6}>
                 <Card
                   onClick={() => {
-                    handleToRedirectTask(project?._id);
+                    handleToRedirectTask(project?._id , project?.isArchived );
                   }}
                   id={`card-${project.id}`}
                   key={project?.id}
