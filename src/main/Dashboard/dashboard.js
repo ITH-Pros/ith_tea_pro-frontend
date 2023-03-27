@@ -15,7 +15,7 @@ import {
 import "./dashboard.css";
 import Col from "react-bootstrap/Col";
 import Loader from "../../components/Loader";
-import { getAllUsers } from "../../services/user/api";
+import { getAllUsers, editLogedInUserDetails } from "../../services/user/api";
 import Toaster from "../../components/Toaster";
 import {
   Row,
@@ -290,7 +290,36 @@ export default function Dashboard(props) {
 		setShowToaster(true);
 		return error.message;
 	}
-};
+  };
+  const skipReminder = async(event) => {
+      event.preventDefault();
+        const dataToSend = {
+            profileCompleted:true
+        };
+
+        try {
+            // call API to update the user details
+            setLoading(true);
+            const response = await editLogedInUserDetails(dataToSend);
+            if (response.error) {
+                console.log('Error while updating user details');
+                setLoading(false);
+                return;
+            }
+            else {
+                setLoading(false);
+                showToaster(true);
+              setToasterMessage('Skipped Succesfully');
+              handleProfileModalClose();
+              
+              
+            }
+        } catch (error) {
+            console.log('Error while updating user details');
+            setLoading(false);
+            return error.message;
+        }
+  }
 
 
 
@@ -937,8 +966,9 @@ export default function Dashboard(props) {
         }}
         animation={false}
       >
-        <Modal.Header closeButton>
+        <Modal.Header >
           <Modal.Title>Profile Details</Modal.Title>
+          <button onClick={skipReminder}>SKIP</button>
         </Modal.Header>
         <Modal.Body
           style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }}

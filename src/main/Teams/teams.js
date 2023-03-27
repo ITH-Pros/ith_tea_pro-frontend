@@ -85,7 +85,7 @@ export default function Teams(props) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setUsersListValue(projects.data?.users || []);
+        setUsersListValue(projects?.data?.users || []);
         let totalPages = Math.ceil(
           projects.data.totalCount / options?.rowsPerPage
         );
@@ -438,11 +438,11 @@ export default function Teams(props) {
         </div>
       
 
-      <CustomPagination
-        getAndSetAllUsers={getAndSetAllUsers}
-        pageDetails={pageDetails}
-        setPageDetails={setPageDetails}
-      />
+        {usersList?.length?<CustomPagination
+          getAndSetAllUsers={getAndSetAllUsers}
+          pageDetails={pageDetails}
+          setPageDetails={setPageDetails}
+        />:<h6>No User Found</h6>}
 
       {loading ? <Loader /> : null}
       {toaster && (

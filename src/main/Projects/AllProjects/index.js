@@ -601,7 +601,14 @@ const archiveProject = async () => {
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
         </h1>
-        <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Back':'Archive List'}</button>
+        <button
+          className="btn btn-primary pull-right"
+          onClick={handleIsArchive}
+          style={{ cursor: "pointer" }}
+        >
+          {" "}
+          {isArchive ? "Back" : "Archive List"}
+        </button>
         <div className="project-boxes jsGridView">
           {userDetails.role === "SUPER_ADMIN" && !isArchive && (
             <div
@@ -627,30 +634,30 @@ const archiveProject = async () => {
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
-                <div
-                  key={element._id}
-                  className="project-box-wrapper"
-                >
+                <div key={element._id} className="project-box-wrapper">
                   <ProjectCard
-				   
                     name={element.name}
-                    description={element?.description||'--'}
+                    description={element?.description || "--"}
                     managedBy={element.managedBy || []}
                     accessibleBy={element.accessibleBy || []}
-					categroies={element.categories?.length}
+                    categroies={element.categories?.length}
                     element={element}
                     handleEdit={() => editProject(element)}
                     handleDelete={() => confirmation(element)}
                     taskData={projectTaskAnalytics?.[element._id]}
-					handleCategories = {() => handleCategorie(element)}
-					handleToRedirectTask = {() => handleToRedirectTask(element)}
-					getAndSetAllProjects = {() => getAndSetAllProjects()}
-					handleArchiveModalShow = {() => handleArchiveModalShow(element)}
+                    handleCategories={() => handleCategorie(element)}
+                    handleToRedirectTask={() => handleToRedirectTask(element)}
+                    getAndSetAllProjects={() => getAndSetAllProjects()}
+                    handleArchiveModalShow={() =>
+                      handleArchiveModalShow(element)
+                    }
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
               );
             })}
+          {!projectList?.length &&
+          <h6>No Project Found</h6>}
         </div>
       </div>
       {loading ? <Loader /> : null}
@@ -687,75 +694,94 @@ const archiveProject = async () => {
           onHide={() => setSureModalShow(false)}
         />
       )}
-	  
-        <Modal 
-          show={confirmModalShow}
-          onHide={() => {setConfirmModalShow(false);setIsArchiveModalShow(false)}}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Confirmation</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div>
-			  <p>Are you sure you want to {isArchiveModalShow?'archive':'delete'} this project?</p>
 
-       
-		   	</div>
+      <Modal
+        show={confirmModalShow}
+        onHide={() => {
+          setConfirmModalShow(false);
+          setIsArchiveModalShow(false);
+        }}
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <p>
+              Are you sure you want to{" "}
+              {isArchiveModalShow ? "archive" : "delete"} this project?
+            </p>
+          </div>
 
-			<div className="button-center-corformain">
+          <div className="button-center-corformain">
+            {!isArchiveModalShow && (
+              <Button
+                style={{ marginLeft: "16px" }}
+                className="btn btn-danger mb-3 mr-3"
+                onClick={() => deleteProject()}
+              >
+                Delete
+              </Button>
+            )}
+            {isArchiveModalShow && (
+              <Button
+                style={{ marginLeft: "16px" }}
+                className="btn btn-danger mb-3 mr-3"
+                onClick={() => archiveProject()}
+              >
+                Archive
+              </Button>
+            )}
+            <Button
+              style={{ marginLeft: "16px" }}
+              className="btn mb-3 mr-3"
+              onClick={() => {
+                setConfirmModalShow(false);
+                setIsArchiveModalShow(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
 
-			   {!isArchiveModalShow && (
-			<Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
-            Delete
-          </Button>
-		  )}
-		  {isArchiveModalShow && (
-			<Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => archiveProject()}>
-			Archive
-		  </Button>
-		  )}
-          <Button style={{marginLeft:"16px"}} className="btn mb-3 mr-3"  onClick={() => {setConfirmModalShow(false) ; setIsArchiveModalShow(false)} }>
-            Cancel
-          </Button>
-		  </div>
-          </Modal.Body>
-		 
-        </Modal>
-
-
-		<Modal 
-          show={categoriesModalShow}
-          onHide={() => setCategoriesModalShow(false)}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Categories</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div>
-			  {/* Show data list with index  */}
-			  <ul>
-		  		{categories.map((category, index) => (
-					<li key={index}>{category}</li>
-				))}
-				<i
-                    className="fa fa-plus-circle fa-3x addBtn"
-                    title="Add Project"
-                    aria-hidden="true"
-                  ></i>
-			  </ul>
-		   	</div>
-          </Modal.Body>
-          {/* <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
+      <Modal
+        show={categoriesModalShow}
+        onHide={() => setCategoriesModalShow(false)}
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Categories</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            {/* Show data list with index  */}
+            <ul>
+              {categories.map((category, index) => (
+                <li key={index}>{category}</li>
+              ))}
+              <i
+                className="fa fa-plus-circle fa-3x addBtn"
+                title="Add Project"
+                aria-hidden="true"
+              ></i>
+            </ul>
+          </div>
+        </Modal.Body>
+        {/* <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
             Delete
           </Button> */}
 
-          <Button style={{marginLeft:"16px"}} className="btn mr-3"  onClick={() => setCategoriesModalShow(false)}>
-            Cancel
-          </Button>
-        </Modal>
-    
+        <Button
+          style={{ marginLeft: "16px" }}
+          className="btn mr-3"
+          onClick={() => setCategoriesModalShow(false)}
+        >
+          Cancel
+        </Button>
+      </Modal>
     </>
   );
   
