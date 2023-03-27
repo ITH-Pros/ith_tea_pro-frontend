@@ -14,6 +14,7 @@ function Header() {
 
 	const navigate = useNavigate();
 	const [userName, setUserName] = useState('')
+	const [profilePicture, setProfileLink] = useState(false);
 
 
 
@@ -41,8 +42,12 @@ function Header() {
 			  return;
 			} else {
 
-			setUserName(response?.data.name);
-			console.log('user name', response?.data.name)
+				setUserName(response?.data.name);
+				if (response.data.profilePicture) {
+	
+					setProfileLink(response.data.profilePicture);
+}
+			console.log('user name--------------------------------------',response?.data)
 		
 			}
 		  } catch (error) {
@@ -56,13 +61,20 @@ function Header() {
 
   return (
     <header>
-		  <div key={userName} className='pull-right'>
-			  <div onClick={redirectToUserDetail} className="user-icon">
-				  <UserIcon firstName={userName} />  
-				  <p style={{marginBottom:'0px', marginLeft:'22px'}}>{userName}</p>
-			  </div>
-		  </div>
-	  </header>
+      <div key={userName} className="pull-right">
+        <div onClick={redirectToUserDetail} className="user-icon">
+          {profilePicture && (
+            <div className="user-pic">
+              <img style={{    width: '30px',
+    height: '30px',
+    borderRadius: '50%'}} src={`${profilePicture}`} alt="profile"></img>
+            </div>
+          )}
+          {!profilePicture && <UserIcon firstName={userName} />}
+          <p style={{ marginBottom: "0px", marginLeft: "22px" }}>{userName}</p>
+        </div>
+      </div>
+    </header>
   );
 }
 

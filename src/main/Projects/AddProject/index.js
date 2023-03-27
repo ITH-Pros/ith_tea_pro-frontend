@@ -465,6 +465,7 @@ export default function AddProject(props) {
                 type="text-area"
                 placeholder="Description"
                 name="description"
+                maxLength={100}
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.description}
                />
