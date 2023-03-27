@@ -38,7 +38,7 @@ a {
 }
 
 .box {
-  width: 23%;
+  width: 23.5%;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -104,9 +104,13 @@ a {
   object-position: top;
 }
 .addBtn {
-  padding: 10px;
-  color: #8355ad;
+  padding: 12px;
+  color: #fff;
   object-fit: cover;
+  background: #8355ad;
+  font-size: 17px;
+  border-radius: 40px;
+  margin-right: 22px;
 }
 .w-125p{
   width: 125px !important;
