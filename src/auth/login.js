@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import React from "react";
 import { Navigate } from 'react-router-dom'
 import { loginUser } from '../services/auth/api'
@@ -12,6 +12,17 @@ import Toaster from '../components/Toaster';
 
 
 export default function Login() {
+  useEffect(() => {
+    let passwordReset = localStorage.getItem("passwordReset");
+    if (passwordReset) {
+      showToaster(true);
+      setToasterMessage("Password set up successfully");
+      localStorage.removeItem("passwordReset");
+      
+    }
+   
+  }, [])
+  
   const { login, accessToken } = useAuth();
 
   const [toasterMessage, setToasterMessage] = useState("");
@@ -56,7 +67,7 @@ export default function Login() {
 
 
 		showToaster(true)
-		setToasterMessage(userLogin.message)
+		setToasterMessage(userLogin?.message||'Please check login credential')
 
 
       } else {
@@ -65,7 +76,7 @@ export default function Login() {
         //   className: "toast-message",
         // });
         // setRatings(userLogin.data);
-        login(userLogin.data);
+        login(userLogin?.data);
 		// console.log("userLogin", userLogin?.data)
 		
 		localStorage.setItem('profileCompleted',userLogin?.data.user.profileCompleted)
@@ -82,7 +93,7 @@ export default function Login() {
 
 		console.log("error", error.message)
 		showToaster(true)
-		setToasterMessage(error.message)
+		setToasterMessage(error?.message || "Please check login credential");
       // setLoading(false);
     }
 
