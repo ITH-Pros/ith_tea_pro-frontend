@@ -182,19 +182,19 @@ export default function ViewTaskModal(props) {
             <Form>
               {userDetails?.role !== "CONTRIBUTOR" &&
                 task?.status === "COMPLETED" && (
-                  <Row className="mb-3">
-                    <>
+                  <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
+                    <div className="col-sm-2 text-right">
                       {task?.isRated && <span>Rating : {task?.rating}</span>}
                       {!task?.isRated && (
                         <Button
                           variant="light"
                           size="sm"
-                          className="addRatingBtn"
+                          className="addRatingBtn" style={{fontSize:'15'}}
                         >
                           <AddRating taskFromDashBoard={task} />{" "}
                         </Button>
                       )}
-                    </>
+                    </div>
                   </Row>
                 )}
               <Row className="mb-3">
