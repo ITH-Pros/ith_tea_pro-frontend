@@ -281,7 +281,7 @@ const ProjectCard = ({
                   </>
                 ))}
               {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
-              <span
+              <span style={{position:'relative'}}
                 key={"+"}
                 onClick={() => {
                   onClickOfIcons(
@@ -291,6 +291,7 @@ const ProjectCard = ({
                 }}
               >
                 <UserIcon firstName={"+"} />
+                <i className="fa fa-user-plus add-user-icon" aria-hidden="true"></i>
               </span>
               {/* )} */}
             </div>

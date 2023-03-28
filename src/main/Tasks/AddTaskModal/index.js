@@ -788,7 +788,7 @@ export default function AddTaskModal(props) {
                     onChange={updateTaskFormValue}
                     value={taskFormValue.assignedTo}
                   >
-                    <option disabled value="">
+                    <option  value="">
                       Select User
                     </option>
                     {userList?.map((module) => (

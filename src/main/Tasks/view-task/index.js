@@ -182,19 +182,19 @@ export default function ViewTaskModal(props) {
             <Form>
               {userDetails?.role !== "CONTRIBUTOR" &&
                 task?.status === "COMPLETED" && (
-                  <Row className="mb-3">
-                    <>
+                  <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
+                    <div className="col-sm-2 text-right">
                       {task?.isRated && <span>Rating : {task?.rating}</span>}
                       {!task?.isRated && (
                         <Button
                           variant="light"
                           size="sm"
-                          className="addRatingBtn"
+                          className="addRatingBtn" style={{fontSize:'15'}}
                         >
                           <AddRating taskFromDashBoard={task} />{" "}
                         </Button>
                       )}
-                    </>
+                    </div>
                   </Row>
                 )}
               <Row className="mb-3">
@@ -392,7 +392,7 @@ export default function ViewTaskModal(props) {
               </div>
             </div>
 
-            <div className="container" style={{ padding: "0", width: "100%" }}>
+            {activeTab === "comments" && <div className="container" style={{ padding: "0", width: "100%" }}>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <TextEditor
@@ -401,7 +401,7 @@ export default function ViewTaskModal(props) {
                     placeholder="Enter text here"
                     value={text}
                     onChange={handleTextChange}
-                    // reset = {resetTextEditor}
+                  // reset = {resetTextEditor}
                   />
                 </div>
                 <div
@@ -418,7 +418,7 @@ export default function ViewTaskModal(props) {
                   </Button>
                 </div>
               </form>
-            </div>
+            </div>}
           </div>
         </Modal.Body>
         <Modal.Footer>
