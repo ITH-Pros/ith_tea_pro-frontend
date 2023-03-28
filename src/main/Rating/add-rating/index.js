@@ -71,7 +71,8 @@ export default function AddRating(props) {
       if (ratingForm.userList?.length && taskFromDashBoard) {
         setRatingForm({
           ...ratingForm,
-          selectedUser: taskFromDashBoard.assignedTo?._id,
+          selectedUser:
+            taskFromDashBoard.assignedTo?._id || taskFromDashBoard.assignedTo,
         });
         console.log(
           "taskFromDashBoard.assignedTo called",
@@ -100,8 +101,9 @@ export default function AddRating(props) {
         );
         setRatingForm({
           ...ratingForm,
-          // selectedProject: taskFromDashBoard.projectId?._id,
-          selectedProject: taskFromDashBoard.projectId,
+          selectedProject:
+            taskFromDashBoard.projectId?._id || taskFromDashBoard.projectId,
+          // selectedProject: taskFromDashBoard.projectId,
           taskList: [taskFromDashBoard],
           selectedTask: taskFromDashBoard._id,
           //   selectedUser: taskFromDashBoard.assignedTo,

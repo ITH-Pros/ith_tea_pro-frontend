@@ -319,37 +319,75 @@ export default function ViewTaskModal(props) {
                 style={{ width: "100%", padding: "0px" }}
               >
                 {/* show comments  */}
-                {task?.comments?.map((item, index) => {
-                  const options = {
-                    timeZone: "Asia/Kolkata",
-                    dateStyle: "medium",
-                    timeStyle: "medium",
-                  };
-                  const createdAt = new Date(item?.createdAt).toLocaleString(
-                    "en-US",
-                    options
-                  );
+                {activeTab === "comments" ? (
+                  <>
+                    {task?.comments?.map((item, index) => {
+                      const options = {
+                        timeZone: "Asia/Kolkata",
+                        dateStyle: "medium",
+                        timeStyle: "medium",
+                      };
+                      const createdAt = new Date(
+                        item?.createdAt
+                      ).toLocaleString("en-US", options);
 
-                  return (
-                    <div className="comment" key={index}>
-                      {/* commentedBy */}
-                      <div className="commentedBy">
-                        <UserIcon
-                          style={{ float: "left" }}
-                          key={index}
-                          firstName={item?.commentedBy?.name}
-                        />{" "}
-                        {item?.commentedBy?.name}
-                      </div>
+                      return (
+                        <div className="comment" key={index}>
+                          {/* commentedBy */}
+                          <div className="commentedBy">
+                            <UserIcon
+                              style={{ float: "left" }}
+                              key={index}
+                              firstName={item?.commentedBy?.name}
+                            />{" "}
+                            {item?.commentedBy?.name}
+                          </div>
 
-                      <p
-                        dangerouslySetInnerHTML={{ __html: item?.comment }}
-                        className="comment-tex"
-                      ></p>
-                      <span className="date sub-text">{createdAt}</span>
-                    </div>
-                  );
-                })}
+                          <p
+                            dangerouslySetInnerHTML={{ __html: item?.comment }}
+                            className="comment-tex"
+                          ></p>
+                          <span className="date sub-text">{createdAt}</span>
+                        </div>
+                      );
+                    })}
+                    {!task?.comments?.length && <h6>No Comments</h6>}
+                  </>
+                ) : (
+                  <>
+                    {task?.ratingComments?.map((item, index) => {
+                      const options = {
+                        timeZone: "Asia/Kolkata",
+                        dateStyle: "medium",
+                        timeStyle: "medium",
+                      };
+                      const createdAt = new Date(
+                        item?.createdAt
+                      ).toLocaleString("en-US", options);
+
+                      return (
+                        <div className="comment" key={index}>
+                          {/* commentedBy */}
+                          <div className="commentedBy">
+                            <UserIcon
+                              style={{ float: "left" }}
+                              key={index}
+                              firstName={item?.commentedBy?.name}
+                            />{" "}
+                            {item?.commentedBy?.name}
+                          </div>
+
+                          <p
+                            dangerouslySetInnerHTML={{ __html: item?.comment }}
+                            className="comment-tex"
+                          ></p>
+                          <span className="date sub-text">{createdAt}</span>
+                        </div>
+                      );
+                    })}
+                    {!task?.ratingComments?.length && <h6>No Rating Comments</h6>}
+                  </>
+                )}
               </div>
             </div>
 
