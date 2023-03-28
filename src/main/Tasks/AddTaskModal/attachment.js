@@ -31,11 +31,11 @@ const AttachmentUploader = (props) => {
                     console.log('Error while Updating details');
                     return;
                 } else {
-                    newUrls.push(response?.data?.url)
+                    newUrls.push(response?.url)
                 }
                 console.log("index   ", index, newFiles.length)
                 if (index === newFiles.length - 1) {
-                    setUploadedFiles([...taskAttachments, ...newUrls]);
+                    setUploadedFiles([...files, ...newUrls]);
                     setFiles([...files, ...newUrls]);
                     console.log("UPDADADADAE", taskAttachments, ...newUrls)
                     uploadedAttachmentsArray([...taskAttachments, ...newUrls])
