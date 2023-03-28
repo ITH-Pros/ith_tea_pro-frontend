@@ -788,9 +788,7 @@ export default function AddTaskModal(props) {
                     onChange={updateTaskFormValue}
                     value={taskFormValue.assignedTo}
                   >
-                    <option  value="">
-                      Select User
-                    </option>
+                    <option value="">Select User</option>
                     {userList?.map((module) => (
                       <option value={module._id} key={module._id}>
                         {module.name}
@@ -804,7 +802,9 @@ export default function AddTaskModal(props) {
                     type="date"
                     min={new Date().toISOString().split("T")[0]}
                     placeholder="Due date"
-                    disabled={selectedTask}
+                    disabled={
+                      selectedTask && taskFormValue?.status === "COMPLETED"
+                    }
                     name="dueDate"
                     value={taskFormValue.dueDate}
                     onChange={updateTaskFormValue}

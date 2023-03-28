@@ -51,6 +51,9 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     onInit();
+    if (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') {
+      setTeamView(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -145,14 +148,15 @@ export default function Dashboard(props) {
       <div className="dashboard_camp">
         <h4>
           My Ratings
-          <button
-            className="addTaskBtn"
-            onClick={() => setTeamView(!teamView)}
-            style={{ float: "right" }}
-          >
-            {" "}
-            {teamView ? "Self view" : "Team View"}{" "}
-          </button>
+          {(userDetails?.role === "LEAD" ||
+            userDetails?.role === "CONTRIBUTOR") && <button
+              className="addTaskBtn"
+              onClick={() => setTeamView(!teamView)}
+              style={{ float: "right" }}
+            >
+              {" "}
+              {teamView ? "Self view" : "Team View"}{" "}
+            </button>}
         </h4>
       </div>
 
