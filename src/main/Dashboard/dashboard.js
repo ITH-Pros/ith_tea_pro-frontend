@@ -40,6 +40,7 @@ import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
 import Tooltip from "react-bootstrap/Tooltip";
+import ViewTaskModal from "../Tasks/view-task";
 // import { MDBTooltip } from "mdb-react-ui-kit";
 var month = moment().month();
 let currentYear = moment().year();
@@ -363,6 +364,26 @@ function formatDate(dateString) {
   return `${day}/${month}/${year}`;
 }
 
+const [showViewTask, setShowViewTask] = useState(false);
+const [selectedTaskId, setSelectedTaskId] = useState("");
+
+const closeViewTaskModal = () => {
+  setShowViewTask(false);
+  setSelectedTaskId(null);
+
+  console.log("closeViewTaskModal");
+};
+
+const handleViewDetails = (taskId) => {
+  console.log(
+    "showViewTask-----------------------------------------------------------",
+    showViewTask
+  );
+  setSelectedTaskId(taskId);
+  setShowViewTask(true);
+  console.log("showViewTask =====================", showViewTask);
+};
+
 
 
   return (
@@ -492,7 +513,7 @@ function formatDate(dateString) {
                     myWorkList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col
-                          onClick={()=>handleTaskItemClick(task?._id)}
+                         onClick={()=>handleViewDetails(task?._id)}
                           lg={4}
                           className="middle"
                         >
@@ -703,7 +724,7 @@ function formatDate(dateString) {
                     pendingRatingList.length > 0 &&
                     pendingRatingList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                        <Col lg={5} className="middle">
+                        <Col onClick={()=>handleViewDetails(task?._id)} lg={5} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
                             round="20px"
@@ -834,8 +855,8 @@ function formatDate(dateString) {
                       teamWorkList.length > 0 &&
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          <Col
-                            onClick={handleTaskItemClick}
+                          <Col 
+                            onClick={()=>handleViewDetails(task?._id)}
                             lg={4}
                             className="middle"
                           >
@@ -1032,176 +1053,18 @@ function formatDate(dateString) {
           <AddRatingModal selectedRating={selectedRating} />
         </Modal.Body>
       </Modal>
-      <Modal
-        show={showViewTaskModal}
-        size="xl"
-        className="taskModalForm"
-        aria-labelledby="contained-modal-title-vcenter"
-        onHide={() => {
-          setShowViewTaskModal(false);
-        }}
-        backdrop="static"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Task Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="dv-50">
-            <Form>
-              <Row className="mb-3">
-                <Form.Group as={Col} md="4">
-                  <Form.Label>Project Name</Form.Label>
-                  <p>{task?.projectId?.name} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label>Section Name</Form.Label>
-                  <p>{task?.section?.name} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label>Lead Type</Form.Label>
-                  {/* task?.lead?.map */}
-                  {task?.lead?.map((item, index) => {
-                    return <p key={index}>{item?.name} </p>;
-                  })}
-                </Form.Group>
-              </Row>
 
-              <Row className="mb-3">
-                <Form.Group as={Col} md="12">
-                  <Form.Label>Task Title</Form.Label>
-                  <p>{task?.title} </p>
-                </Form.Group>
-              </Row>
+{/* task detail modal */}
 
-              <Row className="mb-3">
-                <Form.Group className="desc" as={Col} md="12">
-                  <Form.Label>Task Description</Form.Label>
-                  <p
-                    dangerouslySetInnerHTML={{ __html: task?.description }}
-                  ></p>
-                </Form.Group>
-              </Row>
+<ViewTaskModal
+          showViewTask={showViewTask}
+          closeViewTaskModal={closeViewTaskModal}
+          selectedTaskId={selectedTaskId}
+          // getTasksDataUsingProjectId={getTasksDataUsingProjectId}
+        />
 
-              <Row className="mb-3">
-                <Form.Group as={Col} md="3">
-                  <Form.Label>Assigned To</Form.Label>
-                  <p>{task?.assignedTo?.name || "Not Assigned"} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="3" className="px-0">
-                  <Form.Label>Due Date</Form.Label>
-                  <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {formatDate(task?.dueDate)}{" "}
-                  </p>
-                </Form.Group>
 
-                <Form.Group as={Col} md="3">
-                  <Form.Label>Priority</Form.Label>
-                  <p>{task?.priority} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="3" className="ps-0">
-                  <Form.Label>Status</Form.Label>
-                  {/* <p>{task?.status} </p> */}
-                  <select
-                    className="form-control form-control-lg"
-                    defaultValue={task.status}
-                    onChange={(event) => handleStatusChange(event, task?._id)}
-                    disabled={task.status === "COMPLETED"}
-                  >
-                    <option value="ONGOING">Ongoing</option>
-                    <option value="NOT_STARTED">NOT STARTED</option>
-                    <option value="ONHOLD">On Hold</option>
-                    <option value="ONGOING">On Going</option>
-                    <option value="COMPLETED">Completed</option>
-                  </select>
-                </Form.Group>
-                {task?.status === "COMPLETED" && (
-                  <Form.Group as={Col} md="4">
-                    <Form.Label>Completed Date</Form.Label>
-                    <p>{task?.completedDate} </p>
-                  </Form.Group>
-                )}
-              </Row>
-              <Row className="mb-3">
-                <Form.Group as={Col} md="12">
-                  <Form.Label>Attachments</Form.Label>
-                  {/* {task?.attachments.map((file) => {
-                      // <img src="{file}" alt="attachment"></img>
-                      <p>{file}</p>;
-                    })}{" "} */}
-                  {task.attachments &&
-                    task.attachments.map((file, index) => {
-                      console.log("attachments------------>", task.attachments);
-                      return (
-                        <Col key={index} sm={12}>
-                          <div className="assignPopup">
-                            <a href={`${file}`} target="_blank">
-                              {" "}
-                              {"Attachment" + " " + (index + 1)}
-                            </a>
-                          </div>
-                        </Col>
-                      );
-                    })}
-                </Form.Group>
-              </Row>
-            </Form>
 
-            <div className="comment-section">
-              <h6>Comments</h6>
-              <div
-                className="container"
-                style={{ width: "100%", padding: "0px" }}
-              >
-                {/* show comments  */}
-                {task?.comments?.map((item, index) => {
-                  const options = {
-                    timeZone: "Asia/Kolkata",
-                    dateStyle: "medium",
-                    timeStyle: "medium",
-                  };
-                  const createdAt = new Date(item?.createdAt).toLocaleString(
-                    "en-US",
-                    options
-                  );
-
-                  return (
-                    <div className="comment" key={index}>
-                      {/* commentedBy */}
-                      <div className="commentedBy">
-                        <UserIcon
-                          style={{ float: "left" }}
-                          key={index}
-                          firstName={item?.commentedBy?.name}
-                        />{" "}
-                        {item?.commentedBy?.name}
-                      </div>
-
-                      <p
-                        dangerouslySetInnerHTML={{ __html: item?.comment }}
-                        className="comment-tex"
-                      ></p>
-                      <span className="date sub-text">{createdAt}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-           
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            onClick={() => {
-              setShowViewTaskModal(false);
-            }}
-            variant="secondary"
-          >
-            Close
-          </Button>
-          {/* <Button variant="primary">Save Changes</Button> */}
-        </Modal.Footer>
-      </Modal>
       <Modal
         className="profile-modal"
         show={showModalOnLogin}
