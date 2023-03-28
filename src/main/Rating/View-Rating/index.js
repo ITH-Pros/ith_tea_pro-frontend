@@ -34,6 +34,7 @@ import Toaster from "../../../components/Toaster";
 import AddRatingModal from "../add-rating-modal";
 import AddRating from "../add-rating";
 import MyCalendar from "../../Dashboard/weekCalendra";
+// import MyCalendar from "../../Dashboard/weekCalendra";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -59,6 +60,7 @@ export default function Dashboard(props) {
       month: months.indexOf(monthUse) + 1,
       year: yearUse,
     };
+    console.log("dataToSend", dataToSend);
     getAllRatings(dataToSend);
   }
 
@@ -109,6 +111,7 @@ export default function Dashboard(props) {
   };
 
   async function getAllRatings(data) {
+    console.log("---------+---------", data);
     setLoading(true);
 
     try {
@@ -117,18 +120,21 @@ export default function Dashboard(props) {
           month: months.indexOf(monthUse) + 1,
           year: yearUse,
         };
+        console.log("data+++++++++", data);
       }
+      console.log("data before api call", data);
       const rating = await getRatings(data);
+      
       setLoading(false);
 
       if (rating.error) {
-        setToasterMessage(rating?.error?.message || "Something Went Wrong");
+        setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setRatings([...rating.data]);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setToasterMessage(error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
     }
