@@ -557,7 +557,7 @@ const handleViewDetails = (taskId) => {
                       overdueWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col
-                            onClick={() => handleViewDetails(task?._id)}
+                            
                             lg={4}
                             className="middle"
                           >
@@ -666,7 +666,10 @@ const handleViewDetails = (taskId) => {
                               placement="top"
                               overlay={<Tooltip>{task?.title}</Tooltip>}
                             >
-                              <h5 className="text-truncate">{task?.title}</h5>
+                              <h5
+                          onClick={() => handleViewDetails(task?._id)}
+
+                               className="text-truncate">{task?.title}</h5>
                             </OverlayTrigger>
                           </Col>
                           <Col lg={4} className="middle">
@@ -780,7 +783,6 @@ const handleViewDetails = (taskId) => {
                       myWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col
-                            onClick={() => handleViewDetails(task?._id)}
                             lg={4}
                             className="middle"
                           >
@@ -888,7 +890,9 @@ const handleViewDetails = (taskId) => {
                               placement="top"
                               overlay={<Tooltip>{task?.title}</Tooltip>}
                             >
-                              <h5 className="text-truncate">{task?.title}</h5>
+                            
+                              <h5 onClick={() => handleViewDetails(task?._id)}
+                                className="text-truncate">{task?.title}</h5>
                             </OverlayTrigger>
                           </Col>
                           <Col lg={4} className="middle">
@@ -990,7 +994,6 @@ const handleViewDetails = (taskId) => {
                     pendingRatingList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col
-                          onClick={() => handleViewDetails(task?._id)}
                           lg={5}
                           className="middle"
                         >
@@ -1010,7 +1013,9 @@ const handleViewDetails = (taskId) => {
                             placement="top"
                             overlay={<Tooltip>{task?.title}</Tooltip>}
                           >
-                            <h5 className="text-truncate">{task?.title}</h5>
+                            <h5 
+                          onClick={() => handleViewDetails(task?._id)}
+                             className="text-truncate">{task?.title}</h5>
                           </OverlayTrigger>
                         </Col>
                         <Col lg={2} className="middle">
@@ -1125,7 +1130,7 @@ const handleViewDetails = (taskId) => {
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col
-                            onClick={() => handleViewDetails(task?._id)}
+                            
                             lg={4}
                             className="middle"
                           >
@@ -1228,7 +1233,9 @@ const handleViewDetails = (taskId) => {
                                 </Dropdown.Menu>
                               </Dropdown>
                             )}
-                            <h5 className="text-truncate">{task?.title}</h5>
+                            <h5
+                          onClick={() => handleViewDetails(task?._id)}
+                             className="text-truncate">{task?.title}</h5>
                           </Col>
                           <Col lg={4} className="middle">
                             {task?.status != "COMPLETED" && (
