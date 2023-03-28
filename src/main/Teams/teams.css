@@ -47,7 +47,7 @@ a {
   position: relative;
   border-radius: 10px;
   float: left;
-  max-height: 270px;
+  max-height: 300px;
 }
 
 .top-bar {
@@ -128,7 +128,7 @@ a {
   text-align: center;
 }
 .content-height {
-  height: 150px;
+  height: 180px;
   margin-top: 1px;
   justify-content: center;
   align-items: center;
@@ -291,4 +291,10 @@ button.modal-close-btn:hover{
   right: 0;
  
   top: 15px;}
+
+  .team-socail a {
+    color: #000;
+    margin: 0px 5px;
+    font-size: 20px;
+}  
  

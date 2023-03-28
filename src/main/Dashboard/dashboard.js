@@ -1129,7 +1129,7 @@ const handleViewDetails = (taskId) => {
                       teamWorkList.length > 0 &&
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          <Col lg={4} className="middle">
+                          <Col lg={5} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
                               userDetails.role == "SUPER_ADMIN" ||
                               userDetails.role == "ADMIN") && (

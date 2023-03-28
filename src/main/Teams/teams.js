@@ -370,7 +370,7 @@ export default function Teams(props) {
                       </strong>
 
                       <p>{user.email}</p>
-                      {user.department && <p> ({user?.department}) </p>}
+                      {/* {user.department && <p> ({user?.department}) </p>} */}
                       {user.employeeId && <p>{user?.employeeId} </p>}
                       {user.designation && <p>{user?.designation}</p>}
 
@@ -418,30 +418,34 @@ export default function Teams(props) {
                             </div>
                           </div>
                         )}
+
+<div className="team-socail">
+                      
+                      {user?.githubLink && (
+    <a href={user?.githubLink} target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faGithub} />
+    </a>
+  )}
+  
+  {user?.linkedInLink && (
+    <a href={user?.linkedInLink} target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faLinkedin} />
+    </a>
+  )}
+  
+  {user?.twitterLink && (
+    <a href={user?.twitterLink} target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faTwitter} />
+    </a>
+  )}
+                      </div>
+   
                     </div>
 
+                 
                     
 
-                    
 
-
-                    {user?.githubLink && (
-  <a href={user?.githubLink} target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faGithub} />
-  </a>
-)}
-
-{user?.linkedInLink && (
-  <a href={user?.linkedInLink} target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faLinkedin} />
-  </a>
-)}
-
-{user?.twitterLink && (
-  <a href={user?.twitterLink} target="_blank" rel="noopener noreferrer">
-    <FontAwesomeIcon icon={faTwitter} />
-  </a>
-)}
 
 
 
