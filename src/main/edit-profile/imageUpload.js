@@ -9,6 +9,7 @@ const ImageUpload = (props) => {
       selectedProfilePic,
       showToasterBool,
       showToasterMessage,
+      isEditable,
     } = props;
     console.log(selectedProfilePic)
     const [selectedImage, setSelectedImage] = useState('');
@@ -87,18 +88,20 @@ const ImageUpload = (props) => {
                 <div>
                   <img src={imageUrl} alt="Preview" />
                   <div className="upload-icon">
-                    <i
-                      style={{ cursor: "pointer" }}
-                      className="fas fa-edit"
-                    ></i>
+                    {isEditable && (
+                      <i
+                        style={{ cursor: "pointer" }}
+                        className="fas fa-edit"
+                      ></i>
+                    )}
                   </div>
 
                   {/* <button onClick={resetImageValues}>Edit</button> */}
                 </div>
               ) : (
                 <div className="upload-icon">
-                  <i className="fas fa-cloud-upload-alt"></i>
-                  <span>Select an image file</span>
+                  {isEditable && <i className="fas fa-cloud-upload-alt"></i>}
+                  {isEditable && <span>Select an image file</span>}
                 </div>
               )}
             </label>
@@ -120,7 +123,13 @@ const ImageUpload = (props) => {
 
           {loading ? <Loader /> : null}
         </>
-            {imageUrl&&<i style={{ cursor: "pointer" }} onClick={deleteImage} className="fas fa-trash"></i>}
+        {imageUrl && isEditable && (
+          <i
+            style={{ cursor: "pointer" }}
+            onClick={deleteImage}
+            className="fas fa-trash"
+          ></i>
+        )}
       </>
     );
 };

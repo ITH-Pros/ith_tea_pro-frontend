@@ -153,7 +153,7 @@ function UserForm(props) {
             <form className="row">
                 <div className="profile-images">
                     <div className='edit-detle'>
-                    <ImageUpload setProfileImage={setProfileImage} selectedProfilePic={profilePicture} />
+                        <ImageUpload setProfileImage={setProfileImage} selectedProfilePic={profilePicture} isEditable={!isEditable} />
                     </div>
                     
                 </div>
