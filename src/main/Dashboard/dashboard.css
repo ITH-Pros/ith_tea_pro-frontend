@@ -584,3 +584,10 @@ th {
       padding: 8px;
       border-radius: 6px;
   }
+  .dashboard_camp #card-task {
+    height: 400px;
+  }
+  .alig-nodata{
+    align-items: center;
+    justify-content: center;
+  }

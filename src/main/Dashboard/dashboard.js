@@ -431,7 +431,7 @@ const handleViewDetails = (taskId) => {
 
 
   return (
-    <div className="dashboard_camp rightDashboard">
+    <div className="dashboard_camp  rightDashboard">
       <div className="my-3 d-flex justify-content-center flex-column">
         {/* {<MyCalendar />} */}
       </div>
@@ -550,9 +550,9 @@ const handleViewDetails = (taskId) => {
                 </Row>
                 <Row>
                   <Col lg={12} className="mt-3">
-                    <Card id="card-task" className="px-3">
+                    <Card id="card-task" className={overdueWorkList.length === 0?'alig-nodata':'px-3'}>
                       {overdueWorkList && overdueWorkList.length === 0 && (
-                        <p>No tasks found.</p>
+                        <p className="text-center">No tasks found.</p>
                       )}
                       {overdueWorkList &&
                         overdueWorkList.length > 0 &&
