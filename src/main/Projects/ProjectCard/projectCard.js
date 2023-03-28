@@ -187,7 +187,7 @@ const ProjectCard = ({
       style={{ background: background || generateRandomColor() }}
     >
       {isArchive && <h6 className="archived">Archived</h6>}
-      {isArchive && (
+      {/* {isArchive && (
         <div className="delete-archived">
           {" "}
           <i
@@ -197,8 +197,8 @@ const ProjectCard = ({
             aria-hidden="true"
           ></i>{" "}
         </div>
-      )}
-      {!isArchive && (
+      )} */}
+   
         <div
           className="menu-icon"
           onClick={handleMenuIconClick}
@@ -223,6 +223,8 @@ const ProjectCard = ({
                 <circle cx="12" cy="19" r="1" />
               </svg>
               <div className="dropdown-content">
+
+              {!isArchive && (
                 <a
                   onClick={() => {
                     handleEdit();
@@ -235,6 +237,9 @@ const ProjectCard = ({
                   ></i>{" "}
                   Edit Project
                 </a>
+              )}
+         
+
                 <a
                   href="#1"
                   onClick={() => {
@@ -244,8 +249,12 @@ const ProjectCard = ({
                   }}
                 >
                   {" "}
-                  <i className="fa fa-archive" aria-hidden="true"></i> Archive
+                  <i className="fa fa-archive" aria-hidden="true"></i> {!isArchive ? 'Archive' :'Unarchive'}
                 </a>
+                
+              
+
+
                 <a
                   href="#1"
                   onClick={() => {
@@ -260,7 +269,7 @@ const ProjectCard = ({
             </button>
           )}
         </div>
-      )}
+      
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>

@@ -506,14 +506,22 @@ const archiveProject = async () => {
 	try {
 		let dataToSend = {
 			projectId: selectedProject._id,
-			isArchived: true,
+			// isArchived: true,
 		};
+    if(selectedProject.isArchived){
+      dataToSend.isArchived = false;
+    }else{
+      dataToSend.isArchived = true;
+    }
+
 		const removeRes = await archiveProjectById(dataToSend);
 		setLoading(false);
 
 		if (removeRes.error) {
 			setToasterMessage(removeRes?.message || "Something Went Wrong");
 			setShowToaster(true);
+      setConfirmModalShow(false);
+			setIsArchiveModalShow(false);
 			return;
 		} else {
 			setToasterMessage(removeRes?.message || "Something Went Wrong");
@@ -525,6 +533,8 @@ const archiveProject = async () => {
 	}
 	catch (error) {
 		setToasterMessage(error?.message || "Something Went Wrong");
+    setConfirmModalShow(false);
+			setIsArchiveModalShow(false);
 		setShowToaster(true);
 		setLoading(false);
 		return error.message;
@@ -706,7 +716,7 @@ const archiveProject = async () => {
           
             <h6>
               Are you sure you want to{" "}
-              {isArchiveModalShow ? "archive" : "delete"} this project?
+              {isArchiveModalShow ?(!isArchive ? 'archive' :'unarchive') : "delete"} this project?
             </h6>
         
 
@@ -726,7 +736,7 @@ const archiveProject = async () => {
                 className="btn btn-danger mb-3 mr-3"
                 onClick={() => archiveProject()}
               >
-                Archive
+                {!isArchive ? 'Archive' :'Unarchive'}
               </Button>
             )}
             <Button
