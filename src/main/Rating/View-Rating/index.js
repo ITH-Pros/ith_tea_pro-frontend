@@ -298,7 +298,7 @@ export default function Dashboard(props) {
 			</tbody>
 		  </Table>
 
-<div class="calendar">
+{/* <div class="calendar">
     <ul class="weekdays">
         <li>Chandan</li>
         <li>Manik</li>
@@ -457,7 +457,7 @@ export default function Dashboard(props) {
     </ul>
     
    
-</div>
+</div> */}
 		</div>
   
 		

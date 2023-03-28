@@ -3,11 +3,12 @@ import React, { Component, useEffect } from "react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import TextEditor from "./textEditor";
-
+import { useAuth } from "../../../auth/AuthProvider";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Toaster from "../../../components/Toaster";
+import AddRating from "../../Rating/add-rating";
 import {
   addComment,
   addCommentOnTask,
@@ -25,6 +26,7 @@ export default function ViewTaskModal(props) {
 
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
+  const { userDetails } = useAuth();
 
   //   ------------------------- comment --------------------------
   const [text, setText] = useState("");
@@ -172,6 +174,23 @@ export default function ViewTaskModal(props) {
         <Modal.Body>
           <div className="dv-50">
             <Form>
+              {userDetails?.role !== "CONTRIBUTOR" &&
+                task?.status === "COMPLETED" && (
+                  <Row className="mb-3">
+                    <>
+                      {task?.isRated && <span>Rating : {task?.rating}</span>}
+                      {!task?.isRated && (
+                        <Button
+                          variant="light"
+                          size="sm"
+                          className="addRatingBtn"
+                        >
+                          <AddRating taskFromDashBoard={task} />{" "}
+                        </Button>
+                      )}
+                    </>
+                  </Row>
+                )}
               <Row className="mb-3">
                 <Form.Group as={Col} md="4">
                   <Form.Label>Project Name</Form.Label>
@@ -209,7 +228,7 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="3">
                   <Form.Label>Assigned To</Form.Label>
-                  <p>{task?.assignedTo?.name||'Not Assigned'} </p>
+                  <p>{task?.assignedTo?.name || "Not Assigned"} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
@@ -229,7 +248,7 @@ export default function ViewTaskModal(props) {
                     className="form-control form-control-lg"
                     defaultValue={task.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
-                    disabled={task.status==='COMPLETED'}
+                    disabled={task.status === "COMPLETED"}
                   >
                     <option value="ONGOING">Ongoing</option>
                     <option value="NOT_STARTED">NOT STARTED</option>
@@ -248,16 +267,20 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="12">
                   <Form.Label>Attachments</Form.Label>
-                    {/* {task?.attachments.map((file) => {
+                  {/* {task?.attachments.map((file) => {
                       // <img src="{file}" alt="attachment"></img>
                       <p>{file}</p>;
                     })}{" "} */}
-                    {task.attachments && task.attachments.map((file, index) => {
-                        console.log("attachments------------>",task.attachments)
+                  {task.attachments &&
+                    task.attachments.map((file, index) => {
+                      console.log("attachments------------>", task.attachments);
                       return (
                         <Col key={index} sm={12}>
                           <div className="assignPopup">
-                            <a href={`${file}`} target="_blank"> {"Attachment" + " " + (index + 1)}</a>
+                            <a href={`${file}`} target="_blank">
+                              {" "}
+                              {"Attachment" + " " + (index + 1)}
+                            </a>
                           </div>
                         </Col>
                       );
@@ -310,14 +333,14 @@ export default function ViewTaskModal(props) {
             <div className="container" style={{ padding: "0", width: "100%" }}>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <TextEditor
+                  <TextEditor
                     //   height={100}
-                      width="100%"
-                      placeholder="Enter text here"
-                      value={text}
-                      onChange={handleTextChange}
-                      // reset = {resetTextEditor}
-                    />
+                    width="100%"
+                    placeholder="Enter text here"
+                    value={text}
+                    onChange={handleTextChange}
+                    // reset = {resetTextEditor}
+                  />
                 </div>
                 <div
                   style={{
