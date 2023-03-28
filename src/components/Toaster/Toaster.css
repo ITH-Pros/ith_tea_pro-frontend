@@ -20,6 +20,6 @@
 
   .toast{
     position: relative !important;
-    bottom: 10px !important;
-    left: 4px !important;
+    bottom: 92vh !important;
+    right: 149px !important;
   }

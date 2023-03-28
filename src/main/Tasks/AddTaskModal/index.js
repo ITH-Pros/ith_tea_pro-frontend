@@ -56,7 +56,10 @@ export default function AddTaskModal(props) {
     setUploadedFiles(uploadedFiles); console.log(
     uploadedFiles,
     "-------------------------uploadedFiles--------"
-  );};
+    );
+  };
+
+  
   // const
   // const leadList = [{name : 'Lead 1', _id : '1'}, {name : 'Lead 2', _id : '2'}, {name : 'Lead 3', _id : '3'}]
   const taskFormFields = {

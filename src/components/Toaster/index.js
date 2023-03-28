@@ -15,7 +15,7 @@ function Toaster(props) {
                     <Toast
                         onClose={close}
                         show={show}
-                        delay={4000}
+                        delay={3000}
                         autohide >
                         <Toast.Body >
                             {message}
