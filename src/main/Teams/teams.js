@@ -420,10 +420,31 @@ export default function Teams(props) {
                         )}
                     </div>
 
-                    {user?.github && <FontAwesomeIcon icon={faGithub} />}
-                    {user?.linkedin && <FontAwesomeIcon icon={faLinkedin} />}
-                    {user?.facebook && <FontAwesomeIcon icon={faFacebook} />}
-                    {user?.twitter && <FontAwesomeIcon icon={faTwitter} />}
+                    
+
+                    
+
+
+                    {user?.githubLink && (
+  <a href={user?.githubLink} target="_blank" rel="noopener noreferrer">
+    <FontAwesomeIcon icon={faGithub} />
+  </a>
+)}
+
+{user?.linkedInLink && (
+  <a href={user?.linkedInLink} target="_blank" rel="noopener noreferrer">
+    <FontAwesomeIcon icon={faLinkedin} />
+  </a>
+)}
+
+{user?.twitterLink && (
+  <a href={user?.twitterLink} target="_blank" rel="noopener noreferrer">
+    <FontAwesomeIcon icon={faTwitter} />
+  </a>
+)}
+
+
+
                     {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />
     <FontAwesomeIcon  className="brand-icon" icon={faFacebook} />
 	<FontAwesomeIcon className="brand-icon" icon={faTwitter} /> */}
