@@ -37,7 +37,6 @@ const ProjectCard = ({
   managedBy,
   accessibleBy,
   handleDelete,
-  borderColor,
   background,
   handleCategories,
   categroies,
@@ -56,6 +55,8 @@ const ProjectCard = ({
       "#e3e8ff",
       "#e3d3ff",
       "#d3fcff",
+      "#e5e5e5",
+      "#fffb6d"
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   
@@ -160,8 +161,8 @@ const ProjectCard = ({
       className="project-card"
       style={{ background: background || generateRandomColor() }}
     >
-      {isArchive && <label>Archived</label>}
-
+      {isArchive && <h6 className="archived">Archived</h6>}
+      {isArchive && <div className="delete-archived"> <i onClick={handleDelete} title="delete project" className="fa fa-trash" aria-hidden="true"></i> </div>}
       {!isArchive && (
         <div
           className="menu-icon"
@@ -225,7 +226,7 @@ const ProjectCard = ({
           )}
         </div>
       )}
-      {isArchive && <i onClick={handleDelete} title="delete project" className="fa fa-trash" aria-hidden="true"></i>}
+     
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>

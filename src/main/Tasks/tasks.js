@@ -505,26 +505,25 @@ const archiveConFirmation = (sectionId) => {
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
         </h1>
 
-        { !isArchive && 
+        {!isArchive && (
           <button
-          className="addTaskBtn"
-          style={{
-            float: "right",
-          }}
-          onClick={() => {
-            setSelectedTask();
-            setShowAddTask(true);
-            setSelectedProject();
-          }}
-        >
-          Add Task
-        </button>
-        }
-
-      
+            className="addTaskBtn"
+            style={{
+              float: "right",
+            }}
+            onClick={() => {
+              setSelectedTask();
+              setShowAddTask(true);
+              setSelectedProject();
+            }}
+          >
+            Add Task
+          </button>
+        )}
 
         {projects?.length !== 0 &&
-          userDetails?.role !== "CONTRIBUTOR" && !isArchive &&
+          userDetails?.role !== "CONTRIBUTOR" &&
+          !isArchive &&
           selectedProjectId && (
             <button
               className="addTaskBtn addSectionBtn"
@@ -538,7 +537,7 @@ const archiveConFirmation = (sectionId) => {
               Add Section
             </button>
           )}
-          {/* { userDetails?.role !== "CONTRIBUTOR" && (
+        {/* { userDetails?.role !== "CONTRIBUTOR" && (
             <button
               className="addTaskBtn addSectionBtn"
               style={{
@@ -576,35 +575,36 @@ const archiveConFirmation = (sectionId) => {
 
         <Accordion alwaysOpen="true">
           {!projects?.length &&
-            params?.projectId && !isArchive &&
+            params?.projectId &&
+            !isArchive &&
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
-               
-                  <button style={{border:'0px'}}
-
-                    onClick={() => {
-                      showAddSectionModal(true);
-                    }}
-                   >
-                    <i
-                      className="fa fa-plus-circle fa-3x addBtn-section"
-                      title="Add Project"
-                      aria-hidden="true"
-                    >
-                      {" "}
-                      Add Section
-                    </i>
-                  </button>
+                <button
+                  style={{ border: "0px" }}
+                  onClick={() => {
+                    showAddSectionModal(true);
+                  }}
+                >
+                  <i
+                    className="fa fa-plus-circle fa-3x addBtn-section"
+                    title="Add Project"
+                    aria-hidden="true"
+                  >
+                    {" "}
+                    Add Section
+                  </i>
+                </button>
               </div>
             )}
+          {!projects?.length && userDetails.role === "CONTRIBUTOR" && (
+            <h6>No Tasks Found</h6>
+          )}
 
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
-                  
-                    {project?._id?.projectId} / {project?._id?.section}{" "}
-               
+                  {project?._id?.projectId} / {project?._id?.section}{" "}
                 </Accordion.Header>
               )}
 
@@ -632,38 +632,76 @@ const archiveConFirmation = (sectionId) => {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      {!isArchive && <Dropdown.Item
-                        onClick={() => {
-                          setSelectedTask();
-                          setShowAddTask(true);
-                          setSelectedProject({
-                            _id: project?.projectId,
-                            section: project?.sectionId,
-                          });
-                        }}
-                      >
-                        <i className="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
-                      </Dropdown.Item>}
+                      {!isArchive && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedTask();
+                            setShowAddTask(true);
+                            setSelectedProject({
+                              _id: project?.projectId,
+                              section: project?.sectionId,
+                            });
+                          }}
+                        >
+                          <i
+                            className="fa fa-plus-circle"
+                            aria-hidden="true"
+                          ></i>{" "}
+                          Add Task
+                        </Dropdown.Item>
+                      )}
 
                       {(userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") &&(
+                        userDetails.role === "ADMIN") && (
                         <>
-                          {!isArchive&&<Dropdown.Item
+                          {!isArchive && (
+                            <Dropdown.Item
+                              onClick={() =>
+                                editSection({
+                                  section: project?._id?.section,
+                                  projectId: project?.projectId,
+                                  _id: project?.sectionId,
+                                })
+                              }
+                            >
+                              <i
+                                className="fa fa-pencil-square"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Edit Section
+                            </Dropdown.Item>
+                          )}
+                          {!isArchive && (
+                            <Dropdown.Item
+                              onClick={() =>
+                                archiveConFirmation({ _id: project?.sectionId })
+                              }
+                            >
+                              <i
+                                className="fa fa-archive"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Archive Section
+                            </Dropdown.Item>
+                          )}
+                          {!isArchive && (
+                            <Dropdown.Item>
+                              <i
+                                className="fa fa-files-o"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Copy/Move
+                            </Dropdown.Item>
+                          )}
+                          <Dropdown.Item
+                            disabled={project?.tasks?.length > 0}
                             onClick={() =>
-                              editSection({
-                                section: project?._id?.section,
-                                projectId: project?.projectId,
-                                _id: project?.sectionId,
-                              })
+                              deleteConFirmation({ _id: project?.sectionId })
                             }
                           >
-                            <i className="fa fa-pencil-square" aria-hidden="true"></i>  Edit Section
-                          </Dropdown.Item>}
-                          {!isArchive && <Dropdown.Item onClick={() => archiveConFirmation({ _id: project?.sectionId })} ><i className="fa fa-archive" aria-hidden="true"></i>  Archive Section</Dropdown.Item>}
-                          {!isArchive&& <Dropdown.Item><i className="fa fa-files-o" aria-hidden="true"></i> Copy/Move</Dropdown.Item>}
-                            <Dropdown.Item
-                              disabled={project?.tasks?.length > 0}
-                              onClick={()=>deleteConFirmation({ _id:project?.sectionId})} ><i className="fa fa-trash" aria-hidden="true"></i> Delete Section</Dropdown.Item>
+                            <i className="fa fa-trash" aria-hidden="true"></i>{" "}
+                            Delete Section
+                          </Dropdown.Item>
                         </>
                       )}
                     </Dropdown.Menu>
@@ -687,107 +725,113 @@ const archiveConFirmation = (sectionId) => {
                         <option value="COMPLETED">Completed</option>
                       </select>
 					)} */}
-                    
+
                       {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") && (
-                          <Dropdown>
-                            <Dropdown.Toggle
-                              variant="success"
-                              id="dropdown-basic"
-                              style={{ padding: "0" }}
-                            >
-                              {task.status === "NOT_STARTED" && (
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="success"
+                            id="dropdown-basic"
+                            style={{ padding: "0" }}
+                          >
+                            {task.status === "NOT_STARTED" && (
+                              <i
+                                className="fa fa-check-circle secondary"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "ONGOING" && (
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "COMPLETED" && (
+                              <i
+                                className="fa fa-check-circle success"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                            {task.status === "ONHOLD" && (
+                              <i
+                                className="fa fa-check-circle warning"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                          </Dropdown.Toggle>
+
+                          {task.status !== "COMPLETED" && (
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(
+                                    event,
+                                    task?._id,
+                                    "NOT_STARTED"
+                                  )
+                                }
+                              >
                                 <i
                                   className="fa fa-check-circle secondary"
                                   aria-hidden="true"
-                                ></i>
-                              )}
-                              {task.status === "ONGOING" && (
+                                ></i>{" "}
+                                Not Started
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(
+                                    event,
+                                    task?._id,
+                                    "ONGOING"
+                                  )
+                                }
+                              >
                                 <i
                                   className="fa fa-check-circle warning"
                                   aria-hidden="true"
-                                ></i>
-                              )}
-                              {task.status === "COMPLETED" && (
+                                ></i>{" "}
+                                Ongoing
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(
+                                    event,
+                                    task?._id,
+                                    "COMPLETED"
+                                  )
+                                }
+                              >
                                 <i
                                   className="fa fa-check-circle success"
                                   aria-hidden="true"
-                                ></i>
-                              )}
-                              {task.status === "ONHOLD" && (
+                                ></i>{" "}
+                                Completed
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(event, task?._id, "ONHOLD")
+                                }
+                              >
                                 <i
                                   className="fa fa-check-circle warning"
                                   aria-hidden="true"
-                                ></i>
-                              )}
-                            </Dropdown.Toggle>
-
-                            {
-                              task.status !== "COMPLETED" &&
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={(event) =>
-                                    handleStatusChange(
-                                      event,
-                                      task?._id,
-                                      "NOT_STARTED"
-                                    )
-                                  }
-                                >
-                                  <i
-                                    className="fa fa-check-circle secondary"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Not Started
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={(event) =>
-                                    handleStatusChange(event, task?._id, "ONGOING")
-                                  }
-                                >
-                                  <i
-                                    className="fa fa-check-circle warning"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Ongoing
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={(event) =>
-                                    handleStatusChange(
-                                      event,
-                                      task?._id,
-                                      "COMPLETED"
-                                    )
-                                  }
-                                >
-                                  <i
-                                    className="fa fa-check-circle success"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Completed
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={(event) =>
-                                    handleStatusChange(event, task?._id, "ONHOLD")
-                                  }
-                                >
-                                  <i
-                                    className="fa fa-check-circle warning"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  On Hold
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            }
-                          </Dropdown>
-                        )}
-                      <div className="clickLabelArea" onClick={() => handleViewDetails(task?._id)}>
+                                ></i>{" "}
+                                On Hold
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          )}
+                        </Dropdown>
+                      )}
+                      <div
+                        className="clickLabelArea"
+                        onClick={() => handleViewDetails(task?._id)}
+                      >
                         <i
                           className={
                             task?.status === "COMPLETED" ? "line-strics" : ""
                           }
-                        // onClick={() => handleViewDetails(task?._id)}
+                          // onClick={() => handleViewDetails(task?._id)}
                         >
                           {truncateString(task?.title, 80)}
                         </i>
@@ -838,25 +882,27 @@ const archiveConFirmation = (sectionId) => {
                       </div>
                       {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN")&& !isArchive && (
+                        userDetails.role === "ADMIN") &&
+                        !isArchive && (
                           <a
-                          style={{
-                        float: "right",
-                        color: "#6c757d",
-                        cursor: "pointer",
-                        marginRight: "10px",
-                      }}
-                      onClick={() => {
-                        setSelectedProject();
-                        setShowAddTask(true);
-                        setSelectedTask(task);
-                      }}
-                        >
-                      <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    </a>
-                        
-                       
-                      )}
+                            style={{
+                              float: "right",
+                              color: "#6c757d",
+                              cursor: "pointer",
+                              marginRight: "10px",
+                            }}
+                            onClick={() => {
+                              setSelectedProject();
+                              setShowAddTask(true);
+                              setSelectedTask(task);
+                            }}
+                          >
+                            <i
+                              className="fa fa-pencil-square-o"
+                              aria-hidden="true"
+                            ></i>
+                          </a>
+                        )}
                       {/* <div className="task-hover"> <a > <i className="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div> */}
                     </li>
                   ))}
@@ -869,7 +915,9 @@ const archiveConFirmation = (sectionId) => {
               </div> */}
             </Accordion.Item>
           ))}
-          {projects && projects.length === 0 && <p> {isArchive ? 'No Task archived.': ''} </p>}
+          {projects && projects.length === 0 && (
+            <p> {isArchive ? "No Task archived." : ""} </p>
+          )}
         </Accordion>
 
         <Modal
@@ -895,63 +943,76 @@ const archiveConFirmation = (sectionId) => {
               />
             </div>
             <div className="text-right">
-            {selectedProjectId && sectionName && (
-              <Button
-                style={{ marginLeft: "10px" }}
-                className="btn btn-danger mr-3"
-                onClick={() => addSection()}
-              >
-                {sectionEditMode ? "Update Section" : "Add section"}
-              </Button>
-            )}
+              {selectedProjectId && sectionName && (
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  className="btn btn-danger mr-3"
+                  onClick={() => addSection()}
+                >
+                  {sectionEditMode ? "Update Section" : "Add section"}
+                </Button>
+              )}
 
-            <Button
-              style={{ marginLeft: "5px" }}
-              className="btn"
-              onClick={() => setModalShow(false)}
-            >
-              Cancel
-            </Button>
+              <Button
+                style={{ marginLeft: "5px" }}
+                className="btn"
+                onClick={() => setModalShow(false)}
+              >
+                Cancel
+              </Button>
             </div>
-           
           </Modal.Body>
         </Modal>
 
-		
-		<Modal className="confirmation-modal" show={deleteSectionModal} onHide={() =>setDeleteSectionModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Section</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to delete this section
-		</Modal.Body>
-        <Modal.Footer style={{alignItems:'center', justifyContent:'center'}}>
-          <Button variant="secondary" onClick={() =>setDeleteSectionModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() =>deleteSection()}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <Modal
+          className="confirmation-modal"
+          show={deleteSectionModal}
+          onHide={() => setDeleteSectionModal(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Delete Section</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to delete this section</Modal.Body>
+          <Modal.Footer
+            style={{ alignItems: "center", justifyContent: "center" }}
+          >
+            <Button
+              variant="secondary"
+              onClick={() => setDeleteSectionModal(false)}
+            >
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => deleteSection()}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-	  <Modal className="confirmation-modal" show={archiveSectionModal} onHide={() =>setArchiveSectionModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Archive Section</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to Archive this section
-		</Modal.Body>
-        <Modal.Footer style={{alignItems:'center', justifyContent:'center'}}>
-          <Button variant="secondary" onClick={() =>setArchiveSectionModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() =>archiveSection()}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-	
+        <Modal
+          className="confirmation-modal"
+          show={archiveSectionModal}
+          onHide={() => setArchiveSectionModal(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Archive Section</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to Archive this section</Modal.Body>
+          <Modal.Footer
+            style={{ alignItems: "center", justifyContent: "center" }}
+          >
+            <Button
+              variant="secondary"
+              onClick={() => setArchiveSectionModal(false)}
+            >
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => archiveSection()}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-		{/*  */}
+        {/*  */}
 
         {toaster && (
           <Toaster

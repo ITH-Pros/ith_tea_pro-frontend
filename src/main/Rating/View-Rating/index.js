@@ -140,171 +140,188 @@ export default function Dashboard(props) {
     }
   }
 
-
-
   return (
+    <div>
+      <div className="dashboard_camp">
+        <h4>
+          My Ratings
+          <button
+            className="addTaskBtn"
+            onClick={() => setTeamView(!teamView)}
+            style={{ float: "right" }}
+          >
+            {" "}
+            {teamView ? "Self view" : "Team View"}{" "}
+          </button>
+        </h4>
+      </div>
 
-	<div> 
-	<div className="dashboard_camp"> 
-	<h4>My Ratings 
-		<button className="addTaskBtn" onClick={() => setTeamView(!teamView)} style={{float:'right'}}> {teamView?'Self view':'Team View'} </button>
-	</h4>
-	
-	</div>
-	
+      {teamView ? (
+        <div className="dashboard_camp">
+          <div className="d-flex justify-content-center flex-column">
+            <div className="d-flex" style={{ marginTop: "10px" }}>
+              <h5 className="text-center h5cls">
+                <p
+                  style={{
+                    marginRight: "10px",
+                    marginTop: "6px",
+                    fontSize: "14",
+                  }}
+                >
+                  Ratings for
+                </p>
+                <Form.Group as={Col} md="2" controlId="select_month">
+                  <Form.Control
+                    className="month-drop-select"
+                    required
+                    as="select"
+                    type="select"
+                    name="select_team"
+                    onChange={onchangeMonth}
+                    value={monthUse}
+                  >
+                    <option value="" disabled>
+                      Select Month
+                    </option>
+                    {months.map((monthh, index) => (
+                      <option
+                        value={monthh}
+                        key={monthh}
+                        disabled={index > month && yearUse >= currentYear}
+                      >
+                        {monthh}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="2" controlId="select_year">
+                  <Form.Control
+                    className="year-drop-select"
+                    required
+                    as="select"
+                    type="select"
+                    name="select_team"
+                    onChange={onChangeYear}
+                    value={yearUse}
+                  >
+                    <option value="" disabled>
+                      Select Year
+                    </option>
+                    {years.map((year) => (
+                      <option
+                        value={year}
+                        key={year}
+                        disabled={year > currentYear}
+                      >
+                        {year}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+              </h5>
 
-	{teamView ? (
-		<div className="dashboard_camp">
-		<div className="d-flex justify-content-center flex-column">
-		  <div className="d-flex" style={{marginTop:'10px'}}>
-		
-			<h5 className="text-center h5cls">
-			  <p style={{ marginRight: "10px", marginTop: "6px", fontSize:'14' }}>Ratings for</p>
-			  <Form.Group as={Col} md="2" controlId="select_month">
-				<Form.Control
-				  className="month-drop-select"
-				  required
-				  as="select"
-				  type="select"
-				  name="select_team"
-				  onChange={onchangeMonth}
-				  value={monthUse}
-				>
-				  <option value="" disabled>
-					Select Month
-				  </option>
-				  {months.map((monthh, index) => (
-					<option
-					  value={monthh}
-					  key={monthh}
-					  disabled={index > month && yearUse >= currentYear}
-					>
-					  {monthh}
-					</option>
-				  ))}
-				</Form.Control>
-			  </Form.Group>
-			  <Form.Group as={Col} md="2" controlId="select_year">
-				<Form.Control
-				  className="year-drop-select"
-				  required
-				  as="select"
-				  type="select"
-				  name="select_team"
-				  onChange={onChangeYear}
-				  value={yearUse}
-				>
-				  <option value="" disabled>
-					Select Year
-				  </option>
-				  {years.map((year) => (
-					<option value={year} key={year} disabled={year > currentYear}>
-					  {year}
-					</option>
-				  ))}
-				</Form.Control>
-			  </Form.Group>
-			</h5>
-  
-			{/* <Link to="/rating" params={{ params: true }}> */}
-			<div className="wrap btnWth">
-			
-			{userDetails?.role !== "CONTRIBUTOR" && (
-			  <button className="add-rating-button">
-		  <AddRating />
-				
-			  </button>)}
-			 
-			</div>
-			{/* </Link> */}
-		  </div>
-		  <Table responsive className="ratingTable">
-			<thead>
-			  <tr>
-				<th style={{width:'140'}}>Name</th>
-				{Array(days)
-				  .fill(0)
-				  .map((rating, index) => {
-					return (
-					  <th className="dates text-center" key={`${index}_${index}`}>
-						{index + 1 < 10 ? "0" + (index + 1) : index + 1}
-					  </th>
-					);
-				  })}
-				<th style={{ color: "green" }}>Average</th>
-			  </tr>
-			</thead>
-			<tbody>
-			  {ratingsArray.map((user, index) => {
-				return (
-				  <tr key={index}>
-					<td className="user_names" style={{width:'130'}}> {user.name}</td>
-					
-					{Array(days)
-					  ?.fill(0)
-					  ?.map((day, index) => {
-						let ratingUserObj = user.ratings
-						let ratingCommentObj = ratingUserObj?.find(
-							(el) => el.date - 1 === index
-						  );
-						if (ratingCommentObj) {
-						  return (
-							<RatingBox
-							  key={index}
-							  index={index}
-							  getAllRatings={getAllRatings}
-							  ratingCommentObj={ratingCommentObj}
-							/>
-						  );
-						} else {
-						  let dateToSend = `${yearUse}-${
-							months.indexOf(monthUse) + 1 <= 9
-							  ? "0" + (months.indexOf(monthUse) + 1)
-							  : months.indexOf(monthUse) + 1
-						  }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
-						  return (
-							<td key={index}>
-							  {userDetails?.role === "CONTRIBUTOR" ||
-							  new Date(dateToSend) > new Date() ? (
-								<span
-								  style={{
-									padding: "1px",
-									paddingLeft: "20px",
-									paddingRight: "6px",
-								  }}
-								  className="input_dashboard"
-								></span>
-							  ) : (
-								<>
-								  <span
-									style={{
-									 
-									  padding: "1px",
-									  paddingLeft: "20px",
-									  paddingRight: "6px",
-									}}
-									className="input_dashboard"
-								  ></span>
-						
-								</>
-							  )}
-							</td>
-						  );
-						}
-					  })}
-					<td className="userAverage">
-					  {user.monthlyAverage
-						? Math.round((user.monthlyAverage) * 100) /
-						  100
-						: "NA"}
-					</td>
-				  </tr>
-				);
-			  })}
-			</tbody>
-		  </Table>
+              {/* <Link to="/rating" params={{ params: true }}> */}
+              <div className="wrap btnWth">
+                {userDetails?.role !== "CONTRIBUTOR" && (
+                  <button className="add-rating-button">
+                    <AddRating />
+                  </button>
+                )}
+              </div>
+              {/* </Link> */}
+            </div>
+            <Table responsive className="ratingTable">
+              <thead>
+                <tr>
+                  <th style={{ width: "140" }}>Name</th>
+                  {Array(days)
+                    .fill(0)
+                    .map((rating, index) => {
+                      return (
+                        <th
+                          className="dates text-center"
+                          key={`${index}_${index}`}
+                        >
+                          {index + 1 < 10 ? "0" + (index + 1) : index + 1}
+                        </th>
+                      );
+                    })}
+                  <th style={{ color: "green" }}>Average</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ratingsArray.map((user, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="user_names" style={{ width: "130" }}>
+                        {" "}
+                        {user.name}
+                      </td>
 
-{/* <div class="calendar">
+                      {Array(days)
+                        ?.fill(0)
+                        ?.map((day, index) => {
+                          let ratingUserObj = user.ratings;
+                          let ratingCommentObj = ratingUserObj?.find(
+                            (el) => el.date - 1 === index
+                          );
+                          if (ratingCommentObj) {
+                            return (
+                              <RatingBox
+                                key={index}
+                                index={index}
+                                getAllRatings={getAllRatings}
+                                ratingCommentObj={ratingCommentObj}
+                              />
+                            );
+                          } else {
+                            let dateToSend = `${yearUse}-${
+                              months.indexOf(monthUse) + 1 <= 9
+                                ? "0" + (months.indexOf(monthUse) + 1)
+                                : months.indexOf(monthUse) + 1
+                            }-${
+                              index + 1 <= 9 ? "0" + (index + 1) : index + 1
+                            }`;
+                            return (
+                              <td key={index}>
+                                {userDetails?.role === "CONTRIBUTOR" ||
+                                new Date(dateToSend) > new Date() ? (
+                                  <span
+                                    style={{
+                                      padding: "1px",
+                                      paddingLeft: "20px",
+                                      paddingRight: "6px",
+                                    }}
+                                    className="input_dashboard"
+                                  ></span>
+                                ) : (
+                                  <>
+                                    <span
+                                      style={{
+                                        padding: "1px",
+                                        paddingLeft: "20px",
+                                        paddingRight: "6px",
+                                      }}
+                                      className="input_dashboard"
+                                    ></span>
+                                  </>
+                                )}
+                              </td>
+                            );
+                          }
+                        })}
+                      <td className="userAverage">
+                        {user.monthlyAverage
+                          ? Math.round(user.monthlyAverage * 100) / 100
+                          : "NA"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+
+            {/* <div class="calendar">
     <ul class="weekdays">
         <li>Chandan</li>
         <li>Manik</li>
@@ -464,40 +481,22 @@ export default function Dashboard(props) {
     
    
 </div> */}
-		</div>
-  
-		
-		{loading ? <Loader /> : null}
-		{toaster && (
-		  <Toaster
-			message={toasterMessage}
-			show={toaster}
-			close={() => showToaster(false)}
-		  />
-		)}
-  
-		<div>
-		</div>
-	  </div>
-	):(
-		<MyCalendar
+          </div>
 
+          {loading ? <Loader /> : null}
+          {toaster && (
+            <Toaster
+              message={toasterMessage}
+              show={toaster}
+              close={() => showToaster(false)}
+            />
+          )}
 
-		/>
-	)
-	}
-
-	</div>
-
-	
-
-  )
-
- 
-
- 
-
- 
-
-
+          <div></div>
+        </div>
+      ) : (
+        <MyCalendar />
+      )}
+    </div>
+  );
 }

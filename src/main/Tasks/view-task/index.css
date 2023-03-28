@@ -140,3 +140,25 @@ p {
   font-size: 13px;
   margin-bottom: 0px;
 }
+
+.toggle-tags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.toggle-button {
+  background-color: #eee;
+  border: none;
+  color: #333;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-button.active {
+  background-color: #333;
+  color: #fff;
+}
