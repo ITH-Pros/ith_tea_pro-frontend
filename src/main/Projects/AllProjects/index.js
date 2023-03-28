@@ -602,18 +602,9 @@ const archiveProject = async () => {
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
         </h1>
-        {
-          (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
-        <button className="btn btn-primary pull-right" onClick={handleIsArchive} style={{cursor:"pointer"}}  > {isArchive ? 'Active Projects':'Archive List'}</button>
-        }
-        <div className="project-boxes jsGridView">
-          {userDetails.role === "SUPER_ADMIN" && !isArchive && (
-            <div
-              key="AddProject"
-              style={{ display: "flex" }}
-              className="project-box add-project-button"
-            >
-              <div className="content">
+        <h1 className="projects-button">
+        {userDetails.role === "SUPER_ADMIN" && !isArchive && (
+          
                 <Link
                   to={{
                     pathname: "/project/add",
@@ -621,17 +612,25 @@ const archiveProject = async () => {
                 >
                   <i
                     className="fa fa-plus-circle fa-3x addBtn"
-                    title="Add Project"
+                   
                     aria-hidden="true"
-                  ></i>
+                  > &nbsp; Add Project </i> 
                 </Link>
-              </div>
-            </div>
+            
           )}
+           {
+          (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
+        <button className="btn btn-primary" onClick={handleIsArchive} style={{cursor:"pointer", marginTop:'7px', padding:'7px', fontSize:'600', marginRight:'30px'}}  > {isArchive ? 'Active Projects':'Archive List'}</button>
+        }
+        </h1>
+       
+
+        <div className="project-boxes jsGridView">
+       
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
-                <div key={element._id} className="project-box-wrapper">
+                <div key={element._id} className="">
                   <ProjectCard
                     name={element.name}
                     description={element?.description || "--"}
