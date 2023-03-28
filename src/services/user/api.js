@@ -196,6 +196,20 @@ export async function getProjectById(data) {
         params: data
     }).then(res => res.data))
 }
+export async function getLeadsUsingProjectId(data) {
+  return axiosInstance
+    .get("projects/v1/project/leads", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+export async function getUserUsingProjectId(data) {
+  return axiosInstance
+    .get("projects/v1/project/users", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
 
 export async function updateTaskStatusById(data) {
     return (axiosInstance.patch('task/v1/update/status', data).then(res => res.data))
