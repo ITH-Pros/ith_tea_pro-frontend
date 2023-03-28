@@ -554,3 +554,14 @@
 .categoriesList .fa-flag{
   color: #8355ad;
 }
+.delete-popup {
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  display: flex;
+  color: #e60606;
+}
+
+.delete-popup h6{
+  font-weight: 600;
+}
