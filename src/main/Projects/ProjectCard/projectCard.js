@@ -445,21 +445,7 @@ const ProjectCard = ({
             </div>
           </Modal.Body>
 
-          {/* <div className="text-right me-3">
-            <button
-              style={{ marginLeft: "16px", width: "30%" }}
-              className="btn btn-press  btn-gradient-border btn-primary"
-              onClick={() => {
-                setModalShow(false);
-                setShowSelectBox(false);
-                setSelectedUnassignedUsers("");
-                setListOfUnassignedUsers([]);
-                setSelectedRole(null);
-              }}
-            >
-              Close
-            </button>
-          </div> */}
+          
         </Modal>
       )}
     </div>
