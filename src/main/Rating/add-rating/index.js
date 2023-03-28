@@ -71,7 +71,7 @@ export default function AddRating(props) {
       if (ratingForm.userList?.length && taskFromDashBoard) {
         setRatingForm({
           ...ratingForm,
-          selectedUser: taskFromDashBoard.assignedTo,
+          selectedUser: taskFromDashBoard.assignedTo?._id,
         });
         console.log(
           "taskFromDashBoard.assignedTo called",
@@ -94,10 +94,14 @@ export default function AddRating(props) {
             ? "0" + dueDateData.getDate()
             : dueDateData.getDate());
 
-        console.log("ratingForm.projectList called");
+        console.log(
+          "ratingForm.projectList called",
+          taskFromDashBoard.projectId
+        );
         setRatingForm({
           ...ratingForm,
-          selectedProject: taskFromDashBoard.projectId,
+          // selectedProject: taskFromDashBoard.projectId,
+          selectedProject: taskFromDashBoard.projectId?._id,
           taskList: [taskFromDashBoard],
           selectedTask: taskFromDashBoard._id,
           //   selectedUser: taskFromDashBoard.assignedTo,
@@ -290,8 +294,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
-            
-
             <Form.Group
               as={Col}
               md="6"
@@ -318,7 +320,7 @@ export default function AddRating(props) {
             </Form.Group>
           </Row>
           <Row>
-          <Form.Group as={Col} md="12">
+            <Form.Group as={Col} md="12">
               <Form.Label>Select Task</Form.Label>
               <Form.Control
                 required
@@ -344,15 +346,17 @@ export default function AddRating(props) {
 
             <Form.Group as={Col} md="12">
               <Form.Label>Completed Date</Form.Label>
-              <h5>{(ratingForm?.taskList?.find((task) => task._id === ratingForm.selectedTask)?.completedDate)?.split('T')[0]}</h5>
+              <h5>
+                {
+                  ratingForm?.taskList
+                    ?.find((task) => task._id === ratingForm.selectedTask)
+                    ?.completedDate?.split("T")[0]
+                }
+              </h5>
             </Form.Group>
-
-
-
           </Row>
 
-          <Row className="desc" >
-           
+          <Row className="desc">
             <Form.Control
               type="textArea"
               name="comment"
