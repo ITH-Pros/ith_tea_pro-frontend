@@ -148,8 +148,6 @@ export default function AddTaskModal(props) {
 	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
       console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
       setSelectedLeads(project[0]?.managedBy);
-	  // setUserList(project[0]?.accessibleBy);
-    //   console.log(project);
     } else if (selectedTask ) {
       let project = projectList?.filter(
         (item) => item?._id == selectedTask?.projectId
@@ -159,6 +157,30 @@ export default function AddTaskModal(props) {
 
       setCategoryList(project[0]?.sections);
       setUserList(project[0]?.accessibleBy);
+      if (userDetails?.role === "LEAD") {
+        console.log(userDetails?.role);
+        let newArray = [
+          {
+            _id: userDetails?.id,
+            name: userDetails?.email?.split("@")[0],
+          },
+        ];
+        console.log(
+          newArray,
+          userDetails,
+          "--------------------------new array"
+        );
+        setUserList([...userList, ...newArray]);
+        console.log(
+          userList,
+          "---------------------------------------------------------------user list"
+        );
+      }
+      console.log(
+        userList,
+        "---------------------------------------------------------------user list"
+      );
+
 
       //   let leads = [];
       console.log(
@@ -222,14 +244,35 @@ export default function AddTaskModal(props) {
       console.log(leads, "leads");
       setSelectedLeads(leads || []);
     } else if (handleProjectId) {
+
       let project = projectList?.find((item) => item?._id == handleProjectId);
-      console.log("MAI AAAYA HU IDHAR", project);
       setLeadList(project?.managedBy);
       if (leadLists.length === 1) {
         setSelectedLeads(project?.managedBy);
       }
       setCategoryList(project?.sections);
       setUserList(project?.accessibleBy);
+      if (userDetails?.role === "LEAD") {
+        console.log(userDetails?.role);
+        let newArray = [
+          {
+            _id: userDetails?.id,
+            name: userDetails?.email?.split("@")[0],
+          },
+        ];
+        console.log(
+          newArray,
+          userDetails,
+          "--------------------------new array"
+        );
+        setUserList([...userList, ...newArray]);
+        console.log(
+          userList,
+          "---------------------------------------------------------------user list"
+        );
+      }
+      
+      console.log(userList,'---------------------------------------------------------------user list')
 
       setTaskFormValue({
         ...taskFormValue,
@@ -256,8 +299,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setProjectList(projects.data);
-        // setCategoryList(projects.data[0]?.sections);
-        // setUserList(projects.data[0]?.accessibleBy);
       }
     } catch (error) {
       setLoading(false);
@@ -276,6 +317,19 @@ export default function AddTaskModal(props) {
     setSelectedLeads("");
     setCategoryList(project?.sections);
     setUserList(project?.accessibleBy);
+    if (userDetails?.role === 'LEAD' ) {
+      console.log(userDetails?.role);
+      let newArray = [
+        {
+          _id: userDetails?.id,
+          name: userDetails?.email?.split('@')[0],
+        },
+      ];
+      console.log(newArray,userDetails,'--------------------------new array')
+      setUserList([...userList,...newArray])
+      console.log(userList, '---------------------------------------------------------------user list')
+    }
+
     setLeadList(project?.managedBy);
     updateTaskFormValue(e);
   };
