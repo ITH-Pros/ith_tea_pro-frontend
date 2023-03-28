@@ -145,7 +145,7 @@ export default function AddTaskModal(props) {
 	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
       console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
       setSelectedLeads(project[0]?.managedBy);
-	  setUserList(project[0]?.accessibleBy);
+	  // setUserList(project[0]?.accessibleBy);
     //   console.log(project);
     } else if (selectedTask ) {
       let project = projectList?.filter(
@@ -231,10 +231,10 @@ export default function AddTaskModal(props) {
       setTaskFormValue({
         ...taskFormValue,
         projectId: handleProjectId,
-        assignedTo: userDetails?.id,
+       
         section: project?.sections?.[0],
       });
-    } else if (userDetails.role == "CONTRIBUTOR") {
+    } else if (userDetails.role === "CONTRIBUTOR") {
       setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id });
     } else {
       console.log("else");

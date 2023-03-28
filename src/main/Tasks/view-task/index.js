@@ -153,7 +153,12 @@ export default function ViewTaskModal(props) {
       console.log(error);
     }
   };
+  const [activeTab, setActiveTab] = useState("comments");
 
+  const handleTabChange = (tabName) => {
+    setActiveTab(tabName);
+    console.log(`Active tab changed to ${tabName}`);
+  };
 
   return (
     <>
@@ -291,6 +296,24 @@ export default function ViewTaskModal(props) {
 
             <div className="comment-section">
               <h6>Comments</h6>
+              <div className="toggle-tags">
+                <button
+                  onClick={() => handleTabChange("comments")}
+                  className={`toggle-button ${
+                    activeTab === "comments" ? "active" : ""
+                  }`}
+                >
+                  Comments
+                </button>
+                <button
+                  onClick={() => handleTabChange("ratings")}
+                  className={`toggle-button ${
+                    activeTab === "ratings" ? "active" : ""
+                  }`}
+                >
+                  Ratings
+                </button>
+              </div>
               <div
                 className="container"
                 style={{ width: "100%", padding: "0px" }}
