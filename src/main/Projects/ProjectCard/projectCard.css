@@ -245,7 +245,6 @@
 .add-user-icon {
   position: absolute;
   top: 10px;
-  z-index: 9999;
   right: -6px;
   color: #fff;
   font-size: 14px;

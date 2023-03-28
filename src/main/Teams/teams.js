@@ -373,6 +373,10 @@ export default function Teams(props) {
                       {/* {user.department && <p> ({user?.department}) </p>} */}
                       {user.employeeId && <p>{user?.employeeId} </p>}
                       {user.designation && <p>{user?.designation}</p>}
+                      <p>{user.email}</p>
+                      {/* {user.department && <p> ({user?.department}) </p>} */}
+                      {user.employeeId && <p>{user?.employeeId} </p>}
+                     
 
                       {userDetails?.role !== "CONTRIBUTOR" &&
                         userAnalytics &&
