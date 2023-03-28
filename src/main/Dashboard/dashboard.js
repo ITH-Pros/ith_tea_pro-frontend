@@ -550,12 +550,12 @@ const handleViewDetails = (taskId) => {
                 </Row>
                 <Row>
                   <Col lg={12} className="mt-3">
-                    <Card id="card-task" className={overdueWorkList.length === 0?'alig-nodata':'px-3'}>
-                      {overdueWorkList && overdueWorkList.length === 0 && (
+                    <Card id="card-task" className={!overdueWorkList?.length?'alig-nodata':'px-3'}>
+                      {overdueWorkList && overdueWorkList?.length === 0 && (
                         <p className="text-center">No tasks found.</p>
                       )}
                       {overdueWorkList &&
-                        overdueWorkList.length > 0 &&
+                        overdueWorkList?.length > 0 &&
                         overdueWorkList?.map((task) => (
                           <Row className="d-flex justify-content-start list_task w-100 mx-0">
                             <Col lg={4} className="middle">
@@ -774,12 +774,12 @@ const handleViewDetails = (taskId) => {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" className={myWorkList.length === 0?'alig-nodata':'px-3'} >
-                    {myWorkList && myWorkList.length === 0 && (
+                  <Card id="card-task" className={myWorkList?.length === 0?'alig-nodata':'px-3'} >
+                    {myWorkList && myWorkList?.length === 0 && (
                       <p>No tasks found.</p>
                     )}
                     {myWorkList &&
-                      myWorkList.length > 0 &&
+                      myWorkList?.length > 0 &&
                       myWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
@@ -985,12 +985,12 @@ const handleViewDetails = (taskId) => {
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task" className={pendingRatingList.length === 0?'alig-nodata':'px-3'}>
-                  {pendingRatingList && pendingRatingList.length === 0 && (
+                <Card id="card-task" className={pendingRatingList?.length === 0?'alig-nodata':'px-3'}>
+                  {pendingRatingList && pendingRatingList?.length === 0 && (
                     <p>No task found.</p>
                   )}
                   {pendingRatingList &&
-                    pendingRatingList.length > 0 &&
+                    pendingRatingList?.length > 0 &&
                     pendingRatingList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
                         <Col lg={5} className="middle">
@@ -1121,12 +1121,12 @@ const handleViewDetails = (taskId) => {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" className={teamWorkList.length === 0?'alig-nodata':'px-3'} >
-                    {teamWorkList && teamWorkList.length === 0 && (
+                  <Card id="card-task" className={teamWorkList?.length === 0?'alig-nodata':'px-3'} >
+                    {teamWorkList && teamWorkList?.length === 0 && (
                       <p>No task found.</p>
                     )}
                     {teamWorkList &&
-                      teamWorkList.length > 0 &&
+                      teamWorkList?.length > 0 &&
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={5} className="middle">
