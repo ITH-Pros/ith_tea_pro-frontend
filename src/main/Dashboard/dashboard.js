@@ -920,7 +920,7 @@ const handleViewDetails = (taskId) => {
                             )}
                           </Col>
                           <Col
-                            lg={3}
+                            lg={2}
                             className="text-end middle"
                             style={{ justifyContent: "end" }}
                           >
@@ -1261,7 +1261,7 @@ const handleViewDetails = (taskId) => {
                             )}
                           </Col>
                           <Col
-                            lg={3}
+                            lg={2}
                             className="text-end middle"
                             style={{ justifyContent: "end" }}
                           >
