@@ -404,57 +404,7 @@ export default function AddProject(props) {
               />
             </Form.Group>
           </Row>
-          {/* <Row className="mb-3">
-            <Form.Group as={Col} md="5">
-              <Form.Label>Add Category</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Category"
-                onChange={(e) => setNewCategory(e.target.value)}
-                onKeyDown={addProjectCategory}
-                value={newCategory}
-                required={!projectFormValue.projectCategories.length}
-              />
-            </Form.Group>
-            <Form.Group as={Col} md="1">
-              <Button
-                className="btn btn-gradient-border btnshort-modal"
-                style={{ marginTop: "35px" }}
-                type="button"
-                onClick={addProjectCategoryOnButtonClick}
-              >
-                <i className="fa fa-plus" aria-hidden="true"></i>{" "}
-              </Button>
-            </Form.Group>
-            <div className="mt-1">
-              Categories:
-              {projectFormValue.projectCategories.length
-                ? projectFormValue.projectCategories.map((el) => (
-                    <span className="ctgrybtn" key={el}>
-                      {el}
-                      <i
-                        className="fa fa-times"
-                        style={{ color: "red" }}
-                        onClick={() => removeProjectCategory(el)}
-                        aria-hidden="true"
-                      ></i>
-                    </span>
-                  ))
-                : "  No Categories Added"}
-            </div>
-            <Form.Group as={Col} md="5" className='mt-3'>
-              <Form.Label>Short Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                required
-                type="text-area"
-                placeholder="Short Description"
-                name="shortDescription"
-                onChange={updateRegisterFormValue}
-                value={projectFormValue.shortDescription}
-              />
-            </Form.Group>
-          </Row> */}
+        
 
           <Row className="mb-3">
             <Form.Group as={Col}>
