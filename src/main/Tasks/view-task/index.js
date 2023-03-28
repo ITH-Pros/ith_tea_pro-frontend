@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Toaster from "../../../components/Toaster";
 import AddRating from "../../Rating/add-rating";
+import ToastContainer from 'react-bootstrap/ToastContainer';
 import {
   addComment,
   addCommentOnTask,
@@ -22,7 +23,7 @@ export default function ViewTaskModal(props) {
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
-  //   const setShowToaster = (param) => showToaster(param);
+  const [position, setPosition] = useState('top-start');
 
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
@@ -434,11 +435,13 @@ export default function ViewTaskModal(props) {
         </Modal.Footer>
       </Modal>
       {toaster && (
-        <Toaster
+        <ToastContainer position="top-end" className="p-3">
+        <Toaster 
           message={toasterMessage}
           show={toaster}
           close={() => showToaster(false)}
         />
+        </ToastContainer>
       )}
     </>
   );
