@@ -529,8 +529,8 @@ const handleViewDetails = (taskId) => {
         </Row>
 
         <Row className="mt-3">
-          {userDetails?.role === "SUPER_ADMIN" ||
-            (userDetails?.role === "ADMIN" && (
+          {(userDetails?.role === "SUPER_ADMIN" ||
+            userDetails?.role === "ADMIN") && ((
               <Col lg={6} style={{ paddingLeft: "0px" }}>
                 <Row>
                   <Col lg={6} className="left-add">
