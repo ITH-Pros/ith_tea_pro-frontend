@@ -91,11 +91,12 @@ export default function Dashboard(props) {
 
   function onInit() {
     getAndSetAllProjects();
-    getMyWork();
-    getOverDueTaskList();
+
+    if (userDetails?.role === 'SUPER_ADMIN'||userDetails?.role === 'ADMIN') { getOverDueTaskList(); }
+    if (userDetails?.role !== 'SUPER_ADMIN'||userDetails?.role !== 'ADMIN') { getMyWork(); }
+    if (userDetails?.role !== 'CONTRIBUTOR') { getTeamWorkList(); }
     getPendingRating();
     getUsersList();
-	getTeamWorkList();
   }
 
   const handleToRedirectTask = (projectId , isArchive) => {
