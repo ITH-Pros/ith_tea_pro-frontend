@@ -702,13 +702,13 @@ const archiveProject = async () => {
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <div>
-            <p>
+        <Modal.Body className="delete-popup">
+          
+            <h6>
               Are you sure you want to{" "}
               {isArchiveModalShow ? "archive" : "delete"} this project?
-            </p>
-          </div>
+            </h6>
+        
 
           <div className="button-center-corformain">
             {!isArchiveModalShow && (
