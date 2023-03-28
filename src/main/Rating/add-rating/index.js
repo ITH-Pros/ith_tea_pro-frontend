@@ -100,8 +100,8 @@ export default function AddRating(props) {
         );
         setRatingForm({
           ...ratingForm,
-          // selectedProject: taskFromDashBoard.projectId,
-          selectedProject: taskFromDashBoard.projectId?._id,
+          // selectedProject: taskFromDashBoard.projectId?._id,
+          selectedProject: taskFromDashBoard.projectId,
           taskList: [taskFromDashBoard],
           selectedTask: taskFromDashBoard._id,
           //   selectedUser: taskFromDashBoard.assignedTo,

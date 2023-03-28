@@ -43,6 +43,11 @@ export async function getAllUsersWithoutPagination(data) {
 export async function getAllMyWorks(data) {
     return (axiosInstance.get('/task/v1/list/homepage', { params: data, }).then(res => res.data))
 }
+export async function getOverDueTaskListData(data) {
+  return axiosInstance
+    .get("/task/v1/overdue/tasks", { params: data })
+    .then((res) => res.data);
+}
 export async function getAllPendingRating(data) {
     return (axiosInstance.get('/task/v1/list/pending/rating', { params: data, }).then(res => res.data))
 }
