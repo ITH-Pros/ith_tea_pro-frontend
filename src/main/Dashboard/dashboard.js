@@ -774,7 +774,7 @@ const handleViewDetails = (taskId) => {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" className="px-3">
+                  <Card id="card-task" className={myWorkList.length === 0?'alig-nodata':'px-3'} >
                     {myWorkList && myWorkList.length === 0 && (
                       <p>No tasks found.</p>
                     )}
@@ -985,7 +985,7 @@ const handleViewDetails = (taskId) => {
             </Row>
             <Row>
               <Col lg={12} className="mt-3">
-                <Card id="card-task" className="px-3">
+                <Card id="card-task" className={pendingRatingList.length === 0?'alig-nodata':'px-3'}>
                   {pendingRatingList && pendingRatingList.length === 0 && (
                     <p>No task found.</p>
                   )}
@@ -1121,7 +1121,7 @@ const handleViewDetails = (taskId) => {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" className="px-3">
+                  <Card id="card-task" className={teamWorkList.length === 0?'alig-nodata':'px-3'} >
                     {teamWorkList && teamWorkList.length === 0 && (
                       <p>No task found.</p>
                     )}
