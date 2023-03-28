@@ -6,6 +6,7 @@ import { Navbar, Button, Link, Text } from "@nextui-org/react";
 import { Layout } from "./Layout.js";
 import { Logo } from "./Logo.js";
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { BsBoxArrowRight } from "react-icons/bs";
 import {
   FaUser,
   FaAngleDoubleLeft,
@@ -14,7 +15,8 @@ import {
   FaGem,
   FaList,
   FaRegLaughWink,
-  FaHeart
+  FaHeart,
+
 } from 'react-icons/fa';
 import './navbar.css'
 import { navigationRef } from '../../helpers/logOut';
@@ -55,7 +57,8 @@ export default function App() {
           <NavLink to='/task' style={navLinkStyles}> <MenuItem icon={<FaList />}> Task </MenuItem></NavLink> 
           <NavLink to='/rating' style={navLinkStyles} > <MenuItem icon={<FaRegLaughWink />}>    Rating  </MenuItem></NavLink>
           <NavLink to='/team' style={navLinkStyles}> <MenuItem icon={<FaUser />}>   Team  </MenuItem></NavLink>
-          <NavLink  onClick={logOutFromSystem}   style={navLinkStyles}> <MenuItem icon={<FaRegLaughWink />}>   Logout  </MenuItem></NavLink>
+          <NavLink  onClick={logOutFromSystem}   style={navLinkStyles}> 
+          <MenuItem  icon={<BsBoxArrowRight />}>   Logout  </MenuItem></NavLink>
 
         </Menu>
       </Sidebar>

@@ -13,13 +13,18 @@ import { Link } from "react-router-dom";
 import Modals from "../../components/modal";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
-import { faGithub, faLinkedin, faFacebook , faTwitter } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGithub,
+  faLinkedin,
+  faFacebook,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 
 export default function Teams(props) {
   const { userDetails } = useAuth();
-	const [userAnalytics, setUserAnalytics] = useState({});
+  const [userAnalytics, setUserAnalytics] = useState({});
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
@@ -52,33 +57,32 @@ export default function Teams(props) {
   }
 
   const getUserAnalitics = async () => {
-	setLoading(true);
-	try {
-		const userAnalytics = await getUserAnalytics();
-		setLoading(false);
-		if (userAnalytics.error) {
-			setToasterMessage(userAnalytics?.message || "Something Went Wrong");
-			setShowToaster(true);
-			return;
-		} else {
-			setUserAnalytics(userAnalytics?.data);
-		}
-	} catch (error) {
-		setLoading(false);
-		setToasterMessage(error?.message || "Something Went Wrong");
-		setShowToaster(true);
-		return error.message;
-	}
-};
-
+    setLoading(true);
+    try {
+      const userAnalytics = await getUserAnalytics();
+      setLoading(false);
+      if (userAnalytics.error) {
+        setToasterMessage(userAnalytics?.message || "Something Went Wrong");
+        setShowToaster(true);
+        return;
+      } else {
+        setUserAnalytics(userAnalytics?.data);
+      }
+    } catch (error) {
+      setLoading(false);
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
 
   const getAndSetAllUsers = async function (options) {
     setLoading(true);
     try {
-		let params = {
-			limit: options?.rowsPerPage,
-			currentPage: options?.currentPage
-		}
+      let params = {
+        limit: options?.rowsPerPage,
+        currentPage: options?.currentPage,
+      };
       const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
@@ -94,8 +98,7 @@ export default function Teams(props) {
           rowsPerPage: options?.rowsPerPage,
           totalPages,
         });
-	getUserAnalitics();
-
+        getUserAnalitics();
       }
     } catch (error) {
       setLoading(false);
@@ -210,12 +213,11 @@ export default function Teams(props) {
 
     const numberOfRowsArray = [10, 20, 30, 40, 50];
     const handleOnChange = (e) => {
-      
       let pageNumber = Math.min(
         Math.max(e.target.value, 1),
         pageDetails.totalPages
       );
-	  if (pageDetails.currentPage === pageNumber) {
+      if (pageDetails.currentPage === pageNumber) {
         return;
       }
       let dataToSave = { ...pageDetails, [e.target.name]: pageNumber };
@@ -239,7 +241,7 @@ export default function Teams(props) {
       let dataToSave = {
         ...pageDetails,
         [e.target.name]: parseInt(e.target.value),
-		currentPage: 1
+        currentPage: 1,
       };
 
       setPageDetails(dataToSave);
@@ -260,10 +262,6 @@ export default function Teams(props) {
       getAndSetAllUsers(dataToSave);
     };
 
-
-	
-
-
     return (
       <div className="pagination ">
         <i
@@ -271,22 +269,25 @@ export default function Teams(props) {
           aria-hidden="true"
           onClick={() => changePageNumber(-1)}
         ></i>
-        <input className="pagination-input"
+        <input
+          className="pagination-input"
           type="number"
           value={pageDetails.currentPage}
           name="currentPage"
           //   onKeyDown={checkEnterKey}
           onChange={handleOnChange}
           autoFocus
-        /> 
-       <span className="pagination-input" >/</span><span className="pagination-input"> {pageDetails.totalPages}</span>
+        />
+        <span className="pagination-input">/</span>
+        <span className="pagination-input"> {pageDetails.totalPages}</span>
         <i
           className="fa fa-angle-right pagination-arrow right-arrow"
           aria-hidden="true"
           onClick={() => changePageNumber(1)}
         ></i>
         <span className="page-per-view"> Per Page View : </span>
-        <select className="pagination-select"
+        <select
+          className="pagination-select"
           onChange={onChangeRowsPerPage}
           name="rowsPerPage"
           value={pageDetails.rowsPerPage}
@@ -305,36 +306,33 @@ export default function Teams(props) {
 
   return (
     <>
-     <div className="rightDashboard">
-     <h1 className="h1-text">
+      <div className="rightDashboard">
+        <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
-
-       
         </h1>
-        <h1 style={{textAlign:'right'}}>
-         {userDetails.role === "SUPER_ADMIN" && (
-           
-           <Link
-           to={{
-             pathname: "/user/add",
-           }}
-
-         >
-         
-           <i
-             className="fa fa-user-plus fa-3x addBtn"
-             title="Add User"
-             aria-hidden="true"
-            style={{marginRight:'5'}}>  Add User  </i> 
-         </Link>
-       
+        <h1 style={{ textAlign: "right" }}>
+          {userDetails.role === "SUPER_ADMIN" && (
+            <Link
+              to={{
+                pathname: "/user/add",
+              }}
+            >
+              <i
+                className="fa fa-user-plus fa-3x addBtn"
+                title="Add User"
+                aria-hidden="true"
+                style={{ marginRight: "5" }}
+              >
+                {" "}
+                Add User{" "}
+              </i>
+            </Link>
           )}
-         </h1>
+        </h1>
 
         <div className="container-team">
-       
           {usersList &&
-            usersList.map((user,index) => {
+            usersList.map((user, index) => {
               return (
                 <div key={user._id} className="box">
                   <div className="top-bar"></div>
@@ -350,8 +348,7 @@ export default function Teams(props) {
                     {/* <div id="profileImage"> </div> */}
                     <>
                       {!user?.profilePicture && (
-                        
-                        <UserIcon  key={index} firstName={user.name} />
+                        <UserIcon key={index} firstName={user.name} />
                       )}
                       {user?.profilePicture && (
                         <div className="user-pic">
@@ -373,7 +370,7 @@ export default function Teams(props) {
                       </strong>
 
                       <p>{user.email}</p>
-                      {user.department && <p> ({user?.department}) </p>}
+                      {/* {user.department && <p> ({user?.department}) </p>} */}
                       {user.employeeId && <p>{user?.employeeId} </p>}
                       {user.designation && <p>{user?.designation}</p>}
 
@@ -386,7 +383,7 @@ export default function Teams(props) {
                           <div className="user-analytics">
                             <div className="user-analytics-item">
                               <div className="user-analytics-item-value">
-                                Completed After DueDate:{" "}
+                                Completed After Due Date:{" "}
                                 {userAnalytics
                                   .find(
                                     (analytics) => analytics?._id === user._id
@@ -394,15 +391,64 @@ export default function Teams(props) {
                                   .completedAfterDueDatePercentage.toFixed(2)}
                                 %
                               </div>
+
+                              <div className="progress">
+                                <div
+                                  className="progress-bar"
+                                  role="progressbar"
+                                  style={{
+                                    width: `${userAnalytics
+                                      .find(
+                                        (analytics) =>
+                                          analytics?._id === user._id
+                                      )
+                                      .completedAfterDueDatePercentage.toFixed(
+                                        2
+                                      )}%`,
+                                  }}
+                                  aria-valuenow={userAnalytics
+                                    .find(
+                                      (analytics) => analytics?._id === user._id
+                                    )
+                                    .completedAfterDueDatePercentage.toFixed(2)}
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                ></div>
+                              </div>
                             </div>
                           </div>
                         )}
+
+<div className="team-socail">
+                      
+                      {user?.githubLink && (
+    <a href={user?.githubLink} target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faGithub} />
+    </a>
+  )}
+  
+  {user?.linkedInLink && (
+    <a href={user?.linkedInLink} target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faLinkedin} />
+    </a>
+  )}
+  
+  {user?.twitterLink && (
+    <a href={user?.twitterLink} target="_blank" rel="noopener noreferrer">
+      <FontAwesomeIcon icon={faTwitter} />
+    </a>
+  )}
+                      </div>
+   
                     </div>
 
-                    {user?.github && <FontAwesomeIcon icon={faGithub} />}
-                    {user?.linkedin && <FontAwesomeIcon icon={faLinkedin} />}
-                    {user?.facebook && <FontAwesomeIcon icon={faFacebook} />}
-                    {user?.twitter && <FontAwesomeIcon icon={faTwitter} />}
+                 
+                    
+
+
+
+
+
                     {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />
     <FontAwesomeIcon  className="brand-icon" icon={faFacebook} />
 	<FontAwesomeIcon className="brand-icon" icon={faTwitter} /> */}
@@ -436,31 +482,34 @@ export default function Teams(props) {
               );
             })}
         </div>
-      
 
-        {usersList?.length?<CustomPagination
-          getAndSetAllUsers={getAndSetAllUsers}
-          pageDetails={pageDetails}
-          setPageDetails={setPageDetails}
-        />:<h6>No User Found</h6>}
+        {usersList?.length ? (
+          <CustomPagination
+            getAndSetAllUsers={getAndSetAllUsers}
+            pageDetails={pageDetails}
+            setPageDetails={setPageDetails}
+          />
+        ) : (
+          <h6>No User Found</h6>
+        )}
 
-      {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
+        {loading ? <Loader /> : null}
+        {toaster && (
+          <Toaster
+            message={toasterMessage}
+            show={toaster}
+            close={() => showToaster(false)}
+          />
+        )}
+
+        <Modals
+          modalShow={modalShow}
+          modalBody={<GetModalBody />}
+          heading="Assign Project"
+          onHide={() => setModalShow(false)}
+          submitBtnDisabled={!selectedProjectId}
+          onClick={handleAssignUserProjectSubmit}
         />
-      )}
-
-      <Modals
-        modalShow={modalShow}
-        modalBody={<GetModalBody />}
-        heading="Assign Project"
-        onHide={() => setModalShow(false)}
-        submitBtnDisabled={!selectedProjectId}
-        onClick={handleAssignUserProjectSubmit}
-      />
       </div>
     </>
   );
