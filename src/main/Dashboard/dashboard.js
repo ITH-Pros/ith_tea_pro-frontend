@@ -558,7 +558,7 @@ const handleViewDetails = (taskId) => {
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col
                             
-                            lg={4}
+                            lg={5}
                             className="middle"
                           >
                             {(userDetails.id === task?.assignedTo?._id ||
@@ -697,7 +697,7 @@ const handleViewDetails = (taskId) => {
                             )}
                           </Col>
                           <Col
-                            lg={3}
+                            lg={2}
                             className="text-end middle"
                             style={{ justifyContent: "end" }}
                           >
