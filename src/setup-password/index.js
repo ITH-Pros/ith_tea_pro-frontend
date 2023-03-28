@@ -114,7 +114,9 @@ function PasswordForm() {
 
   return (
     <div className="set-password">
+     
       <form className="password-form" onSubmit={handleSubmit}>
+       <h4>Set Password</h4>
         <div className="hed-pass">
         <h4>Email : {email}</h4>
         </div>
