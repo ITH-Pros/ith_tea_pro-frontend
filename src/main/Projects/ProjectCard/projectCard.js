@@ -26,12 +26,7 @@ import {
   faBarChart,
   faIcons,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  assignProjectLead,
-  assignTeamAPI,
-  getUnassignedUsers,
-} from "../../../services/user/api";
-import Select from "react-select";
+import { assignProjectLead, assignTeamAPI, getUnassignedUsers } from "../../../services/user/api";
 // import "./ProjectCard.css";
 
 const ProjectCard = ({
@@ -49,7 +44,7 @@ const ProjectCard = ({
   handleToRedirectTask,
   getAndSetAllProjects,
   handleArchiveModalShow,
-  isArchive,
+  isArchive
 }) => {
   const generateRandomColor = () => {
     console.log(accessibleBy);
@@ -61,9 +56,11 @@ const ProjectCard = ({
       "#e3d3ff",
       "#d3fcff",
       "#e5e5e5",
-      "#fffb6d",
+      "#fffb6d"
     ];
     return colors[Math.floor(Math.random() * colors.length)];
+  
+   
   };
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
@@ -75,14 +72,14 @@ const ProjectCard = ({
   const [selectedRole, setSelectedRole] = useState(null);
 
   const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
-  const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState([]);
+  const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState("");
 
   console.log(selectedUnassignedUsers);
 
   const assignTeamUsers = async () => {
     let dataToSend = {
       projectId: element._id,
-      userIds: selectedUnassignedUsers,
+      userIds: [selectedUnassignedUsers],
     };
     try {
       let response;
@@ -159,46 +156,14 @@ const ProjectCard = ({
     setModalShow(true);
   };
 
-  // Define options for the contributor select
-  const contributorOptions = listOfUnassignedUsers.map((user, index) => ({
-    value: user._id,
-    label: user.name,
-  }));
-
-  // Define a function to handle changes to the selected contributors
-  const handleContributorsChange = (selectedOptions) => {
-    setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
-  };
-
-  // Define options for the lead select
-  const leadOptions = listOfUnassignedUsers.map((user, index) => ({
-    value: user._id,
-    label: user.name,
-  }));
-
-  // Define a function to handle changes to the selected leads
-  const handleLeadsChange = (selectedOptions) => {
-    setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
-  };
-
   return (
     <div
       className="project-card"
       style={{ background: background || generateRandomColor() }}
     >
       {isArchive && <h6 className="archived">Archived</h6>}
-      {/* {isArchive && (
-        <div className="delete-archived">
-          {" "}
-          <i
-            onClick={handleDelete}
-            title="delete project"
-            className="fa fa-trash"
-            aria-hidden="true"
-          ></i>{" "}
-        </div>
-      )} */}
-   
+      {/* {isArchive && <div className="delete-archived"> <i onClick={handleDelete} title="delete project" className="fa fa-trash" aria-hidden="true"></i> </div>} */}
+      {!isArchive && (
         <div
           className="menu-icon"
           onClick={handleMenuIconClick}
@@ -269,7 +234,8 @@ const ProjectCard = ({
             </button>
           )}
         </div>
-      
+      )}
+     
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
@@ -323,9 +289,9 @@ const ProjectCard = ({
                     )}
                   </>
                 ))}
-              {/* {accessibleBy?.length + managedBy?.length > 13 && ( */}
-              <span
-                style={{ position: "relative" }}
+             
+            </div>
+            <div style={{position:'relative', float:'right',}}
                 key={"+"}
                 onClick={() => {
                   onClickOfIcons(
@@ -334,14 +300,9 @@ const ProjectCard = ({
                   );
                 }}
               >
-                <UserIcon firstName={"+"} />
-                <i
-                  className="fa fa-user-plus add-user-icon"
-                  aria-hidden="true"
-                ></i>
-              </span>
-              {/* )} */}
-            </div>
+               
+                <i className="fa fa-user-plus add-user-icon" aria-hidden="true"></i>
+              </div>
           </div>
         </div>
       </div>
@@ -362,60 +323,6 @@ const ProjectCard = ({
           </Modal.Header>
           <Modal.Body>
             <div>
-            <Row>
-            <Col sm={12}>
-                  {userDetails.role !== "CONTRIBUTOR" &&
-                    !isArchive &&
-                    userDetails.role !== "LEAD" && (
-                      <div onClick={assignTeamUser} className="assignPopup">
-                        <UserIcon firstName={"+"} />
-                        <p className="ms-4 mb-0">{"Add Team"}</p>
-                      </div>
-                    )}
-                </Col>
-                <div>
-                  {showSelectBox && (
-                    <>
-                      <div className="select-rol-con">
-                        <select
-                          className="form-control form-control-lg"
-                          value={selectedRole}
-                          onChange={handleRoleChange}
-                        >
-                          <option value="">Select a role</option>
-                          <option value="CONTRIBUTOR">CONTRIBUTOR</option>
-                          <option value="LEAD">LEAD</option>
-                        </select>
-                        {selectedRole === "CONTRIBUTOR" && (
-                          <Select
-                            options={contributorOptions}
-                            value={contributorOptions.filter((option) =>
-                              selectedUnassignedUsers.includes(option.value)
-                            )}
-                            isMulti
-                            onChange={handleContributorsChange}
-                          />
-                        )}
-                        {selectedRole === "LEAD" && (
-                          <Select
-                            options={leadOptions}
-                            value={leadOptions.filter((option) =>
-                              selectedUnassignedUsers.includes(option.value)
-                            )}
-                            isMulti
-                            onChange={handleLeadsChange}
-                          />
-                        )}
-                      </div>
-                      {selectedUnassignedUsers && (
-                        <div className="assign-name">
-                          <button onClick={assignTeamUsers}>Assign</button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-            </Row>
               <Row>
                 {users.map((user, index) => {
                   return (
@@ -449,12 +356,91 @@ const ProjectCard = ({
                     </Col>
                   );
                 })}
-               
+                <Col sm={12}>
+                  {userDetails.role !== "CONTRIBUTOR" &&
+                    !isArchive &&
+                    userDetails.role !== "LEAD" && (
+                      <div onClick={assignTeamUser} className="assignPopup">
+                        <UserIcon firstName={"+"} />
+                        <p className="ms-4 mb-0">{"Add Team"}</p>
+                      </div>
+                    )}
+                </Col>
+                <div>
+                  {showSelectBox && (
+                    <>
+                      <div className="select-rol-con">
+                        <select
+                          className="form-control form-control-lg"
+                          value={selectedRole}
+                          onChange={handleRoleChange}
+                        >
+                          <option value="">Select a role</option>
+                          <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+                          <option value="LEAD">LEAD</option>
+                        </select>
+                        {selectedRole === "CONTRIBUTOR" && (
+                          <select
+                            className="form-control form-control-lg"
+                            onChange={(e) =>
+                              setSelectedUnassignedUsers(e.target.value)
+                            }
+                          >
+                            <option value="">Select a CONTRIBUTOR</option>
+                            {listOfUnassignedUsers.map((user, index) => {
+                              return (
+                                <option key={index} value={user._id}>
+                                  {user.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+                        {selectedRole === "LEAD" && (
+                          <select
+                            className="form-control form-control-lg"
+                            onChange={(e) =>
+                              setSelectedUnassignedUsers(e.target.value)
+                            }
+                          >
+                            <option value="">Select a LEAD</option>
+                            {listOfUnassignedUsers.map((user, index) => {
+                              return (
+                                <option key={index} value={user._id}>
+                                  {user.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        )}
+                      </div>
+                      {selectedUnassignedUsers && (
+                        <div className="assign-name">
+                          <button onClick={assignTeamUsers}>Assign</button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </Row>
             </div>
           </Modal.Body>
 
-          
+          {/* <div className="text-right me-3">
+            <button
+              style={{ marginLeft: "16px", width: "30%" }}
+              className="btn btn-press  btn-gradient-border btn-primary"
+              onClick={() => {
+                setModalShow(false);
+                setShowSelectBox(false);
+                setSelectedUnassignedUsers("");
+                setListOfUnassignedUsers([]);
+                setSelectedRole(null);
+              }}
+            >
+              Close
+            </button>
+          </div> */}
         </Modal>
       )}
     </div>
