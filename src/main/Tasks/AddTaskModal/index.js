@@ -80,32 +80,30 @@ export default function AddTaskModal(props) {
   const [selectedLeads, setSelectedLeads] = useState();
 
   useEffect(() => {
-    console.log(showAddTask);
-    // getLeadsList();
     getProjectList();
   }, []);
 
   useEffect(() => {
-	taskFormValue.projectId && getUserListUsingProjectId(taskFormValue.projectId);
-  }, [taskFormValue.projectId]);
+    if(taskFormValue.projectId &&
+      taskFormValue.leads){
+        if(leadLists.find((el) => el._id === taskFormValue?.leads)?.role === "ADMIN") {
+      getUserListUsingProjectId(taskFormValue?.projectId, taskFormValue?.leads)
+    } else {
+      getUserListUsingProjectId(taskFormValue?.projectId);
+    }
+  }
+  }, [taskFormValue.projectId, taskFormValue.leads]);
 
+ 
 
   useEffect(() => {
     if (showAddTask) {
       setShowAddTaskModal(true);
-      setSelectedLeads("");
       patchFormForAdd();
     }
   }, [showAddTask]);
 
-  useEffect(() => {
-    console.log(selectedTask,'-------------------------------------------selectedProjectFromTask');
-    if (showAddTask) {
-      setShowAddTaskModal(true);
-      patchFormForAdd();
-    }
-  }, [showAddTask]);
-
+ 
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
@@ -113,22 +111,16 @@ export default function AddTaskModal(props) {
       let project = projectList?.filter(
         (item) => item?._id === selectedProjectFromTask?._id
       );
-	//   setTaskFormValue({
-    //     ...taskFormValue,
-    //     projectId: project[0]?._id,
-    //   });
 	  console.log(project[0]?._id, 'project[0]?.sections')
 	  
 	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
-      console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
-      setSelectedLeads(project[0]?.managedBy);
     } else if (selectedTask ) {
       let project = projectList?.filter(
-        (item) => item?._id == selectedTask?.projectId
+        (item) => item?._id === selectedTask?.projectId
       );
-      console.log(selectedTask, project);
+      console.log(selectedTask?.projectId,project?._id,'ATBBaXBsUZyem4Mw2sG8TfykLpjp8A774FC5ATBBaXBsUZyem4Mw2sG8TfykLpjp8A774FC5');
       
-      getLeadsListUsingProjectId(selectedTask?._id)
+      getLeadsListUsingProjectId(selectedTask?.projectId);
 
       setCategoryList(project[0]?.sections);
       // setUserList(project[0]?.accessibleBy);
@@ -467,6 +459,7 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
+
   const onLeadChange = (e) => {
     setTaskFormValue({
       ...taskFormFields,
@@ -474,14 +467,14 @@ export default function AddTaskModal(props) {
       section: taskFormValue?.section,
       leads: e.target.value,
     });
-    if (leadLists.find((el) => el._id === e.target.value)?.role === "ADMIN") {
-    console.log('[[[[[[[[[[[[[[[[[[[[[[[')
-      getUserListUsingProjectId(taskFormValue?.projectId,taskFormValue?.leads)
-    } else {
-      getUserListUsingProjectId(taskFormValue?.projectId);
+  //   if (leadLists.find((el) => el._id === e.target.value)?.role === "ADMIN") {
+  //   console.log('[[[[[[[[[[[[[[[[[[[[[[[')
+  //     getUserListUsingProjectId(taskFormValue?.projectId,taskFormValue?.leads)
+  //   } else {
+  //     getUserListUsingProjectId(taskFormValue?.projectId);
 
       
-  }
+  // }
    
 
   };
