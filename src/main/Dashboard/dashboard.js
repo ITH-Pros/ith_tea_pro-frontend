@@ -1053,21 +1053,25 @@ const handleViewDetails = (taskId) => {
                             {task?.status == "COMPLETED" && (
                               // <Badge bg="success">COMPLLETED</Badge>
                               <>
-                                {task?.lead[0]?.name && (
-                                  <span
-                                    title="Project Lead"
-                                    className="nameTag"
-                                  >
-                                    <img src={leadAvatar} alt="userAvtar" />{" "}
-                                    {task?.lead[0]?.name}
-                                  </span>
-                                )}
+                              {task?.lead[0]?.name && (
+  <span title={task?.lead[0]?.name} className="nameTag">
+    <img src={leadAvatar} alt="userAvtar" />{" "}
+    {task?.lead[0]?.name.split(" ")[0]?.charAt(0)}
+    {task?.lead[0]?.name.split(" ")[1]?.charAt(0)}
+  </span>
+)}
+{' '}
+
+                                
                                 {task?.assignedTo?.name && (
-                                  <span title="Assigned To" className="nameTag">
-                                    <img src={avtar} alt="userAvtar" />{" "}
-                                    {task?.assignedTo?.name}
-                                  </span>
-                                )}
+  <span title={task?.assignedTo?.name} className="nameTag">
+    <img src={avtar} alt="userAvtar" />{" "}
+    {task?.assignedTo?.name.split(" ")[0]?.charAt(0)}
+    {task?.assignedTo?.name.split(" ")[1]?.charAt(0)}
+  </span>
+)}
+
+                                
                               </>
                             )}
                             {task?.status == "ONHOLD" && (
