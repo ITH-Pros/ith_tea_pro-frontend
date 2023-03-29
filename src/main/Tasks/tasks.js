@@ -853,7 +853,7 @@ const archiveConFirmation = (sectionId) => {
                           }
                           // onClick={() => handleViewDetails(task?._id)}
                         >
-                          {truncateString(task?.title, 70)}
+                          {truncateString(task?.title, 65)}
                         </i>
 
                         {task?.status === "NOT_STARTED" && (
@@ -895,8 +895,8 @@ const archiveConFirmation = (sectionId) => {
                       <div className="nameTag">
                         <img
                           style={{
-                            width: "30px",
-                            height: "30px",
+                            width: "20px",
+                            height: "20px",
                             borderRadius: "50%",
                           }}
                           src={`${task?.assignedTo?.profilePicture}`}

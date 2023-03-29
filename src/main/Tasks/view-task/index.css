@@ -143,23 +143,25 @@ p {
 
 .toggle-tags {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
-  margin: 20px;
+  margin: 20px 0px;
+  border-bottom: 1.5px solid #607D8B;
 }
 
 .toggle-button {
-  background-color: #eee;
+  background-color: #eee0;
   border: none;
-  color: #333;
-  padding: 10px 20px;
+  color: #607D8B;
+  padding: 10px 40px;
   font-size: 16px;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s ease;
-  border-radius: 5px;
+  border-radius: 2px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .toggle-button.active {
-  background-color: #673AB7;
-  color: #fff;
+  border-bottom: 3px solid #673AB7;
 }
