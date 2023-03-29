@@ -79,6 +79,17 @@ const FilterModal = (props) => {
   const [sortOrder, setSortOrder] = useState("");
   const [sortType, setSortType] = useState("");
 
+    useEffect(() => {
+      return () => {
+        localStorage.removeItem("taskFilters");
+        localStorage.removeItem("dueDate");
+        localStorage.removeItem("sortOrder");
+        localStorage.removeItem("sortType");
+    localStorage.removeItem("selectedFilter");
+
+      };
+    }, []);
+
 
   const handleFilterSelect = (fromDate, toDate) => {
     console.log(fromDate,'-------------------------From date')
@@ -108,6 +119,9 @@ const FilterModal = (props) => {
     // setFilterFormValue({ ...filterFormValue, sortOrder: sortType });
 
   }
+
+  
+
 
   const updateFromLocalStorage = () => {
     console.log("filterFormValueFromLocal\n\n\nn\n\n");
@@ -166,25 +180,6 @@ const FilterModal = (props) => {
   const closeModalAndgetAllTaskOfProject = () => {
     updateFromLocalStorage();
     setClearFilterBoolean(true);
-    // let filterFormValue = {};
-    // if (selectProjectGroup) {
-    //   filterFormValue.selectProjectGroup = selectProjectGroup;
-    // }
-    // if (sortBy) {
-    //   filterFormValue.sortBy = sortBy;
-    // }
-    // if (dueDate) {
-    //   filterFormValue.dueDate = dueDate;
-    // }
-    // if (dateCreated) {
-    //   filterFormValue.dateCreated = dateCreated;
-    // }
-    // if (dateUpdated) {
-    //   filterFormValue.dateUpdated = dateUpdated;
-    // }
-    // if (dateCompleted) {
-    //   filterFormValue.dateCompleted = dateCompleted;
-    // }
     if (assignedTo) {
       filterFormValue.assignedTo = assignedTo.map((item) => item._id);
     }
@@ -474,7 +469,7 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9">
                     <Select
-                      onChange={(e) => onSelectData(e, "assignedTo")}
+                      onChange={(e) => onSelectData(e, "category")}
                       value={categoryData}
                       isMulti
                       getOptionLabel={(options) => options["name"]}
