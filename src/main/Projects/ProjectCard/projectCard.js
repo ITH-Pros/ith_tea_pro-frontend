@@ -242,24 +242,24 @@ const ProjectCard = ({
         <p>{description}</p>
       </div>
       <div className="project-stats row">
-        <div className="stat col-3" title="Over Due Tasks">
-          {/* onClick={() => handleCategories()} */}
-          <FontAwesomeIcon icon={faFlag} />
-          <span>{taskData?.overDueTasks}</span>
-        </div>
-        <div className="stat col-3" title="Completed Tasks">
-          <FontAwesomeIcon icon={faTasks} />
-          <span>{taskData?.COMPLETED || 0}</span>
-        </div>
-        <div className="stat col-3" title="On Going Tasks">
-          <FontAwesomeIcon icon={faCheck} />
-          <span>{taskData?.ONGOING || 0}</span>
-        </div>
-        <div className="stat col-3" title="Total Tasks">
-          <FontAwesomeIcon icon={faBarChart || 0} />
-          <span>{taskData?.totalTask || 0}</span>
-        </div>
-      </div>
+  <div className="stat col-3" title="Overdue tasks">
+    <FontAwesomeIcon icon={faFlag} />
+    <span>{taskData?.overDueTasks || 0}</span>
+  </div>
+  <div className="stat col-3" title="Completed tasks">
+    <FontAwesomeIcon icon={faTasks} />
+    <span>{taskData?.COMPLETED || 0}</span>
+  </div>
+  <div className="stat col-3" title="Ongoing tasks">
+    <FontAwesomeIcon icon={faCheck} />
+    <span>{taskData?.ONGOING || 0}</span>
+  </div>
+  <div className="stat col-3" title="Total number of tasks">
+    <FontAwesomeIcon icon={faBarChart} />
+    <span>{taskData?.totalTask || 0}</span>
+  </div>
+</div>
+
 
       <div>
         <div>
