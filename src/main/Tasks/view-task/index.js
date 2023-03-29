@@ -13,11 +13,13 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import {
   addComment,
   addCommentOnTask,
+  addRatingOnTask,
   taskById,
   updateTaskStatusById,
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
+import Rating from "../../Rating/rating";
 export default function ViewTaskModal(props) {
   const { showViewTask, closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
   const [loading, setLoading] = useState(false);
@@ -149,6 +151,9 @@ export default function ViewTaskModal(props) {
       if (response.status === 200) {
         setTaskData(response?.data);
         setShowViewTaskModal(true);
+        setIsRatingFormVisible(false);
+        setErrorRating(false);
+        setRating(0);
       }
     } catch (error) {
       console.log(error);
@@ -160,6 +165,69 @@ export default function ViewTaskModal(props) {
     setActiveTab(tabName);
     console.log(`Active tab changed to ${tabName}`);
   };
+
+
+  const [rating, setRating] = useState(0);
+  const [isRatingFormVisible, setIsRatingFormVisible] = useState(false);
+  const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
+  const [errorRating, setErrorRating] = useState(false);
+
+  const handleAddRating = (task) => {
+    console.log("task", task);
+    setSelectedTaskIdForRating(task._id);
+    setIsRatingFormVisible(true);
+
+    // make API call to update task status with newStatus
+  }
+
+
+
+  // ///////////////////////////  Rating Modal ///////////////////////////
+  const addRating = async () => {
+    
+      let dataToSend = {
+        taskId: selectedTaskIdForRating,
+        rating: rating,
+        // comment: comment,
+      };
+      console.log("dataToSend", dataToSend);
+      setLoading(true);
+      try {
+        const rating = await addRatingOnTask(dataToSend);
+        setLoading(false);
+        if (rating.error) {
+          // setToasterMessage(rating?.message || "Something Went Wrong");
+          // setShowToaster(true);
+        } else {
+          // setToasterMessage("Rating Added Succesfully");
+          // setShowToaster(true);
+          // navigate("/rating");
+          setIsRatingFormVisible(false);
+          getTaskDetailsById(selectedTaskIdForRating);
+        }
+      } catch (error) {
+        setLoading(false);
+        // setToasterMessage(error?.message || "Something Went Wrong");
+        // setShowToaster(true);
+      }
+    
+  };
+
+  const handleRating = (rating) => {
+    // if rating is 0 to 6 then then true else return false
+    if (rating > 0 && rating <= 6) {
+      setRating(rating);
+      setErrorRating(false);
+    } else {
+      setErrorRating(true);
+      return false;
+    }
+    
+  };
+
+  // -------------------------   Oninitial load ----------------------------
+
+
 
   return (
     <>
@@ -185,14 +253,59 @@ export default function ViewTaskModal(props) {
                   <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
                     <div className="col-sm-2 text-right">
                       {task?.isRated && <span>Rating : {task?.rating}</span>}
-                      {!task?.isRated && (
-                        <Button
+                      {!task?.isRated && !isRatingFormVisible && (
+                        <Button onClick={() => {handleAddRating(task)}}
                           variant="light"
                           size="sm"
                           className="addRatingBtn" style={{fontSize:'15'}}
-                        >
-                          <AddRating taskFromDashBoard={task} />{" "}
+                        >Add Rating
+                          {/* <AddRating taskFromDashBoard={task} />{" "} */}
                         </Button>
+                      )}
+                      {!task?.isRated && isRatingFormVisible && (
+                        <div className="ratingForm">
+                          <input 
+                          required
+                            type="number"
+                            min="0"
+                            max="6"
+                            placeholder="0 - 6"
+                            // value={rating}
+                            onChange={(e) => handleRating(e.target.value)}
+  
+                          />
+                          {errorRating && (
+                            <span className="error">Rating should be between 0 to 6</span>
+                          )}
+
+                          {/* {!errorRating && rating &&  */}
+                        
+                          <Button
+                            variant="light"
+                            size="sm"
+                            className="addRatingBtn mr-2"
+                            onClick={() => {
+                              addRating();
+                            }}
+                            disabled={errorRating}
+                          >
+                            Submit
+                          </Button>
+                          {/* } */}
+                      { errorRating && 
+                          <Button
+                            variant="light"
+                            size="sm"
+                            className="addRatingBtn"
+                            onClick={() => {
+                              setIsRatingFormVisible(false)
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                      }
+                            
+                          </div>
                       )}
                     </div>
                   </Row>

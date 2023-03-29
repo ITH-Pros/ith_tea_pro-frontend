@@ -643,6 +643,7 @@ const archiveProject = async () => {
                 <div key={element._id} className="">
                   <ProjectCard
                     name={element.name}
+                    background={element?.colorCode}
                     description={element?.description || "--"}
                     managedBy={element.managedBy || []}
                     accessibleBy={element.accessibleBy || []}
@@ -651,11 +652,13 @@ const archiveProject = async () => {
                     handleEdit={() => editProject(element)}
                     handleDelete={() => confirmation(element)}
                     taskData={projectTaskAnalytics?.[element._id]}
-                    handleCategories = {() => handleCategorie(element)}
-                    handleToRedirectTask = {() => handleToRedirectTask(element)}
-                    getAndSetAllProjects = {() => getAndSetAllProjects()}
-                    handleArchiveModalShow = {() => handleArchiveModalShow(element)}
-                    isArchive = {isArchive}
+                    handleCategories={() => handleCategorie(element)}
+                    handleToRedirectTask={() => handleToRedirectTask(element)}
+                    getAndSetAllProjects={() => getAndSetAllProjects()}
+                    handleArchiveModalShow={() =>
+                      handleArchiveModalShow(element)
+                    }
+                    isArchive={isArchive}
                     //   backgroundColor="#00ADEF"
                   />
                 </div>
