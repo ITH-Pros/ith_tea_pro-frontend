@@ -602,17 +602,14 @@ th {
     height: 24px;
     margin-right: 4px;
   }
-  
-  .nameTag:hover::before {
-    content: attr(title);
-    display: block;
-    position: absolute;
-    top: -24px;
-    left: -4px;
-    background-color: #333;
-    color: #fff;
-    padding: 4px;
-    border-radius: 4px;
-    font-size: 14px;
+  .tooltip-button{
+    background: rgb(0 0 0 / 0%) !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0px 3px;
+    border-right: 1px solid #9E9E9E!important;
+    border-radius: 0px !important;
+    padding-right: 5px !important;
   }
+
   

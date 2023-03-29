@@ -5,8 +5,8 @@ import MyCalendar from "./weekCalendra";
 import { useState, useEffect } from "react";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 import Form from "react-bootstrap/Form";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import { truncateString } from "../../helpers/truncet";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import {
   getAllMyWorks,
   getAllPendingRating,
@@ -42,7 +42,6 @@ import AddRatingModal from "../Rating/add-rating-modal";
 import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
-import Tooltip from "react-bootstrap/Tooltip";
 import ViewTaskModal from "../Tasks/view-task";
 // import { MDBTooltip } from "mdb-react-ui-kit";
 var month = moment().month();
@@ -1054,24 +1053,58 @@ const handleViewDetails = (taskId) => {
                             {task?.status == "COMPLETED" && (
                               // <Badge bg="success">COMPLLETED</Badge>
                               <>
-           {task?.lead[0]?.name && (
-  <span title={task?.lead[0]?.name} className="nameTag">
+
+  <>
+      {['top'].map((placement) => (
+        <OverlayTrigger
+          key={placement}
+          placement={placement}
+          overlay={
+            <Tooltip id={`tooltip-${placement}`}>
+             {task?.lead[0]?.name} 
+            </Tooltip>
+          }
+        >
+          <Button className="tooltip-button" >
+          {task?.lead[0]?.name && (
+  <span className="nameTag">
     <img src={leadAvatar} alt="userAvtar" />{" "}
     {task?.lead[0]?.name.split(" ")[0]?.charAt(0)}
     {task?.lead[0]?.name.split(" ")[1]?.charAt(0)}
   </span>
 )}
-{' '}
+          </Button>
+        </OverlayTrigger>
+      ))}
+    </>
 
-                                
-
-                                {task?.assignedTo?.name && (
-  <span title={task?.assignedTo?.name} className="nameTag">
+    <>
+      {['top'].map((placement) => (
+        <OverlayTrigger
+          key={placement}
+          placement={placement}
+          overlay={
+            <Tooltip id={`tooltip-${placement}`}>
+            {task?.assignedTo?.name}
+            </Tooltip>
+          }
+        >
+          <Button className="tooltip-button" style={{borderRight:'0px'}}>
+          {task?.assignedTo?.name && (
+  <span  className="nameTag">
     <img src={avtar} alt="userAvtar" />{" "}
     {task?.assignedTo?.name.split(" ")[0]?.charAt(0)}
     {task?.assignedTo?.name.split(" ")[1]?.charAt(0)}
   </span>
 )}
+          </Button>
+        </OverlayTrigger>
+      ))}
+    </>
+
+                                
+
+                             
 
                                 
                               </>
