@@ -149,3 +149,22 @@ span.rbc-toolbar-label {
   width: 650px !important;
   max-width: 650px !important;
  }
+ .confirmation-popup .modal-dialog{
+  height: 250px !important;
+  display: block !important;
+  max-width: 400px !important;
+  position: relative !important;
+  top: 22% !important;
+  flex-direction: initial !important;
+  overflow: hidden !important;
+ }
+ .confirmation-popup .modal-body {
+  height: 28vh !important;
+  overflow: hidden !important;
+ }
+ .confirmation-popup .button-center-corformain {
+  bottom: -10px !important;
+}
+.confirmation-popup .delete-popup h6 {
+  margin-top: -40px !important;
+}
