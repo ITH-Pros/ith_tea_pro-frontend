@@ -121,6 +121,7 @@ body {
   margin-bottom: 5px;
   border-bottom: 1px solid #ddd;
   height: 40px;
+    font-weight: 600;
 }
 .comment-tex {
   float: left;
@@ -129,9 +130,10 @@ body {
 }
 .comment-tex p{
   margin: 0px !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
   letter-spacing: 0.8px;
+  margin-bottom: 2px !important;
 }
 span.date.sub-text {
   font-size: 12px;

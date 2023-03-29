@@ -113,7 +113,11 @@ export default function Login() {
                 <div className="bg2"></div>
               </div>
               <div className="loginContent form">
-                <img src={require('../assests/img/logo.png')} alt="logo" />
+               <a href='https://projects.ith.tech/login'>
+                 <img src={require('../assests/img/logo.png')} alt="logo" />
+
+                
+                </a>
                 <div className="text">Tea Pro</div>
                 <form >
                   <div className="field">
@@ -127,7 +131,7 @@ export default function Login() {
                     <input type={loginFormValue.showPassword ? "text" : "password"} name='password' placeholder="Password" onChange={updateLoginFormValues} >
 
                     </input>
-                    <i style={{ position: 'absolute', top: '12px', right: '21px', cursor: 'pointer' }} name='showPassword' onClick={showHidePassword} onMouseDown={handleMouseDownPassword} className={loginFormValue.showPassword ? "fa fa-eye-slash" : "fa fa-eye"} ></i>
+                    <i style={{ position: 'absolute', top: '12px', right: '21px', cursor: 'pointer' }} name='showPassword' onClick={showHidePassword} onMouseDown={handleMouseDownPassword} className={loginFormValue.showPassword ? "fa fa-eye" : " fa fa-eye-slash"} ></i>
                     {/* <label>Password</label> */}
                   </div>
                   <button className='loginButton' onClick={handleLogin}>Log in</button>
