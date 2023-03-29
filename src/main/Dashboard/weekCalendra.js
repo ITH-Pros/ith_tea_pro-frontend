@@ -109,7 +109,7 @@ export default function MyCalendar() {
   };
   return (
     <>
-      <h5 className="text-center h5cls">
+      {/* <h5 className="text-center h5cls">
         <p
           style={{
             marginRight: "10px",
@@ -163,7 +163,7 @@ export default function MyCalendar() {
             ))}
           </Form.Control>
         </Form.Group>
-      </h5>
+      </h5> */}
       <div className="calendars">
         <div>
           {/* <h4 style={{marginTop:'10px'}}>My Ratings</h4> */}
