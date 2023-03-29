@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useRef } from "react";
 import "./tasks.css";
 import {
@@ -614,49 +615,49 @@ const archiveConFirmation = (sectionId) => {
           )}
 
           {projects.map((project, index) => (
-        <Accordion.Item key={index} eventKey={index}>
-          {project?._id?.projectId && project?._id?.section && (
-            <Accordion.Header>
-              {project?._id?.projectId} / {project?._id?.section}{" "}
-            </Accordion.Header>
-          )}
+            <Accordion.Item key={index} eventKey={index}>
+              {project?._id?.projectId && project?._id?.section && (
+                <Accordion.Header>
+                  {project?._id?.projectId} / {project?._id?.section}{" "}
+                </Accordion.Header>
+              )}
 
-          <div className="d-flex rightTags">
-            <OverlayTrigger
-              placement="top"
-              overlay={
-                <Tooltip>
-                  {taskInfo && (
-                    <div>
-                      <div>Completed Tasks: {taskInfo.completedTasks}</div>
-                      <div>Pending Tasks: {taskInfo.pendingTasks}</div>
-                    </div>
-                  )}
-                </Tooltip>
-              }
-            >
-              <div
-                onMouseEnter={() => handleProgressBarHover(project)}
-                onMouseLeave={() => setTaskInfo(null)}
-              >
-                {parseFloat(
-                  (Number(project?.completedTasks || 0) /
-                    Number(project?.totalTasks || 1)) *
-                    100
-                ).toFixed(2) + " % "}
-                <ProgressBar>
-                  <ProgressBar
-                    variant="success"
-                    now={
-                      100 *
+              <div className="d-flex rightTags">
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip>
+                      {taskInfo && (
+                        <div>
+                          <div>Completed Tasks: {taskInfo.completedTasks}</div>
+                          <div>Pending Tasks: {taskInfo.pendingTasks}</div>
+                        </div>
+                      )}
+                    </Tooltip>
+                  }
+                >
+                  <div
+                    onMouseEnter={() => handleProgressBarHover(project)}
+                    onMouseLeave={() => setTaskInfo(null)}
+                  >
+                    {parseFloat(
                       (Number(project?.completedTasks || 0) /
-                        Number(project?.totalTasks || 1))
-                    }
-                    key={1}
-                  />
-                </ProgressBar>
-              </div>
-            </OverlayTrigger>
+                        Number(project?.totalTasks || 1)) *
+                        100
+                    ).toFixed(2) + " % "}
+                    <ProgressBar>
+                      <ProgressBar
+                        variant="success"
+                        now={
+                          100 *
+                          (Number(project?.completedTasks || 0) /
+                            Number(project?.totalTasks || 1))
+                        }
+                        key={1}
+                      />
+                    </ProgressBar>
+                  </div>
+                </OverlayTrigger>
                 <div>
                   <Dropdown>
                     <Dropdown.Toggle id="dropdown-basic">
@@ -703,19 +704,6 @@ const archiveConFirmation = (sectionId) => {
                               Edit Section
                             </Dropdown.Item>
                           )}
-                          {/* {!isArchive && (
-                            <Dropdown.Item
-                              onClick={() =>
-                                archiveConFirmation({ _id: project?.sectionId })
-                              }
-                            >
-                              <i
-                                className="fa fa-archive"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Archive Section
-                            </Dropdown.Item>
-                          )} */}
                           {!isArchive && (
                             <Dropdown.Item>
                               <i
@@ -744,8 +732,6 @@ const archiveConFirmation = (sectionId) => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
-                     
-
                       {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") && (
@@ -753,7 +739,6 @@ const archiveConFirmation = (sectionId) => {
                           <Dropdown.Toggle
                             variant="success"
                             id="dropdown-basic"
-                            
                           >
                             {task.status === "NOT_STARTED" && (
                               <i
@@ -887,27 +872,26 @@ const archiveConFirmation = (sectionId) => {
                         )}
                         {!task?.assignedTo?.profilePicture && (
                           <div className="nameTag">
-                          <UserIcon  key={index} firstName={task?.assignedTo?.name} />
-
+                            <UserIcon
+                              key={index}
+                              firstName={task?.assignedTo?.name}
+                            />
                           </div>
-                    )}
-                    {task?.assignedTo?.profilePicture && (
-                      <div className="nameTag">
-                        <img
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            borderRadius: "50%",
-                          }}
-                          src={`${task?.assignedTo?.profilePicture}`}
-                          alt="profile"
-                        ></img>
-                      </div>
-                    )}
-                    <span >
-                          {" "}
-                          {task?.assignedTo?.name}
-                        </span>
+                        )}
+                        {task?.assignedTo?.profilePicture && (
+                          <div className="nameTag">
+                            <img
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "50%",
+                              }}
+                              src={`${task?.assignedTo?.profilePicture}`}
+                              alt="profile"
+                            ></img>
+                          </div>
+                        )}
+                        <span> {task?.assignedTo?.name}</span>
 
                         {task?.dueDate && (
                           <Badge bg={task?.dueToday ? "danger" : "primary"}>
@@ -920,6 +904,7 @@ const archiveConFirmation = (sectionId) => {
                         )}
                       </div>
                       {(userDetails.id === task?.assignedTo?._id ||
+                       ( userDetails.role === "LEAD"&&(userDetails.id === task?.assignedTo?._id||task?.lead?.includes(userDetails.id)||userDetails.id === task?.createdBy?._id )) ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") &&
                         !isArchive && (
@@ -929,8 +914,8 @@ const archiveConFirmation = (sectionId) => {
                               color: "#6c757d",
                               cursor: "pointer",
                               marginRight: "10px",
-                              position: 'relative',
-                              top: '10px'
+                              position: "relative",
+                              top: "10px",
                             }}
                             onClick={() => {
                               setSelectedProject();
@@ -944,7 +929,6 @@ const archiveConFirmation = (sectionId) => {
                             ></i>
                           </a>
                         )}
-                      {/* <div className="task-hover"> <a > <i className="fa fa-pencil-square-o" aria-hidden="true"></i> </a> </div> */}
                     </li>
                   ))}
                 </ul>
@@ -1006,10 +990,10 @@ const archiveConFirmation = (sectionId) => {
         </Modal>
 
         <Modal
-         className="confirmation-popup"
+          className="confirmation-popup"
           show={deleteSectionModal}
           onHide={() => setDeleteSectionModal(false)}
-          >
+        >
           <Modal.Header closeButton>
             <Modal.Title>Delete Section</Modal.Title>
           </Modal.Header>
@@ -1032,7 +1016,7 @@ const archiveConFirmation = (sectionId) => {
         <Modal
           className="confirmation-popup"
           show={archiveSectionModal}
-          onHide={() => setArchiveSectionModal(false)} 
+          onHide={() => setArchiveSectionModal(false)}
         >
           <Modal.Header closeButton>
             <Modal.Title>Archive Section</Modal.Title>
