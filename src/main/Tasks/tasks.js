@@ -712,19 +712,7 @@ const archiveConFirmation = (sectionId) => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
-                      {/* {(userDetails.id === task?.assignedTo?._id || userDetails.role =='SUPER_ADMIN' || userDetails.role =='ADMIN') && (
-                      <select
-                        defaultValue={task.status}
-                        onChange={(event) =>
-                          handleStatusChange(event, task?._id)
-                        }
-                      >
-                        <option value="ONGOING">Ongoing</option>
-                        <option value="NOT_STARTED">NOT STARTED</option>
-                        <option value="ONHOLD">On Hold</option>
-                        <option value="COMPLETED">Completed</option>
-                      </select>
-					)} */}
+                     
 
                       {(userDetails.id === task?.assignedTo?._id ||
                         userDetails.role === "SUPER_ADMIN" ||
@@ -733,7 +721,7 @@ const archiveConFirmation = (sectionId) => {
                           <Dropdown.Toggle
                             variant="success"
                             id="dropdown-basic"
-                            style={{ padding: "0" }}
+                            
                           >
                             {task.status === "NOT_STARTED" && (
                               <i
@@ -833,7 +821,7 @@ const archiveConFirmation = (sectionId) => {
                           }
                           // onClick={() => handleViewDetails(task?._id)}
                         >
-                          {truncateString(task?.title, 80)}
+                          {truncateString(task?.title, 70)}
                         </i>
 
                         {task?.status === "NOT_STARTED" && (
@@ -890,6 +878,8 @@ const archiveConFirmation = (sectionId) => {
                               color: "#6c757d",
                               cursor: "pointer",
                               marginRight: "10px",
+                              position: 'relative',
+                              top: '10px'
                             }}
                             onClick={() => {
                               setSelectedProject();
