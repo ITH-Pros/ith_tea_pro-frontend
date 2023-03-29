@@ -107,17 +107,26 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-
+ 
       let project = projectList?.filter(
         (item) => item?._id === selectedProjectFromTask?._id
       );
-	  console.log(project[0]?._id, 'project[0]?.sections')
-	  
-	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
+       getLeadsListUsingProjectId(project[0]?._id);
+       setCategoryList(project[0]?.sections);
+      
+      setTaskFormValue({
+        ...taskFormValue,
+        projectId: project[0]?._id,
+        section: selectedProjectFromTask.section,
+      });
+      console.log(project, selectedProjectFromTask);
+      console.log(taskFormValue)
     } else if (selectedTask ) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
       );
+	  console.log(selectedTask);
+
       getLeadsListUsingProjectId(selectedTask?.projectId);
       setCategoryList(project[0]?.sections);
       let dueDateData = new Date(selectedTask?.dueDate);
