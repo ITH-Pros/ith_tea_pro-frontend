@@ -25,6 +25,8 @@ import {
   Button,
   Overlay,
   Popover,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import avtar from "../../assests/img/avtar.png";
 import moment from "moment";
@@ -54,6 +56,16 @@ const Tasks = () => {
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
   const [isArchive , setIsArchive] = useState(false)
+
+
+  const [taskInfo, setTaskInfo] = useState(null);
+
+  const handleProgressBarHover = (project) => {
+    const completedTasks = project.completedTasks || 0;
+    const totalTasks = project.totalTasks || 1;
+    const pendingTasks = totalTasks - completedTasks;
+    setTaskInfo({ completedTasks, pendingTasks });
+  };
 
 
 
@@ -601,14 +613,31 @@ const archiveConFirmation = (sectionId) => {
           )}
 
           {projects.map((project, index) => (
-            <Accordion.Item key={index} eventKey={index}>
-              {project?._id?.projectId && project?._id?.section && (
-                <Accordion.Header>
-                  {project?._id?.projectId} / {project?._id?.section}{" "}
-                </Accordion.Header>
-              )}
+        <Accordion.Item key={index} eventKey={index}>
+          {project?._id?.projectId && project?._id?.section && (
+            <Accordion.Header>
+              {project?._id?.projectId} / {project?._id?.section}{" "}
+            </Accordion.Header>
+          )}
 
-              <div className="d-flex rightTags">
+          <div className="d-flex rightTags">
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip>
+                  {taskInfo && (
+                    <div>
+                      <div>Completed Tasks: {taskInfo.completedTasks}</div>
+                      <div>Pending Tasks: {taskInfo.pendingTasks}</div>
+                    </div>
+                  )}
+                </Tooltip>
+              }
+            >
+              <div
+                onMouseEnter={() => handleProgressBarHover(project)}
+                onMouseLeave={() => setTaskInfo(null)}
+              >
                 {parseFloat(
                   (Number(project?.completedTasks || 0) /
                     Number(project?.totalTasks || 1)) *
@@ -625,6 +654,8 @@ const archiveConFirmation = (sectionId) => {
                     key={1}
                   />
                 </ProgressBar>
+              </div>
+            </OverlayTrigger>
                 <div>
                   <Dropdown>
                     <Dropdown.Toggle id="dropdown-basic">

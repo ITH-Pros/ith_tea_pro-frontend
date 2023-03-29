@@ -134,7 +134,7 @@ export default function AllProject() {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setProjectTaskAnalytics(projects.data);
+        setProjectTaskAnalytics(projects?.data);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
