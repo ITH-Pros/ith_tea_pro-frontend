@@ -365,19 +365,15 @@ export default function Teams(props) {
                       )}
                     </>
                     <div className="content-height">
-                      <strong>
+                      <strong style={{FontSize: '14px',
+    color: '#673AB7'}}>
                         {user.name} ({user.role})
                       </strong>
-
-                      <p>{user.email}</p>
-                      {/* {user.department && <p> ({user?.department}) </p>} */}
-                      {user.employeeId && <p>{user?.employeeId} </p>}
                       {user.designation && <p>{user?.designation}</p>}
                       <p>{user.email}</p>
-                      {/* {user.department && <p> ({user?.department}) </p>} */}
-                      {user.employeeId && <p>{user?.employeeId} </p>}
-                     
 
+                      {user.employeeId && <p>{user?.employeeId} </p>}
+    
                       {userDetails?.role !== "CONTRIBUTOR" &&
                         userAnalytics &&
                         Array.isArray(userAnalytics) &&

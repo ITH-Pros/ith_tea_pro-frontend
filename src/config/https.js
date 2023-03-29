@@ -30,6 +30,7 @@ axiosInstance.interceptors.response.use(
     async function (error) {
         if (error.response) {
             if (error.response.status === 403 && error.response.data) {
+                logOut();
                 return Promise.reject(error.response.data?.message);
             }
             if (error.response.status === 401 && error.response.data) {

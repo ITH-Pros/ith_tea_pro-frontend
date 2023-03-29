@@ -17,6 +17,7 @@ import {
   createTask,
   updateTaskDetails,
   getProjectDetailsById,
+  getLeadsUsingProjectId,getUserUsingProjectId,
   getProjectById,
   deleteTaskDetails,
 } from "../../../services/user/api";
@@ -148,17 +149,22 @@ export default function AddTaskModal(props) {
 	  setTaskFormValue({ ...taskFormValue,projectId: project[0]?._id ,section: selectedProjectFromTask?.section });
       console.log(project, projectList, selectedProjectFromTask , '----------+++++++++++++');
       setSelectedLeads(project[0]?.managedBy);
-	  // setUserList(project[0]?.accessibleBy);
-    //   console.log(project);
     } else if (selectedTask ) {
       let project = projectList?.filter(
         (item) => item?._id == selectedTask?.projectId
       );
       console.log(selectedTask, project);
-      setLeadList(project[0]?.managedBy);
+      // setLeadList(project[0]?.managedBy);
+      getLeadsListUsingProjectId(project?._id)
 
       setCategoryList(project[0]?.sections);
-      setUserList(project[0]?.accessibleBy);
+      // setUserList(project[0]?.accessibleBy);
+    
+      console.log(
+        userList,
+        "---------------------------------------------------------------user list"
+      );
+
 
       //   let leads = [];
       console.log(
@@ -202,13 +208,11 @@ export default function AddTaskModal(props) {
           : dueDateData.getDate());
 
       setTaskFormValue({
-        projectId: selectedTask?.projectId,
+        projectId: getLeadsListUsingProjectId(selectedTask?.projectId),
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
-        assignedTo: selectedTask?.assignedTo?._id
-          ? selectedTask?.assignedTo?._id
-          : selectedTask?.assignedTo,
+        // assignedTo: getUserListUsingProjectId(selectedTask?.projectId),
         dueDate: dueDateData,
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
@@ -222,14 +226,17 @@ export default function AddTaskModal(props) {
       console.log(leads, "leads");
       setSelectedLeads(leads || []);
     } else if (handleProjectId) {
+
       let project = projectList?.find((item) => item?._id == handleProjectId);
-      console.log("MAI AAAYA HU IDHAR", project);
-      setLeadList(project?.managedBy);
+      // setLeadList(project?.managedBy);
+      getLeadsListUsingProjectId(project?._id)
       if (leadLists.length === 1) {
         setSelectedLeads(project?.managedBy);
       }
       setCategoryList(project?.sections);
-      setUserList(project?.accessibleBy);
+      // setUserList(project?.accessibleBy);
+    
+      console.log(userList,'---------------------------------------------------------------user list')
 
       setTaskFormValue({
         ...taskFormValue,
@@ -256,13 +263,68 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setProjectList(projects.data);
-        // setCategoryList(projects.data[0]?.sections);
-        // setUserList(projects.data[0]?.accessibleBy);
       }
     } catch (error) {
       setLoading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
+      return error.message;
+    }
+  };
+  const getLeadsListUsingProjectId =async(id) => {
+    console.log(id);
+    
+      let dataToSend = {
+        projectId: id,
+      };
+      setLoading(true);
+      try {
+        const leads = await getLeadsUsingProjectId(dataToSend);
+        setLoading(false);
+        if (leads.error) {
+          setToasterMessage(leads?.message || "Something Went Wrong");
+          setShowToaster(true);
+        } else {
+          console.log(leads, '-------------+++++++++++++++++=====================>>>>>>>>>>>> leads array');
+          setLeadList(leads?.data);
+
+
+          
+        }
+      } catch (error) {
+        setToasterMessage(error?.message || "Something Went Wrong");
+        setShowToaster(true);
+        setLoading(false);
+        return error.message;
+      }
+    
+  }
+  const getUserListUsingProjectId = async (id,lead) => {
+    console.log(id,lead);
+    let dataToSend = {
+      projectId: id ,
+    };
+    if (lead) {
+      dataToSend.selectedLeadRole='ADMIN'
+    }
+    setLoading(true);
+    try {
+      const users = await getUserUsingProjectId(dataToSend);
+      setLoading(false);
+      if (users.error) {
+        setToasterMessage(users?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        console.log(
+          users,
+          "-------------+++++++++++++++++=====================>>>>>>>>>>>> users array"
+        );
+        setUserList(users?.data);
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      setLoading(false);
       return error.message;
     }
   };
@@ -275,8 +337,10 @@ export default function AddTaskModal(props) {
     });
     setSelectedLeads("");
     setCategoryList(project?.sections);
-    setUserList(project?.accessibleBy);
-    setLeadList(project?.managedBy);
+    // setUserList(project?.accessibleBy);
+    getLeadsListUsingProjectId(project._id);
+  
+    // setLeadList(project?.managedBy);
     updateTaskFormValue(e);
   };
 
@@ -456,14 +520,22 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
-  const onLeadChange = (users) => {
-    console.log(users);
-    let leads = users?.map((item) => item?._id);
-    setSelectedLeads(users);
+  const onLeadChange = (e) => {
     setTaskFormValue({
-      ...taskFormValue,
-      tasklead: leads,
+      ...taskFormFields,
+      projectId:taskFormValue?.projectId,
+      leads: e.target.value,
     });
+    if (leadLists.find((el) => el._id === e.target.value)?.role === "ADMIN") {
+    console.log('[[[[[[[[[[[[[[[[[[[[[[[')
+      getUserListUsingProjectId(taskFormValue?.projectId,taskFormValue?.leads)
+    } else {
+      getUserListUsingProjectId(taskFormValue?.projectId);
+
+      
+  }
+   
+
   };
 
   const resetModalData = () => {
@@ -704,31 +776,32 @@ export default function AddTaskModal(props) {
                 </Form.Group>
                 <Form.Group as={Col} md="12">
                   <Form.Label>Lead</Form.Label>
-                  {/* <Form.Control
-                      required
-                      as="select"
-                      type="select"
-                      name="tasklead"
-                      onChange={updateTaskFormValue}
-                      value={taskFormValue.tasklead}
-                    >   */}
-                  <Select
-                    isMulti
+                  {/* <Select
                     value={selectedLeads}
                     onChange={onLeadChange}
                     getOptionLabel={(options) => options["name"]}
                     getOptionValue={(options) => options["_id"]}
                     options={leadLists}
-                  />
-                  {/* <option value="" disabled>
-                        Select Lead
+                    disabled={!taskFormValue?.projectId}
+                  /> */}
+                  <Form.Control
+                    size="lg"
+                    required
+                    as="select"
+                    type="select"
+                    onChange={onLeadChange}
+                    value={taskFormValue.leads}
+                    name="leadId"
+                  >
+                    <option value="" disabled>
+                      Select Lead
+                    </option>
+                    {leadLists?.map((project) => (
+                      <option value={project._id} key={project._id}>
+                        {project.name}
                       </option>
-                      {leadLists?.map((lead) => (
-                        <option value={lead?._id} key={lead?._id}>
-                          {lead?.name}
-                        </option>
-                      ))}
-					</Form.Control> */}
+                    ))}
+                  </Form.Control>
                   <Form.Control.Feedback type="invalid">
                     Lead is required !!
                   </Form.Control.Feedback>
