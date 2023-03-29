@@ -34,6 +34,7 @@ import { useAuth } from "../../auth/AuthProvider";
 import { useParams } from "react-router-dom";
 import ViewTaskModal from "./view-task";
 import { truncateString } from "../../helpers/truncet";
+import UserIcon from "../Projects/ProjectCard/profileImage";
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -884,11 +885,30 @@ const archiveConFirmation = (sectionId) => {
                         {task?.priority === "HIGH" && (
                           <Badge bg="danger">HIGH</Badge>
                         )}
-                        <span className="nameTag">
+                        {!task?.assignedTo?.profilePicture && (
+                          <div className="nameTag">
+                          <UserIcon  key={index} firstName={task?.assignedTo?.name} />
+
+                          </div>
+                    )}
+                    {task?.assignedTo?.profilePicture && (
+                      <div className="nameTag">
+                        <img
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                          }}
+                          src={`${task?.assignedTo?.profilePicture}`}
+                          alt="profile"
+                        ></img>
+                      </div>
+                    )}
+                    <span >
                           {" "}
-                          <img src={avtar} alt="userAvtar" />{" "}
                           {task?.assignedTo?.name}
                         </span>
+
                         {task?.dueDate && (
                           <Badge bg={task?.dueToday ? "danger" : "primary"}>
                             Due{" "}
