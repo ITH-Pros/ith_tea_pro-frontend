@@ -129,7 +129,7 @@ export default function AddTaskModal(props) {
 
       getLeadsListUsingProjectId(selectedTask?.projectId);
       setCategoryList(project[0]?.sections);
-      let dueDateData = new Date(selectedTask?.dueDate);
+      let dueDateData = new Date(selectedTask?.dueDate?.split('T')[0]);
       let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
         completedDateData =
@@ -514,7 +514,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !selectedLeads
+      !taskFormValue.leads
     ) {
       return;
     }
@@ -530,7 +530,7 @@ export default function AddTaskModal(props) {
         dueDate,
         priority,
         status,
-        tasklead,
+        leads,
         attachments,
         completedDate,
       } = taskFormValue;
@@ -543,8 +543,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads &&
-        (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      leads && (dataToSend["tasklead"] = [leads]);
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
       console.log("uploadedFilesuploadedFilesuploadedFilesuploadedFilesuploadedFilesuploadedFilesuploadedFiles",uploadedFiles)

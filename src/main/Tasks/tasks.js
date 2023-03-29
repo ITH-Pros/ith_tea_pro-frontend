@@ -703,7 +703,7 @@ const archiveConFirmation = (sectionId) => {
                               Edit Section
                             </Dropdown.Item>
                           )}
-                          {!isArchive && (
+                          {/* {!isArchive && (
                             <Dropdown.Item
                               onClick={() =>
                                 archiveConFirmation({ _id: project?.sectionId })
@@ -715,7 +715,7 @@ const archiveConFirmation = (sectionId) => {
                               ></i>{" "}
                               Archive Section
                             </Dropdown.Item>
-                          )}
+                          )} */}
                           {!isArchive && (
                             <Dropdown.Item>
                               <i
