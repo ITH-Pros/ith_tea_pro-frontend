@@ -10,7 +10,9 @@ import { useState } from "react";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
 import { useAuth } from "../../../auth/AuthProvider";
-import { Modal, Row, Col } from "react-bootstrap";
+import { Modal, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
+import Button from 'react-bootstrap/Button';
+
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -163,13 +165,13 @@ const ProjectCard = ({
     >
       {isArchive && <h6 className="archived">Archived</h6>}
       {/* {isArchive && <div className="delete-archived"> <i onClick={handleDelete} title="delete project" className="fa fa-trash" aria-hidden="true"></i> </div>} */}
-      {!isArchive && (
+      
         <div
           className="menu-icon"
           onClick={handleMenuIconClick}
           onBlur={handleMenuIconClick}
         >
-          {userDetails.role === "SUPER_ADMIN" && userDetails.role === "ADMIN" && (
+          {userDetails.role === "SUPER_ADMIN" && (
             <button className="project-btn-more dropdown ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -234,14 +236,14 @@ const ProjectCard = ({
             </button>
           )}
         </div>
-      )}
+      
      
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
-        <p>{description} </p>
+        <p>{description}</p>
       </div>
-      <div className="project-stats row">
+      {/* <div className="project-stats row">
   <div className="stat col-3" title="Overdue tasks">
     <FontAwesomeIcon icon={faFlag} />
     <span>{taskData?.overDueTasks || 0}</span>
@@ -258,7 +260,93 @@ const ProjectCard = ({
     <FontAwesomeIcon icon={faBarChart} />
     <span>{taskData?.totalTask || 0}</span>
   </div>
+</div> */}
+
+{/*  */}
+<div className="project-stats row">
+   <div className="stat col-3">
+      <>
+      {['top'].map((placement) => (
+      <OverlayTrigger
+      key={placement}
+      placement={placement}
+      overlay={
+      <Tooltip id={`tooltip-${placement}`}>
+         Overdue Tasks
+      </Tooltip>
+      }
+      >
+      <Button className="tooltip-button br0">
+         <FontAwesomeIcon icon={faFlag} />
+         <span>{taskData?.overDueTasks || 0}</span>
+      </Button>
+      </OverlayTrigger>
+      ))}
+      </>
+   </div>
+   <div className="stat col-3">
+      <>
+      {['top'].map((placement) => (
+      <OverlayTrigger
+      key={placement}
+      placement={placement}
+      overlay={
+      <Tooltip id={`tooltip-${placement}`}>
+         Completed tasks
+      </Tooltip>
+      }
+      >
+      <Button className="tooltip-button br0">
+         <FontAwesomeIcon icon={faTasks} />
+         <span>{taskData?.COMPLETED || 0}</span>
+      </Button>
+      </OverlayTrigger>
+      ))}
+      </>
+   </div>
+   <div className="stat col-3">
+      <>
+      {['top'].map((placement) => (
+      <OverlayTrigger
+      key={placement}
+      placement={placement}
+      overlay={
+      <Tooltip id={`tooltip-${placement}`}>
+         Ongoing tasks
+      </Tooltip>
+      }
+      >
+      <Button className="tooltip-button br0">
+         <FontAwesomeIcon icon={faCheck} />
+         <span>{taskData?.ONGOING || 0}</span>
+      </Button>
+      </OverlayTrigger>
+      ))}
+      </>
+   </div>
+   <div className="stat col-3">
+      <>
+      {['top'].map((placement) => (
+      <OverlayTrigger
+      key={placement}
+      placement={placement}
+      overlay={
+      <Tooltip id={`tooltip-${placement}`}>
+         Total number of tasks
+      </Tooltip>
+      }
+      >
+      <Button className="tooltip-button br0">
+         <FontAwesomeIcon icon={faBarChart} />
+         <span>{taskData?.totalTask || 0}</span>
+      </Button>
+      </OverlayTrigger>
+      ))}
+      </>
+   </div>
 </div>
+
+{/*  */}
 
 
       <div>

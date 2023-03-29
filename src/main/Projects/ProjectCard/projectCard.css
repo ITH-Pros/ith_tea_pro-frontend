@@ -183,28 +183,9 @@
   border-radius: 50%;
 }
 
-/* Style for the tooltip */
-.stat {
-  position: relative;
-}
-
-/* Style for the tooltip text */
-.stat::after {
-  content: attr(title);
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 5px);
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-}
-
-/* Show the tooltip when the user hovers over the element */
-.stat:hover::after {
-  opacity: 1;
+.tooltip-button{
+  background: rgb(0 0 0 / 0%) !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #9E9E9E !important;
 }
