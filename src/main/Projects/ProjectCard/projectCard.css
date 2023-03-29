@@ -183,25 +183,9 @@
   border-radius: 50%;
 }
 
-/* Style for the tooltip */
-.stat {
-  position: relative;
-}
-
-/* Style for the tooltip text */
-.stat::after {
-  content: attr(title);
-  position: absolute;
-  background-color: #333;
-  color: #fff;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  max-width: 300px;
-  min-width: 200px;
-}
-.stat:hover::after {
-  opacity: 1;
+.tooltip-button{
+  background: rgb(0 0 0 / 0%) !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #9E9E9E !important;
 }

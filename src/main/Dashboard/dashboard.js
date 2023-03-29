@@ -1089,7 +1089,7 @@ const handleViewDetails = (taskId) => {
             </Tooltip>
           }
         >
-          <Button className="tooltip-button" style={{borderRight:'0px'}}>
+          <Button className="tooltip-button br0">
           {task?.assignedTo?.name && (
   <span  className="nameTag">
     <img src={avtar} alt="userAvtar" />{" "}

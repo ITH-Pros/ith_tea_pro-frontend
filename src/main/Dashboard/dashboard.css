@@ -611,5 +611,8 @@ th {
     border-radius: 0px !important;
     padding-right: 5px !important;
   }
+  .br0{
+    border-right: 0px !important;
+  }
 
   

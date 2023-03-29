@@ -14,6 +14,9 @@ import { Modal, Row, Col } from "react-bootstrap";
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import Button from 'react-bootstrap/Button';
 import {
   faEllipsisH,
   faTasks,
@@ -242,21 +245,89 @@ const ProjectCard = ({
         <p>{description} </p>
       </div>
       <div className="project-stats row">
-  <div className="stat col-3" title="Overdue tasks">
-    <FontAwesomeIcon icon={faFlag} />
+  <div className="stat col-3">
+  <>
+      {['top'].map((placement) => (
+        <OverlayTrigger
+          key={placement}
+          placement={placement}
+          overlay={
+            <Tooltip id={`tooltip-${placement}`}>
+             Overdue Tasks
+            </Tooltip>
+          }
+        >
+          <Button className="tooltip-button br0">
+          <FontAwesomeIcon icon={faFlag} />
     <span>{taskData?.overDueTasks || 0}</span>
+          </Button>
+        </OverlayTrigger>
+      ))}
+    </>
   </div>
-  <div className="stat col-3" title="Completed tasks">
+  <div className="stat col-3">
+  <>
+      {['top'].map((placement) => (
+        <OverlayTrigger
+          key={placement}
+          placement={placement}
+          overlay={
+            <Tooltip id={`tooltip-${placement}`}>
+            Completed tasks
+            </Tooltip>
+          }
+        >
+          <Button className="tooltip-button br0">
+         
     <FontAwesomeIcon icon={faTasks} />
     <span>{taskData?.COMPLETED || 0}</span>
+          </Button>
+        </OverlayTrigger>
+      ))}
+    </>
+
   </div>
-  <div className="stat col-3" title="Ongoing tasks">
-    <FontAwesomeIcon icon={faCheck} />
+  <div className="stat col-3">
+  <>
+      {['top'].map((placement) => (
+        <OverlayTrigger
+          key={placement}
+          placement={placement}
+          overlay={
+            <Tooltip id={`tooltip-${placement}`}>
+               Ongoing tasks
+            </Tooltip>
+          }
+        >
+          <Button className="tooltip-button br0">
+          <FontAwesomeIcon icon={faCheck} />
     <span>{taskData?.ONGOING || 0}</span>
+          </Button>
+        </OverlayTrigger>
+      ))}
+    </>
+   
   </div>
-  <div className="stat col-3" title="Total number of tasks">
-    <FontAwesomeIcon icon={faBarChart} />
+  <div className="stat col-3">
+  <>
+      {['top'].map((placement) => (
+        <OverlayTrigger
+          key={placement}
+          placement={placement}
+          overlay={
+            <Tooltip id={`tooltip-${placement}`}>
+              Total number of tasks
+            </Tooltip>
+          }
+        >
+          <Button className="tooltip-button br0">
+          <FontAwesomeIcon icon={faBarChart} />
     <span>{taskData?.totalTask || 0}</span>
+          </Button>
+        </OverlayTrigger>
+      ))}
+    </>
+  
   </div>
 </div>
 
