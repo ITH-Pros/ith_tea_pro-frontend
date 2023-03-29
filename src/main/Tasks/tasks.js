@@ -986,10 +986,10 @@ const archiveConFirmation = (sectionId) => {
         </Modal>
 
         <Modal
-          className="confirmation-modal"
+         className="confirmation-popup"
           show={deleteSectionModal}
           onHide={() => setDeleteSectionModal(false)}
-        >
+          >
           <Modal.Header closeButton>
             <Modal.Title>Delete Section</Modal.Title>
           </Modal.Header>
@@ -1010,9 +1010,9 @@ const archiveConFirmation = (sectionId) => {
         </Modal>
 
         <Modal
-          className="confirmation-modal"
+          className="confirmation-popup"
           show={archiveSectionModal}
-          onHide={() => setArchiveSectionModal(false)}
+          onHide={() => setArchiveSectionModal(false)} 
         >
           <Modal.Header closeButton>
             <Modal.Title>Archive Section</Modal.Title>
