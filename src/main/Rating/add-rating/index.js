@@ -61,7 +61,9 @@ export default function AddRating(props) {
     }, [ratingForm.selectedProject]);
 
     useEffect(() => {
-      if (ratingForm.selectedUser) {
+      if (ratingForm.selectedUser && !taskFromDashBoard) {
+        console.log(taskFromDashBoard)
+
         getAllPendingRatingTaskList();
         console.log("taskList called");
       }
@@ -139,8 +141,10 @@ export default function AddRating(props) {
           setShowToaster(true);
           console.log("error", response.error);
         } else {
-          setRatingForm({ ...ratingForm, taskList: response?.data });
-          //   console.log("taskList", response?.data);
+          setRatingForm({
+            ...ratingForm,
+            taskList: response?.data,
+          });
         }
       } catch (error) {
         console.log("error", error);

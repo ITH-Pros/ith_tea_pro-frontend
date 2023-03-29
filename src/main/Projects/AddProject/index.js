@@ -13,11 +13,13 @@ import {
   getAllUserWithoutPagination,
   updateProjectForm,
 } from "../../../services/user/api";
-import './index.css'
+import './index.css';
 import Select from 'react-select';
 import { useNavigate , useLocation, useParams, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ColorPicker, useColor } from "react-color-palette";
+import "react-color-palette/lib/css/styles.css";
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -80,10 +82,11 @@ export default function AddProject(props) {
 	const [projectList, setProjectListValue] = useState([]);
 	const params = useParams()
   const setShowToaster = (param) => showToaster(param);
+  const [color, setColor] = useColor("hex", "#cc3636 ");
 
   const projectById = projectList.find((project) => project._id === params.projectId);
-  console.log(projectById,'projectById')
-  console.log(params,'params')
+  // console.log(projectById,'projectById')
+  // console.log(params,'params')
 
 //   const projectDetails = location.state.project;
 //   console.log(projectDetails,'locations')
@@ -93,6 +96,15 @@ export default function AddProject(props) {
     const projectFormFields = { name:  '', description: '', selectedManagers: [],  selectAccessibleBy: [] }
     const [projectFormValue, setProjectFormValue] = useState(projectFormFields);
 
+
+    useEffect(() => {
+       setProjectFormValue({
+         ...projectFormValue,
+         colorCode:color?.hex,
+       });
+      console.log(color)
+      console.log(projectFormValue)
+    }, [color]);
 
     useEffect(() => {
 		getAndSetAllProjects();
@@ -249,6 +261,7 @@ export default function AddProject(props) {
 				setShowErrorForLead(true);
                 return
             }
+         console.log(projectFormValue)
 
             const userRes = await addNewProject(projectFormValue);
             setLoading(false);
@@ -379,22 +392,23 @@ export default function AddProject(props) {
             <Form.Group as={Col} md="6">
               <Form.Label>Assign Leads</Form.Label>
               <Select
-               styles={customStyles}
+                styles={customStyles}
                 isMulti
                 onChange={onAssignManagerChange}
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={leadList}
                 value={managedby}
-				required
+                required
               />
-			  {showErrorForLead && <p className="text-danger error">Lead is required !!</p>}
-			 
+              {showErrorForLead && (
+                <p className="text-danger error">Lead is required !!</p>
+              )}
             </Form.Group>
             <Form.Group as={Col} md="6">
               <Form.Label>Assign Users</Form.Label>
               <Select
-              styles={customStyles}
+                styles={customStyles}
                 isMulti
                 onChange={onAssignUserChange}
                 getOptionLabel={(options) => options["name"]}
@@ -404,7 +418,6 @@ export default function AddProject(props) {
               />
             </Form.Group>
           </Row>
-        
 
           <Row className="mb-3">
             <Form.Group as={Col}>
@@ -418,22 +431,38 @@ export default function AddProject(props) {
                 maxLength={100}
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.description}
-               />
+              />
+            </Form.Group>
+          </Row>
+
+          <Row className="mb-3">
+            <Form.Group as={Col}>
+              <Form.Label>Project Color</Form.Label>
+              <ColorPicker
+                width={456}
+                height={228}
+                color={color}
+                onChange={setColor}
+                hideHSV
+                dark
+              />
+              ;
             </Form.Group>
           </Row>
 
           <div>
-			<UpdateAndCancel />
-					</div>
-				</Form>
-				{toaster && (
-					<Toaster
-						message={toasterMessage}
-						show={toaster}
-						close={() => showToaster(false)} />
-				)}
-				{loading ? <Loader /> : null}
-			</div>
+            <UpdateAndCancel />
+          </div>
+        </Form>
+        {toaster && (
+          <Toaster
+            message={toasterMessage}
+            show={toaster}
+            close={() => showToaster(false)}
+          />
+        )}
+        {loading ? <Loader /> : null}
+      </div>
     );
 
 

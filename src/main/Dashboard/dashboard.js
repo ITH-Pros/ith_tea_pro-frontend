@@ -442,7 +442,7 @@ const handleViewDetails = (taskId) => {
             {props.showBtn && (
               <h1 className="h1-text">
                 <AiFillProject className="project-icon" /> My Projects
-                {/* <i className="fa fa-home" aria-hidden="true"></i> My Projects */}
+                {/* <i className="fa fa-home" aria-hidden="true"></i>    */}
               </h1>
             )}
           </Col>
