@@ -118,15 +118,8 @@ export default function AddTaskModal(props) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
       );
-      console.log(selectedTask?.projectId,project?._id,'ATBBaXBsUZyem4Mw2sG8TfykLpjp8A774FC5ATBBaXBsUZyem4Mw2sG8TfykLpjp8A774FC5');
-      
       getLeadsListUsingProjectId(selectedTask?.projectId);
-
       setCategoryList(project[0]?.sections);
-      // setUserList(project[0]?.accessibleBy);
-    
-
-
       let dueDateData = new Date(selectedTask?.dueDate);
       let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
@@ -156,10 +149,11 @@ export default function AddTaskModal(props) {
 
       setTaskFormValue({
         projectId: selectedTask?.projectId,
+        leads: selectedTask?.lead[0],
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
-        assignedTo:selectedTask?.assignedTo?._id,
+        assignedTo: selectedTask?.assignedTo?._id,
         dueDate: dueDateData,
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
