@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 import Form from "react-bootstrap/Form";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import { truncateString } from "../../helpers/truncet";
 import {
   getAllMyWorks,
   getAllPendingRating,
@@ -1053,7 +1054,7 @@ const handleViewDetails = (taskId) => {
                             {task?.status == "COMPLETED" && (
                               // <Badge bg="success">COMPLLETED</Badge>
                               <>
-                              {task?.lead[0]?.name && (
+           {task?.lead[0]?.name && (
   <span title={task?.lead[0]?.name} className="nameTag">
     <img src={leadAvatar} alt="userAvtar" />{" "}
     {task?.lead[0]?.name.split(" ")[0]?.charAt(0)}
@@ -1063,6 +1064,7 @@ const handleViewDetails = (taskId) => {
 {' '}
 
                                 
+
                                 {task?.assignedTo?.name && (
   <span title={task?.assignedTo?.name} className="nameTag">
     <img src={avtar} alt="userAvtar" />{" "}

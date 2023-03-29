@@ -239,7 +239,7 @@ const ProjectCard = ({
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
-        <p>{description}</p>
+        <p>{description} </p>
       </div>
       <div className="project-stats row">
   <div className="stat col-3" title="Overdue tasks">

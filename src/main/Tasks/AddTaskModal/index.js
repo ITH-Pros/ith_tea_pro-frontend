@@ -6,9 +6,6 @@ import { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-// import "froala-editor/css/froala_style.min.css";
-// import "froala-editor/css/froala_editor.pkgd.min.css";
-import FroalaEditorComponent from "react-froala-wysiwyg";
 import AttachmentUploader from "./attachment";
 
 import { Modal } from "react-bootstrap";
@@ -21,7 +18,6 @@ import {
   getProjectById,
   deleteTaskDetails,
 } from "../../../services/user/api";
-// import {deleteTaskDetails} from '../../../services/user/api'
 import Toaster from "../../../components/Toaster";
 import { CONSTENTS } from "../../../constents";
 import Select from "react-select";
@@ -61,8 +57,6 @@ export default function AddTaskModal(props) {
   };
 
   
-  // const
-  // const leadList = [{name : 'Lead 1', _id : '1'}, {name : 'Lead 2', _id : '2'}, {name : 'Lead 3', _id : '3'}]
   const taskFormFields = {
     projectId: "",
     section: "",
@@ -92,7 +86,7 @@ export default function AddTaskModal(props) {
   }, []);
 
   useEffect(() => {
-	taskFormValue.projectId && getUsersList()
+	taskFormValue.projectId && getUserListUsingProjectId(taskFormValue.projectId);
   }, [taskFormValue.projectId]);
 
 
@@ -105,34 +99,13 @@ export default function AddTaskModal(props) {
   }, [showAddTask]);
 
   useEffect(() => {
+    console.log(selectedTask,'-------------------------------------------selectedProjectFromTask');
     if (showAddTask) {
       setShowAddTaskModal(true);
       patchFormForAdd();
     }
   }, [showAddTask]);
 
-  const getUsersList = async function () {
-	let dataToSend = {
-	  projectId: taskFormValue.projectId,
-	};
-	setLoading(true);
-	try {
-	  const user = await getProjectById(dataToSend);
-	  setLoading(false);
-	  if (user.error) {
-		setToasterMessage(user?.message || "Something Went Wrong");
-		setShowToaster(true);
-	  } else {
-		console.log(user, "user");
-		setCategoryList(user?.data?.sections);
-	}
-	} catch (error) {
-	  setToasterMessage(error?.message || "Something Went Wrong");
-	  setShowToaster(true);
-	  setLoading(false);
-	  return error.message;
-	}
-  };
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
@@ -154,32 +127,14 @@ export default function AddTaskModal(props) {
         (item) => item?._id == selectedTask?.projectId
       );
       console.log(selectedTask, project);
-      // setLeadList(project[0]?.managedBy);
-      getLeadsListUsingProjectId(project?._id)
+      
+      getLeadsListUsingProjectId(selectedTask?._id)
 
       setCategoryList(project[0]?.sections);
       // setUserList(project[0]?.accessibleBy);
     
-      console.log(
-        userList,
-        "---------------------------------------------------------------user list"
-      );
 
 
-      //   let leads = [];
-      console.log(
-        selectedTask?.lead,
-        project[0]?.managedBy,
-        "selectedTask?.lead"
-      );
-      //   if (selectedTask?.lead?.length) {
-
-      //     leads = leadLists?.filter((item) =>
-      //       selectedTask?.lead?.includes(item?._id)
-      //     );
-      //   }
-
-      //   setTaskFormValue()
       let dueDateData = new Date(selectedTask?.dueDate);
       let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
@@ -208,23 +163,18 @@ export default function AddTaskModal(props) {
           : dueDateData.getDate());
 
       setTaskFormValue({
-        projectId: getLeadsListUsingProjectId(selectedTask?.projectId),
+        projectId: selectedTask?.projectId,
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
-        // assignedTo: getUserListUsingProjectId(selectedTask?.projectId),
+        assignedTo:selectedTask?.assignedTo?._id,
         dueDate: dueDateData,
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
       });
-      console.log(selectedTask?.lead, "selectedTask?.lead", leadLists);
-      let leads = project[0]?.managedBy?.filter((item) =>
-        selectedTask?.lead?.includes(item?._id)
-      );
-      console.log(leads, "leads");
-      setSelectedLeads(leads || []);
+    
     } else if (handleProjectId) {
 
       let project = projectList?.find((item) => item?._id == handleProjectId);
@@ -332,10 +282,9 @@ export default function AddTaskModal(props) {
   const onchangeSelectedProject = (e) => {
     let project = projectList.find((el) => el._id === e.target.value);
     setTaskFormValue({
-      ...taskFormFields,
+      // ...taskFormFields,
       projectId: project._id,
     });
-    setSelectedLeads("");
     setCategoryList(project?.sections);
     // setUserList(project?.accessibleBy);
     getLeadsListUsingProjectId(project._id);
@@ -380,7 +329,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !selectedLeads
+      !taskFormValue.leads
     ) {
       return;
     }
@@ -396,7 +345,7 @@ export default function AddTaskModal(props) {
         dueDate,
         priority,
         status,
-        tasklead,
+        leads,
         attachments,
       } = taskFormValue;
       let dataToSend = {};
@@ -408,8 +357,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads &&
-        (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      leads && (dataToSend["tasklead"] = [leads]);
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
       
@@ -452,7 +400,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !selectedLeads
+      !taskFormValue.leads
     ) {
       return;
     }
@@ -467,7 +415,7 @@ export default function AddTaskModal(props) {
         dueDate,
         priority,
         status,
-        tasklead,
+        leads,
         completedDate,
       } = taskFormValue;
       let dataToSend = {};
@@ -479,8 +427,7 @@ export default function AddTaskModal(props) {
       dueDate && (dataToSend["dueDate"] = dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
-      selectedLeads &&
-        (dataToSend["tasklead"] = selectedLeads.map((item) => item?._id));
+      leads && (dataToSend["tasklead"] = [leads]);
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
     uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
@@ -523,7 +470,8 @@ export default function AddTaskModal(props) {
   const onLeadChange = (e) => {
     setTaskFormValue({
       ...taskFormFields,
-      projectId:taskFormValue?.projectId,
+      projectId: taskFormValue?.projectId,
+      section: taskFormValue?.section,
       leads: e.target.value,
     });
     if (leadLists.find((el) => el._id === e.target.value)?.role === "ADMIN") {
@@ -793,7 +741,7 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.leads}
                     name="leadId"
                   >
-                    <option value="" disabled>
+                    <option value=""  >
                       Select Lead
                     </option>
                     {leadLists?.map((project) => (

@@ -707,7 +707,7 @@ const archiveProject = async () => {
           setIsArchiveModalShow(false);
         }}
         animation={false}
-      >
+      className="confirmation-popup">
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
