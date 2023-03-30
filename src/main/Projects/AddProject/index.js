@@ -162,14 +162,16 @@ export default function AddProject(props) {
         setLoading(true);
         setValidated(true)
         try {
-            if (!checkAllValuesPresent()) {
-                setLoading(false);
-                return
-            }
+          if (!checkAllValuesPresent()||!managedby.length) {
+            setLoading(false);
+    setShowErrorForLead(true);
+            return
+        }
 			const updatedProjectFormValue = {
 				...projectFormValue,
 				projectId: params.projectId,
 			};
+      console.log(updatedProjectFormValue,'updatedProjectFormValue')
             const userRes = await updateProjectForm(updatedProjectFormValue);
             setLoading(false);
             if (userRes.error) {
@@ -314,6 +316,7 @@ export default function AddProject(props) {
       );
       
     },1000)
+
     }
   const onAssignUserChange = (users) => {
     
