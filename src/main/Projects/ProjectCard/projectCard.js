@@ -435,40 +435,7 @@ const ProjectCard = ({
           </Modal.Header>
           <Modal.Body>
             <div>
-              <Row>
-                {users.map((user, index) => {
-                  return (
-                    <Col key={index} sm={12}>
-                      <div className="assignPopup">
-                        <>
-                          {!user?.profilePicture && (
-                            <UserIcon key={index} firstName={user.name} />
-                          )}
-                          {user?.profilePicture && (
-                            <div className="user-pic">
-                              <img
-                                style={{
-                                  width: "30px",
-                                  height: "30px",
-                                  borderRadius: "50%",
-                                }}
-                                src={`${user?.profilePicture}`}
-                                alt="profile"
-                              ></img>
-                            </div>
-                          )}
-                        </>
-                        <div className="ms-4">
-                          <p className="mb-0">
-                            {user?.name} ({user?.role})
-                          </p>
-                          <p className="userEmail">{user?.email}</p>
-                        </div>
-                      </div>
-                    </Col>
-                  );
-                })}
-                <Col sm={12}>
+            <Col sm={12}>
                   {userDetails.role !== "CONTRIBUTOR" &&
                     !isArchive &&
                     userDetails.role !== "LEAD" && (
@@ -521,6 +488,40 @@ const ProjectCard = ({
                     </>
                   )}
                 </div>
+              <Row>
+                {users.map((user, index) => {
+                  return (
+                    <Col key={index} sm={12}>
+                      <div className="assignPopup">
+                        <>
+                          {!user?.profilePicture && (
+                            <UserIcon key={index} firstName={user.name} />
+                          )}
+                          {user?.profilePicture && (
+                            <div className="user-pic">
+                              <img
+                                style={{
+                                  width: "30px",
+                                  height: "30px",
+                                  borderRadius: "50%",
+                                }}
+                                src={`${user?.profilePicture}`}
+                                alt="profile"
+                              ></img>
+                            </div>
+                          )}
+                        </>
+                        <div className="ms-4">
+                          <p className="mb-0">
+                            {user?.name} ({user?.role})
+                          </p>
+                          <p className="userEmail">{user?.email}</p>
+                        </div>
+                      </div>
+                    </Col>
+                  );
+                })}
+               
               </Row>
             </div>
           </Modal.Body>
