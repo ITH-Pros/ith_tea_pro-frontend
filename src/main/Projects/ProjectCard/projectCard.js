@@ -63,7 +63,7 @@ const ProjectCard = ({
     };
     try {
       let response;
-      if (selectedRole == "LEAD") {
+      if (selectedRole === "LEAD") {
         response = await assignProjectLead(dataToSend);
       } else {
         response = await assignTeamAPI(dataToSend);

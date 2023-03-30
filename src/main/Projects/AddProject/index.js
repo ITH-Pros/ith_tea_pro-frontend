@@ -13,7 +13,7 @@ import {
 } from "../../../services/user/api";
 import "./index.css";
 import Select from "react-select";
-import { useNavigate, useLocation, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/lib/css/styles.css";
 

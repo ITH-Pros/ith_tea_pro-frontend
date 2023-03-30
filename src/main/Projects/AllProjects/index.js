@@ -2,21 +2,15 @@
 import { useEffect, useState } from "react";
 import {
   archiveProjectById,
-  assignUserToProject,
   deleteProjectById,
   getAllProjects,
   getTaskStatusAnalytics,
-  getUsersOfProject,
-  unAssignUserToProject,
 } from "../../../services/user/api";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import Loader from "../../../components/Loader";
-import Modals from "../../../components/modal";
-import ConfirmationModal from "../../../components/confirmationModal";
-import { MDBTooltip } from "mdb-react-ui-kit";
-import { useAuth } from "../../../auth/AuthProvider";
 import { Link } from "react-router-dom";
+import Loader from "../../../components/Loader";
+import { useAuth } from "../../../auth/AuthProvider";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
 import { Modal, Button } from "react-bootstrap";
@@ -28,19 +22,13 @@ export default function AllProject() {
   const [toasterMessage, setToasterMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [projectList, setProjectListValue] = useState([]);
-  const [allUserList, setAllUserListValue] = useState([]);
-  const [selectedProjectId, setSelectedProjectId] = useState("");
   const [projectTaskAnalytics, setProjectTaskAnalytics] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedProject, setSelectedProject] = useState({
     name: null,
     _id: null,
   });
-  const [selectedUser, setSelectedUser] = useState({ name: null, _id: null });
-  const [showMoreUserDropDownId, setShowMoreUserDropDownId] = useState("");
-  const [projectAssignedUsers, setProjectAssignedUsers] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
-  const [sureModalShow, setSureModalShow] = useState(false);
+
   const [confirmModalShow, setConfirmModalShow] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
 
@@ -68,7 +56,6 @@ export default function AllProject() {
     );
   };
 
-  const userListToAddInProject = new Set();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -108,141 +95,6 @@ export default function AllProject() {
         setShowToaster(true);
       } else {
         setProjectTaskAnalytics(projects?.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
-    }
-  };
-
-  const addAndRemveUserFromList = (userId) => {
-    userListToAddInProject.has(userId)
-      ? userListToAddInProject.delete(userId)
-      : userListToAddInProject.add(userId);
-  };
-
-  const checkAndGetProjectUsers = (element) => {
-    if (element._id === showMoreUserDropDownId) {
-      setShowMoreUserDropDownId("");
-      return;
-    }
-    getProjectAssignedUsers(element);
-  };
-  const getProjectAssignedUsers = async (element) => {
-    try {
-      let dataToSend = {
-        params: { projectId: element._id },
-      };
-      const projectAssignedUsers = await getUsersOfProject(dataToSend);
-      if (projectAssignedUsers.error) {
-        setToasterMessage(
-          projectAssignedUsers?.error?.message || "Something Went Wrong"
-        );
-        setShowToaster(true);
-        return;
-      } else {
-        setProjectAssignedUsers(projectAssignedUsers.data);
-        setShowMoreUserDropDownId(element._id);
-        setSelectedProject(element);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
-    }
-  };
-
-  const GetModalBody = () => {
-    return (
-      <>
-        {allUserList &&
-          allUserList.map((proejctUser, index) => {
-            let checkAlreadyAssigned = projectAssignedUsers.find(
-              (ele) => ele._id === proejctUser._id
-            );
-            return (
-              <div key={proejctUser._id}>
-                <input
-                  disabled={checkAlreadyAssigned}
-                  checked={checkAlreadyAssigned}
-                  onClick={() => addAndRemveUserFromList(proejctUser._id)}
-                  type="checkbox"
-                ></input>
-                <span> {proejctUser.name}</span>
-              </div>
-            );
-          })}
-      </>
-    );
-  };
-
-  const GetSureModalBody = () => {
-    return (
-      <>
-        User <strong>{selectedUser.name}</strong> will be removed from Project{" "}
-        <strong>{selectedProject.name}</strong>
-        <hr></hr>
-        <small>
-          Note : <strong>{selectedUser.name}</strong> will not be able add or
-          see tasks{" "}
-        </small>
-      </>
-    );
-  };
-
-  const removeUserFromProject = (user, project) => {
-    setSelectedProject(project);
-    setSelectedUser(user);
-    setSureModalShow(true);
-  };
-
-  const AddSelectedUsersToProject = async () => {
-    try {
-      let dataToSend = {
-        projectId: selectedProjectId,
-        userIds: [...userListToAddInProject],
-      };
-      const addRes = await assignUserToProject(dataToSend);
-      if (addRes.error) {
-        setToasterMessage(addRes?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-        return;
-      } else {
-        setToasterMessage(addRes?.message || "Something Went Wrong");
-        setShowToaster(true);
-        getAndSetAllProjects();
-        setModalShow(false);
-        userListToAddInProject.clear();
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
-    }
-  };
-
-  const closeSureModals = () => {
-    setSureModalShow(false);
-  };
-
-  const removeSelectedUsersFromProject = async () => {
-    try {
-      let dataToSend = {
-        projectId: selectedProject._id,
-        userId: selectedUser._id,
-      };
-      const removeRes = await unAssignUserToProject(dataToSend);
-      if (removeRes.error) {
-        setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-        return;
-      } else {
-        setToasterMessage(removeRes?.message || "Something Went Wrong");
-        setShowToaster(true);
-        getAndSetAllProjects();
-        setShowMoreUserDropDownId("");
-        setSureModalShow(false);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -402,32 +254,6 @@ export default function AllProject() {
         />
       )}
 
-      {modalShow && (
-        <Modals
-          modalShow={modalShow}
-          keyboardProp={true}
-          backdropProp="static"
-          modalBody={<GetModalBody />}
-          heading="Assign Project"
-          onClick={AddSelectedUsersToProject}
-          onHide={() => setModalShow(false)}
-        />
-      )}
-      {sureModalShow && (
-        <ConfirmationModal
-          modalShow={sureModalShow}
-          keyboardProp={true}
-          backdropProp="static"
-          modalBody={<GetSureModalBody />}
-          heading="Are You Sure"
-          onReject={() => {
-            closeSureModals();
-          }}
-          onAccept={removeSelectedUsersFromProject}
-          onHide={() => setSureModalShow(false)}
-        />
-      )}
-
       <Modal
         show={confirmModalShow}
         onHide={() => {
@@ -494,7 +320,6 @@ export default function AllProject() {
         </Modal.Header>
         <Modal.Body>
           <div>
-            {/* Show data list with index  */}
             <ul>
               {categories.map((category, index) => (
                 <li key={index}>{category}</li>
