@@ -15,13 +15,13 @@ import {
 } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
-import { CONSTENTS } from "../../../constents";
+import { CONSTANTS } from "../../../constants";
 
 function TaskModal(props) {
   const { selectedTaskObj, selectedProject, getAllTaskOfProject, category } =
     props;
-  const statusList = CONSTENTS.statusList;
-  const priorityList = CONSTENTS.priorityList;
+  const statusList = CONSTANTS.statusList;
+  const priorityList = CONSTANTS.priorityList;
   const [toaster, showToaster] = useState(false);
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");

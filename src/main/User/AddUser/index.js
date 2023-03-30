@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import Loader from '../../../components/Loader';
 import Toaster from '../../../components/Toaster';
-import { CONSTENTS } from '../../../constents';
+import { CONSTANTS } from '../../../constants';
 import { addNewUserDetail } from '../../../services/user/api';
 import './index.css'
 import { Link, useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ export default function AddUser(props) {
     const [toaster, showToaster] = useState(false);
     const setShowToaster = (param) => showToaster(param);
 	const navigate = useNavigate();
-    const rolesList = CONSTENTS.ROLES
+    const rolesList = CONSTANTS.ROLES
     const registerFromFields = { name: '', email: '',  role: rolesList[0] }
     const [registerFromValue, setRegisterFromValue] = useState(registerFromFields);
 

@@ -1,11 +1,7 @@
-
-import React from 'react';
-
+import React from "react";
 export const navigationRef = React.createRef();
 
-
- export const logOut = function () {
-	console.log("logout")
-	localStorage.clear();
-	navigationRef.current?.navigate('/login');
-}
+export const logOut = function () {
+  localStorage.clear();
+  navigationRef.current?.navigate("/login");
+};

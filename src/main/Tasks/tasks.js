@@ -34,7 +34,7 @@ import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
 import { useParams } from "react-router-dom";
 import ViewTaskModal from "./view-task";
-import { truncateString } from "../../helpers/truncet";
+import { Truncate } from "../../helpers/truncate";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 
 const Tasks = () => {
@@ -842,7 +842,7 @@ const archiveConFirmation = (sectionId) => {
                           }
                           // onClick={() => handleViewDetails(task?._id)}
                         >
-                          {truncateString(task?.title, 65)}
+                          {Truncate(task?.title, 65)}
                         </i>
 
                         {task?.status === "NOT_STARTED" && (

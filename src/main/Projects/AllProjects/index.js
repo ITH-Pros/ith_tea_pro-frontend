@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import "./index.css";
 import Loader from "../../../components/Loader";
 import Modals from "../../../components/modal";
-import ConfirmationModal from "../../../components/sureModal";
+import ConfirmationModal from "../../../components/confirmationModal";
 import { MDBTooltip } from "mdb-react-ui-kit";
 import AddTaskModal from "../../Tasks/AddTaskModal";
 import { useAuth } from "../../../auth/AuthProvider";
