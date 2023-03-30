@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
@@ -5,38 +6,33 @@ import Toaster from "../components/Toaster";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+
   const [accessToken, setAccessToken] = useLocalStorage("_u", null);
   const [userDetails, setUserDetails] = useLocalStorage("user", null);
-  const [profileModalShow, setProfileModalShow] = useLocalStorage(
-    "profileModalShow",
-    false
-  );
-
-  const navigate = useNavigate();
+  const [profileModalShow, setProfileModalShow] = useLocalStorage("profileModalShow",false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const setShowToaster = (param) => showToaster(param);
-  // call this function when you want to authenticate the user
+  const navigate = useNavigate();
+
   const login = async (data) => {
     setAccessToken(data?.token);
     setUserDetails(data?.user);
-	console.log("data?.profileCompleted", data?.profileCompleted)
-    if (data?.user?.profileCompleted == false) {
+    if (data?.user?.profileCompleted === false) {
       setProfileModalShow(true);
     }
     navigate("/");
   };
 
-  // call this function to sign out logged in user
   const logout = () => {
-    setToasterMessage("Logged Out Succesfully");
+    setToasterMessage("Logged Out Successfully");
     setShowToaster(true);
     setAccessToken(null);
     setUserDetails(null);
   };
 
-  const value = useMemo(
-    () => ({
+  const value = useMemo(() => (
+    {
       accessToken,
       login,
       userDetails,

@@ -1,4 +1,4 @@
-
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,9 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Toaster = ({ message, show, close }) => {
   const [progress, setProgress] = useState(0);
 
-    useEffect(() => {
-      console.log("-----------------------------38");
-      
+  useEffect(() => {
     let interval = null;
     if (show) {
       interval = setInterval(() => {
@@ -28,8 +26,7 @@ const Toaster = ({ message, show, close }) => {
     return () => clearInterval(interval);
   }, [show]);
 
-    useEffect(() => {
-      console.log('-----------------------------58')
+  useEffect(() => {
     if (show) {
       toast.info(<div>{message}</div>, {
         autoClose: 4000,
