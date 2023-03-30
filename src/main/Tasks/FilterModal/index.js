@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Container, Row, Form, Modal, Col } from "react-bootstrap";
 import { useLocalStorage } from "../../../auth/useLocalStorage";
 import Loader from "../../../components/Loader";
-import { CONSTENTS } from "../../../constents";
+import { CONSTANTS } from "../../../constants";
 import "./filter.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,9 +19,9 @@ const FilterModal = (props) => {
   const { getTaskFilters, handleProjectId ,isArchive} = props;
   const { userDetails } = useAuth();
 
-  const statusList = CONSTENTS.statusListObj;
-  const priorityList = CONSTENTS.priorityListObj;
-  const groupByList = CONSTENTS.TASK_GROUPS;
+  const statusList = CONSTANTS.statusListObj;
+  const priorityList = CONSTANTS.priorityListObj;
+  const groupByList = CONSTANTS.TASK_GROUPS;
   const filterFormFileds = {
     createdBy: "",
     assignedTo: "",
@@ -61,7 +61,7 @@ const FilterModal = (props) => {
   const [categories, setCategories] = useState([]);
   const [usersList, setUsersList] = useState([]);
 
-  const [sortedByArr, setSortedByArr] = useState(CONSTENTS.SORTEDBY);
+  const [sortedByArr, setSortedByArr] = useState(CONSTANTS.SORTEDBY);
 
   //   console.log("handleProjectId handleProjectId handleProjectId",handleProjectId);
   //         if (handleProjectId) {

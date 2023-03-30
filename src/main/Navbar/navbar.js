@@ -4,7 +4,7 @@ import { useAuth } from '../../auth/AuthProvider';
 import React from "react";
 import { Navbar, Button, Link, Text } from "@nextui-org/react";
 import { Layout } from "./Layout.js";
-import { Logo } from "./Logo.js";
+
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { BsBoxArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -54,11 +54,7 @@ export default function App() {
        
        <Sidebar>
         <Menu iconShape="circle">
-          <MenuItem onClick={redirectToDashbord}>
-          <Logo />
-          <Text b color="#8355ad" hideIn="xs">
-         Tea Pro
-         </Text></MenuItem>
+          
          <NavLink to='/' style={navLinkStyles}>
           <MenuItem  icon={<FaTachometerAlt />}> Dashboard </MenuItem></NavLink>
           <NavLink to='/project/all' style={navLinkStyles}>   <MenuItem icon={<FaGem />}>  Project  </MenuItem></NavLink>

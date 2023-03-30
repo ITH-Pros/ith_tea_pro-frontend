@@ -19,7 +19,7 @@ import {
   deleteTaskDetails,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
-import { CONSTENTS } from "../../../constents";
+import { CONSTANTS } from "../../../constants";
 import Select from "react-select";
 import TextEditor from "./textEditor";
 import { getAllLeadsWithoutPagination } from "../../../services/user/api";
@@ -35,8 +35,8 @@ export default function AddTaskModal(props) {
     handleProjectId,
   } = props;
   console.log(handleProjectId, "-----------");
-  const statusList = CONSTENTS.statusList;
-  const priorityList = CONSTENTS.priorityList;
+  const statusList = CONSTANTS.statusList;
+  const priorityList = CONSTANTS.priorityList;
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [categoryList, setCategoryList] = useState();

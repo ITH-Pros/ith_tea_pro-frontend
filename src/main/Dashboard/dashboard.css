@@ -602,6 +602,12 @@ th {
     height: 24px;
     margin-right: 4px;
   }
+  .dashboard_camp.rightDashboard .container{
+    margin-top: 0px !important;
+  }
+  .dashboard_camp.rightDashboard .container #nav-filter {
+    margin-top: 8px !important;
+}
   .tooltip-button{
     background: rgb(0 0 0 / 0%) !important;
     border: none !important;
