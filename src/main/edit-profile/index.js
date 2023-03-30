@@ -33,21 +33,8 @@ function UserForm(props) {
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
   const navigate = useNavigate();
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  //   const [currentUser, setCurrentUser] = useState({});
-
-  const isDisabledUpdate = () => {
-    // twitter , linkedin, github are not vadlid url then disable the button
-    if (
-      !twitterRegex.test(twitter) ||
-      !linkedinRegex.test(linkedin) ||
-      !githubRegex.test(github)
-    ) {
-        setIsDisabled(true);
-    }
-    setIsDisabled(false);
-  };
+  const today = new Date();
+ 
 
   useEffect(() => {
     onInit();
@@ -193,6 +180,7 @@ function UserForm(props) {
             type="text"
             id="name"
             value={name}
+            maxLength="50"
             onChange={(event) => setName(event.target.value)}
             // readOnly={!isEditable}
             disabled={isEditable}
@@ -214,6 +202,7 @@ function UserForm(props) {
           <input
             type="text"
             id="employeeId"
+            maxLength={20}
             value={employeeId}
             onChange={(event) => setEmployeeId(event.target.value)}
             disabled={isEditable}
@@ -228,7 +217,7 @@ function UserForm(props) {
             type="date"
             id="dob"
             value={formatDate(dob)}
-            max={formatDate(new Date())}
+            max={formatDate(new Date(today.getFullYear() - 15, today.getMonth(), today.getDate()))}
             onChange={(event) => setDob(event.target.value)}
             // readOnly={!isEditable}
             disabled={isEditable}
@@ -240,6 +229,7 @@ function UserForm(props) {
             type="text"
             id="designation"
             value={designation}
+            maxLength="50"
             onChange={(event) => setDesignation(event.target.value)}
             // readOnly={!isEditable}
             disabled={isEditable}
@@ -251,6 +241,7 @@ function UserForm(props) {
             type="text"
             id="department"
             value={department}
+            maxLength="50"
             onChange={(event) => setDepartment(event.target.value)}
             // readOnly={!isEditable}
             disabled={isEditable}
