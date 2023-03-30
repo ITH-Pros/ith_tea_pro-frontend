@@ -5,7 +5,6 @@ import Navbar from "../src/main/Navbar/navbar";
 // import { ProtectedRoute } from './auth/requireAuth'
 import Login from "./auth/login";
 import Dashboard from "./main/Dashboard/dashboard";
-import Footer from "./main/Footer/footer";
 import Project from "./main/Projects/";
 import Rating from "./main/Rating/rating";
 import Task from "./main/Tasks/tasks";
@@ -60,7 +59,6 @@ function App() {
               <Navbar />
               <Header />
               <Dashboard showBtn={true} />
-              <Footer />
             </ProtectedRoute>
           }
         />

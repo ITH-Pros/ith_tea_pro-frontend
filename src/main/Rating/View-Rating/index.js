@@ -3,7 +3,6 @@ import moment from "moment";
 
 import { useState, useEffect } from "react";
 import "./index.css";
-import { MDBTooltip } from "mdb-react-ui-kit";
 // eslint-disable-next-line no-unused-vars
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Col from "react-bootstrap/Col";
@@ -33,7 +32,7 @@ import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
 import AddRatingModal from "../add-rating-modal";
 import AddRating from "../add-rating";
-import MyCalendar from "../../Dashboard/weekCalendra";
+import MyCalendar from "./weekCalendra";
 // import MyCalendar from "../../Dashboard/weekCalendra";
 
 var month = moment().month();
