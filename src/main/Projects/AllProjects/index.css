@@ -566,6 +566,8 @@
 
 }
 .projects-button{
+  margin-left: auto;
+  width: 28%;
   text-align: right;
 }
 

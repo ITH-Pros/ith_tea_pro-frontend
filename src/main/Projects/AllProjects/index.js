@@ -608,33 +608,33 @@ const archiveProject = async () => {
 
   return (
     <>
-      <div className="rightDashboard">
+      <div className="rightDashboard" style={{marginTop:'7%'}}>
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
-        </h1>
-        <h1 className="projects-button">
-        {userDetails.role === "SUPER_ADMIN" && !isArchive && (
+
+          <div className="projects-button">
+          {userDetails.role === "SUPER_ADMIN" && !isArchive && (
           
-                <Link
-                  to={{
-                    pathname: "/project/add",
-                  }}
-                >
-                  <i
-                    className="fa fa-plus-circle fa-3x addBtn"
-                   
-                    aria-hidden="true"
-                  > &nbsp; Add Project </i> 
-                </Link>
-            
-          )}
-           {
-          (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
-        <button className="btn btn-primary" onClick={handleIsArchive} style={{cursor:"pointer", marginTop:'7px', padding:'7px', fontSize:'600', marginRight:'30px'}}  > {isArchive ? 'Active Projects':'Archive List'}</button>
-        }
+          <Link style={{float:'left'}}
+            to={{
+              pathname: "/project/add",
+            }}
+          >
+            <i
+              className="fa fa-plus-circle fa-3x addBtn"
+             
+              aria-hidden="true"
+            > &nbsp; Add Project </i> 
+          </Link>
+      
+    )}
+     {
+    (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
+  <button className="btn btn-primary" onClick={handleIsArchive}> {isArchive ? 'Active Projects':'Archive List'}</button>
+  }
+          </div>
         </h1>
        
-
         <div className="project-boxes jsGridView">
        
           {projectList &&

@@ -49,8 +49,9 @@ code {
   margin-left: auto;
 }
 .rightDashboard {
-  width: 84%; 
+  width: 84%;
   margin-right: 1rem;
   margin-left: auto;
+  margin-top: 5%;
 }
 

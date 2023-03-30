@@ -374,9 +374,15 @@ export default function AddProject(props) {
 
 
     return (
-      <div className="addUserFrom rightDashboard">
-        {/* <h4 className='mb-5'>Add Project</h4> */}
-        <Form noValidate className="addUserFormBorder" validated={validated}>
+     
+      <div className="addUserFrom rightDashboard" style={{marginTop:'7%', background:'none',marginRight:'0px',padding: '0px',
+      borderRadius: '0px'}}>
+         <h1 className="h1-text">
+          <i className="fa fa-database" aria-hidden="true"></i>Add Projects
+
+         
+        </h1>
+        <Form noValidate className="addUserFormBorder add-pro" validated={validated}>
           <Row className="mb-3">
             <Form.Group as={Col} md="12">
               <Form.Label>Name</Form.Label>
@@ -448,14 +454,13 @@ export default function AddProject(props) {
             <Form.Group as={Col}>
               <Form.Label>Project Color</Form.Label>
               <ColorPicker
-                width={456}
-                height={228}
+                width={356}
+                height={100}
                 color={color}
                 onChange={setColor}
                 hideHSV
                 dark
               />
-              ;
             </Form.Group>
           </Row>
 

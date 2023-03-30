@@ -6,6 +6,12 @@
     padding: 1px 6px 1px 8px;
     font-size: 13px; 
 }
+form.addUserFormBorder.add-pro{
+  margin-right: 2rem;
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+}
 .btn-51,
 .btn-51 *,
 .btn-51 :after,
