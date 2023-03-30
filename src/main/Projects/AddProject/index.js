@@ -162,9 +162,11 @@ export default function AddProject(props) {
         setLoading(true);
         setValidated(true)
         try {
-          if (!checkAllValuesPresent()||!managedby.length) {
+          if (!checkAllValuesPresent()|| !managedby.length) {
             setLoading(false);
-    setShowErrorForLead(true);
+            if(!managedby.length){
+            setShowErrorForLead(true);
+            }
             return
         }
 			const updatedProjectFormValue = {
@@ -260,7 +262,9 @@ export default function AddProject(props) {
         try {
             if (!checkAllValuesPresent()||!managedby.length) {
                 setLoading(false);
-				setShowErrorForLead(true);
+                if(!managedby.length){
+                  setShowErrorForLead(true);
+                  }
                 return
             }
          console.log(projectFormValue)
@@ -383,6 +387,7 @@ export default function AddProject(props) {
                 value={projectFormValue.name}
                 name="name"
                 placeholder="Project Name"
+                maxLength={50}
               ></Form.Control>
               <Form.Control.Feedback type="invalid">
                 Name is required !!
@@ -429,13 +434,14 @@ export default function AddProject(props) {
                 as="textarea"
                 required
                 type="text-area"
-                placeholder="Description"
+                placeholder="Maximum 100 words allowed"
                 name="description"
                 maxLength={100}
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.description}
               />
             </Form.Group>
+      
           </Row>
 
           <Row className="mb-3">
