@@ -219,7 +219,6 @@ export default function AllProject() {
       } else {
         setProjectAssignedUsers(projectAssignedUsers.data);
         setSelectedProjectId(element._id);
-
         setModalShow(true);
       }
     } catch (error) {

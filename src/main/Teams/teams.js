@@ -113,6 +113,7 @@ export default function Teams(props) {
   };
 
   const handleAddUserToProject = async function (userId) {
+    setSelectedProjectId("");
     setLoading(true);
     try {
       const projects = await getAllProjects();
