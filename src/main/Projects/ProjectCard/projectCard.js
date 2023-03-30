@@ -12,7 +12,7 @@ import UserIcon from "./profileImage";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Modal, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
-
+import Select from "react-select";
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -81,7 +81,8 @@ const ProjectCard = ({
   const assignTeamUsers = async () => {
     let dataToSend = {
       projectId: element._id,
-      userIds: [selectedUnassignedUsers],
+      // userIds: [selectedUnassignedUsers],
+      userIds: selectedUnassignedUsers,
     };
     try {
       let response;
@@ -157,6 +158,29 @@ const ProjectCard = ({
     SetModalTitle(type);
     setModalShow(true);
   };
+// Define options for the contributor select
+  const contributorOptions = listOfUnassignedUsers.map((user, index) => ({
+    value: user._id,
+    label: user.name,
+  }));
+
+  // Define a function to handle changes to the selected contributors
+  const handleContributorsChange = (selectedOptions) => {
+    setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
+  };
+
+   // Define options for the lead select
+  const leadOptions = listOfUnassignedUsers.map((user, index) => ({
+    value: user._id,
+    label: user.name,
+  }));
+
+  // Define a function to handle changes to the selected leads
+  const handleLeadsChange = (selectedOptions) => {
+    setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
+  };
+
+
 
   return (
     <div
@@ -468,38 +492,25 @@ const ProjectCard = ({
                           <option value="LEAD">LEAD</option>
                         </select>
                         {selectedRole === "CONTRIBUTOR" && (
-                          <select
-                            className="form-control form-control-lg"
-                            onChange={(e) =>
-                              setSelectedUnassignedUsers(e.target.value)
-                            }
-                          >
-                            <option value="">Select a CONTRIBUTOR</option>
-                            {listOfUnassignedUsers.map((user, index) => {
-                              return (
-                                <option key={index} value={user._id}>
-                                  {user.name}
-                                </option>
-                              );
-                            })}
-                          </select>
+                          <Select
+                            options={contributorOptions}
+                            value={contributorOptions.filter((option) =>
+                              selectedUnassignedUsers.includes(option.value)
+                            )}
+                            isMulti
+                            onChange={handleContributorsChange}
+                          />
                         )}
                         {selectedRole === "LEAD" && (
-                          <select
-                            className="form-control form-control-lg"
-                            onChange={(e) =>
-                              setSelectedUnassignedUsers(e.target.value)
-                            }
-                          >
-                            <option value="">Select a LEAD</option>
-                            {listOfUnassignedUsers.map((user, index) => {
-                              return (
-                                <option key={index} value={user._id}>
-                                  {user.name}
-                                </option>
-                              );
-                            })}
-                          </select>
+                          <Select
+                            options={leadOptions}
+                            value={leadOptions.filter((option) =>
+                              selectedUnassignedUsers.includes(option.value)
+                            )}
+                            isMulti
+                            onChange={handleLeadsChange}
+                          />
+                        
                         )}
                       </div>
                       {selectedUnassignedUsers && (
