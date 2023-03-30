@@ -1,57 +1,70 @@
 .project-boxes {
   overflow-y: auto;
 }
+
 .moreIcon {
   cursor: grab;
 }
+
 .project-boxes.jsGridView {
-    width: 100%;
-    float: left;
+  width: 100%;
+  float: left;
 }
+
 .project-boxes.jsListView .project-box {
   display: flex;
   border-radius: 10px;
   position: relative;
 }
-.project-boxes.jsListView .project-box > * {
+
+.project-boxes.jsListView .project-box>* {
   margin-right: 24px;
 }
+
 .project-boxes.jsListView .more-wrapper {
   position: absolute;
   right: 16px;
   top: 16px;
 }
+
 .project-boxes.jsListView .project-box-content-header {
   order: 1;
   max-width: 120px;
 }
+
 .project-boxes.jsListView .project-box-header {
   order: 2;
 }
+
 .project-boxes.jsListView .project-box-footer {
   order: 3;
   padding-top: 0;
   flex-direction: column;
   justify-content: flex-start;
 }
+
 .project-boxes.jsListView .project-box-footer:after {
   display: none;
 }
+
 .project-boxes.jsListView .participants {
   margin-bottom: 8px;
 }
+
 .project-boxes.jsListView .project-box-content-header p {
   text-align: left;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.project-boxes.jsListView .project-box-header > span {
+
+.project-boxes.jsListView .project-box-header>span {
   position: absolute;
   bottom: 16px;
   left: 16px;
   font-size: 12px;
 }
+
 .project-boxes.jsListView .box-progress-wrapper {
   order: 4;
   flex: 1;
@@ -70,42 +83,47 @@
     rgb(0 0 0 / 10%) 0px -79px 40px 0px inset, rgb(0 0 0 / 6%) 0px 2px 1px,
     rgb(0 0 0 / 9%) 0px 4px 2px, rgb(0 0 0 / 9%) 0px 8px 4px,
     rgb(0 0 0 / 9%) 0px 16px 8px, rgb(0 0 0 / 9%) 0px 32px 16px;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 10px;
-    padding: 20px;
-    background-color: #fff;
-    height: 287px;
-    width: 380px;
-    float: left;
-    transition: all .3s cubic-bezier(.25, .8, .25, 1);
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    box-shadow: 0 2px 0 rgb(0 0 1 / 5%);
-    cursor: pointer;
-    justify-content: center;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 10px;
+  padding: 20px;
+  background-color: #fff;
+  height: 287px;
+  width: 380px;
+  float: left;
+  transition: all .3s cubic-bezier(.25, .8, .25, 1);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  box-shadow: 0 2px 0 rgb(0 0 1 / 5%);
+  cursor: pointer;
+  justify-content: center;
 }
+
 .project-box-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
 }
+
 .project-box-header span {
   color: #4a4a4a;
   opacity: 0.7;
   font-size: 14px;
   line-height: 16px;
 }
+
 .project-box-content-header {
   text-align: center;
   margin-bottom: 16px;
 }
+
 .project-box-content-header p {
   margin: 0;
 }
+
 .project-box-wrapper {
   padding: 0px;
   transition: 0.2s;
@@ -144,11 +162,11 @@
   height: 4px;
   border-radius: 6px;
 }
+
 .progress {
   width: 350px;
   height: 6px !important;
   border-radius: 6px;
-  /* overflow: hidden; */
   background-color: #fff;
   margin: 8px 0;
   cursor: pointer;
@@ -160,6 +178,7 @@
   line-height: 16px;
   margin: 0;
 }
+
 .box-progress-percentage {
   text-align: right;
   margin: 0;
@@ -174,8 +193,8 @@
   padding-top: 16px;
   position: relative;
 }
+
 .project-box-footer:after {
-  /* content: ""; */
   position: absolute;
   background-color: rgba(255, 255, 255, 0.6);
   width: calc(100% + 32px);
@@ -188,6 +207,7 @@
   display: flex;
   align-items: center;
 }
+
 .participants img {
   width: 20px;
   height: 20px;
@@ -197,9 +217,11 @@
   object-fit: cover;
   padding: 1px;
 }
+
 .participants img:not(:first-child) {
   margin-left: -8px;
 }
+
 .moreParticipants {
   display: flex;
   align-items: center;
@@ -207,6 +229,7 @@
   max-width: 900px;
   border-radius: 10px;
 }
+
 .moreUserDropdownImg {
   width: 60px;
   height: 60px;
@@ -217,6 +240,7 @@
   cursor: pointer;
   padding: 6px;
 }
+
 .add-participant {
   width: 20px;
   height: 20px;
@@ -277,6 +301,7 @@
     margin-right: 0;
   }
 }
+
 @media screen and (max-width: 880px) {
   .messages-section {
     transform: translateX(100%);
@@ -287,6 +312,7 @@
     height: 100%;
     width: 100%;
   }
+
   .messages-section .messages-close {
     display: block;
   }
@@ -295,7 +321,9 @@
     display: flex;
   }
 }
+
 @media screen and (max-width: 720px) {
+
   .app-name,
   .profile-btn span {
     display: none;
@@ -307,6 +335,7 @@
     width: 20px;
     height: 20px;
   }
+
   .add-btn svg,
   .notification-btn svg,
   .mode-switch svg {
@@ -318,6 +347,7 @@
     margin-left: 4px;
   }
 }
+
 @media screen and (max-width: 520px) {
   .projects-section {
     overflow: auto;
@@ -379,6 +409,7 @@
   .status-type {
     padding-right: 4px;
   }
+
   .status-type:after {
     display: none;
   }
@@ -401,7 +432,7 @@
     line-height: 16px;
   }
 
-  .project-boxes.jsListView .project-box-header > span {
+  .project-boxes.jsListView .project-box-header>span {
     font-size: 10px;
   }
 
@@ -419,7 +450,7 @@
     text-align: center;
   }
 
-  .project-boxes.jsListView .project-box > * {
+  .project-boxes.jsListView .project-box>* {
     margin-right: 10px;
   }
 
@@ -428,6 +459,7 @@
     top: 10px;
   }
 }
+
 .moreUserDrpDown {
   margin: 10px;
 }
@@ -437,7 +469,6 @@
   z-index: 1000 !important;
   border-radius: 5px;
   position: absolute;
-  /*   display: none; */
   border: solid thin black;
   padding: 3px;
   -webkit-box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.18);
@@ -448,20 +479,20 @@
   margin-top: 50px;
 }
 
-.context-menu-container > ul {
+.context-menu-container>ul {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
 
-.context-menu-container > ul > li {
+.context-menu-container>ul>li {
   padding: 4px;
   cursor: hand;
   cursor: pointer;
   border-radius: 5px;
 }
 
-.context-menu-container > ul > li:hover {
+.context-menu-container>ul>li:hover {
   background-color: #c4c4c4;
 }
 
@@ -469,6 +500,7 @@
   width: 2px;
   height: 2px;
 }
+
 ::-webkit-scrollbar-button {
   width: 2px;
   height: 2px;
@@ -478,18 +510,14 @@
   display: flex;
   position: absolute;
   display: block;
-  /* top: 0; */
-  /* left: 0; */
-  /* width: 170px; */
   max-height: 500px;
-  /* margin: 0; */
   background: #abc;
   overflow-y: auto;
   overflow-x: hidden;
-  /* transform: rotate(-90deg) translateY(-80px); */
   transform-origin: right top;
   z-index: 1;
 }
+
 .dropdown {
   float: left;
 }
@@ -499,7 +527,6 @@
   border: none;
   outline: none;
   color: white;
-  /* padding: 14px 16px; */
   background-color: inherit;
   font-family: inherit;
   margin: 0;
@@ -538,17 +565,20 @@
   display: block;
 }
 
-.categoriesList{
+.categoriesList {
   list-style: none;
   padding: 0;
 }
-.categoriesList li{
+
+.categoriesList li {
   border-bottom: 1px solid #ddd;
   padding: 6px;
 }
-.categoriesList .fa-flag{
+
+.categoriesList .fa-flag {
   color: #8355ad;
 }
+
 .delete-popup {
   align-items: center;
   justify-content: center;
@@ -557,20 +587,22 @@
   color: #e60606;
 }
 
-.delete-popup h6{
+.delete-popup h6 {
   font-weight: 600;
 }
-.projects-button .addBtn{
-   width: 150px !important;
-   border-radius: 8px;
+
+.projects-button .addBtn {
+  width: 150px !important;
+  border-radius: 8px;
 
 }
-.projects-button{
+
+.projects-button {
   margin-left: auto;
   width: 28%;
   text-align: right;
 }
 
-.projects-button .btn:active{
+.projects-button .btn:active {
   background: #8355ad !important;
 }

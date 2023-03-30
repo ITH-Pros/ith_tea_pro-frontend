@@ -1,47 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import {
-	archiveProjectById,
+  archiveProjectById,
   assignUserToProject,
   deleteProjectById,
   getAllProjects,
-  getAllUsers,
-  getProjectDetailsById,
   getTaskStatusAnalytics,
   getUsersOfProject,
   unAssignUserToProject,
 } from "../../../services/user/api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import "./index.css";
 import Loader from "../../../components/Loader";
 import Modals from "../../../components/modal";
 import ConfirmationModal from "../../../components/confirmationModal";
 import { MDBTooltip } from "mdb-react-ui-kit";
-import AddTaskModal from "../../Tasks/AddTaskModal";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Link } from "react-router-dom";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
-// import { Button } from "bootstrap";
-import { Modal ,  Button } from "react-bootstrap";
-// import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from "react-bootstrap";
 
 export default function AllProject() {
-  let projectBackColor = [
-    "#e9e7fd",
-    "#dbf6fd",
-    "#fee4cb",
-    "#ff942e",
-    "#8490a3",
-    "#b477e0",
-    "#f0da37",
-    "#e3595f",
-    "#e3e3e3",
-    "#5fc9de",
-    "#7ae03f",
-    "#9399bf",
-  ];
   const { userDetails } = useAuth();
   const [toaster, showToaster] = useState(false);
   const setShowToaster = (param) => showToaster(param);
@@ -61,57 +41,52 @@ export default function AllProject() {
   const [projectAssignedUsers, setProjectAssignedUsers] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [sureModalShow, setSureModalShow] = useState(false);
-  const [confirmModalShow , setConfirmModalShow] = useState(false);
-  const [isArchive , setIsArchive] = useState(false)
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
+  const [isArchive, setIsArchive] = useState(false);
 
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
 
-  const handleIsArchive = () =>{
-    setIsArchive(!isArchive)
-    // getAndSetAllProjects()
-  }
-
+  const handleIsArchive = () => {
+    setIsArchive(!isArchive);
+  };
 
   const handleCategorie = (project) => {
-	setCategories(project.categories)
-	setCategoriesModalShow(true);
-	  };
+    setCategories(project.categories);
+    setCategoriesModalShow(true);
+  };
 
-	  const editProject = async (project) => {
-  
-		navigate(`/project/add/${project._id}`);
-	
-	  };
+  const editProject = async (project) => {
+    navigate(`/project/add/${project._id}`);
+  };
 
-	  const handleToRedirectTask =(project) => {
-      console.log(isArchive, '------------------------------is archive')
-      navigate(`/task/${JSON.stringify({ projectId:project._id,isArchive:isArchive })}/}`);
-	}
-
-
+  const handleToRedirectTask = (project) => {
+    navigate(
+      `/task/${JSON.stringify({
+        projectId: project._id,
+        isArchive: isArchive,
+      })}/}`
+    );
+  };
 
   const userListToAddInProject = new Set();
   const navigate = useNavigate();
-  // const navigate = useNavigate();
 
   useEffect(() => {
-	  getAndsetTaskStatusAnalytics();
+    getAndsetTaskStatusAnalytics();
     getAndSetAllProjects();
   }, []);
 
   useEffect(() => {
-    getAndSetAllProjects()
+    getAndSetAllProjects();
   }, [isArchive]);
 
   const getAndSetAllProjects = async function () {
-    let dataToSend = {}
-    if(isArchive){
-      dataToSend.isArchived = true
+    let dataToSend = {};
+    if (isArchive) {
+      dataToSend.isArchived = true;
     }
-    //setloading(true);
     try {
       const projects = await getAllProjects(dataToSend);
-      //setloading(false);
       if (projects.error) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -121,15 +96,13 @@ export default function AllProject() {
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
-      //setloading(false);
       return error.message;
     }
   };
+
   const getAndsetTaskStatusAnalytics = async () => {
-    //setloading(true);
     try {
       const projects = await getTaskStatusAnalytics();
-      //setloading(false);
       if (projects.error) {
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -139,7 +112,6 @@ export default function AllProject() {
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
-      //setloading(false);
       return error.message;
     }
   };
@@ -158,13 +130,11 @@ export default function AllProject() {
     getProjectAssignedUsers(element);
   };
   const getProjectAssignedUsers = async (element) => {
-    //setloading(true);
     try {
       let dataToSend = {
         params: { projectId: element._id },
       };
       const projectAssignedUsers = await getUsersOfProject(dataToSend);
-      //setloading(false);
       if (projectAssignedUsers.error) {
         setToasterMessage(
           projectAssignedUsers?.error?.message || "Something Went Wrong"
@@ -179,54 +149,10 @@ export default function AllProject() {
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
-      //setloading(false);
       return error.message;
     }
   };
 
-  const handleAddUserToProjectButton = async function (element) {
-    //setloading(true);
-    try {
-      const projectUsers = await getAllUsers();
-      //setloading(false);
-      if (projectUsers.error) {
-        setToasterMessage(
-          projectUsers?.error?.message || "Something Went Wrong"
-        );
-        setShowToaster(true);
-        return;
-      } else {
-        setAllUserListValue(projectUsers.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      //setloading(false);
-      return error.message;
-    }
-    try {
-      let dataToSend = {
-        params: { projectId: element._id },
-      };
-      const projectAssignedUsers = await getUsersOfProject(dataToSend);
-      //setloading(false);
-      if (projectAssignedUsers.error) {
-        toast.error(projectAssignedUsers.error.message, {
-          position: toast.POSITION.TOP_CENTER,
-          className: "toast-message",
-        });
-        return;
-      } else {
-        setProjectAssignedUsers(projectAssignedUsers.data);
-        setSelectedProjectId(element._id);
-        setModalShow(true);
-      }
-    } catch (error) {
-      //setloading(false);
-      return error.message;
-    }
-    // setSelectedUserId(userId)
-  };
   const GetModalBody = () => {
     return (
       <>
@@ -250,6 +176,7 @@ export default function AllProject() {
       </>
     );
   };
+
   const GetSureModalBody = () => {
     return (
       <>
@@ -263,137 +190,20 @@ export default function AllProject() {
       </>
     );
   };
+
   const removeUserFromProject = (user, project) => {
     setSelectedProject(project);
     setSelectedUser(user);
     setSureModalShow(true);
   };
-  const getProjectUserIcons = (project) => {
-    let rows = [];
-    let projectUsers = project?.accessibleBy;
-    for (let i = 0; i < projectUsers?.length; i++) {
-      let user = projectUsers[i];
-      if (i === 5) {
-        rows.push(
-          <MDBTooltip
-            key={user._id + i}
-            tag="a"
-            wrapperProps={{ href: "#" }}
-            title={"View More..."}
-          >
-            <div>
-              <i
-                className="fa fa-chevron-circle-down"
-                style={{ cursor: "grab" }}
-                aria-hidden="true"
-                onClick={() => {
-                  checkAndGetProjectUsers(project);
-                }}
-              ></i>
-            </div>
-          </MDBTooltip>
-        );
-        break;
-      }
-      if (showMoreUserDropDownId && showMoreUserDropDownId === project._id) {
-        continue;
-      }
-      if (userDetails.role === "SUPER_ADMIN") {
-        rows.push(
-          <MDBTooltip
-            tag="a"
-            wrapperProps={{ href: "#" }}
-            title={`click to Remove ${user.name}`}
-            key={user._id + i}
-          >
-            <img
-              onClick={() => {
-                removeUserFromProject(
-                  { name: user.name, _id: user._id },
-                  { name: project.name, _id: project._id }
-                );
-              }}
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
-              alt="participant"
-            />
-          </MDBTooltip>
-        );
-      } else {
-        rows.push(
-          <MDBTooltip
-            tag="a"
-            wrapperProps={{ href: "#" }}
-            title={`${user.name}`}
-            key={user._id + i}
-          >
-            <img
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
-              alt="participant"
-            />
-          </MDBTooltip>
-        );
-      }
-    }
-    return rows;
-  };
-  const GetShowMoreUsersModalBody = () => {
-    return (
-      <div className="moreParticipants">
-        {projectAssignedUsers &&
-          projectAssignedUsers.map((proejctUser, index) => {
-            return (
-              <div key={proejctUser._id + index}>
-                {userDetails.role === "SUPER_ADMIN" ? (
-                  <MDBTooltip
-                    tag="p"
-                    wrapperProps={{ href: "#" }}
-                    title={`click to Remove ${proejctUser.name}`}
-                  >
-                    <img
-                      className="moreUserDropdownImg"
-                      src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
-                      alt={proejctUser.name}
-                      onClick={() => {
-                        removeUserFromProject(
-                          { name: proejctUser.name, _id: proejctUser._id },
-                          {
-                            name: selectedProject.name,
-                            _id: selectedProject._id,
-                          }
-                        );
-                      }}
-                    />
-                    <span> {proejctUser.name}</span>
-                  </MDBTooltip>
-                ) : (
-                  <MDBTooltip
-                    tag="p"
-                    wrapperProps={{ href: "#" }}
-                    title={`${proejctUser.name}`}
-                  >
-                    <img
-                      className="moreUserDropdownImg"
-                      src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
-                      alt={proejctUser.name}
-                    />
-                    <span> {proejctUser.name}</span>
-                  </MDBTooltip>
-                )}
-              </div>
-            );
-          })}
-      </div>
-    );
-  };
+
   const AddSelectedUsersToProject = async () => {
-    //setloading(true);
     try {
       let dataToSend = {
         projectId: selectedProjectId,
         userIds: [...userListToAddInProject],
       };
       const addRes = await assignUserToProject(dataToSend);
-      //setloading(false);
       if (addRes.error) {
         setToasterMessage(addRes?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -406,26 +216,23 @@ export default function AllProject() {
         userListToAddInProject.clear();
       }
     } catch (error) {
-      //setloading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
     }
   };
+
   const closeSureModals = () => {
     setSureModalShow(false);
-    // setSelectedProject({});
-    // setSelectedUser({});
   };
+
   const removeSelectedUsersFromProject = async () => {
-    //setloading(true);
     try {
       let dataToSend = {
         projectId: selectedProject._id,
         userId: selectedUser._id,
       };
       const removeRes = await unAssignUserToProject(dataToSend);
-      //setloading(false);
       if (removeRes.error) {
         setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -435,33 +242,21 @@ export default function AllProject() {
         setShowToaster(true);
         getAndSetAllProjects();
         setShowMoreUserDropDownId("");
-        // getProjectAssignedUsers(selectedProject);
         setSureModalShow(false);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
-      //setloading(false);
       return error.message;
     }
   };
 
   const confirmation = (project) => {
-	setSelectedProject(project);
-	setConfirmModalShow(true);
-	};
-
-
-
+    setSelectedProject(project);
+    setConfirmModalShow(true);
+  };
 
   const deleteProject = async () => {
-
-	// setSelectedProject(project);
-
-	// setConfirmModalShow(true);
-
-
-    // console.log(project, "------deleteProject");
     setLoading(true);
     try {
       let dataToSend = {
@@ -478,7 +273,7 @@ export default function AllProject() {
         setToasterMessage(removeRes?.message || "Something Went Wrong");
         setShowToaster(true);
         getAndSetAllProjects();
-		setConfirmModalShow(false);
+        setConfirmModalShow(false);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -488,154 +283,85 @@ export default function AllProject() {
     }
   };
 
+  const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
 
-//   ////////////////////////  Archive project modal  ////////////////////////
+  const handleArchiveModalShow = (project) => {
+    setSelectedProject(project);
+    setConfirmModalShow(true);
+    setIsArchiveModalShow(true);
+  };
 
-const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
+  const archiveProject = async () => {
+    setLoading(true);
+    try {
+      let dataToSend = {
+        projectId: selectedProject._id,
+      };
+      if (selectedProject.isArchived) {
+        dataToSend.isArchived = false;
+      } else {
+        dataToSend.isArchived = true;
+      }
 
-const handleArchiveModalShow = (project) => {
-	setSelectedProject(project);
-	console.log(project, "------deleteProject");
-	setConfirmModalShow(true);
-	setIsArchiveModalShow(true);
-};
+      const removeRes = await archiveProjectById(dataToSend);
+      setLoading(false);
 
-const archiveProject = async () => {
-	setLoading(true);
-	try {
-		let dataToSend = {
-			projectId: selectedProject._id,
-			// isArchived: true,
-		};
-    if(selectedProject.isArchived){
-      dataToSend.isArchived = false;
-    }else{
-      dataToSend.isArchived = true;
-    }
-
-		const removeRes = await archiveProjectById(dataToSend);
-		setLoading(false);
-
-		if (removeRes.error) {
-			setToasterMessage(removeRes?.message || "Something Went Wrong");
-			setShowToaster(true);
+      if (removeRes.error) {
+        setToasterMessage(removeRes?.message || "Something Went Wrong");
+        setShowToaster(true);
+        setConfirmModalShow(false);
+        setIsArchiveModalShow(false);
+        return;
+      } else {
+        setToasterMessage(removeRes?.message || "Something Went Wrong");
+        setShowToaster(true);
+        getAndSetAllProjects();
+        setConfirmModalShow(false);
+        setIsArchiveModalShow(false);
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
       setConfirmModalShow(false);
-			setIsArchiveModalShow(false);
-			return;
-		} else {
-			setToasterMessage(removeRes?.message || "Something Went Wrong");
-			setShowToaster(true);
-			getAndSetAllProjects();
-			setConfirmModalShow(false);
-			setIsArchiveModalShow(false);
-		}
-	}
-	catch (error) {
-		setToasterMessage(error?.message || "Something Went Wrong");
-    setConfirmModalShow(false);
-			setIsArchiveModalShow(false);
-		setShowToaster(true);
-		setLoading(false);
-		return error.message;
-	}
-};
-
- 
-
-  const ProgressBarComp = (props) => {
-    const { project } = props;
-    return (
-      <div className="box-progress-wrapper">
-        <p className="box-progress-header">Progress</p>
-        <div className="progress">
-          <div
-            className="progress-bar bg-success"
-            data-container="body"
-            data-toggle="tooltip"
-            title={`Completed ${projectTaskAnalytics?.[project._id]?.[
-              "COMPLETED"
-            ]?.toFixed(2)}%`}
-            style={{
-              width: `${projectTaskAnalytics?.[project._id]?.[
-                "COMPLETED"
-              ]?.toFixed(2)}%`,
-            }}
-          ></div>
-          <div
-            className="progress-bar bg-warning"
-            data-container="body"
-            data-toggle="tooltip"
-            title={`In Progress ${projectTaskAnalytics?.[project._id]?.[
-              "ONGOING"
-            ]?.toFixed(2)}%`}
-            style={{
-              width: `${projectTaskAnalytics?.[project._id]?.[
-                "ONGOING"
-              ]?.toFixed(2)}%`,
-            }}
-          ></div>
-          <div
-            className="progress-bar bg-danger"
-            data-container="body"
-            data-toggle="tooltip"
-            title={`On Hold ${projectTaskAnalytics?.[project._id]?.[
-              "ONHOLD"
-            ]?.toFixed(2)}%`}
-            style={{
-              width: `${projectTaskAnalytics?.[project._id]?.[
-                "ONHOLD"
-              ]?.toFixed(2)}%`,
-            }}
-          ></div>
-          <div
-            className="progress-bar bg-white"
-            data-container="body"
-            data-toggle="tooltip"
-            title={`No Progress ${projectTaskAnalytics?.[project._id]?.[
-              "NOT_STARTED"
-            ]?.toFixed(2)}%`}
-            style={{
-              width: `${projectTaskAnalytics?.[project._id]?.[
-                "NOT_STARTED"
-              ]?.toFixed(2)}%`,
-            }}
-          ></div>
-        </div>
-      </div>
-    );
+      setIsArchiveModalShow(false);
+      setShowToaster(true);
+      setLoading(false);
+      return error.message;
+    }
   };
 
   return (
     <>
-      <div className="rightDashboard" style={{marginTop:'7%'}}>
+      <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i> Projects
-
           <div className="projects-button">
-          {userDetails.role === "SUPER_ADMIN" && !isArchive && (
-          
-          <Link style={{float:'left'}}
-            to={{
-              pathname: "/project/add",
-            }}
-          >
-            <i
-              className="fa fa-plus-circle fa-3x addBtn"
-             
-              aria-hidden="true"
-            > &nbsp; Add Project </i> 
-          </Link>
-      
-    )}
-     {
-    (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
-  <button className="btn btn-primary" onClick={handleIsArchive}> {isArchive ? 'Active Projects':'Archive List'}</button>
-  }
+            {userDetails.role === "SUPER_ADMIN" && !isArchive && (
+              <Link
+                style={{ float: "left" }}
+                to={{
+                  pathname: "/project/add",
+                }}
+              >
+                <i
+                  className="fa fa-plus-circle fa-3x addBtn"
+                  aria-hidden="true"
+                >
+                  {" "}
+                  &nbsp; Add Project{" "}
+                </i>
+              </Link>
+            )}
+            {(userDetails.role === "ADMIN" ||
+              userDetails.role === "SUPER_ADMIN") && (
+              <button className="btn btn-primary" onClick={handleIsArchive}>
+                {" "}
+                {isArchive ? "Active Projects" : "Archive List"}
+              </button>
+            )}
           </div>
         </h1>
-       
+
         <div className="project-boxes jsGridView">
-       
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
@@ -658,13 +384,13 @@ const archiveProject = async () => {
                       handleArchiveModalShow(element)
                     }
                     isArchive={isArchive}
-                    //   backgroundColor="#00ADEF"
                   />
                 </div>
               );
             })}
-          {!projectList?.length  && userDetails.role === "CONTRIBUTOR"&&
-          <h6>No Project Found</h6>}
+          {!projectList?.length && userDetails.role === "CONTRIBUTOR" && (
+            <h6>No Project Found</h6>
+          )}
         </div>
       </div>
       {loading ? <Loader /> : null}
@@ -709,17 +435,21 @@ const archiveProject = async () => {
           setIsArchiveModalShow(false);
         }}
         animation={false}
-      className="confirmation-popup">
+        className="confirmation-popup"
+      >
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body className="delete-popup">
-          
-            <h6>
-              Are you sure you want to{" "}
-              {isArchiveModalShow ?(!isArchive ? 'archive' :'unarchive') : "delete"} this project?
-            </h6>
-        
+          <h6>
+            Are you sure you want to{" "}
+            {isArchiveModalShow
+              ? !isArchive
+                ? "archive"
+                : "unarchive"
+              : "delete"}{" "}
+            this project?
+          </h6>
 
           <div className="button-center-corformain">
             {!isArchiveModalShow && (
@@ -737,7 +467,7 @@ const archiveProject = async () => {
                 className="btn btn-danger mb-3 mr-3"
                 onClick={() => archiveProject()}
               >
-                {!isArchive ? 'Archive' :'Unarchive'}
+                {!isArchive ? "Archive" : "Unarchive"}
               </Button>
             )}
             <Button
@@ -777,9 +507,6 @@ const archiveProject = async () => {
             </ul>
           </div>
         </Modal.Body>
-        {/* <Button style={{marginLeft:"16px"}} className="btn btn-danger mb-3 mr-3" onClick={() => deleteProject()}>
-            Delete
-          </Button> */}
 
         <Button
           style={{ marginLeft: "16px" }}
@@ -791,5 +518,4 @@ const archiveProject = async () => {
       </Modal>
     </>
   );
-  
 }
