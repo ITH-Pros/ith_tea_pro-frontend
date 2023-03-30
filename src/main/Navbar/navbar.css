@@ -2,20 +2,23 @@
     background: linear-gradient(rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0)) !important;
 }
 
-.nextui-navbar-container{
+.nextui-navbar-container {
     background-color: #9ec6e1 !important;
 }
-.css-1wvake5{
+
+.css-1wvake5 {
     height: 100%;
     width: 180px !important;
     min-width: 180px !important;
     margin-right: 15px;
 }
-.ps-sidebar-root .css-dip3t8{
+
+.ps-sidebar-root .css-dip3t8 {
     width: 13%;
     position: fixed;
     top: 62px;
 }
+
 ul.css-ewdv3l {
     margin-top: 15px;
 }

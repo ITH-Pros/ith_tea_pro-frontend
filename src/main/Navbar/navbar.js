@@ -22,7 +22,8 @@ import {
 } from 'react-icons/fa';
 import './navbar.css'
 import { navigationRef } from '../../helpers/logOut';
-export default function App() {
+
+export default function Navbar() {
   const { accessToken, logout } = useAuth();
   const navigate = useNavigate();
 
