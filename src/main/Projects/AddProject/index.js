@@ -162,14 +162,18 @@ export default function AddProject(props) {
         setLoading(true);
         setValidated(true)
         try {
-            if (!checkAllValuesPresent()) {
-                setLoading(false);
-                return
+          if (!checkAllValuesPresent()|| !managedby.length) {
+            setLoading(false);
+            if(!managedby.length){
+            setShowErrorForLead(true);
             }
+            return
+        }
 			const updatedProjectFormValue = {
 				...projectFormValue,
 				projectId: params.projectId,
 			};
+      console.log(updatedProjectFormValue,'updatedProjectFormValue')
             const userRes = await updateProjectForm(updatedProjectFormValue);
             setLoading(false);
             if (userRes.error) {
@@ -258,7 +262,9 @@ export default function AddProject(props) {
         try {
             if (!checkAllValuesPresent()||!managedby.length) {
                 setLoading(false);
-				setShowErrorForLead(true);
+                if(!managedby.length){
+                  setShowErrorForLead(true);
+                  }
                 return
             }
          console.log(projectFormValue)
@@ -314,6 +320,7 @@ export default function AddProject(props) {
       );
       
     },1000)
+
     }
   const onAssignUserChange = (users) => {
     
@@ -367,9 +374,15 @@ export default function AddProject(props) {
 
 
     return (
-      <div className="addUserFrom rightDashboard">
-        {/* <h4 className='mb-5'>Add Project</h4> */}
-        <Form noValidate className="addUserFormBorder" validated={validated}>
+     
+      <div className="addUserFrom rightDashboard" style={{marginTop:'7%', background:'none',marginRight:'0px',padding: '0px',
+      borderRadius: '0px'}}>
+         <h1 className="h1-text">
+          <i className="fa fa-database" aria-hidden="true"></i>Add Projects
+
+         
+        </h1>
+        <Form noValidate className="addUserFormBorder add-pro" validated={validated}>
           <Row className="mb-3">
             <Form.Group as={Col} md="12">
               <Form.Label>Name</Form.Label>
@@ -380,6 +393,7 @@ export default function AddProject(props) {
                 value={projectFormValue.name}
                 name="name"
                 placeholder="Project Name"
+                maxLength={50}
               ></Form.Control>
               <Form.Control.Feedback type="invalid">
                 Name is required !!
@@ -426,27 +440,27 @@ export default function AddProject(props) {
                 as="textarea"
                 required
                 type="text-area"
-                placeholder="Description"
+                placeholder="Maximum 100 words allowed"
                 name="description"
                 maxLength={100}
                 onChange={updateRegisterFormValue}
                 value={projectFormValue.description}
               />
             </Form.Group>
+      
           </Row>
 
           <Row className="mb-3">
             <Form.Group as={Col}>
               <Form.Label>Project Color</Form.Label>
               <ColorPicker
-                width={456}
-                height={228}
+                width={356}
+                height={100}
                 color={color}
                 onChange={setColor}
                 hideHSV
                 dark
               />
-              ;
             </Form.Group>
           </Row>
 

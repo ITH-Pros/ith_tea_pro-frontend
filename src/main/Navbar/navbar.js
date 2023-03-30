@@ -13,6 +13,7 @@ import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
   FaTachometerAlt,
+  FaHome,
   FaGem,
   FaList,
   FaRegLaughWink,
@@ -55,7 +56,7 @@ export default function App() {
         <Menu iconShape="circle">
           
          <NavLink to='/' style={navLinkStyles}>
-          <MenuItem  icon={<FaTachometerAlt />}> Dashboard </MenuItem></NavLink>
+          <MenuItem  icon={<FaHome />}> Dashboard </MenuItem></NavLink>
           <NavLink to='/project/all' style={navLinkStyles}>   <MenuItem icon={<FaGem />}>  Project  </MenuItem></NavLink>
           <NavLink to='/task' style={navLinkStyles}> <MenuItem icon={<FaList />}> Task </MenuItem></NavLink> 
           <NavLink to='/rating' style={navLinkStyles} > <MenuItem icon={<FaRegLaughWink />}>    Rating  </MenuItem></NavLink>
@@ -65,38 +66,7 @@ export default function App() {
 
         </Menu>
       </Sidebar>
-        // <Navbar isBordered variant={'floating'}>
-        //   <Navbar.Brand>
-        //     <Logo />
-        //     <Text b color="#8355ad" hideIn="xs">
-        //       Tea Pro
-        //     </Text>
-        //   </Navbar.Brand>
-        //   <Navbar.Content activeColor={'secondary'} hideIn="xs" variant={'highlight'}>
-        //     <NavLink to='/' style={navLinkStyles}>
-        //       Dashboard
-        //     </NavLink>
-        //     <NavLink to='/project/all' style={navLinkStyles}>
-        //       Project
-        //     </NavLink>
-        //     <NavLink to='/rating' style={navLinkStyles}>
-        //       Rating
-        //     </NavLink>
-        //     <NavLink to='/task' style={navLinkStyles}>
-        //       Task
-        //     </NavLink>
-        //     <NavLink to='/team' style={navLinkStyles}>
-        //       Team
-        //     </NavLink>
-        //   </Navbar.Content>
-
-
-        //   < Navbar.Content >
-        //     <Navbar.Link color="inherit" style={{ cursor: 'pointer' }} onClick={() => logout()}>
-        //       Logout
-        //     </Navbar.Link>
-        //   </Navbar.Content>
-        // </Navbar>
+      
       )
       }
 

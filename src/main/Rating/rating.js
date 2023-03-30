@@ -237,7 +237,7 @@ export default function Rating(props) {
 
     return (
         <>
-          <div className="rightDashboard">
+          <div className="rightDashboard" style={{marginTop:'7%'}}>
           <h1 className="h1-text">
           <i className="fa fa-database" aria-hidden="true"></i>Rating  
         </h1>

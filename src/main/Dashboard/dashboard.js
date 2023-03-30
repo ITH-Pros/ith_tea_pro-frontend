@@ -349,9 +349,9 @@ export default function Dashboard(props) {
         <Row>
           <Col lg={6} className="px-0">
             {props.showBtn && (
-              <h1 className="h1-text">
-                <AiFillProject className="project-icon" /> My Projects
-              </h1>
+               <h1 className="h1-text">
+               <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
+             </h1>
             )}
           </Col>
           <Col lg={6} id="nav-filter" className="px-0">

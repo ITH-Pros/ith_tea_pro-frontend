@@ -59,18 +59,10 @@ function App() {
               <Navbar />
               <Header />
               <Dashboard showBtn={true} />
+            
             </ProtectedRoute>
           }
         />
-
-        {/* <Route path='/project/add/:projectId' element={ 
-                <ProtectedRoute>
-					<Navbar /> 
-                    <AddProject />
-					
-                  
-                </ProtectedRoute>}
-            /> */}
 
         <Route
           path="/project"
@@ -81,7 +73,7 @@ function App() {
               <ProtectedRoute>
                 {" "}
                 <Navbar />
-              
+               <Header />
                 <Project />{" "}
               </ProtectedRoute>
             </>
@@ -127,9 +119,10 @@ function App() {
 		  element={
 
 			<ProtectedRoute>
-            <Navbar />
+           <Navbar />
+               <Header />
               
-		  <UserForm />
+		     <UserForm />
 		  </ProtectedRoute>
 		  
 		  } />
@@ -186,7 +179,9 @@ function App() {
               {" "}
               <ProtectedRoute>
                 {" "}
-                <Navbar /> <User />{" "}
+                <Navbar />
+               <Header />
+                 <User />{" "}
               </ProtectedRoute>
             </>
           }

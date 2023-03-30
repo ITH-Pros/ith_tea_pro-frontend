@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,12 +23,18 @@ function UserForm(props) {
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] = useState("");
   const [dob, setDob] = useState("");
+  const githubRegex = /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/;
+  const twitterRegex = /^(https?:\/\/)?(www\.)?twitter\.com\/[a-zA-Z0-9_]+\/?$/;
+  const linkedinRegex =
+    /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]+\/?$/;
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
   const navigate = useNavigate();
+  const today = new Date();
+ 
 
   useEffect(() => {
     onInit();
@@ -40,7 +47,7 @@ function UserForm(props) {
       setIsEditable(true);
     }
   };
-
+  
   const patchValues = (currentUser) => {
     setName(currentUser?.name || "");
     setRole(currentUser?.role || "");
@@ -76,11 +83,14 @@ function UserForm(props) {
 
   function handleEditClick(event) {
     event.preventDefault();
-    setIsEditable(!isEditable);
+    setIsEditable(!isEditable); 
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (github && !githubRegex.test(github) || linkedin && !linkedinRegex.test(linkedin) || twitter && !twitterRegex.test(twitter) ) {
+        return;
+      }
     const dataToSend = {
       name: name,
       role: role,
@@ -144,7 +154,6 @@ function UserForm(props) {
         <div className="form-group col-12 text-right profil-ed">
           {!isEditable && (
             <button onClick={handleSubmit} className="submit-button">
-              {" "}
               Update
             </button>
           )}
@@ -162,6 +171,7 @@ function UserForm(props) {
             type="text"
             id="name"
             value={name}
+            maxLength="50"
             onChange={(event) => setName(event.target.value)}
             disabled={isEditable}
           />
@@ -182,6 +192,7 @@ function UserForm(props) {
           <input
             type="text"
             id="employeeId"
+            maxLength={20}
             value={employeeId}
             onChange={(event) => setEmployeeId(event.target.value)}
             disabled={isEditable}
@@ -194,7 +205,7 @@ function UserForm(props) {
             type="date"
             id="dob"
             value={formatDate(dob)}
-            max={formatDate(new Date())}
+            max={formatDate(new Date(today.getFullYear() - 15, today.getMonth(), today.getDate()))}
             onChange={(event) => setDob(event.target.value)}
             disabled={isEditable}
           />
@@ -205,6 +216,7 @@ function UserForm(props) {
             type="text"
             id="designation"
             value={designation}
+            maxLength="50"
             onChange={(event) => setDesignation(event.target.value)}
             disabled={isEditable}
           />
@@ -215,6 +227,7 @@ function UserForm(props) {
             type="text"
             id="department"
             value={department}
+            maxLength="50"
             onChange={(event) => setDepartment(event.target.value)}
             disabled={isEditable}
           />
@@ -238,9 +251,15 @@ function UserForm(props) {
             id="github"
             value={github}
             onChange={(event) => setGithub(event.target.value)}
+            // readOnly={!isEditable}
             disabled={isEditable}
+            className={github && !githubRegex.test(github) ? "invalid" : ""}
           />
+          {github && !githubRegex.test(github) && (
+            <span className="error">Invalid Github URL</span>
+          )}
         </div>
+
         <div className="form-group">
           <label htmlFor="twitter">Twitter:</label>
           <input
@@ -249,7 +268,11 @@ function UserForm(props) {
             value={twitter}
             onChange={(event) => setTwitter(event.target.value)}
             disabled={isEditable}
+            className={twitter && !twitterRegex.test(twitter) ? "invalid" : ""}
           />
+          {twitter && !twitterRegex.test(twitter) && (
+            <span className="error">Invalid Twitter URL</span>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="linkedin">LinkedIn:</label>
@@ -259,7 +282,13 @@ function UserForm(props) {
             value={linkedin}
             onChange={(event) => setLinkedin(event.target.value)}
             disabled={isEditable}
+            className={
+              linkedin && !linkedinRegex.test(linkedin) ? "invalid" : ""
+            }
           />
+          {linkedin && !linkedinRegex.test(linkedin) && (
+            <span className="error">Invalid LinkedIn URL</span>
+          )}
         </div>
       </form>
 

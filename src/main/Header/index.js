@@ -69,7 +69,7 @@ function Header() {
   return (
  
 
-	<Navbar bg="light" variant="light" sticky="top">
+	<Navbar bg="light" variant="light" fixed="top">
       <Container fluid="lg" style={{maxWidth:'1240px'}}>
         <Navbar.Brand onClick={redirectToDashbord}>
 	
