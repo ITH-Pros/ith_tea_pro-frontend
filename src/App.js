@@ -120,9 +120,10 @@ function App() {
 		  element={
 
 			<ProtectedRoute>
-            <Navbar />
+           <Navbar />
+               <Header />
               
-		  <UserForm />
+		     <UserForm />
 		  </ProtectedRoute>
 		  
 		  } />
@@ -179,7 +180,9 @@ function App() {
               {" "}
               <ProtectedRoute>
                 {" "}
-                <Navbar /> <User />{" "}
+                <Navbar />
+               <Header />
+                 <User />{" "}
               </ProtectedRoute>
             </>
           }

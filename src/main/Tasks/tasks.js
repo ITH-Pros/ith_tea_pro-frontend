@@ -514,56 +514,49 @@ const archiveConFirmation = (sectionId) => {
 
   return (
     <>
-      <div className="rightDashboard">
+      <div className="rightDashboard" style={{marginTop:'7%'}}>
         <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
-        </h1>
 
-        {!isArchive && (
-          <button
-            className="addTaskBtn"
-            style={{
-              float: "right",
-            }}
-            onClick={() => {
-              setSelectedTask();
-              setShowAddTask(true);
-              setSelectedProject();
-            }}
-          >
-            Add Task
-          </button>
-        )}
-
-        {projects?.length !== 0 &&
-          userDetails?.role !== "CONTRIBUTOR" &&
-          !isArchive &&
-          selectedProjectId && (
+          <div className="projects-button">
+          
+          {!isArchive && (
             <button
-              className="addTaskBtn addSectionBtn"
+              className="addTaskBtn"
               style={{
                 float: "right",
               }}
               onClick={() => {
-                showAddSectionModal(true);
+                setSelectedTask();
+                setShowAddTask(true);
+                setSelectedProject();
               }}
             >
-              Add Section
+              Add Task
             </button>
           )}
-        {/* { userDetails?.role !== "CONTRIBUTOR" && (
-            <button
-              className="addTaskBtn addSectionBtn"
-              style={{
-                float: "right",
-              }}
-
-              onClick={handleIsArchive}
-             
-            >
-             {isArchive?'Back': ' Archive list'}
-            </button>
-          )} */}
+  
+          {projects?.length !== 0 &&
+            userDetails?.role !== "CONTRIBUTOR" &&
+            !isArchive &&
+            selectedProjectId && (
+              <button
+                className="addTaskBtn addSectionBtn"
+                style={{
+                  float: "right",
+                }}
+                onClick={() => {
+                  showAddSectionModal(true);
+                }}
+              >
+                Add Section
+              </button>
+            )}
+          </div>
+  
+        </h1>
+       
+      
 
         <FilterModal
           handleProjectId={selectedProjectId}
