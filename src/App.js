@@ -60,19 +60,10 @@ function App() {
               <Navbar />
               <Header />
               <Dashboard showBtn={true} />
-              <Footer />
+            
             </ProtectedRoute>
           }
         />
-
-        {/* <Route path='/project/add/:projectId' element={ 
-                <ProtectedRoute>
-					<Navbar /> 
-                    <AddProject />
-					
-                  
-                </ProtectedRoute>}
-            /> */}
 
         <Route
           path="/project"
@@ -83,7 +74,7 @@ function App() {
               <ProtectedRoute>
                 {" "}
                 <Navbar />
-              
+               <Header />
                 <Project />{" "}
               </ProtectedRoute>
             </>
