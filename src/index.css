@@ -16,6 +16,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color:#e7eaf0 !important;
   overflow-x: hidden;
+  font-family: 'Ubuntu', sans-serif !important;
 }
 
 code {

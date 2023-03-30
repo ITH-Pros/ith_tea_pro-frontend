@@ -1,30 +1,57 @@
-import React from 'react';
-// import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
-import './Toaster.css';
 
-function Toaster(props) {
-    const { close, show, message } = props;
-    return (
-        <Row>
-            <Col xs={6}>
-                <ToastContainer bg='success' className="p-3" position={`bottom-end`}>
-                    <Toast
-                        onClose={close}
-                        show={show}
-                        delay={3000}
-                        autohide >
-                        <Toast.Body >
-                            {message}
-                        </Toast.Body>
-                    </Toast>
-                </ToastContainer>
-            </Col>
-        </Row>
-    );
-}
+import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Toaster = ({ message, show, close }) => {
+  const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+      console.log("-----------------------------38");
+      
+    let interval = null;
+    if (show) {
+      interval = setInterval(() => {
+        setProgress((prevProgress) => {
+          if (prevProgress >= 100) {
+            clearInterval(interval);
+            close();
+            return 0;
+          }
+          return prevProgress + 33.3;
+        });
+      }, 1000);
+    } else {
+      clearInterval(interval);
+      setProgress(0);
+    }
+    return () => clearInterval(interval);
+  }, [show]);
+
+    useEffect(() => {
+      console.log('-----------------------------58')
+    if (show) {
+      toast.info(<div>{message}</div>, {
+        autoClose: 4000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: progress / 100,
+      });
+    }
+  }, [show]);
+
+  return (
+    <ToastContainer
+      position="top-right"
+      autoClose={false}
+      hideProgressBar
+      closeOnClick={false}
+      pauseOnHover={false}
+      draggable={false}
+    />
+  );
+};
 
 export default Toaster;

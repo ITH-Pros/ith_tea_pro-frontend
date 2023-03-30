@@ -7,6 +7,8 @@ import { Layout } from "./Layout.js";
 import { Logo } from "./Logo.js";
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { BsBoxArrowRight } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+
 import {
   FaUser,
   FaAngleDoubleLeft,
@@ -21,7 +23,13 @@ import {
 import './navbar.css'
 import { navigationRef } from '../../helpers/logOut';
 export default function App() {
-  const { accessToken, logout } = useAuth()
+  const { accessToken, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const redirectToDashbord = () => {
+    navigate("/");
+    
+  }
   const navLinkStyles = ({ isActive }) => {
     return {
       fontWeight: isActive ? 'bold' : 'normal',
@@ -46,7 +54,7 @@ export default function App() {
        
        <Sidebar>
         <Menu iconShape="circle">
-          <MenuItem>
+          <MenuItem onClick={redirectToDashbord}>
           <Logo />
           <Text b color="#8355ad" hideIn="xs">
          Tea Pro

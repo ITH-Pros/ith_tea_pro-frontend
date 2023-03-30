@@ -52,6 +52,8 @@ export default function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     if (!loginFormValue.email || !loginFormValue.password) {
+      showToaster(true);
+      setToasterMessage("Email & Password is required.");
       return
     }
     let dataToSend = loginFormValue
@@ -59,42 +61,15 @@ export default function Login() {
       const userLogin = await loginUser(dataToSend);
       // setLoading(false);
       if (userLogin.error) {
-        // toast.error(userLogin.error.message, {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-		console.log("userLogin", userLogin.message)
-
-
-		showToaster(true)
-		setToasterMessage(userLogin?.message||'Please check login credential')
-
-
+        showToaster(true)
+        setToasterMessage(userLogin?.message||'Please check login credential')
       } else {
-        // toast.success("Submitted succesfully !", {
-        //   position: toast.POSITION.TOP_CENTER,
-        //   className: "toast-message",
-        // });
-        // setRatings(userLogin.data);
         login(userLogin?.data);
-		// console.log("userLogin", userLogin?.data)
-		
-		localStorage.setItem('profileCompleted',userLogin?.data.user.profileCompleted)
-
-		console.log("userLogin", userLogin?.data.user.profileCompleted)
-
-		// if(userLogin?.data.profileCompleted == false) {
-		// 	setProfileModalShow(true);
-		// }
-
-
+		    localStorage.setItem('profileCompleted',userLogin?.data.user.profileCompleted)
       }
     } catch (error) {
-
-		console.log("error", error.message)
-		showToaster(true)
-		setToasterMessage(error?.message || "Please check login credential");
-      // setLoading(false);
+        showToaster(true)
+        setToasterMessage(error?.message || "Please check login credential");
     }
 
   };

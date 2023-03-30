@@ -733,6 +733,10 @@ const archiveConFirmation = (sectionId) => {
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
                       {(userDetails.id === task?.assignedTo?._id ||
+                        (userDetails.role === "LEAD" &&
+                          (userDetails.id === task?.assignedTo?._id ||
+                            task?.lead?.includes(userDetails.id) ||
+                            userDetails.id === task?.createdBy?._id)) ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") && (
                         <Dropdown>
@@ -904,7 +908,10 @@ const archiveConFirmation = (sectionId) => {
                         )}
                       </div>
                       {(userDetails.id === task?.assignedTo?._id ||
-                       ( userDetails.role === "LEAD"&&(userDetails.id === task?.assignedTo?._id||task?.lead?.includes(userDetails.id)||userDetails.id === task?.createdBy?._id )) ||
+                        (userDetails.role === "LEAD" &&
+                          (userDetails.id === task?.assignedTo?._id ||
+                            task?.lead?.includes(userDetails.id) ||
+                            userDetails.id === task?.createdBy?._id)) ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") &&
                         !isArchive && (
