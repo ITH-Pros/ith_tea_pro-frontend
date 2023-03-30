@@ -157,6 +157,22 @@ function UserForm(props) {
                     </div>
                     
                 </div>
+                <div className="form-group col-12 text-right profil-ed">
+                {!isEditable && (
+                    <button onClick={handleSubmit} className="submit-button">
+                        {" "}
+                        Update
+                    </button>
+                )}
+                 
+
+                {isEditable && (
+                    <button className="submit-button edit" onClick={handleEditClick}>
+                        Edit Profile
+                    </button>
+                )}
+                </div>
+              
                 <div className="form-group col-12">
                     <label htmlFor="name">Name:</label>
                     <input
@@ -278,22 +294,6 @@ function UserForm(props) {
                     />
                 </div>
 
-                {!isEditable && (
-                    <button onClick={handleSubmit} className="submit-button">
-                        {" "}
-                        Update
-                    </button>
-                )}
-                    {/* <button onClick={handleSubmit} className="submit-button">
-                        {" "}
-                        Update
-                    </button> */}
-
-                {isEditable && (
-                    <button className="submit-button edit" onClick={handleEditClick}>
-                        Edit
-                    </button>
-                )}
             </form>
 
             {toaster && (
