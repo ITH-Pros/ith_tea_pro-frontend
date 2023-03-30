@@ -432,9 +432,7 @@ const handleViewDetails = (taskId) => {
 
   return (
     <div className="dashboard_camp  rightDashboard">
-      <div className="my-3 d-flex justify-content-center flex-column">
-        {/* {<MyCalendar />} */}
-      </div>
+    
       <Container>
         <Row>
           <Col lg={6} className="px-0">
