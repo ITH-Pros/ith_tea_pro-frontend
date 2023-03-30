@@ -65,7 +65,7 @@ export default function AddUser(props) {
     }
 
     return (
-        <div className="addUserFrom rightDashboard">
+        <div className="addUserFrom rightDashboard" style={{marginTop:'7%'}}>
 
         <div className="backButton">
 			<Link to="/team">

@@ -307,13 +307,13 @@ export default function Teams(props) {
 
   return (
     <>
-      <div className="rightDashboard">
+      <div className="rightDashboard" style={{marginTop:'7%'}}>
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
-        </h1>
-        <h1 style={{ textAlign: "right" }}>
+
+          <div className="projects-button">
           {userDetails.role === "SUPER_ADMIN" && (
-            <Link
+            <Link style={{float:'right'}}
               to={{
                 pathname: "/user/add",
               }}
@@ -329,7 +329,9 @@ export default function Teams(props) {
               </i>
             </Link>
           )}
+          </div>
         </h1>
+       
 
         <div className="container-team">
           {usersList &&
