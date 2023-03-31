@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
 import { Button, Col, Row } from "react-bootstrap";
@@ -392,7 +392,6 @@ function TaskModal(props) {
                   disabled={statusValue === status}
                   key={status}
                 >
-                  {" "}
                   {status}{" "}
                 </option>
               ))}
@@ -448,11 +447,8 @@ function TaskModal(props) {
             <DatePicker
               autoFocus
               format="dd-MM-y"
-              // selected={dueDateValue}
               value={dueDateValue}
-              // selected={dueDateValue}
               onCalendarClose={() => setEditDueDateEnable(false)}
-              // onBlur={() => setEditDueDateEnable(false)}
               onChange={checkAndUpdateDueDate}
             ></DatePicker>
           </div>
@@ -481,15 +477,11 @@ function TaskModal(props) {
       if (!e || e?.toDateString() === completedDateValue?.toDateString()) {
         return;
       }
-      // updateTaskCompletedDate(e.toDateString())
       updateMutipleTaskDetails(
         { completedDate: e.toDateString() },
         selectedTaskDetails
       );
-
-      // setDueDateValue(e)
       setEditCompletedDateEnable(false);
-      // selectedTaskDetails.completedDate = e
     };
     return (
       <>
@@ -499,11 +491,8 @@ function TaskModal(props) {
             <DatePicker
               autoFocus
               format="dd-MM-y"
-              // selected={completedDateValue}
               value={completedDateValue}
-              // selected={completedDateValue}
               onCalendarClose={() => setEditCompletedDateEnable(false)}
-              // onBlur={() => setEditCompletedDateEnable(false)}
               onChange={checkAndUpdateDueDate}
             ></DatePicker>
           </div>
@@ -545,7 +534,6 @@ function TaskModal(props) {
   };
 
   const getProjectsTaskDetails = async (task) => {
-    // setLoading(true)
     try {
       let dataToSend = {
         params: {
@@ -553,7 +541,6 @@ function TaskModal(props) {
         },
       };
       const taskRes = await getTaskDetailsByTaskId(dataToSend);
-      // setLoading(false);
       if (taskRes.error) {
         setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -563,7 +550,6 @@ function TaskModal(props) {
         !taskModalShow && setTaskModalShow(true);
       }
     } catch (error) {
-      // setLoading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
@@ -571,7 +557,6 @@ function TaskModal(props) {
   };
 
   const updateMutipleTaskDetails = async (data, taskDetails) => {
-    // setLoading(true)
     try {
       let dataToSend = {
         taskId: taskDetails._id,
@@ -587,7 +572,6 @@ function TaskModal(props) {
       data.completedDate && (dataToSend["completedDate"] = data.completedDate);
 
       const taskRes = await updateTaskDetails(dataToSend);
-      // setLoading(false);
       if (taskRes.error) {
         setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -597,7 +581,6 @@ function TaskModal(props) {
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      // setLoading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
@@ -725,15 +708,10 @@ function TaskModal(props) {
         />
 
         {selectedTaskObj.title?.slice(0, 100) + "......."}
-        {/* <del>Functionality Implimentation & Bug Fixing</del> */}
-        {/* <div className="date-tag">Completed Feb 16, 2022</div> */}
-
         {getPriorityTag(selectedTaskObj)}
-
         {getDueDateTag(selectedTaskObj)}
         {getAssignedToTag(selectedTaskObj)}
         {getCompletedDateTag(selectedTaskObj)}
-        {/* <div className="date-tag">Due Jun 21, 2022</div> */}
         <i
           style={{ marginLeft: "5px" }}
           className="fa fa-comments"
@@ -743,7 +721,6 @@ function TaskModal(props) {
         <small className="progress-bar-count">546</small>
         <div className="progress-bar"></div>
       </div>
-
 
       <Modal
         show={taskModalShow}
@@ -801,16 +778,10 @@ function TaskModal(props) {
           <div>
             <hr></hr>
             <EditDescriptionBox />
-            {/* <b>Comments </b> */}
             <CommentsForm />
             <CommentsListBox />
           </div>
         </Modal.Body>
-        {/* <Modal.Footer>
-        <button className="btn btn-gradient-border " onClick={onHide}>
-          Close
-        </button>
-      </Modal.Footer> */}
       </Modal>
 
       {loading && <Loader />}

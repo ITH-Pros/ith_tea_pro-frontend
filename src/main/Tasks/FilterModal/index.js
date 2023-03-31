@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Button, Container, Row, Form, Modal, Col } from "react-bootstrap";
-import { useLocalStorage } from "../../../auth/useLocalStorage";
+import { Container, Row, Form, Modal, Col } from "react-bootstrap";
 import Loader from "../../../components/Loader";
 import { CONSTANTS } from "../../../constants";
 import "./filter.css";
@@ -14,14 +14,13 @@ import {
 import Select from "react-select";
 import { useAuth } from "../../../auth/AuthProvider";
 import FilterDropdown from "./FilterDropdown";
-import SortByDropdown from './SortFilter'
+import SortByDropdown from "./SortFilter";
 const FilterModal = (props) => {
-  const { getTaskFilters, handleProjectId ,isArchive} = props;
-  const { userDetails } = useAuth();
+  const { getTaskFilters, handleProjectId, isArchive } = props;
 
+  const { userDetails } = useAuth();
   const statusList = CONSTANTS.statusListObj;
   const priorityList = CONSTANTS.priorityListObj;
-  const groupByList = CONSTANTS.TASK_GROUPS;
   const filterFormFileds = {
     createdBy: "",
     assignedTo: "",
@@ -33,9 +32,8 @@ const FilterModal = (props) => {
     sortOrder: "",
     sortType: "",
     fromDate: "",
-    toDate:""
+    toDate: "",
   };
-  const [selectProjectGroup, setSelectProjectGroup] = useState("");
   const [clearFilter, setClearFilterBoolean] = useState(false);
   const [projectIds, setProjectIds] = useState([]);
   const [assignedTo, setAssignedTo] = useState([]);
@@ -43,98 +41,52 @@ const FilterModal = (props) => {
   const [statusData, setStatusData] = useState([]);
   const [priorityData, setPriorityData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
-  //   con
-
-  const [sortBy, setSortBy] = useState("");
-  const [dueDate, setDueDate] = useState("");
   const [dateCreated, setDateCreated] = useState("");
   const [dateUpdated, setDateUpdated] = useState("");
   const [dateCompleted, setDateCompleted] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [filterModalShow, setFilterModalShow] = useState(false);
-
   const [filterFormValue, setFilterFormValue] = useState(filterFormFileds);
-  const [selectedFilterData, setSelectedFilterData] = useState();
-
   const [projects, setProjects] = useState([]);
   const [categories, setCategories] = useState([]);
   const [usersList, setUsersList] = useState([]);
 
-  const [sortedByArr, setSortedByArr] = useState(CONSTANTS.SORTEDBY);
-
-  //   console.log("handleProjectId handleProjectId handleProjectId",handleProjectId);
-  //         if (handleProjectId) {
-  //           let projectData = projects?.data?.find((item) => handleProjectId == item?._id);
-  //           setProjectIds(projectData);
-  //         }
   useEffect(() => {
     getAllProjectsData();
     getAllCategoriesData();
     getAllUsersData();
     updateFromLocalStorage();
   }, []);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [sortOrder, setSortOrder] = useState("");
-  const [sortType, setSortType] = useState("");
 
-    useEffect(() => {
-      return () => {
-        localStorage.removeItem("taskFilters");
-        localStorage.removeItem("dueDate");
-        localStorage.removeItem("sortOrder");
-        localStorage.removeItem("sortType");
-    localStorage.removeItem("selectedFilter");
-
-      };
-    }, []);
-
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("taskFilters");
+      localStorage.removeItem("dueDate");
+      localStorage.removeItem("sortOrder");
+      localStorage.removeItem("sortType");
+      localStorage.removeItem("selectedFilter");
+    };
+  }, []);
 
   const handleFilterSelect = (fromDate, toDate) => {
-    console.log(fromDate,'-------------------------From date')
-    console.log(toDate, '-------------------------To date')
-    // setFromDate(fromDate);
-    // setToDate(toDate);
-    localStorage.setItem('dueDate',JSON.stringify({'fromDate':fromDate,'toDate':toDate}))
-    // setFilterFormValue({ ...filterFormValue, fromDate:fromDate });
-    // setFilterFormValue({ ...filterFormValue, toDate: toDate });
-    
-    // Call your API with the fromDate and toDate values
-    // Update the filteredData state with the API response
+    localStorage.setItem(
+      "dueDate",
+      JSON.stringify({ fromDate: fromDate, toDate: toDate })
+    );
   };
+
   const handleFilterSortOrderSelect = (sortOrder) => {
-    setSortOrder(sortOrder)
-    console.log(sortOrder, '=====================sort order')
-    localStorage.setItem("sortOrder", sortOrder );
-
-    // setFilterFormValue({ ...filterFormValue, sortOrder: sortOrder });
-    
-  }
-  const handleFilterSortSelect = (sortType)=> {
-    console.log(sortType, '=====================sort type')
-    setSortType(sortType)
+    localStorage.setItem("sortOrder", sortOrder);
+  };
+  const handleFilterSortSelect = (sortType) => {
     localStorage.setItem("sortType", sortType);
-
-    // setFilterFormValue({ ...filterFormValue, sortOrder: sortType });
-
-  }
-
-  
-
+  };
 
   const updateFromLocalStorage = () => {
-    console.log("filterFormValueFromLocal\n\n\nn\n\n");
     if (localStorage.getItem("taskFilters")) {
       let filterFormValueFromLocal = JSON.parse(
         localStorage.getItem("taskFilters")
       );
-      console.log(
-        "filterFormValueFromLocal\n\n\nn\n\n",
-        filterFormValueFromLocal,
-        usersList
-      );
-      //   setFilterFormValue(JSON.parse(localStorage.getItem("taskFilters")));
       let projectData = projects.filter((item) =>
         filterFormValueFromLocal?.projectIds?.includes(item?._id)
       );
@@ -154,29 +106,16 @@ const FilterModal = (props) => {
       let selectedPriority = priorityList.filter((item) =>
         filterFormValueFromLocal?.priority?.includes(item?._id)
       );
-      console.log("assignedToData", assignedToData);
       setProjectIds(projectData);
       setAssignedTo(assignedToData);
       setCategoryData(selectedCategory);
       setCreatedBy(createdByData);
       setPriorityData(selectedPriority);
       setStatusData(selectedStatus);
-      setSelectedFilterData({
-        projectIds: projectData,
-        assignedTo: assignedToData,
-        createdBy: filterFormValueFromLocal?.category,
-        category: createdByData,
-        priority: filterFormValue?.priority,
-        status: filterFormValue?.status,
-      });
       setClearFilterBoolean(true);
     }
   };
 
-  const updateFilterFormValue = (e) => {
-    setFilterFormValue({ ...filterFormValue, [e.target.name]: e.target.value });
-    console.log(filterFormValue);
-  };
   const closeModalAndgetAllTaskOfProject = () => {
     updateFromLocalStorage();
     setClearFilterBoolean(true);
@@ -187,27 +126,19 @@ const FilterModal = (props) => {
     if (dueDate.fromDate && dueDate.toDate) {
       filterFormValue.fromDate = dueDate.fromDate;
       filterFormValue.toDate = dueDate.toDate;
-      
     }
     if (localStorage.getItem("sortOrder")) {
       filterFormValue.sortOrder = localStorage.getItem("sortOrder");
-      
     }
     if (localStorage.getItem("sortType")) {
       filterFormValue.sortType = localStorage.getItem("sortType");
     }
 
-      console.log(
-        filterFormValue,
-       
-        "---------------------filter form value ................................"
-      );
     localStorage.setItem("taskFilters", JSON.stringify(filterFormValue));
     getTaskFilters();
     setFilterModalShow(false);
   };
   const clearFilterFormValue = () => {
-    setSelectProjectGroup("");
     setProjectIds("");
     setAssignedTo("");
     setCreatedBy("");
@@ -216,9 +147,7 @@ const FilterModal = (props) => {
     setStatusData("");
     setDateCompleted("");
     setDateCreated("");
-    setDueDate("");
     setDateUpdated("");
-    setSortBy("");
     setFilterFormValue(filterFormFileds);
     localStorage.removeItem("taskFilters");
     localStorage.removeItem("dueDate");
@@ -228,6 +157,7 @@ const FilterModal = (props) => {
     setClearFilterBoolean(false);
     getTaskFilters();
   };
+
   const getAllProjectsData = async () => {
     setLoading(true);
 
@@ -236,7 +166,6 @@ const FilterModal = (props) => {
       setLoading(false);
 
       if (projects.error) {
-        console.log(projects?.error);
       } else {
         setProjects(projects.data);
       }
@@ -245,6 +174,7 @@ const FilterModal = (props) => {
       return error.message;
     }
   };
+
   const getAllCategoriesData = async () => {
     setLoading(true);
 
@@ -253,13 +183,11 @@ const FilterModal = (props) => {
       setLoading(false);
 
       if (categories.error) {
-        console.log(categories?.error);
       } else {
         categories.data = categories?.data?.map((item, i) => ({
           name: item?.name,
           _id: item?._id,
         }));
-        console.log(categories.data,'======================================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         setCategories(categories?.data);
       }
     } catch (error) {
@@ -267,13 +195,12 @@ const FilterModal = (props) => {
       return error.message;
     }
   };
+
   const getAllUsersData = async () => {
     setLoading(true);
-
     try {
       const users = await getAllUsersWithoutPagination();
       setLoading(false);
-
       if (users.error) {
         console.log(users?.error);
       } else {
@@ -284,20 +211,20 @@ const FilterModal = (props) => {
       return error.message;
     }
   };
+
   const onSelectData = (selectedItems, dataType) => {
-	// console.log("selectedItems", selectedItems);
     let data = selectedItems?.map((item) => item?._id);
     if (dataType == "projectIds") {
       setProjectIds(selectedItems);
-    } else if (dataType == "assignedTo") {
+    } else if (dataType === "assignedTo") {
       setAssignedTo(selectedItems);
-    } else if (dataType == "createdBy") {
+    } else if (dataType === "createdBy") {
       setCreatedBy(selectedItems);
-    } else if (dataType == "priority") {
+    } else if (dataType === "priority") {
       setPriorityData(selectedItems);
-    } else if (dataType == "status") {
+    } else if (dataType === "status") {
       setStatusData(selectedItems);
-    } else if (dataType == "category") {
+    } else if (dataType === "category") {
       setCategoryData(selectedItems);
     }
     setFilterFormValue({ ...filterFormValue, [dataType]: data });
@@ -308,8 +235,6 @@ const FilterModal = (props) => {
       let assignedToData = usersList?.filter(
         (item) => userDetails.id == item?._id
       );
-      console.log(assignedToData, userDetails, "assignedToData", usersList);
-
       setProjectIds(projectData);
       setAssignedTo(assignedToData);
     }
@@ -323,24 +248,26 @@ const FilterModal = (props) => {
           <Container>
             <Row>
               <Col lg={8}>
-                {!isArchive&&<div>
-                  <img
-                    onClick={setProjectAndOpenModal}
-                    style={{
-                      marginRight: "2px",
-                      cursor: "pointer",
-                    }}
-                    src={require("../../../assests/img/filter.png")}
-                    alt="filter"
-                  />
+                {!isArchive && (
+                  <div>
+                    <img
+                      onClick={setProjectAndOpenModal}
+                      style={{
+                        marginRight: "2px",
+                        cursor: "pointer",
+                      }}
+                      src={require("../../../assests/img/filter.png")}
+                      alt="filter"
+                    />
 
-                  <span
-                    onClick={setProjectAndOpenModal}
-                    className="filter-task-tag"
-                  >
-                    Filter
-                  </span>
-                </div>}
+                    <span
+                      onClick={setProjectAndOpenModal}
+                      className="filter-task-tag"
+                    >
+                      Filter
+                    </span>
+                  </div>
+                )}
               </Col>
               <Col lg={3}>
                 <div className="text-right me-2">
@@ -444,24 +371,6 @@ const FilterModal = (props) => {
                   </Col>
                 </Row>
               </Form.Group>
-
-              {/* <Form.Group as={Row} controlId="formDateCreated">
-                  <Row className="filterFields">
-                    <Col sm="3">
-                      <Form.Label>Category</Form.Label>
-                    </Col>
-                    <Col sm="9">
-                      <Select
-                        onChange={(e) => onSelectData(e, "category")}
-                        value={categoryData}
-                        isMulti
-                        getOptionLabel={(options) => options["name"]}
-                        getOptionValue={(options) => options["_id"]}
-                        options={categories}
-                      />
-                    </Col>
-                  </Row>
-                </Form.Group> */}
               <Form.Group controlId="category">
                 <Row className="filterFields">
                   <Col sm="3">
@@ -484,20 +393,6 @@ const FilterModal = (props) => {
                   <Col sm="3">
                     <Form.Label>Priority</Form.Label>
                   </Col>
-                  {/* <Form.Control
-                      as="select"
-                      type="select"
-                      name="priority"
-                      onChange={updateFilterFormValue}
-                      value={filterFormValue.priority}
-                    >
-                      <option value="">Priority</option>
-                      {priorityList?.map((priority) => (
-                        <option value={priority} key={priority}>
-                          {priority}
-                        </option>
-                      ))}
-                    </Form.Control> */}
                   <Col sm="9">
                     <Select
                       onChange={(e) => onSelectData(e, "priority")}
@@ -516,7 +411,7 @@ const FilterModal = (props) => {
                   <Col sm="3">
                     <Form.Label>Status</Form.Label>
                   </Col>
-                
+
                   <Col sm="9">
                     <Select
                       onChange={(e) => onSelectData(e, "status")}
@@ -529,39 +424,16 @@ const FilterModal = (props) => {
                   </Col>
                 </Row>
               </Form.Group>
-
-              {/* <Form.Group controlId="formSortBy" >
-                <Row className="filterFields" style={{marginBottom:'0px'}}>
-                  <Col sm="3">
-                    <Form.Label>Sort By</Form.Label>
-                  </Col>
-                  <Col sm="9">
-                    <Form.Control
-                      as="select"
-                      type="select"
-                      name="sortBy"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                    >
-                      <option value="">Select Sort By</option>
-                      {sortedByArr?.map((type) => (
-                        <option value={type} key={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </Row>
-              </Form.Group> */}
-
               <Form.Group controlId="formDueDate">
                 <Row className="filterFields due-date">
                   <FilterDropdown onFilterSelect={handleFilterSelect} />
-
                 </Row>
               </Form.Group>
               <Form.Group controlId="formDueDate">
-                <Row className="filterFields due-date" style={{marginTop:'0px'}}>
+                <Row
+                  className="filterFields due-date"
+                  style={{ marginTop: "0px" }}
+                >
                   <SortByDropdown
                     onFilterSortSelect={handleFilterSortSelect}
                     onFilterSortOrderSelect={handleFilterSortOrderSelect}
@@ -616,25 +488,9 @@ const FilterModal = (props) => {
                   </Col>
                 </Row>
               </Form.Group>
-
-              {/* <Button  md="2" className="btnDanger" type="submit">
-                  Clear Filter
-                </Button> */}
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            {/* <button
-              className="btn btn-gradient-border"
-              onClick={() => setFilterModalShow(false)}
-            >
-              Close
-            </button> */}
-            {/* <button
-              className="btn btn-gradient-border"
-              onClick={closeModalAndgetAllTaskOfProject}
-            >
-              Apply
-            </button> */}
             <div>
               <img
                 onClick={closeModalAndgetAllTaskOfProject}
@@ -657,7 +513,6 @@ const FilterModal = (props) => {
           </Modal.Footer>
         </Modal>
       )}
-
       {loading && <Loader />}
     </>
   );

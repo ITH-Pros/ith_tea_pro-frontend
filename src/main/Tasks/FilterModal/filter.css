@@ -1,4 +1,4 @@
-.filter-task-tag{
+.filter-task-tag {
     line-height: 16px;
     display: inline-flex;
     align-items: center;
@@ -10,49 +10,52 @@
     margin: 1.5px 0;
     color: #0f1b57;
     padding: 5px;
-    box-shadow: none!important;
-    background-color: transparent!important;
+    box-shadow: none !important;
+    background-color: transparent !important;
     border: 1px solid transparent;
     cursor: pointer;
     font-weight: 700;
     opacity: .7;
 }
-.text-right{
+
+.text-right {
     text-align: right;
 }
-    .addTaskBtn {
-        background-color: #8355ad!important;
-        line-height: 16px;
-        white-space: nowrap;
-        transition: color .3s linear;
-        color: #fff!important;
-        border-color: #d1a2fb;
-        padding: 6px 12px;
-        border-radius: 5px;
-        border: 1px solid;
-        font-size: 12px;
-    }
 
-#dialog-window .accordion-item{
+.addTaskBtn {
+    background-color: #8355ad !important;
+    line-height: 16px;
+    white-space: nowrap;
+    transition: color .3s linear;
+    color: #fff !important;
+    border-color: #d1a2fb;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: 1px solid;
+    font-size: 12px;
+}
+
+#dialog-window .accordion-item {
     background: transparent;
 }
-.filter-main-tag{
+
+.filter-main-tag {
     display: flex;
     justify-content: center;
 }
 
-.filterWth{ 
+.filterWth {
     width: 100%;
 }
-.form-control{
+
+.form-control {
     margin-bottom: 5px;
 }
 
-.modal-footer{
-        display: flex;
+.modal-footer {
+    display: flex;
     justify-content: flex-end;
     align-items: end;
-    /* height: 60px; */
     box-shadow: 0 -3px 3px rgb(0 0 0 / 10%);
     background: #fff !important;
     z-index: 1;
@@ -61,33 +64,41 @@
     padding-right: 40px;
     position: fixed;
     bottom: 0 !important;
-    /* right: 10px; */
     width: 598px;
 }
-.filterFields{ margin-bottom: 10px;}
-.filterFields{
+
+.filterFields {
+    margin-bottom: 10px;
+}
+
+.filterFields {
     align-items: center;
     flex-wrap: nowrap !important;
 }
-.filterFields .col-form-label{
+
+.filterFields .col-form-label {
     font-size: 14px;
-    text-transform: capitalize; 
+    text-transform: capitalize;
 }
-.filterFields .form-control{ 
+
+.filterFields .form-control {
     font-size: 15px;
     width: 100%;
 }
-.filterModal .modal-body{
+
+.filterModal .modal-body {
     height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.filterModal.modal.show .modal-dialog{
+
+.filterModal.modal.show .modal-dialog {
     border-radius: 4px;
     height: 100vh;
     margin: 0;
-  }
-  .filterFields .react-datepicker-wrapper {
+}
+
+.filterFields .react-datepicker-wrapper {
     padding: 0;
 }
 
@@ -100,13 +111,15 @@
     width: 26%;
     font-weight: 100;
 }
-.due-date .form-control{
+
+.due-date .form-control {
     font-size: 14px;
     float: right;
     width: 74%;
     margin-top: 14px;
 }
-.due-date select{
+
+.due-date select {
     width: 73%;
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
@@ -122,7 +135,7 @@
     margin-top: 10px;
 }
 
-.daterangepicker.ltr.show-calendar.opensright{
+.daterangepicker.ltr.show-calendar.opensright {
     top: 14px !important;
     left: auto;
     right: 45px !important;
