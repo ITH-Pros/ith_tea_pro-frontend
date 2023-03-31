@@ -284,11 +284,11 @@ const Tasks = () => {
         if (filterData?.createdBy) {
           data.createdBy = JSON.stringify(filterData?.createdBy);
         }
-        if (filterData?.assignedTo) {
+        if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
           data.assignedTo = JSON.stringify(filterData?.assignedTo);
         }
-        if (filterData?.section) {
-          data.section = JSON.stringify(filterData?.section);
+        if (filterData?.category) {
+          data.section = JSON.stringify(filterData?.category);
         }
         if (filterData?.priority) {
           data.priority = JSON.stringify(filterData?.priority);
