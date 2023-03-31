@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-operators */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
@@ -11,18 +13,16 @@ import ImageUpload from "./imageUpload";
 
 function UserForm(props) {
   const { handleModalClose } = props;
-
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [toaster, showToaster] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
-  const [role, setRole] = useState(""); // ['SUPER_ADMIN', 'ADMIN', 'CONTRIBUTOR']
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [employeeId, setEmployeeId] = useState("");
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] = useState("");
   const [dob, setDob] = useState("");
-  // console.log('dob', dob);
   const githubRegex = /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/;
   const twitterRegex = /^(https?:\/\/)?(www\.)?twitter\.com\/[a-zA-Z0-9_]+\/?$/;
   const linkedinRegex =
@@ -45,11 +45,9 @@ function UserForm(props) {
 
     if (localStorage.getItem("isEditProfile") === "true") {
       setIsEditable(true);
-      // Rename the key
     }
   };
-  console.log("profilePicture", profilePicture);
-
+  
   const patchValues = (currentUser) => {
     setName(currentUser?.name || "");
     setRole(currentUser?.role || "");
@@ -61,11 +59,9 @@ function UserForm(props) {
     setTwitter(currentUser?.twitterLink || "");
     setLinkedin(currentUser?.linkedInLink || "");
     setDob(currentUser?.dob || "");
-
     setProfileImage(currentUser?.profilePicture || "");
   };
 
-  //   get currentUserdetails from API and set the values
   const getUserDetails = async () => {
     setLoading(true);
     try {
@@ -75,7 +71,6 @@ function UserForm(props) {
         setLoading(false);
         return;
       } else {
-        //   setCurrentUser(response.data);
         patchValues(response.data);
         setLoading(false);
       }
@@ -88,12 +83,11 @@ function UserForm(props) {
 
   function handleEditClick(event) {
     event.preventDefault();
-    setIsEditable(!isEditable); // Set isEditable to true when Edit button is clicked
+    setIsEditable(!isEditable); 
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("--------------------------profile url", profilePicture);
     if (github && !githubRegex.test(github) || linkedin && !linkedinRegex.test(linkedin) || twitter && !twitterRegex.test(twitter) ) {
         return;
       }
@@ -112,7 +106,6 @@ function UserForm(props) {
     };
 
     try {
-      // call API to update the user details
       setLoading(true);
       const response = await editLogedInUserDetails(dataToSend);
       if (response.error) {
@@ -134,7 +127,6 @@ function UserForm(props) {
       setLoading(false);
       return error.message;
     }
-    // Do something with the form data
   };
 
   function formatDate(date) {
@@ -161,8 +153,7 @@ function UserForm(props) {
         </div>
         <div className="form-group col-12 text-right profil-ed">
           {!isEditable && (
-            <button  onClick={handleSubmit} className="submit-button">
-              {" "}
+            <button onClick={handleSubmit} className="submit-button">
               Update
             </button>
           )}
@@ -182,7 +173,6 @@ function UserForm(props) {
             value={name}
             maxLength="50"
             onChange={(event) => setName(event.target.value)}
-            // readOnly={!isEditable}
             disabled={isEditable}
           />
         </div>
@@ -206,8 +196,6 @@ function UserForm(props) {
             value={employeeId}
             onChange={(event) => setEmployeeId(event.target.value)}
             disabled={isEditable}
-
-            // readOnly={!isEditable}
           />
         </div>
 
@@ -219,7 +207,6 @@ function UserForm(props) {
             value={formatDate(dob)}
             max={formatDate(new Date(today.getFullYear() - 15, today.getMonth(), today.getDate()))}
             onChange={(event) => setDob(event.target.value)}
-            // readOnly={!isEditable}
             disabled={isEditable}
           />
         </div>
@@ -231,7 +218,6 @@ function UserForm(props) {
             value={designation}
             maxLength="50"
             onChange={(event) => setDesignation(event.target.value)}
-            // readOnly={!isEditable}
             disabled={isEditable}
           />
         </div>
@@ -243,7 +229,6 @@ function UserForm(props) {
             value={department}
             maxLength="50"
             onChange={(event) => setDepartment(event.target.value)}
-            // readOnly={!isEditable}
             disabled={isEditable}
           />
         </div>
@@ -282,7 +267,6 @@ function UserForm(props) {
             id="twitter"
             value={twitter}
             onChange={(event) => setTwitter(event.target.value)}
-            // readOnly={!isEditable}
             disabled={isEditable}
             className={twitter && !twitterRegex.test(twitter) ? "invalid" : ""}
           />
@@ -297,7 +281,6 @@ function UserForm(props) {
             id="linkedin"
             value={linkedin}
             onChange={(event) => setLinkedin(event.target.value)}
-            // readOnly={!isEditable}
             disabled={isEditable}
             className={
               linkedin && !linkedinRegex.test(linkedin) ? "invalid" : ""

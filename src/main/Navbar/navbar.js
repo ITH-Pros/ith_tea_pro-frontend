@@ -2,7 +2,6 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthProvider';
 import React from "react";
-import { Navbar, Button, Link, Text } from "@nextui-org/react";
 import { Layout } from "./Layout.js";
 
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';

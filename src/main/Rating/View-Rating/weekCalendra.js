@@ -1,10 +1,8 @@
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { myevents, myresources } from "./data";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "./dashboard.css";
 import { useEffect, useState } from "react";
-import { getRatings } from "../../services/user/api";
+import { getRatings } from "../../../services/user/api";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
