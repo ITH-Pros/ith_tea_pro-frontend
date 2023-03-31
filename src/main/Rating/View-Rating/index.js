@@ -1,74 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import moment from "moment";
-
 import { useState, useEffect } from "react";
 import "./index.css";
-// eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-
+import { Table } from "react-bootstrap";
 import {
-  Row,
-  Container,
-  Nav,
-  Dropdown,
-  Card,
-  Button,
-  Badge,
-  Table,
-  Modal,
-} from "react-bootstrap";
-import Avatar from "react-avatar";
-import {
-  getAllUsers,
-  getAllUserWithoutPagination,
   getRatings,
 } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
-// import MyCalendar from "../../Dashboard/weekCalendra";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
-import AddRatingModal from "../add-rating-modal";
 import AddRating from "../add-rating";
 import MyCalendar from "./weekCalendra";
-// import MyCalendar from "../../Dashboard/weekCalendra";
 
 var month = moment().month();
 let currentYear = moment().year();
+
 export default function Dashboard(props) {
-  const [usersArray, setTeamOptions] = useState([]);
   const [ratingsArray, setRatings] = useState([]);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
   const [teamView, setTeamView] = useState(false);
-
   const setShowToaster = (param) => showToaster(param);
   const { userDetails } = useAuth();
+  const [days, setDays] = useState(moment().daysInMonth());
+  const [monthUse, setMonth] = useState(moment().format("MMMM"));
+  const [yearUse, setYear] = useState(currentYear);
+  let months = moment().year(Number)?._locale?._months;
+  let years = [2022, 2023, 2024, 2025];
 
   useEffect(() => {
     onInit();
-    if (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') {
+    if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
       setTeamView(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onInit() {
-    getUsersList();
     let dataToSend = {
       month: months.indexOf(monthUse) + 1,
       year: yearUse,
     };
-    console.log("dataToSend", dataToSend);
     getAllRatings(dataToSend);
   }
-
-  const [days, setDays] = useState(moment().daysInMonth());
-  const [monthUse, setMonth] = useState(moment().format("MMMM"));
-  const [yearUse, setYear] = useState(currentYear);
 
   const onchangeMonth = (e) => {
     setMonth(e.target.value);
@@ -80,6 +58,7 @@ export default function Dashboard(props) {
     setDays(monthDays.getDate());
     getAllRatings(dataToSend);
   };
+
   const onChangeYear = (e) => {
     setYear(e.target.value);
     let dataToSend = {
@@ -89,46 +68,17 @@ export default function Dashboard(props) {
     getAllRatings(dataToSend);
   };
 
-  let months = moment().year(Number)?._locale?._months;
-  let years = [2022, 2023, 2024, 2025];
-
-  const getUsersList = async function () {
-    setLoading(true);
-    try {
-      const user = await getAllUserWithoutPagination();
-      setLoading(false);
-
-      if (user.error) {
-        setToasterMessage(user?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setTeamOptions([...user.data]);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
-    }
-  };
-
   async function getAllRatings(data) {
-    console.log("---------+---------", data);
     setLoading(true);
-
     try {
       if (!data) {
         data = {
           month: months.indexOf(monthUse) + 1,
           year: yearUse,
         };
-        console.log("data+++++++++", data);
       }
-      console.log("data before api call", data);
       const rating = await getRatings(data);
-      
       setLoading(false);
-
       if (rating.error) {
         setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
@@ -148,14 +98,15 @@ export default function Dashboard(props) {
         <h4>
           My Ratings
           {(userDetails?.role === "LEAD" ||
-            userDetails?.role === "CONTRIBUTOR") && <button
+            userDetails?.role === "CONTRIBUTOR") && (
+            <button
               className="addTaskBtn"
               onClick={() => setTeamView(!teamView)}
               style={{ float: "right" }}
             >
-              {" "}
               {teamView ? "Self view" : "Team View"}{" "}
-            </button>}
+            </button>
+          )}
         </h4>
       </div>
 
@@ -223,7 +174,6 @@ export default function Dashboard(props) {
                 </Form.Group>
               </h5>
 
-              {/* <Link to="/rating" params={{ params: true }}> */}
               <div className="wrap btnWth">
                 {userDetails?.role !== "CONTRIBUTOR" && (
                   <button className="add-rating-button">
@@ -235,7 +185,6 @@ export default function Dashboard(props) {
                   </button>
                 )}
               </div>
-              {/* </Link> */}
             </div>
             <Table responsive className="ratingTable">
               <thead>
@@ -261,7 +210,6 @@ export default function Dashboard(props) {
                   return (
                     <tr key={index}>
                       <td className="user_names" style={{ width: "130" }}>
-                        {" "}
                         {user.name}
                       </td>
 
@@ -327,167 +275,6 @@ export default function Dashboard(props) {
                 })}
               </tbody>
             </Table>
-
-            {/* <div class="calendar">
-    <ul class="weekdays">
-        <li>Chandan</li>
-        <li>Manik</li>
-        <li>Manav</li>
-        <li>Mishba</li>
-        <li>Mohit</li>
-        <li>Rashid</li>
-        <li>Chandan</li>
-        <li>Manik</li>
-        
-        
-    </ul>
-    
-    <ul class="days">
-    
-        <li class="out_of_range calendar-day">
-            <div class="date day_cell"></div>
-        </li>
-        <li class="out_of_range calendar-day">
-            <div class="date day_cell"></div>
-        </li>            
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 1  
-			<br/> <span className="rateing">5</span> 
-			</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 2</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 3</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 4</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 5</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 6</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 7</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 8</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 9</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 10</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 11</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 12</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 13</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 14</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 15</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 16</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 17</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 18</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 19</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 20</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 21</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 22</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 23</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 24</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Wed,</span> <span class="month">Mar</span> 25</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Thu,</span> <span class="month">Mar</span> 26</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Fri,</span> <span class="month">Mar</span> 27</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sat,</span> <span class="month">Mar</span> 28</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Sun,</span> <span class="month">Mar</span> 29</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Mon,</span> <span class="month">Mar</span> 30</div>
-            <div class="show-info"></div>
-        </li>
-        <li class="calendar-day">
-            <div class="date day_cell"><span class="day">Tue,</span> <span class="month">Mar</span> 31</div>
-            <div class="show-info"></div>
-        </li>
-                
-   
-        <li class="out_of_range calendar-day">
-            <div class="date day_cell"></div>
-        </li>
-        <li class="out_of_range calendar-day">
-            <div class="date day_cell"></div>
-        </li>
-    </ul>
-    
-   
-</div> */}
           </div>
 
           {loading ? <Loader /> : null}
@@ -498,7 +285,6 @@ export default function Dashboard(props) {
               close={() => showToaster(false)}
             />
           )}
-
           <div></div>
         </div>
       ) : (

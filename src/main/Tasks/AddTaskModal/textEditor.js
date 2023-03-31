@@ -5,15 +5,14 @@ import "react-quill/dist/quill.snow.css";
 const TextEditor = ({ height, width, placeholder, value, onChange }) => {
   const [editorContent, setEditorContent] = useState(value || "");
 
-    const handleChange = (content) => {
-      console.log(content,'===========================>>>>>>>>>>>>>>>>CONTENT')
+  const handleChange = (content) => {
     setEditorContent(content);
     onChange && onChange(content);
   };
 
   return (
     <ReactQuill
-      style={{ height, width:'100%' }}
+      style={{ height, width: "100%" }}
       placeholder={placeholder}
       value={editorContent}
       onChange={handleChange}

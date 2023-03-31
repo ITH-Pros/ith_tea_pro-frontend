@@ -1,10 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-
 class UserIcon extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       backgroundColor: this.generateRandomColor(),
     };
@@ -28,7 +26,6 @@ class UserIcon extends React.Component {
   render() {
     const { firstName } = this.props;
     const { backgroundColor } = this.state;
-
     const styles = {
       width: "40px",
       height: "40px",
@@ -38,14 +35,14 @@ class UserIcon extends React.Component {
       justifyContent: "center",
       alignItems: "center",
       color: "#fff",
-      fontSize: "20px", 
+      fontSize: "20px",
       textTransform: "uppercase",
     };
 
     return (
       <div style={styles} className="user-pic">
-        {firstName?.charAt(0)!=='.'&&firstName?.charAt(0)}
-        {firstName?.charAt(0)==='.'&&firstName}
+        {firstName?.charAt(0) !== "." && firstName?.charAt(0)}
+        {firstName?.charAt(0) === "." && firstName}
       </div>
     );
   }

@@ -1,9 +1,10 @@
-*{
+* {
   margin: 0px;
   padding: 0px;
 }
+
 :focus-visible {
-    outline: -webkit-focus-ring-color auto 0px !important; 
+  outline: -webkit-focus-ring-color auto 0px !important;
 }
 
 body {
@@ -14,7 +15,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color:#e7eaf0 !important;
+  background-color: #e7eaf0 !important;
   overflow-x: hidden;
   font-family: 'Ubuntu', sans-serif !important;
 }
@@ -28,10 +29,9 @@ code {
 * {
   scrollbar-width: thin;
   scrollbar-color: blue rgb(180, 54, 238);
-  
+
 }
 
-/* Targtes on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 10px;
 }
@@ -45,13 +45,14 @@ code {
   border-radius: 20px;
   border: 3px solid orange;
 }
-.dashboard_camp{ 
+
+.dashboard_camp {
   margin-left: auto;
 }
+
 .rightDashboard {
   width: 84%;
   margin-right: 1rem;
   margin-left: auto;
   margin-top: 5%;
 }
-

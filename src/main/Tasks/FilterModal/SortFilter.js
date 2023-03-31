@@ -9,17 +9,17 @@ function SortByDropdown(props) {
     setSortBy(value);
     sendSortByToBackend(value);
   };
-    useEffect(() => {
-      const sortOrder = localStorage.getItem("sortOrder");
-      const sortType = localStorage.getItem("sortType");
-      const selectedFilter = localStorage.getItem("selectedFilter");
-        if (sortOrder) {
-          setSortOrder(sortOrder)
-      
-      } if (sortType) {
-          setSortBy(sortType)
-      }
-    }, []);
+
+  useEffect(() => {
+    const sortOrder = localStorage.getItem("sortOrder");
+    const sortType = localStorage.getItem("sortType");
+    if (sortOrder) {
+      setSortOrder(sortOrder);
+    }
+    if (sortType) {
+      setSortBy(sortType);
+    }
+  }, []);
 
   const handleSortOrderChange = (event) => {
     const value = event.target.value;
@@ -28,25 +28,11 @@ function SortByDropdown(props) {
   };
 
   const sendSortByToBackend = (sortByValue) => {
-    // Send the selected sortBy value to the backend in a payload
-    const payload = {
-      sortBy: sortByValue,
-    };
-       props.onFilterSortSelect(sortByValue);
-    console.log(payload, "----------------------------payload");
-
-    // Send the payload to the backend using whatever method you prefer (e.g. fetch(), axios, etc.)
+    props.onFilterSortSelect(sortByValue);
   };
 
   const sendSortOrderToBackend = (sortOrderValue) => {
-    // Send the selected sortOrder value to the backend in a payload
-    const payload = {
-      sortOrder: sortOrderValue,
-    };
-       props.onFilterSortOrderSelect(sortOrderValue);
-      
-    console.log(payload, "----------------------------payload");
-    // Send the payload to the backend using whatever method you prefer (e.g. fetch(), axios, etc.)
+    props.onFilterSortOrderSelect(sortOrderValue);
   };
 
   return (
@@ -61,7 +47,6 @@ function SortByDropdown(props) {
         <option value="date-completed">Date Completed</option>
         <option value="alphabetically">Alphabetically</option>
       </select>
-
       <label htmlFor="sort-order">Sort order:</label>
       <select
         id="sort-order"

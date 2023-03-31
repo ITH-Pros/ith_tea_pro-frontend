@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
-// import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-daterangepicker/daterangepicker.css";
 
 function FilterDropdown(props) {
@@ -13,7 +12,7 @@ function FilterDropdown(props) {
   useEffect(() => {
     const dueDate = JSON.parse(localStorage.getItem("dueDate"));
     const selectedFilter = localStorage.getItem("selectedFilter");
-    if (dueDate && selectedFilter==='range') {
+    if (dueDate && selectedFilter === "range") {
       setDateRange({
         fromDate: new Date(dueDate.fromDate),
         toDate: new Date(dueDate.toDate),
@@ -22,7 +21,6 @@ function FilterDropdown(props) {
     } else {
       setSelectedFilter(selectedFilter);
     }
-
   }, []);
 
   const handleFilterSelect = (event) => {
@@ -55,7 +53,7 @@ function FilterDropdown(props) {
   const renderFilterDropdown = () => {
     let fromDate = new Date();
     let toDate = new Date();
-    localStorage.setItem('selectedFilter', selectedFilter);
+    localStorage.setItem("selectedFilter", selectedFilter);
     if (selectedFilter === "Tomorrow") {
       toDate.setDate(toDate.getDate() + 1);
       fromDate = toDate;

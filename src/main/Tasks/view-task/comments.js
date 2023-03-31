@@ -25,20 +25,18 @@ const CommentBox = ({ onSubmit }) => {
     <form onSubmit={handleSubmit}>
       <label>
         Comment:
-        <TextEditor 
-		height={100} 
-		width="100%" 
-		placeholder="Enter text here"
-		value={comment}
-		onChange={handleCommentChange}
-		 />
-        {/* <textarea value={comment} onChange={handleCommentChange} /> */}
+        <TextEditor
+          height={100}
+          width="100%"
+          placeholder="Enter text here"
+          value={comment}
+          onChange={handleCommentChange}
+        />
       </label>
       <label>
         Attachment:
         <input type="file" onChange={handleAttachmentChange} />
       </label>
-      {/* <button type="submit">Submit</button> */}
     </form>
   );
 };

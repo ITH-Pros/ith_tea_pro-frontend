@@ -34,7 +34,6 @@ function UserForm(props) {
   const [profilePicture, setProfileImage] = useState("");
   const navigate = useNavigate();
   const today = new Date();
- 
 
   useEffect(() => {
     onInit();
@@ -47,7 +46,7 @@ function UserForm(props) {
       setIsEditable(true);
     }
   };
-  
+
   const patchValues = (currentUser) => {
     setName(currentUser?.name || "");
     setRole(currentUser?.role || "");
@@ -83,14 +82,18 @@ function UserForm(props) {
 
   function handleEditClick(event) {
     event.preventDefault();
-    setIsEditable(!isEditable); 
+    setIsEditable(!isEditable);
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (github && !githubRegex.test(github) || linkedin && !linkedinRegex.test(linkedin) || twitter && !twitterRegex.test(twitter) ) {
-        return;
-      }
+    if (
+      (github && !githubRegex.test(github)) ||
+      (linkedin && !linkedinRegex.test(linkedin)) ||
+      (twitter && !twitterRegex.test(twitter))
+    ) {
+      return;
+    }
     const dataToSend = {
       name: name,
       role: role,
@@ -205,7 +208,13 @@ function UserForm(props) {
             type="date"
             id="dob"
             value={formatDate(dob)}
-            max={formatDate(new Date(today.getFullYear() - 15, today.getMonth(), today.getDate()))}
+            max={formatDate(
+              new Date(
+                today.getFullYear() - 15,
+                today.getMonth(),
+                today.getDate()
+              )
+            )}
             onChange={(event) => setDob(event.target.value)}
             disabled={isEditable}
           />

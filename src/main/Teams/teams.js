@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useEffect, useState } from "react";
 import {
@@ -17,7 +18,6 @@ import Toaster from "../../components/Toaster";
 import {
   faGithub,
   faLinkedin,
-  faFacebook,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,8 +42,6 @@ export default function Teams(props) {
 
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
-
-  //   numberOfRowsArray
 
   useEffect(() => {
     onInit();
@@ -235,18 +233,6 @@ const handleSelectProject =(projectId) => {
       setPageDetails(dataToSave);
       getAndSetAllUsers(dataToSave);
     };
-    // const checkEnterKey = (e) => {
-    //   console.log("e.keyCode", e.key);
-    //   if (e.keyCode === 13) {
-    //     let pageNumber = Math.min(
-    //       Math.max(e.target.value, 1),
-    //       pageDetails.totalPages
-    //     );
-    // 	let dataToSave = { ...pageDetails, [e.target.name]: pageNumber};
-    // 	setPageDetails(dataToSave);
-    //     getAndSetAllUsers(dataToSave);
-    //   }
-    // };
 
     const onChangeRowsPerPage = (e) => {
       let dataToSave = {
@@ -285,7 +271,6 @@ const handleSelectProject =(projectId) => {
           type="number"
           value={pageDetails.currentPage}
           name="currentPage"
-          //   onKeyDown={checkEnterKey}
           onChange={handleOnChange}
           autoFocus
         />
@@ -317,10 +302,9 @@ const handleSelectProject =(projectId) => {
 
   return (
     <>
-      <div className="rightDashboard" style={{marginTop:'7%'}}>
+      <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
-
           <div className="projects-button">
           {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN")  && (
             <Link style={{float:'right'}}
@@ -341,7 +325,6 @@ const handleSelectProject =(projectId) => {
           )}
           </div>
         </h1>
-       
 
         <div className="container-team">
           {usersList &&
@@ -355,10 +338,8 @@ const handleSelectProject =(projectId) => {
                         pathname: "/user/view/" + user._id,
                       }}
                     ></Link>
-                    {/* <label className="heart"></label> */}
                   </div>
                   <div className="content">
-                    {/* <div id="profileImage"> </div> */}
                     <>
                       {!user?.profilePicture && (
                         <UserIcon key={index} firstName={user.name} />
@@ -378,15 +359,12 @@ const handleSelectProject =(projectId) => {
                       )}
                     </>
                     <div className="content-height">
-                      <strong style={{FontSize: '14px',
-    color: '#673AB7'}}>
+                      <strong style={{ FontSize: "14px", color: "#673AB7" }}>
                         {user.name} ({user.role})
                       </strong>
                       {user.designation && <p>{user?.designation}</p>}
                       <p>{user.email}</p>
-
                       {user.employeeId && <p>{user?.employeeId} </p>}
-    
                       {userDetails?.role !== "CONTRIBUTOR" &&
                         userAnalytics &&
                         Array.isArray(userAnalytics) &&
@@ -432,39 +410,39 @@ const handleSelectProject =(projectId) => {
                           </div>
                         )}
 
-<div className="team-socail">
-                      
-                      {user?.githubLink && (
-    <a href={user?.githubLink} target="_blank" rel="noopener noreferrer">
-      <FontAwesomeIcon icon={faGithub} />
-    </a>
-  )}
-  
-  {user?.linkedInLink && (
-    <a href={user?.linkedInLink} target="_blank" rel="noopener noreferrer">
-      <FontAwesomeIcon icon={faLinkedin} />
-    </a>
-  )}
-  
-  {user?.twitterLink && (
-    <a href={user?.twitterLink} target="_blank" rel="noopener noreferrer">
-      <FontAwesomeIcon icon={faTwitter} />
-    </a>
-  )}
+                      <div className="team-socail">
+                        {user?.githubLink && (
+                          <a
+                            href={user?.githubLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faGithub} />
+                          </a>
+                        )}
+
+                        {user?.linkedInLink && (
+                          <a
+                            href={user?.linkedInLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faLinkedin} />
+                          </a>
+                        )}
+
+                        {user?.twitterLink && (
+                          <a
+                            href={user?.twitterLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faTwitter} />
+                          </a>
+                        )}
                       </div>
-   
                     </div>
 
-                 
-                    
-
-
-
-
-
-                    {/* <FontAwesomeIcon className="brand-icon" icon={faLinkedin} />
-    <FontAwesomeIcon  className="brand-icon" icon={faFacebook} />
-	<FontAwesomeIcon className="brand-icon" icon={faTwitter} /> */}
                   </div>
 
                   {userDetails.role === "SUPER_ADMIN" && "ADMIN" && user?.role !=='ADMIN' && (
@@ -475,7 +453,6 @@ const handleSelectProject =(projectId) => {
                           handleAddUserToProject(user._id);
                         }}
                       >
-                        {" "}
                         <i className="fa fa-check " aria-hidden="true"></i>{" "}
                         Assign
                       </button>

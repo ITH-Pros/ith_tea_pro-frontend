@@ -1,6 +1,6 @@
-// import { Row } from "@nextui-org/react";
-import React, { Component, useEffect } from "react";
-import { useState } from "react";
+/* eslint-disable no-useless-concat */
+/* eslint-disable react/jsx-no-target-blank */
+import React, {useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
@@ -8,10 +8,10 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Toaster from "../../../components/Toaster";
-import AddRating from "../../Rating/add-rating";
+import Loader from "../../../components/Loader";
+
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import {
-  addComment,
   addCommentOnTask,
   addRatingOnTask,
   taskById,
@@ -19,29 +19,31 @@ import {
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
-import Rating from "../../Rating/rating";
 export default function ViewTaskModal(props) {
-  const { showViewTask, closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
+
+  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
-  const [position, setPosition] = useState('top-start');
-
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
   const { userDetails } = useAuth();
-
-  //   ------------------------- comment --------------------------
   const [text, setText] = useState("");
-  const [count, setCount] = useState(250);
+  const [activeTab, setActiveTab] = useState("comments");
+  const [rating, setRating] = useState(0);
+  const [isRatingFormVisible, setIsRatingFormVisible] = useState(false);
+  const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
+  const [errorRating, setErrorRating] = useState(false);
+
+  useEffect(() => {
+    if (selectedTaskId) {
+      getTaskDetailsById(selectedTaskId);
+    }
+  }, [selectedTaskId]);
 
   const handleTextChange = (content) => {
-    const newText = content;
     setText(content);
-    setCount(250 - newText?.length);
   };
-
-  //   format date function
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -63,7 +65,6 @@ export default function ViewTaskModal(props) {
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
-        // get
         getTasksDataUsingProjectId();
       }
     } catch (error) {
@@ -75,36 +76,18 @@ export default function ViewTaskModal(props) {
 
   const handleStatusChange = (e, taskId) => {
     const newStatus = e.target.value;
-
-    console.log("newStatus", newStatus);
-    // make API call to update task status with newStatus
     let dataToSend = {
       taskId: taskId,
       status: newStatus,
     };
-    console.log("dataToSend", dataToSend);
-
     updateTaskStatus(dataToSend);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the comment, e.g. post it to a server
-    console.log(text);
     setText(null);
     setText(null);
-    setCount(250);
-    console.log('ssssssssssssssssssssssssssssssss',text)
-
-    //   ------------------------- comment --------------------------
     addcomment();
-
-  };
-
-  const handleDescSubmit = (comment, attachment) => {
-    console.log(`Comment: ${comment}`);
-    console.log(`Attachment: ${attachment}`);
-    // You can perform any action with the comment and attachment data here
   };
 
   const addcomment = async () => {
@@ -114,15 +97,13 @@ export default function ViewTaskModal(props) {
     };
     try {
       let response = await addCommentOnTask(dataToSend);
-      console.log(response);
       if (response.error) {
-        // showToaster(true)
-        // setToasterMessage(response.message)
+        showToaster(true)
+        setToasterMessage(response.message)
       } else {
-        // showToaster(true)
-        // setToasterMessage(response.message)
-		setText("");
-		// resetTextEditor();
+        showToaster(true)
+        setToasterMessage(response.message)
+		    setText("");
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -132,22 +113,12 @@ export default function ViewTaskModal(props) {
     }
   };
 
-  // -------------------------   Oninitial load ----------------------------
-  useEffect(() => {
-    if (selectedTaskId) {
-      getTaskDetailsById(selectedTaskId);
-    }
-  }, [selectedTaskId]);
-
-  //-------------------------- get task details by id ----------------------------
-
   const getTaskDetailsById = async (id) => {
     let dataToSend = {
       taskId: id,
     };
     try {
       let response = await taskById(dataToSend);
-      console.log(response);
       if (response.status === 200) {
         setTaskData(response?.data);
         setShowViewTaskModal(true);
@@ -159,62 +130,41 @@ export default function ViewTaskModal(props) {
       console.log(error);
     }
   };
-  const [activeTab, setActiveTab] = useState("comments");
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
-    console.log(`Active tab changed to ${tabName}`);
   };
 
-
-  const [rating, setRating] = useState(0);
-  const [isRatingFormVisible, setIsRatingFormVisible] = useState(false);
-  const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
-  const [errorRating, setErrorRating] = useState(false);
-
   const handleAddRating = (task) => {
-    console.log("task", task);
     setSelectedTaskIdForRating(task._id);
     setIsRatingFormVisible(true);
-
-    // make API call to update task status with newStatus
   }
 
-
-
-  // ///////////////////////////  Rating Modal ///////////////////////////
   const addRating = async () => {
-    
       let dataToSend = {
         taskId: selectedTaskIdForRating,
         rating: rating,
-        // comment: comment,
       };
-      console.log("dataToSend", dataToSend);
       setLoading(true);
       try {
         const rating = await addRatingOnTask(dataToSend);
         setLoading(false);
         if (rating.error) {
-          // setToasterMessage(rating?.message || "Something Went Wrong");
-          // setShowToaster(true);
+          setToasterMessage(rating?.message || "Something Went Wrong");
+          showToaster(true);
         } else {
-          // setToasterMessage("Rating Added Succesfully");
-          // setShowToaster(true);
-          // navigate("/rating");
+          setToasterMessage("Rating Added Succesfully");
+          showToaster(true);
           setIsRatingFormVisible(false);
           getTaskDetailsById(selectedTaskIdForRating);
         }
       } catch (error) {
         setLoading(false);
-        // setToasterMessage(error?.message || "Something Went Wrong");
-        // setShowToaster(true);
       }
     
   };
 
   const handleRating = (rating) => {
-    // if rating is 0 to 6 then then true else return false
     if (rating > 0 && rating <= 6) {
       setRating(rating);
       setErrorRating(false);
@@ -222,12 +172,7 @@ export default function ViewTaskModal(props) {
       setErrorRating(true);
       return false;
     }
-    
   };
-
-  // -------------------------   Oninitial load ----------------------------
-
-
 
   return (
     <>
@@ -259,7 +204,6 @@ export default function ViewTaskModal(props) {
                           size="sm"
                           className="addRatingBtn" style={{fontSize:'15'}}
                         >Add Rating
-                          {/* <AddRating taskFromDashBoard={task} />{" "} */}
                         </Button>
                       )}
                       {!task?.isRated && isRatingFormVisible && (
@@ -270,15 +214,12 @@ export default function ViewTaskModal(props) {
                             min="0"
                             max="6"
                             placeholder="0 - 6"
-                            // value={rating}
                             onChange={(e) => handleRating(e.target.value)}
   
                           />
                           {errorRating && (
                             <span className="error">Rating should be between 0 to 6</span>
                           )}
-
-                          {/* {!errorRating && rating &&  */}
                         
                           <Button
                             variant="light"
@@ -291,7 +232,6 @@ export default function ViewTaskModal(props) {
                           >
                             Submit
                           </Button>
-                          {/* } */}
                       { errorRating && 
                           <Button
                             variant="light"
@@ -304,7 +244,6 @@ export default function ViewTaskModal(props) {
                             Cancel
                           </Button>
                       }
-                            
                           </div>
                       )}
                     </div>
@@ -321,7 +260,6 @@ export default function ViewTaskModal(props) {
                 </Form.Group>
                 <Form.Group as={Col} md="4">
                   <Form.Label>Lead Type</Form.Label>
-                  {/* task?.lead?.map */}
                   {task?.lead?.map((item, index) => {
                     return <p key={index}>{item?.name} </p>;
                   })}
@@ -362,7 +300,6 @@ export default function ViewTaskModal(props) {
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
-                  {/* <p>{task?.status} </p> */}
                   <select
                     className="form-control form-control-lg"
                     defaultValue={task.status}
@@ -386,18 +323,12 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="12">
                   <Form.Label>Attachments</Form.Label>
-                  {/* {task?.attachments.map((file) => {
-                      // <img src="{file}" alt="attachment"></img>
-                      <p>{file}</p>;
-                    })}{" "} */}
                   {task.attachments &&
                     task.attachments.map((file, index) => {
-                      console.log("attachments------------>", task.attachments);
                       return (
                         <Col key={index} sm={12}>
                           <div className="assignPopup">
                             <a href={`${file}`} target="_blank">
-                              {" "}
                               {"Attachment" + " " + (index + 1)}
                             </a>
                           </div>
@@ -432,7 +363,6 @@ export default function ViewTaskModal(props) {
                 className="container"
                 style={{ width: "100%", padding: "0px" }}
               >
-                {/* show comments  */}
                 {activeTab === "comments" ? (
                   <>
                     {task?.comments?.map((item, index) => {
@@ -447,13 +377,12 @@ export default function ViewTaskModal(props) {
 
                       return (
                         <div className="comment" key={index}>
-                          {/* commentedBy */}
                           <div className="commentedBy">
                             <UserIcon
                               style={{ float: "left" }}
                               key={index}
                               firstName={item?.commentedBy?.name}
-                            />{" "}
+                            />
                             {item?.commentedBy?.name}
                           </div>
 
@@ -470,27 +399,27 @@ export default function ViewTaskModal(props) {
                 ) : (
                   <>
                     {task?.ratingComments?.map((item, index) => {
+                      
                       const options = {
                         timeZone: "Asia/Kolkata",
                         dateStyle: "medium",
                         timeStyle: "medium",
                       };
+
                       const createdAt = new Date(
                         item?.createdAt
                       ).toLocaleString("en-US", options);
 
                       return (
                         <div className="comment" key={index}>
-                          {/* commentedBy */}
                           <div className="commentedBy">
                             <UserIcon
                               style={{ float: "left" }}
                               key={index}
                               firstName={item?.commentedBy?.name}
-                            />{" "}
+                            />
                             {item?.commentedBy?.name}
                           </div>
-
                           <p
                             dangerouslySetInnerHTML={{ __html: item?.comment }}
                             className="comment-tex"
@@ -509,12 +438,10 @@ export default function ViewTaskModal(props) {
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <TextEditor
-                    //   height={100}
                     width="100%"
                     placeholder="Enter text here"
                     value={text}
                     onChange={handleTextChange}
-                  // reset = {resetTextEditor}
                   />
                 </div>
                 <div
@@ -526,7 +453,6 @@ export default function ViewTaskModal(props) {
                   }}
                 >
                   <Button type="submit" className="btn btn-primary">
-                    {" "}
                     Post
                   </Button>
                 </div>
@@ -544,9 +470,9 @@ export default function ViewTaskModal(props) {
           >
             Close
           </Button>
-          {/* <Button variant="primary">Save Changes</Button> */}
         </Modal.Footer>
       </Modal>
+      {loading?<Loader />:null}
       {toaster && (
         <ToastContainer position="top-end" className="p-3">
         <Toaster 
