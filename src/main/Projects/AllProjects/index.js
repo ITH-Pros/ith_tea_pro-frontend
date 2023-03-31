@@ -35,6 +35,7 @@ export default function AllProject() {
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
 
   const handleIsArchive = () => {
+    setProjectListValue([])
     setIsArchive(!isArchive);
   };
 
@@ -73,14 +74,18 @@ export default function AllProject() {
       dataToSend.isArchived = true;
     }
     try {
+    setLoading(true);
       const projects = await getAllProjects(dataToSend);
       if (projects.error) {
+        setLoading(false)
         setToasterMessage(projects?.error?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects?.data);
+        setLoading(false)
       }
     } catch (error) {
+      setLoading(false)
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
@@ -138,6 +143,7 @@ export default function AllProject() {
   const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
 
   const handleArchiveModalShow = (project) => {
+    // console.log("project", project);
     setSelectedProject(project);
     setConfirmModalShow(true);
     setIsArchiveModalShow(true);
