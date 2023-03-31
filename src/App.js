@@ -109,7 +109,6 @@ function App() {
             <ProtectedRoute>
               <Navbar />
                <Header />
-      
               <Rating />
             </ProtectedRoute>
           }

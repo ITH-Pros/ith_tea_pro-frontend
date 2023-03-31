@@ -39,7 +39,8 @@ import {
   Modal,
 } from "react-bootstrap";
 
-export default function Dashboard(props) {
+export default function ViewRating(props) {
+  
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -349,7 +350,7 @@ export default function Dashboard(props) {
           <Col lg={6} className="px-0">
             {props.showBtn && (
                <h1 className="h1-text">
-               <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
+               <i className="fa fa fa-home" aria-hidden="true"></i>My ViewRating
              </h1>
             )}
           </Col>
