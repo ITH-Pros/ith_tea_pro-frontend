@@ -335,7 +335,7 @@ const handleSelectProject =(projectId) => {
                 style={{ marginRight: "5" }}
               >
                 {" "}
-                Add User{" "}
+                Add Team{" "}
               </i>
             </Link>
           )}
