@@ -218,9 +218,9 @@ const ProjectCard = ({
       <div className="project-stats row">
         <div className="stat col-3">
           <>
-            {["top"].map((placement) => (
+            {["top"].map((placement,index) => (
               <OverlayTrigger
-                key={placement}
+                key={index}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>Overdue Tasks</Tooltip>
@@ -236,9 +236,9 @@ const ProjectCard = ({
         </div>
         <div className="stat col-3">
           <>
-            {["top"].map((placement) => (
+            {["top"].map((placement,index) => (
               <OverlayTrigger
-                key={placement}
+                key={index+1}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>Completed tasks</Tooltip>
@@ -254,9 +254,9 @@ const ProjectCard = ({
         </div>
         <div className="stat col-3">
           <>
-            {["top"].map((placement) => (
+            {["top"].map((placement,index) => (
               <OverlayTrigger
-                key={placement}
+                key={index+2}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>Ongoing tasks</Tooltip>
@@ -272,9 +272,9 @@ const ProjectCard = ({
         </div>
         <div className="stat col-3">
           <>
-            {["top"].map((placement) => (
+            {["top"].map((placement,index) => (
               <OverlayTrigger
-                key={placement}
+                key={index+3}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>
@@ -305,7 +305,7 @@ const ProjectCard = ({
                       <UserIcon key={index} firstName={user.name} />
                     )}
                     {user?.profilePicture && (
-                      <div className="user-pic">
+                      <div key={index} className="user-pic">
                         <img
                           style={{
                             width: "30px",
@@ -322,7 +322,6 @@ const ProjectCard = ({
             </div>
             <div
               style={{ position: "relative", float: "right" }}
-              key={"+"}
               onClick={() => {
                 onClickOfIcons(
                   accessibleBy.concat(managedBy),

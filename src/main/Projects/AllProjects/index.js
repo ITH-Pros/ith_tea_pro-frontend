@@ -198,7 +198,6 @@ export default function AllProject() {
                   className="fa fa-plus-circle fa-3x addBtn"
                   aria-hidden="true"
                 >
-                  {" "}
                   &nbsp; Add Project{" "}
                 </i>
               </Link>
@@ -217,8 +216,8 @@ export default function AllProject() {
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
-                <div key={element._id} className="">
-                  <ProjectCard
+                <div key={projectIndex}>
+                  <ProjectCard 
                     name={element.name}
                     background={element?.colorCode}
                     description={element?.description || "--"}
