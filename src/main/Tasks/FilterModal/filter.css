@@ -55,7 +55,7 @@
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    align-items: end;
+    align-items: flex-end;
     box-shadow: 0 -3px 3px rgb(0 0 0 / 10%);
     background: #fff !important;
     z-index: 1;

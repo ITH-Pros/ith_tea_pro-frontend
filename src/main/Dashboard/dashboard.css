@@ -235,7 +235,7 @@ th {
 .wrap {
   height: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .add-rating-button {
@@ -364,8 +364,8 @@ th {
 }
 
 .right-filter {
-  align-items: end;
-  justify-content: end;
+  align-items: flex-end;
+  justify-content: flex-end;
   display: flex;
 }
 

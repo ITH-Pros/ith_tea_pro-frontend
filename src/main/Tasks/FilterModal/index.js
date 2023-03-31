@@ -214,7 +214,7 @@ const FilterModal = (props) => {
 
   const onSelectData = (selectedItems, dataType) => {
     let data = selectedItems?.map((item) => item?._id);
-    if (dataType == "projectIds") {
+    if (dataType === "projectIds") {
       setProjectIds(selectedItems);
     } else if (dataType === "assignedTo") {
       setAssignedTo(selectedItems);
@@ -231,9 +231,9 @@ const FilterModal = (props) => {
   };
   const setProjectAndOpenModal = (projectData) => {
     if (handleProjectId) {
-      let projectData = projects?.find((item) => handleProjectId == item?._id);
+      let projectData = projects?.find((item) => handleProjectId === item?._id);
       let assignedToData = usersList?.filter(
-        (item) => userDetails.id == item?._id
+        (item) => userDetails.id === item?._id
       );
       setProjectIds(projectData);
       setAssignedTo(assignedToData);

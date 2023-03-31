@@ -232,7 +232,7 @@ th {
 .wrap {
     height: auto;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .btnWth {
@@ -378,8 +378,8 @@ button.add-rating-button {
 }
 
 .right-filter {
-    align-items: end;
-    justify-content: end;
+    align-items: flex-end;
+    justify-content: flex-end;
     display: flex;
 }
 
