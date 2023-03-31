@@ -612,7 +612,7 @@ const archiveProject = async () => {
           <i className="fa fa-database" aria-hidden="true"></i> Projects
 
           <div className="projects-button">
-          {userDetails.role === "SUPER_ADMIN" && !isArchive && (
+          {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && !isArchive && (
           
           <Link style={{float:'left'}}
             to={{

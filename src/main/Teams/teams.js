@@ -322,7 +322,7 @@ const handleSelectProject =(projectId) => {
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
 
           <div className="projects-button">
-          {userDetails.role === "SUPER_ADMIN" && (
+          {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN")  && (
             <Link style={{float:'right'}}
               to={{
                 pathname: "/user/add",
