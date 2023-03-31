@@ -115,7 +115,7 @@ function UserForm(props) {
       } else {
         setLoading(false);
         showToaster(true);
-        setToasterMessage(response.message);
+        setToasterMessage("Profile updated successful");
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
 
