@@ -33,6 +33,7 @@ export default function AddTaskModal(props) {
     closeModal,
     selectedTask,
     handleProjectId,
+    // onInit
   } = props;
   console.log(handleProjectId, "-----------");
   const statusList = CONSTANTS.statusList;
@@ -380,6 +381,8 @@ export default function AddTaskModal(props) {
         getNewTasks(projectId);
         showToaster(true);
         setToasterMessage("Task Created Successfully");
+        console.log(taskRes, "taskRes++++++++++++===================>>>>>>>");
+        // onInit();
       }
     } catch (error) {
       setLoading(false);
@@ -680,8 +683,8 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Project
                     </option>
-                    {projectList?.map((project) => (
-                      <option value={project._id} key={project._id}>
+                    {projectList?.map((project , index) => (
+                      <option value={project._id} key={index}>
                         {project.name}
                       </option>
                     ))}
@@ -706,8 +709,8 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Section
                     </option>
-                    {categoryList?.map((section) => (
-                      <option value={section._id} key={section._id}>
+                    {categoryList?.map((section , index) => (
+                      <option value={section._id} key={index}>
                         {section.name}
                       </option>
                     ))}
@@ -739,8 +742,8 @@ export default function AddTaskModal(props) {
                     <option value=""  >
                       Select Lead
                     </option>
-                    {leadLists?.map((project) => (
-                      <option value={project._id} key={project._id}>
+                    {leadLists?.map((project , index) => (
+                      <option value={project._id} key={index}>
                         {project.name}
                       </option>
                     ))}
@@ -805,8 +808,8 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.assignedTo}
                   >
                     <option value="">Select User</option>
-                    {userList?.map((module) => (
-                      <option value={module._id} key={module._id}>
+                    {userList?.map((module  , index) => (
+                      <option value={module._id} key={index}>
                         {module.name}
                       </option>
                     ))}
@@ -840,8 +843,8 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Priority
                     </option>
-                    {priorityList.map((priority) => (
-                      <option value={priority} key={priority}>
+                    {priorityList.map((priority , index) => (
+                      <option value={priority} key={index}>
                         {priority}
                       </option>
                     ))}
@@ -861,11 +864,11 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Status
                     </option>
-                    {statusList?.map((status) => (
+                    {statusList?.map((status , index) => (
                       <option
                         value={status}
                         disabled={status === "COMPLETED" && !selectedTask}
-                        key={status}
+                        key={index}
                       >
                         {status}
                       </option>

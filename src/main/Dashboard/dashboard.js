@@ -69,6 +69,7 @@ export default function Dashboard(props) {
   }, []);
 
   function onInit() {
+    console.log("jai shree ram")
     getAndSetAllProjects();
     if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
       getOverDueTaskList();
@@ -248,6 +249,7 @@ export default function Dashboard(props) {
     setShowAddTask(false);
     setSelectedProject();
     setSelectedTask();
+    onInit();
   };
 
   const openAddtask = (project) => {
@@ -275,10 +277,11 @@ export default function Dashboard(props) {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
-        getMyWork();
-        getTeamWork();
-        getOverDueTaskList();
-        getPendingRating();
+        // getMyWork();
+        // getTeamWork();
+        // getOverDueTaskList();
+        // getPendingRating();
+        onInit();
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -423,6 +426,7 @@ export default function Dashboard(props) {
             getNewTasks={getNewTasks}
             showAddTask={showAddTask}
             closeModal={closeModal}
+            // handleOnInit={onInit}
           />
           <button
             className="expend"
