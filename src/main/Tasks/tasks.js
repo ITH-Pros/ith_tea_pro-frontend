@@ -831,6 +831,7 @@ const Tasks = () => {
                 required
                 type="text"
                 className="form-control"
+                maxLength={40}
                 value={sectionName}
                 onChange={(e) => setSectionName(e.target.value)}
               />
