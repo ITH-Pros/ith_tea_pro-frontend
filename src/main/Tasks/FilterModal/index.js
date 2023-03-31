@@ -69,6 +69,7 @@ const FilterModal = (props) => {
   }, []);
 
   const handleFilterSelect = (fromDate, toDate) => {
+    console.log("fromDate", fromDate);
     localStorage.setItem(
       "dueDate",
       JSON.stringify({ fromDate: fromDate, toDate: toDate })

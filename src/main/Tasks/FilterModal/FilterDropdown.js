@@ -5,8 +5,8 @@ import "bootstrap-daterangepicker/daterangepicker.css";
 function FilterDropdown(props) {
   const [selectedFilter, setSelectedFilter] = useState("");
   const [dateRange, setDateRange] = useState({
-    fromDate: new Date(),
-    toDate: new Date(),
+    fromDate: '',
+    toDate: '',
   });
 
   useEffect(() => {
@@ -51,8 +51,8 @@ function FilterDropdown(props) {
   };
 
   const renderFilterDropdown = () => {
-    let fromDate = new Date();
-    let toDate = new Date();
+    let fromDate = '';
+    let toDate = '';
     localStorage.setItem("selectedFilter", selectedFilter);
     if (selectedFilter === "Tomorrow") {
       toDate.setDate(toDate.getDate() + 1);

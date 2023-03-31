@@ -288,7 +288,7 @@ const Tasks = () => {
           data.assignedTo = JSON.stringify(filterData?.assignedTo);
         }
         if (filterData?.category) {
-          data.section = JSON.stringify(filterData?.category);
+          data.sections = JSON.stringify(filterData?.category);
         }
         if (filterData?.priority) {
           data.priority = JSON.stringify(filterData?.priority);
