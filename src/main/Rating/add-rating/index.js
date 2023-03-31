@@ -23,7 +23,7 @@ export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
 
   const RatingModalBody = () => {
-    const { taskFromDashBoard } = props;
+    const { taskFromDashBoard , handleOnInit } = props;
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
     // console.log("taskFromDashBoard", taskFromDashBoard)
@@ -175,6 +175,7 @@ export default function AddRating(props) {
           } else {
             setToasterMessage("Rating Added Succesfully");
             setShowToaster(true);
+            handleOnInit();
             navigate("/rating");
           }
         } catch (error) {
