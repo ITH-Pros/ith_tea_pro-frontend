@@ -448,14 +448,14 @@ export default function ViewRating(props) {
                 <Col lg={6} className="left-add">
                   <span>OVERDUE WORK</span>
 
-                  <i
+                  {/* <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i>
+                  ></i> */}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -676,14 +676,14 @@ export default function ViewRating(props) {
               <Row>
                 <Col lg={6} className="left-add">
                   <span>My Work</span>
-                  <i
+                  {/* <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i>
+                  ></i> */}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -1073,14 +1073,14 @@ export default function ViewRating(props) {
                 <Col lg={6} className="left-add">
                   <span>Team Work</span>
 
-                  <i
+                  {/* <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i>
+                  ></i> */}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
