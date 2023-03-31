@@ -2,7 +2,6 @@ import "./App.css";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "../src/main/Navbar/navbar";
-// import { ProtectedRoute } from './auth/requireAuth'
 import Login from "./auth/login";
 import Dashboard from "./main/Dashboard/dashboard";
 import Project from "./main/Projects/";
@@ -22,8 +21,6 @@ import Header from "./main/Header";
 import UserForm from "./main/edit-profile";
 import PasswordForm from "./setup-password";
 
-// const LazyAbout = React.lazy(() => import('./components/About'))
-
 function App() {
   return (
     <ProSidebarProvider>
@@ -32,25 +29,16 @@ function App() {
           <Route
             path="/login"
             element={
-              // <ProtectedRoute>
-              <Login  />
-              // </ProtectedRoute>
+              <Login />
             }
           />
         }
-		<Route
-		path="/set-password/:token"
-		element={
-			// <ProtectedRoute>
-			<PasswordForm />
-			// </ProtectedRoute>
-		}
-		/>
-
-
-
-
-
+        <Route
+          path="/set-password/:token"
+          element={
+            <PasswordForm />
+          }
+        />
 
         <Route
           path="/"
@@ -59,21 +47,17 @@ function App() {
               <Navbar />
               <Header />
               <Dashboard showBtn={true} />
-            
             </ProtectedRoute>
           }
         />
 
         <Route
           path="/project"
-          // exact={true}
           element={
             <>
-              {" "}
               <ProtectedRoute>
-                {" "}
                 <Navbar />
-               <Header />
+                <Header />
                 <Project />{" "}
               </ProtectedRoute>
             </>
@@ -101,42 +85,35 @@ function App() {
           />
 
           <Route path="all" element={<AllProject />} />
-          {/* <Route path="view/:projectId" element={<ViewUser />} /> */}
         </Route>
         <Route
           path="/rating/"
           element={
             <ProtectedRoute>
               <Navbar />
-               <Header />
+              <Header />
               <Rating />
             </ProtectedRoute>
           }
         />
 
-          <Route path="/profile" 
-		  element={
-
-			<ProtectedRoute>
-           <Navbar />
-               <Header />
-              
-		     <UserForm />
-		  </ProtectedRoute>
-		  
-		  } />
-		
-
-
-
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <Header />
+              <UserForm />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/team"
           element={
             <ProtectedRoute>
               <Navbar />
-               <Header />
-
+              <Header />
               <Team />
             </ProtectedRoute>
           }
@@ -147,40 +124,33 @@ function App() {
           element={
             <>
               <ProtectedRoute>
-              <Navbar />
-               <Header />
-
+                <Navbar />
+                <Header />
                 <Task />
               </ProtectedRoute>
             </>
           }
         />
-		<Route
-		  path="/task/:projectId/:isArchive"
-		  element={
-			<>
-			  <ProtectedRoute>
-        <Navbar />
-     
-				<Task />
-			  </ProtectedRoute>
-			</>
-		  }
-		/>
-		
-
+        <Route
+          path="/task/:projectId/:isArchive"
+          element={
+            <>
+              <ProtectedRoute>
+                <Navbar />
+                <Task />
+              </ProtectedRoute>
+            </>
+          }
+        />
 
         <Route
           path="/user"
-          // exact={true}
           element={
             <>
-              {" "}
               <ProtectedRoute>
-                {" "}
                 <Navbar />
-               <Header />
-                 <User />{" "}
+                <Header />
+                <User />
               </ProtectedRoute>
             </>
           }
@@ -190,7 +160,6 @@ function App() {
             element={
               <>
                 <CheckRole role="SUPER_ADMIN">
-                  {" "}
                   <AddUser />
                 </CheckRole>
               </>
