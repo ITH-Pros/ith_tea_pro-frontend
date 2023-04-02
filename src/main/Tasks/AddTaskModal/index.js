@@ -90,6 +90,7 @@ export default function AddTaskModal(props) {
     if (showAddTask) {
       setShowAddTaskModal(true);
       patchFormForAdd();
+      setCategoryList();
     }
   }, [showAddTask]);
 
