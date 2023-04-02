@@ -28,6 +28,7 @@ export default function AddRatingModal(props) {
   const navigate = useNavigate();
 
   const { selectedRating } = props;
+  // console.log("selectedRating", selectedRating);
 
   useEffect(() => {
     if (selectedRating) {

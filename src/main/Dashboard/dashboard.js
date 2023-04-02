@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import moment from "moment";
+import { AiFillProject } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -39,8 +40,7 @@ import {
   Modal,
 } from "react-bootstrap";
 
-export default function ViewRating(props) {
-  
+export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -353,7 +353,7 @@ export default function ViewRating(props) {
           <Col lg={6} className="px-0">
             {props.showBtn && (
                <h1 className="h1-text">
-               <i className="fa fa fa-home" aria-hidden="true"></i>My ViewRating
+               <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
              </h1>
             )}
           </Col>
@@ -448,14 +448,14 @@ export default function ViewRating(props) {
                 <Col lg={6} className="left-add">
                   <span>OVERDUE WORK</span>
 
-                  {/* <i
+                  <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i> */}
+                  ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -676,14 +676,14 @@ export default function ViewRating(props) {
               <Row>
                 <Col lg={6} className="left-add">
                   <span>My Work</span>
-                  {/* <i
+                  <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i> */}
+                  ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -1073,14 +1073,14 @@ export default function ViewRating(props) {
                 <Col lg={6} className="left-add">
                   <span>Team Work</span>
 
-                  {/* <i
+                  <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i> */}
+                  ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>

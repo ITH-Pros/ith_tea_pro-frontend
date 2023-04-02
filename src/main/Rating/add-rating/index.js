@@ -21,6 +21,7 @@ export default function AddRating(props) {
 
   const RatingModalBody = () => {
     const { taskFromDashBoard , handleOnInit } = props;
+    console.log("taskFromDashBoard", taskFromDashBoard);
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
     // console.log("taskFromDashBoard", taskFromDashBoard)

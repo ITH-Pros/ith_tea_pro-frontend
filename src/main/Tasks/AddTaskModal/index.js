@@ -395,17 +395,7 @@ export default function AddTaskModal(props) {
         setShowToaster(true);
         return;
       } else {
-        setTaskFormValue({
-          ...taskFormValue,
-          title: "",
-          description: null,
-          assignedTo: "",
-          dueDate: "",
-          completedDate: "",
-          priority: "",
-          status: "",
-          attachments: [],
-        });
+        resetFormValue();
         setValidated(false);
         setSelectedLeads("");
         setShowAddTaskModal(true);
@@ -551,6 +541,7 @@ export default function AddTaskModal(props) {
           status: "",
           attachments: [],
         });
+
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
