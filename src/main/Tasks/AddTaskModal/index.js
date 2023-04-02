@@ -140,9 +140,12 @@ export default function AddTaskModal(props) {
           ? "0" + dueDateData.getDate()
           : dueDateData.getDate());
 
+
+          console.log("selectedTask", selectedTask);
+
       setTaskFormValue({
         projectId: selectedTask?.projectId,
-        leads: selectedTask?.lead[0],
+        leads: selectedTask?.lead[0]._id,
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
