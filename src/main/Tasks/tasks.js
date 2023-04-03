@@ -476,8 +476,8 @@ const Tasks = () => {
                 </button>
               </div>
             )}
-          {!projects?.length && userDetails.role === "CONTRIBUTOR" && (
-            <h6>No Tasks Found</h6>
+          {!projects?.length && (
+            <h6 style={{textAlign:'center'}} >No Tasks Found</h6>
           )}
 
           {projects.map((project, index) => (
