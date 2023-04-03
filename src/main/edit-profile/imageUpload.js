@@ -22,16 +22,16 @@ const ImageUpload = (props) => {
   const handleImageChange = async (event) => {
     const selectedImage = event.target.files[0];
     if (selectedImage && selectedImage.type.startsWith("image/")) {
-      setImageUrl(URL.createObjectURL(selectedImage));
-      if (!selectedImage) {
-        alert("Please select an image file");
+      if (selectedImage.size > 5 * 1024 * 1024) {
+        alert(`Please select an image file that is less than or equal to 5MB. The selected file size is ${Math.round(selectedImage.size/1024/1024 * 100) / 100}MB`);
         return;
       }
+      setImageUrl(URL.createObjectURL(selectedImage));
       setLoading(true);
       try {
         const formData = new FormData();
         formData.append("file", selectedImage);
-        
+  
         const response = await uploadProfileImage(formData);
         setLoading(false);
         if (response.error) {
@@ -52,7 +52,7 @@ const ImageUpload = (props) => {
       alert("Please select a valid image file (jpg, png, gif)");
     }
   };
-
+  
   const deleteImage = async () => {
     setImageUrl(null);
     setProfileImage(null);
