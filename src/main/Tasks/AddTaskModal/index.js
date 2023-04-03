@@ -146,11 +146,11 @@ export default function AddTaskModal(props) {
 
       setTaskFormValue({
         projectId: selectedTask?.projectId,
-        leads: selectedTask?.lead[0]._id,
+        leads: selectedTask?.lead[0]?._id||selectedTask?.lead[0],
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
-        assignedTo: selectedTask?.assignedTo?._id,
+        assignedTo: selectedTask?.assignedTo?._id||selectedTask?.assignedTo,
         dueDate: dueDateData,
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
