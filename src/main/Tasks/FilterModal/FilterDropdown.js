@@ -67,7 +67,7 @@ function FilterDropdown(props) {
 
   return (
     <div>
-      <label htmlFor="filter-dropdown">Due Date:</label>
+      <label htmlFor="filter-dropdown" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Due Date:</label>
       <select
         id="filter-dropdown"
         value={selectedFilter}
