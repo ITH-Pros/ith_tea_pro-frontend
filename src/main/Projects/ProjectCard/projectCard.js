@@ -1,35 +1,24 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import {
-//   faEllipsisV,
-//   faTasks,
-//   faComments,
-//   faFlag,
-//   faClock,
-// } from "@fortawesome/free-solid-svg-icons";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
 import { useAuth } from "../../../auth/AuthProvider";
 import { Modal, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import Select from "react-select";
-
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEllipsisH,
   faTasks,
-  faCommentDots,
   faFlag,
-  faClock,
-  faSpellCheck,
-  faCheckCircle,
   faCheck,
   faBarChart,
-  faIcons,
 } from "@fortawesome/free-solid-svg-icons";
-import { assignProjectLead, assignTeamAPI, getUnassignedUsers } from "../../../services/user/api";
-// import "./ProjectCard.css";
+import {
+  assignProjectLead,
+  assignTeamAPI,
+  getUnassignedUsers,
+} from "../../../services/user/api";
 
 const ProjectCard = ({
   name,
@@ -40,17 +29,13 @@ const ProjectCard = ({
   accessibleBy,
   handleDelete,
   background,
-  handleCategories,
-  categroies,
   taskData,
   handleToRedirectTask,
   getAndSetAllProjects,
   handleArchiveModalShow,
-  isArchive
+  isArchive,
 }) => {
   const generateRandomColor = () => {
-    console.log(accessibleBy);
-    console.log(element);
     const colors = [
       "#e4ffc5",
       "#ffd9d9",
@@ -58,46 +43,34 @@ const ProjectCard = ({
       "#e3d3ff",
       "#d3fcff",
       "#e5e5e5",
-      "#fffb6d"
+      "#fffb6d",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
-  
-   
   };
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [modalTitle, SetModalTitle] = useState("");
-
   const [showMenuList, setShowMenuList] = useState(false);
-
   const [showSelectBox, setShowSelectBox] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
-
   const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
   const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState("");
-
-  console.log(selectedUnassignedUsers);
 
   const assignTeamUsers = async () => {
     let dataToSend = {
       projectId: element._id,
-      // userIds: [selectedUnassignedUsers],
       userIds: selectedUnassignedUsers,
     };
     try {
       let response;
-      if (selectedRole == "LEAD") {
+      if (selectedRole === "LEAD") {
         response = await assignProjectLead(dataToSend);
       } else {
         response = await assignTeamAPI(dataToSend);
       }
       if (response.error) {
-        console.log("Error while getting user details");
-        //   setLoading(false);
         return;
       } else {
-        // setListOfUnassignedUsers(response?.data);
-        console.log("user name", response?.data);
         setModalShow(false);
         setSelectedUnassignedUsers("");
         setShowSelectBox(false);
@@ -109,7 +82,6 @@ const ProjectCard = ({
       }
     } catch (error) {
       console.log("Error while getting user details");
-      // setLoading(false);
       return error.message;
     }
   };
@@ -123,15 +95,12 @@ const ProjectCard = ({
       const response = await getUnassignedUsers(dataToSend);
       if (response.error) {
         console.log("Error while getting user details");
-        //   setLoading(false);
         return;
       } else {
         setListOfUnassignedUsers(response?.data);
-        console.log("user name", response?.data);
       }
     } catch (error) {
       console.log("Error while getting user details");
-      // setLoading(false);
       return error.message;
     }
   };
@@ -145,42 +114,35 @@ const ProjectCard = ({
     getListOfUnassignedUsers(event.target.value);
   }
 
-  const assignTeam = () => {};
-
   const handleMenuIconClick = () => {
     setShowMenuList(!showMenuList);
   };
+
   const { userDetails } = useAuth();
 
   const onClickOfIcons = (user, type) => {
-    console.log(user, "---------------------suer");
     setUsers(user);
     SetModalTitle(type);
     setModalShow(true);
   };
-// Define options for the contributor select
+
   const contributorOptions = listOfUnassignedUsers.map((user, index) => ({
     value: user._id,
     label: user.name,
   }));
 
-  // Define a function to handle changes to the selected contributors
   const handleContributorsChange = (selectedOptions) => {
     setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
   };
 
-   // Define options for the lead select
   const leadOptions = listOfUnassignedUsers.map((user, index) => ({
     value: user._id,
     label: user.name,
   }));
 
-  // Define a function to handle changes to the selected leads
   const handleLeadsChange = (selectedOptions) => {
     setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
   };
-
-
 
   return (
     <div
@@ -188,33 +150,30 @@ const ProjectCard = ({
       style={{ background: background || generateRandomColor() }}
     >
       {isArchive && <h6 className="archived">Archived</h6>}
-      {/* {isArchive && <div className="delete-archived"> <i onClick={handleDelete} title="delete project" className="fa fa-trash" aria-hidden="true"></i> </div>} */}
-      
-        <div
-          className="menu-icon"
-          onClick={handleMenuIconClick}
-          onBlur={handleMenuIconClick}
-        >
-          {userDetails.role === "SUPER_ADMIN" && (
-            <button className="project-btn-more dropdown ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-more-vertical"
-              >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="12" cy="5" r="1" />
-                <circle cx="12" cy="19" r="1" />
-              </svg>
-              <div className="dropdown-content">
-
+      <div
+        className="menu-icon"
+        onClick={handleMenuIconClick}
+        onBlur={handleMenuIconClick}
+      >
+        {userDetails.role === "SUPER_ADMIN" && (
+          <button className="project-btn-more dropdown ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-more-vertical"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="5" r="1" />
+              <circle cx="12" cy="19" r="1" />
+            </svg>
+            <div className="dropdown-content">
               {!isArchive && (
                 <a
                   onClick={() => {
@@ -229,150 +188,109 @@ const ProjectCard = ({
                   Edit Project
                 </a>
               )}
-         
-
-                <a
-                  href="#1"
-                  onClick={() => {
-                    console.log("INNN delete");
-                    handleArchiveModalShow();
-                    //   handleDelete();
-                  }}
-                >
-                  {" "}
-                  <i className="fa fa-archive" aria-hidden="true"></i> {!isArchive ? 'Archive' :'Unarchive'}
-                </a>
-                
-              
-
-
-                <a
-                  href="#1"
-                  onClick={() => {
-                    console.log("INNN delete");
-                    handleDelete();
-                  }}
-                >
-                  {" "}
-                  <i className="fa fa-trash" aria-hidden="true"></i> Delete
-                </a>
-              </div>
-            </button>
-          )}
-        </div>
-      
-     
+              <a
+                href="#1"
+                onClick={() => {
+                  handleArchiveModalShow();
+                }}
+              >
+                <i className="fa fa-archive" aria-hidden="true"></i>{" "}
+                {!isArchive ? "Archive" : "Unarchive"}
+              </a>
+              <a
+                href="#1"
+                onClick={() => {
+                  handleDelete();
+                }}
+              >
+                <i className="fa fa-trash" aria-hidden="true"></i> Delete
+              </a>
+            </div>
+          </button>
+        )}
+      </div>
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
         <p>{description}</p>
       </div>
-      {/* <div className="project-stats row">
-  <div className="stat col-3" title="Overdue tasks">
-    <FontAwesomeIcon icon={faFlag} />
-    <span>{taskData?.overDueTasks || 0}</span>
-  </div>
-  <div className="stat col-3" title="Completed tasks">
-    <FontAwesomeIcon icon={faTasks} />
-    <span>{taskData?.COMPLETED || 0}</span>
-  </div>
-  <div className="stat col-3" title="Ongoing tasks">
-    <FontAwesomeIcon icon={faCheck} />
-    <span>{taskData?.ONGOING || 0}</span>
-  </div>
-  <div className="stat col-3" title="Total number of tasks">
-    <FontAwesomeIcon icon={faBarChart} />
-    <span>{taskData?.totalTask || 0}</span>
-  </div>
-</div> */}
 
-{/*  */}
-<div className="project-stats row">
-   <div className="stat col-3">
-      <>
-      {['top'].map((placement) => (
-      <OverlayTrigger
-      key={placement}
-      placement={placement}
-      overlay={
-      <Tooltip id={`tooltip-${placement}`}>
-         Overdue Tasks
-      </Tooltip>
-      }
-      >
-      <Button className="tooltip-button br0">
-         <FontAwesomeIcon icon={faFlag} />
-         <span>{taskData?.overDueTasks || 0}</span>
-      </Button>
-      </OverlayTrigger>
-      ))}
-      </>
-   </div>
-   <div className="stat col-3">
-      <>
-      {['top'].map((placement) => (
-      <OverlayTrigger
-      key={placement}
-      placement={placement}
-      overlay={
-      <Tooltip id={`tooltip-${placement}`}>
-         Completed tasks
-      </Tooltip>
-      }
-      >
-      <Button className="tooltip-button br0">
-         <FontAwesomeIcon icon={faTasks} />
-         <span>{taskData?.COMPLETED || 0}</span>
-      </Button>
-      </OverlayTrigger>
-      ))}
-      </>
-   </div>
-   <div className="stat col-3">
-      <>
-      {['top'].map((placement) => (
-      <OverlayTrigger
-      key={placement}
-      placement={placement}
-      overlay={
-      <Tooltip id={`tooltip-${placement}`}>
-         Ongoing tasks
-      </Tooltip>
-      }
-      >
-      <Button className="tooltip-button br0">
-         <FontAwesomeIcon icon={faCheck} />
-         <span>{taskData?.ONGOING || 0}</span>
-      </Button>
-      </OverlayTrigger>
-      ))}
-      </>
-   </div>
-   <div className="stat col-3">
-      <>
-      {['top'].map((placement) => (
-      <OverlayTrigger
-      key={placement}
-      placement={placement}
-      overlay={
-      <Tooltip id={`tooltip-${placement}`}>
-         Total number of tasks
-      </Tooltip>
-      }
-      >
-      <Button className="tooltip-button br0">
-         <FontAwesomeIcon icon={faBarChart} />
-         <span>{taskData?.totalTask || 0}</span>
-      </Button>
-      </OverlayTrigger>
-      ))}
-      </>
-   </div>
-</div>
-
-{/*  */}
-
-
+      <div className="project-stats row">
+        <div className="stat col-3">
+          <>
+            {["top"].map((placement,index) => (
+              <OverlayTrigger
+                key={index}
+                placement={placement}
+                overlay={
+                  <Tooltip id={`tooltip-${placement}`}>Overdue Tasks</Tooltip>
+                }
+              >
+                <Button className="tooltip-button br0">
+                  <FontAwesomeIcon icon={faFlag} />
+                  <span>{taskData?.overDueTasks || 0}</span>
+                </Button>
+              </OverlayTrigger>
+            ))}
+          </>
+        </div>
+        <div className="stat col-3">
+          <>
+            {["top"].map((placement,index) => (
+              <OverlayTrigger
+                key={index+1}
+                placement={placement}
+                overlay={
+                  <Tooltip id={`tooltip-${placement}`}>Completed tasks</Tooltip>
+                }
+              >
+                <Button className="tooltip-button br0">
+                  <FontAwesomeIcon icon={faTasks} />
+                  <span>{taskData?.COMPLETED || 0}</span>
+                </Button>
+              </OverlayTrigger>
+            ))}
+          </>
+        </div>
+        <div className="stat col-3">
+          <>
+            {["top"].map((placement,index) => (
+              <OverlayTrigger
+                key={index+2}
+                placement={placement}
+                overlay={
+                  <Tooltip id={`tooltip-${placement}`}>Ongoing tasks</Tooltip>
+                }
+              >
+                <Button className="tooltip-button br0">
+                  <FontAwesomeIcon icon={faCheck} />
+                  <span>{taskData?.ONGOING || 0}</span>
+                </Button>
+              </OverlayTrigger>
+            ))}
+          </>
+        </div>
+        <div className="stat col-3">
+          <>
+            {["top"].map((placement,index) => (
+              <OverlayTrigger
+                key={index+3}
+                placement={placement}
+                overlay={
+                  <Tooltip id={`tooltip-${placement}`}>
+                    Total number of tasks
+                  </Tooltip>
+                }
+              >
+                <Button className="tooltip-button br0">
+                  <FontAwesomeIcon icon={faBarChart} />
+                  <span>{taskData?.totalTask || 0}</span>
+                </Button>
+              </OverlayTrigger>
+            ))}
+          </>
+        </div>
+      </div>
       <div>
         <div>
           <div className="pull-left w-100">
@@ -387,7 +305,7 @@ const ProjectCard = ({
                       <UserIcon key={index} firstName={user.name} />
                     )}
                     {user?.profilePicture && (
-                      <div className="user-pic">
+                      <div key={index} className="user-pic">
                         <img
                           style={{
                             width: "30px",
@@ -401,20 +319,21 @@ const ProjectCard = ({
                     )}
                   </>
                 ))}
-             
             </div>
-            <div style={{position:'relative', float:'right',}}
-                key={"+"}
-                onClick={() => {
-                  onClickOfIcons(
-                    accessibleBy.concat(managedBy),
-                    "Assigned and Managed By"
-                  );
-                }}
-              >
-               
-                <i className="fa fa-user-plus add-user-icon" aria-hidden="true"></i>
-              </div>
+            <div
+              style={{ position: "relative", float: "right" }}
+              onClick={() => {
+                onClickOfIcons(
+                  accessibleBy.concat(managedBy),
+                  "Assigned and Managed By"
+                );
+              }}
+            >
+              <i
+                className="fa fa-user-plus add-user-icon"
+                aria-hidden="true"
+              ></i>
+            </div>
           </div>
         </div>
       </div>
@@ -435,59 +354,58 @@ const ProjectCard = ({
           </Modal.Header>
           <Modal.Body>
             <div>
-            <Col sm={12}>
-                  {userDetails.role !== "CONTRIBUTOR" &&
-                    !isArchive &&
-                    userDetails.role !== "LEAD" && (
-                      <div onClick={assignTeamUser} className="assignPopup">
-                        <UserIcon firstName={"+"} />
-                        <p className="ms-4 mb-0">{"Add Team"}</p>
+              <Col sm={12}>
+                {userDetails.role !== "CONTRIBUTOR" &&
+                  !isArchive &&
+                  userDetails.role !== "LEAD" && (
+                    <div onClick={assignTeamUser} className="assignPopup">
+                      <UserIcon firstName={"+"} />
+                      <p className="ms-4 mb-0">{"Add Team"}</p>
+                    </div>
+                  )}
+              </Col>
+              <div>
+                {showSelectBox && (
+                  <>
+                    <div className="select-rol-con">
+                      <select
+                        className="form-control form-control-lg"
+                        value={selectedRole}
+                        onChange={handleRoleChange}
+                      >
+                        <option value="">Select a role</option>
+                        <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+                        <option value="LEAD">LEAD</option>
+                      </select>
+                      {selectedRole === "CONTRIBUTOR" && (
+                        <Select
+                          options={contributorOptions}
+                          value={contributorOptions.filter((option) =>
+                            selectedUnassignedUsers.includes(option.value)
+                          )}
+                          isMulti
+                          onChange={handleContributorsChange}
+                        />
+                      )}
+                      {selectedRole === "LEAD" && (
+                        <Select
+                          options={leadOptions}
+                          value={leadOptions.filter((option) =>
+                            selectedUnassignedUsers.includes(option.value)
+                          )}
+                          isMulti
+                          onChange={handleLeadsChange}
+                        />
+                      )}
+                    </div>
+                    {selectedUnassignedUsers && (
+                      <div className="assign-name">
+                        <button onClick={assignTeamUsers}>Assign</button>
                       </div>
                     )}
-                </Col>
-                <div>
-                  {showSelectBox && (
-                    <>
-                      <div className="select-rol-con">
-                        <select
-                          className="form-control form-control-lg"
-                          value={selectedRole}
-                          onChange={handleRoleChange}
-                        >
-                          <option value="">Select a role</option>
-                          <option value="CONTRIBUTOR">CONTRIBUTOR</option>
-                          <option value="LEAD">LEAD</option>
-                        </select>
-                        {selectedRole === "CONTRIBUTOR" && (
-                          <Select
-                            options={contributorOptions}
-                            value={contributorOptions.filter((option) =>
-                              selectedUnassignedUsers.includes(option.value)
-                            )}
-                            isMulti
-                            onChange={handleContributorsChange}
-                          />
-                        )}
-                        {selectedRole === "LEAD" && (
-                          <Select
-                            options={leadOptions}
-                            value={leadOptions.filter((option) =>
-                              selectedUnassignedUsers.includes(option.value)
-                            )}
-                            isMulti
-                            onChange={handleLeadsChange}
-                          />
-                        
-                        )}
-                      </div>
-                      {selectedUnassignedUsers && (
-                        <div className="assign-name">
-                          <button onClick={assignTeamUsers}>Assign</button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
+                  </>
+                )}
+              </div>
               <Row>
                 {users.map((user, index) => {
                   return (
@@ -521,26 +439,9 @@ const ProjectCard = ({
                     </Col>
                   );
                 })}
-               
               </Row>
             </div>
           </Modal.Body>
-
-          {/* <div className="text-right me-3">
-            <button
-              style={{ marginLeft: "16px", width: "30%" }}
-              className="btn btn-press  btn-gradient-border btn-primary"
-              onClick={() => {
-                setModalShow(false);
-                setShowSelectBox(false);
-                setSelectedUnassignedUsers("");
-                setListOfUnassignedUsers([]);
-                setSelectedRole(null);
-              }}
-            >
-              Close
-            </button>
-          </div> */}
         </Modal>
       )}
     </div>

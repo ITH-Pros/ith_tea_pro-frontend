@@ -1,21 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useState, useEffect } from "react";
-
 import "../rating.css";
 import {
-  addRating,
   addRatingOnTask,
   getAllAssignedProject,
-  getAllUserDataForRating,
   getProjectById,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
-import FroalaEditorComponent from "react-froala-wysiwyg";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 
@@ -24,9 +21,6 @@ export default function AddRating(props) {
 
   const RatingModalBody = () => {
     const { taskFromDashBoard } = props;
-    // console.log("taskFromDashBoard", taskFromDashBoard);
-    // const { taskFromDashBoard } = props;
-    // console.log("taskFromDashBoard", taskFromDashBoard)
     const ratingFormsFields = {
       selectedProject: "",
       rating: "",
@@ -48,24 +42,18 @@ export default function AddRating(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-      console.log("taskFromDashBoard", taskFromDashBoard);
       getProjectList();
-      console.log("projectList called");
     }, []);
 
     useEffect(() => {
       if (ratingForm.selectedProject) {
         getUsersList();
-        console.log("userList called");
       }
     }, [ratingForm.selectedProject]);
 
     useEffect(() => {
       if (ratingForm.selectedUser && !taskFromDashBoard) {
-        console.log(taskFromDashBoard)
-
         getAllPendingRatingTaskList();
-        console.log("taskList called");
       }
     }, [ratingForm.selectedDate, ratingForm.selectedUser]);
 
@@ -76,10 +64,6 @@ export default function AddRating(props) {
           selectedUser:
             taskFromDashBoard.assignedTo?._id || taskFromDashBoard.assignedTo,
         });
-        console.log(
-          "taskFromDashBoard.assignedTo called",
-          taskFromDashBoard.assignedTo
-        );
       }
     }, [ratingForm.userList]);
 
@@ -97,18 +81,12 @@ export default function AddRating(props) {
             ? "0" + dueDateData.getDate()
             : dueDateData.getDate());
 
-        console.log(
-          "ratingForm.projectList called",
-          taskFromDashBoard.projectId
-        );
         setRatingForm({
           ...ratingForm,
           selectedProject:
             taskFromDashBoard.projectId?._id || taskFromDashBoard.projectId,
-          // selectedProject: taskFromDashBoard.projectId,
           taskList: [taskFromDashBoard],
           selectedTask: taskFromDashBoard._id,
-          //   selectedUser: taskFromDashBoard.assignedTo,
           selectedDate: dueDateData,
         });
       }
@@ -116,7 +94,6 @@ export default function AddRating(props) {
 
     const handleRatingFormChange = (event) => {
       const { name, value } = event.target;
-      console.log(name, value);
       setRatingForm({
         ...ratingForm,
         [name]: value,
@@ -135,7 +112,6 @@ export default function AddRating(props) {
         };
 
         const response = await getTaskDetailsByProjectId(dataToSend);
-        console.log("response", response);
         if (response.error) {
           setToasterMessage(response.error);
           setShowToaster(true);
@@ -155,7 +131,13 @@ export default function AddRating(props) {
     const handleSubmit = async (event) => {
       setValidated(true);
       event.preventDefault();
-      if (!ratingForm.selectedTask || !ratingForm.selectedDate || !ratingForm.rating || ratingForm.rating > 6 || ratingForm.rating < 0) {
+      if (
+        !ratingForm.selectedTask ||
+        !ratingForm.selectedDate ||
+        !ratingForm.rating ||
+        ratingForm.rating > 6 ||
+        ratingForm.rating < 0
+      ) {
         return;
       } else {
         let { selectedTask, rating, comment } = ratingForm;
@@ -164,7 +146,6 @@ export default function AddRating(props) {
           rating: rating,
           comment: comment,
         };
-        console.log("dataToSend", dataToSend);
         setLoading(true);
         try {
           const rating = await addRatingOnTask(dataToSend);
@@ -406,9 +387,6 @@ export default function AddRating(props) {
         <Modal.Body>
           <RatingModalBody />
         </Modal.Body>
-        {/* <Button variant="secondary" onClick={() => setModalShow(false)}>
-          Close
-        </Button> */}
       </Modal>
       {!modalShow && <span onClick={() => setModalShow(true)}>Add Rating</span>}
     </>

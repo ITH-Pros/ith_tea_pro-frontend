@@ -1,11 +1,12 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./tasks.css";
 import {
   addSectionApi,
   archiveSectionApi,
   deleteSectionApi,
-  getAllProjects,
   getProjectsTask,
   updateSection,
   updateTaskStatusById,
@@ -14,22 +15,16 @@ import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
-import TaskModal from "./ShowTaskModal";
 import {
   Accordion,
   ProgressBar,
-  Row,
-  Col,
   Dropdown,
   Badge,
   Modal,
   Button,
-  Overlay,
-  Popover,
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import avtar from "../../assests/img/avtar.png";
 import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
 import { useParams } from "react-router-dom";
@@ -42,25 +37,37 @@ const Tasks = () => {
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
-  const [taskFilters, setTaskFilters] = useState({});
   const [selectedProject, setSelectedProject] = useState({});
-
-  const [taskData, setTaskData] = useState({});
   const [showAddTask, setShowAddTask] = useState(false);
   const [selectedTask, setSelectedTask] = useState({});
   const [modalShow, setModalShow] = useState(false);
   const [sectionEditMode, setSectionEditMode] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [selectedSectionId, setSelectedSectionId] = useState("");
-  const { userDetails } = useAuth();
-
   const [showViewTask, setShowViewTask] = useState(false);
+  const setShowToaster = (param) => showToaster(param);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
-  const [isArchive , setIsArchive] = useState(false)
-
-
+  const [isArchive, setIsArchive] = useState(false);
   const [taskInfo, setTaskInfo] = useState(null);
+  const [sectionName, setSectionName] = useState("");
+  const [archiveSectionModal, setArchiveSectionModal] = useState(false);
+  const { userDetails } = useAuth();
+  const params = useParams();
+
+  useEffect(() => {
+    getTasksDataUsingProjectId();
+    let paramsData;
+    if (params?.projectId) {
+      paramsData = JSON.parse(params?.projectId);
+    }
+    if (paramsData?.projectId) {
+      setSelectedProjectId(paramsData?.projectId);
+    }
+    if (paramsData?.isArchive) {
+      setIsArchive(paramsData?.isArchive);
+    }
+  }, [isArchive]);
 
   const handleProgressBarHover = (project) => {
     const completedTasks = project.completedTasks || 0;
@@ -69,98 +76,69 @@ const Tasks = () => {
     setTaskInfo({ completedTasks, pendingTasks });
   };
 
+  const deleteConFirmation = (sectionId) => {
+    setSelectedSectionId(sectionId?._id);
+    setDeleteSectionModal(true);
+  };
 
-
-
-//   ///////////////////////////  confirmation-popup  ///////////////////////////
-
-const deleteConFirmation = (sectionId) => {
-	setSelectedSectionId(sectionId?._id);
-	setDeleteSectionModal(true);
- };
-
- const deleteSection = async () => {
-	let dataToSend = {
-	  sectionId: selectedSectionId,
-	};
-	try {
-	  const res = await deleteSectionApi(dataToSend);
-	  console.log("res", res);
-	  if (res.status === 200) {
-		setToasterMessage("Section deleted successfully");
-		setShowToaster(true);
-		setDeleteSectionModal(false);
-		closeModal();
-		getTasksDataUsingProjectId();
-		let paramsData;
-    if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId);
-    }
-    if (paramsData?.projectId) {
-      setSelectedProjectId(paramsData?.projectId);
-    }
-   
-	  } else {
-		setToasterMessage(res?.message);
-		setShowToaster(true);
-	  }
-	} catch (error) {
-	  console.log("error", error);
-	}
-	  };
-
- 
-
-// ///////////////////////////  confirmation-popup  ///////////////////////////
-
-///////////////////////////  archiveConFirmation  ///////////////////////////
-
-const [archiveSectionModal, setArchiveSectionModal] = useState(false);
-
-
-const archiveConFirmation = (sectionId) => {
-	setSelectedSectionId(sectionId?._id);
-	setArchiveSectionModal(true);
-	 };
-
-	 const archiveSection = async () => {
-		let dataToSend = {
-		  sectionId: selectedSectionId,
-		  isArchived: true,
-		};
-		try {
-		  const res = await archiveSectionApi(dataToSend);
-		  console.log("res", res);
-		  if (res.status === 200) {
-			setToasterMessage("Section archived successfully");
-			setShowToaster(true);
-			setArchiveSectionModal(false);
-			closeModal();
-			getTasksDataUsingProjectId();
-			let paramsData;
-      if (params?.projectId) {
-        paramsData = JSON.parse(params?.projectId);
+  const deleteSection = async () => {
+    let dataToSend = {
+      sectionId: selectedSectionId,
+    };
+    try {
+      const res = await deleteSectionApi(dataToSend);
+      if (res.status === 200) {
+        setToasterMessage("Section deleted successfully");
+        setShowToaster(true);
+        setDeleteSectionModal(false);
+        closeModal();
+        getTasksDataUsingProjectId();
+        let paramsData;
+        if (params?.projectId) {
+          paramsData = JSON.parse(params?.projectId);
+        }
+        if (paramsData?.projectId) {
+          setSelectedProjectId(paramsData?.projectId);
+        }
+      } else {
+        setToasterMessage(res?.message);
+        setShowToaster(true);
       }
-      if (paramsData?.projectId) {
-        setSelectedProjectId(paramsData?.projectId);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const archiveSection = async () => {
+    let dataToSend = {
+      sectionId: selectedSectionId,
+      isArchived: true,
+    };
+    try {
+      const res = await archiveSectionApi(dataToSend);
+      if (res.status === 200) {
+        setToasterMessage("Section archived successfully");
+        setShowToaster(true);
+        setArchiveSectionModal(false);
+        closeModal();
+        getTasksDataUsingProjectId();
+        let paramsData;
+        if (params?.projectId) {
+          paramsData = JSON.parse(params?.projectId);
+        }
+        if (paramsData?.projectId) {
+          setSelectedProjectId(paramsData?.projectId);
+        }
+      } else {
+        setToasterMessage(res?.message);
+        setShowToaster(true);
       }
-    
-		  } else {
-			setToasterMessage(res?.message);
-			setShowToaster(true);
-		  }
-		} catch (error) {
-		  console.log("error", error);
-		}
-		  };
-
-
-///////////////////////////  archiveConFirmation  ///////////////////////////
-
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const editSection = (sectionId, projectId) => {
-    console.log("sectionId", sectionId);
-    console.log("projectId", projectId);
     setSelectedProjectId(sectionId?.projectId);
     setSectionName(sectionId?.section);
     setSelectedSectionId(sectionId?._id);
@@ -176,24 +154,20 @@ const archiveConFirmation = (sectionId) => {
     };
     try {
       const res = await updateSection(dataToSend);
-      console.log("res", res);
       if (res.status === 200) {
         setToasterMessage("Section updated successfully");
         setSectionEditMode(false);
         setShowToaster(true);
         setModalShow(false);
         closeModal();
-        // getAndSetAllProjects();
         getTasksDataUsingProjectId();
-        // window.location.reload();
-       let paramsData;
-       if (params?.projectId) {
-         paramsData = JSON.parse(params?.projectId);
-       }
-       if (paramsData?.projectId) {
-         setSelectedProjectId(paramsData?.projectId);
-       }
-      
+        let paramsData;
+        if (params?.projectId) {
+          paramsData = JSON.parse(params?.projectId);
+        }
+        if (paramsData?.projectId) {
+          setSelectedProjectId(paramsData?.projectId);
+        }
       } else {
         setToasterMessage(res?.message);
         setShowToaster(true);
@@ -204,46 +178,21 @@ const archiveConFirmation = (sectionId) => {
   };
 
   const handleViewDetails = (taskId) => {
-    console.log(
-      "showViewTask-----------------------------------------------------------",
-      showViewTask
-    );
     setSelectedTaskId(taskId);
     setShowViewTask(true);
-    console.log("showViewTask =====================", showViewTask);
   };
 
   const closeViewTaskModal = () => {
     setShowViewTask(false);
     setSelectedTaskId(null);
-
-    console.log("closeViewTaskModal");
   };
-
-  //   console.log("userDetails +++++++++++++++++++++++++++", userDetails.id);
-  const params = useParams();
-  console.log("params", params);
-  console.log("selectedProjectId", selectedProjectId);
-
-  const setShowToaster = (param) => showToaster(param);
-
-  const [showStatusSelect, setShowStatusSelect] = useState(false);
-
-  //   const handleTaskItemClick = () => {
-  //     setShowStatusSelect(!showStatusSelect);
-  //   };
 
   const handleStatusChange = (e, taskId, status) => {
     const newStatus = status;
-
-    console.log("newStatus", newStatus);
-    // make API call to update task status with newStatus
     let dataToSend = {
       taskId: taskId,
       status: newStatus,
     };
-    console.log("dataToSend", dataToSend);
-
     updateTaskStatus(dataToSend);
   };
 
@@ -265,28 +214,8 @@ const archiveConFirmation = (sectionId) => {
     }
   };
 
-  useEffect(() => {
-    getTasksDataUsingProjectId();
-    let paramsData;
-    if (params?.projectId) {
-      
-       paramsData=JSON.parse(params?.projectId)
-    }
-    if (paramsData?.projectId) {
-      setSelectedProjectId(paramsData?.projectId);
-    }
-    if (paramsData?.isArchive) {
-      setIsArchive(paramsData?.isArchive);
-    }
-  }, [isArchive]);
-
-  const [projectList, setProjectListValue] = useState([]);
-  const [sectionName, setSectionName] = useState("");
-
   const showAddSectionModal = (isTrue) => {
     setSectionName("");
-    // setSelectedProjectId("");
-    getAndSetAllProjects();
     setModalShow(isTrue);
   };
 
@@ -302,37 +231,27 @@ const archiveConFirmation = (sectionId) => {
           projectId: selectedProjectId,
         };
 
-        //   if(sectionEditMode){
-        // 	dataToSend.sectionId = sectionId;
-        //   }
-
         const res = await addSectionApi(dataToSend);
         setLoading(false);
         if (res.error) {
           setToasterMessage(res?.error?.message || "Something Went Wrong");
-          console.log( res?.error?.message)
           setShowToaster(true);
         } else {
           setToasterMessage(res?.message || "Something Went Wrong");
           setShowToaster(true);
           setModalShow(false);
           closeModal();
-          // getAndSetAllProjects();
           getTasksDataUsingProjectId();
-          // window.location.reload();
-         let paramsData;
-         if (params?.projectId) {
-           paramsData = JSON.parse(params?.projectId);
-         }
-         if (paramsData?.projectId) {
-           setSelectedProjectId(paramsData?.projectId);
-         }
-        
+          let paramsData;
+          if (params?.projectId) {
+            paramsData = JSON.parse(params?.projectId);
+          }
+          if (paramsData?.projectId) {
+            setSelectedProjectId(paramsData?.projectId);
+          }
         }
       } catch (error) {
         setToasterMessage(error?.message || "Something Went Wrong");
-        console.log( error?.error?.message)
-
         setShowToaster(true);
         setLoading(false);
         return error.message;
@@ -340,38 +259,18 @@ const archiveConFirmation = (sectionId) => {
     }
   };
 
-  const getAndSetAllProjects = async function () {
-    //setloading(true);
-    try {
-      const projects = await getAllProjects();
-      //setloading(false);
-      if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setProjectListValue(projects.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      //setloading(false);
-      return error.message;
-    }
-  };
-
   const getTasksDataUsingProjectId = async () => {
     let paramsData;
-     if (params?.projectId) {
-       paramsData = JSON.parse(params?.projectId);
-     }
+    if (params?.projectId) {
+      paramsData = JSON.parse(params?.projectId);
+    }
     setLoading(true);
     try {
       let data = {
         groupBy: "default",
-        // user
       };
-      if(isArchive){
-        data.isArchived = true
+      if (isArchive) {
+        data.isArchived = true;
       }
       if (params?.projectId) {
         data.projectId = paramsData?.projectId;
@@ -379,7 +278,6 @@ const archiveConFirmation = (sectionId) => {
 
       if (localStorage.getItem("taskFilters")) {
         let filterData = JSON.parse(localStorage.getItem("taskFilters"));
-        console.log("filterData", filterData);
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds);
         }
@@ -399,7 +297,7 @@ const archiveConFirmation = (sectionId) => {
           data.status = JSON.stringify(filterData?.status);
         }
         if (filterData?.sortType) {
-          data.sortType =filterData?.sortType;
+          data.sortType = filterData?.sortType;
         }
         if (filterData?.sortOrder) {
           data.sortOrder = filterData?.sortOrder;
@@ -410,10 +308,6 @@ const archiveConFirmation = (sectionId) => {
         if (filterData?.toDate) {
           data.toDate = filterData?.toDate;
         }
-       
-        // data = filterData;
-        // data.groupBy = "default";
-        console.log(data, "filter data");
       }
       const tasks = await getProjectsTask(data);
       setLoading(false);
@@ -438,7 +332,7 @@ const archiveConFirmation = (sectionId) => {
                 (today.getDate() <= 9
                   ? "0" + today.getDate()
                   : today.getDate());
-              if (dateMonth == today) {
+              if (dateMonth === today) {
                 task.dueToday = true;
               } else if (
                 new Date().getTime() > new Date(task?.dueDate).getTime()
@@ -456,7 +350,7 @@ const archiveConFirmation = (sectionId) => {
               }
               if (
                 task?.completedDate &&
-                dateMonth == task?.completedDate?.split("T")[0]
+                dateMonth === task?.completedDate?.split("T")[0]
               ) {
                 task.dueToday = false;
               }
@@ -464,24 +358,14 @@ const archiveConFirmation = (sectionId) => {
           });
           allTask[i].tasks = item?.tasks;
         });
-        console.log(
-          tasks?.data[0]?.isArchived,
-          "-----------------------------tasks?.data[0]?.isArchived------------------------------");
         setProjects(allTask);
-        console.log(allTask);
-       let paramsData;
-       if (params?.projectId) {
-         paramsData = JSON.parse(params?.projectId);
-       }
-       if (paramsData?.projectId) {
-         setSelectedProjectId(paramsData?.projectId);
-       }
-      
-        // if (!allTask?.length && params?.projectId && userDetails?.role !=='CONTRIBUTOR' ) {
-        // 	setModalShow(true);
-        // }
-
-        console.log(allTask, "allTask");
+        let paramsData;
+        if (params?.projectId) {
+          paramsData = JSON.parse(params?.projectId);
+        }
+        if (paramsData?.projectId) {
+          setSelectedProjectId(paramsData?.projectId);
+        }
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -495,68 +379,57 @@ const archiveConFirmation = (sectionId) => {
     closeModal();
     getTasksDataUsingProjectId();
   };
+
   const getTaskFilters = () => {
     getTasksDataUsingProjectId();
   };
+
   const closeModal = () => {
     setShowAddTask(false);
     setSelectedProject();
     setSelectedTask();
   };
 
-  const handleIsArchive = () =>{
-    setIsArchive(!isArchive)
-    // getAndSetAllProjects()
-  }
-
-  
-
-
   return (
     <>
-      <div className="rightDashboard" style={{marginTop:'7%'}}>
+      <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
-
           <div className="projects-button">
-          
-          {!isArchive && (
-            <button
-              className="addTaskBtn"
-              style={{
-                float: "right",
-              }}
-              onClick={() => {
-                setSelectedTask();
-                setShowAddTask(true);
-                setSelectedProject();
-              }}
-            >
-              Add Task
-            </button>
-          )}
-  
-          {projects?.length !== 0 &&
-            userDetails?.role !== "CONTRIBUTOR" &&
-            !isArchive &&
-            selectedProjectId && (
+            {!isArchive && (
               <button
-                className="addTaskBtn addSectionBtn"
+                className="addTaskBtn"
                 style={{
                   float: "right",
                 }}
                 onClick={() => {
-                  showAddSectionModal(true);
+                  setSelectedTask();
+                  setShowAddTask(true);
+                  setSelectedProject();
                 }}
               >
-                Add Section
+                Add Task
               </button>
             )}
+
+            {projects?.length !== 0 &&
+              userDetails?.role !== "CONTRIBUTOR" &&
+              !isArchive &&
+              selectedProjectId && (
+                <button
+                  className="addTaskBtn addSectionBtn"
+                  style={{
+                    float: "right",
+                  }}
+                  onClick={() => {
+                    showAddSectionModal(true);
+                  }}
+                >
+                  Add Section
+                </button>
+              )}
           </div>
-  
         </h1>
-       
-      
 
         <FilterModal
           handleProjectId={selectedProjectId}
@@ -871,7 +744,7 @@ const archiveConFirmation = (sectionId) => {
                           <div className="nameTag">
                             <UserIcon
                               key={index}
-                              firstName={task?.assignedTo?.name}
+                              firstName={task?.assignedTo?.name||''}
                             />
                           </div>
                         )}
@@ -933,11 +806,6 @@ const archiveConFirmation = (sectionId) => {
                   ))}
                 </ul>
               </Accordion.Body>
-              {/* <div className="collpase">collapsed</div> */}
-              {/* <div className="addtask">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                Add Task
-              </div> */}
             </Accordion.Item>
           ))}
           {projects && projects.length === 0 && (
@@ -1037,7 +905,7 @@ const archiveConFirmation = (sectionId) => {
           </Modal.Footer>
         </Modal>
 
-        {/*  */}
+        {loading ? <Loader /> : null}
 
         {toaster && (
           <Toaster

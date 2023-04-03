@@ -1,25 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { setPasswordApi, verifyTokenApi } from "../services/user/api";
-
 import { useParams, useNavigate } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import "./index.css";
 import Toaster from "../components/Toaster";
-import { set } from "immutable";
 
 function PasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState("");
-
   const params = useParams();
-  console.log("params", params);
 
   const handleChangeConfirmPassword = (event) => {
     setConfirmPassword(event.target.value);
@@ -45,25 +41,19 @@ function PasswordForm() {
     try {
       const response = await verifyTokenApi(dataToSend);
       if (response.error) {
-        console.log("Password already setup");
-		showToaster(true)
-		setToasterMessage(response.message)	
+        showToaster(true);
+        setToasterMessage(response.message);
         navigate("/login");
         return;
       } else {
-		showToaster(true)
-		setToasterMessage(response.message)
+        showToaster(true);
+        setToasterMessage(response.message);
         setEmail(response?.data?.email);
-        console.log("response", response);
       }
     } catch (error) {
-		showToaster(true)
-		setToasterMessage(error.message)
-
+      showToaster(true);
+      setToasterMessage(error.message);
       navigate("/login");
-
-      console.log("Error while getting user details");
-
       return error.message;
     }
   };
@@ -75,7 +65,6 @@ function PasswordForm() {
     }
 
     if (password !== confirmPassword) {
-
       setValidationError("Passwords do not match");
       return;
     } else {
@@ -87,12 +76,9 @@ function PasswordForm() {
       try {
         const response = await setPasswordApi(dataToSend);
         if (response.error) {
-          console.log("Error while getting user details");
-
           return;
         } else {
-          console.log("response========================+++++++++++++++++++++", response);
-          localStorage.setItem('passwordReset', true);
+          localStorage.setItem("passwordReset", true);
           navigate("/login");
         }
       } catch (error) {
@@ -104,7 +90,6 @@ function PasswordForm() {
 
   const handleChange = (event) => {
     setPassword(event.target.value);
-    // setConfirmPassword(event.target.value);
     if (event.target.value !== confirmPassword) {
       setValidationError("Passwords do not match");
     } else {
@@ -114,32 +99,30 @@ function PasswordForm() {
 
   return (
     <div className="set-password">
-     
       <form className="password-form" onSubmit={handleSubmit}>
-       <h4>Set Password</h4>
+        <h4>Set Password</h4>
         <div className="hed-pass">
-        <h4>Email : {email}</h4>
+          <h4>Email : {email}</h4>
         </div>
-    
-         <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password"  value={password} onChange={handleChange} placeholder="Password" />
-      </Form.Group>
-        {/* <div className="form-group">
-          <label>
-            Confirm Password:
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(event) => handleChangeConfirmPassword(event)}
-            />
-          </label>
-        </div> */}
-           <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label> Confirm Password</Form.Label>
-        <Form.Control type="password" value={confirmPassword}
-              onChange={(event) => handleChangeConfirmPassword(event)} placeholder="Confirm Password" />
-      </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={handleChange}
+            placeholder="Password"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label> Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            value={confirmPassword}
+            onChange={(event) => handleChangeConfirmPassword(event)}
+            placeholder="Confirm Password"
+          />
+        </Form.Group>
         <div className="form-group">
           <p className="error">{validationError}</p>
         </div>
@@ -148,18 +131,17 @@ function PasswordForm() {
             <Button variant="primary" className="submit-button" type="submit">
               Submit
             </Button>
-           
           </div>
         )}
       </form>
 
-	  {toaster && (
-	<Toaster
-	  message={toasterMessage}
-	  show={toaster}
-	  close={() => showToaster(false)}
-	/>
-  )}
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+      )}
     </div>
   );
 }
