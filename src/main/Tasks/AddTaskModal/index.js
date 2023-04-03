@@ -105,7 +105,7 @@ export default function AddTaskModal(props) {
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
-        section: selectedProjectFromTask.sectionId,
+        section: selectedProjectFromTask.section,
       });
     } else if (selectedTask) {
       let project = projectList?.filter(
