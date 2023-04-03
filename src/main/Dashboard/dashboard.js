@@ -468,7 +468,7 @@ export default function Dashboard(props) {
                     }
                   >
                     {overdueWorkList && overdueWorkList?.length === 0 && (
-                      <p className="text-center">No tasks found.</p>
+                      <p className="text-center">No task found.</p>
                     )}
                     {overdueWorkList &&
                       overdueWorkList?.length > 0 &&
@@ -675,7 +675,7 @@ export default function Dashboard(props) {
             <Col lg={6} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
-                  <span>My Work</span>
+                  <span>MY WORK</span>
                   <i
                     onClick={() => {
                       setSelectedTask();
@@ -696,7 +696,7 @@ export default function Dashboard(props) {
                     }
                   >
                     {myWorkList && myWorkList?.length === 0 && (
-                      <p>No tasks found.</p>
+                      <p>No task found.</p>
                     )}
                     {myWorkList &&
                       myWorkList?.length > 0 &&
@@ -897,7 +897,7 @@ export default function Dashboard(props) {
           <Col lg={6} style={{ paddingRight: "0px" }}>
             <Row>
               <Col lg={6} className="left-add">
-                <span>Pending Ratings</span>
+                <span>PENDING RATINGS</span>
               </Col>
               <Col lg={6} className="right-filter"></Col>
             </Row>
@@ -1071,7 +1071,7 @@ export default function Dashboard(props) {
             <Col lg={6} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
-                  <span>Team Work</span>
+                  <span>TEAM WORK</span>
 
                   <i
                     onClick={() => {
