@@ -16,6 +16,9 @@ import Select from "react-select";
 import { useNavigate, useParams } from "react-router-dom";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/lib/css/styles.css";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const customStyles = {
   option: (provided) => ({
@@ -315,11 +318,24 @@ export default function AddProject(props) {
       <h1 className="h1-text">
         <i className="fa fa-database" aria-hidden="true"></i>Add Projects
       </h1>
+
+      
+      <div >
+        <Link className="h1-text pull-right" to="/project/all">
+          <Button variant="outline-primary">
+            <FontAwesomeIcon icon={faArrowLeft} /> Back
+          </Button>
+        </Link>
+        </div>
+   
+
+    
       <Form
         noValidate
         className="addUserFormBorder add-pro"
         validated={validated}
       >
+      
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
             <Form.Label>Name</Form.Label>
