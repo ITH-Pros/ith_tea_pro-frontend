@@ -137,6 +137,8 @@ function App() {
             <>
               <ProtectedRoute>
                 <Navbar />
+                <Header />
+
                 <Task />
               </ProtectedRoute>
             </>
