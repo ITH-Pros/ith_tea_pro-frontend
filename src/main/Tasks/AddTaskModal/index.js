@@ -90,7 +90,7 @@ export default function AddTaskModal(props) {
     if (showAddTask) {
       setShowAddTaskModal(true);
       patchFormForAdd();
-      setCategoryList();
+      // setCategoryList();
     }
   }, [showAddTask]);
 
@@ -111,6 +111,7 @@ export default function AddTaskModal(props) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
       );
+      console.log("project", selectedTask);
 
       getLeadsListUsingProjectId(selectedTask?.projectId);
       setCategoryList(project[0]?.sections);
@@ -396,7 +397,7 @@ export default function AddTaskModal(props) {
         setShowToaster(true);
         return;
       } else {
-        resetFormValue();
+        // resetFormValue();
         setValidated(false);
         setSelectedLeads("");
         setShowAddTaskModal(true);
