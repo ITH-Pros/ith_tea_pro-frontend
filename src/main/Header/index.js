@@ -50,7 +50,7 @@ function Header() {
       <Container fluid="lg" style={{ maxWidth: "1240px" }}>
         <Navbar.Brand onClick={redirectToDashbord}>
           <Logo />
-          <Text b color="#8355ad" hideIn="xs">
+          <Text b color="#8355ad" style={{cursor:"pointer"}} hideIn="xs">
             Tea Pro
           </Text>
         </Navbar.Brand>

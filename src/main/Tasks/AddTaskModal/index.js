@@ -336,6 +336,8 @@ export default function AddTaskModal(props) {
         });
         setValidated(false);
         setSelectedLeads("");
+    setCategoryList([]);
+
         setShowAddTaskModal(false);
         getNewTasks(projectId);
         showToaster(true);
@@ -399,6 +401,8 @@ export default function AddTaskModal(props) {
         resetFormValue();
         setValidated(false);
         setSelectedLeads("");
+        setCategoryList([]);
+
         setShowAddTaskModal(true);
         getNewTasks(projectId);
         showToaster(true);
@@ -425,6 +429,8 @@ export default function AddTaskModal(props) {
     closeModal();
     setValidated(false);
     resetFormValue();
+    setCategoryList([]);
+
 
     setShowAddTaskModal(false);
   };

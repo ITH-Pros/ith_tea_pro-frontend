@@ -850,7 +850,7 @@ export default function Dashboard(props) {
                                 <Badge bg="warning">ONGOING</Badge>
                               )}
                               {task?.status === "COMPLETED" && (
-                                <Badge bg="success">COMPLLETED</Badge>
+                                <Badge bg="success">COMPLETED</Badge>
                               )}
                               {task?.status === "ONHOLD" && (
                                 <Badge bg="secondary">ON HOLD</Badge>
@@ -974,7 +974,7 @@ export default function Dashboard(props) {
                               <Badge bg="warning">ONGOING</Badge>
                             )}
                             {task?.status === "COMPLETED" && (
-                              // <Badge bg="success">COMPLLETED</Badge>
+                              // <Badge bg="success">COMPLETED</Badge>
                               <>
                                 <>
                                   {["top"].map((placement) => (
@@ -1243,7 +1243,7 @@ export default function Dashboard(props) {
                                 <Badge bg="warning">ONGOING</Badge>
                               )}
                               {task?.status === "COMPLETED" && (
-                                <Badge bg="success">COMPLLETED</Badge>
+                                <Badge bg="success">COMPLETED</Badge>
                               )}
                               {task?.status === "ONHOLD" && (
                                 <Badge bg="secondary">ON HOLD</Badge>
