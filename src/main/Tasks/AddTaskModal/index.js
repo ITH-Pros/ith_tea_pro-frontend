@@ -101,7 +101,6 @@ export default function AddTaskModal(props) {
       );
       getLeadsListUsingProjectId(project[0]?._id);
       setCategoryList(project[0]?.sections);
-
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
@@ -397,7 +396,7 @@ export default function AddTaskModal(props) {
         setShowToaster(true);
         return;
       } else {
-        // resetFormValue();
+        resetFormValue();
         setValidated(false);
         setSelectedLeads("");
         setShowAddTaskModal(true);
@@ -430,19 +429,23 @@ export default function AddTaskModal(props) {
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
+
     setTaskFormValue({
       projectId: "",
       section: "",
       title: "",
-      description: "",
       assignedTo: "",
       dueDate: "",
       completedDate: "",
       priority: priorityList[0],
       status: statusList[0],
       attachments: [],
-      tasklead: "",
+      leads: "",
     });
+    setTimeout(() => {
+      document.getElementById('handleresetbuttonid')?.click();
+    },500)
+
   };
 
   const updateTask = async () => {
@@ -556,6 +559,7 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
+
 
   return (
     <>
@@ -685,6 +689,7 @@ export default function AddTaskModal(props) {
                   placeholder="Enter Description"
                   value={taskFormValue?.description}
                   onChange={updateTaskDescriptionValue}
+
                 />
               </Row>
               <Row className="mt-5">
@@ -821,7 +826,6 @@ export default function AddTaskModal(props) {
                     type="button"
                     onClick={submitTaskAnother}
                   >
-                    {" "}
                     Create And Add Another
                   </Button>
                 )}
