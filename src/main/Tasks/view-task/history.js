@@ -230,6 +230,38 @@ export default function History(props) {
                               </p>
                             </div>
                           )}
+
+                          {/* Due date */}
+                            {item?.previous?.dueDate !== item?.new?.dueDate && (
+                                <div className="detail-item">
+                                    <span>Changed due date from:</span>
+                                    <p className="previous">
+                                        {new Date(item?.previous?.dueDate).toLocaleDateString()}
+                                    </p>
+                                    <span> to: </span>
+                                    <p className="new">
+                                        {new Date(item?.new?.dueDate).toLocaleDateString()}
+                                    </p>
+                                    </div>
+                            )}
+                            {/* status */}
+                            {item?.previous?.status !== item?.new?.status && (
+                                <div className="detail-item">
+                                    <span>Changed status from:</span>
+                                    <p className="previous">
+                                        {item?.previous?.status}
+                                    </p>
+                                    <span> to: </span>
+                                    <p className="new">
+                                        {item?.new?.status}
+                                    </p>
+                                </div>
+                            )}
+                            
+
+
+
+
                         </div>
                       </div>
                     )}

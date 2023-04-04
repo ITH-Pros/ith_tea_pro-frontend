@@ -75,6 +75,16 @@ export default function ViewTaskModal(props) {
     }
   };
 
+  function formatDatee(dateString, options = {}) {
+    const defaultOptions = {
+      timeZone: "UTC",
+      dateStyle: "medium",
+      timeStyle: "medium",
+    };
+    const mergedOptions = { ...defaultOptions, ...options };
+    return new Date(dateString).toLocaleString("en-US", mergedOptions);
+  }
+
   const handleStatusChange = (e, taskId) => {
     const newStatus = e.target.value;
     let dataToSend = {
@@ -124,6 +134,7 @@ export default function ViewTaskModal(props) {
         setTaskData(response?.data);
         // console.log(response?.data);
         setShowViewTaskModal(true);
+        setActiveTab("comments")
         setIsRatingFormVisible(false);
         setErrorRating(false);
         setRating(0);
@@ -292,7 +303,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {formatDate(task?.dueDate)}{" "}
+                    {formatDatee(task?.dueDate)}{" "}
                   </p>
                 </Form.Group>
 
@@ -318,7 +329,7 @@ export default function ViewTaskModal(props) {
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
-                    <p>{task?.completedDate} </p>
+                    <p>{formatDate(task?.completedDate)} </p>
                   </Form.Group>
                 )}
               </Row>
