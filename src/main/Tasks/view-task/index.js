@@ -193,12 +193,12 @@ export default function ViewTaskModal(props) {
         <Modal.Body>
           <div className="dv-50">
             <Form>
-              {userDetails?.role !== "CONTRIBUTOR" &&
+              {
                 task?.status === "COMPLETED" && (
                   <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
                     <div className="col-sm-2 text-right">
                       {task?.isRated && <span>Rating : {task?.rating}</span>}
-                      {!task?.isRated && !isRatingFormVisible && (
+                      {!task?.isRated && !isRatingFormVisible && userDetails?.role !== "CONTRIBUTOR" && userDetails.id !== task?.assignedTo?._id  && (
                         <Button onClick={() => {handleAddRating(task)}}
                           variant="light"
                           size="sm"

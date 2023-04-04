@@ -29,6 +29,7 @@ export default function AddTaskModal(props) {
     closeModal,
     selectedTask,
     handleProjectId,
+    // onInit
   } = props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
@@ -89,6 +90,7 @@ export default function AddTaskModal(props) {
     if (showAddTask) {
       setShowAddTaskModal(true);
       patchFormForAdd();
+      // setCategoryList();
     }
   }, [showAddTask]);
 
@@ -99,7 +101,6 @@ export default function AddTaskModal(props) {
       );
       getLeadsListUsingProjectId(project[0]?._id);
       setCategoryList(project[0]?.sections);
-
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
@@ -109,6 +110,7 @@ export default function AddTaskModal(props) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
       );
+      console.log("project", selectedTask);
 
       getLeadsListUsingProjectId(selectedTask?.projectId);
       setCategoryList(project[0]?.sections);
@@ -139,13 +141,16 @@ export default function AddTaskModal(props) {
           ? "0" + dueDateData.getDate()
           : dueDateData.getDate());
 
+
+          console.log("selectedTask", selectedTask);
+
       setTaskFormValue({
         projectId: selectedTask?.projectId,
-        leads: selectedTask?.lead[0],
+        leads: selectedTask?.lead[0]?._id||selectedTask?.lead[0],
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
-        assignedTo: selectedTask?.assignedTo?._id,
+        assignedTo: selectedTask?.assignedTo?._id||selectedTask?.assignedTo,
         dueDate: dueDateData,
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
@@ -331,10 +336,14 @@ export default function AddTaskModal(props) {
         });
         setValidated(false);
         setSelectedLeads("");
+    setCategoryList([]);
+
         setShowAddTaskModal(false);
         getNewTasks(projectId);
         showToaster(true);
         setToasterMessage("Task Created Successfully");
+        console.log(taskRes, "taskRes++++++++++++===================>>>>>>>");
+        // onInit();
       }
     } catch (error) {
       setLoading(false);
@@ -389,19 +398,11 @@ export default function AddTaskModal(props) {
         setShowToaster(true);
         return;
       } else {
-        setTaskFormValue({
-          ...taskFormValue,
-          title: "",
-          description: null,
-          assignedTo: "",
-          dueDate: "",
-          completedDate: "",
-          priority: "",
-          status: "",
-          attachments: [],
-        });
+        resetFormValue();
         setValidated(false);
         setSelectedLeads("");
+        setCategoryList([]);
+
         setShowAddTaskModal(true);
         getNewTasks(projectId);
         showToaster(true);
@@ -428,23 +429,29 @@ export default function AddTaskModal(props) {
     closeModal();
     setValidated(false);
     resetFormValue();
+    setCategoryList([]);
+
 
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
+
     setTaskFormValue({
       projectId: "",
       section: "",
       title: "",
-      description: "",
       assignedTo: "",
       dueDate: "",
       completedDate: "",
       priority: priorityList[0],
       status: statusList[0],
       attachments: [],
-      tasklead: "",
+      leads: "",
     });
+    setTimeout(() => {
+      document.getElementById('handleresetbuttonid')?.click();
+    },500)
+
   };
 
   const updateTask = async () => {
@@ -545,6 +552,7 @@ export default function AddTaskModal(props) {
           status: "",
           attachments: [],
         });
+
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
@@ -557,6 +565,7 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
+
 
   return (
     <>
@@ -596,8 +605,8 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Project
                     </option>
-                    {projectList?.map((project) => (
-                      <option value={project._id} key={project._id}>
+                    {projectList?.map((project , index) => (
+                      <option value={project._id} key={index}>
                         {project.name}
                       </option>
                     ))}
@@ -622,8 +631,8 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Section
                     </option>
-                    {categoryList?.map((section) => (
-                      <option value={section._id} key={section._id}>
+                    {categoryList?.map((section , index) => (
+                      <option value={section._id} key={index}>
                         {section.name}
                       </option>
                     ))}
@@ -644,9 +653,11 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.leads}
                     name="leadId"
                   >
-                    <option value="">Select Lead</option>
-                    {leadLists?.map((project) => (
-                      <option value={project._id} key={project._id}>
+                    <option value=""  >
+                      Select Lead
+                    </option>
+                    {leadLists?.map((project , index) => (
+                      <option value={project._id} key={index}>
                         {project.name}
                       </option>
                     ))}
@@ -684,6 +695,7 @@ export default function AddTaskModal(props) {
                   placeholder="Enter Description"
                   value={taskFormValue?.description}
                   onChange={updateTaskDescriptionValue}
+
                 />
               </Row>
               <Row className="mt-5">
@@ -705,8 +717,8 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.assignedTo}
                   >
                     <option value="">Select User</option>
-                    {userList?.map((module) => (
-                      <option value={module._id} key={module._id}>
+                    {userList?.map((module  , index) => (
+                      <option value={module._id} key={index}>
                         {module.name}
                       </option>
                     ))}
@@ -739,8 +751,8 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Priority
                     </option>
-                    {priorityList.map((priority) => (
-                      <option value={priority} key={priority}>
+                    {priorityList.map((priority , index) => (
+                      <option value={priority} key={index}>
                         {priority}
                       </option>
                     ))}
@@ -760,11 +772,11 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Status
                     </option>
-                    {statusList?.map((status) => (
+                    {statusList?.map((status , index) => (
                       <option
                         value={status}
                         disabled={status === "COMPLETED" && !selectedTask}
-                        key={status}
+                        key={index}
                       >
                         {status}
                       </option>
@@ -820,7 +832,6 @@ export default function AddTaskModal(props) {
                     type="button"
                     onClick={submitTaskAnother}
                   >
-                    {" "}
                     Create And Add Another
                   </Button>
                 )}

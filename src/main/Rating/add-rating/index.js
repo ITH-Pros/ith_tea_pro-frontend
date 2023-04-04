@@ -20,7 +20,11 @@ export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
 
   const RatingModalBody = () => {
-    const { taskFromDashBoard } = props;
+    const { taskFromDashBoard , handleOnInit } = props;
+    console.log("taskFromDashBoard", taskFromDashBoard);
+    // console.log("taskFromDashBoard", taskFromDashBoard);
+    // const { taskFromDashBoard } = props;
+    // console.log("taskFromDashBoard", taskFromDashBoard)
     const ratingFormsFields = {
       selectedProject: "",
       rating: "",
@@ -134,6 +138,7 @@ export default function AddRating(props) {
       if (
         !ratingForm.selectedTask ||
         !ratingForm.selectedDate ||
+        !ratingForm.selectedUser ||
         !ratingForm.rating ||
         ratingForm.rating > 6 ||
         ratingForm.rating < 0
@@ -156,6 +161,7 @@ export default function AddRating(props) {
           } else {
             setToasterMessage("Rating Added Succesfully");
             setShowToaster(true);
+            handleOnInit();
             navigate("/rating");
           }
         } catch (error) {
@@ -226,7 +232,7 @@ export default function AddRating(props) {
                 value={ratingForm.selectedProject}
                 disabled={taskFromDashBoard ? true : false}
               >
-                <option value="">Select Project</option>
+                <option disabled value="">Select Project</option>
                 {ratingForm?.projectList?.map((module) => (
                   <option value={module._id} key={module._id}>
                     {module.name}
@@ -250,7 +256,7 @@ export default function AddRating(props) {
                 value={ratingForm.selectedUser}
                 disabled={taskFromDashBoard ? true : false}
               >
-                <option value="">Select User</option>
+                <option value="" disabled>Select User</option>
                 {ratingForm?.userList?.map((module) => (
                   <option value={module._id} key={module._id}>
                     {module.name}
@@ -318,7 +324,7 @@ export default function AddRating(props) {
                 value={ratingForm.selectedTask}
                 disabled={taskFromDashBoard ? true : false}
               >
-                <option value="">Select Task</option>
+                <option value="" disabled>Select Task</option>
                 {ratingForm?.taskList?.map((module) => (
                   <option value={module?._id} key={module?._id}>
                     {module?.title}

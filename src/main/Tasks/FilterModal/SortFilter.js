@@ -37,7 +37,7 @@ function SortByDropdown(props) {
 
   return (
     <div>
-      <label htmlFor="sort-by">Sort by:</label>
+      <label htmlFor="sort-by" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Sort By:</label>
       <select id="sort-by" value={sortBy} onChange={handleSortByChange}>
         <option value=" ">Select Sort Type</option>
         <option value="due-date">Due Date</option>
@@ -47,7 +47,7 @@ function SortByDropdown(props) {
         <option value="date-completed">Date Completed</option>
         <option value="alphabetically">Alphabetically</option>
       </select>
-      <label htmlFor="sort-order">Sort order:</label>
+      <label htmlFor="sort-order" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Sort order:</label>
       <select
         id="sort-order"
         value={sortOrder}

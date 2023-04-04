@@ -7,6 +7,7 @@ import {
   getUserAssignedProjects,
   assignUserToProject,
   getUserAnalytics,
+  assignUserToProjectByIds,
 } from "../../services/user/api";
 import "./teams.css";
 import Loader from "../../components/Loader";
@@ -106,12 +107,12 @@ export default function Teams(props) {
     }
   };
 
-  const handleSelectProject = (projectId) => {
-    setSelectedProjectId(projectId);
-  };
+  // const handleSelectProject = (projectId) => {
+  //   setSelectedProjectId(projectId);
+  // };
 
   const handleAddUserToProject = async function (userId) {
-    setSelectedProjectId("");
+    setSelectedProjectIds("");
     setLoading(true);
     try {
       const projects = await getAllProjects();
@@ -154,28 +155,37 @@ export default function Teams(props) {
     setModalShow(true);
   };
 
+  const [selectedProjectIds, setSelectedProjectIds] = useState([]);
+
+const handleSelectProject =(projectId) => {
+  if (selectedProjectIds.includes(projectId)) {
+    setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
+  } else {
+    setSelectedProjectIds([...selectedProjectIds, projectId]);
+  }
+}
+
   const GetModalBody = () => {
     return (
       <>
         {projectList &&
-          projectList.map((proejct, index) => {
-            let checkAlreadyAssigned = userAssignedProjects.find(
-              (ele) => ele._id === proejct._id
-            );
-            return (
-              <div key={proejct._id} className="assignPro">
-                <input
-                  disabled={checkAlreadyAssigned}
-                  checked={
-                    checkAlreadyAssigned || selectedProjectId === proejct._id
-                  }
-                  onChange={() => handleSelectProject(proejct._id)}
-                  type="checkbox"
-                ></input>
-                <span> {proejct.name}</span>
-              </div>
-            );
-          })}
+  projectList.map((project, index) => {
+    const checkAlreadyAssigned = userAssignedProjects.find(
+      (ele) => ele._id === project._id
+    );
+    const isSelected = selectedProjectIds.includes(project._id);
+    return (
+      <div key={project._id} className="assignPro">
+        <input
+          disabled={checkAlreadyAssigned}
+          checked={checkAlreadyAssigned || isSelected}
+          onChange={() => handleSelectProject(project._id)}
+          type="checkbox"
+        />
+        <span>{project.name}</span>
+      </div>
+    );
+  })}
       </>
     );
   };
@@ -183,10 +193,10 @@ export default function Teams(props) {
     setLoading(true);
     try {
       let dataToSend = {
-        projectId: selectedProjectId,
-        userIds: [selectedUserId],
+        projectIds: selectedProjectIds,
+        userId: selectedUserId,
       };
-      const assignRes = await assignUserToProject(dataToSend);
+      const assignRes = await assignUserToProjectByIds(dataToSend);
       setLoading(false);
       if (assignRes.error) {
         setToasterMessage(assignRes?.error?.message || "Something Went Wrong");
@@ -296,24 +306,23 @@ export default function Teams(props) {
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
           <div className="projects-button">
-            {userDetails.role === "SUPER_ADMIN" && (
-              <Link
-                style={{ float: "right" }}
-                to={{
-                  pathname: "/user/add",
-                }}
+          {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN")  && (
+            <Link style={{float:'right'}}
+              to={{
+                pathname: "/user/add",
+              }}
+            >
+              <i
+                className="fa fa-user-plus fa-3x addBtn"
+                title="Add User"
+                aria-hidden="true"
+                style={{ marginRight: "5" }}
               >
-                <i
-                  className="fa fa-user-plus fa-3x addBtn"
-                  title="Add User"
-                  aria-hidden="true"
-                  style={{ marginRight: "5" }}
-                >
-                  {" "}
-                  Add User{" "}
-                </i>
-              </Link>
-            )}
+                {" "}
+                Add Team{" "}
+              </i>
+            </Link>
+          )}
           </div>
         </h1>
 
@@ -436,7 +445,7 @@ export default function Teams(props) {
 
                   </div>
 
-                  {userDetails.role === "SUPER_ADMIN" && "ADMIN" && (
+                  {userDetails.role === "SUPER_ADMIN" && "ADMIN" && user?.role !=='ADMIN' && (
                     <div className="btn">
                       <button
                         className="btn-glow margin-right btn-color"
@@ -488,7 +497,7 @@ export default function Teams(props) {
           modalBody={<GetModalBody />}
           heading="Assign Project"
           onHide={() => setModalShow(false)}
-          submitBtnDisabled={!selectedProjectId}
+          submitBtnDisabled={!selectedProjectIds}
           onClick={handleAssignUserProjectSubmit}
         />
       </div>

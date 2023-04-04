@@ -67,7 +67,7 @@ function App() {
             path="add"
             element={
               <>
-                <CheckRole role="SUPER_ADMIN">
+                <CheckRole role={["SUPER_ADMIN","ADMIN"]}>
                   <AddProject />
                 </CheckRole>
               </>
@@ -77,7 +77,7 @@ function App() {
             path="add/:projectId"
             element={
               <>
-                <CheckRole role="SUPER_ADMIN">
+                <CheckRole role={["SUPER_ADMIN","ADMIN"]}>
                   <AddProject />
                 </CheckRole>
               </>
@@ -137,6 +137,8 @@ function App() {
             <>
               <ProtectedRoute>
                 <Navbar />
+                <Header />
+
                 <Task />
               </ProtectedRoute>
             </>
@@ -159,7 +161,7 @@ function App() {
             path="add"
             element={
               <>
-                <CheckRole role="SUPER_ADMIN">
+                <CheckRole role={["SUPER_ADMIN","ADMIN"]}>
                   <AddUser />
                 </CheckRole>
               </>

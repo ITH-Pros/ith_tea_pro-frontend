@@ -284,11 +284,11 @@ const Tasks = () => {
         if (filterData?.createdBy) {
           data.createdBy = JSON.stringify(filterData?.createdBy);
         }
-        if (filterData?.assignedTo) {
+        if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
           data.assignedTo = JSON.stringify(filterData?.assignedTo);
         }
-        if (filterData?.section) {
-          data.section = JSON.stringify(filterData?.section);
+        if (filterData?.category) {
+          data.sections = JSON.stringify(filterData?.category);
         }
         if (filterData?.priority) {
           data.priority = JSON.stringify(filterData?.priority);
@@ -476,8 +476,8 @@ const Tasks = () => {
                 </button>
               </div>
             )}
-          {!projects?.length && userDetails.role === "CONTRIBUTOR" && (
-            <h6>No Tasks Found</h6>
+          {!projects?.length && (
+            <h6 style={{textAlign:'center'}} >No Tasks Found</h6>
           )}
 
           {projects.map((project, index) => (
@@ -831,6 +831,7 @@ const Tasks = () => {
                 required
                 type="text"
                 className="form-control"
+                maxLength={40}
                 value={sectionName}
                 onChange={(e) => setSectionName(e.target.value)}
               />

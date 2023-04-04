@@ -177,7 +177,11 @@ export default function Dashboard(props) {
               <div className="wrap btnWth">
                 {userDetails?.role !== "CONTRIBUTOR" && (
                   <button className="add-rating-button">
-                    <AddRating />
+                    <AddRating
+                   handleOnInit={onInit}
+    
+                    
+                     />
                   </button>
                 )}
               </div>
