@@ -19,6 +19,7 @@ import {
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
+import History from "./history";
 export default function ViewTaskModal(props) {
 
   const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
@@ -121,6 +122,7 @@ export default function ViewTaskModal(props) {
       let response = await taskById(dataToSend);
       if (response.status === 200) {
         setTaskData(response?.data);
+        // console.log(response?.data);
         setShowViewTaskModal(true);
         setIsRatingFormVisible(false);
         setErrorRating(false);
@@ -358,12 +360,22 @@ export default function ViewTaskModal(props) {
                 >
                   Ratings
                 </button>
+                {/* history */}
+                <button 
+                onClick={() => handleTabChange("history")}
+                className={`toggle-button ${
+                  activeTab === "history" ? "active" : ""
+                }`}
+                >
+                  History
+                </button>
+
               </div>
               <div
                 className="container"
                 style={{ width: "100%", padding: "0px" }}
               >
-                {activeTab === "comments" ? (
+                {activeTab === "comments" && (
                   <>
                     {task?.comments?.map((item, index) => {
                       const options = {
@@ -396,7 +408,10 @@ export default function ViewTaskModal(props) {
                     })}
                     {!task?.comments?.length && <h6>No Comments</h6>}
                   </>
-                ) : (
+                ) }
+
+                {activeTab === "ratings" &&
+                (
                   <>
                     {task?.ratingComments?.map((item, index) => {
                       
@@ -431,6 +446,28 @@ export default function ViewTaskModal(props) {
                     {!task?.ratingComments?.length && <h6>No Rating Comments</h6>}
                   </>
                 )}
+
+                {activeTab === "history" &&
+                (
+                  <>
+                  {/* <h1>hello history</h1> */}
+                  <History
+                    taskId={task?._id}
+                  />
+                  </>
+                )}
+                
+                
+                 
+
+
+
+
+
+
+
+
+
               </div>
             </div>
 

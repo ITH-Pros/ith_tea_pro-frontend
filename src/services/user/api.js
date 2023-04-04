@@ -302,3 +302,12 @@ export async function getUserAnalytics(data) {
     })
     .then((res) => res.data);
 }
+
+
+export async function getTaskHistoryById(data) {
+  return axiosInstance
+    .get("tasklogs/v1/get", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
