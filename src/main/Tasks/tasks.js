@@ -744,7 +744,7 @@ const Tasks = () => {
                           <div className="nameTag">
                             <UserIcon
                               key={index}
-                              firstName={task?.assignedTo?.name}
+                              firstName={task?.assignedTo?.name||''}
                             />
                           </div>
                         )}

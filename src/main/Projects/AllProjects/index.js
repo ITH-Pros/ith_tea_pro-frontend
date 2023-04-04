@@ -212,6 +212,7 @@ export default function AllProject() {
     (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
   <button className="btn btn-primary" onClick={handleIsArchive}> {isArchive ? 'Active Projects':'Archive List'}</button>
   }
+
           </div>
         </h1>
 
@@ -219,8 +220,8 @@ export default function AllProject() {
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
-                <div key={element._id} className="">
-                  <ProjectCard
+                <div key={projectIndex}>
+                  <ProjectCard 
                     name={element.name}
                     background={element?.colorCode}
                     description={element?.description || "--"}
