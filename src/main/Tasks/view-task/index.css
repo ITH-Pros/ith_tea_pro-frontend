@@ -183,8 +183,8 @@ p {
 .toggle-button.active {
   border-bottom: 3px solid #673AB7;
 }
-
+/* 
 .offcanvas.show:not(.hiding) {
-  /* transform: none; */
+
   width: 800px;
-}
+} */

@@ -191,7 +191,7 @@ export default function ViewTaskModal(props) {
   return (
     <>
      
-      <Offcanvas className="Offcanvas-modal" show={showViewTaskModal} placement='end'  onHide={() => {
+      <Offcanvas className="Offcanvas-modal" style={{width:'800px'}} show={showViewTaskModal} placement='end'  onHide={() => {
           closeViewTaskModal();
           setShowViewTaskModal(false);
         }} >
@@ -511,58 +511,48 @@ export default function ViewTaskModal(props) {
 
 
 
-  return (
-    <>
-      <Modal
-        show={showViewTaskModal}
-        size="xl"
-        className="taskModalForm"
-        aria-labelledby="contained-modal-title-vcenter"
-        onHide={() => {
-          closeViewTaskModal();
-          setShowViewTaskModal(false);
-        }}
-        backdrop="static"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Task Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+  // return (
+  //   <>
+  //     <Modal
+  //       show={showViewTaskModal}
+  //       size="xl"
+  //       className="taskModalForm"
+  //       aria-labelledby="contained-modal-title-vcenter"
+  //       onHide={() => {
+  //         closeViewTaskModal();
+  //         setShowViewTaskModal(false);
+  //       }}
+  //       backdrop="static"
+  //     >
+  //       <Modal.Header closeButton>
+  //         <Modal.Title>Task Details</Modal.Title>
+  //       </Modal.Header>
+  //       <Modal.Body>
           
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            onClick={() => {
-              closeViewTaskModal();
-              setShowViewTaskModal(false);
-            }}
-            variant="secondary"
-          >
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+  //       </Modal.Body>
+  //       <Modal.Footer>
+  //         <Button
+  //           onClick={() => {
+  //             closeViewTaskModal();
+  //             setShowViewTaskModal(false);
+  //           }}
+  //           variant="secondary"
+  //         >
+  //           Close
+  //         </Button>
+  //       </Modal.Footer>
+  //     </Modal>
 
-
-
-
-
-
-
-
-
-
-
-      {loading?<Loader />:null}
-      {toaster && (
-        <ToastContainer position="top-end" className="p-3">
-        <Toaster 
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-        </ToastContainer>
-      )}
-    </>
-  );
+  //     {loading?<Loader />:null}
+  //     {toaster && (
+  //       <ToastContainer position="top-end" className="p-3">
+  //       <Toaster 
+  //         message={toasterMessage}
+  //         show={toaster}
+  //         close={() => showToaster(false)}
+  //       />
+  //       </ToastContainer>
+  //     )}
+  //   </>
+  // );
 }

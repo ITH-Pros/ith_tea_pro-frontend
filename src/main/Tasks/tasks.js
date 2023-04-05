@@ -31,6 +31,8 @@ import { useParams } from "react-router-dom";
 import ViewTaskModal from "./view-task";
 import { Truncate } from "../../helpers/truncate";
 import UserIcon from "../Projects/ProjectCard/profileImage";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -813,7 +815,7 @@ const Tasks = () => {
           )}
         </Accordion>
 
-        <Modal
+        {/* <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
           animation={false}
@@ -825,7 +827,23 @@ const Tasks = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="form-group">
+           
+          </Modal.Body>
+        </Modal> */}
+
+
+        {/* ////// */}
+        <Offcanvas
+        className="Offcanvas-modal"
+        show={modalShow}
+        placement="top"
+        onHide={() => setModalShow(false)}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> {sectionEditMode ? "Update Section" : "Add section"}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <div className="form-group">
               <label>Section</label>
               <input
                 required
@@ -855,8 +873,23 @@ const Tasks = () => {
                 Cancel
               </Button>
             </div>
-          </Modal.Body>
-        </Modal>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+
+
+
+   
+
+
+
+        {/* /// */}
+
+
+
+
+
+
 
         <Modal
           className="confirmation-popup"

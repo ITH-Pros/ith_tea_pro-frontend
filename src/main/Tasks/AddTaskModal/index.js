@@ -21,6 +21,8 @@ import { CONSTANTS } from "../../../constants";
 import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Loader from "../../../components/Loader";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 export default function AddTaskModal(props) {
   const {
     selectedProjectFromTask,
@@ -141,16 +143,15 @@ export default function AddTaskModal(props) {
           ? "0" + dueDateData.getDate()
           : dueDateData.getDate());
 
-
-          console.log("selectedTask", selectedTask);
+      console.log("selectedTask", selectedTask);
 
       setTaskFormValue({
         projectId: selectedTask?.projectId,
-        leads: selectedTask?.lead[0]?._id||selectedTask?.lead[0],
+        leads: selectedTask?.lead[0]?._id || selectedTask?.lead[0],
         section: selectedTask?.section,
         title: selectedTask?.title,
         description: selectedTask?.description,
-        assignedTo: selectedTask?.assignedTo?._id||selectedTask?.assignedTo,
+        assignedTo: selectedTask?.assignedTo?._id || selectedTask?.assignedTo,
         dueDate: dueDateData,
         completedDate: completedDateData ? completedDateData : "",
         priority: selectedTask?.priority,
@@ -336,7 +337,7 @@ export default function AddTaskModal(props) {
         });
         setValidated(false);
         setSelectedLeads("");
-    setCategoryList([]);
+        setCategoryList([]);
 
         setShowAddTaskModal(false);
         getNewTasks(projectId);
@@ -431,11 +432,9 @@ export default function AddTaskModal(props) {
     resetFormValue();
     setCategoryList([]);
 
-
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
-
     setTaskFormValue({
       projectId: "",
       section: "",
@@ -449,9 +448,8 @@ export default function AddTaskModal(props) {
       leads: "",
     });
     setTimeout(() => {
-      document.getElementById('handleresetbuttonid')?.click();
-    },500)
-
+      document.getElementById("handleresetbuttonid")?.click();
+    }, 500);
   };
 
   const updateTask = async () => {
@@ -566,26 +564,20 @@ export default function AddTaskModal(props) {
     }
   };
 
-
   return (
     <>
-      <Modal
-        width={800}
+      <Offcanvas  
+        className="Offcanvas-modal"
+        style={{width:'800px'}}
         show={showAddTaskModal}
-        size="xl"
-        className="taskModalForm"
-        aria-labelledby="contained-modal-title-vcenter"
+        placement="end"
         onHide={() => resetModalData()}
-        backdrop="static"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            {" "}
-            {selectedTask ? "Edit Task" : "Add Task"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="dv-50">
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> {selectedTask ? "Edit Task" : "Add Task"}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body  >
+        <div className="dv-50">
             <Form noValidate validated={validated}>
               <Row>
                 <Form.Group as={Col} md="6">
@@ -605,7 +597,7 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Project
                     </option>
-                    {projectList?.map((project , index) => (
+                    {projectList?.map((project, index) => (
                       <option value={project._id} key={index}>
                         {project.name}
                       </option>
@@ -631,7 +623,7 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Section
                     </option>
-                    {categoryList?.map((section , index) => (
+                    {categoryList?.map((section, index) => (
                       <option value={section._id} key={index}>
                         {section.name}
                       </option>
@@ -653,10 +645,8 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.leads}
                     name="leadId"
                   >
-                    <option value=""  >
-                      Select Lead
-                    </option>
-                    {leadLists?.map((project , index) => (
+                    <option value="">Select Lead</option>
+                    {leadLists?.map((project, index) => (
                       <option value={project._id} key={index}>
                         {project.name}
                       </option>
@@ -695,7 +685,6 @@ export default function AddTaskModal(props) {
                   placeholder="Enter Description"
                   value={taskFormValue?.description}
                   onChange={updateTaskDescriptionValue}
-
                 />
               </Row>
               <Row className="mt-5">
@@ -717,7 +706,7 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.assignedTo}
                   >
                     <option value="">Select User</option>
-                    {userList?.map((module  , index) => (
+                    {userList?.map((module, index) => (
                       <option value={module._id} key={index}>
                         {module.name}
                       </option>
@@ -751,7 +740,7 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Priority
                     </option>
-                    {priorityList.map((priority , index) => (
+                    {priorityList.map((priority, index) => (
                       <option value={priority} key={index}>
                         {priority}
                       </option>
@@ -772,7 +761,7 @@ export default function AddTaskModal(props) {
                     <option value="" disabled>
                       Select Status
                     </option>
-                    {statusList?.map((status , index) => (
+                    {statusList?.map((status, index) => (
                       <option
                         value={status}
                         disabled={status === "COMPLETED" && !selectedTask}
@@ -845,8 +834,28 @@ export default function AddTaskModal(props) {
               />
             )}
           </div>
-        </Modal.Body>
-      </Modal>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+      {/* <Modal
+        width={800}
+        show={showAddTaskModal}
+        size="xl"
+        className="taskModalForm"
+        aria-labelledby="contained-modal-title-vcenter"
+        onHide={() => resetModalData()}
+        backdrop="static"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            {" "}
+            {selectedTask ? "Edit Task" : "Add Task"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body> */}
+          
+        {/* </Modal.Body>
+      </Modal> */}
       {loading ? <Loader /> : null}
     </>
   );
