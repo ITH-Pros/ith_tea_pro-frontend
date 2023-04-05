@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
-
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import {
   addCommentOnTask,
@@ -187,24 +187,19 @@ export default function ViewTaskModal(props) {
     }
   };
 
+
   return (
     <>
-      <Modal
-        show={showViewTaskModal}
-        size="xl"
-        className="taskModalForm"
-        aria-labelledby="contained-modal-title-vcenter"
-        onHide={() => {
+     
+      <Offcanvas className="Offcanvas-modal" show={showViewTaskModal} placement='end'  onHide={() => {
           closeViewTaskModal();
           setShowViewTaskModal(false);
-        }}
-        backdrop="static"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Task Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="dv-50">
+        }} >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Task Details</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <div className="dv-50">
             <Form>
               {
                 task?.status === "COMPLETED" && (
@@ -303,7 +298,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {formatDatee(task?.dueDate)}{" "}
+                    {formatDate(task?.dueDate)}{" "}
                   </p>
                 </Form.Group>
 
@@ -467,18 +462,6 @@ export default function ViewTaskModal(props) {
                   />
                   </>
                 )}
-                
-                
-                 
-
-
-
-
-
-
-
-
-
               </div>
             </div>
 
@@ -507,6 +490,45 @@ export default function ViewTaskModal(props) {
               </form>
             </div>}
           </div>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+
+      {loading?<Loader />:null}
+      {toaster && (
+        <ToastContainer position="top-end" className="p-3">
+        <Toaster 
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+        </ToastContainer>
+      )}
+    </>
+  );
+
+
+
+
+
+  return (
+    <>
+      <Modal
+        show={showViewTaskModal}
+        size="xl"
+        className="taskModalForm"
+        aria-labelledby="contained-modal-title-vcenter"
+        onHide={() => {
+          closeViewTaskModal();
+          setShowViewTaskModal(false);
+        }}
+        backdrop="static"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Task Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -520,6 +542,17 @@ export default function ViewTaskModal(props) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
+
+
+
+
+
+
+
+
+
       {loading?<Loader />:null}
       {toaster && (
         <ToastContainer position="top-end" className="p-3">
