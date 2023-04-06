@@ -155,7 +155,7 @@ const ProjectCard = ({
         onClick={handleMenuIconClick}
         onBlur={handleMenuIconClick}
       >
-        {userDetails.role === "SUPER_ADMIN" && (
+        {(userDetails.role === "SUPER_ADMIN" || userDetails.role ==="ADMIN") && (
           <button className="project-btn-more dropdown ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
