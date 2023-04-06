@@ -478,7 +478,7 @@ const Tasks = () => {
                 </button>
               </div>
             )}
-          {!projects?.length && (
+          {!projects?.length && !selectedProjectId && (
             <h6 style={{textAlign:'center'}} >No Tasks Found</h6>
           )}
 
@@ -875,21 +875,7 @@ const Tasks = () => {
             </div>
         </Offcanvas.Body>
       </Offcanvas>
-
-
-
-
-   
-
-
-
         {/* /// */}
-
-
-
-
-
-
 
         <Modal
           className="confirmation-popup"

@@ -123,7 +123,7 @@ export default function AllProject() {
       setLoading(false);
 
       if (removeRes.error) {
-        setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(removeRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -133,7 +133,7 @@ export default function AllProject() {
         setConfirmModalShow(false);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setToasterMessage(error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;
