@@ -49,6 +49,8 @@ export default function AddTaskModal(props) {
     setUploadedFiles(uploadedFiles);
   };
 
+
+
   const taskFormFields = {
     projectId: "",
     section: "",
@@ -72,6 +74,10 @@ export default function AddTaskModal(props) {
     getProjectList();
   }, []);
 
+  // useEffect(() => {
+  //   // getProjectList();
+  // }, [taskFormValue.projectId]);
+
   useEffect(() => {
     if (taskFormValue.projectId && taskFormValue.leads) {
       if (
@@ -91,6 +97,7 @@ export default function AddTaskModal(props) {
   useEffect(() => {
     if (showAddTask) {
       setShowAddTaskModal(true);
+      getProjectList();
       patchFormForAdd();
       // setCategoryList();
     }
@@ -98,6 +105,7 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
+      // console.log("selectedProjectFromTask", selectedProjectFromTask);
       let project = projectList?.filter(
         (item) => item?._id === selectedProjectFromTask?._id
       );
@@ -189,6 +197,11 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setProjectList(projects.data);
+        console.log("projects", projects);
+        // if(showAddTask){
+
+          // patchFormForAdd();
+        // }
       }
     } catch (error) {
       setLoading(false);
@@ -626,7 +639,7 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.section}
                     disabled={selectedProjectFromTask}
                   >
-                    <option value="" disabled>
+                    <option value="" selected disabled>
                       Select Section
                     </option>
                     {categoryList?.map((section, index) => (

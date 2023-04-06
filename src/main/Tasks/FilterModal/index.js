@@ -181,6 +181,7 @@ const FilterModal = (props) => {
 
     try {
       const categories = await getAllCategories();
+      console.log("categories", categories);
       setLoading(false);
 
       if (categories.error) {

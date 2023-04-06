@@ -73,7 +73,7 @@ const Tasks = () => {
 
   const handleProgressBarHover = (project) => {
     const completedTasks = project.completedTasks || 0;
-    const totalTasks = project.totalTasks || 1;
+    const totalTasks = project.totalTasks || 0;
     const pendingTasks = totalTasks - completedTasks;
     setTaskInfo({ completedTasks, pendingTasks });
   };
@@ -251,6 +251,7 @@ const Tasks = () => {
           if (paramsData?.projectId) {
             setSelectedProjectId(paramsData?.projectId);
           }
+          // getProjectList();
         }
       } catch (error) {
         setToasterMessage(error?.message || "Something Went Wrong");
@@ -408,6 +409,7 @@ const Tasks = () => {
                   setSelectedTask();
                   setShowAddTask(true);
                   setSelectedProject();
+                  
                 }}
               >
                 Add Task
