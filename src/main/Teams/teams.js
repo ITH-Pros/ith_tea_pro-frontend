@@ -8,6 +8,7 @@ import {
   assignUserToProject,
   getUserAnalytics,
   assignUserToProjectByIds,
+  deleteUserById,
 } from "../../services/user/api";
 import "./teams.css";
 import Loader from "../../components/Loader";
@@ -15,6 +16,7 @@ import { Link } from "react-router-dom";
 import Modals from "../../components/modal";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'; 
 import {
   faGithub,
   faLinkedin,
@@ -22,6 +24,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserIcon from "../Projects/ProjectCard/profileImage";
+import { Button, Modal } from "react-bootstrap";
 
 export default function Teams(props) {
   const { userDetails } = useAuth();
@@ -42,6 +45,13 @@ export default function Teams(props) {
 
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
+
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
+
+const [userId, setUserId] = useState("");
+
+
+
 
   useEffect(() => {
     onInit();
@@ -217,6 +227,33 @@ const handleSelectProject =(projectId) => {
     setModalShow(false);
   };
 
+
+  const handleDeleteUser = async () => {
+    setLoading(true);
+    try {
+      let dataToSend = {
+        userId:userId ,
+      };
+      const deleteUser = await deleteUserById(dataToSend);
+      setLoading(false);
+      if (deleteUser.error) {
+        setToasterMessage(deleteUser?.message || "Something Went Wrong");
+        setShowToaster(true);
+        return;
+      } else {
+        setToasterMessage("User Deleted Successfully");
+        setShowToaster(true);
+        getAndSetAllUsers(pageDetails);
+        setConfirmModalShow(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
+
   const CustomPagination = (props) => {
     const { getAndSetAllUsers, setPageDetails, pageDetails } = props;
 
@@ -339,6 +376,60 @@ const handleSelectProject =(projectId) => {
                       }}
                     ></Link>
                   </div>
+
+
+
+
+                  {(userDetails.role === "SUPER_ADMIN" || userDetails.role ==="ADMIN") && !user?.isDeleted && (
+          <button className="project-btn-more dropdown ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-more-vertical"
+            >
+              <circle cx="12" cy="12" r="1" />
+              <circle cx="12" cy="5" r="1" />
+              <circle cx="12" cy="19" r="1" />
+            </svg>
+            <div className="dropdown-content">
+              
+                <a
+                onClick={()=>{setConfirmModalShow(true); setUserId(user._id)}
+
+                } icon="pi pi-check" label="Confirm"
+                  // onClick={() => {
+                  //   handleEdit();
+                  // }}
+                >
+                  {" "}
+                  <i
+                    className="fa fa-pencil-square"
+                    aria-hidden="true"
+                  ></i>{" "}
+                  Delete user
+                </a>
+              
+           
+            </div>
+          </button>
+        )}
+
+                  
+
+
+
+
+
+
+
+
                   <div className="content">
                     <>
                       {!user?.profilePicture && (
@@ -457,7 +548,7 @@ const handleSelectProject =(projectId) => {
                         Assign
                       </button>
 
-                      <button
+                      {/* <button
                         className="btn-glow margin-right btn-color"
                         to={{
                           pathname: "/rating",
@@ -465,7 +556,7 @@ const handleSelectProject =(projectId) => {
                         state={{ userId: user._id }}
                       >
                         Add Rating
-                      </button>
+                      </button> */}
                     </div>
                   )}
                 </div>
@@ -491,6 +582,7 @@ const handleSelectProject =(projectId) => {
             close={() => showToaster(false)}
           />
         )}
+        
 
         <Modals
           modalShow={modalShow}
@@ -500,6 +592,53 @@ const handleSelectProject =(projectId) => {
           submitBtnDisabled={!selectedProjectIds}
           onClick={handleAssignUserProjectSubmit}
         />
+
+
+<Modal
+        show={confirmModalShow}
+        onHide={() => {
+          setConfirmModalShow(false);
+          
+        }}
+        animation={false}
+        className="confirmation-popup"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="delete-popup">
+          <h6>
+            Are you sure you want to delete this user ?
+          </h6>
+
+          <div className="button-center-corformain">
+           
+              <Button
+                style={{ marginLeft: "16px" }}
+                className="btn btn-danger mb-3 mr-3"
+                onClick={() => handleDeleteUser()}
+              >
+                Delete
+              </Button>
+       
+           
+            <Button
+              style={{ marginLeft: "16px" }}
+              className="btn mb-3 mr-3"
+              onClick={() => {
+                setConfirmModalShow(false);
+                
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+
+
+
       </div>
     </>
   );
