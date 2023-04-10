@@ -637,30 +637,36 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                variant="defult"
-                                id="dropdown-basic"
-                              >
-                                <i className="fa fa-ellipsis-v"></i>
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setSelectedProject();
-                                    setShowAddTask(true);
-                                    setSelectedTask(task);
-                                  }}
+                            {(userDetails.id === task?.assignedTo?._id ||
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="defult"
+                                  id="dropdown-basic"
                                 >
-                                  <i
-                                    className="fa fa-pencil-square"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Edit Task
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setSelectedProject();
+                                      setShowAddTask(true);
+                                      setSelectedTask(task);
+                                    }}
+                                  >
+                                    <i
+                                      className="fa fa-pencil-square"
+                                      aria-hidden="true"
+                                    ></i>{" "}
+                                    Edit Task
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>}
                           </Col>
                         </Row>
                       ))}
@@ -862,30 +868,36 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                variant="defult"
-                                id="dropdown-basic"
-                              >
-                                <i className="fa fa-ellipsis-v"></i>
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setSelectedProject();
-                                    setShowAddTask(true);
-                                    setSelectedTask(task);
-                                  }}
+                            {(userDetails.id === task?.assignedTo?._id ||
+                        (userDetails.role === "LEAD" &&
+                          (userDetails.id === task?.assignedTo?._id ||
+                            task?.lead?.includes(userDetails.id) ||
+                            userDetails.id === task?.createdBy?._id)) ||
+                        userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") &&<Dropdown>
+                                <Dropdown.Toggle
+                                  variant="defult"
+                                  id="dropdown-basic"
                                 >
-                                  <i
-                                    className="fa fa-pencil-square"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Edit Task
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setSelectedProject();
+                                      setShowAddTask(true);
+                                      setSelectedTask(task);
+                                    }}
+                                  >
+                                    <i
+                                      className="fa fa-pencil-square"
+                                      aria-hidden="true"
+                                    ></i>{" "}
+                                    Edit Task
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>}
                           </Col>
                         </Row>
                       ))}
@@ -1255,7 +1267,14 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            <Dropdown>
+                            {(userDetails.id === task?.assignedTo?._id ||
+                        (userDetails.role === "LEAD" &&
+                          (userDetails.id === task?.assignedTo?._id ||
+                            task?.lead?.includes(userDetails.id) ||
+                            userDetails.id === task?.createdBy?._id)) ||
+                        userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") &&
+                        <Dropdown>
                               <Dropdown.Toggle
                                 variant="defult"
                                 id="dropdown-basic"
@@ -1274,7 +1293,7 @@ export default function Dashboard(props) {
                                   Edit
                                 </Dropdown.Item>
                               </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown>}
                           </Col>
                         </Row>
                       ))}
