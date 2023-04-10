@@ -1,7 +1,6 @@
 /* eslint-disable no-mixed-operators */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import {
@@ -32,7 +31,7 @@ function UserForm(props) {
   const [linkedin, setLinkedin] = useState("");
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
-  const navigate = useNavigate();
+
   const today = new Date();
 
   useEffect(() => {
@@ -47,6 +46,7 @@ function UserForm(props) {
     }
   };
 
+ 
   const patchValues = (currentUser) => {
     setName(currentUser?.name || "");
     setRole(currentUser?.role || "");
@@ -107,6 +107,7 @@ function UserForm(props) {
       linkedInLink: linkedin,
       profilePicture,
     };
+    console.log(profilePicture  )
 
     try {
       setLoading(true);
@@ -118,13 +119,12 @@ function UserForm(props) {
       } else {
         setLoading(false);
         showToaster(true);
+        localStorage.setItem("selectedProfilePicture",profilePicture)
         setToasterMessage("Profile updated successful");
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
         handleModalClose();
-        navigate("/");
-        console.log("response", response);
-
+        
       }
     } catch (error) {
       console.log("Error while updating user details");

@@ -69,11 +69,12 @@ export default function AddProject(props) {
   const [projectList, setProjectListValue] = useState([]);
   const params = useParams();
   const setShowToaster = (param) => showToaster(param);
-  const [color, setColor] = useColor("hex", "#cc3636 ");
-
   const projectById = projectList.find(
     (project) => project._id === params.projectId
   );
+ 
+  const [color, setColor] = useColor("hex", projectById?.colorCode||"#f7ddba");
+
 
   const projectFormFields = {
     name: "",
@@ -107,8 +108,11 @@ export default function AddProject(props) {
         description: projectById.description,
         selectedManagers: projectById.managedBy.map((el) => el._id),
         selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
+        colorCode:projectById?.colorCode
       });
+    
     }
+ 
   }, [projectById]);
 
   const getAndSetAllProjects = async function () {
@@ -316,7 +320,7 @@ export default function AddProject(props) {
       }}
     >
       <h1 className="h1-text">
-        <i className="fa fa-database" aria-hidden="true"></i>Add Projects
+        <i className="fa fa-database" aria-hidden="true"></i>{projectById?'Edit Project':'Add Project'}
       </h1>
 
       
