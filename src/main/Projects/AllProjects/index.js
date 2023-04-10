@@ -78,7 +78,7 @@ export default function AllProject() {
       const projects = await getAllProjects(dataToSend);
       if (projects.error) {
         setLoading(false)
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects?.data);
@@ -96,7 +96,7 @@ export default function AllProject() {
     try {
       const projects = await getTaskStatusAnalytics();
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectTaskAnalytics(projects?.data);
@@ -133,7 +133,7 @@ export default function AllProject() {
         setConfirmModalShow(false);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;
@@ -178,7 +178,7 @@ export default function AllProject() {
         setIsArchiveModalShow(false);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setConfirmModalShow(false);
       setIsArchiveModalShow(false);
       setShowToaster(true);

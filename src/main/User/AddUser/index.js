@@ -58,7 +58,7 @@ export default function AddUser(props) {
         navigate("/team");
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;

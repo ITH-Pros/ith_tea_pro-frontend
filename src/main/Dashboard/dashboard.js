@@ -108,7 +108,7 @@ export default function Dashboard(props) {
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(
-          tasks?.error?.message ||
+          tasks?.message ||
             "Something Went Wrong While Fetching My Work Data"
         );
         setShowToaster(true);
@@ -188,7 +188,7 @@ export default function Dashboard(props) {
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(
-          tasks?.error?.message ||
+          tasks?.message ||
             "Something Went Wrong while fetching Pending Ratings Data"
         );
         setShowToaster(true);
@@ -227,7 +227,7 @@ export default function Dashboard(props) {
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects.data);
@@ -277,10 +277,7 @@ export default function Dashboard(props) {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
-        // getMyWork();
-        // getTeamWork();
-        // getOverDueTaskList();
-        // getPendingRating();
+       
         onInit();
       }
     } catch (error) {

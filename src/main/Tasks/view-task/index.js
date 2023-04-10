@@ -71,7 +71,7 @@ export default function ViewTaskModal(props) {
         getTasksDataUsingProjectId();
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       showToaster(true);
       return error.message;
     }

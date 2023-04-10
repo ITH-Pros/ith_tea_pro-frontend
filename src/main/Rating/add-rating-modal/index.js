@@ -196,7 +196,7 @@ export default function AddRatingModal(props) {
 
       const projects = await getAllAssignedProject(dataToSend);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectOptions(projects.data);
@@ -214,7 +214,7 @@ export default function AddRatingModal(props) {
       const user = await getAllUserDataForRating();
       setLoading(false);
       if (user.error) {
-        setToasterMessage(user?.error?.message || "Something Went Wrong");
+        setToasterMessage(user?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setTeamOptions(user?.data);
@@ -233,7 +233,7 @@ export default function AddRatingModal(props) {
       const rating = await addRating(data);
       setLoading(false);
       if (rating.error) {
-        setToasterMessage(rating?.error?.message || "Something Went Wrong");
+        setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setToasterMessage("Rating Added Succesfully");

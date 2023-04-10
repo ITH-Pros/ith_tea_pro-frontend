@@ -94,7 +94,7 @@ const [userId, setUserId] = useState("");
       const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setUsersListValue(projects?.data?.users || []);
@@ -127,7 +127,7 @@ const [userId, setUserId] = useState("");
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -147,7 +147,7 @@ const [userId, setUserId] = useState("");
       setLoading(false);
       if (userAssignedProjects.error) {
         setToasterMessage(
-          userAssignedProjects?.error?.message || "Something Went Wrong"
+          userAssignedProjects?.message || "Something Went Wrong"
         );
         setShowToaster(true);
         return;
@@ -208,7 +208,7 @@ const handleSelectProject =(projectId) => {
       const assignRes = await assignUserToProjectByIds(dataToSend);
       setLoading(false);
       if (assignRes.error) {
-        setToasterMessage(assignRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(assignRes?.message || "Something Went Wrong");
         setShowToaster(true);
         setModalShow(false);
 
@@ -247,7 +247,7 @@ const handleSelectProject =(projectId) => {
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
     }
