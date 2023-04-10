@@ -26,6 +26,8 @@ function FilterDropdown(props) {
   const handleFilterSelect = (event) => {
     const selectedValue = event.target.value;
     setSelectedFilter(selectedValue);
+    localStorage.setItem("selectedFilter", selectedValue);
+
   };
 
   const handleDateRangeChange = (event, picker) => {

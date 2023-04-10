@@ -281,6 +281,8 @@ const Tasks = () => {
       
       if (localStorage.getItem("taskFilters")) {
         let filterData = JSON.parse(localStorage.getItem("taskFilters"));
+        let selectedFilter = localStorage.getItem("selectedFilter");
+        console.log(selectedFilter,'selectedFilter')
         console.log(filterData)
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds);
@@ -306,11 +308,16 @@ const Tasks = () => {
         if (filterData?.sortOrder) {
           data.sortOrder = filterData?.sortOrder;
         }
-        if (filterData?.fromDate && filterData?.fromDate!==filterData?.toDate) {
+        if (filterData?.fromDate && filterData?.fromDate!==filterData?.toDate && selectedFilter!=='Today' && selectedFilter!=='Tomorrow') {
           data.fromDate = filterData?.fromDate;
         }
-        if (filterData?.toDate  && filterData?.fromDate!==filterData?.toDate) {
+        if (filterData?.toDate  && filterData?.fromDate!==filterData?.toDate && selectedFilter!=='Today' && selectedFilter!=='Tomorrow') {
           data.toDate = filterData?.toDate;
+        }
+        if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
+          data.fromDate = filterData?.fromDate;
+          data.toDate = filterData?.toDate;
+          
         }
       }
       const tasks = await getProjectsTask(data);
