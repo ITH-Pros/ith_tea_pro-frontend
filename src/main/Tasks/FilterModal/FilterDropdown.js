@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
+import {Row, Col } from "react-bootstrap";
 
 function FilterDropdown(props) {
   const [selectedFilter, setSelectedFilter] = useState("");
@@ -11,7 +12,8 @@ function FilterDropdown(props) {
 
   useEffect(() => {
     const dueDate = JSON.parse(localStorage.getItem("dueDate"));
-    const selectedFilter = localStorage.getItem("selectedFilter");
+    const selectedFilter = localStorage.getItem("selectedFilterTypes");
+    console.log(selectedFilter,'selectedFilterTypes')
     if (dueDate && selectedFilter === "range") {
       setDateRange({
         fromDate: new Date(dueDate.fromDate),
@@ -27,11 +29,13 @@ function FilterDropdown(props) {
     const selectedValue = event.target.value;
     setSelectedFilter(selectedValue);
     localStorage.setItem("selectedFilter", selectedValue);
+    localStorage.setItem("selectedFilterTypes", selectedValue);
 
   };
 
   const handleDateRangeChange = (event, picker) => {
     localStorage.setItem("selectedFilter", "range");
+    localStorage.setItem("selectedFilterTypes", "range");
 
     setDateRange({
       fromDate: picker.startDate.toDate(),
@@ -69,7 +73,12 @@ function FilterDropdown(props) {
 
   return (
     <div>
-      <label htmlFor="filter-dropdown" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Due Date:</label>
+                <Row className="filterFields">
+
+      <Col sm="3">
+      <label htmlFor="filter-dropdown" style={{ fontSize: "0.9rem !important", fontWeight: "bold" }}>Due Date:</label>
+      </Col>
+      <Col sm="9">
       <select
         id="filter-dropdown"
         value={selectedFilter}
@@ -82,10 +91,15 @@ function FilterDropdown(props) {
         <option value="Next 30 days">Next 30 days</option>
         <option value="range">Range</option>
       </select>
+        </Col>
+       </Row>
+        
+     
       {selectedFilter === "range" && renderDateRangePicker()}
       {selectedFilter !== "range" &&
         selectedFilter !== "" &&
-        renderFilterDropdown()}
+          renderFilterDropdown()}
+        
     </div>
   );
 }

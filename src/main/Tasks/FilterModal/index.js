@@ -124,9 +124,9 @@ const FilterModal = (props) => {
       filterFormValue.assignedTo = assignedTo.map((item) => item._id);
     }
     let dueDate = JSON.parse(localStorage.getItem("dueDate"));
-    if (dueDate.fromDate && dueDate.toDate) {
-      filterFormValue.fromDate = dueDate.fromDate;
-      filterFormValue.toDate = dueDate.toDate;
+    if (dueDate?.fromDate && dueDate?.toDate) {
+      filterFormValue.fromDate = dueDate?.fromDate;
+      filterFormValue.toDate = dueDate?.toDate;
     }
     if (localStorage.getItem("sortOrder")) {
       filterFormValue.sortOrder = localStorage.getItem("sortOrder");
@@ -293,6 +293,7 @@ const FilterModal = (props) => {
                       onClick={() => {
                         clearFilterFormValue();
                         setClearFilterBoolean(false);
+                        localStorage.removeItem('selectedFilterTypes')
                       }}
                       className="filter-task-tag"
                     >

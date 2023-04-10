@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Col,Row } from "react-bootstrap";
 
 function SortByDropdown(props) {
   const [sortBy, setSortBy] = useState(" ");
@@ -37,8 +38,13 @@ function SortByDropdown(props) {
 
   return (
     <div>
+      <Row>
+        <Col sm="3">
       <label htmlFor="sort-by" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Sort By:</label>
-      <select id="sort-by" value={sortBy} onChange={handleSortByChange}>
+
+        </Col>
+        <Col sm="9">
+        <select id="sort-by" value={sortBy} onChange={handleSortByChange}>
         <option value=" ">Select Sort Type</option>
         <option value="due-date">Due Date</option>
         <option value="status">Status</option>
@@ -47,8 +53,17 @@ function SortByDropdown(props) {
         <option value="date-completed">Date Completed</option>
         <option value="alphabetically">Alphabetically</option>
       </select>
+
+        </Col>
+      </Row>
+
+      <Row>
+        <Col sm="3">
+
       <label htmlFor="sort-order" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Sort order:</label>
-      <select
+        </Col>
+        <Col sm="9">
+        <select
         id="sort-order"
         value={sortOrder}
         onChange={handleSortOrderChange}
@@ -57,6 +72,10 @@ function SortByDropdown(props) {
         <option value="-1">Decreasing</option>
         <option value="1">Increasing</option>
       </select>
+        </Col>
+      </Row>
+     
+   
     </div>
   );
 }
