@@ -54,6 +54,8 @@ export default function ViewTaskModal(props) {
     return `${day}/${month}/${year}`;
   }
 
+  
+
   const updateTaskStatus = async (dataToSend) => {
     try {
       const res = await updateTaskStatusById(dataToSend);
@@ -69,7 +71,7 @@ export default function ViewTaskModal(props) {
         getTasksDataUsingProjectId();
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       showToaster(true);
       return error.message;
     }

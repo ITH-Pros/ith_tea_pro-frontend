@@ -35,7 +35,7 @@ export default function ViewUser(props) {
         setUserDetails(userDetails.data);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;

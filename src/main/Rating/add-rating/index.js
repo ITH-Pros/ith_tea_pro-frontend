@@ -166,7 +166,7 @@ export default function AddRating(props) {
           }
         } catch (error) {
           setLoading(false);
-          setToasterMessage(error?.message || "Something Went Wrong");
+          setToasterMessage(error?.error?.message || "Something Went Wrong");
           setShowToaster(true);
         }
       }
@@ -188,7 +188,7 @@ export default function AddRating(props) {
           setRatingForm({ ...ratingForm, projectList: projects.data });
         }
       } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        setToasterMessage(error?.error?.message || "Something Went Wrong");
         setShowToaster(true);
         setLoading(false);
         return error.message;
@@ -210,7 +210,7 @@ export default function AddRating(props) {
           setRatingForm({ ...ratingForm, userList: user?.data?.accessibleBy });
         }
       } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        setToasterMessage(error?.error?.message || "Something Went Wrong");
         setShowToaster(true);
         setLoading(false);
         return error.message;

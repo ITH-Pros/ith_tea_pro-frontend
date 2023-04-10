@@ -4,7 +4,8 @@ import { loginUser } from "../services/auth/api";
 import "./login.css";
 import { useAuth } from "./AuthProvider";
 import Toaster from "../components/Toaster";
-
+import ResetPassword from "./resetPassword";
+import ForgotPassword from "./forgotPassword";
 export default function Login() {
 
     const { login, accessToken } = useAuth();
@@ -15,6 +16,21 @@ export default function Login() {
       password: "",
       showPassword: false,
     });
+    const [isResetOpen, setIsResetOpen] = useState(false);
+    const [isForgotOpen, setIsForgotOpen] = useState(false);
+  
+  const handleResetClick = (e) => {
+    e.preventDefault();
+      setIsResetOpen(true);
+      setIsForgotOpen(false);
+    };
+  
+  const handleForgotClick = (e) => {
+    e.preventDefault();
+      
+      setIsResetOpen(false);
+      setIsForgotOpen(true);
+    };
 
   useEffect(() => {
     let passwordReset = localStorage.getItem("passwordReset");
@@ -82,7 +98,7 @@ export default function Login() {
               <div className="bg2"></div>
             </div>
             <div className="loginContent form">
-              <a href="https://projects.ith.tech/login">
+              <a href="https://pro.ith.tech/login">
                 <img src={require("../assests/img/logo.png")} alt="logo" />
               </a>
               <div className="text">Tea Pro</div>
@@ -125,11 +141,16 @@ export default function Login() {
                 </div>
                 <button className="loginButton" onClick={handleLogin}>
                   Log in
-                </button>
-              </form>
+                  </button>
+                  <button onClick={handleForgotClick} className="forgot-password">Forgot Password</button>
+                  <button  onClick={handleResetClick} className="reset-password">Reset Password</button>
+                </form>
+                {isResetOpen && <ResetPassword />}
+      {isForgotOpen && <ForgotPassword />}
             </div>
           </div>
-        </div>
+          </div>
+          
       )}
 
       {toaster && (

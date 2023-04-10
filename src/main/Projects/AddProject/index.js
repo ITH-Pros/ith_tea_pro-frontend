@@ -119,7 +119,7 @@ export default function AddProject(props) {
     try {
       const projects = await getAllProjects();
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects.data);
@@ -172,7 +172,7 @@ export default function AddProject(props) {
       setLoading(false);
 
       if (user.error) {
-        setToasterMessage(user?.error?.message || "Something Went Wrong");
+        setToasterMessage(user?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setUserList(user.data);
@@ -191,7 +191,7 @@ export default function AddProject(props) {
       setLoading(false);
 
       if (lead.error) {
-        setToasterMessage(lead?.error?.message || "Something Went Wrong");
+        setToasterMessage(lead?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setLeadList(lead.data);

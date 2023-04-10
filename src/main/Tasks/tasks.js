@@ -210,7 +210,7 @@ const Tasks = () => {
         getTasksDataUsingProjectId();
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
     }
@@ -236,7 +236,7 @@ const Tasks = () => {
         const res = await addSectionApi(dataToSend);
         setLoading(false);
         if (res.error) {
-          setToasterMessage(res?.error?.message || "Something Went Wrong");
+          setToasterMessage(res?.message || "Something Went Wrong");
           setShowToaster(true);
         } else {
           setToasterMessage(res?.message || "Something Went Wrong");
@@ -254,7 +254,7 @@ const Tasks = () => {
           // getProjectList();
         }
       } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        setToasterMessage(error?.error?.message || "Something Went Wrong");
         setShowToaster(true);
         setLoading(false);
         return error.message;

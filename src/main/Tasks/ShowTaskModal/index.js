@@ -542,7 +542,7 @@ function TaskModal(props) {
       };
       const taskRes = await getTaskDetailsByTaskId(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -573,7 +573,7 @@ function TaskModal(props) {
 
       const taskRes = await updateTaskDetails(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -598,7 +598,7 @@ function TaskModal(props) {
       setLoading(false);
 
       if (comment.error) {
-        setToasterMessage(comment?.error?.message || "Something Went Wrong");
+        setToasterMessage(comment?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setToasterMessage("Comment added succesfully");
@@ -622,7 +622,7 @@ function TaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {

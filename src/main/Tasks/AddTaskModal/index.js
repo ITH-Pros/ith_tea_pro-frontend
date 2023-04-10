@@ -192,7 +192,7 @@ export default function AddTaskModal(props) {
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -226,7 +226,7 @@ export default function AddTaskModal(props) {
         setLeadList(leads?.data);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;
@@ -251,7 +251,7 @@ export default function AddTaskModal(props) {
         setUserList(users?.data);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;
@@ -335,7 +335,7 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -412,7 +412,7 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -514,7 +514,7 @@ export default function AddTaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -553,7 +553,7 @@ export default function AddTaskModal(props) {
       const taskRes = await deleteTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {

@@ -347,3 +347,35 @@
   box-shadow: inset 2px 2px 5px #babecc,
     inset -5px -5px 10px #ffffff73;
 }
+
+.forgot-password,
+.reset-password {
+  margin-top: 10px;
+  border-radius: 16px;
+  border: none;
+  padding: 4px 4px;
+  margin-right: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2),
+              -4px -4px 8px rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s ease-in-out;
+}
+
+.forgot-password {
+  background-color: #8355ad;
+  color: white;
+}
+
+.reset-password {
+  background-color: #8355ad;
+  color: white;
+}
+
+.forgot-password:hover,
+.reset-password:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),
+              -2px -2px 4px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
