@@ -591,7 +591,7 @@ export default function Dashboard(props) {
                           <Col lg={4} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                Due Date:{" "}
+                                
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
@@ -1073,14 +1073,14 @@ export default function Dashboard(props) {
                 <Col lg={6} className="left-add">
                   <span>TEAM WORK</span>
 
-                  <i
+                  {/* <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i>
+                  ></i> */}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -1209,7 +1209,7 @@ export default function Dashboard(props) {
                           <Col lg={4} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                Due Date:{" "}
+                                
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
