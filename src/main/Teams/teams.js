@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import Modals from "../../components/modal";
 import { useAuth } from "../../auth/AuthProvider";
 import Toaster from "../../components/Toaster";
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'; 
 import {
   faGithub,
   faLinkedin,
