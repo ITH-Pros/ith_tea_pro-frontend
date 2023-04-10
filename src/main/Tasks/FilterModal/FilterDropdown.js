@@ -51,8 +51,8 @@ function FilterDropdown(props) {
   };
 
   const renderFilterDropdown = () => {
-    let fromDate = '';
-    let toDate = '';
+    let fromDate=new Date();
+    let toDate =new Date();
     localStorage.setItem("selectedFilter", selectedFilter);
     if (selectedFilter === "Tomorrow") {
       toDate.setDate(toDate.getDate() + 1);

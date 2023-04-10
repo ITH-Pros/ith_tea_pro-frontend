@@ -135,9 +135,3 @@
     margin-top: 10px;
 }
 
-.daterangepicker.ltr.show-calendar.opensright {
-    top: 14px !important;
-    left: auto;
-    right: 45px !important;
-    display: block;
-}

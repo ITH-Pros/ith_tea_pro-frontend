@@ -278,9 +278,10 @@ const Tasks = () => {
       if (params?.projectId) {
         data.projectId = paramsData?.projectId;
       }
-
+      
       if (localStorage.getItem("taskFilters")) {
         let filterData = JSON.parse(localStorage.getItem("taskFilters"));
+        console.log(filterData)
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds);
         }
@@ -305,10 +306,10 @@ const Tasks = () => {
         if (filterData?.sortOrder) {
           data.sortOrder = filterData?.sortOrder;
         }
-        if (filterData?.fromDate) {
+        if (filterData?.fromDate && filterData?.fromDate!==filterData?.toDate) {
           data.fromDate = filterData?.fromDate;
         }
-        if (filterData?.toDate) {
+        if (filterData?.toDate  && filterData?.fromDate!==filterData?.toDate) {
           data.toDate = filterData?.toDate;
         }
       }

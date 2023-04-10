@@ -240,6 +240,9 @@ const FilterModal = (props) => {
       setProjectIds(projectData);
       setAssignedTo(assignedToData);
     }
+    localStorage.removeItem('dueDate')
+    localStorage.removeItem('selectedFilter')
+    localStorage.removeItem('taskFilters')
     setFilterModalShow(true);
   };
 

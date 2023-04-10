@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-concat */
 /* eslint-disable react/jsx-no-target-blank */
 import React, {useState, useEffect } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Col from "react-bootstrap/Col";
@@ -74,16 +74,6 @@ export default function ViewTaskModal(props) {
       return error.message;
     }
   };
-
-  function formatDatee(dateString, options = {}) {
-    const defaultOptions = {
-      timeZone: "UTC",
-      dateStyle: "medium",
-      timeStyle: "medium",
-    };
-    const mergedOptions = { ...defaultOptions, ...options };
-    return new Date(dateString).toLocaleString("en-US", mergedOptions);
-  }
 
   const handleStatusChange = (e, taskId) => {
     const newStatus = e.target.value;
