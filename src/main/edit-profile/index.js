@@ -9,6 +9,7 @@ import {
 } from "../../services/user/api";
 import "./index.css";
 import ImageUpload from "./imageUpload";
+import { useNavigate } from "react-router-dom";
 
 function UserForm(props) {
   const { handleModalClose } = props;
@@ -31,6 +32,7 @@ function UserForm(props) {
   const [linkedin, setLinkedin] = useState("");
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
+  const navigate = useNavigate();
 
   const today = new Date();
 
@@ -133,6 +135,12 @@ function UserForm(props) {
     }
   };
 
+  const handleResetClick = (e) => {
+    // e.preventDefault();
+    navigate('/profile/reset-password')
+      
+    };
+
   function formatDate(date) {
     const d = new Date(date);
     let month = "" + (d.getMonth() + 1);
@@ -167,6 +175,8 @@ function UserForm(props) {
               Edit Profile
             </button>
           )}
+          <button  onClick={handleResetClick} className="submit-button edit">Reset Password</button>
+
         </div>
 
         <div className="form-group col-12">

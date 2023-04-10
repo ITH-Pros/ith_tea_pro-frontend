@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { resetPassword } from "../services/auth/api";
 
 function ResetPassword() {
   const [oldPassword, setOldPassword] = useState("");
@@ -8,6 +10,11 @@ function ResetPassword() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const backToLogin = () => {
+    navigate("/profile");
+  };
 
   const handleOldPasswordChange = (event) => {
     setOldPassword(event.target.value);
@@ -31,7 +38,7 @@ function ResetPassword() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const dataToSend = {
       oldPassword: oldPassword,
@@ -40,6 +47,19 @@ function ResetPassword() {
     };
       console.log(dataToSend,'---------------data to send ')
     // Make API call with dataToSend
+    try {
+      const response = await resetPassword(dataToSend);
+      if(response.error){
+        console.log(response.error,'-----------------error')
+      }
+      else{
+        navigate("/profile");
+      }
+    }
+    catch (error) {
+      console.log(error,'-----------------error')
+    }
+
   };
 
   const toggleShowOldPassword = () => {
@@ -55,6 +75,17 @@ function ResetPassword() {
   };
 
   return (
+    <div className="login-screen">
+    <div className="man-login">
+      <div className="bg-box">
+        <div className="bg1"></div>
+        <div className="bg2"></div>
+      </div>
+      <div className="loginContent form">
+        <a href="https://pro.ith.tech/login">
+          <img src={require("../assests/img/logo.png")} alt="logo" />
+        </a>
+        <div className="text">Tea Pro</div>
     <div>
       <h2>Reset Password</h2>
       <form onSubmit={handleSubmit}>
@@ -118,11 +149,17 @@ function ResetPassword() {
           <p className="error-msg">Passwords do not match</p>
         )}
       </div>
-      <button type="submit" disabled={isSubmitDisabled}>
+      <button className="loginButton" type="submit" disabled={isSubmitDisabled}>
         Submit
       </button>
+      <button onClick={backToLogin} className="loginButton" >
+               Back
+              </button>
     </form>
   </div>
+  </div>
+          </div>
+          </div>
   );
 }
 

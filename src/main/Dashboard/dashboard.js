@@ -1228,7 +1228,7 @@ export default function Dashboard(props) {
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                Completed:{" "}
+                                {/* Completed:{" "} */}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]

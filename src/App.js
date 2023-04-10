@@ -20,7 +20,8 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import Header from "./main/Header";
 import UserForm from "./main/edit-profile";
 import PasswordForm from "./setup-password";
-
+import ForgotPassword from "./auth/forgotPassword";
+import ResetPassword from "./auth/resetPassword";
 function App() {
   return (
     <ProSidebarProvider>
@@ -33,6 +34,15 @@ function App() {
             }
           />
         }
+        {
+          <Route
+            path="/forgot-password"
+            element={
+              <ForgotPassword />
+            }
+          />
+        }
+     
         <Route
           path="/set-password/:token"
           element={
@@ -107,6 +117,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+           {
+          <Route
+            path="/profile/reset-password"
+            element={
+              <ResetPassword />
+            }
+          />
+        }
 
         <Route
           path="/team"

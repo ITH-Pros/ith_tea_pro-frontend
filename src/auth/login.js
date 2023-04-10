@@ -1,11 +1,9 @@
 import React,{ useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/auth/api";
 import "./login.css";
 import { useAuth } from "./AuthProvider";
 import Toaster from "../components/Toaster";
-import ResetPassword from "./resetPassword";
-import ForgotPassword from "./forgotPassword";
 export default function Login() {
 
     const { login, accessToken } = useAuth();
@@ -16,20 +14,15 @@ export default function Login() {
       password: "",
       showPassword: false,
     });
-    const [isResetOpen, setIsResetOpen] = useState(false);
-    const [isForgotOpen, setIsForgotOpen] = useState(false);
+ const navigate = useNavigate();
+
   
-  const handleResetClick = (e) => {
-    e.preventDefault();
-      setIsResetOpen(true);
-      setIsForgotOpen(false);
-    };
   
   const handleForgotClick = (e) => {
     e.preventDefault();
-      
-      setIsResetOpen(false);
-      setIsForgotOpen(true);
+    navigate('/forgot-password')
+
+     
     };
 
   useEffect(() => {
@@ -143,10 +136,8 @@ export default function Login() {
                   Log in
                   </button>
                   <button onClick={handleForgotClick} className="forgot-password">Forgot Password</button>
-                  <button  onClick={handleResetClick} className="reset-password">Reset Password</button>
                 </form>
-                {isResetOpen && <ResetPassword />}
-      {isForgotOpen && <ForgotPassword />}
+                
             </div>
           </div>
           </div>
