@@ -356,8 +356,8 @@ export default function AddTaskModal(props) {
 
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        showToaster(true);
         setToasterMessage("Task Created Successfully");
+        showToaster(true);
         console.log(taskRes, "taskRes++++++++++++===================>>>>>>>");
         // onInit();
       }

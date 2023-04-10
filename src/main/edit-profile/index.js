@@ -121,9 +121,10 @@ function UserForm(props) {
         setToasterMessage("Profile updated successful");
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
-
         handleModalClose();
         navigate("/");
+        console.log("response", response);
+
       }
     } catch (error) {
       console.log("Error while updating user details");
