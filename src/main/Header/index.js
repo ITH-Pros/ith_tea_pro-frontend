@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +13,15 @@ import { Text } from "@nextui-org/react";
 function Header() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
-  const [profilePicture, setProfileLink] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(false);
 
   useEffect(() => {
     getUserDetails();
   }, []);
+
+  useEffect(() => {
+    setProfilePicture(localStorage.getItem('selectedProfilePicture'))
+  }, [localStorage.getItem('selectedProfilePicture')]);
 
   const redirectToDashbord = () => {
     navigate("/");
@@ -36,7 +41,7 @@ function Header() {
       } else {
         setUserName(response?.data.name);
         if (response.data.profilePicture) {
-          setProfileLink(response.data.profilePicture);
+          setProfilePicture(response.data.profilePicture);
         }
       }
     } catch (error) {
