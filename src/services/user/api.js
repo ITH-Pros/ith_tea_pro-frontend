@@ -89,6 +89,11 @@ export async function assignUserToProjectByIds(data) {
     return (axiosInstance.patch('projects/v1/assign/projects', data).then(res => res.data))
 }
 
+export async function deleteUserById(data) {
+  return (axiosInstance.patch("user/v1/delete/user", data).then((res) => res.data));
+}
+
+
 export async function deleteProjectById(data) {
   return axiosInstance
     .patch("/projects/v1/delete", data)
