@@ -822,7 +822,6 @@ export default function Dashboard(props) {
                           <Col lg={4} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                Due Date:{" "}
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
@@ -956,7 +955,6 @@ export default function Dashboard(props) {
                         <Col lg={2} className="middle">
                           {task?.status !== "COMPLETED" && (
                             <small>
-                              Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
                                 {moment(task?.dueDate?.split("T")[0])}
                               </Badge>

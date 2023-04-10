@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import UserIcon from "../Projects/ProjectCard/profileImage";
@@ -54,7 +55,7 @@ function Header() {
     <Navbar bg="light" variant="light" fixed="top">
       <Container fluid="lg" style={{ maxWidth: "1240px" }}>
         <Navbar.Brand onClick={redirectToDashbord}>
-          <Logo />
+                <img style={{height:'35px',widows:'35px'}} src={require("../../assests/img/logo.png")} alt="logo" />
           <Text b color="#8355ad" style={{cursor:"pointer"}} hideIn="xs">
             Tea Pro
           </Text>

@@ -54,6 +54,8 @@ export default function ViewTaskModal(props) {
     return `${day}/${month}/${year}`;
   }
 
+  
+
   const updateTaskStatus = async (dataToSend) => {
     try {
       const res = await updateTaskStatusById(dataToSend);
