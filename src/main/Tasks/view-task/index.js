@@ -51,7 +51,12 @@ export default function ViewTaskModal(props) {
     const day = date.getUTCDate().toString().padStart(2, "0");
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
     const year = date.getUTCFullYear();
-    return `${day}/${month}/${year}`;
+    if (day && month && year) {
+      
+      return `${day}/${month}/${year}`;
+    } else {
+      return '--';
+    }
   }
 
   
