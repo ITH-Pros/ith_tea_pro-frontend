@@ -16,11 +16,7 @@ export default function Login() {
     });
  const navigate = useNavigate();
 
-  const handleResetClick = (e) => {
-    e.preventDefault();
-    navigate('/reset-password')
-      
-    };
+  
   
   const handleForgotClick = (e) => {
     e.preventDefault();
@@ -140,7 +136,6 @@ export default function Login() {
                   Log in
                   </button>
                   <button onClick={handleForgotClick} className="forgot-password">Forgot Password</button>
-                  <button  onClick={handleResetClick} className="reset-password">Reset Password</button>
                 </form>
                 
             </div>

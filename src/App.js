@@ -42,14 +42,7 @@ function App() {
             }
           />
         }
-        {
-          <Route
-            path="/reset-password"
-            element={
-              <ResetPassword />
-            }
-          />
-        }
+     
         <Route
           path="/set-password/:token"
           element={
@@ -124,6 +117,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+           {
+          <Route
+            path="/profile/reset-password"
+            element={
+              <ResetPassword />
+            }
+          />
+        }
 
         <Route
           path="/team"
