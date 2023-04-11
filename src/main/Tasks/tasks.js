@@ -415,8 +415,8 @@ const Tasks = () => {
                 }}
                 onClick={() => {
                   setSelectedTask();
-                  setShowAddTask(true);
                   setSelectedProject();
+                  setShowAddTask(true);
                   
                 }}
               >
