@@ -14,6 +14,7 @@ function ForgotPassword() {
 
   const [showOtp, setShowOtp] = useState(false);
   const [passWordSection, setPassWordSection] = useState(false);
+  const [otpLogId, setOtpLogId] = useState("");
 
 
   const navigate = useNavigate();
@@ -49,8 +50,8 @@ function ForgotPassword() {
   const sendOtp = async (event) => {
     event.preventDefault();
     const dataToSend = {
-      // email : email,
-      otp: otp,
+      email : email,
+      // otp: otp,
     };
     // Make API call with dataToSend
     try {
@@ -75,19 +76,37 @@ function ForgotPassword() {
       otp: otp,
     };
     // Make API call with dataToSend
+    console.log(dataToSend,'---------------data to send ')
     try {
       const response = await verifyOtp(dataToSend);
       if(response.error){
-        console.log(response.error,'-----------------error')
+        console.log(response,'-----------------3error')
       }
       else{
+        console.log(response,'-----------------3success')
+        setOtpLogId(response.data.otpLogId);
         // navigate("/reset-password");
         setPassWordSection(true);
+        setShowOtp(false);
+
       }
     }
     catch (error) {
-      console.log(error,'-----------------error')
+      console.log(error,'-----------------5error')
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
   };
 
 
@@ -96,9 +115,9 @@ function ForgotPassword() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const dataToSend = {
-      newPassword: newPassword,
-      confirmPassword: confirmPassword,
-      otp: otp,
+      password: newPassword,
+      repeat: confirmPassword,
+      otpLogId: otpLogId,
     };
     // Make API call with dataToSend
 

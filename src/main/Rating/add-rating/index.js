@@ -14,13 +14,13 @@ import {
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
 
   const RatingModalBody = () => {
-    const { taskFromDashBoard , handleOnInit } = props;
+    const { taskFromDashBoard , onInit } = props;
     console.log("taskFromDashBoard", taskFromDashBoard);
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
@@ -161,12 +161,14 @@ export default function AddRating(props) {
           } else {
             setToasterMessage("Rating Added Succesfully");
             setShowToaster(true);
-            handleOnInit();
+            onInit();
+            if(!taskFromDashBoard){
             navigate("/rating");
+            }
           }
         } catch (error) {
           setLoading(false);
-          setToasterMessage(error?.error?.message || "Something Went Wrong");
+          setToasterMessage(error?.message || "Something Went Wrong");
           setShowToaster(true);
         }
       }
@@ -395,7 +397,9 @@ export default function AddRating(props) {
           <RatingModalBody />
         </Modal.Body>
       </Modal>
-      {!modalShow && <span onClick={() => setModalShow(true)}>Add Rating</span>}
+      {!modalShow &&  <Button variant="light"
+                              size="sm"
+                              className="addRatingBtn" onClick={() => setModalShow(true)}>Add Rating</Button>}
     </>
   );
 }

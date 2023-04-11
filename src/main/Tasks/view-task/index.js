@@ -141,6 +141,11 @@ export default function ViewTaskModal(props) {
   };
 
   const handleAddRating = (task) => {
+    // Reset Rating
+    // setRating('');
+
+    setErrorRating(false);
+
     setSelectedTaskIdForRating(task._id);
     setIsRatingFormVisible(true);
   }

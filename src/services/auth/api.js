@@ -17,5 +17,5 @@ export function verifyOtp(data) {
 }
 
 export function changePassword(data) {
-  return axiosInstance.patch("auth/v1/user/forgot/change/password", data).then((res) => res.data);
+  return axiosInstance.post("auth/v1/user/forgot/change/password", data).then((res) => res.data);
 }
