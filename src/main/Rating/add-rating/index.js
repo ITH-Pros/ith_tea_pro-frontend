@@ -161,10 +161,14 @@ export default function AddRating(props) {
           } else {
             setToasterMessage("Rating Added Succesfully");
             setShowToaster(true);
+            if(taskFromDashBoard){
             onInit();
+            }
             if(!taskFromDashBoard){
             navigate("/rating");
             }
+            setModalShow(false);
+            
           }
         } catch (error) {
           setLoading(false);
