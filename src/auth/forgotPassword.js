@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword, forgotPassword, verifyOtp } from "../services/auth/api";
+import Toaster from "../components/Toaster";
+import Loader from '../components/Loader/index'
 
 function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -10,7 +12,9 @@ function ForgotPassword() {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [showOtp, setShowOtp] = useState(false);
   const [passWordSection, setPassWordSection] = useState(false);
@@ -48,28 +52,39 @@ function ForgotPassword() {
 
 
   const sendOtp = async (event) => {
+    setLoading(true);
     event.preventDefault();
     const dataToSend = {
       email : email,
-      // otp: otp,
     };
-    // Make API call with dataToSend
     try {
       const response = await forgotPassword(dataToSend);
-      if(response.error){
+    setLoading(false);
+
+      if (response.error) {
+        setToasterMessage(response?.message);
+        showToaster(true);
         console.log(response.error,'-----------------error')
       }
-      else{
+      else {
+        setToasterMessage(response?.message);
+        showToaster(true);
         // navigate("/reset-password");
         setShowOtp(true);
       }
     }
     catch (error) {
+    setLoading(false);
+
+      setToasterMessage(error?.error?.message);
+      showToaster(true);
       console.log(error,'-----------------error')
     }
   };
 
   const verifyEmailOrOTP = async (event) => {
+    setLoading(true);
+
     event.preventDefault();
     const dataToSend = {
       email : email,
@@ -79,10 +94,16 @@ function ForgotPassword() {
     console.log(dataToSend,'---------------data to send ')
     try {
       const response = await verifyOtp(dataToSend);
-      if(response.error){
+    setLoading(false);
+
+      if (response.error) {
+        setToasterMessage(response?.message);
+        showToaster(true);
         console.log(response,'-----------------3error')
       }
-      else{
+      else {
+        setToasterMessage(response?.message);
+        showToaster(true);
         console.log(response,'-----------------3success')
         setOtpLogId(response.data.otpLogId);
         // navigate("/reset-password");
@@ -92,27 +113,17 @@ function ForgotPassword() {
       }
     }
     catch (error) {
+    setLoading(false);
+
       console.log(error,'-----------------5error')
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
   };
 
 
 
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     const dataToSend = {
       password: newPassword,
@@ -123,14 +134,28 @@ function ForgotPassword() {
 
     try {
       const response = await changePassword(dataToSend);
+      setLoading(false);
       if(response.error){
+        setToasterMessage(response?.message);
+        showToaster(true);
         console.log(response.error,'-----------------error')
       }
       else{
+        setToasterMessage(response?.message);
+        showToaster(true);
+        setTimeout(() => {
+          localStorage.clear();
         navigate("/login");
+
+          window.location.reload();
+        },1000)
       }
     }
     catch (error) {
+      setLoading(false);
+
+      setToasterMessage(error?.error?.message);
+        showToaster(true);
       console.log(error,'-----------------error')
     }
   };
@@ -271,6 +296,14 @@ function ForgotPassword() {
           </div>
         </div>
       </div>
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />)}
+      {loading ? <Loader /> : null}
+      
     </div>
   );
 }

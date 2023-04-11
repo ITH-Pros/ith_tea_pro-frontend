@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resetPassword } from "../services/auth/api";
+import Toaster from "../components/Toaster";
+import Loader from '../components/Loader/index'
 
 function ResetPassword() {
   const [oldPassword, setOldPassword] = useState("");
@@ -10,6 +12,10 @@ function ResetPassword() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [toaster, showToaster] = useState(false);
+  const setShowToaster = (param) => showToaster(param);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const backToLogin = () => {
@@ -39,6 +45,8 @@ function ResetPassword() {
   };
 
   const handleSubmit = async (event) => {
+    setLoading(true);
+
     event.preventDefault();
     const dataToSend = {
       oldPassword: oldPassword,
@@ -49,15 +57,33 @@ function ResetPassword() {
     // Make API call with dataToSend
     try {
       const response = await resetPassword(dataToSend);
-      if(response.error){
-        console.log(response.error,'-----------------error')
+      setLoading(false);
+
+      if (response.error) {
+        setToasterMessage(response?.message);
+        setShowToaster(true);
+        console.log(response?.message||'response.error')
       }
-      else{
-        navigate("/profile");
+      else {
+        console.log(response?.message||'else')
+
+        setToasterMessage(response?.message);
+        setShowToaster(true);
+        setTimeout(() => {
+          localStorage.clear();
+        navigate("/login");
+
+          window.location.reload();
+        },1000)
+        // navigate("/profile");
       }
     }
     catch (error) {
-      console.log(error,'-----------------error')
+      setLoading(false);
+      setToasterMessage(error?.error?.message||'Something Went Wrong');
+      setShowToaster(true);
+      console.log(error?.error?.message||'error')
+
     }
 
   };
@@ -158,8 +184,17 @@ function ResetPassword() {
     </form>
   </div>
   </div>
-          </div>
-          </div>
+      </div>
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />)}
+      {loading ? <Loader /> : null}
+      
+    </div>
+    
   );
 }
 
