@@ -431,7 +431,7 @@ export default function Dashboard(props) {
             getNewTasks={getNewTasks}
             showAddTask={showAddTask}
             closeModal={closeModal}
-            // handleOnInit={onInit}
+            // onInit={() => onInit()}
           />
           <button
             className="expend"
@@ -1095,7 +1095,11 @@ export default function Dashboard(props) {
                               size="sm"
                               className="addRatingBtn"
                             >
-                              <AddRating taskFromDashBoard={task} />{" "}
+                              <AddRating 
+                              
+                              taskFromDashBoard={task}
+                              onInit={onInit}
+                               />{" "}
                             </Button>
                           )}
                         </Col>
