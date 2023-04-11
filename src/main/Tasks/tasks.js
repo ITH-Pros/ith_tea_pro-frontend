@@ -56,7 +56,9 @@ const Tasks = () => {
   const [archiveSectionModal, setArchiveSectionModal] = useState(false);
   const { userDetails } = useAuth();
   const params = useParams();
-
+  useEffect(() => {
+    window.history.replaceState({}, '', '/task');
+  }, []);
   useEffect(() => {
     getTasksDataUsingProjectId();
     let paramsData;
