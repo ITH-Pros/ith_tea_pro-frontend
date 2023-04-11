@@ -1049,6 +1049,7 @@ export default function Dashboard(props) {
                                     </OverlayTrigger>
                                   ))}
                                 </>
+                      
 
                                 <>
                                   {["top"].map((placement) => (
@@ -1090,17 +1091,10 @@ export default function Dashboard(props) {
                           style={{ justifyContent: "end" }}
                         >
                           {userDetails?.role !== "CONTRIBUTOR" && (
-                            <Button
-                              variant="light"
-                              size="sm"
-                              className="addRatingBtn"
-                            >
-                              <AddRating 
-                              
+                            <AddRating 
                               taskFromDashBoard={task}
                               onInit={onInit}
-                               />{" "}
-                            </Button>
+                            />
                           )}
                         </Col>
                       </Row>

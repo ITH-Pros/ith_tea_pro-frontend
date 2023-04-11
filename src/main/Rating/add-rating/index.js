@@ -14,7 +14,7 @@ import {
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
@@ -397,7 +397,9 @@ export default function AddRating(props) {
           <RatingModalBody />
         </Modal.Body>
       </Modal>
-      {!modalShow && <span onClick={() => setModalShow(true)}>Add Rating</span>}
+      {!modalShow &&  <Button variant="light"
+                              size="sm"
+                              className="addRatingBtn" onClick={() => setModalShow(true)}>Add Rating</Button>}
     </>
   );
 }
