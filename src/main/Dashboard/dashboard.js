@@ -1291,6 +1291,7 @@ export default function Dashboard(props) {
                                             {task?.assignedTo?.name
                                               .split(" ")[0] +' '} 
                                             {task?.assignedTo?.name
+                                              .split(" ")[1] && task?.assignedTo?.name
                                               .split(" ")[1]
                                               ?.charAt(0)+'.'}
                                           </span>

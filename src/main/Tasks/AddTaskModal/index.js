@@ -661,6 +661,9 @@ export default function AddTaskModal(props) {
                     onChange={onLeadChange}
                     value={taskFormValue.leads}
                     name="leadId"
+                    disabled={
+                      selectedTask && taskFormValue?.status === "COMPLETED"
+                    }
                   >
                     <option value="">Select Lead</option>
                     {leadLists?.map((project, index) => (

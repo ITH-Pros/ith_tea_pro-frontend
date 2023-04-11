@@ -259,7 +259,7 @@ export default function ViewTaskModal(props) {
                   <p>{task?.section?.name} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
-                  <Form.Label>Lead Type</Form.Label>
+                  <Form.Label>Lead</Form.Label>
                   {task?.lead?.map((item, index) => {
                     return <p key={index}>{item?.name} </p>;
                   })}
