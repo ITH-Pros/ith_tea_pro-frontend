@@ -296,7 +296,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {formatDate(task?.dueDate||'--')}{" "}
+                    {formatDate(task?.dueDate)||'--'}{" "}
                   </p>
                 </Form.Group>
 
@@ -322,7 +322,7 @@ export default function ViewTaskModal(props) {
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
-                    <p>{formatDate(task?.completedDate)} </p>
+                    <p>{formatDate(task?.completedDate)||'--'} </p>
                   </Form.Group>
                 )}
               </Row>

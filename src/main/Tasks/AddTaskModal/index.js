@@ -193,8 +193,8 @@ export default function AddTaskModal(props) {
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        projects?.message&&setToasterMessage(projects?.message );
+        projects?.message&&setShowToaster(true);
         return;
       } else {
         setProjectList(projects.data);
@@ -206,8 +206,8 @@ export default function AddTaskModal(props) {
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+     error?.error?.message&& setToasterMessage(error?.error?.message);
+     error?.error?.message&& setShowToaster(true);
       return error.message;
     }
   };
@@ -221,14 +221,14 @@ export default function AddTaskModal(props) {
       const leads = await getLeadsUsingProjectId(dataToSend);
       setLoading(false);
       if (leads.error) {
-        setToasterMessage(leads?.message || "Something Went Wrong");
-        setShowToaster(true);
+        leads?.message&& setToasterMessage(leads?.message );
+        leads?.message&&setShowToaster(true);
       } else {
         setLeadList(leads?.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      error?.error?.message&&setToasterMessage(error?.error?.message);
+      error?.error?.message&&setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -246,14 +246,14 @@ export default function AddTaskModal(props) {
       const users = await getUserUsingProjectId(dataToSend);
       setLoading(false);
       if (users.error) {
-        setToasterMessage(users?.message || "Something Went Wrong");
-        setShowToaster(true);
+        users?.message &&setToasterMessage(users?.message );
+        users?.message && setShowToaster(true);
       } else {
         setUserList(users?.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      error?.error?.message &&setToasterMessage(error?.error?.message );
+      error?.error?.message &&setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -336,8 +336,8 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        taskRes?.message&& setToasterMessage(taskRes?.message );
+        taskRes?.message&&setShowToaster(true);
         return;
       } else {
         setTaskFormValue({
@@ -357,14 +357,14 @@ export default function AddTaskModal(props) {
 
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        setToasterMessage("Task Created Successfully");
+        // setToasterMessage("Task Created Successfully");
         showToaster(true);
         // onInit();
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      error?.error?.message &&  setToasterMessage(error?.error?.message );
+      error?.error?.message && setShowToaster(true);
       return error.message;
     }
   };
@@ -412,8 +412,8 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        taskRes?.message&&setToasterMessage(taskRes?.message);
+        taskRes?.message&&setShowToaster(true);
         return;
       } else {
         resetFormValue();
@@ -421,14 +421,13 @@ export default function AddTaskModal(props) {
         setSelectedLeads("");
         setCategoryList([]);
 
-        setShowAddTaskModal(true);
         getNewTasks(projectId);
         showToaster(true);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      error?.error?.message&&setToasterMessage(error?.error?.message );
+      error?.error?.message&&setShowToaster(true);
       return error.message;
     }
   };
@@ -513,8 +512,8 @@ export default function AddTaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        taskRes?.message&&setToasterMessage(taskRes?.message);
+        taskRes?.message&& setShowToaster(true);
         return;
       } else {
         setSelectedLeads("");
@@ -536,8 +535,8 @@ export default function AddTaskModal(props) {
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      error?.error?.message&&setToasterMessage(error?.error?.message);
+      error?.error?.message&& setShowToaster(true);
       return error.message;
     }
   };
@@ -552,8 +551,8 @@ export default function AddTaskModal(props) {
       const taskRes = await deleteTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        taskRes?.message&& setToasterMessage(taskRes?.message );
+        taskRes?.message&&setShowToaster(true);
         return;
       } else {
         setSelectedLeads("");
@@ -576,8 +575,8 @@ export default function AddTaskModal(props) {
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      error?.error?.message &&setToasterMessage(error?.error?.message );
+      error?.error?.message &&setShowToaster(true);
       return error.message;
     }
   };
