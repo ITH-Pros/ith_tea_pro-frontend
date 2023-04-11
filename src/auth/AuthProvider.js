@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [profileModalShow, setProfileModalShow] = useLocalStorage("profileModalShow",false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
+  
   const setShowToaster = (param) => showToaster(param);
   const navigate = useNavigate();
 

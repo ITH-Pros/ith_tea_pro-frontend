@@ -452,7 +452,7 @@ export default function Dashboard(props) {
             getNewTasks={getNewTasks}
             showAddTask={showAddTask}
             closeModal={closeModal}
-            // handleOnInit={onInit}
+            // onInit={() => onInit()}
           />
           <button
             className="expend"
@@ -502,8 +502,12 @@ export default function Dashboard(props) {
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
-                              userDetails.role === "SUPER_ADMIN" ||
-                              userDetails.role === "ADMIN") && (
+                        (userDetails.role === "LEAD" &&
+                          (userDetails.id === task?.assignedTo?._id ||
+                            task?.lead?.includes(userDetails.id) ||
+                            userDetails.id === task?.createdBy?._id)) ||
+                        userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") && (
                               <Dropdown>
                                 <Dropdown.Toggle
                                   variant="success"
@@ -658,6 +662,7 @@ export default function Dashboard(props) {
                                             {task?.assignedTo?.name
                                               .split(" ")[0] +' '} 
                                             {task?.assignedTo?.name
+                                              .split(" ")[1]&&task?.assignedTo?.name
                                               .split(" ")[1]
                                               ?.charAt(0)+'.'}
                                           </span>
@@ -1071,6 +1076,7 @@ export default function Dashboard(props) {
                                     </OverlayTrigger>
                                   ))}
                                 </>
+                      
 
                                 <>
                                   {["top"].map((placement) => (
@@ -1112,13 +1118,10 @@ export default function Dashboard(props) {
                           style={{ justifyContent: "end" }}
                         >
                           {userDetails?.role !== "CONTRIBUTOR" && (
-                            <Button
-                              variant="light"
-                              size="sm"
-                              className="addRatingBtn"
-                            >
-                              <AddRating taskFromDashBoard={task} />{" "}
-                            </Button>
+                            <AddRating 
+                              taskFromDashBoard={task}
+                              onInit={onInit}
+                            />
                           )}
                         </Col>
                       </Row>
@@ -1167,8 +1170,12 @@ export default function Dashboard(props) {
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
-                              userDetails.role === "SUPER_ADMIN" ||
-                              userDetails.role === "ADMIN") && (
+                        (userDetails.role === "LEAD" &&
+                          (userDetails.id === task?.assignedTo?._id ||
+                            task?.lead?.includes(userDetails.id) ||
+                            userDetails.id === task?.createdBy?._id)) ||
+                        userDetails.role === "SUPER_ADMIN" ||
+                        userDetails.role === "ADMIN") && (
                               <Dropdown>
                                 <Dropdown.Toggle
                                   variant="success"
@@ -1320,6 +1327,7 @@ export default function Dashboard(props) {
                                             {task?.assignedTo?.name
                                               .split(" ")[0] +' '} 
                                             {task?.assignedTo?.name
+                                              .split(" ")[1] && task?.assignedTo?.name
                                               .split(" ")[1]
                                               ?.charAt(0)+'.'}
                                           </small>
@@ -1413,6 +1421,7 @@ export default function Dashboard(props) {
         showViewTask={showViewTask}
         closeViewTaskModal={closeViewTaskModal}
         selectedTaskId={selectedTaskId}
+        onInit={onInit}
       />
 
       <Modal

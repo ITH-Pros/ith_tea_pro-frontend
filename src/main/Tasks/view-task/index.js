@@ -22,7 +22,7 @@ import "./index.css";
 import History from "./history";
 export default function ViewTaskModal(props) {
 
-  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
+  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId , onInit } = props;
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
@@ -51,7 +51,12 @@ export default function ViewTaskModal(props) {
     const day = date.getUTCDate().toString().padStart(2, "0");
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
     const year = date.getUTCFullYear();
-    return `${day}/${month}/${year}`;
+    if (day && month && year) {
+      
+      return `${day}/${month}/${year}`;
+    } else {
+      return '--';
+    }
   }
 
   
@@ -141,6 +146,11 @@ export default function ViewTaskModal(props) {
   };
 
   const handleAddRating = (task) => {
+    // Reset Rating
+    // setRating('');
+
+    setErrorRating(false);
+
     setSelectedTaskIdForRating(task._id);
     setIsRatingFormVisible(true);
   }
@@ -162,6 +172,7 @@ export default function ViewTaskModal(props) {
           showToaster(true);
           setIsRatingFormVisible(false);
           getTaskDetailsById(selectedTaskIdForRating);
+          onInit()
         }
       } catch (error) {
         setLoading(false);
@@ -262,7 +273,7 @@ export default function ViewTaskModal(props) {
                   <p>{task?.section?.name} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
-                  <Form.Label>Lead Type</Form.Label>
+                  <Form.Label>Lead</Form.Label>
                   {task?.lead?.map((item, index) => {
                     return <p key={index}>{item?.name} </p>;
                   })}
@@ -293,7 +304,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {formatDate(task?.dueDate)}{" "}
+                    {formatDate(task?.dueDate)||'--'}{" "}
                   </p>
                 </Form.Group>
 
@@ -319,7 +330,7 @@ export default function ViewTaskModal(props) {
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
-                    <p>{formatDate(task?.completedDate)} </p>
+                    <p>{formatDate(task?.completedDate)||'--'} </p>
                   </Form.Group>
                 )}
               </Row>

@@ -112,6 +112,12 @@ export async function addNewProject(data) {
     .then((res) => res.data);
 }
 
+export async function resendActivationLinkApi(data) {
+  return axiosInstance
+    .post("auth/v1/resend/password/setup", data)
+    .then((res) => res.data);
+}
+
 export async function updateProjectForm(data) {
   return axiosInstance.patch("/projects/v1/edit", data).then((res) => res.data);
 }
@@ -249,6 +255,13 @@ export async function addSectionApi(data) {
 export async function getProjectById(data) {
   return axiosInstance
     .get("projects/v1/specific", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+export async function getProjectByProjectId(data) {
+  return axiosInstance
+    .get("projects/v1/project/users/for/rating", {
       params: data,
     })
     .then((res) => res.data);

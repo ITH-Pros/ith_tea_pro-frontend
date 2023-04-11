@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useEffect, useState } from "react";
@@ -5,7 +6,7 @@ import {
   getAllUsers,
   getAllProjects,
   getUserAssignedProjects,
-  assignUserToProject,
+  resendActivationLinkApi,
   getUserAnalytics,
   assignUserToProjectByIds,
   deleteUserById,
@@ -305,6 +306,8 @@ const GetModalBody = () => {
       getAndSetAllUsers(dataToSave);
     };
 
+ 
+
     const onChangeRowsPerPage = (e) => {
       let dataToSave = {
         ...pageDetails,
@@ -329,7 +332,7 @@ const GetModalBody = () => {
       setPageDetails(dataToSave);
       getAndSetAllUsers(dataToSave);
     };
-
+  
     return (
       <div className="pagination ">
         <i
@@ -370,6 +373,29 @@ const GetModalBody = () => {
       </div>
     );
   };
+  const resendActivationLink = async(userId) => {
+    setLoading(true); 
+    try {
+      let dataToSend = {
+        userId:userId ,
+      };
+      const resendLink = await resendActivationLinkApi(dataToSend);
+      setLoading(false);
+      if (resendLink.error) {
+        setToasterMessage(resendLink?.message || "Something Went Wrong");
+        setShowToaster(true);
+        return;
+      } else {
+        setToasterMessage(resendLink?.message);
+        setShowToaster(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  }
 
   return (
     <>
@@ -454,18 +480,9 @@ const GetModalBody = () => {
             </div>
           </button>
         )}
-
-                  
-
-
-
-
-
-
-
-
                   <div className="content">
                     <>
+                      {!user?.credentials&&<img onClick={()=>resendActivationLink(user?._id)} style={{ width: '36px', height: '36px', position: 'relative', bottom: '23px', left: '112px', cursor: 'pointer' }} src={require("../../assests/img/resend-icon.jpg")} alt='resend' title="Resend Password Setup Link" ></img>}
                       {!user?.profilePicture && (
                         <UserIcon key={index} firstName={user.name} />
                       )}

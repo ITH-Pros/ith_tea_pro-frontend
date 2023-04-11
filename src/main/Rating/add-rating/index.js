@@ -8,19 +8,19 @@ import "../rating.css";
 import {
   addRatingOnTask,
   getAllAssignedProject,
-  getProjectById,
+  getProjectByProjectId,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
 
   const RatingModalBody = () => {
-    const { taskFromDashBoard , handleOnInit } = props;
+    const { taskFromDashBoard , onInit } = props;
     console.log("taskFromDashBoard", taskFromDashBoard);
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
@@ -161,12 +161,18 @@ export default function AddRating(props) {
           } else {
             setToasterMessage("Rating Added Succesfully");
             setShowToaster(true);
-            handleOnInit();
+            if(taskFromDashBoard){
+            onInit();
+            }
+            if(!taskFromDashBoard){
             navigate("/rating");
+            }
+            setModalShow(false);
+            
           }
         } catch (error) {
           setLoading(false);
-          setToasterMessage(error?.error?.message || "Something Went Wrong");
+          setToasterMessage(error?.message || "Something Went Wrong");
           setShowToaster(true);
         }
       }
@@ -201,13 +207,13 @@ export default function AddRating(props) {
       };
       setLoading(true);
       try {
-        const user = await getProjectById(dataToSend);
+        const user = await getProjectByProjectId(dataToSend);
         setLoading(false);
         if (user.error) {
           setToasterMessage(user?.message || "Something Went Wrong");
           setShowToaster(true);
         } else {
-          setRatingForm({ ...ratingForm, userList: user?.data?.accessibleBy });
+          setRatingForm({ ...ratingForm, userList: user?.data });
         }
       } catch (error) {
         setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -395,7 +401,9 @@ export default function AddRating(props) {
           <RatingModalBody />
         </Modal.Body>
       </Modal>
-      {!modalShow && <span onClick={() => setModalShow(true)}>Add Rating</span>}
+      {!modalShow &&  <Button variant="light"
+                              size="sm"
+                              className="addRatingBtn" onClick={() => setModalShow(true)}>Add Rating</Button>}
     </>
   );
 }
