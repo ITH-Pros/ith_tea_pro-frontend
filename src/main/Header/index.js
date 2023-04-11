@@ -69,8 +69,7 @@ function Header() {
                   <div  className="user-pic">
                     <img
                       style={{
-                        width: "30px",
-                        height: "30px",
+                        
                         borderRadius: "50%",
                       }}
                       src={`${profilePicture}`}

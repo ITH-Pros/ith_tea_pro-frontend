@@ -299,9 +299,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads ||
-      !taskFormValue.assignedTo ||
-      !taskFormValue.dueDate 
+      !taskFormValue.leads 
     ) {
       return;
     }
@@ -375,9 +373,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads ||
-      !taskFormValue.assignedTo ||
-      !taskFormValue.dueDate 
+      !taskFormValue.leads
     ) {
       return;
     }
@@ -473,9 +469,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads ||
-      !taskFormValue.assignedTo ||
-      !taskFormValue.dueDate 
+      !taskFormValue.leads 
     ) {
       return;
     }
@@ -684,7 +678,7 @@ export default function AddTaskModal(props) {
                   <Form.Label>Task Title</Form.Label>
                   <Form.Control
                     required
-                    size="lg"
+                   
                     type="text"
                     placeholder="Title"
                     value={taskFormValue.title}
@@ -719,7 +713,6 @@ export default function AddTaskModal(props) {
                 <Form.Group as={Col} md="3">
                   <Form.Label>Assigned To</Form.Label>
                   <Form.Control
-                  required
                     as="select"
                     type="select"
                     name="assignedTo"
@@ -733,15 +726,11 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                  Assigned To is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <Form.Control
-                  required
                     type="date"
                     min={new Date().toISOString().split("T")[0]}
                     placeholder="Due date"
@@ -752,10 +741,6 @@ export default function AddTaskModal(props) {
                     value={taskFormValue.dueDate}
                     onChange={updateTaskFormValue}
                   />
-                       <Form.Control.Feedback type="invalid">
-                       Due Date To is required !!
-                  </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">

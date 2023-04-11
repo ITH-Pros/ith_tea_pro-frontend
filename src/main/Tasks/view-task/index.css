@@ -188,3 +188,11 @@ p {
 
   width: 800px;
 } */
+
+.ratingForm{      width: 220px;
+  position: absolute;
+  right: 60px;
+  top: 20px;}
+  .ratingForm input{ width: 50px; margin-bottom: 5px; float: right; display: block;  }
+  .ratingForm button{  float: right;
+    clear: both;}

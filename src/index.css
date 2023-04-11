@@ -28,7 +28,7 @@ code {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: blue rgb(180, 54, 238);
+  scrollbar-color: #fff rgb(180, 54, 238);
 
 }
 
@@ -37,13 +37,13 @@ code {
 }
 
 *::-webkit-scrollbar-track {
-  background: rgb(188, 126, 247);
+  background: #fff;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: blue;
+  background-color: rgb(188, 126, 247);
   border-radius: 20px;
-  border: 3px solid orange;
+ 
 }
 
 .dashboard_camp {

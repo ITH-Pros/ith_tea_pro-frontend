@@ -897,9 +897,9 @@ const Tasks = () => {
           <Modal.Header closeButton>
             <Modal.Title>Delete Section</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this section</Modal.Body>
-          <Modal.Footer
-            style={{ alignItems: "center", justifyContent: "center" }}
+          <Modal.Body className="body_ui">Are you sure you want to delete this section</Modal.Body>
+          <Modal.Footer className="footer_ui"
+            style={{ alignItems: "center", justifyContent: "center", position:'inherit', width:'auto'  }}
           >
             <Button
               variant="secondary"

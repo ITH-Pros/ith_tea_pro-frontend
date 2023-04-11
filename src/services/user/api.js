@@ -259,6 +259,13 @@ export async function getProjectById(data) {
     })
     .then((res) => res.data);
 }
+export async function getProjectByProjectId(data) {
+  return axiosInstance
+    .get("projects/v1/project/users/for/rating", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
 export async function getLeadsUsingProjectId(data) {
   return axiosInstance
     .get("projects/v1/project/leads", {

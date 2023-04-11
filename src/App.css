@@ -120,7 +120,7 @@ textarea.form-control {
   float: right;
   position: absolute;
   right: 10px;
-  width: 137px;
+  width: 120px;
   display: flex;
 }
 
@@ -174,7 +174,7 @@ span.rbc-toolbar-label {
 }
 
 .confirmation-popup .modal-body {
-  height: 28vh !important;
+  height: 28vh ;
   overflow: hidden !important;
 }
 

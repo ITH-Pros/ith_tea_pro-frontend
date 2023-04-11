@@ -31,8 +31,7 @@ const customStyles = {
   control: (provided) => ({
     ...provided,
     boxShadow: "none",
-    maxHeight: "40px",
-    overflowY: "auto",
+ 
     borderRadius: "5px",
     color: "#767474",
     minHeight: "40px",
@@ -51,6 +50,14 @@ const customStyles = {
     padding: "5px",
     zIndex: "2",
   }),
+  valueContainer: (provided) =>(
+    {
+      ...provided,
+width:'200px',
+maxHeight: "40px",
+overflowY: "auto",
+    }
+  ),
 };
 
 

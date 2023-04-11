@@ -11,6 +11,7 @@ import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import ViewRatings from "./View-Rating";
 import { useLocation } from "react-router-dom";
+import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
 
 
 export default function Rating(props) {
@@ -40,7 +41,7 @@ export default function Rating(props) {
         <>
           <div className="rightDashboard" style={{marginTop:'7%'}}>
           <h1 className="h1-text">
-          <i className="fa fa-database" aria-hidden="true"></i>Rating  
+          <i ><FaRegLaughWink/></i>Rating  
         </h1>
             <div className="main-rating-contianer">
                 {renderCurrentView()}

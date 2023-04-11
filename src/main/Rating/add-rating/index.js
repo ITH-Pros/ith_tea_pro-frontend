@@ -8,7 +8,7 @@ import "../rating.css";
 import {
   addRatingOnTask,
   getAllAssignedProject,
-  getProjectById,
+  getProjectByProjectId,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
@@ -207,13 +207,13 @@ export default function AddRating(props) {
       };
       setLoading(true);
       try {
-        const user = await getProjectById(dataToSend);
+        const user = await getProjectByProjectId(dataToSend);
         setLoading(false);
         if (user.error) {
           setToasterMessage(user?.message || "Something Went Wrong");
           setShowToaster(true);
         } else {
-          setRatingForm({ ...ratingForm, userList: user?.data?.accessibleBy });
+          setRatingForm({ ...ratingForm, userList: user?.data });
         }
       } catch (error) {
         setToasterMessage(error?.error?.message || "Something Went Wrong");

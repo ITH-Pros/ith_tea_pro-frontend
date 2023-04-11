@@ -14,7 +14,7 @@ import { useAuth } from "../../../auth/AuthProvider";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
 import { Modal, Button } from "react-bootstrap";
-
+import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
 export default function AllProject() {
   const { userDetails } = useAuth();
   const [toaster, showToaster] = useState(false);
@@ -191,7 +191,7 @@ export default function AllProject() {
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <h1 className="h1-text">
-          <i className="fa fa-database" aria-hidden="true"></i> Projects
+          <i><FaGem/></i>  Projects
           <div className="projects-button">
           {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && !isArchive && (
           

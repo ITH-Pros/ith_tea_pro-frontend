@@ -474,6 +474,6 @@ button.accordion-button {
 }
 
 
-
+.body_ui{ position: inherit;     height: 21vh !important;}
 
 
