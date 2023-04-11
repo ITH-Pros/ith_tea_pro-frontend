@@ -498,7 +498,8 @@
 
 ::-webkit-scrollbar {
   width: 2px;
-  height: 2px;
+  height: 5px;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar-button {
@@ -559,6 +560,7 @@
 
 .dropdown-content a:hover {
   background-color: #ddd;
+  border-radius: 10px ;
 }
 
 .dropdown:hover .dropdown-content {

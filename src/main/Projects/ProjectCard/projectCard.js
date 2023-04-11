@@ -400,7 +400,8 @@ const ProjectCard = ({
                         />
                       )}
                       {selectedRole === "LEAD" && (
-                        <Select
+                        <Select 
+                        placeholder="Select Member"
                           options={leadOptions}
                           value={leadOptions.filter((option) =>
                             selectedUnassignedUsers.includes(option.value)
@@ -412,13 +413,13 @@ const ProjectCard = ({
                     </div>
                     {selectedUnassignedUsers && (
                       <div className="assign-name">
-                        <button onClick={assignTeamUsers}>Assign</button>
+                        <Button variant="success"  size="sm"  onClick={assignTeamUsers}>Assign</Button>
                       </div>
                     )}
                   </>
                 )}
               </div>
-              <Row>
+              <Row style={{marginTop:'15px'}}>
                 {users.map((user, index) => {
                   return (
                     <Col key={index} sm={12}>

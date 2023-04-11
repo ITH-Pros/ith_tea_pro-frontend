@@ -6,10 +6,10 @@ td {
     color: black;
     margin: 0;
     padding: 0;
-    border-radius: 10px;
+    border-radius: 2px;
     text-align: center;
     width: 100%;
-    box-shadow: -5px -5px 9px rgb(204 42 42 / 0%), 4px 3px 7px #0000005e;
+    box-shadow: 0px 0px 4px #cccccc7a;
     font-size: 12px;
     font-weight: 600;
 }
@@ -71,7 +71,7 @@ table> :not(caption)>*>* {
 .input_dashboard {
     -webkit-backdrop-filter: blur(3.7px);
     backdrop-filter: blur(3.7px);
-    border: 1px solid rgb(126 103 217 / 99%);
+    border: 1px solid rgba(210, 210, 210, 0.99);
 }
 
 thead,
@@ -329,7 +329,7 @@ button.add-rating-button {
 
 #card-task h5 {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     color: #6590ad;
 }
 
@@ -545,7 +545,7 @@ button.add-rating-button {
 .ratingTable td,
 .ratingTable th {
     border-bottom: 0;
-    min-width: 54px;
+    min-width: 70px;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;

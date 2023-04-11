@@ -681,7 +681,7 @@ export default function AddTaskModal(props) {
                   <Form.Label>Task Title</Form.Label>
                   <Form.Control
                     required
-                    size="lg"
+                   
                     type="text"
                     placeholder="Title"
                     value={taskFormValue.title}

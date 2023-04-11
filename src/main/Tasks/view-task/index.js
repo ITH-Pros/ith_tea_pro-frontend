@@ -211,6 +211,7 @@ export default function ViewTaskModal(props) {
                           <input 
                           required
                             type="number"
+                            style={{display:'block'}}
                             min="0"
                             max="6"
                             placeholder="0 - 6"
@@ -218,9 +219,9 @@ export default function ViewTaskModal(props) {
   
                           />
                           {errorRating && (
-                            <span className="error">Rating should be between 0 to 6</span>
+                            <p className="error text-end" style={{clear:'both'}}>Rating should be between 0 to 6</p>
                           )}
-                        
+                        <div style={{clear:'both', display:'flex', justifyContent:'end'}}>
                           <Button
                             variant="light"
                             size="sm"
@@ -243,7 +244,9 @@ export default function ViewTaskModal(props) {
                           >
                             Cancel
                           </Button>
+                         
                       }
+                       </div>
                           </div>
                       )}
                     </div>
@@ -276,7 +279,7 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group className="desc" as={Col} md="12">
                   <Form.Label>Task Description</Form.Label>
-                  <p
+                  <p className="text-muted"
                     dangerouslySetInnerHTML={{ __html: task?.description }}
                   ></p>
                 </Form.Group>

@@ -20,7 +20,7 @@ span.badge {
 .fa-check-circle {
   color: #17b667 !important;
   margin-right: 5px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
 }
 
 select {

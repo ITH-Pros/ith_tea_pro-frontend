@@ -396,12 +396,33 @@ export default function Dashboard(props) {
                   <Row className="d-flex justify-content-start">
                     <Col lg={6} className="middle">
                       <Avatar name={project.name} size={40} round="20px" />{" "}
-                      <h5 className="text-truncate">{project?.name}</h5>
+                      {/* <h5 className="text-truncate">{project?.name}</h5> */}
+                      <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip>{project?.name}</Tooltip>}
+                            >
+                              <h5
+                                
+                                className="text-truncate"
+                              >
+                               {project?.name}
+                              </h5>
+                            </OverlayTrigger>
                     </Col>
                     <Col lg={4} className="middle">
-                      <p className="text-truncate">
-                        {project?.description || "--"}
-                      </p>
+                      
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip>{project?.description || "--"}</Tooltip>}
+                            >
+                              <p
+                                
+                                className="text-truncate"
+                              >
+                               {project?.description || "--"}
+                              </p>
+                            </OverlayTrigger>
+
                     </Col>
                     <Col
                       lg={2}
@@ -723,6 +744,7 @@ export default function Dashboard(props) {
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
+                    style={{cursor:'pointer'}}
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
@@ -1123,6 +1145,7 @@ export default function Dashboard(props) {
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
+                    style={{cursor:'pointer'}}
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
@@ -1142,7 +1165,7 @@ export default function Dashboard(props) {
                       teamWorkList?.length > 0 &&
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          <Col lg={5} className="middle">
+                          <Col lg={4} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
                               userDetails.role === "SUPER_ADMIN" ||
                               userDetails.role === "ADMIN") && (
@@ -1242,12 +1265,18 @@ export default function Dashboard(props) {
                                 </Dropdown.Menu>
                               </Dropdown>
                             )}
-                            <h5
-                              onClick={() => handleViewDetails(task?._id)}
-                              className="text-truncate"
+                        
+                                  <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip>{task?.title}</Tooltip>}
                             >
-                              {task?.title}
-                            </h5>
+                              <h5
+                                onClick={() => handleViewDetails(task?._id)}
+                                className="text-truncate"
+                              >
+                                {task?.title}
+                              </h5>
+                            </OverlayTrigger>
                           </Col>
                           <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
@@ -1272,7 +1301,7 @@ export default function Dashboard(props) {
                               </small>
                             )}
                           </Col>
-                          <Col lg={2} className="middle">
+                          <Col lg={3} className="middle">
                           <>
                                   {["top"].map((placement) => (
                                     <OverlayTrigger
@@ -1286,14 +1315,14 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button br0">
                                         {task?.assignedTo?.name && (
-                                          <span className="nameTag" title="Assigned To">
+                                          <small  className="nameTag text-truncate" title="Assigned To">
                                             <img src={avtar} alt="userAvtar" />{" "}
                                             {task?.assignedTo?.name
                                               .split(" ")[0] +' '} 
                                             {task?.assignedTo?.name
                                               .split(" ")[1]
                                               ?.charAt(0)+'.'}
-                                          </span>
+                                          </small>
                                         )}
                                       </Button>
                                     </OverlayTrigger>
@@ -1323,7 +1352,8 @@ export default function Dashboard(props) {
                           <Col
                             lg={1}
                             id="dropdown_action"
-                            className="text-end middle"
+                            className="text-end "
+                            style={{position:'absolute', right:'0px'}}
                           >
                             {(userDetails.id === task?.assignedTo?._id ||
                         (userDetails.role === "LEAD" &&
@@ -1336,6 +1366,7 @@ export default function Dashboard(props) {
                               <Dropdown.Toggle
                                 variant="defult"
                                 id="dropdown-basic"
+                                style={{padding:'0px', textAlign:'end'}}
                               >
                                 <i className="fa fa-ellipsis-v"></i>
                               </Dropdown.Toggle>
