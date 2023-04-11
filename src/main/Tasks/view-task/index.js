@@ -22,7 +22,7 @@ import "./index.css";
 import History from "./history";
 export default function ViewTaskModal(props) {
 
-  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
+  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId , onInit } = props;
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
@@ -167,6 +167,7 @@ export default function ViewTaskModal(props) {
           showToaster(true);
           setIsRatingFormVisible(false);
           getTaskDetailsById(selectedTaskIdForRating);
+          onInit()
         }
       } catch (error) {
         setLoading(false);

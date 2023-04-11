@@ -1382,6 +1382,7 @@ export default function Dashboard(props) {
         showViewTask={showViewTask}
         closeViewTaskModal={closeViewTaskModal}
         selectedTaskId={selectedTaskId}
+        onInit={onInit}
       />
 
       <Modal
