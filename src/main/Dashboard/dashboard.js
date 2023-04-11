@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import moment from "moment";
-import { AiFillProject } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -69,7 +68,6 @@ export default function Dashboard(props) {
   }, []);
 
   function onInit() {
-    console.log("jai shree ram")
     getAndSetAllProjects();
     if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
       getOverDueTaskList();
@@ -307,6 +305,16 @@ export default function Dashboard(props) {
     }
   };
 
+  function daysSince(dateStr) {
+    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+    const currentDate = new Date();
+    const date = new Date(dateStr);
+    const diffDays = Math?.round(Math?.abs((currentDate - date) / oneDay));
+    return diffDays;
+  }
+  
+  
+
   const skipReminder = async (event) => {
     event.preventDefault();
     const dataToSend = {
@@ -445,14 +453,14 @@ export default function Dashboard(props) {
                 <Col lg={6} className="left-add">
                   <span>OVERDUE WORK</span>
 
-                  {/* <i
+                {/* {<i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i> */}
+                  ></i>} */}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -585,22 +593,23 @@ export default function Dashboard(props) {
                               </h5>
                             </OverlayTrigger>
                           </Col>
-                          <Col lg={4} className="middle">
+                          <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
                                 
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
-                                  {moment(task?.dueDate?.split("T")[0]).format(
+                                 { daysSince(task?.dueDate?.split("T")[0]) + ' Day ago'}
+                                  {/* {moment(task?.dueDate?.split("T")[0]).format(
                                     "DD/MM/YYYY"
-                                  )}
+                                  )} */}
+                                  
                                 </Badge>
                               </small>
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                Completed:{" "}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]
@@ -609,8 +618,36 @@ export default function Dashboard(props) {
                               </small>
                             )}
                           </Col>
+                          <Col lg={3} className="middle">
+                          <>
+                                  {["top"].map((placement) => (
+                                    <OverlayTrigger
+                                      key={placement}
+                                      placement={placement}
+                                      overlay={
+                                        <Tooltip id={`tooltip-${placement}`}>
+                                          {task?.assignedTo?.name}
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <Button className="tooltip-button br0">
+                                        {task?.assignedTo?.name && (
+                                          <span className="nameTag" title="Assigned To">
+                                            <img src={avtar} alt="userAvtar" />{" "}
+                                            {task?.assignedTo?.name
+                                              .split(" ")[0] +' '} 
+                                            {task?.assignedTo?.name
+                                              .split(" ")[1]
+                                              ?.charAt(0)+'.'}
+                                          </span>
+                                        )}
+                                      </Button>
+                                    </OverlayTrigger>
+                                  ))}
+                                </>
+                          </Col>
                           <Col
-                            lg={3}
+                            lg={2}
                             className="text-end middle"
                             style={{ justifyContent: "end" }}
                           >
@@ -830,7 +867,6 @@ export default function Dashboard(props) {
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                Completed:{" "}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]
@@ -996,7 +1032,7 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button">
                                         {task?.lead[0]?.name && (
-                                          <span className="nameTag">
+                                          <span className="nameTag" title="Lead">
                                             <img
                                               src={leadAvatar}
                                               alt="userAvtar"
@@ -1027,7 +1063,7 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button br0">
                                         {task?.assignedTo?.name && (
-                                          <span className="nameTag">
+                                          <span className="nameTag" title="Assigned To">
                                             <img src={avtar} alt="userAvtar" />{" "}
                                             {task?.assignedTo?.name
                                               .split(" ")[0]
@@ -1080,14 +1116,14 @@ export default function Dashboard(props) {
                 <Col lg={6} className="left-add">
                   <span>TEAM WORK</span>
 
-                  {/* <i
+                  <i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i> */}
+                  ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -1213,7 +1249,7 @@ export default function Dashboard(props) {
                               {task?.title}
                             </h5>
                           </Col>
-                          <Col lg={4} className="middle">
+                          <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
                                 
@@ -1228,7 +1264,6 @@ export default function Dashboard(props) {
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                {/* Completed:{" "} */}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]
@@ -1236,6 +1271,34 @@ export default function Dashboard(props) {
                                 </Badge>
                               </small>
                             )}
+                          </Col>
+                          <Col lg={2} className="middle">
+                          <>
+                                  {["top"].map((placement) => (
+                                    <OverlayTrigger
+                                      key={placement}
+                                      placement={placement}
+                                      overlay={
+                                        <Tooltip id={`tooltip-${placement}`}>
+                                          {task?.assignedTo?.name}
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <Button className="tooltip-button br0">
+                                        {task?.assignedTo?.name && (
+                                          <span className="nameTag" title="Assigned To">
+                                            <img src={avtar} alt="userAvtar" />{" "}
+                                            {task?.assignedTo?.name
+                                              .split(" ")[0] +' '} 
+                                            {task?.assignedTo?.name
+                                              .split(" ")[1]
+                                              ?.charAt(0)+'.'}
+                                          </span>
+                                        )}
+                                      </Button>
+                                    </OverlayTrigger>
+                                  ))}
+                                </>
                           </Col>
                           <Col
                             lg={2}
@@ -1298,7 +1361,9 @@ export default function Dashboard(props) {
             </Col>
           </Row>
         </Container>
+            
       )}
+      
 
       <Modal
         show={modalShow}
@@ -1349,5 +1414,7 @@ export default function Dashboard(props) {
         />
       )}
     </div>
+   
+
   );
 }

@@ -301,10 +301,22 @@ const ProjectCard = ({
                 .slice(0, 13)
                 .map((user, index) => (
                   <>
-                    {!user?.profilePicture && (
+                    {!user?.profilePicture &&(index<3)&& (
                       <UserIcon key={index} firstName={user.name} />
                     )}
-                    {user?.profilePicture && (
+                    {(index > 2) && (index === 3) && (
+                      <span  onClick={() => {
+                        onClickOfIcons(
+                          accessibleBy.concat(managedBy),
+                          "Team Members"
+                        );
+                      }}>
+
+                        <UserIcon   key={index} firstName={'...'} />
+                      </span>
+
+                    )}
+                    {user?.profilePicture &&(index<3)&&(
                       <div key={index} className="user-pic">
                         <img
                           style={{
@@ -356,7 +368,7 @@ const ProjectCard = ({
             <div>
               <Col sm={12}>
                 {userDetails.role !== "CONTRIBUTOR" &&
-                  !isArchive &&
+                  !isArchive && modalTitle!=='Team Members'&&
                   userDetails.role !== "LEAD" && (
                     <div onClick={assignTeamUser} className="assignPopup">
                       <UserIcon firstName={"+"} />

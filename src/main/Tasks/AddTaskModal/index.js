@@ -358,7 +358,6 @@ export default function AddTaskModal(props) {
         getNewTasks(projectId);
         setToasterMessage("Task Created Successfully");
         showToaster(true);
-        console.log(taskRes, "taskRes++++++++++++===================>>>>>>>");
         // onInit();
       }
     } catch (error) {
@@ -424,7 +423,6 @@ export default function AddTaskModal(props) {
         setShowAddTaskModal(true);
         getNewTasks(projectId);
         showToaster(true);
-        setToasterMessage("Task Created Successfully");
       }
     } catch (error) {
       setLoading(false);
@@ -849,7 +847,7 @@ export default function AddTaskModal(props) {
                     </Button>
                   </div>
                 )}
-                {!selectedTask && (
+                {!selectedTask && !selectedProjectFromTask && (
                   <Button
                     className="btn-press btn-gradient-border btnDanger"
                     type="button"
