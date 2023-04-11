@@ -278,6 +278,7 @@ export default function AddRating(props) {
                 placeholder="Rating Date"
                 onChange={handleRatingFormChange}
                 max={new Date().toISOString().split("T")[0]}
+                min="2023-04-01"
                 value={ratingForm.selectedDate}
                 disabled={taskFromDashBoard ? true : false}
               />
@@ -332,7 +333,7 @@ export default function AddRating(props) {
                 ))}
               </Form.Control>
               <Form.Control.Feedback type="invalid">
-                User name is required !!
+                Task is required !!
               </Form.Control.Feedback>
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>

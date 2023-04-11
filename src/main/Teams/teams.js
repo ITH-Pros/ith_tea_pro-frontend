@@ -153,6 +153,7 @@ const [userId, setUserId] = useState("");
         return;
       } else {
         setUserAssignedProjects(userAssignedProjects.data);
+      
       }
     } catch (error) {
       setLoading(false);
@@ -166,38 +167,69 @@ const [userId, setUserId] = useState("");
 
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
 
-const handleSelectProject =(projectId) => {
-  if (selectedProjectIds.includes(projectId)) {
-    setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
-  } else {
-    setSelectedProjectIds([...selectedProjectIds, projectId]);
-  }
-}
+// const handleSelectProject =(projectId) => {
+//   if (selectedProjectIds.includes(projectId)) {
+//     setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
+//   } else {
+//     setSelectedProjectIds([...selectedProjectIds, projectId]);
+//   }
+// }
+const GetModalBody = () => {
+  return (
+    <>
+      {projectList &&
+        projectList.map((project, index) => {
+          const checkAlreadyAssigned = userAssignedProjects.find(
+            (ele) => ele._id === project._id
+          );
+          const isSelected = selectedProjectIds.includes(project._id);
+          return (
+            <div key={project._id} className="assignPro">
+              <input
+                disabled={checkAlreadyAssigned}
+                checked={checkAlreadyAssigned || isSelected}
+                onChange={() => {
+                  if (isSelected) {
+                    setSelectedProjectIds(selectedProjectIds.filter((id) => id !== project._id));
+                  } else {
+                    setSelectedProjectIds([...selectedProjectIds, project._id]);
+                  }
+                }}
+                type="checkbox"
+              />
+              <span>{project.name}</span>
+            </div>
+          );
+        })}
+    </>
+  );
+};
 
-  const GetModalBody = () => {
-    return (
-      <>
-        {projectList &&
-  projectList.map((project, index) => {
-    const checkAlreadyAssigned = userAssignedProjects.find(
-      (ele) => ele._id === project._id
-    );
-    const isSelected = selectedProjectIds.includes(project._id);
-    return (
-      <div key={project._id} className="assignPro">
-        <input
-          disabled={checkAlreadyAssigned}
-          checked={checkAlreadyAssigned || isSelected}
-          onChange={() => handleSelectProject(project._id)}
-          type="checkbox"
-        />
-        <span>{project.name}</span>
-      </div>
-    );
-  })}
-      </>
-    );
-  };
+
+  // const GetModalBody = () => {
+  //   return (
+  //     <>
+  //       {projectList &&
+  // projectList.map((project, index) => {
+  //   const checkAlreadyAssigned = userAssignedProjects.find(
+  //     (ele) => ele._id === project._id
+  //   );
+  //   const isSelected = selectedProjectIds.includes(project._id);
+  //   return (
+  //     <div key={project._id} className="assignPro">
+  //       <input
+  //         disabled={checkAlreadyAssigned}
+  //         checked={checkAlreadyAssigned || isSelected}
+  //         onChange={() => handleSelectProject(project._id)}
+  //         type="checkbox"
+  //       />
+  //       <span>{project.name}</span>
+  //     </div>
+  //   );
+  // })}
+  //     </>
+  //   );
+  // };
   const handleAssignUserProjectSubmit = async () => {
     setLoading(true);
     try {
@@ -215,6 +247,9 @@ const handleSelectProject =(projectId) => {
         return;
       } else {
         setProjectListValue(assignRes.data);
+        setToasterMessage(assignRes?.message);
+
+        
       }
     } catch (error) {
       setLoading(false);
