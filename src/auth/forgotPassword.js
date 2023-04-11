@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { forgotPassword, verifyOtp } from "../services/auth/api";
+import { changePassword, forgotPassword, verifyOtp } from "../services/auth/api";
 
 function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -54,7 +54,7 @@ function ForgotPassword() {
     };
     // Make API call with dataToSend
     try {
-      const response = await verifyOtp(dataToSend);
+      const response = await forgotPassword(dataToSend);
       if(response.error){
         console.log(response.error,'-----------------error')
       }
@@ -103,7 +103,7 @@ function ForgotPassword() {
     // Make API call with dataToSend
 
     try {
-      const response = await forgotPassword(dataToSend);
+      const response = await changePassword(dataToSend);
       if(response.error){
         console.log(response.error,'-----------------error')
       }

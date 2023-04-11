@@ -66,7 +66,7 @@ function Header() {
             <div className="user-text-name" key={userName}>
               <div onClick={redirectToUserDetail} className="user-icon">
                 {profilePicture && (
-                  <div className="user-pic">
+                  <div  className="user-pic">
                     <img
                       style={{
                         width: "30px",
@@ -79,9 +79,9 @@ function Header() {
                   </div>
                 )}
                 {!profilePicture && <UserIcon firstName={userName} />}
-                <p
+                <p 
                   className="text-truncate"
-                  style={{ marginBottom: "0px", marginLeft: "22px" }}
+                  style={{ marginBottom: "0px", marginLeft: "22px" , cursor:"pointer" }}
                 >
                   {userName}
                 </p>
