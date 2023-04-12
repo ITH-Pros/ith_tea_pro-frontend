@@ -221,3 +221,5 @@ background: #fff;
     margin-right: -10px;
     width: 35px!important;
 }
+
+#confirmation_ui{ position: absolute;}
