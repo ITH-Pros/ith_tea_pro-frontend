@@ -200,7 +200,7 @@ export default function ViewTaskModal(props) {
   //     return true;
   //   } else if (task?.lead[0]?._id === userDetails?.id ){
   //     return true;
-  //   } else if (userDetails?.role === "ADMIN" || userDetails?.role === "SUPERADMIN"){
+  //   } else if (userDetails?.role === "ADMIN" || userDetails?.role === "SUPER_ADMIN"){
   //     return true;
   //   } else {
   //     return false;

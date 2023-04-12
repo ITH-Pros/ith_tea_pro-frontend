@@ -858,7 +858,7 @@ const Tasks = () => {
         <Offcanvas
         className="Offcanvas-modal"
         show={modalShow}
-        placement="top"
+        placement="end"
         onHide={() => setModalShow(false)}
       >
         <Offcanvas.Header closeButton>
