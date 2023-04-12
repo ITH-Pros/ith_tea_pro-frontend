@@ -345,7 +345,7 @@ const FilterModal = (props) => {
               <Form.Group controlId="formDateCreated">
                 <Row className="filterFields">
                   <Col sm="3">
-                    <Form.Label>createdBy</Form.Label>
+                    <Form.Label>Created By</Form.Label>
                   </Col>
                   <Col sm="9">
                     <Select
@@ -363,7 +363,7 @@ const FilterModal = (props) => {
               <Form.Group controlId="formDateCreated">
                 <Row className="filterFields">
                   <Col sm="3">
-                    <Form.Label>assignedTo</Form.Label>
+                    <Form.Label>Assigned To</Form.Label>
                   </Col>
                   <Col sm="9">
                     <Select

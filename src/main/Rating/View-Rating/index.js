@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Table } from "react-bootstrap";
+import { Row, Table } from "react-bootstrap";
 import {
   getRatings,
 } from "../../../services/user/api";
@@ -95,8 +95,9 @@ export default function Dashboard(props) {
   return (
     <div>
       <div className="dashboard_camp">
-        <h4>
-          My Ratings
+        <Row>
+          <Col lg={6}><h4>  My Ratings</h4></Col>
+          <Col lg={6}>
           {(userDetails?.role === "LEAD" ||
             userDetails?.role === "CONTRIBUTOR") && (
             <button
@@ -107,18 +108,31 @@ export default function Dashboard(props) {
               {teamView ? "Self view" : "Team View"}{" "}
             </button>
           )}
-        </h4>
+    <div className="wrap ">
+                {userDetails?.role !== "CONTRIBUTOR" && (
+                  <button className="add-rating-button">
+                    <AddRating
+                   handleOnInit={onInit}
+    
+                    
+                     />
+                  </button>
+                )}
+              </div>
+          </Col>
+        </Row>
+      
       </div>
 
       {teamView ? (
         <div className="dashboard_camp">
-          <div className="d-flex justify-content-center flex-column">
+          <div className=" ">
             <div className="d-flex" style={{ marginTop: "10px" }}>
               <h5 className="text-center h5cls">
                 <p
                   style={{
                     marginRight: "10px",
-                    marginTop: "6px",
+                    marginTop: "13px",
                     fontSize: "14",
                   }}
                 >
@@ -174,19 +188,9 @@ export default function Dashboard(props) {
                 </Form.Group>
               </h5>
 
-              <div className="wrap btnWth">
-                {userDetails?.role !== "CONTRIBUTOR" && (
-                  <button className="add-rating-button">
-                    <AddRating
-                   handleOnInit={onInit}
-    
-                    
-                     />
-                  </button>
-                )}
-              </div>
+          
             </div>
-            <Table responsive className="ratingTable">
+            <Table responsive >
               <thead>
                 <tr>
                   <th style={{ width: "140" }}>Name</th>
@@ -195,7 +199,7 @@ export default function Dashboard(props) {
                     .map((rating, index) => {
                       return (
                         <th
-                          className="dates text-center"
+                           
                           key={`${index}_${index}`}
                         >
                           {index + 1 < 10 ? "0" + (index + 1) : index + 1}
@@ -209,7 +213,7 @@ export default function Dashboard(props) {
                 {ratingsArray.map((user, index) => {
                   return (
                     <tr key={index}>
-                      <td className="user_names" style={{ width: "130" }}>
+                      <td className="user_names text-truncate " style={{ width: "130" }}>
                         {user.name}
                       </td>
 

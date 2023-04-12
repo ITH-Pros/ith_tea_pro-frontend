@@ -622,7 +622,7 @@ const GetModalBody = () => {
             setPageDetails={setPageDetails}
           />
         ) : (
-          <h6>No User Found</h6>
+          <h6 className="text-center">No User Found</h6>
         )}
 
         {loading ? <Loader /> : null}

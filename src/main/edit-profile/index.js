@@ -152,7 +152,7 @@ function UserForm(props) {
   }
 
   return (
-    <div className="addUserFrom-edit">
+    <div className="addUserFrom-edit " >
       <form className="row">
         <div className="profile-images">
           <div className="edit-detle">
