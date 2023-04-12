@@ -515,8 +515,12 @@ const ProjectCard = ({
                           <p className="userEmail">{user?.email}</p>
                         </div>
 
+                        {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && (
 
                       <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="pull-right"/>
+                        )}
+
+
                  
                       
                    
