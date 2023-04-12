@@ -667,7 +667,8 @@ th {
   color: #6c6666;
   font-size: 13px;
 }
-
+#list_ui .list_task:hover{     background: #ebebeb80;
+  border-radius: 0px;}
 #list_ui .day {
   text-align: center;
   font-size: 13px;
@@ -697,4 +698,9 @@ th {
 }
 .completed p {
   color: #000 !important;
+}
+
+#test.bs-popover-start > .popover-arrow::after {
+  right: var(--bs-popover-border-width);
+  border-left-color: #198754 !important;
 }
