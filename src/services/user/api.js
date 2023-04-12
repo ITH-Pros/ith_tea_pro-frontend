@@ -329,3 +329,9 @@ export async function getTaskHistoryById(data) {
     })
     .then((res) => res.data);
 }
+
+export async function removeUserFromProject(data) {
+  return axiosInstance
+    .patch("projects/v1/remove/users", data)
+    .then((res) => res.data);
+}

@@ -135,6 +135,7 @@ export default function ViewTaskModal(props) {
       let response = await taskById(dataToSend);
       if (response.status === 200) {
         setTaskData(response?.data);
+        console.log(response?.data , "response?.data");
         // console.log(response?.data);
         setShowViewTaskModal(true);
         setActiveTab("comments")
@@ -195,6 +196,22 @@ export default function ViewTaskModal(props) {
       return false;
     }
   };
+
+  // const desibleFields = (task) => {
+  //   console.log(task?.status , "task?.status");
+
+  //   if (task?.status === "COMPLETED" && task?.isRated) {
+  //     return false;
+  //   } else if (task?.assignedTo?._id === userDetails?.id ){
+  //     return true;
+  //   } else if (task?.lead[0]?._id === userDetails?.id ){
+  //     return true;
+  //   } else if (userDetails?.role === "ADMIN" || userDetails?.role === "SUPER_ADMIN"){
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
 
   return (

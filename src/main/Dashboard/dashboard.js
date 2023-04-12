@@ -25,6 +25,7 @@ import {
   BsChevronLeft,
   BsChevronDoubleRight,
   BsChevronRight,
+  BsPersonAdd,
 } from "react-icons/bs";
 import {
   getAllMyWorks,
@@ -43,6 +44,7 @@ import {
   Button,
   Badge,
   Modal,
+  Popover,
 } from "react-bootstrap";
 
 export default function Dashboard(props) {
@@ -1713,9 +1715,7 @@ export default function Dashboard(props) {
                         <p className="day">THU 13</p>
                       </Col>
                       <Col lg={10} className="px-0 py-3 border">
-                        <div className="list-day ">
-
-                        </div>
+                        <div className="list-day "></div>
                       </Col>
                     </Row>
                     <Row id="list_ui">
@@ -1723,22 +1723,29 @@ export default function Dashboard(props) {
                         <p className="day">FRI 14</p>
                       </Col>
                       <Col lg={10} className="px-0 py-3 border">
-                        <div className="list-day ">
-
-                        </div>
+                        <div className="list-day "></div>
                       </Col>
                     </Row>
-                    <Row id="list_ui">
-                      <Col lg={2} className="v-align">
-                        <p className="day">SAT 15</p>
-                      </Col>
-                      <Col lg={10} className="px-0 py-3 border">
-                        <div className="list-day ">
-
-                        </div>
-                      </Col>
-                    </Row>
-              
+                    <OverlayTrigger
+                      placement="left"
+                      trigger="click"
+                      overlay={
+                        <Popover id="test">
+                          <Button variant="success" size="sm">
+                            <BsPersonAdd /> Quick Add
+                          </Button>
+                        </Popover>
+                      }
+                    >
+                      <Row id="list_ui">
+                        <Col lg={2} className="v-align">
+                          <p className="day">SAT 15</p>
+                        </Col>
+                        <Col lg={10} className="px-0 py-3 border">
+                          <div className="list-day "></div>
+                        </Col>
+                      </Row>
+                    </OverlayTrigger>
                   </Card>
                 </Col>
               </Row>
