@@ -10,7 +10,6 @@ a {
   display: flex;
   align-items: center;
   margin-left: 0px;
-
 }
 
 .h1-text i {
@@ -34,7 +33,6 @@ a {
   display: flex;
   flex-wrap: wrap;
   overflow-y: auto;
-
 }
 
 .box {
@@ -92,7 +90,7 @@ a {
   transition: all 0.3s;
 }
 
-.box .heart-btn:checked~.heart::before {
+.box .heart-btn:checked ~ .heart::before {
   color: #e41934;
 }
 
@@ -103,14 +101,24 @@ a {
   padding: 1rem;
   display: none;
 }
-
-.content img {
-  width: 50px;
-  height: 50px;
+.contents {
+  background-color: #fff;
+  width: 30px;
+  height: 30px;
+  border: 1px #ccc solid;
+  position: absolute;
   border-radius: 50%;
+  right: 10px;
+  line-height: 30px;
+  top: 10px;
+  cursor: pointer;
+}
+.contents img {
   overflow: hidden;
+  width: 21px;
   object-fit: cover;
   object-position: top;
+  opacity: 0.8;
 }
 
 .addBtn {
@@ -151,11 +159,9 @@ a {
 }
 
 .content p {
-
   font-size: 0.8rem;
   color: #7a7a7a;
   margin: 0px 0px 2px 0px;
-
 }
 
 #profileImage {
@@ -171,7 +177,6 @@ a {
 }
 
 .btn {
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -180,7 +185,6 @@ a {
 
 .btn a i {
   margin-right: 9px;
-
 }
 
 .btn-color {
@@ -198,16 +202,18 @@ a {
   transition: all ease 0.5s;
 }
 
-
 .add-project-button {
-  box-shadow: rgb(0 0 0 / 17%) 0px -23px 25px 0px inset, rgb(0 0 0 / 15%) 0px -36px 30px 0px inset, rgb(0 0 0 / 10%) 0px -79px 40px 0px inset, rgb(0 0 0 / 6%) 0px 2px 1px, rgb(0 0 0 / 9%) 0px 4px 2px, rgb(0 0 0 / 9%) 0px 8px 4px, rgb(0 0 0 / 9%) 0px 16px 8px, rgb(0 0 0 / 9%) 0px 32px 16px;
+  box-shadow: rgb(0 0 0 / 17%) 0px -23px 25px 0px inset,
+    rgb(0 0 0 / 15%) 0px -36px 30px 0px inset,
+    rgb(0 0 0 / 10%) 0px -79px 40px 0px inset, rgb(0 0 0 / 6%) 0px 2px 1px,
+    rgb(0 0 0 / 9%) 0px 4px 2px, rgb(0 0 0 / 9%) 0px 8px 4px,
+    rgb(0 0 0 / 9%) 0px 16px 8px, rgb(0 0 0 / 9%) 0px 32px 16px;
   height: 250px;
 }
 
 .margin-right {
   margin-right: 10px;
   border: 1px;
-
 }
 
 .pagination {
@@ -230,7 +236,6 @@ a {
   align-items: center;
   width: 35px;
   text-align: center;
-
 }
 
 .left-arrow {
@@ -247,7 +252,6 @@ a {
   width: 120px;
   margin: 10px;
   width: auto;
-
 }
 
 .brand-icon {
@@ -318,7 +322,3 @@ button.modal-close-btn:hover {
   width: 90% !important;
   margin: auto !important;
 }
-
-
-
-

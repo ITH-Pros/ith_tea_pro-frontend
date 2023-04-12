@@ -24,7 +24,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserIcon from "../Projects/ProjectCard/profileImage";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default function Teams(props) {
   const { userDetails } = useAuth();
@@ -48,10 +48,7 @@ export default function Teams(props) {
 
   const [confirmModalShow, setConfirmModalShow] = useState(false);
 
-const [userId, setUserId] = useState("");
-
-
-
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     onInit();
@@ -154,7 +151,6 @@ const [userId, setUserId] = useState("");
         return;
       } else {
         setUserAssignedProjects(userAssignedProjects.data);
-      
       }
     } catch (error) {
       setLoading(false);
@@ -168,44 +164,48 @@ const [userId, setUserId] = useState("");
 
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
 
-// const handleSelectProject =(projectId) => {
-//   if (selectedProjectIds.includes(projectId)) {
-//     setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
-//   } else {
-//     setSelectedProjectIds([...selectedProjectIds, projectId]);
-//   }
-// }
-const GetModalBody = () => {
-  return (
-    <>
-      {projectList &&
-        projectList.map((project, index) => {
-          const checkAlreadyAssigned = userAssignedProjects.find(
-            (ele) => ele._id === project._id
-          );
-          const isSelected = selectedProjectIds.includes(project._id);
-          return (
-            <div key={project._id} className="assignPro">
-              <input
-                disabled={checkAlreadyAssigned}
-                checked={checkAlreadyAssigned || isSelected}
-                onChange={() => {
-                  if (isSelected) {
-                    setSelectedProjectIds(selectedProjectIds.filter((id) => id !== project._id));
-                  } else {
-                    setSelectedProjectIds([...selectedProjectIds, project._id]);
-                  }
-                }}
-                type="checkbox"
-              />
-              <span>{project.name}</span>
-            </div>
-          );
-        })}
-    </>
-  );
-};
-
+  // const handleSelectProject =(projectId) => {
+  //   if (selectedProjectIds.includes(projectId)) {
+  //     setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
+  //   } else {
+  //     setSelectedProjectIds([...selectedProjectIds, projectId]);
+  //   }
+  // }
+  const GetModalBody = () => {
+    return (
+      <>
+        {projectList &&
+          projectList.map((project, index) => {
+            const checkAlreadyAssigned = userAssignedProjects.find(
+              (ele) => ele._id === project._id
+            );
+            const isSelected = selectedProjectIds.includes(project._id);
+            return (
+              <div key={project._id} className="assignPro">
+                <input
+                  disabled={checkAlreadyAssigned}
+                  checked={checkAlreadyAssigned || isSelected}
+                  onChange={() => {
+                    if (isSelected) {
+                      setSelectedProjectIds(
+                        selectedProjectIds.filter((id) => id !== project._id)
+                      );
+                    } else {
+                      setSelectedProjectIds([
+                        ...selectedProjectIds,
+                        project._id,
+                      ]);
+                    }
+                  }}
+                  type="checkbox"
+                />
+                <span>{project.name}</span>
+              </div>
+            );
+          })}
+      </>
+    );
+  };
 
   // const GetModalBody = () => {
   //   return (
@@ -249,8 +249,6 @@ const GetModalBody = () => {
       } else {
         setProjectListValue(assignRes.data);
         setToasterMessage(assignRes?.message);
-
-        
       }
     } catch (error) {
       setLoading(false);
@@ -262,12 +260,11 @@ const GetModalBody = () => {
     setModalShow(false);
   };
 
-
   const handleDeleteUser = async () => {
     setLoading(true);
     try {
       let dataToSend = {
-        userId:userId ,
+        userId: userId,
       };
       const deleteUser = await deleteUserById(dataToSend);
       setLoading(false);
@@ -306,8 +303,6 @@ const GetModalBody = () => {
       getAndSetAllUsers(dataToSave);
     };
 
- 
-
     const onChangeRowsPerPage = (e) => {
       let dataToSave = {
         ...pageDetails,
@@ -332,7 +327,7 @@ const GetModalBody = () => {
       setPageDetails(dataToSave);
       getAndSetAllUsers(dataToSave);
     };
-  
+
     return (
       <div className="pagination ">
         <i
@@ -373,11 +368,11 @@ const GetModalBody = () => {
       </div>
     );
   };
-  const resendActivationLink = async(userId) => {
-    setLoading(true); 
+  const resendActivationLink = async (userId) => {
+    setLoading(true);
     try {
       let dataToSend = {
-        userId:userId ,
+        userId: userId,
       };
       const resendLink = await resendActivationLinkApi(dataToSend);
       setLoading(false);
@@ -395,7 +390,7 @@ const GetModalBody = () => {
       setShowToaster(true);
       return error.message;
     }
-  }
+  };
 
   return (
     <>
@@ -403,26 +398,27 @@ const GetModalBody = () => {
         <h1 className="h1-text">
           <i className="fa fa-users" aria-hidden="true"></i>Team Members
           <div className="projects-button">
-          {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN")  && (
-            <Link style={{float:'right'}}
-              to={{
-                pathname: "/user/add",
-              }}
-            >
-              <Button variant="primary" size="md"> 
-              <span
-                className="fa fa-user-plus"
-                title="Add User"
-                aria-hidden="true"
-                style={{marginRight:'5px'}}
+            {(userDetails.role === "SUPER_ADMIN" ||
+              userDetails.role === "ADMIN") && (
+              <Link
+                style={{ float: "right" }}
+                to={{
+                  pathname: "/user/add",
+                }}
               >
-                {" "}
-               
-              </span>
-              Add Team{" "}
-              </Button>
-            </Link>
-          )}
+                <Button variant="primary" size="md">
+                  <span
+                    className="fa fa-user-plus"
+                    title="Add User"
+                    aria-hidden="true"
+                    style={{ marginRight: "5px" }}
+                  >
+                    {" "}
+                  </span>
+                  Add Team{" "}
+                </Button>
+              </Link>
+            )}
           </div>
         </h1>
 
@@ -440,52 +436,67 @@ const GetModalBody = () => {
                     ></Link>
                   </div>
 
-
-
-
-                  {(userDetails.role === "SUPER_ADMIN" || userDetails.role ==="ADMIN") && !user?.isDeleted && (
-          <button className="project-btn-more dropdown ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-more-vertical"
-            >
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="12" cy="5" r="1" />
-              <circle cx="12" cy="19" r="1" />
-            </svg>
-            <div className="dropdown-content">
-              
-                <a
-                onClick={()=>{setConfirmModalShow(true); setUserId(user._id)}
-
-                } icon="pi pi-check" label="Confirm"
-                  // onClick={() => {
-                  //   handleEdit();
-                  // }}
-                >
-                  {" "}
-                  <i
-                    className="fa fa-pencil-square"
-                    aria-hidden="true"
-                  ></i>{" "}
-                  Delete user
-                </a>
-              
-           
-            </div>
-          </button>
-        )}
+                  {(userDetails.role === "SUPER_ADMIN" ||
+                    userDetails.role === "ADMIN") &&
+                    !user?.isDeleted && (
+                      <button className="project-btn-more dropdown ">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-more-vertical"
+                        >
+                          <circle cx="12" cy="12" r="1" />
+                          <circle cx="12" cy="5" r="1" />
+                          <circle cx="12" cy="19" r="1" />
+                        </svg>
+                        <div className="dropdown-content">
+                          <a
+                            onClick={() => {
+                              setConfirmModalShow(true);
+                              setUserId(user._id);
+                            }}
+                            icon="pi pi-check"
+                            label="Confirm"
+                            // onClick={() => {
+                            //   handleEdit();
+                            // }}
+                          >
+                            {" "}
+                            <i
+                              className="fa fa-pencil-square"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Delete user
+                          </a>
+                        </div>
+                      </button>
+                    )}
                   <div className="content">
                     <>
-                      {!user?.credentials&&<img onClick={()=>resendActivationLink(user?._id)} style={{ width: '36px', height: '36px', position: 'relative', bottom: '23px', left: '112px', cursor: 'pointer' }} src={require("../../assests/img/resend-icon.jpg")} alt='resend' title="Resend Password Setup Link" ></img>}
+                      {!user?.credentials && (
+               
+                        <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>Resend Password Setup Link</Tooltip>}
+                      >
+                                <div className="contents">
+                        <img
+                          onClick={() => resendActivationLink(user?._id)}
+                       
+                          src={require("../../assests/img/resend-icon.jpg")}
+                          alt="resend"
+                          title="Resend Password Setup Link"
+                        ></img>
+                        </div>
+                      </OverlayTrigger>
+                      )}
                       {!user?.profilePicture && (
                         <UserIcon key={index} firstName={user.name} />
                       )}
@@ -587,22 +598,23 @@ const GetModalBody = () => {
                         )}
                       </div>
                     </div>
-
                   </div>
 
-                  {userDetails.role === "SUPER_ADMIN" && "ADMIN" && user?.role !=='ADMIN' && (
-                    <div className="btn">
-                      <button
-                        className="btn-glow margin-right btn-color"
-                        onClick={() => {
-                          handleAddUserToProject(user._id);
-                        }}
-                      >
-                        <i className="fa fa-check " aria-hidden="true"></i>{" "}
-                        Assign
-                      </button>
+                  {userDetails.role === "SUPER_ADMIN" &&
+                    "ADMIN" &&
+                    user?.role !== "ADMIN" && (
+                      <div className="btn">
+                        <button
+                          className="btn-glow margin-right btn-color"
+                          onClick={() => {
+                            handleAddUserToProject(user._id);
+                          }}
+                        >
+                          <i className="fa fa-check " aria-hidden="true"></i>{" "}
+                          Assign
+                        </button>
 
-                      {/* <button
+                        {/* <button
                         className="btn-glow margin-right btn-color"
                         to={{
                           pathname: "/rating",
@@ -611,8 +623,8 @@ const GetModalBody = () => {
                       >
                         Add Rating
                       </button> */}
-                    </div>
-                  )}
+                      </div>
+                    )}
                 </div>
               );
             })}
@@ -636,7 +648,6 @@ const GetModalBody = () => {
             close={() => showToaster(false)}
           />
         )}
-        
 
         <Modals
           modalShow={modalShow}
@@ -647,26 +658,21 @@ const GetModalBody = () => {
           onClick={handleAssignUserProjectSubmit}
         />
 
+        <Modal
+          show={confirmModalShow}
+          onHide={() => {
+            setConfirmModalShow(false);
+          }}
+          animation={false}
+          className="confirmation-popup"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="delete-popup">
+            <h6>Are you sure you want to delete this user ?</h6>
 
-<Modal
-        show={confirmModalShow}
-        onHide={() => {
-          setConfirmModalShow(false);
-          
-        }}
-        animation={false}
-        className="confirmation-popup"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmation</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="delete-popup">
-          <h6>
-            Are you sure you want to delete this user ?
-          </h6>
-
-          <div className="button-center-corformain">
-           
+            <div className="button-center-corformain">
               <Button
                 style={{ marginLeft: "16px" }}
                 className="btn btn-danger mb-3 mr-3"
@@ -674,25 +680,19 @@ const GetModalBody = () => {
               >
                 Delete
               </Button>
-       
-           
-            <Button
-              style={{ marginLeft: "16px" }}
-              className="btn mb-3 mr-3"
-              onClick={() => {
-                setConfirmModalShow(false);
-                
-              }}
-            >
-              Cancel
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
 
-
-
-
+              <Button
+                style={{ marginLeft: "16px" }}
+                className="btn mb-3 mr-3"
+                onClick={() => {
+                  setConfirmModalShow(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     </>
   );
