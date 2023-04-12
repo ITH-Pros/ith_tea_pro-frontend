@@ -130,10 +130,11 @@ body {
 .commentedBy {
   float: left;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   border-bottom: 1px solid #ddd;
   height: 40px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .comment-tex {
@@ -196,3 +197,5 @@ p {
   .ratingForm input{ width: 50px; margin-bottom: 5px; float: right; display: block;  }
   .ratingForm button{  float: right;
     clear: both;}
+
+    .ql-editor{ height: 150px; overflow-y: auto;}

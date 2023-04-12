@@ -498,15 +498,16 @@ export default function ViewTaskModal(props) {
                     onChange={handleTextChange}
                   />
                 </div>
-                <div
+                <div  
                   style={{
                     float: "left",
                     width: "100%",
                     textAlign: "right",
-                    marginTop: "50px",
+                 
+                    
                   }}
                 >
-                  <Button type="submit" className="btn btn-primary">
+                  <Button type="submit" className="btn btn-primary mb-2">
                     Post
                   </Button>
                 </div>

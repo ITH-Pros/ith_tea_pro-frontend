@@ -857,6 +857,7 @@ const Tasks = () => {
         {/* ////// */}
         <Offcanvas
         className="Offcanvas-modal"
+        style={{height:'100vh'}}
         show={modalShow}
         placement="top"
         onHide={() => setModalShow(false)}
@@ -864,7 +865,7 @@ const Tasks = () => {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title> {sectionEditMode ? "Update Section" : "Add section"}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
+        <Offcanvas.Body >
         <div className="form-group">
               <label>Section</label>
               <input
