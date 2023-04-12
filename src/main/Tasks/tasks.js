@@ -506,6 +506,7 @@ const Tasks = () => {
 
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
+              
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
                   {project?._id?.projectId} / {project?._id?.section}{" "}
@@ -836,6 +837,13 @@ const Tasks = () => {
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
         </Accordion>
+
+
+<div className="bg-primary px-2">
+ 
+
+</div>
+
 
         {/* <Modal
           show={modalShow}
