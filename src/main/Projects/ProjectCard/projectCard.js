@@ -7,7 +7,9 @@ import { Modal, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Select from "react-select";
 import React from "react";
+import {CiCircleRemove} from 'react-icons/ci'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faTasks,
   faFlag,
@@ -18,6 +20,7 @@ import {
   assignProjectLead,
   assignTeamAPI,
   getUnassignedUsers,
+  removeUserFromProject,
 } from "../../../services/user/api";
 
 const ProjectCard = ({
@@ -143,6 +146,69 @@ const ProjectCard = ({
   const handleLeadsChange = (selectedOptions) => {
     setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
   };
+
+  const handleConfirmation = (userId , username) => {
+    setShowConfirmation(true);
+    setSelectedUser(userId);
+    setSelectedUserName(username);
+  };
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedUser , setSelectedUser] = useState(null);
+  const [selectedUserName , setSelectedUserName] = useState(null);
+
+
+ 
+
+
+  function ConfirmationPopup({ show, onCancel, onConfirm ,  }) {
+    return (
+      <Modal show={show} onHide={onCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to remove {selectedUserName} ?
+
+      <div>
+      <Button variant="secondary ml-2" onClick={onCancel}>Cancel</Button>
+          <Button variant="danger ml-2" onClick={onConfirm}>Remove</Button>
+
+      </div>
+
+       
+        
+        </Modal.Body>
+      
+       
+      </Modal>
+    );
+  }
+
+  const removeUser = async () => {
+    let dataToSend = {
+      projectId: element._id,
+      userIds: [selectedUser],
+    };
+    try {
+      const response = await removeUserFromProject(dataToSend);
+      if (response.error) {
+        console.log("Error while getting user details");
+        return;
+      } else {
+        getAndSetAllProjects();
+        setShowConfirmation(false);
+        setSelectedUser(null);
+        setSelectedUserName(null);
+        setModalShow(false);
+
+      }
+    } catch (error) {
+      console.log("Error while getting user details");
+      // return error.message;
+    }
+  };
+
+  
 
   return (
     <div
@@ -448,12 +514,28 @@ const ProjectCard = ({
                           </p>
                           <p className="userEmail">{user?.email}</p>
                         </div>
+
+
+                      <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="pull-right"/>
+                 
+                      
+                   
                       </div>
+                      
+
+
                     </Col>
                   );
                 })}
               </Row>
             </div>
+            <ConfirmationPopup
+            show={showConfirmation}
+            onCancel={() => setShowConfirmation(false)}
+            onConfirm={removeUser}
+             />
+
+
           </Modal.Body>
         </Modal>
       )}

@@ -12,6 +12,7 @@ const ImageUpload = (props) => {
   } = props;
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [inputKey, setInputKey] = useState(Date.now());
 
   useEffect(() => {
     if (selectedProfilePic) {
@@ -48,6 +49,7 @@ const ImageUpload = (props) => {
         setLoading(false);
         return error.message;
       }
+      setInputKey(Date.now());
     } else {
       alert("Please select a valid image file (jpg, png, gif)");
     }
@@ -56,6 +58,7 @@ const ImageUpload = (props) => {
   const deleteImage = async () => {
     setImageUrl(null);
     setProfileImage(null);
+    setInputKey(Date.now());
   };
   return (
     <>
@@ -83,9 +86,10 @@ const ImageUpload = (props) => {
           </label>
           {
             <input
+              key={inputKey}
               id="image-input"
               type="file"
-              accept="image/*"
+              accept="image/jpeg, image/png, image/gif"
               onChange={handleImageChange}
             />
           }
