@@ -499,7 +499,7 @@ export default function Dashboard(props) {
                       overdueWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -697,7 +697,7 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -929,7 +929,7 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -1178,7 +1178,7 @@ export default function Dashboard(props) {
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -1374,7 +1374,7 @@ export default function Dashboard(props) {
                             className="text-end "
                             style={{ position: "absolute", right: "0px" }}
                           >
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -1462,7 +1462,7 @@ export default function Dashboard(props) {
                             teamWorkList?.map((task) => (
                               <Row className="d-flex justify-content-start list_task w-100 mx-0">
                                 <Col lg={4} className="middle">
-                                  {(userDetails.id === task?.assignedTo?._id ||
+                                  {(
                                     (userDetails.role === "LEAD" &&
                                       (userDetails.id ===
                                         task?.assignedTo?._id ||
@@ -1670,7 +1670,7 @@ export default function Dashboard(props) {
                                   className="text-end "
                                   style={{ position: "absolute", right: "0px" }}
                                 >
-                                  {(userDetails.id === task?.assignedTo?._id ||
+                                  {(
                                     (userDetails.role === "LEAD" &&
                                       (userDetails.id ===
                                         task?.assignedTo?._id ||

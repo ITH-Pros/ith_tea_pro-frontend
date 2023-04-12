@@ -248,7 +248,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 project is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col} md="6">
@@ -272,7 +271,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 User name is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col} md="4" controlId="rating_date">
@@ -291,7 +289,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 Date is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group
@@ -316,7 +313,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 Rating is required, value must be in range [0,6] !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row>
@@ -341,7 +337,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 Task is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col} md="12">
