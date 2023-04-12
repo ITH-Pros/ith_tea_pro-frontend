@@ -11,6 +11,8 @@ import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import Modal from "react-bootstrap/Modal";
+
 import {
   addCommentOnTask,
   addRatingOnTask,
@@ -88,6 +90,10 @@ export default function ViewTaskModal(props) {
       taskId: taskId,
       status: newStatus,
     };
+    if (newStatus === 'COMPLETED') {
+      // confirm('Are you sure you want to complete the task.')
+        
+    }
     updateTaskStatus(dataToSend);
   };
 
@@ -200,7 +206,7 @@ export default function ViewTaskModal(props) {
   //     return true;
   //   } else if (task?.lead[0]?._id === userDetails?.id ){
   //     return true;
-  //   } else if (userDetails?.role === "ADMIN" || userDetails?.role === "SUPERADMIN"){
+  //   } else if (userDetails?.role === "ADMIN" || userDetails?.role === "SUPER_ADMIN"){
   //     return true;
   //   } else {
   //     return false;
@@ -335,9 +341,14 @@ export default function ViewTaskModal(props) {
                     className="form-control form-control-lg"
                     defaultValue={task.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
-                    disabled={task?.status === "COMPLETED"}
+                    disabled={task.status === "COMPLETED"||!(userDetails.id === task?.assignedTo?._id ||
+                      (userDetails.role === "LEAD" &&
+                        (userDetails.id === task?.assignedTo?._id ||
+                          task?.lead?.includes(userDetails.id) ||
+                          userDetails.id === task?.createdBy?._id)) ||
+                      userDetails.role === "SUPER_ADMIN" ||
+                      userDetails.role === "ADMIN") }
                   >
-                    <option value="ONGOING">Ongoing</option>
                     <option value="NOT_STARTED">NOT STARTED</option>
                     <option value="ONHOLD">On Hold</option>
                     <option value="ONGOING">On Going</option>
