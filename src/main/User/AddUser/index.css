@@ -11,5 +11,5 @@
 .was-validated .form-control:valid,
 .form-control.is-valid {
 
-  background-position: right calc(0.375em + 1.1875rem) center !important;
+  background-position: right calc(0.375em + 10px) center !important;
 }

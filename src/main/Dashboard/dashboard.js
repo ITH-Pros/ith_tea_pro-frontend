@@ -369,6 +369,7 @@ export default function Dashboard(props) {
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="secondary"
+                      size="lg"
                       onClick={handleShowAllProjects}
                       id="dropdown-basic"
                     >

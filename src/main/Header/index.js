@@ -80,7 +80,7 @@ function Header() {
                 {!profilePicture && <UserIcon firstName={userName} />}
                 <p 
                   className="text-truncate"
-                  style={{ marginBottom: "0px", marginLeft: "22px" , cursor:"pointer" }}
+                  style={{ marginBottom: "0px", marginLeft: "22px" , cursor:"pointer", paddingTop:'10px', maxWidth:'100px' }}
                 >
                   {userName}
                 </p>

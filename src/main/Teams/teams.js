@@ -409,15 +409,18 @@ const GetModalBody = () => {
                 pathname: "/user/add",
               }}
             >
-              <i
-                className="fa fa-user-plus fa-3x addBtn"
+              <Button variant="primary" size="md"> 
+              <span
+                className="fa fa-user-plus"
                 title="Add User"
                 aria-hidden="true"
-                style={{ marginRight: "5" }}
+                style={{marginRight:'5px'}}
               >
                 {" "}
-                Add Team{" "}
-              </i>
+               
+              </span>
+              Add Team{" "}
+              </Button>
             </Link>
           )}
           </div>

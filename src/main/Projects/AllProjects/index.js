@@ -13,7 +13,7 @@ import Loader from "../../../components/Loader";
 import { useAuth } from "../../../auth/AuthProvider";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Row, Col } from "react-bootstrap";
 import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
 export default function AllProject() {
   const { userDetails } = useAuth();
@@ -35,7 +35,7 @@ export default function AllProject() {
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
 
   const handleIsArchive = () => {
-    setProjectListValue([])
+    setProjectListValue([]);
     setIsArchive(!isArchive);
   };
 
@@ -74,18 +74,18 @@ export default function AllProject() {
       dataToSend.isArchived = true;
     }
     try {
-    setLoading(true);
+      setLoading(true);
       const projects = await getAllProjects(dataToSend);
       if (projects.error) {
-        setLoading(false)
+        setLoading(false);
         setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects?.data);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
@@ -190,38 +190,55 @@ export default function AllProject() {
   return (
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
-        <h1 className="h1-text">
-          <i><FaGem/></i>  Projects
-          <div className="projects-button">
-          {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && !isArchive && (
-          
-          <Link style={{float:'left'}}
-            to={{
-              pathname: "/project/add",
-            }}
-          >
-            <i
-              className="fa fa-plus-circle fa-3x addBtn"
-             
-              aria-hidden="true"
-            > &nbsp; Add Project </i> 
-          </Link>
-      
-    )}
-     {
-    (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
-  <button className="btn btn-primary" onClick={handleIsArchive}> {isArchive ? 'Active Projects':'Archive List'}</button>
-  }
-
-          </div>
-        </h1>
+        <Row>
+          <Col lg={6}>
+            <h1 className="h1-text">
+              <i>
+                <FaGem />
+              </i>{" "}
+              Projects
+            </h1>
+          </Col>
+          <Col lg={6}>
+            <div className="text-end">
+              {(userDetails.role === "SUPER_ADMIN" ||
+                userDetails.role === "ADMIN") &&
+                !isArchive && (
+                  <Link
+                    style={{ marginRight: "10px" }}
+                    to={{
+                      pathname: "/project/add",
+                    }}
+                  >
+                     <button className="btn btn-primary"> 
+                    <i
+                      className="fa fa-plus-circle"
+                      aria-hidden="true"
+                    >
+                       </i>
+                      
+                      &nbsp; Add Project{" "}
+                   
+                    </button>
+                  </Link>
+                )}
+              {(userDetails.role === "ADMIN" ||
+                userDetails.role === "SUPER_ADMIN") && (
+                <button className="btn btn-primary" onClick={handleIsArchive}>
+                  {" "}
+                  {isArchive ? "Active Projects" : "Archive List"}
+                </button>
+              )}
+            </div>
+          </Col>
+        </Row>
 
         <div className="project-boxes jsGridView">
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
                 <div key={projectIndex}>
-                  <ProjectCard 
+                  <ProjectCard
                     name={element.name}
                     background={element?.colorCode}
                     description={element?.description || "--"}

@@ -317,7 +317,7 @@ const ProjectCard = ({
 
                     )}
                     {user?.profilePicture &&(index<3)&&(
-                      <div key={index} className="user-pic">
+                      <div key={index} className="user_pic_card">
                         <img
                           style={{
                             width: "30px",
@@ -429,11 +429,11 @@ const ProjectCard = ({
                             <UserIcon key={index} firstName={user.name} />
                           )}
                           {user?.profilePicture && (
-                            <div className="user-pic">
+                            <div className="user_pic_card">
                               <img
                                 style={{
-                                  width: "30px",
-                                  height: "30px",
+                                  width: "35px",
+                                  height: "35px",
                                   borderRadius: "50%",
                                 }}
                                 src={`${user?.profilePicture}`}
