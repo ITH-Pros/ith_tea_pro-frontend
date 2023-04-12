@@ -506,6 +506,7 @@ const Tasks = () => {
 
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
+              
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
                   {project?._id?.projectId} / {project?._id?.section}{" "}
@@ -622,11 +623,7 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
-                      {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
+                      {((userDetails.role === "LEAD" && ( task?.lead?.includes(userDetails.id) ||userDetails.id === task?.createdBy?._id)) ||
                         userDetails.role === "SUPER_ADMIN" ||
                         userDetails.role === "ADMIN") && (
                         <Dropdown>
@@ -764,7 +761,7 @@ const Tasks = () => {
                         {task?.priority === "HIGH" && (
                           <Badge bg="danger">HIGH</Badge>
                         )}
-                        {!task?.assignedTo?.profilePicture && (
+                        {!task?.assignedTo?.profilePicture&&task?.assignedTo?.name && (
                           <div className="nameTag">
                             <UserIcon
                               key={index}
@@ -786,6 +783,7 @@ const Tasks = () => {
                           </div>
                         )}
                         <span> {task?.assignedTo?.name}</span>
+                        {!task?.assignedTo?.name && <span> NOT ASSIGNED </span>}
 
                         {task?.dueDate && (
                           <Badge bg={task?.dueToday ? "danger" : "primary"}>
@@ -797,9 +795,9 @@ const Tasks = () => {
                           // onClick={() => handleViewDetails(task?._id)}
                         )}
                       </div>
-                      {(userDetails.id === task?.assignedTo?._id ||
+                      {(
                         (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
+                          (
                             task?.lead?.includes(userDetails.id) ||
                             userDetails.id === task?.createdBy?._id)) ||
                         userDetails.role === "SUPER_ADMIN" ||
@@ -836,6 +834,13 @@ const Tasks = () => {
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
         </Accordion>
+
+
+<div className="bg-primary px-2">
+ 
+
+</div>
+
 
         {/* <Modal
           show={modalShow}
