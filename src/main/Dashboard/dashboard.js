@@ -46,6 +46,7 @@ import {
   Modal,
   Popover,
 } from "react-bootstrap";
+import CustomCalendar from "./custom-calender";
 
 export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState("");
@@ -499,7 +500,7 @@ export default function Dashboard(props) {
                       overdueWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -697,7 +698,7 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -929,7 +930,7 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -1178,7 +1179,7 @@ export default function Dashboard(props) {
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -1374,7 +1375,7 @@ export default function Dashboard(props) {
                             className="text-end "
                             style={{ position: "absolute", right: "0px" }}
                           >
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {(
                               (userDetails.role === "LEAD" &&
                                 (userDetails.id === task?.assignedTo?._id ||
                                   task?.lead?.includes(userDetails.id) ||
@@ -1420,7 +1421,7 @@ export default function Dashboard(props) {
               <Row>
                 <Col lg={12} className="mt-3">
                   <Card id="card-task" style={{ overflowX: "hidden" }}>
-                    <Row id="agenda">
+                    {/* <Row id="agenda">
                       <Col lg={4}>
                         <Button variant="light" size="sm" className="left-btn">
                           <BsChevronDoubleLeft /> Week
@@ -1440,7 +1441,8 @@ export default function Dashboard(props) {
                           Week <BsChevronDoubleRight />
                         </Button>
                       </Col>
-                    </Row>
+                    </Row> */}
+                    <CustomCalendar/>
                     <Row id="list_ui" className="mt-2">
                       <Col lg={2} className="v-align">
                         <p className="day">
@@ -1462,7 +1464,7 @@ export default function Dashboard(props) {
                             teamWorkList?.map((task) => (
                               <Row className="d-flex justify-content-start list_task w-100 mx-0">
                                 <Col lg={4} className="middle">
-                                  {(userDetails.id === task?.assignedTo?._id ||
+                                  {(
                                     (userDetails.role === "LEAD" &&
                                       (userDetails.id ===
                                         task?.assignedTo?._id ||
@@ -1670,7 +1672,7 @@ export default function Dashboard(props) {
                                   className="text-end "
                                   style={{ position: "absolute", right: "0px" }}
                                 >
-                                  {(userDetails.id === task?.assignedTo?._id ||
+                                  {(
                                     (userDetails.role === "LEAD" &&
                                       (userDetails.id ===
                                         task?.assignedTo?._id ||
@@ -1755,6 +1757,10 @@ export default function Dashboard(props) {
                 </Col>
               </Row>
             </Col>
+
+            {/* ///////custom calender */}
+            {/* <CustomCalendar/> */}
+            {/* /////custom calender */}
           </Row>
         </Container>
       )}

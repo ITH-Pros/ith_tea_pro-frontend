@@ -90,7 +90,6 @@ export default function AddUser(props) {
             <Form.Control.Feedback type="invalid">
               Name is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           
           <Form.Group as={Col} md="4">
@@ -106,7 +105,6 @@ export default function AddUser(props) {
             <Form.Control.Feedback type="invalid">
               Email is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           
           <Form.Group as={Col} md="4">

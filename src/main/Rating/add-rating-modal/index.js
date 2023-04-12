@@ -271,7 +271,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               Project is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Col} md="6">
@@ -294,7 +293,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               User name is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Col} md="6">
@@ -317,7 +315,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               Task is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="rating_date">
             <Form.Label>Date</Form.Label>
@@ -333,7 +330,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               Date is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group
@@ -357,7 +353,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               Rating is required, value must be in range [0,5] !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3 desc">

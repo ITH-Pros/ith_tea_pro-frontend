@@ -433,6 +433,11 @@ export default function AddTaskModal(props) {
       ...taskFormFields,
       projectId: taskFormValue?.projectId,
       section: taskFormValue?.section,
+      title:taskFormValue?.title,
+      description:taskFormValue?.description,
+      dueDate:taskFormValue?.dueDate,
+      priority:taskFormValue?.priority,
+      status:taskFormValue?.status,
       leads: e.target.value,
     });
   };
@@ -617,7 +622,6 @@ export default function AddTaskModal(props) {
                   <Form.Control.Feedback type="invalid">
                     Project is required !!
                   </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="6">
                   <Form.Label>Section</Form.Label>
@@ -627,6 +631,7 @@ export default function AddTaskModal(props) {
                     as="select"
                     type="select"
                     name="section"
+                    placeholder="Select Section"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.section}
                     disabled={selectedProjectFromTask}
@@ -634,6 +639,7 @@ export default function AddTaskModal(props) {
                     <option value="" selected disabled>
                       Select Section
                     </option>
+                 
                     {categoryList?.map((section, index) => (
                       <option value={section._id} key={index}>
                         {section.name}
@@ -643,7 +649,6 @@ export default function AddTaskModal(props) {
                   <Form.Control.Feedback type="invalid">
                     Section is required !!
                   </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="12">
                   <Form.Label>Lead</Form.Label>
@@ -669,7 +674,6 @@ export default function AddTaskModal(props) {
                   <Form.Control.Feedback type="invalid">
                     Lead is required !!
                   </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
 
@@ -689,7 +693,6 @@ export default function AddTaskModal(props) {
                   <Form.Control.Feedback type="invalid">
                     Title is required !!
                   </Form.Control.Feedback>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
               </Row>
 
@@ -762,7 +765,6 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
@@ -774,7 +776,6 @@ export default function AddTaskModal(props) {
                     name="status"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.status || statusList[0]}
-                    disabled={taskFormValue?.status === "COMPLETED"}
                   >
                     <option value="" disabled>
                       Select Status
@@ -789,7 +790,6 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
-                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
 
                 </Form.Group>
                 {taskFormValue?.status === "COMPLETED" && (
@@ -801,7 +801,7 @@ export default function AddTaskModal(props) {
                       name="completedDate"
                       onChange={updateTaskFormValue}
                       value={taskFormValue.completedDate}
-                      disabled={selectedTask.status === "COMPLETED"}
+                      disabled={taskFormValue.status === "COMPLETED"}
                     />
                   </Form.Group>
                 )}
@@ -856,26 +856,6 @@ export default function AddTaskModal(props) {
           </div>
         </Offcanvas.Body>
       </Offcanvas>
-
-      {/* <Modal
-        width={800}
-        show={showAddTaskModal}
-        size="xl"
-        className="taskModalForm"
-        aria-labelledby="contained-modal-title-vcenter"
-        onHide={() => resetModalData()}
-        backdrop="static"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            {" "}
-            {selectedTask ? "Edit Task" : "Add Task"}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body> */}
-          
-        {/* </Modal.Body>
-      </Modal> */}
       {loading ? <Loader /> : null}
     </>
   );

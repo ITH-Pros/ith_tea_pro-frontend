@@ -364,7 +364,6 @@ export default function AddProject(props) {
             <Form.Control.Feedback type="invalid">
               Name is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
         </Row>
 
