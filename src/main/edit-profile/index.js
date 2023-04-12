@@ -126,10 +126,13 @@ function UserForm(props) {
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
         handleModalClose();
+        console.log('inside handel function')
+        document.getElementById('headerbuttontoupdateprofile')?.click();
         
       }
     } catch (error) {
       console.log("Error while updating user details");
+      document.getElementById('headerbuttontoupdateprofile')?.click();
       setLoading(false);
       return error.message;
     }
