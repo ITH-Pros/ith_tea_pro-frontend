@@ -38,6 +38,7 @@ export default function ViewTaskModal(props) {
   const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
   const [errorRating, setErrorRating] = useState(false);
 
+ 
   useEffect(() => {
     if (selectedTaskId) {
       getTaskDetailsById(selectedTaskId);
@@ -76,6 +77,7 @@ export default function ViewTaskModal(props) {
           getTaskDetailsById(selectedTaskId);
         }
         getTasksDataUsingProjectId();
+        setShowConfirmation(false)
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -92,10 +94,44 @@ export default function ViewTaskModal(props) {
     };
     if (newStatus === 'COMPLETED') {
       // confirm('Are you sure you want to complete the task.')
-        
-    }
+
+      handleConfirmation(dataToSend)
+      
+      
+    } else {
     updateTaskStatus(dataToSend);
+    }
   };
+
+  const handleConfirmation = (dataToSend) => {
+    setDataToSendForTaskStatus(dataToSend)
+    setShowConfirmation(true);
+ 
+  };
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [dataToSendForTaskStatus , setDataToSendForTaskStatus] = useState(null)
+
+
+
+
+  function ConfirmationPopup({ show, onCancel, onConfirm ,  }) {
+    return (
+      <Modal show={show} onHide={onCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to complete this task ?
+
+      <div>
+      <Button variant="secondary ml-2" onClick={onCancel}>Cancel</Button>
+          <Button variant="danger ml-2" onClick={onConfirm}>Complete</Button>
+
+      </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -196,22 +232,6 @@ export default function ViewTaskModal(props) {
       return false;
     }
   };
-
-  // const desibleFields = (task) => {
-  //   console.log(task?.status , "task?.status");
-
-  //   if (task?.status === "COMPLETED" && task?.isRated) {
-  //     return false;
-  //   } else if (task?.assignedTo?._id === userDetails?.id ){
-  //     return true;
-  //   } else if (task?.lead[0]?._id === userDetails?.id ){
-  //     return true;
-  //   } else if (userDetails?.role === "ADMIN" || userDetails?.role === "SUPER_ADMIN"){
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
 
 
   return (
@@ -528,6 +548,13 @@ export default function ViewTaskModal(props) {
         </Offcanvas.Body>
       </Offcanvas>
 
+      <ConfirmationPopup
+            show={showConfirmation}
+            onCancel={() => setShowConfirmation(false)}
+            onConfirm={() =>updateTaskStatus(dataToSendForTaskStatus)}
+             />
+
+
 
       {loading?<Loader />:null}
       {toaster && (
@@ -541,53 +568,4 @@ export default function ViewTaskModal(props) {
       )}
     </>
   );
-
-
-
-
-
-  // return (
-  //   <>
-  //     <Modal
-  //       show={showViewTaskModal}
-  //       size="xl"
-  //       className="taskModalForm"
-  //       aria-labelledby="contained-modal-title-vcenter"
-  //       onHide={() => {
-  //         closeViewTaskModal();
-  //         setShowViewTaskModal(false);
-  //       }}
-  //       backdrop="static"
-  //     >
-  //       <Modal.Header closeButton>
-  //         <Modal.Title>Task Details</Modal.Title>
-  //       </Modal.Header>
-  //       <Modal.Body>
-          
-  //       </Modal.Body>
-  //       <Modal.Footer>
-  //         <Button
-  //           onClick={() => {
-  //             closeViewTaskModal();
-  //             setShowViewTaskModal(false);
-  //           }}
-  //           variant="secondary"
-  //         >
-  //           Close
-  //         </Button>
-  //       </Modal.Footer>
-  //     </Modal>
-
-  //     {loading?<Loader />:null}
-  //     {toaster && (
-  //       <ToastContainer position="top-end" className="p-3">
-  //       <Toaster 
-  //         message={toasterMessage}
-  //         show={toaster}
-  //         close={() => showToaster(false)}
-  //       />
-  //       </ToastContainer>
-  //     )}
-  //   </>
-  // );
 }
