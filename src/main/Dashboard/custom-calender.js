@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from "react-icons/bs";
+import { BsChevronDoubleLeft, BsChevronLeft, BsChevronDown, BsChevronDoubleRight } from "react-icons/bs";
 import "./dashboard.css";
 
 const CustomCalendar = () => {
@@ -44,7 +44,7 @@ console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateS
 
   return (
     <Row id="agenda">
-      <Col lg={4}>
+      <Col lg={4} className="px-0">
         <Button variant="light" size="sm" className="left-btn" onClick={handlePrev}>
           <BsChevronDoubleLeft /> Prev {currentView}
         </Button>
@@ -55,14 +55,14 @@ console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateS
       <Col lg={4} className="text-center">
         <h4>
           {currentView === "Week"
-            ? `Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`
+            ?<> <span> week of </span> <br/>  {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}</>
             : currentDate.toLocaleDateString()}
         </h4>
       </Col>
-      <Col lg={4} className="text-end">
+      <Col lg={4} className="text-end px-0">
         <Dropdown>
           <Dropdown.Toggle variant="light" size="sm" id="dropdown-basic">
-            {currentView}
+            {currentView} <BsChevronDown/>
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
