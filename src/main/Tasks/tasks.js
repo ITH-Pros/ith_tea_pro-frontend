@@ -3,6 +3,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import "./tasks.css";
+import { useEffectOnce } from './useEffectOnce';
+
 import {
   addSectionApi,
   archiveSectionApi,
@@ -56,22 +58,30 @@ const Tasks = () => {
   const [archiveSectionModal, setArchiveSectionModal] = useState(false);
   const { userDetails } = useAuth();
   const params = useParams();
-  useEffect(() => {
-    window.history.replaceState({}, '', '/task');
-  }, []);
+
   useEffect(() => {
     getTasksDataUsingProjectId();
     let paramsData;
+  
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId);
+      paramsData = JSON.parse(params?.projectId)
+      localStorage.setItem('tasksParamsData',params?.projectId)
     }
-    if (paramsData?.projectId) {
+ 
+    if (paramsData?.projectId) {  
       setSelectedProjectId(paramsData?.projectId);
     }
     if (paramsData?.isArchive) {
       setIsArchive(paramsData?.isArchive);
     }
   }, [isArchive]);
+ 
+  // useEffectOnce(() => {
+  //   console.log('useEffectOnce has run!');
+  //   return () => {
+  //   };
+  // });
+ 
 
   const handleProgressBarHover = (project) => {
     const completedTasks = project.completedTasks || 0;

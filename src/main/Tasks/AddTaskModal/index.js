@@ -835,7 +835,7 @@ export default function AddTaskModal(props) {
                     </Button>
                   </div>
                 )}
-                {!selectedTask && !selectedProjectFromTask && (
+                {!selectedTask && !selectedProjectFromTask &&   !(selectedTask || handleProjectId || selectedProjectFromTask)&&(
                   <Button
                     className="btn-press btn-gradient-border btnDanger"
                     type="button"
