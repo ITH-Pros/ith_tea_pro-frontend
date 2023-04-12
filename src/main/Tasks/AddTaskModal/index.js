@@ -74,10 +74,6 @@ export default function AddTaskModal(props) {
     getProjectList();
   }, []);
 
-  // useEffect(() => {
-  //   // getProjectList();
-  // }, [taskFormValue.projectId]);
-
   useEffect(() => {
     if (taskFormValue.projectId && taskFormValue.leads) {
       if (
@@ -102,6 +98,11 @@ export default function AddTaskModal(props) {
       // setCategoryList();
     }
   }, [showAddTask]);
+
+  
+
+ 
+
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
