@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import "./tasks.css";
-// import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-headless-accordion";
+import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-headless-accordion";
 import {
   addSectionApi,
   archiveSectionApi,
@@ -487,7 +487,7 @@ const Tasks = () => {
           selectedTaskId={selectedTaskId}
           getTasksDataUsingProjectId={getTasksDataUsingProjectId}
         />
-
+{/* 
         <Accordion alwaysOpen="true">
           {!projects?.length &&
             params?.projectId &&
@@ -848,15 +848,9 @@ const Tasks = () => {
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
-        </Accordion> 
+        </Accordion> */}
 
 
-
-
-
-
-
-{/* 
 <div  id="multi_accrodian">
 <Accordion>
             <AccordionItem>
@@ -894,9 +888,27 @@ const Tasks = () => {
             </AccordionItem>
         </Accordion>
 
-</div> */}
+</div>
 
 
+        {/* <Modal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          animation={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {" "}
+              {sectionEditMode ? "Update Section" : "Add section"}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+           
+          </Modal.Body>
+        </Modal> */}
+
+
+        {/* ////// */}
         <Offcanvas
         className="Offcanvas-modal"
         style={{height:'100vh'}}
