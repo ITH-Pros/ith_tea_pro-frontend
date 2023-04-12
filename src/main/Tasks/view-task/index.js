@@ -11,7 +11,6 @@ import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import {  message, Popconfirm } from 'antd';
 import Modal from "react-bootstrap/Modal";
 
 import {
