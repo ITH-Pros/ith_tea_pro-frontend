@@ -59,12 +59,7 @@
 }
 
 
-.border-bottom {
-  cursor: pointer;
-  border: 1px solid #5959e3;
-  box-shadow: -5px -5px 9px rgb(255 255 255 / 45%), 5px 5px 9px;
-
-}
+ 
 
 .main-div-tab {
   display: flex;
