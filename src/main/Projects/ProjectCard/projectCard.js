@@ -163,15 +163,15 @@ const ProjectCard = ({
 
   function ConfirmationPopup({ show, onCancel, onConfirm ,  }) {
     return (
-      <Modal show={show} onHide={onCancel}>
+      <Modal show={show} onHide={onCancel} centered id="confirmation_ui">
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to remove {selectedUserName} ?
 
-      <div>
-      <Button variant="secondary ml-2" onClick={onCancel}>Cancel</Button>
-          <Button variant="danger ml-2" onClick={onConfirm}>Remove</Button>
+      <div className="mt-2">
+      <Button size="md" variant="secondary " onClick={onCancel}>Cancel</Button>
+          <Button size="md" variant="danger" style={{marginLeft:'10px'}} onClick={onConfirm}>Remove</Button>
 
       </div>
 

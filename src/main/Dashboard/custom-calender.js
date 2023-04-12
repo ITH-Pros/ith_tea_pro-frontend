@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Dropdown } from "react-bootstrap";
 import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from "react-icons/bs";
 
 const CustomCalendar = () => {
-  const [currentView, setCurrentView] = useState("week");
+  const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const handlePrev = () => {
-    if (currentView === "week") {
+    if (currentView === "Week") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
       setCurrentDate(newDate);
       console.log(`Previous week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
-    } else if (currentView === "day") {
+    } else if (currentView === "Day") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
       setCurrentDate(newDate);
       console.log(`Previous day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
@@ -19,44 +19,53 @@ const CustomCalendar = () => {
   };
 
   const handleNext = () => {
-    if (currentView === "week") {
+    if (currentView === "Week") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
       setCurrentDate(newDate);
       console.log(`Next week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
-    } else if (currentView === "day") {
+    } else if (currentView === "Day") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
       setCurrentDate(newDate);
       console.log(`Next day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     }
   };
 
-  const handleViewChange = (e) => {
-    const newView = e.target.value;
-    setCurrentView(newView);
-    console.log(`View changed: currentView=${newView}, currentDate=${currentDate.toLocaleDateString()}`);
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+    console.log(`View changed: currentView=${view}, currentDate=${currentDate.toLocaleDateString()}`);
   };
 
   const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
-  const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 7);
+  const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + (7 - currentDate.getDay()));
 
   return (
     <Row id="agenda">
       <Col lg={4}>
         <Button variant="light" size="sm" className="left-btn" onClick={handlePrev}>
-          <BsChevronDoubleLeft /> Prev {currentView === "week" ? "Week" : "Day"}
+          <BsChevronDoubleLeft /> Prev {currentView}
         </Button>
         <Button variant="light" size="sm" className="right-btn" onClick={handleNext}>
-          Next {currentView === "week" ? "Week" : "Day"} <BsChevronDoubleRight />
+          Next {currentView} <BsChevronDoubleRight />
         </Button>
       </Col>
-      <Col lg={4}>
-        <h4 className="text-center">{currentView === "week" ? `Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}` : currentDate.toLocaleDateString()}</h4>
+      <Col lg={4} className="text-center">
+        <h4>
+          {currentView === "Week"
+            ? `Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`
+            : currentDate.toLocaleDateString()}
+        </h4>
       </Col>
       <Col lg={4} className="text-end">
-        <select value={currentView} onChange={handleViewChange}>
-          <option value="week">Week</option>
-          <option value="day">Day</option>
-        </select>
+        <Dropdown>
+          <Dropdown.Toggle variant="light" size="sm" id="dropdown-basic">
+            {currentView}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => handleViewChange("Week")}>Week</Dropdown.Item>
+            <Dropdown.Item onClick={() => handleViewChange("Day")}>Day</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Col>
     </Row>
   );
