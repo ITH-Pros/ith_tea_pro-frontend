@@ -1442,7 +1442,8 @@ export default function Dashboard(props) {
                         </Button>
                       </Col>
                     </Row> */}
-                    <CustomCalendar/>
+                    <CustomCalendar
+                    />
                     <Row id="list_ui" className="mt-2">
                       <Col lg={2} className="v-align">
                         <p className="day">
