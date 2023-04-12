@@ -477,3 +477,4 @@ button.accordion-button {
 .body_ui{ position: inherit;     height: 21vh !important;}
 
 
+.was-validated .form-control:invalid{background-position: right calc(0.375em + 1.1875rem) center !important;}

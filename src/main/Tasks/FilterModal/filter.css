@@ -29,10 +29,10 @@
     transition: color .3s linear;
     color: #fff !important;
     border-color: #d1a2fb;
-    padding: 6px 12px;
+    padding: 10px 12px;
     border-radius: 5px;
     border: 1px solid;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 #dialog-window .accordion-item {

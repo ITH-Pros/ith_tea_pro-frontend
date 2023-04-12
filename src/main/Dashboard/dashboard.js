@@ -21,6 +21,12 @@ import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
 import ViewTaskModal from "../Tasks/view-task";
 import {
+  BsChevronDoubleLeft,
+  BsChevronLeft,
+  BsChevronDoubleRight,
+  BsChevronRight,
+} from "react-icons/bs";
+import {
   getAllMyWorks,
   getAllPendingRating,
   getAllProjects,
@@ -106,8 +112,7 @@ export default function Dashboard(props) {
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(
-          tasks?.message ||
-            "Something Went Wrong While Fetching My Work Data"
+          tasks?.message || "Something Went Wrong While Fetching My Work Data"
         );
         setShowToaster(true);
       } else {
@@ -275,7 +280,7 @@ export default function Dashboard(props) {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
-       
+
         onInit();
       }
     } catch (error) {
@@ -312,8 +317,6 @@ export default function Dashboard(props) {
     const diffDays = Math?.round(Math?.abs((currentDate - date) / oneDay));
     return diffDays;
   }
-  
-  
 
   const skipReminder = async (event) => {
     event.preventDefault();
@@ -357,9 +360,9 @@ export default function Dashboard(props) {
         <Row>
           <Col lg={6} className="px-0">
             {props.showBtn && (
-               <h1 className="h1-text">
-               <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
-             </h1>
+              <h1 className="h1-text">
+                <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
+              </h1>
             )}
           </Col>
           <Col lg={6} id="nav-filter" className="px-0">
@@ -369,6 +372,7 @@ export default function Dashboard(props) {
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="secondary"
+                      size="lg"
                       onClick={handleShowAllProjects}
                       id="dropdown-basic"
                     >
@@ -398,31 +402,23 @@ export default function Dashboard(props) {
                       <Avatar name={project.name} size={40} round="20px" />{" "}
                       {/* <h5 className="text-truncate">{project?.name}</h5> */}
                       <OverlayTrigger
-                              placement="top"
-                              overlay={<Tooltip>{project?.name}</Tooltip>}
-                            >
-                              <h5
-                                
-                                className="text-truncate"
-                              >
-                               {project?.name}
-                              </h5>
-                            </OverlayTrigger>
+                        placement="top"
+                        overlay={<Tooltip>{project?.name}</Tooltip>}
+                      >
+                        <h5 className="text-truncate">{project?.name}</h5>
+                      </OverlayTrigger>
                     </Col>
                     <Col lg={4} className="middle">
-                      
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={<Tooltip>{project?.description || "--"}</Tooltip>}
-                            >
-                              <p
-                                
-                                className="text-truncate"
-                              >
-                               {project?.description || "--"}
-                              </p>
-                            </OverlayTrigger>
-
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip>{project?.description || "--"}</Tooltip>
+                        }
+                      >
+                        <p className="text-truncate">
+                          {project?.description || "--"}
+                        </p>
+                      </OverlayTrigger>
                     </Col>
                     <Col
                       lg={2}
@@ -474,7 +470,7 @@ export default function Dashboard(props) {
                 <Col lg={6} className="left-add">
                   <span>OVERDUE WORK</span>
 
-                {/* {<i
+                  {/* {<i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
@@ -502,12 +498,12 @@ export default function Dashboard(props) {
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
                               <Dropdown>
                                 <Dropdown.Toggle
                                   variant="success"
@@ -621,15 +617,14 @@ export default function Dashboard(props) {
                           <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
-                                 { daysSince(task?.dueDate?.split("T")[0]) + ' Day ago'}
+                                  {daysSince(task?.dueDate?.split("T")[0]) +
+                                    " Day ago"}
                                   {/* {moment(task?.dueDate?.split("T")[0]).format(
                                     "DD/MM/YYYY"
                                   )} */}
-                                  
                                 </Badge>
                               </small>
                             )}
@@ -644,33 +639,36 @@ export default function Dashboard(props) {
                             )}
                           </Col>
                           <Col lg={3} className="middle">
-                          <>
-                                  {["top"].map((placement) => (
-                                    <OverlayTrigger
-                                      key={placement}
-                                      placement={placement}
-                                      overlay={
-                                        <Tooltip id={`tooltip-${placement}`}>
-                                          {task?.assignedTo?.name}
-                                        </Tooltip>
-                                      }
-                                    >
-                                      <Button className="tooltip-button br0">
-                                        {task?.assignedTo?.name && (
-                                          <span className="nameTag" title="Assigned To">
-                                            <img src={avtar} alt="userAvtar" />{" "}
-                                            {task?.assignedTo?.name
-                                              .split(" ")[0] +' '} 
-                                            {task?.assignedTo?.name
-                                              .split(" ")[1]&&task?.assignedTo?.name
-                                              .split(" ")[1]
-                                              ?.charAt(0)+'.'}
-                                          </span>
-                                        )}
-                                      </Button>
-                                    </OverlayTrigger>
-                                  ))}
-                                </>
+                            <>
+                              {["top"].map((placement) => (
+                                <OverlayTrigger
+                                  key={placement}
+                                  placement={placement}
+                                  overlay={
+                                    <Tooltip id={`tooltip-${placement}`}>
+                                      {task?.assignedTo?.name}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Button className="tooltip-button br0">
+                                    {task?.assignedTo?.name && (
+                                      <span
+                                        className="nameTag"
+                                        title="Assigned To"
+                                      >
+                                        <img src={avtar} alt="userAvtar" />{" "}
+                                        {task?.assignedTo?.name.split(" ")[0] +
+                                          " "}
+                                        {task?.assignedTo?.name.split(" ")[1] &&
+                                          task?.assignedTo?.name
+                                            .split(" ")[1]
+                                            ?.charAt(0) + "."}
+                                      </span>
+                                    )}
+                                  </Button>
+                                </OverlayTrigger>
+                              ))}
+                            </>
                           </Col>
                           <Col
                             lg={2}
@@ -703,7 +701,8 @@ export default function Dashboard(props) {
                                   task?.lead?.includes(userDetails.id) ||
                                   userDetails.id === task?.createdBy?._id)) ||
                               userDetails.role === "SUPER_ADMIN" ||
-                              userDetails.role === "ADMIN") && <Dropdown>
+                              userDetails.role === "ADMIN") && (
+                              <Dropdown>
                                 <Dropdown.Toggle
                                   variant="defult"
                                   id="dropdown-basic"
@@ -726,7 +725,8 @@ export default function Dashboard(props) {
                                     Edit Task
                                   </Dropdown.Item>
                                 </Dropdown.Menu>
-                              </Dropdown>}
+                              </Dropdown>
+                            )}
                           </Col>
                         </Row>
                       ))}
@@ -749,7 +749,7 @@ export default function Dashboard(props) {
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                    style={{cursor:'pointer'}}
+                    style={{ cursor: "pointer" }}
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
@@ -928,12 +928,13 @@ export default function Dashboard(props) {
                             className="text-end middle"
                           >
                             {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") &&<Dropdown>
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
+                              <Dropdown>
                                 <Dropdown.Toggle
                                   variant="defult"
                                   id="dropdown-basic"
@@ -956,7 +957,8 @@ export default function Dashboard(props) {
                                     Edit Task
                                   </Dropdown.Item>
                                 </Dropdown.Menu>
-                              </Dropdown>}
+                              </Dropdown>
+                            )}
                           </Col>
                         </Row>
                       ))}
@@ -1059,7 +1061,10 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button">
                                         {task?.lead[0]?.name && (
-                                          <span className="nameTag" title="Lead">
+                                          <span
+                                            className="nameTag"
+                                            title="Lead"
+                                          >
                                             <img
                                               src={leadAvatar}
                                               alt="userAvtar"
@@ -1076,7 +1081,6 @@ export default function Dashboard(props) {
                                     </OverlayTrigger>
                                   ))}
                                 </>
-                      
 
                                 <>
                                   {["top"].map((placement) => (
@@ -1091,7 +1095,10 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button br0">
                                         {task?.assignedTo?.name && (
-                                          <span className="nameTag" title="Assigned To">
+                                          <span
+                                            className="nameTag"
+                                            title="Assigned To"
+                                          >
                                             <img src={avtar} alt="userAvtar" />{" "}
                                             {task?.assignedTo?.name
                                               .split(" ")[0]
@@ -1118,7 +1125,7 @@ export default function Dashboard(props) {
                           style={{ justifyContent: "end" }}
                         >
                           {userDetails?.role !== "CONTRIBUTOR" && (
-                            <AddRating 
+                            <AddRating
                               taskFromDashBoard={task}
                               onInit={onInit}
                             />
@@ -1148,7 +1155,7 @@ export default function Dashboard(props) {
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                    style={{cursor:'pointer'}}
+                    style={{ cursor: "pointer" }}
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
@@ -1170,12 +1177,12 @@ export default function Dashboard(props) {
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
                               <Dropdown>
                                 <Dropdown.Toggle
                                   variant="success"
@@ -1272,8 +1279,8 @@ export default function Dashboard(props) {
                                 </Dropdown.Menu>
                               </Dropdown>
                             )}
-                        
-                                  <OverlayTrigger
+
+                            <OverlayTrigger
                               placement="top"
                               overlay={<Tooltip>{task?.title}</Tooltip>}
                             >
@@ -1288,7 +1295,6 @@ export default function Dashboard(props) {
                           <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
@@ -1309,33 +1315,36 @@ export default function Dashboard(props) {
                             )}
                           </Col>
                           <Col lg={3} className="middle">
-                          <>
-                                  {["top"].map((placement) => (
-                                    <OverlayTrigger
-                                      key={placement}
-                                      placement={placement}
-                                      overlay={
-                                        <Tooltip id={`tooltip-${placement}`}>
-                                          {task?.assignedTo?.name}
-                                        </Tooltip>
-                                      }
-                                    >
-                                      <Button className="tooltip-button br0">
-                                        {task?.assignedTo?.name && (
-                                          <small  className="nameTag text-truncate" title="Assigned To">
-                                            <img src={avtar} alt="userAvtar" />{" "}
-                                            {task?.assignedTo?.name
-                                              .split(" ")[0] +' '} 
-                                            {task?.assignedTo?.name
-                                              .split(" ")[1] && task?.assignedTo?.name
-                                              .split(" ")[1]
-                                              ?.charAt(0)+'.'}
-                                          </small>
-                                        )}
-                                      </Button>
-                                    </OverlayTrigger>
-                                  ))}
-                                </>
+                            <>
+                              {["top"].map((placement) => (
+                                <OverlayTrigger
+                                  key={placement}
+                                  placement={placement}
+                                  overlay={
+                                    <Tooltip id={`tooltip-${placement}`}>
+                                      {task?.assignedTo?.name}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Button className="tooltip-button br0">
+                                    {task?.assignedTo?.name && (
+                                      <small
+                                        className="nameTag text-truncate"
+                                        title="Assigned To"
+                                      >
+                                        <img src={avtar} alt="userAvtar" />{" "}
+                                        {task?.assignedTo?.name.split(" ")[0] +
+                                          " "}
+                                        {task?.assignedTo?.name.split(" ")[1] &&
+                                          task?.assignedTo?.name
+                                            .split(" ")[1]
+                                            ?.charAt(0) + "."}
+                                      </small>
+                                    )}
+                                  </Button>
+                                </OverlayTrigger>
+                              ))}
+                            </>
                           </Col>
                           <Col
                             lg={2}
@@ -1361,36 +1370,37 @@ export default function Dashboard(props) {
                             lg={1}
                             id="dropdown_action"
                             className="text-end "
-                            style={{position:'absolute', right:'0px'}}
+                            style={{ position: "absolute", right: "0px" }}
                           >
                             {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") &&
-                        <Dropdown>
-                              <Dropdown.Toggle
-                                variant="defult"
-                                id="dropdown-basic"
-                                style={{padding:'0px', textAlign:'end'}}
-                              >
-                                <i className="fa fa-ellipsis-v"></i>
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setSelectedProject();
-                                    setShowAddTask(true);
-                                    setSelectedTask(task);
-                                  }}
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="defult"
+                                  id="dropdown-basic"
+                                  style={{ padding: "0px", textAlign: "end" }}
                                 >
-                                  Edit
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>}
+                                  <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setSelectedProject();
+                                      setShowAddTask(true);
+                                      setSelectedTask(task);
+                                    }}
+                                  >
+                                    Edit
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            )}
                           </Col>
                         </Row>
                       ))}
@@ -1398,11 +1408,344 @@ export default function Dashboard(props) {
                 </Col>
               </Row>
             </Col>
+            <Col lg={6} style={{ paddingLeft: "0px" }}>
+              <Row>
+                <Col lg={6} className="left-add">
+                  <span>Agenda</span>
+                </Col>
+                <Col lg={6} className="right-filter"></Col>
+              </Row>
+              <Row>
+                <Col lg={12} className="mt-3">
+                  <Card id="card-task" style={{ overflowX: "hidden" }}>
+                    <Row id="agenda">
+                      <Col lg={4}>
+                        <Button variant="light" size="sm" className="left-btn">
+                          <BsChevronDoubleLeft /> Week
+                        </Button>
+                        <Button variant="light" size="sm" className="right-btn">
+                          <BsChevronLeft /> Day
+                        </Button>
+                      </Col>
+                      <Col lg={4}>
+                        <h4 className="text-center">April</h4>
+                      </Col>
+                      <Col lg={4} className="text-end">
+                        <Button variant="light" size="sm" className="left-btn">
+                          Day <BsChevronRight />
+                        </Button>
+                        <Button variant="light" size="sm" className="right-btn">
+                          Week <BsChevronDoubleRight />
+                        </Button>
+                      </Col>
+                    </Row>
+                    <Row id="list_ui" className="mt-2">
+                      <Col lg={2} className="v-align">
+                        <p className="day">
+                          MON <br />
+                          <span>10</span>
+                        </p>
+                      </Col>
+                      <Col lg={10} className="border-start  px-1">
+                        <div
+                          className={
+                            teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
+                          }
+                        >
+                          {teamWorkList && teamWorkList?.length === 0 && (
+                            <p>No task found.</p>
+                          )}
+                          {teamWorkList &&
+                            teamWorkList?.length > 0 &&
+                            teamWorkList?.map((task) => (
+                              <Row className="d-flex justify-content-start list_task w-100 mx-0">
+                                <Col lg={4} className="middle">
+                                  {(userDetails.id === task?.assignedTo?._id ||
+                                    (userDetails.role === "LEAD" &&
+                                      (userDetails.id ===
+                                        task?.assignedTo?._id ||
+                                        task?.lead?.includes(userDetails.id) ||
+                                        userDetails.id ===
+                                          task?.createdBy?._id)) ||
+                                    userDetails.role === "SUPER_ADMIN" ||
+                                    userDetails.role === "ADMIN") && (
+                                    <Dropdown>
+                                      <Dropdown.Toggle
+                                        variant="success"
+                                        id="dropdown-basic"
+                                        style={{ padding: "0" }}
+                                      >
+                                        {task.status === "NOT_STARTED" && (
+                                          <i
+                                            className="fa fa-check-circle secondary"
+                                            aria-hidden="true"
+                                          ></i>
+                                        )}
+                                        {task.status === "ONGOING" && (
+                                          <i
+                                            className="fa fa-check-circle warning"
+                                            aria-hidden="true"
+                                          ></i>
+                                        )}
+                                        {task.status === "COMPLETED" && (
+                                          <i
+                                            className="fa fa-check-circle success"
+                                            aria-hidden="true"
+                                          ></i>
+                                        )}
+                                        {task.status === "ONHOLD" && (
+                                          <i
+                                            className="fa fa-check-circle warning"
+                                            aria-hidden="true"
+                                          ></i>
+                                        )}
+                                      </Dropdown.Toggle>
+
+                                      <Dropdown.Menu>
+                                        <Dropdown.Item
+                                          onClick={(event) =>
+                                            handleStatusChange(
+                                              event,
+                                              task?._id,
+                                              "NOT_STARTED"
+                                            )
+                                          }
+                                        >
+                                          <i
+                                            className="fa fa-check-circle secondary"
+                                            aria-hidden="true"
+                                          ></i>
+                                          Not Started
+                                        </Dropdown.Item>
+                                        <Dropdown.Item
+                                          onClick={(event) =>
+                                            handleStatusChange(
+                                              event,
+                                              task?._id,
+                                              "ONGOING"
+                                            )
+                                          }
+                                        >
+                                          <i
+                                            className="fa fa-check-circle warning"
+                                            aria-hidden="true"
+                                          ></i>
+                                          Ongoing
+                                        </Dropdown.Item>
+                                        <Dropdown.Item
+                                          onClick={(event) =>
+                                            handleStatusChange(
+                                              event,
+                                              task?._id,
+                                              "COMPLETED"
+                                            )
+                                          }
+                                        >
+                                          <i
+                                            className="fa fa-check-circle success"
+                                            aria-hidden="true"
+                                          ></i>{" "}
+                                          Completed
+                                        </Dropdown.Item>
+                                        <Dropdown.Item
+                                          onClick={(event) =>
+                                            handleStatusChange(
+                                              event,
+                                              task?._id,
+                                              "ONHOLD"
+                                            )
+                                          }
+                                        >
+                                          <i
+                                            className="fa fa-check-circle warning"
+                                            aria-hidden="true"
+                                          ></i>{" "}
+                                          On Hold
+                                        </Dropdown.Item>
+                                      </Dropdown.Menu>
+                                    </Dropdown>
+                                  )}
+
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>{task?.title}</Tooltip>}
+                                  >
+                                    <h5
+                                      onClick={() =>
+                                        handleViewDetails(task?._id)
+                                      }
+                                      className="text-truncate"
+                                    >
+                                      {task?.title}
+                                    </h5>
+                                  </OverlayTrigger>
+                                </Col>
+                                <Col lg={2} className="middle">
+                                  {task?.status !== "COMPLETED" && (
+                                    <small>
+                                      <Badge
+                                        bg={
+                                          task?.dueToday ? "danger" : "primary"
+                                        }
+                                      >
+                                        {moment(
+                                          task?.dueDate?.split("T")[0]
+                                        ).format("DD/MM/YYYY")}
+                                      </Badge>
+                                    </small>
+                                  )}
+                                  {task?.status === "COMPLETED" && (
+                                    <small>
+                                      <Badge bg="success">
+                                        {moment(
+                                          task?.completedDate?.split("T")[0]
+                                        ).format("DD/MM/YYYY")}
+                                      </Badge>
+                                    </small>
+                                  )}
+                                </Col>
+                                <Col lg={3} className="middle">
+                                  <>
+                                    {["top"].map((placement) => (
+                                      <OverlayTrigger
+                                        key={placement}
+                                        placement={placement}
+                                        overlay={
+                                          <Tooltip id={`tooltip-${placement}`}>
+                                            {task?.assignedTo?.name}
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <Button className="tooltip-button br0">
+                                          {task?.assignedTo?.name && (
+                                            <small
+                                              className="nameTag text-truncate"
+                                              title="Assigned To"
+                                            >
+                                              <img
+                                                src={avtar}
+                                                alt="userAvtar"
+                                              />{" "}
+                                              {task?.assignedTo?.name.split(
+                                                " "
+                                              )[0] + " "}
+                                              {task?.assignedTo?.name.split(
+                                                " "
+                                              )[1] &&
+                                                task?.assignedTo?.name
+                                                  .split(" ")[1]
+                                                  ?.charAt(0) + "."}
+                                            </small>
+                                          )}
+                                        </Button>
+                                      </OverlayTrigger>
+                                    ))}
+                                  </>
+                                </Col>
+                                <Col
+                                  lg={2}
+                                  className="text-end middle"
+                                  style={{ justifyContent: "end" }}
+                                >
+                                  <small>
+                                    {task?.status === "NOT_STARTED" && (
+                                      <Badge bg="primary">NOT STARTED</Badge>
+                                    )}
+                                    {task?.status === "ONGOING" && (
+                                      <Badge bg="warning">ONGOING</Badge>
+                                    )}
+                                    {task?.status === "COMPLETED" && (
+                                      <Badge bg="success">COMPLETED</Badge>
+                                    )}
+                                    {task?.status === "ONHOLD" && (
+                                      <Badge bg="secondary">ON HOLD</Badge>
+                                    )}
+                                  </small>
+                                </Col>
+                                <Col
+                                  lg={1}
+                                  id="dropdown_action"
+                                  className="text-end "
+                                  style={{ position: "absolute", right: "0px" }}
+                                >
+                                  {(userDetails.id === task?.assignedTo?._id ||
+                                    (userDetails.role === "LEAD" &&
+                                      (userDetails.id ===
+                                        task?.assignedTo?._id ||
+                                        task?.lead?.includes(userDetails.id) ||
+                                        userDetails.id ===
+                                          task?.createdBy?._id)) ||
+                                    userDetails.role === "SUPER_ADMIN" ||
+                                    userDetails.role === "ADMIN") && (
+                                    <Dropdown>
+                                      <Dropdown.Toggle
+                                        variant="defult"
+                                        id="dropdown-basic"
+                                        style={{
+                                          padding: "0px",
+                                          textAlign: "end",
+                                        }}
+                                      >
+                                        <i className="fa fa-ellipsis-v"></i>
+                                      </Dropdown.Toggle>
+
+                                      <Dropdown.Menu>
+                                        <Dropdown.Item
+                                          onClick={() => {
+                                            setSelectedProject();
+                                            setShowAddTask(true);
+                                            setSelectedTask(task);
+                                          }}
+                                        >
+                                          Edit
+                                        </Dropdown.Item>
+                                      </Dropdown.Menu>
+                                    </Dropdown>
+                                  )}
+                                </Col>
+                              </Row>
+                            ))}
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row id="list_ui">
+                      <Col lg={2} className="v-align">
+                        <p className="day">THU 13</p>
+                      </Col>
+                      <Col lg={10} className="px-0 py-3 border">
+                        <div className="list-day ">
+
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row id="list_ui">
+                      <Col lg={2} className="v-align completed">
+                        <p className="day">FRI 14</p>
+                      </Col>
+                      <Col lg={10} className="px-0 py-3 border">
+                        <div className="list-day ">
+
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row id="list_ui">
+                      <Col lg={2} className="v-align">
+                        <p className="day">SAT 15</p>
+                      </Col>
+                      <Col lg={10} className="px-0 py-3 border">
+                        <div className="list-day ">
+
+                        </div>
+                      </Col>
+                    </Row>
+              
+                  </Card>
+                </Col>
+              </Row>
+            </Col>
           </Row>
         </Container>
-            
       )}
-      
 
       <Modal
         show={modalShow}
@@ -1454,7 +1797,5 @@ export default function Dashboard(props) {
         />
       )}
     </div>
-   
-
   );
 }

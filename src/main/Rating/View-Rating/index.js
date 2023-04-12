@@ -110,13 +110,13 @@ export default function Dashboard(props) {
           )}
     <div className="wrap ">
                 {userDetails?.role !== "CONTRIBUTOR" && (
-                  <button className="add-rating-button">
+                  
                     <AddRating
                    handleOnInit={onInit}
     
                     
                      />
-                  </button>
+                  
                 )}
               </div>
           </Col>
