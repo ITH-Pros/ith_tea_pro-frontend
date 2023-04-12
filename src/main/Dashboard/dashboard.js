@@ -1421,7 +1421,7 @@ export default function Dashboard(props) {
               <Row>
                 <Col lg={12} className="mt-3">
                   <Card id="card-task" style={{ overflowX: "hidden" }}>
-                    <Row id="agenda">
+                    {/* <Row id="agenda">
                       <Col lg={4}>
                         <Button variant="light" size="sm" className="left-btn">
                           <BsChevronDoubleLeft /> Week
@@ -1441,7 +1441,8 @@ export default function Dashboard(props) {
                           Week <BsChevronDoubleRight />
                         </Button>
                       </Col>
-                    </Row>
+                    </Row> */}
+                    <CustomCalendar/>
                     <Row id="list_ui" className="mt-2">
                       <Col lg={2} className="v-align">
                         <p className="day">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
 import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from "react-icons/bs";
+import "./dashboard.css";
 
 const CustomCalendar = () => {
   const [currentView, setCurrentView] = useState("Week");
