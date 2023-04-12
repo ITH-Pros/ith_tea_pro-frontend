@@ -68,10 +68,10 @@ export default function ViewTaskModal(props) {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
+        setToasterMessage(res?.message );
         showToaster(true);
       } else {
-        setToasterMessage(res?.message || "Something Went Wrong");
+        setToasterMessage(res?.message );
         showToaster(true);
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
@@ -80,8 +80,6 @@ export default function ViewTaskModal(props) {
         setShowConfirmation(false)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      showToaster(true);
       return error.message;
     }
   };
@@ -92,15 +90,15 @@ export default function ViewTaskModal(props) {
       taskId: taskId,
       status: newStatus,
     };
-    if (newStatus === 'COMPLETED') {
-      // confirm('Are you sure you want to complete the task.')
+    // if (newStatus === 'COMPLETED') {
+    //   // confirm('Are you sure you want to complete the task.')
 
-      handleConfirmation(dataToSend)
+    //   handleConfirmation(dataToSend)
       
       
-    } else {
+    // } else {
     updateTaskStatus(dataToSend);
-    }
+    // }  
   };
 
   const handleConfirmation = (dataToSend) => {
@@ -115,7 +113,7 @@ export default function ViewTaskModal(props) {
 
 
 
-  function ConfirmationPopup({ show, onCancel, onConfirm ,  }) {
+  function ConfirmationPopup({ show, onCancel, onConfirm  }) {
     return (
       <Modal show={show} onHide={onCancel}>
         <Modal.Header closeButton>
@@ -208,7 +206,7 @@ export default function ViewTaskModal(props) {
         const rating = await addRatingOnTask(dataToSend);
         setLoading(false);
         if (rating.error) {
-          setToasterMessage(rating?.message || "Something Went Wrong");
+          setToasterMessage(rating?.message );
           showToaster(true);
         } else {
           setToasterMessage("Rating Added Succesfully");
