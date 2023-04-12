@@ -506,6 +506,7 @@ const Tasks = () => {
 
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
+              
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
                   {project?._id?.projectId} / {project?._id?.section}{" "}
@@ -834,6 +835,13 @@ const Tasks = () => {
           )}
         </Accordion>
 
+
+<div className="bg-primary px-2">
+ 
+
+</div>
+
+
         {/* <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
@@ -854,6 +862,7 @@ const Tasks = () => {
         {/* ////// */}
         <Offcanvas
         className="Offcanvas-modal"
+        style={{height:'100vh'}}
         show={modalShow}
         placement="end"
         onHide={() => setModalShow(false)}
@@ -861,7 +870,7 @@ const Tasks = () => {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title> {sectionEditMode ? "Update Section" : "Add section"}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
+        <Offcanvas.Body >
         <div className="form-group">
               <label>Section</label>
               <input
