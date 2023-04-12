@@ -4,7 +4,8 @@
 import React, { useState, useEffect } from "react";
 import "./tasks.css";
 import { useEffectOnce } from './useEffectOnce';
-
+import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-headless-accordion";
+ 
 import {
   addSectionApi,
   archiveSectionApi,
@@ -18,7 +19,7 @@ import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
 import {
-  Accordion,
+ 
   ProgressBar,
   Dropdown,
   Badge,
@@ -34,6 +35,7 @@ import ViewTaskModal from "./view-task";
 import { Truncate } from "../../helpers/truncate";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+ 
 
 
 const Tasks = () => {
@@ -476,7 +478,7 @@ const Tasks = () => {
           selectedTaskId={selectedTaskId}
           getTasksDataUsingProjectId={getTasksDataUsingProjectId}
         />
-
+{/* 
         <Accordion alwaysOpen="true">
           {!projects?.length &&
             params?.projectId &&
@@ -836,11 +838,45 @@ const Tasks = () => {
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
+        </Accordion> */}
+
+
+<div  id="multi_accrodian">
+<Accordion>
+            <AccordionItem>
+                <AccordionHeader>
+                    <h3 >Recru 2.0</h3>
+                </AccordionHeader>
+
+                <AccordionBody>
+                <div className="accordion-body">
+                <AccordionItem>
+                    <AccordionHeader>
+                        <h3 className={`accordion-title`}>Ad-hoc</h3>
+                    </AccordionHeader>
+
+                    <AccordionBody>
+                        <div className="accordion-body">
+                            Lorem ipsum dolor sit amet.
+                        </div>
+                    </AccordionBody>
+                </AccordionItem>
+            </div>
+                </AccordionBody>
+            </AccordionItem>
+
+            <AccordionItem>
+                <AccordionHeader>
+                    <h3 className="">Title 2</h3>
+                </AccordionHeader>
+
+                <AccordionBody>
+                    <div className="accordion-body">
+                        Lorem ipsum dolor sit amet.
+                    </div>
+                </AccordionBody>
+            </AccordionItem>
         </Accordion>
-
-
-<div className="bg-primary px-2">
- 
 
 </div>
 
