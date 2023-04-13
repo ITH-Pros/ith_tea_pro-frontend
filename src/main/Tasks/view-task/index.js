@@ -24,7 +24,7 @@ import "./index.css";
 import History from "./history";
 export default function ViewTaskModal(props) {
 
-  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId , onInit } = props;
+  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId , onInit  , isChange , setIsChange } = props;
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
@@ -214,6 +214,10 @@ export default function ViewTaskModal(props) {
           setIsRatingFormVisible(false);
           getTaskDetailsById(selectedTaskIdForRating);
           onInit()
+          if (userDetails?.role !== "CONTRIBUTOR") {
+            // getTeamWorkList();
+            setIsChange(!isChange);
+          }
         }
       } catch (error) {
         setLoading(false);

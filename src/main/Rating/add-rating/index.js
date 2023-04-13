@@ -15,12 +15,14 @@ import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
+import { useAuth } from "../../../auth/AuthProvider";
 
 export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
+  const { userDetails } = useAuth();
 
   const RatingModalBody = () => {
-    const { taskFromDashBoard , onInit } = props;
+    const { taskFromDashBoard , onInit , setIsChange , isChange  } = props;
     console.log("taskFromDashBoard", taskFromDashBoard);
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
@@ -163,6 +165,10 @@ export default function AddRating(props) {
             setShowToaster(true);
             if(taskFromDashBoard){
             onInit();
+            if (userDetails?.role !== "CONTRIBUTOR") {
+              // getTeamWorkList();
+              setIsChange(!isChange);
+            }
             }
             if(!taskFromDashBoard){
             navigate("/rating");
