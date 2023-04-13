@@ -83,12 +83,16 @@ export default function Teams(props) {
   };
 
   const getAndSetAllUsers = async function (options) {
+    if(! options?.currentPage){
+      return;
+    }
     setLoading(true);
     try {
       let params = {
         limit: options?.rowsPerPage,
         currentPage: options?.currentPage,
       };
+   
       const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
@@ -291,10 +295,10 @@ export default function Teams(props) {
 
     const numberOfRowsArray = [10, 20, 30, 40, 50];
     const handleOnChange = (e) => {
-      let pageNumber = Math.min(
-        Math.max(e.target.value, 1),
-        pageDetails.totalPages
-      );
+      let pageNumber = parseInt(e.target.value);
+      if (pageNumber < 1 || pageNumber > pageDetails.totalPages) {
+        return;
+      }
       if (pageDetails.currentPage === pageNumber) {
         return;
       }
@@ -302,6 +306,9 @@ export default function Teams(props) {
       setPageDetails(dataToSave);
       getAndSetAllUsers(dataToSave);
     };
+    
+    
+    
 
     const onChangeRowsPerPage = (e) => {
       let dataToSave = {
@@ -340,8 +347,7 @@ export default function Teams(props) {
           type="number"
           value={pageDetails.currentPage}
           name="currentPage"
-          onChange={handleOnChange}
-          autoFocus
+          onChange={(e)=>handleOnChange(e)}
         />
         <span className="pagination-input">/</span>
         <span className="pagination-input"> {pageDetails.totalPages}</span>

@@ -80,7 +80,7 @@ export default function AddProject(props) {
     (project) => project._id === params.projectId
   );
  
-  const [color, setColor] = useColor("hex", projectById?.colorCode||"#f7ddba");
+  const [color, setColor] = useColor("hex", projectById?.colorCode||"#ADD8E6");
 
 
   const projectFormFields = {

@@ -192,7 +192,7 @@ export default function AllProject() {
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <Row>
           <Col lg={6}>
-            <h1 className="h1-text">
+            <h1 className="h1-text mt-0">
               <i>
                 <FaGem />
               </i>{" "}

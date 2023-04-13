@@ -439,7 +439,7 @@ const Tasks = () => {
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <Row>
           <Col lg={6}>
-          <h1 className="h1-text">
+          <h1 className="h1-text mt-0">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
       
         </h1>
@@ -535,12 +535,13 @@ const Tasks = () => {
             <h6 style={{textAlign:'center'}} >No Tasks Found</h6>
           )}
 
-          {projects.map((project, index) => (
-            <Accordion.Item key={index} eventKey={index}>
-              {project?._id?.projectId && project?._id?.section && (
-                <Accordion.Header>
-                  {project?._id?.projectId} / {project?._id?.section}{" "}
-                </Accordion.Header>
+{projects.map((project, index) => (
+  project?.tasks?.length > 0 && ( // check if tasks array has data
+    <Accordion.Item key={index} eventKey={index}>
+      {project?._id?.projectId && project?._id?.section && (
+        <Accordion.Header>
+          {project?._id?.projectId} / {project?._id?.section}
+        </Accordion.Header>
               )}
 
               <div className="d-flex rightTags">
@@ -653,13 +654,23 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
-                      {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
+                      
+                      <div
+                        className="clickLabelArea"
+                        
+                      >
+                        <Row className="align-items-center justify-content-start">
+                          <Col lg={5} className="align-items-center"> 
+                          <Row>
+                            <Col  lg={1}>
+                            <div>
+                          {(userDetails.id === task?.assignedTo?._id ||
+                      (userDetails.role === "LEAD" &&
+                        (userDetails.id === task?.assignedTo?._id ||
+                          task?.lead?.includes(userDetails.id) ||
+                          userDetails.id === task?.createdBy?._id)) ||
+                      userDetails.role === "SUPER_ADMIN" ||
+                      userDetails.role === "ADMIN")&& (
                         <Dropdown>
                           <Dropdown.Toggle
                             variant="success"
@@ -753,20 +764,24 @@ const Tasks = () => {
                           )}
                         </Dropdown>
                       )}
-                      <div
-                        className="clickLabelArea"
-                        onClick={() => handleViewDetails(task?._id)}
-                      >
-                        <i
+                          </div>
+                            </Col>
+                            <Col  lg={11}>
+                            <p
                           className={
                             task?.status === "COMPLETED" ? "line-strics" : ""
                           }
                           // onClick={() => handleViewDetails(task?._id)}
                         >
-                          {Truncate(task?.title, 65)}
-                        </i>
-
-                        {task?.status === "NOT_STARTED" && (
+                         <p onClick={() => handleViewDetails(task?._id)} className="text-truncate">{task?.title}</p> 
+                        </p>
+                            </Col>
+                          </Row>
+                       
+                        </Col>
+                         
+                          <Col lg={3}>
+                          {task?.status === "NOT_STARTED" && (
                           <Badge bg="secondary">NOT STARTED</Badge>
                         )}
                         {task?.status === "ONGOING" && (
@@ -795,7 +810,9 @@ const Tasks = () => {
                         {task?.priority === "HIGH" && (
                           <Badge bg="danger">HIGH</Badge>
                         )}
-                        {!task?.assignedTo?.profilePicture && (
+                          </Col>
+                          <Col lg={3} className="align-items-center justify-content-start">
+                          {!task?.assignedTo?.profilePicture&&task?.assignedTo?.name && (
                           <div className="nameTag">
                             <UserIcon
                               key={index}
@@ -804,7 +821,7 @@ const Tasks = () => {
                           </div>
                         )}
                         {task?.assignedTo?.profilePicture && (
-                          <div className="nameTag">
+                          <div className="nameTag" style={{display:'contents'}}>
                             <img
                               style={{
                                 width: "20px",
@@ -817,7 +834,10 @@ const Tasks = () => {
                           </div>
                         )}
                         <span> {task?.assignedTo?.name}</span>
-
+                        {!task?.assignedTo?.name && <span> NOT ASSIGNED </span>}
+                          </Col>
+                          <Col lg={1}>
+                            
                         {task?.dueDate && (
                           <Badge bg={task?.dueToday ? "danger" : "primary"}>
                             Due{" "}
@@ -827,6 +847,14 @@ const Tasks = () => {
                           </Badge>
                           // onClick={() => handleViewDetails(task?._id)}
                         )}
+                          </Col>
+                          
+                        </Row>
+                       
+
+                       
+                     
+
                       </div>
                       {(userDetails.id === task?.assignedTo?._id ||
                         (userDetails.role === "LEAD" &&
@@ -861,8 +889,8 @@ const Tasks = () => {
                   ))}
                 </ul>
               </Accordion.Body>
-            </Accordion.Item>
-          ))}
+            </Accordion.Item>)
+))}
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
