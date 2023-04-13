@@ -308,6 +308,7 @@ button.accordion-button {
   white-space: normal;
   word-break: break-word;
   height: 50px;
+  display: flex;
 }
 
 .addtask {
