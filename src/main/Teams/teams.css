@@ -144,7 +144,7 @@ a {
 }
 
 .content-height {
-  height: 180px;
+  height: 120px;
   margin-top: 1px;
   justify-content: center;
   align-items: center;
@@ -324,3 +324,4 @@ button.modal-close-btn:hover {
   width: 90% !important;
   margin: auto !important;
 }
+.user-analytics-item-value{ font-size: 13px; margin: 10px auto;}

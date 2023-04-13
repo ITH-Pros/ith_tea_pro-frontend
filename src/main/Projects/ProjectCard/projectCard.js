@@ -9,6 +9,8 @@ import Select from "react-select";
 import React from "react";
 import {CiCircleRemove} from 'react-icons/ci'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 
 import {
   faTasks,
@@ -416,22 +418,24 @@ const ProjectCard = ({
         </div>
       </div>
       {modalshow && (
-        <Modal
-          show={modalshow}
-          onHide={() => {
+        <Offcanvas  
+        className="Offcanvas-modal"
+        style={{width:'500px'}}
+        show={modalshow}
+        placement="end"
+        onHide={() => {
             setModalShow(false);
             setShowSelectBox(false);
             setSelectedUnassignedUsers("");
             setListOfUnassignedUsers([]);
             setSelectedRole(null);
           }}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{modalTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div>
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body  >
+        <div>
               <Col sm={12}>
                 {userDetails.role !== "CONTRIBUTOR" &&
                   !isArchive && modalTitle!=='Team Members'&&
@@ -498,8 +502,8 @@ const ProjectCard = ({
                             <div className="user_pic_card">
                               <img
                                 style={{
-                                  width: "35px",
-                                  height: "35px",
+                                  width: "30px",
+                                  height: "30px",
                                   borderRadius: "50%",
                                 }}
                                 src={`${user?.profilePicture}`}
@@ -517,7 +521,7 @@ const ProjectCard = ({
 
                         {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && (
 
-                      <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="pull-right"/>
+                      <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="delete_icon"/>
                         )}
 
 
@@ -538,11 +542,17 @@ const ProjectCard = ({
             onCancel={() => setShowConfirmation(false)}
             onConfirm={removeUser}
              />
+        </Offcanvas.Body>
+      </Offcanvas>
 
-
-          </Modal.Body>
-        </Modal>
       )}
+
+     
+
+
+
+
+
     </div>
   );
 };

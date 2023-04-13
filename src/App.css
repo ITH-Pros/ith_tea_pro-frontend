@@ -116,11 +116,12 @@ textarea.form-control {
   margin: 0 17px 0 2px !important;
 }
 
-.pull-right {
+.delete_icon {
   float: right;
   position: absolute;
-  right: 10px;
-  width: 120px;
+  right: 20px;
+  font-size: 30px;
+  width: 50px;
   display: flex;
 }
 

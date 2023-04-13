@@ -166,7 +166,7 @@ function UserForm(props) {
             />
           </div>
         </div>
-        <div className="form-group col-12 text-right profil-ed">
+        <div className="form-group col-12 text-center profil-ed">
           {!isEditable && (
             <button onClick={handleSubmit} className="submit-button">
               Update

@@ -12,6 +12,7 @@
   background: #fff;
   border-color: #3333;
   float: left;
+  position: relative;
 }
 
 .menu-icon {
