@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight } from "react-icons/bs";
+import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight , BsChevronDown } from "react-icons/bs";
 import { getTeamWork, updateTaskStatusById } from "../../services/user/api";
 import { useAuth } from "../../auth/AuthProvider";
 
@@ -90,26 +90,26 @@ const CustomCalendar = (props) => {
 
   return (
     <Row id="agenda">
-          <Col lg={4}>
-              <Button variant="light" size="sm" className="left-btn" onClick={handlePrev}>
-                  <BsChevronDoubleLeft /> Prev {currentView}
-              </Button>
-              <Button variant="light" size="sm" className="right-btn" onClick={handleNext}>
-                  Next {currentView} <BsChevronDoubleRight />
-              </Button>
-          </Col>
-          <Col lg={4} className="text-center">
-              <h4>
-                  {currentView === "Week"
-                      ? `Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`
-                      : currentDate.toLocaleDateString()}
-              </h4>
-          </Col>
-          <Col lg={4} className="text-end">
-              <Dropdown>
-                  <Dropdown.Toggle variant="light" size="sm" id="dropdown-basic">
-                      {currentView}
-                  </Dropdown.Toggle>
+      <Col lg={4} className="px-0">
+        <Button variant="light" size="sm" className="left-btn" onClick={handlePrev}>
+          <BsChevronDoubleLeft /> Prev {currentView}
+        </Button>
+        <Button variant="light" size="sm" className="right-btn" onClick={handleNext}>
+          Next {currentView} <BsChevronDoubleRight />
+        </Button>
+      </Col>
+      <Col lg={4} className="text-center">
+        <h4>
+          {currentView === "Week"
+            ?<> <span> Week of </span> <br/>  {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}</>
+            : currentDate.toLocaleDateString()}
+        </h4>
+      </Col>
+      <Col lg={4} className="text-end px-0">
+        <Dropdown>
+          <Dropdown.Toggle variant="light" size="sm" id="dropdown-basic">
+            {currentView} <BsChevronDown/>
+          </Dropdown.Toggle>
 
                   <Dropdown.Menu>
                       <Dropdown.Item onClick={() => handleViewChange("Week")}>Week</Dropdown.Item>
