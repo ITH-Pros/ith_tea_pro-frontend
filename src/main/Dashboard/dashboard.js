@@ -1146,7 +1146,7 @@ export default function Dashboard(props) {
       {userDetails?.role !== "CONTRIBUTOR" && (
         <Container>
           <Row className="mt-3">
-            <Col lg={6} style={{ paddingLeft: "0px" }}>
+            {/* <Col lg={6} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
                   <span>TEAM WORK</span>
@@ -1410,11 +1410,20 @@ export default function Dashboard(props) {
                   </Card>
                 </Col>
               </Row>
-            </Col>
-            <Col lg={6} style={{ paddingLeft: "0px" }}>
+            </Col> */}
+            <Col lg={12} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
-                  <span>Agenda</span>
+                  <span>Team Work</span>
+                  <i
+                    onClick={() => {
+                      setSelectedTask();
+                      setShowAddTask(true);
+                      setSelectedProject();
+                    }}
+                    className="fa fa-plus-circle"
+                    style={{ cursor: "pointer" }}
+                  ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
