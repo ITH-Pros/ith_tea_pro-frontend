@@ -331,6 +331,7 @@ button.add-rating-button {
     margin: 0;
     font-size: 14px;
     color: #6590ad;
+    cursor: pointer;
 }
 
 #card-task p {
