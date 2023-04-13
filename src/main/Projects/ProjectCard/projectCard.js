@@ -498,8 +498,8 @@ const ProjectCard = ({
                             <div className="user_pic_card">
                               <img
                                 style={{
-                                  width: "35px",
-                                  height: "35px",
+                                  width: "30px",
+                                  height: "30px",
                                   borderRadius: "50%",
                                 }}
                                 src={`${user?.profilePicture}`}
@@ -517,7 +517,7 @@ const ProjectCard = ({
 
                         {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && (
 
-                      <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="pull-right"/>
+                      <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="delete_icon"/>
                         )}
 
 

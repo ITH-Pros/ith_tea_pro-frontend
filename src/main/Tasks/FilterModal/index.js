@@ -71,6 +71,7 @@ const FilterModal = (props) => {
     }),
     placeholder: (provided) => ({
       ...provided,
+      color:'#999'
     }),
     menu: (provided) => ({
       ...provided,
@@ -289,13 +290,13 @@ const FilterModal = (props) => {
   return (
     <>
       <div>
-        <Button variant="light" style={{ marginRight: "10px" }}>
+        <Button variant="light" style={{ margin: "0px 5px" }}>
           {!isArchive && (
-            <div>
+            
               <span onClick={setProjectAndOpenModal}>
                 <i class="fa fa-filter" aria-hidden="true"></i> Filter
               </span>
-            </div>
+            
           )}
         </Button>
        {clearFilter && <Button variant="light" style={{ marginRight: "10px" }}>

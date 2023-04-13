@@ -41,7 +41,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
+    width: 45px;
     height: 40px;
     margin-right: 20px;
     background-color: #eee;
@@ -126,7 +126,8 @@
   }
   
   .event-description h4 {
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 300;
     margin-bottom: 5px;
   }
   

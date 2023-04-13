@@ -332,10 +332,7 @@ th {
   align-items: center;
 }
 
-#card-task:hover,
-#card-undefined:hover {
-  border: 1px #0dcaf0 solid;
-}
+ 
 
 .left-add span {
   margin-right: 10px;
