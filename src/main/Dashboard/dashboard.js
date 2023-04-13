@@ -1466,13 +1466,13 @@ export default function Dashboard(props) {
                     setTeamWorkList={setTeamWorkList}
                     isChange={isChange}
                     />
-                    <Row id="list_ui" className="mt-2">
-                      <Col lg={2} className="v-align">
+                    <Row id="list_ui" className="mt-2 ">
+                      {/* <Col lg={2} className="v-align">
                         <p className="day">
                           MON <br />
                           <span>10</span>
                         </p>
-                      </Col>
+                      </Col> */}
                       <Col lg={10} className="border-start  px-1">
                         <div
                           className={
@@ -1485,7 +1485,7 @@ export default function Dashboard(props) {
                           {teamWorkList &&
                             teamWorkList?.length > 0 &&
                             teamWorkList?.map((task) => (
-                              <Row className="d-flex justify-content-start list_task w-100 mx-0">
+                              <Row  className="d-flex justify-content-start list_task w-100 mx-0">
                                 <Col lg={4} className="middle">
                                   {(
                                     (userDetails.role === "LEAD" &&
