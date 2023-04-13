@@ -32,12 +32,12 @@ const CustomCalendar = (props) => {
 
     if (currentView === "Week") {
       dataToSend = {
-        fromDate: weekStart.toLocaleDateString(),
-        toDate: weekEnd.toLocaleDateString(),
+        fromDate: weekStart,
+        toDate: weekEnd,
       };
     } else if (currentView === "Day") {
         dataToSend = {
-            currentDate: currentDate.toLocaleDateString(),
+            currentDate: currentDate,
         };
     }
     console.log("dataToSend", dataToSend);
