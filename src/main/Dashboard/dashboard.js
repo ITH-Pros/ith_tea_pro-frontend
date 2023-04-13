@@ -67,6 +67,7 @@ export default function Dashboard(props) {
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const { userDetails } = useAuth();
   const setShowToaster = (param) => showToaster(param);
+  const [isChange, setIsChange] = useState(undefined);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,9 +85,9 @@ export default function Dashboard(props) {
     if (userDetails?.role !== "SUPER_ADMIN" || userDetails?.role !== "ADMIN") {
       getMyWork();
     }
-    if (userDetails?.role !== "CONTRIBUTOR") {
-      getTeamWorkList();
-    }
+
+   
+    
     getPendingRating();
   }
 
@@ -256,6 +257,10 @@ export default function Dashboard(props) {
     setSelectedProject();
     setSelectedTask();
     onInit();
+    if (userDetails?.role !== "CONTRIBUTOR") {
+      // getTeamWorkList();
+      setIsChange(!isChange);
+    }
   };
 
   const openAddtask = (project) => {
@@ -285,6 +290,10 @@ export default function Dashboard(props) {
         setShowToaster(true);
 
         onInit();
+        if (userDetails?.role !== "CONTRIBUTOR") {
+          // getTeamWorkList();
+          setIsChange(!isChange);
+        }
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -293,25 +302,25 @@ export default function Dashboard(props) {
     }
   };
 
-  const getTeamWorkList = async () => {
-    setLoading(true);
-    try {
-      const res = await getTeamWork();
-      setLoading(false);
+  // const getTeamWorkList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await getTeamWork();
+  //     setLoading(false);
 
-      if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setTeamWorkList(res?.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
-    }
-  };
+  //     if (res.error) {
+  //       setToasterMessage(res?.message || "Something Went Wrong");
+  //       setShowToaster(true);
+  //     } else {
+  //       setTeamWorkList(res?.data);
+  //     }
+  //   } catch (error) {
+  //     setToasterMessage(error?.message || "Something Went Wrong");
+  //     setShowToaster(true);
+  //     setLoading(false);
+  //     return error.message;
+  //   }
+  // };
 
   function daysSince(dateStr) {
     const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
@@ -1131,6 +1140,8 @@ export default function Dashboard(props) {
                             <AddRating
                               taskFromDashBoard={task}
                               onInit={onInit}
+                              setIsChange={setIsChange}
+                              isChange={isChange}
                             />
                           )}
                         </Col>
@@ -1146,7 +1157,7 @@ export default function Dashboard(props) {
       {userDetails?.role !== "CONTRIBUTOR" && (
         <Container>
           <Row className="mt-3">
-            <Col lg={6} style={{ paddingLeft: "0px" }}>
+            {/* <Col lg={6} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
                   <span>TEAM WORK</span>
@@ -1410,11 +1421,20 @@ export default function Dashboard(props) {
                   </Card>
                 </Col>
               </Row>
-            </Col>
-            <Col lg={6} style={{ paddingLeft: "0px" }}>
+            </Col> */}
+            <Col lg={12} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
-                  <span>Agenda</span>
+                  <span>Team Work</span>
+                  <i
+                    onClick={() => {
+                      setSelectedTask();
+                      setShowAddTask(true);
+                      setSelectedProject();
+                    }}
+                    className="fa fa-plus-circle"
+                    style={{ cursor: "pointer" }}
+                  ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -1443,6 +1463,8 @@ export default function Dashboard(props) {
                       </Col>
                     </Row> */}
                     <CustomCalendar
+                    setTeamWorkList={setTeamWorkList}
+                    isChange={isChange}
                     />
                     <Row id="list_ui" className="mt-2">
                       <Col lg={2} className="v-align">
@@ -1718,7 +1740,7 @@ export default function Dashboard(props) {
                         </div>
                       </Col>
                     </Row>
-                    <Row id="list_ui">
+                    {/* <Row id="list_ui">
                       <Col lg={2} className="v-align">
                         <p className="day">THU 13</p>
                       </Col>
@@ -1733,27 +1755,7 @@ export default function Dashboard(props) {
                       <Col lg={10} className="px-0 py-3 border">
                         <div className="list-day "></div>
                       </Col>
-                    </Row>
-                    <OverlayTrigger
-                      placement="left"
-                      trigger="click"
-                      overlay={
-                        <Popover id="test">
-                          <Button variant="success" size="sm">
-                            <BsPersonAdd /> Quick Add
-                          </Button>
-                        </Popover>
-                      }
-                    >
-                      <Row id="list_ui">
-                        <Col lg={2} className="v-align">
-                          <p className="day">SAT 15</p>
-                        </Col>
-                        <Col lg={10} className="px-0 py-3 border">
-                          <div className="list-day "></div>
-                        </Col>
-                      </Row>
-                    </OverlayTrigger>
+                    </Row> */}
                   </Card>
                 </Col>
               </Row>
@@ -1784,6 +1786,8 @@ export default function Dashboard(props) {
         closeViewTaskModal={closeViewTaskModal}
         selectedTaskId={selectedTaskId}
         onInit={onInit}
+        setIsChange={setIsChange}
+        isChange={isChange}
       />
 
       <Modal
