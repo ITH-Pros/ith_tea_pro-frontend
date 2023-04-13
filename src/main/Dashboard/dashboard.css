@@ -650,7 +650,7 @@ th {
 #agenda {
   width: auto;
   padding: 0px 10px;
-  background: #f0f0f0;
+  border-bottom: #f0f0f0 1px solid;
   padding: 8px;
 }
 #agenda .left-btn {

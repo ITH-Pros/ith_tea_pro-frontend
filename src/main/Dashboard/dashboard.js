@@ -332,10 +332,10 @@ export default function Dashboard(props) {
     const dayOfMonth = dayBefore.getDate();
 
     return (
-      <div className="day v-align">
+      <span>
         <p>{dayOfWeek}</p>
         <span>{dayOfMonth}</span>
-      </div>
+      </span>
     );
   }
 
@@ -1498,15 +1498,15 @@ export default function Dashboard(props) {
                                 {(taskIndex === 0 ||
                                   task.dueDate !==
                                   teamWorkList[taskIndex - 1].dueDate) ? (
-                                    <Col lg={1} className="v-align">
-                                    <div>{formatDate(task.dueDate)}</div>
+                                    <Col lg={1} className="border-top day v-align">
+                                    {formatDate(task.dueDate)}
                                   </Col>
                                 ) :
-                                <Col lg={1} className="v-align">
-                                <div></div>
+                                <Col lg={1} className="v-align " >
+                                 
                               </Col>
                                 }
-                                <Col lg={11}>
+                                <Col lg={11} className="border-start">
                                 <Row className="d-flex justify-content-start list_task w-100 mx-0">
                                   <Col lg={4} className="middle">
                                     {((userDetails.role === "LEAD" &&
