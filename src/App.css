@@ -83,25 +83,7 @@ textarea.form-control {
   outline: none;
 }
 
-.modal.show .modal-dialog,
-.modal-dialog.modal-xl {
-  transform: none;
-  box-shadow: 2px 0 123px 2px rgb(0 0 0 / 56%);
-  width: 600px;
-  position: fixed;
-  right: 0;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  z-index: 509;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  overflow: auto;
-  right: 0;
-  background-color: #fff;
-  border-radius: 10px;
-}
+ 
 
 .fr-toolbar .fr-command.fr-btn svg {
   width: 18px !important;
