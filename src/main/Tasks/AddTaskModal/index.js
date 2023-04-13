@@ -7,7 +7,6 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import AttachmentUploader from "./attachment";
-import { Modal } from "react-bootstrap";
 import {
   getAllProjects,
   createTask,
@@ -22,6 +21,7 @@ import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Loader from "../../../components/Loader";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+// import {useEffectOnce} from './useEffectOnce';
 
 export default function AddTaskModal(props) {
   const {
@@ -50,7 +50,6 @@ export default function AddTaskModal(props) {
   };
 
 
-
   const taskFormFields = {
     projectId: "",
     section: "",
@@ -70,9 +69,26 @@ export default function AddTaskModal(props) {
   const [toasterMessage, setToasterMessage] = useState("");
   const [selectedLeads, setSelectedLeads] = useState();
 
+  // useEffectOnce(() => {
+  //   console.log('useEffectOnce has run!');
+  //   setToasterMessage('')
+  //   setShowToaster(false);
+  //   return () => {
+  //     setToasterMessage('')
+  //     setShowToaster(false);
+  //   };
+  // });
+
   useEffect(() => {
+  
     getProjectList();
   }, []);
+
+  useEffect(() => {
+    setCategoryList(projectList[0]?.sections)
+  
+    
+  }, [projectList]);
 
   useEffect(() => {
     if (taskFormValue.projectId && taskFormValue.leads) {
@@ -95,7 +111,6 @@ export default function AddTaskModal(props) {
       setShowAddTaskModal(true);
       getProjectList();
       patchFormForAdd();
-      // setCategoryList();
     }
   }, [showAddTask]);
 
@@ -193,21 +208,13 @@ export default function AddTaskModal(props) {
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        projects?.message&&setToasterMessage(projects?.message );
-        projects?.message&&setShowToaster(true);
         return;
       } else {
-        setProjectList(projects.data);
-        console.log("projects", projects);
-        // if(showAddTask){
-
-          // patchFormForAdd();
-        // }
+        setProjectList(projects?.data);
+        console.log('-------------------------------')
       }
     } catch (error) {
       setLoading(false);
-     error?.error?.message&& setToasterMessage(error?.error?.message);
-     error?.error?.message&& setShowToaster(true);
       return error.message;
     }
   };
@@ -221,14 +228,10 @@ export default function AddTaskModal(props) {
       const leads = await getLeadsUsingProjectId(dataToSend);
       setLoading(false);
       if (leads.error) {
-        leads?.message&& setToasterMessage(leads?.message );
-        leads?.message&&setShowToaster(true);
       } else {
         setLeadList(leads?.data);
       }
     } catch (error) {
-      error?.error?.message&&setToasterMessage(error?.error?.message);
-      error?.error?.message&&setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -246,14 +249,10 @@ export default function AddTaskModal(props) {
       const users = await getUserUsingProjectId(dataToSend);
       setLoading(false);
       if (users.error) {
-        users?.message &&setToasterMessage(users?.message );
-        users?.message && setShowToaster(true);
       } else {
         setUserList(users?.data);
       }
     } catch (error) {
-      error?.error?.message &&setToasterMessage(error?.error?.message );
-      error?.error?.message &&setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -334,10 +333,11 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        taskRes?.message&& setToasterMessage(taskRes?.message );
-        taskRes?.message&&setShowToaster(true);
+        setToasterMessage(taskRes?.message||'Error while creating Task')
+        setShowToaster(true);
         return;
       } else {
+        
         setTaskFormValue({
           ...taskFormValue,
           title: "",
@@ -348,21 +348,25 @@ export default function AddTaskModal(props) {
           priority: "",
           status: "",
           attachments: [],
+          leads:""
         });
         setValidated(false);
         setSelectedLeads("");
         setCategoryList([]);
+        localStorage.setItem('showTaskToaster','Task Created Succesfully !!')
 
-        setShowAddTaskModal(false);
+
+
+        setTimeout(() => {
+          setShowAddTaskModal(false);
+
+        }, 1000);
         getNewTasks(projectId);
-        // setToasterMessage("Task Created Successfully");
-        showToaster(true);
+      
         // onInit();
       }
     } catch (error) {
       setLoading(false);
-      error?.error?.message &&  setToasterMessage(error?.error?.message );
-      error?.error?.message && setShowToaster(true);
       return error.message;
     }
   };
@@ -408,22 +412,21 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        taskRes?.message&&setToasterMessage(taskRes?.message);
-        taskRes?.message&&setShowToaster(true);
+        setToasterMessage(taskRes?.message||'Error while creating Task')
+        setShowToaster(true);
         return;
       } else {
+        setToasterMessage('Task Created Succesfully')
+        setShowToaster(true);
         resetFormValue();
         setValidated(false);
         setSelectedLeads("");
         setCategoryList([]);
 
         getNewTasks(projectId);
-        showToaster(true);
       }
     } catch (error) {
       setLoading(false);
-      error?.error?.message&&setToasterMessage(error?.error?.message );
-      error?.error?.message&&setShowToaster(true);
       return error.message;
     }
   };
@@ -511,8 +514,8 @@ export default function AddTaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        taskRes?.message&&setToasterMessage(taskRes?.message);
-        taskRes?.message&& setShowToaster(true);
+        setToasterMessage(taskRes?.message||'Error while updating Task')
+        setShowToaster(true);
         return;
       } else {
         setSelectedLeads("");
@@ -530,12 +533,12 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
+        localStorage.setItem('showTaskToaster','Task Updated Succesfully !!')
+
       }
     } catch (error) {
       console.log(error);
       setLoading(false);
-      error?.error?.message&&setToasterMessage(error?.error?.message);
-      error?.error?.message&& setShowToaster(true);
       return error.message;
     }
   };
@@ -550,8 +553,8 @@ export default function AddTaskModal(props) {
       const taskRes = await deleteTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        taskRes?.message&& setToasterMessage(taskRes?.message );
-        taskRes?.message&&setShowToaster(true);
+        setToasterMessage(taskRes?.message||'Error while deleting Task')
+        setShowToaster(true);
         return;
       } else {
         setSelectedLeads("");
@@ -570,12 +573,12 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
+        localStorage.setItem('showTaskToaster','Task Deleted Succesfully !!')
+
       }
     } catch (error) {
       console.log(error);
       setLoading(false);
-      error?.error?.message &&setToasterMessage(error?.error?.message );
-      error?.error?.message &&setShowToaster(true);
       return error.message;
     }
   };

@@ -3,9 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import "./tasks.css";
-import { useEffectOnce } from './useEffectOnce';
 import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-headless-accordion";
- 
 import {
   addSectionApi,
   archiveSectionApi,
@@ -60,6 +58,17 @@ const Tasks = () => {
   const [archiveSectionModal, setArchiveSectionModal] = useState(false);
   const { userDetails } = useAuth();
   const params = useParams();
+  useEffect(() => {
+    if(localStorage.getItem('showTaskToaster')){
+      setTimeout(()=>{
+
+        setToasterMessage(localStorage.getItem('showTaskToaster'))
+        setShowToaster(true);
+        localStorage.removeItem('showTaskToaster')
+      },500)
+    }
+   
+  }, [localStorage.getItem('showTaskToaster')]);
 
   useEffect(() => {
     getTasksDataUsingProjectId();
@@ -257,6 +266,7 @@ const Tasks = () => {
           setShowToaster(true);
           setModalShow(false);
           closeModal();
+          
           getTasksDataUsingProjectId();
           let paramsData;
           if (params?.projectId) {
@@ -428,10 +438,9 @@ const Tasks = () => {
                   float: "right",
                 }}
                 onClick={() => {
+                  setShowAddTask(true);
                   setSelectedTask();
                   setSelectedProject();
-                  setShowAddTask(true);
-                  
                 }}
               >
                 Add Task
@@ -625,9 +634,13 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
-                      {((userDetails.role === "LEAD" && ( task?.lead?.includes(userDetails.id) ||userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
+                      {(userDetails.id === task?.assignedTo?._id ||
+                      (userDetails.role === "LEAD" &&
+                        (userDetails.id === task?.assignedTo?._id ||
+                          task?.lead?.includes(userDetails.id) ||
+                          userDetails.id === task?.createdBy?._id)) ||
+                      userDetails.role === "SUPER_ADMIN" ||
+                      userDetails.role === "ADMIN")&& (
                         <Dropdown>
                           <Dropdown.Toggle
                             variant="success"
@@ -797,7 +810,7 @@ const Tasks = () => {
                           // onClick={() => handleViewDetails(task?._id)}
                         )}
                       </div>
-                      {(
+                      {(  
                         (userDetails.role === "LEAD" &&
                           (
                             task?.lead?.includes(userDetails.id) ||
