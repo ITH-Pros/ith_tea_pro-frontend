@@ -8,7 +8,7 @@
   padding: 30px;
   border-radius: 15px;
   position: relative;
-  padding-top: 135px;
+  padding-top: 100px;
 }
 
 .profile-images {
@@ -35,10 +35,11 @@ input {
   display: block;
   width: 100%;
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 14px !important;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   box-sizing: border-box;
+  height: 35px;
 }
 
 input:focus {
@@ -48,8 +49,8 @@ input:focus {
 
 .submit-button {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+  padding:5px 10px;
+  font-size:14px !important;
  
   color: #fff;
   background-color: #4da6ff;
@@ -80,8 +81,8 @@ input:focus {
 
 .edit-detle {
   position: relative;
-  height: 180px;
-  width: 180px;
+  height: 125px;
+  width: 125px;
   margin: auto;
 }
 
