@@ -9,6 +9,8 @@ import Select from "react-select";
 import React from "react";
 import {CiCircleRemove} from 'react-icons/ci'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 
 import {
   faTasks,
@@ -416,22 +418,24 @@ const ProjectCard = ({
         </div>
       </div>
       {modalshow && (
-        <Modal
-          show={modalshow}
-          onHide={() => {
+        <Offcanvas  
+        className="Offcanvas-modal"
+        style={{width:'500px'}}
+        show={modalshow}
+        placement="end"
+        onHide={() => {
             setModalShow(false);
             setShowSelectBox(false);
             setSelectedUnassignedUsers("");
             setListOfUnassignedUsers([]);
             setSelectedRole(null);
           }}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{modalTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div>
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body  >
+        <div>
               <Col sm={12}>
                 {userDetails.role !== "CONTRIBUTOR" &&
                   !isArchive && modalTitle!=='Team Members'&&
@@ -538,11 +542,17 @@ const ProjectCard = ({
             onCancel={() => setShowConfirmation(false)}
             onConfirm={removeUser}
              />
+        </Offcanvas.Body>
+      </Offcanvas>
 
-
-          </Modal.Body>
-        </Modal>
       )}
+
+     
+
+
+
+
+
     </div>
   );
 };
