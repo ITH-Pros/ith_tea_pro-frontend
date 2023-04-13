@@ -490,3 +490,20 @@ button.accordion-button {
   padding: 7px 10px;
   text-align: left;}
 #multi_accrodian button h3{ font-size: 18px; margin: 0px; font-weight: 400;}
+
+
+.filter_btn{    background: #ffffff !important;
+  padding: 0px !important;
+  display: flex;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 0px;
+  width: 111px;
+  float: right;
+  text-align: end;}
+  .filter_btn .container{ margin-top: 0px !important;}
+  .filter_btn .col-lg-8{ width: 100%;}
+  .filter_btn .filter-task-tag{opacity: 1 !important; color: #000 !important; font-weight: 300;    background: #ffffff !important;
+    height: 35px;
+    border-radius: 5px;
+    line-height: 35px;}
