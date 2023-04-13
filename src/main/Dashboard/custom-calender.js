@@ -55,7 +55,7 @@ console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateS
       <Col lg={4} className="text-center">
         <h4>
           {currentView === "Week"
-            ?<> <span> week of </span> <br/>  {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}</>
+            ?<> <span> Week of </span> <br/>  {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}</>
             : currentDate.toLocaleDateString()}
         </h4>
       </Col>

@@ -236,7 +236,9 @@ a {
   align-items: center;
   width: 35px;
   text-align: center;
+  
 }
+.pagination-input:focus{outline: none !important;}
 
 .left-arrow {
   margin-right: 10px;

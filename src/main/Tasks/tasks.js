@@ -3,7 +3,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import "./tasks.css";
-import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-headless-accordion";
+// import {
+//   Accordion,
+//   AccordionBody,
+//   AccordionHeader,
+//   AccordionItem,
+// } from "react-headless-accordion";
 import {
   addSectionApi,
   archiveSectionApi,
@@ -17,7 +22,7 @@ import Toaster from "../../components/Toaster";
 import FilterModal from "./FilterModal";
 import AddTaskModal from "./AddTaskModal";
 import {
- 
+  Accordion,
   ProgressBar,
   Dropdown,
   Badge,
@@ -25,6 +30,7 @@ import {
   Button,
   OverlayTrigger,
   Tooltip,
+  Row, Col
 } from "react-bootstrap";
 import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
@@ -32,9 +38,7 @@ import { useParams } from "react-router-dom";
 import ViewTaskModal from "./view-task";
 import { Truncate } from "../../helpers/truncate";
 import UserIcon from "../Projects/ProjectCard/profileImage";
-import Offcanvas from 'react-bootstrap/Offcanvas';
- 
-
+import Offcanvas from "react-bootstrap/Offcanvas";
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -59,40 +63,37 @@ const Tasks = () => {
   const { userDetails } = useAuth();
   const params = useParams();
   useEffect(() => {
-    if(localStorage.getItem('showTaskToaster')){
-      setTimeout(()=>{
-
-        setToasterMessage(localStorage.getItem('showTaskToaster'))
+    if (localStorage.getItem("showTaskToaster")) {
+      setTimeout(() => {
+        setToasterMessage(localStorage.getItem("showTaskToaster"));
         setShowToaster(true);
-        localStorage.removeItem('showTaskToaster')
-      },500)
+        localStorage.removeItem("showTaskToaster");
+      }, 500);
     }
-   
-  }, [localStorage.getItem('showTaskToaster')]);
+  }, [localStorage.getItem("showTaskToaster")]);
 
   useEffect(() => {
     getTasksDataUsingProjectId();
     let paramsData;
-  
+
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId)
-      localStorage.setItem('tasksParamsData',params?.projectId)
+      paramsData = JSON.parse(params?.projectId);
+      localStorage.setItem("tasksParamsData", params?.projectId);
     }
- 
-    if (paramsData?.projectId) {  
+
+    if (paramsData?.projectId) {
       setSelectedProjectId(paramsData?.projectId);
     }
     if (paramsData?.isArchive) {
       setIsArchive(paramsData?.isArchive);
     }
   }, [isArchive]);
- 
+
   // useEffectOnce(() => {
   //   console.log('useEffectOnce has run!');
   //   return () => {
   //   };
   // });
- 
 
   const handleProgressBarHover = (project) => {
     const completedTasks = project.completedTasks || 0;
@@ -266,7 +267,7 @@ const Tasks = () => {
           setShowToaster(true);
           setModalShow(false);
           closeModal();
-          
+
           getTasksDataUsingProjectId();
           let paramsData;
           if (params?.projectId) {
@@ -302,12 +303,12 @@ const Tasks = () => {
       if (params?.projectId) {
         data.projectId = paramsData?.projectId;
       }
-      
+
       if (localStorage.getItem("taskFilters")) {
         let filterData = JSON.parse(localStorage.getItem("taskFilters"));
         let selectedFilter = localStorage.getItem("selectedFilter");
-        console.log(selectedFilter,'selectedFilter')
-        console.log(filterData)
+        console.log(selectedFilter, "selectedFilter");
+        console.log(filterData);
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds);
         }
@@ -332,16 +333,25 @@ const Tasks = () => {
         if (filterData?.sortOrder) {
           data.sortOrder = filterData?.sortOrder;
         }
-        if (filterData?.fromDate && filterData?.fromDate!==filterData?.toDate && selectedFilter!=='Today' && selectedFilter!=='Tomorrow') {
+        if (
+          filterData?.fromDate &&
+          filterData?.fromDate !== filterData?.toDate &&
+          selectedFilter !== "Today" &&
+          selectedFilter !== "Tomorrow"
+        ) {
           data.fromDate = filterData?.fromDate;
         }
-        if (filterData?.toDate  && filterData?.fromDate!==filterData?.toDate && selectedFilter!=='Today' && selectedFilter!=='Tomorrow') {
+        if (
+          filterData?.toDate &&
+          filterData?.fromDate !== filterData?.toDate &&
+          selectedFilter !== "Today" &&
+          selectedFilter !== "Tomorrow"
+        ) {
           data.toDate = filterData?.toDate;
         }
-        if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
+        if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
           data.fromDate = filterData?.fromDate;
           data.toDate = filterData?.toDate;
-          
         }
       }
       const tasks = await getProjectsTask(data);
@@ -428,9 +438,15 @@ const Tasks = () => {
   return (
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
-        <h1 className="h1-text">
+        <Row>
+          <Col lg={6}>
+          <h1 className="h1-text">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
-          <div className="projects-button">
+      
+        </h1>
+          </Col>
+          <Col lg={6}>
+          <div className="text-end">
             {!isArchive && (
               <button
                 className="addTaskBtn"
@@ -443,7 +459,7 @@ const Tasks = () => {
                   setSelectedProject();
                 }}
               >
-                Add Task
+             <i class="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
               </button>
             )}
 
@@ -453,24 +469,28 @@ const Tasks = () => {
               selectedProjectId && (
                 <button
                   className="addTaskBtn addSectionBtn"
-                  style={{
-                    float: "right",
-                  }}
+                
                   onClick={() => {
                     showAddSectionModal(true);
                   }}
                 >
-                  Add Section
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>  Add Section
                 </button>
               )}
-          </div>
-        </h1>
-
-        <FilterModal
+              <button className="filter_btn">
+                 <FilterModal
           handleProjectId={selectedProjectId}
           getTaskFilters={getTaskFilters}
           isArchive={isArchive}
         />
+              </button>
+                  
+          </div>
+          </Col>
+        </Row>
+     
+
+   
 
         <AddTaskModal
           selectedProjectFromTask={selectedProject}
@@ -487,7 +507,7 @@ const Tasks = () => {
           selectedTaskId={selectedTaskId}
           getTasksDataUsingProjectId={getTasksDataUsingProjectId}
         />
-{/* 
+        
         <Accordion alwaysOpen="true">
           {!projects?.length &&
             params?.projectId &&
@@ -848,48 +868,45 @@ const Tasks = () => {
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
-        </Accordion> */}
+        </Accordion>
 
-
-<div  id="multi_accrodian">
-<Accordion>
+        {/* <div id="multi_accrodian">
+          <Accordion>
             <AccordionItem>
-                <AccordionHeader>
-                    <h3 >Recru 2.0</h3>
-                </AccordionHeader>
+              <AccordionHeader>
+                <h3>Recru 2.0</h3>
+              </AccordionHeader>
 
-                <AccordionBody>
+              <AccordionBody>
                 <div className="accordion-body">
-                <AccordionItem>
+                  <AccordionItem>
                     <AccordionHeader>
-                        <h3 className={`accordion-title`}>Ad-hoc</h3>
+                      <h3 className={`accordion-title`}>Ad-hoc</h3>
                     </AccordionHeader>
 
                     <AccordionBody>
-                        <div className="accordion-body">
-                            Lorem ipsum dolor sit amet.
-                        </div>
+                      <div className="accordion-body">
+                        Lorem ipsum dolor sit amet.
+                      </div>
                     </AccordionBody>
-                </AccordionItem>
-            </div>
-                </AccordionBody>
+                  </AccordionItem>
+                </div>
+              </AccordionBody>
             </AccordionItem>
 
             <AccordionItem>
-                <AccordionHeader>
-                    <h3 className="">Title 2</h3>
-                </AccordionHeader>
+              <AccordionHeader>
+                <h3 className="">Title 2</h3>
+              </AccordionHeader>
 
-                <AccordionBody>
-                    <div className="accordion-body">
-                        Lorem ipsum dolor sit amet.
-                    </div>
-                </AccordionBody>
+              <AccordionBody>
+                <div className="accordion-body">
+                  Lorem ipsum dolor sit amet.
+                </div>
+              </AccordionBody>
             </AccordionItem>
-        </Accordion>
-
-</div>
-
+          </Accordion>
+        </div> */}
 
         {/* <Modal
           show={modalShow}
@@ -907,20 +924,22 @@ const Tasks = () => {
           </Modal.Body>
         </Modal> */}
 
-
         {/* ////// */}
         <Offcanvas
-        className="Offcanvas-modal"
-        style={{height:'100vh'}}
-        show={modalShow}
-        placement="end"
-        onHide={() => setModalShow(false)}
-      >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title> {sectionEditMode ? "Update Section" : "Add section"}</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body >
-        <div className="form-group">
+          className="Offcanvas-modal"
+          style={{ height: "100vh" }}
+          show={modalShow}
+          placement="end"
+          onHide={() => setModalShow(false)}
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>
+              {" "}
+              {sectionEditMode ? "Update Section" : "Add section"}
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <div className="form-group">
               <label>Section</label>
               <input
                 required
@@ -950,8 +969,8 @@ const Tasks = () => {
                 Cancel
               </Button>
             </div>
-        </Offcanvas.Body>
-      </Offcanvas>
+          </Offcanvas.Body>
+        </Offcanvas>
         {/* /// */}
 
         <Modal
@@ -962,9 +981,17 @@ const Tasks = () => {
           <Modal.Header closeButton>
             <Modal.Title>Delete Section</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="body_ui">Are you sure you want to delete this section</Modal.Body>
-          <Modal.Footer className="footer_ui"
-            style={{ alignItems: "center", justifyContent: "center", position:'inherit', width:'auto'  }}
+          <Modal.Body className="body_ui">
+            Are you sure you want to delete this section
+          </Modal.Body>
+          <Modal.Footer
+            className="footer_ui"
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              position: "inherit",
+              width: "auto",
+            }}
           >
             <Button
               variant="secondary"
