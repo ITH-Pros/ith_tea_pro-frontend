@@ -439,7 +439,7 @@ const Tasks = () => {
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <Row>
           <Col lg={6}>
-          <h1 className="h1-text">
+          <h1 className="h1-text mt-0">
           <i className="fa fa-list-ul" aria-hidden="true"></i>Task
       
         </h1>

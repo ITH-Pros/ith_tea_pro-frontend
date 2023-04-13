@@ -12,7 +12,18 @@ import "react-toastify/dist/ReactToastify.css";
 import ViewRatings from "./View-Rating";
 import { useLocation } from "react-router-dom";
 import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
-
+import {
+    Row,
+    Container,
+    Nav,
+    Dropdown,
+    Card,
+    Button,
+    Badge,
+    Modal,
+    Popover,
+    Col
+  } from "react-bootstrap";
 
 export default function Rating(props) {
 
@@ -40,9 +51,15 @@ export default function Rating(props) {
     return (
         <>
           <div className="rightDashboard" style={{marginTop:'7%'}}>
-          <h1 className="h1-text">
-          <i ><FaRegLaughWink/></i>Rating  
+            <Row>
+                <Col lg={6}>
+                <h1 className="h1-text">
+          <i ><FaRegLaughWink/></i>Team Rating  
         </h1>
+                </Col>
+                
+            </Row>
+      
             <div className="main-rating-contianer">
                 {renderCurrentView()}
             </div>
