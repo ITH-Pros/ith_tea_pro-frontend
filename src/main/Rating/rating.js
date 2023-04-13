@@ -49,6 +49,8 @@ export default function Rating(props) {
                 );
     };
     return (
+                            // onClick={() => setModalShow(true)
+
         <>
           <div className="rightDashboard" style={{marginTop:'7%'}}>
             <Row>
@@ -57,8 +59,10 @@ export default function Rating(props) {
           <i ><FaRegLaughWink/></i>Team Rating  
         </h1>
                 </Col>
+               
                 
-            </Row>
+                </Row>
+                
       
             <div className="main-rating-contianer">
                 {renderCurrentView()}
