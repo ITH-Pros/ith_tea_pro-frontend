@@ -332,7 +332,7 @@ export default function Dashboard(props) {
     const dayOfMonth = dayBefore.getDate();
 
     return (
-      <div className="day">
+      <div className="day v-align">
         <p>{dayOfWeek}</p>
         <span>{dayOfMonth}</span>
       </div>
@@ -1454,7 +1454,7 @@ export default function Dashboard(props) {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" style={{ overflowX: "hidden" }}>
+                  <Card id="card-task" style={{ overflowX: "hidden", paddingTop:'0px', height:'auto'  }}>
                     {/* <Row id="agenda">
                       <Col lg={4}>
                         <Button variant="light" size="sm" className="left-btn">
@@ -1480,9 +1480,10 @@ export default function Dashboard(props) {
                       setTeamWorkList={setTeamWorkList}
                       isChange={isChange}
                     />
-                    <Row id="list_ui" className="mt-2">
-                      <Col lg={10} className="border-start  px-1">
-                        <div
+                    <div className="mt-3" style={{ height:'90vh', overflowY:'auto', overflowX:'hidden' }}>
+                    <div id="list_ui" className="mt-2">
+                     
+                        <Row
                           className={
                             teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
                           }
@@ -1497,10 +1498,11 @@ export default function Dashboard(props) {
                                 {(taskIndex === 0 ||
                                   task.dueDate !==
                                     teamWorkList[taskIndex - 1].dueDate) && (
-                                  <Col lg={2} className="v-align">
+                                  <Col lg={1} className="v-align">
                                     <div>{formatDate(task.dueDate)}</div>
                                   </Col>
                                 )}
+                                <Col lg={11}>
                                 <Row className="d-flex justify-content-start list_task w-100 mx-0">
                                   <Col lg={4} className="middle">
                                     {((userDetails.role === "LEAD" &&
@@ -1755,11 +1757,13 @@ export default function Dashboard(props) {
                                     )}
                                   </Col>
                                 </Row>
+                                </Col>
                               </>
                             ))}
-                        </div>
-                      </Col>
-                    </Row>
+                        </Row>
+                    
+                    </div>
+                    </div>
                   </Card>
                 </Col>
               </Row>
