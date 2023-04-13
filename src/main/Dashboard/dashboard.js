@@ -1467,12 +1467,12 @@ export default function Dashboard(props) {
                     isChange={isChange}
                     />
                     <Row id="list_ui" className="mt-2 ">
-                      {/* <Col lg={2} className="v-align">
+                      <Col lg={2} className="v-align">
                         <p className="day">
                           MON <br />
                           <span>10</span>
                         </p>
-                      </Col> */}
+                      </Col>
                       <Col lg={10} className="border-start  px-1">
                         <div
                           className={

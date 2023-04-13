@@ -536,8 +536,8 @@ const Tasks = () => {
           )}
 
           {projects.map((project, index) => (
-            <Accordion.Item key={index} eventKey={index}>
-              {project?._id?.projectId && project?._id?.section && (
+           <Accordion.Item key={index} eventKey={index}>
+              {project?._id?.projectId && project?._id?.section  && (
                 <Accordion.Header>
                   {project?._id?.projectId} / {project?._id?.section}{" "}
                 </Accordion.Header>
