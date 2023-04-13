@@ -813,7 +813,7 @@ export default function AddTaskModal(props) {
               <div className="addFormBtn">
                 {!selectedTask && (
                   <Button
-                    className=" btn-press  btn-gradient-border btnDanger"
+                    className="btn btn-primary"
                     type="button"
                     onClick={submitTask}
                   >
@@ -823,14 +823,14 @@ export default function AddTaskModal(props) {
                 {selectedTask && (
                   <div>
                     <Button
-                      className=" btn-press  btn-gradient-border btnDanger"
+                      className="btn btn-primary" 
                       type="button"
                       onClick={updateTask}
                     >
                       Update
                     </Button>
                     <Button
-                      className=" btn-press  btn-gradient-border btnDanger"
+                      className="btn btn-danger" style={{marginLeft:'10px'}}
                       type="button"
                       onClick={deleteTask}
                     >
@@ -840,7 +840,7 @@ export default function AddTaskModal(props) {
                 )}
                 {!selectedTask && !selectedProjectFromTask &&   !(selectedTask || handleProjectId || selectedProjectFromTask)&&(
                   <Button
-                    className="btn-press btn-gradient-border btnDanger"
+                    className="btn btn-primary" style={{marginLeft:'10px'}}
                     type="button"
                     onClick={submitTaskAnother}
                   >

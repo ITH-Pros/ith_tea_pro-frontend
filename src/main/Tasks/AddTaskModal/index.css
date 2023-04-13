@@ -172,7 +172,8 @@ p {
 }
 
 button.btn-press.btn-gradient-border {
-  margin-right: 12px;
+  
+  font-size: 14px;
 }
 
 .addFormBtn {

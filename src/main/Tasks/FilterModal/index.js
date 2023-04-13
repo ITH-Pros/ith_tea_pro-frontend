@@ -51,6 +51,46 @@ const FilterModal = (props) => {
   const [categories, setCategories] = useState([]);
   const [usersList, setUsersList] = useState([]);
 
+  const customStyles = {
+    option: (provided) => ({
+      ...provided,
+      padding: 5,
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+    }),
+    control: (provided) => ({
+      ...provided,
+      boxShadow: "none",
+   
+      borderRadius: "5px",
+      color: "#767474",
+      minHeight: "40px",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+    }),
+    menu: (provided) => ({
+      ...provided,
+      fontSize: 13,
+      borderRadius: "0px 0px 10px 10px",
+      boxShadow: "10px 15px 30px rgba(0, 0, 0, 0.05)",
+      top: "32px",
+      padding: "5px",
+      zIndex: "2",
+    }),
+    valueContainer: (provided) =>(
+      {
+        ...provided,
+ 
+ 
+ 
+      }
+    ),
+  };
+
   useEffect(() => {
     getAllProjectsData();
     getAllCategoriesData();
@@ -299,6 +339,7 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9" className="filterFields">
                     <Select
+                    styles={customStyles}
                       onChange={(e) => onSelectData(e, "projectIds")}
                       value={projectIds}
                       isMulti
@@ -317,6 +358,7 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9">
                     <Select
+                     styles={customStyles}
                       onChange={(e) => onSelectData(e, "createdBy")}
                       value={createdBy}
                       isMulti
@@ -335,6 +377,7 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9">
                     <Select
+                     styles={customStyles}
                       onChange={(e) => onSelectData(e, "assignedTo")}
                       value={assignedTo}
                       isMulti
@@ -352,6 +395,7 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9">
                     <Select
+                     styles={customStyles}
                       onChange={(e) => onSelectData(e, "category")}
                       value={categoryData}
                       isMulti
@@ -369,6 +413,7 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9">
                     <Select
+                     styles={customStyles}
                       onChange={(e) => onSelectData(e, "priority")}
                       value={priorityData}
                       isMulti
@@ -388,6 +433,7 @@ const FilterModal = (props) => {
 
                   <Col sm="9">
                     <Select
+                     styles={customStyles}
                       onChange={(e) => onSelectData(e, "status")}
                       value={statusData}
                       isMulti
