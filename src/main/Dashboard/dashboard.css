@@ -313,7 +313,7 @@ th {
   color: #6590ad;
 }
 
-#card-task p,
+ 
 #card-undefined p {
   margin: 0;
   font-size: 14px;
@@ -696,6 +696,7 @@ th {
 }
 #list_ui .list_task {
   border: 0px !important;
+  position: relative;
 }
 .list-day {
   width: auto;

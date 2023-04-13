@@ -1440,7 +1440,7 @@ export default function Dashboard(props) {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" style={{ overflowX: "hidden" }}>
+                  <Card id="card-task" style={{ overflowX: "hidden", paddingTop:'0px', height:'auto' }}>
                     {/* <Row id="agenda">
                       <Col lg={4}>
                         <Button variant="light" size="sm" className="left-btn">
@@ -1466,14 +1466,15 @@ export default function Dashboard(props) {
                     setTeamWorkList={setTeamWorkList}
                     isChange={isChange}
                     />
-                   <Row id="list_ui" className="mt-3" style={{ overflowX: "hidden", height:'80vh', overflowY:'auto' }}>
-                      <Col lg={2} className="v-align">
+                <div className="mt-3" style={{ height:'90vh', overflowY:'auto', overflowX:'hidden' }}>
+                <Row id="list_ui" >
+                      <Col lg={1} className="v-align">
                         <p className="day">
                           MON <br />
                           <span>10</span>
                         </p>
                       </Col>
-                      <Col lg={10} className="border-start  px-1">
+                      <Col lg={11} className="border-start">
                         <div
                           className={
                             teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
@@ -1740,6 +1741,7 @@ export default function Dashboard(props) {
                         </div>
                       </Col>
                     </Row>
+                </div>
                     {/* <Row id="list_ui">
                       <Col lg={2} className="v-align">
                         <p className="day">THU 13</p>
