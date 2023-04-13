@@ -988,8 +988,8 @@ const Tasks = () => {
               )}
 
               <Button
-                style={{ marginLeft: "5px" }}
-                className="btn"
+                style={{ marginLeft: "5px", color:'#fff' }}
+                className="btn btn-light"
                 onClick={() => setModalShow(false)}
               >
                 Cancel

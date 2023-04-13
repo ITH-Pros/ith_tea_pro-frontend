@@ -156,10 +156,7 @@ span.rbc-toolbar-label {
   overflow: hidden !important;
 }
 
-.confirmation-popup .modal-body {
-  height: 28vh ;
-  overflow: hidden !important;
-}
+ 
 
 .confirmation-popup .button-center-corformain {
   bottom: -10px !important;

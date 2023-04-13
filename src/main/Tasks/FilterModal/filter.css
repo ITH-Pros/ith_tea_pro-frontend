@@ -84,11 +84,7 @@
     width: 100%;
 }
 
-.filterModal .modal-body {
-    height: 80vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+ 
 
 .filterModal.modal.show .modal-dialog {
     border-radius: 4px;

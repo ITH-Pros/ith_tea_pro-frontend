@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
@@ -169,9 +168,9 @@ const ProjectCard = ({
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to remove {selectedUserName} ?
+        <Modal.Body className="text-center">Are you sure you want to remove {selectedUserName} ?
 
-      <div className="mt-2">
+      <div className="mt-3 mb-3 text-center">
       <Button size="md" variant="secondary " onClick={onCancel}>Cancel</Button>
           <Button size="md" variant="danger" style={{marginLeft:'10px'}} onClick={onConfirm}>Remove</Button>
 
@@ -434,7 +433,7 @@ const ProjectCard = ({
         <Offcanvas.Header closeButton>
           <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body  >
+        <Offcanvas.Body className="pt-0"  >
         <div>
               <Col sm={12}>
                 {userDetails.role !== "CONTRIBUTOR" &&
