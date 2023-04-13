@@ -771,7 +771,7 @@ export default function Dashboard(props) {
                   <Card
                     id="card-task"
                     className={
-                      myWorkList?.length === 0 ? "alig-nodata" : "px-3"
+                      myWorkList?.length === 0 ? "alig-nodata" : "px-3 pt-0"
                     }
                   >
                     {myWorkList && myWorkList?.length === 0 && (
@@ -991,7 +991,7 @@ export default function Dashboard(props) {
                 <Card
                   id="card-task"
                   className={
-                    pendingRatingList?.length === 0 ? "alig-nodata" : "px-3"
+                    pendingRatingList?.length === 0 ? "alig-nodata" : "px-3 "
                   }
                 >
                   {pendingRatingList && pendingRatingList?.length === 0 && (
@@ -1440,7 +1440,7 @@ export default function Dashboard(props) {
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
-                  <Card id="card-task" style={{ overflowX: "hidden" }}>
+                  <Card id="card-task" style={{ overflowX: "hidden", paddingTop:'0px', height:'auto', overflowY:'auto' }}>
                     {/* <Row id="agenda">
                       <Col lg={4}>
                         <Button variant="light" size="sm" className="left-btn">
@@ -1466,7 +1466,7 @@ export default function Dashboard(props) {
                     setTeamWorkList={setTeamWorkList}
                     isChange={isChange}
                     />
-                    <Row id="list_ui" className="mt-2">
+                    <Row id="list_ui" className="mt-3" style={{ overflowX: "hidden", height:'80vh', overflowY:'auto' }}>
                       <Col lg={2} className="v-align">
                         <p className="day">
                           MON <br />
