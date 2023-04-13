@@ -89,7 +89,7 @@ const CustomCalendar = (props) => {
   console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`)
 
   return (
-    <Row id="agenda">
+    <Row id="agenda" className="align-items-center" >
       <Col lg={4} className="px-0">
         <Button variant="light" size="sm" className="left-btn" onClick={handlePrev}>
           <BsChevronDoubleLeft /> Prev {currentView}

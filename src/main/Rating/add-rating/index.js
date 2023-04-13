@@ -402,9 +402,9 @@ export default function AddRating(props) {
           <RatingModalBody />
         </Modal.Body>
       </Modal>
-      {!modalShow &&  <Button variant="light"
+      {!modalShow &&  <Button variant="primary"
                               size="sm"
-                              className="addRatingBtn" onClick={() => setModalShow(true)}>Add Rating</Button>}
+                               style={{fontSize:'10px'}} onClick={() => setModalShow(true)}>Add Rating</Button>}
     </>
   );
 }

@@ -380,7 +380,7 @@ export default function Dashboard(props) {
           <Col lg={6} id="nav-filter" className="px-0">
             <Nav className="justify-content-end" activeKey="/home">
               <Nav.Item>
-                <Nav.Link eventKey="link-1" className="px-0">
+                <Nav.Link eventKey="link-1">
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="secondary"
@@ -1466,7 +1466,7 @@ export default function Dashboard(props) {
                     setTeamWorkList={setTeamWorkList}
                     isChange={isChange}
                     />
-                    <Row id="list_ui" className="mt-2 ">
+                   <Row id="list_ui" className="mt-3" style={{ overflowX: "hidden", height:'80vh', overflowY:'auto' }}>
                       <Col lg={2} className="v-align">
                         <p className="day">
                           MON <br />
@@ -1485,7 +1485,7 @@ export default function Dashboard(props) {
                           {teamWorkList &&
                             teamWorkList?.length > 0 &&
                             teamWorkList?.map((task) => (
-                              <Row  className="d-flex justify-content-start list_task w-100 mx-0">
+                              <Row className="d-flex justify-content-start list_task w-100 mx-0">
                                 <Col lg={4} className="middle">
                                   {(
                                     (userDetails.role === "LEAD" &&

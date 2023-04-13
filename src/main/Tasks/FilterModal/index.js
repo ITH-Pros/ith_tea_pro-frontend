@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Container, Row, Form, Modal, Col } from "react-bootstrap";
+import { Container, Row, Form, Modal, Col, Button } from "react-bootstrap";
 import Loader from "../../../components/Loader";
 import { CONSTANTS } from "../../../constants";
 import "./filter.css";
@@ -240,71 +240,39 @@ const FilterModal = (props) => {
       setProjectIds(projectData);
       setAssignedTo(assignedToData);
     }
-    localStorage.removeItem('dueDate')
-    localStorage.removeItem('selectedFilter')
-    localStorage.removeItem('taskFilters')
+    localStorage.removeItem("dueDate");
+    localStorage.removeItem("selectedFilter");
+    localStorage.removeItem("taskFilters");
     setFilterModalShow(true);
   };
 
   return (
     <>
-      <div className="filter-main-tag">
-        <div className="filterWth">
-          <Container>
-            <Row>
-              <Col lg={8}>
-                {!isArchive && (
-                  <div>
-                    <img
-                      onClick={setProjectAndOpenModal}
-                      style={{
-                        marginRight: "2px",
-                        cursor: "pointer",
-                      }}
-                      src={require("../../../assests/img/filter.png")}
-                      alt="filter"
-                    />
-
-                    <span
-                      onClick={setProjectAndOpenModal}
-                      className="filter-task-tag"
-                    >
-                      Filter
-                    </span>
-                  </div>
-                )}
-              </Col>
-              <Col lg={3}>
-                <div className="text-right me-2">
-                  {clearFilter && (
-                    <img
-                      style={{
-                        width: "18px",
-                        height: "18px",
-                        marginRight: "2px",
-                        cursor: "pointer",
-                      }}
-                      src={require("../../../assests/img/removeFilter.jpg")}
-                      alt="filter"
-                    />
-                  )}
-                  {clearFilter && (
-                    <span
-                      onClick={() => {
-                        clearFilterFormValue();
-                        setClearFilterBoolean(false);
-                        localStorage.removeItem('selectedFilterTypes')
-                      }}
-                      className="filter-task-tag"
-                    >
-                      Clear Filter
-                    </span>
-                  )}
-                </div>
-              </Col>
-            </Row>
-          </Container>
-        </div>
+      <div>
+        <Button variant="light" style={{ marginRight: "10px" }}>
+          {!isArchive && (
+            <div>
+              <span onClick={setProjectAndOpenModal}>
+                <i class="fa fa-filter" aria-hidden="true"></i> Filter
+              </span>
+            </div>
+          )}
+        </Button>
+       {clearFilter && <Button variant="light" style={{ marginRight: "10px" }}>
+          {clearFilter && <i class="fa fa-times-circle" aria-hidden="true"></i>}
+          {clearFilter && (
+            <span
+              style={{ marginLeft: "5px" }}
+              onClick={() => {
+                clearFilterFormValue();
+                setClearFilterBoolean(false);
+                localStorage.removeItem("selectedFilterTypes");
+              }}
+            >
+              Clear Filter
+            </span>
+          )}
+        </Button>}
       </div>
       {filterModalShow && (
         <Modal
