@@ -96,8 +96,8 @@ export default function Dashboard(props) {
     <div>
       <div className="dashboard_camp">
         <Row>
-          <Col lg={6}><h4>  My Ratings</h4></Col>
-          <Col lg={6}>
+         
+          <Col lg={12}>
           {(userDetails?.role === "LEAD" ||
             userDetails?.role === "CONTRIBUTOR") && (
             <button

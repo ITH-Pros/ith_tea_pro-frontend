@@ -567,9 +567,10 @@ th {
 }
 
 .btn-light.addRatingBtn {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 18px;
+  padding: 6px 10px;
+  line-height: 25px;
   border: 1px solid #8355ad;
   color: #f8f9fa;
   background: #8355ad;

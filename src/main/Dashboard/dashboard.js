@@ -380,7 +380,7 @@ export default function Dashboard(props) {
           <Col lg={6} id="nav-filter" className="px-0">
             <Nav className="justify-content-end" activeKey="/home">
               <Nav.Item>
-                <Nav.Link eventKey="link-1">
+                <Nav.Link eventKey="link-1" className="px-0">
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="secondary"
