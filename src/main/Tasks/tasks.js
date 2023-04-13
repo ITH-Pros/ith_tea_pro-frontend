@@ -535,12 +535,13 @@ const Tasks = () => {
             <h6 style={{textAlign:'center'}} >No Tasks Found</h6>
           )}
 
-          {projects.map((project, index) => (
-            <Accordion.Item key={index} eventKey={index}>
-              {project?._id?.projectId && project?._id?.section && (
-                <Accordion.Header>
-                  {project?._id?.projectId} / {project?._id?.section}{" "}
-                </Accordion.Header>
+{projects.map((project, index) => (
+  project?.tasks?.length > 0 && ( // check if tasks array has data
+    <Accordion.Item key={index} eventKey={index}>
+      {project?._id?.projectId && project?._id?.section && (
+        <Accordion.Header>
+          {project?._id?.projectId} / {project?._id?.section}
+        </Accordion.Header>
               )}
 
               <div className="d-flex rightTags">
@@ -656,7 +657,7 @@ const Tasks = () => {
                       
                       <div
                         className="clickLabelArea"
-                        onClick={() => handleViewDetails(task?._id)}
+                        
                       >
                         <Row className="align-items-center justify-content-start">
                           <Col lg={5} className="align-items-center"> 
@@ -772,7 +773,7 @@ const Tasks = () => {
                           }
                           // onClick={() => handleViewDetails(task?._id)}
                         >
-                         <p className="text-truncate">{task?.title}</p> 
+                         <p onClick={() => handleViewDetails(task?._id)} className="text-truncate">{task?.title}</p> 
                         </p>
                             </Col>
                           </Row>
@@ -888,8 +889,8 @@ const Tasks = () => {
                   ))}
                 </ul>
               </Accordion.Body>
-            </Accordion.Item>
-          ))}
+            </Accordion.Item>)
+))}
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
