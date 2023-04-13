@@ -779,6 +779,7 @@ export default function AddTaskModal(props) {
                     name="status"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.status || statusList[0]}
+                    disabled={taskFormValue.status === "COMPLETED"}
                   >
                     <option value="" disabled>
                       Select Status
