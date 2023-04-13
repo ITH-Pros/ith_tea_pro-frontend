@@ -267,7 +267,6 @@ const Tasks = () => {
           setShowToaster(true);
           setModalShow(false);
           closeModal();
-
           getTasksDataUsingProjectId();
           let paramsData;
           if (params?.projectId) {
@@ -454,9 +453,10 @@ const Tasks = () => {
                   float: "right",
                 }}
                 onClick={() => {
-                  setShowAddTask(true);
                   setSelectedTask();
                   setSelectedProject();
+                  setShowAddTask(true);
+                  
                 }}
               >
              <i class="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
@@ -537,7 +537,6 @@ const Tasks = () => {
 
           {projects.map((project, index) => (
             <Accordion.Item key={index} eventKey={index}>
-              
               {project?._id?.projectId && project?._id?.section && (
                 <Accordion.Header>
                   {project?._id?.projectId} / {project?._id?.section}{" "}
@@ -856,9 +855,9 @@ const Tasks = () => {
                      
 
                       </div>
-                      {(  
+                      {(userDetails.id === task?.assignedTo?._id ||
                         (userDetails.role === "LEAD" &&
-                          (
+                          (userDetails.id === task?.assignedTo?._id ||
                             task?.lead?.includes(userDetails.id) ||
                             userDetails.id === task?.createdBy?._id)) ||
                         userDetails.role === "SUPER_ADMIN" ||

@@ -1,11 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-import { BsChevronDoubleLeft, BsChevronLeft, BsChevronDown, BsChevronDoubleRight } from "react-icons/bs";
-import "./dashboard.css";
+import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight , BsChevronDown } from "react-icons/bs";
+import { getTeamWork, updateTaskStatusById } from "../../services/user/api";
+import { useAuth } from "../../auth/AuthProvider";
 
-const CustomCalendar = () => {
+const CustomCalendar = (props) => {
   const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
+  const { userDetails } = useAuth();
+  const { setTeamWorkList , isChange} = props;
+
+  useEffect(() => {
+
+    if (userDetails?.role !== "CONTRIBUTOR") {
+        getTeamWorkList();
+      }
+    }, [currentDate,currentView ]);
+
+    useEffect(() => {
+
+        if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined)  {
+            console.log(isChange);
+            getTeamWorkList();
+          }
+        }, [isChange]);
+
+
+  const getTeamWorkList = async () => {
+
+    let dataToSend = { };
+
+    if (currentView === "Week") {
+      dataToSend = {
+        fromDate: weekStart,
+        toDate: weekEnd,
+      };
+    } else if (currentView === "Day") {
+        dataToSend = {
+            currentDate: currentDate,
+        };
+    }
+    console.log("dataToSend", dataToSend);
+    try {
+      const res = await getTeamWork(dataToSend);
+      if (res.error) {
+        console.log("Error while getting team work list");
+
+      } else {
+        setTeamWorkList(res?.data);
+      }
+    } catch (error) {
+      return error.message;
+    }
+  };
 
   const handlePrev = () => {
     if (currentView === "Week") {
@@ -39,8 +86,7 @@ const CustomCalendar = () => {
   const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
   const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + (7 - currentDate.getDay()));
 
-//   weekstart , weekend
-console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`)
+  console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`)
 
   return (
     <Row id="agenda">
@@ -65,13 +111,14 @@ console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateS
             {currentView} <BsChevronDown/>
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => handleViewChange("Week")}>Week</Dropdown.Item>
-            <Dropdown.Item onClick={() => handleViewChange("Day")}>Day</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </Col>
-    </Row>
+                  <Dropdown.Menu>
+                      <Dropdown.Item onClick={() => handleViewChange("Week")}>Week</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleViewChange("Day")}>Day</Dropdown.Item>
+                  </Dropdown.Menu>
+              </Dropdown>
+          </Col>
+      </Row>
+      
   );
 };
 
