@@ -308,7 +308,7 @@ button.accordion-button {
   white-space: normal;
   word-break: break-word;
   height: 50px;
-  display: flex;
+ 
 }
 
 .addtask {
@@ -470,10 +470,11 @@ button.accordion-button {
   height: 100px;
 }
 
-.clickLabelArea i {
+.clickLabelArea p {
   font-size: 16px;
 }
-
+.clickLabelArea .btn{ padding: 0px !important;}
+.clickLabelArea .nameTag{ display: contents;}
 
 .body_ui{ position: inherit;     height: 21vh !important;}
 
