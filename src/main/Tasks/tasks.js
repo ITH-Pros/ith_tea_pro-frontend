@@ -654,7 +654,17 @@ const Tasks = () => {
                 <ul className="mb-0">
                   {project?.tasks?.map((task) => (
                     <li key={task?._id} className="share-wrapper-ui">
-                      {(userDetails.id === task?.assignedTo?._id ||
+                      
+                      <div
+                        className="clickLabelArea"
+                        onClick={() => handleViewDetails(task?._id)}
+                      >
+                        <Row className="align-items-center justify-content-start">
+                          <Col lg={5} className="align-items-center"> 
+                          <Row>
+                            <Col  lg={1}>
+                            <div>
+                          {(userDetails.id === task?.assignedTo?._id ||
                       (userDetails.role === "LEAD" &&
                         (userDetails.id === task?.assignedTo?._id ||
                           task?.lead?.includes(userDetails.id) ||
@@ -754,20 +764,24 @@ const Tasks = () => {
                           )}
                         </Dropdown>
                       )}
-                      <div
-                        className="clickLabelArea"
-                        onClick={() => handleViewDetails(task?._id)}
-                      >
-                        <i
+                          </div>
+                            </Col>
+                            <Col  lg={11}>
+                            <p
                           className={
                             task?.status === "COMPLETED" ? "line-strics" : ""
                           }
                           // onClick={() => handleViewDetails(task?._id)}
                         >
-                          {Truncate(task?.title, 65)}
-                        </i>
-
-                        {task?.status === "NOT_STARTED" && (
+                         <p className="text-truncate">{task?.title}</p> 
+                        </p>
+                            </Col>
+                          </Row>
+                       
+                        </Col>
+                         
+                          <Col lg={3}>
+                          {task?.status === "NOT_STARTED" && (
                           <Badge bg="secondary">NOT STARTED</Badge>
                         )}
                         {task?.status === "ONGOING" && (
@@ -796,7 +810,9 @@ const Tasks = () => {
                         {task?.priority === "HIGH" && (
                           <Badge bg="danger">HIGH</Badge>
                         )}
-                        {!task?.assignedTo?.profilePicture&&task?.assignedTo?.name && (
+                          </Col>
+                          <Col lg={3} className="align-items-center justify-content-start">
+                          {!task?.assignedTo?.profilePicture&&task?.assignedTo?.name && (
                           <div className="nameTag">
                             <UserIcon
                               key={index}
@@ -805,7 +821,7 @@ const Tasks = () => {
                           </div>
                         )}
                         {task?.assignedTo?.profilePicture && (
-                          <div className="nameTag">
+                          <div className="nameTag" style={{display:'contents'}}>
                             <img
                               style={{
                                 width: "20px",
@@ -819,7 +835,9 @@ const Tasks = () => {
                         )}
                         <span> {task?.assignedTo?.name}</span>
                         {!task?.assignedTo?.name && <span> NOT ASSIGNED </span>}
-
+                          </Col>
+                          <Col lg={1}>
+                            
                         {task?.dueDate && (
                           <Badge bg={task?.dueToday ? "danger" : "primary"}>
                             Due{" "}
@@ -829,6 +847,14 @@ const Tasks = () => {
                           </Badge>
                           // onClick={() => handleViewDetails(task?._id)}
                         )}
+                          </Col>
+                          
+                        </Row>
+                       
+
+                       
+                     
+
                       </div>
                       {(  
                         (userDetails.role === "LEAD" &&
