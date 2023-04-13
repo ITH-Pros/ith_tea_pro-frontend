@@ -1497,11 +1497,15 @@ export default function Dashboard(props) {
                               <>
                                 {(taskIndex === 0 ||
                                   task.dueDate !==
-                                    teamWorkList[taskIndex - 1].dueDate) && (
-                                  <Col lg={1} className="v-align">
+                                  teamWorkList[taskIndex - 1].dueDate) ? (
+                                    <Col lg={1} className="v-align">
                                     <div>{formatDate(task.dueDate)}</div>
                                   </Col>
-                                )}
+                                ) :
+                                <Col lg={1} className="v-align">
+                                <div></div>
+                              </Col>
+                                }
                                 <Col lg={11}>
                                 <Row className="d-flex justify-content-start list_task w-100 mx-0">
                                   <Col lg={4} className="middle">
