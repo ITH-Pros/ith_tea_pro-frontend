@@ -108,7 +108,7 @@ export default function Dashboard(props) {
               {teamView ? "Self view" : "Team View"}{" "}
             </button>
           )}
-    <div className="wrap ">
+    <div className="wrap  rating_btn" style={{height:'100%'}}>
                 {userDetails?.role !== "CONTRIBUTOR" && (
                   
                     <AddRating

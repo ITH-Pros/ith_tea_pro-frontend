@@ -678,3 +678,7 @@ ul.weekdays {
         display: block;
     }
 }
+
+
+.rating_btn .btn{ font-size: 15px !important;
+    margin-right: 10px;}

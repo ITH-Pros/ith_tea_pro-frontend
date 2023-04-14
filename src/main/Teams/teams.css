@@ -45,7 +45,7 @@ a {
   position: relative;
   border-radius: 10px;
   float: left;
-  max-height: 300px;
+  max-height: 400px;
 }
 
 .top-bar {
@@ -144,7 +144,7 @@ a {
 }
 
 .content-height {
-  height: 120px;
+  min-height: 120px;
   margin-top: 1px;
   justify-content: center;
   align-items: center;
