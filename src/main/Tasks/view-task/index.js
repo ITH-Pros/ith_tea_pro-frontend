@@ -78,6 +78,9 @@ export default function ViewTaskModal(props) {
         }
         getTasksDataUsingProjectId();
         setShowConfirmation(false)
+        console.log('isChange', isChange)
+        // setIsChange(!isChange)
+        
       }
     } catch (error) {
       return error.message;
@@ -176,6 +179,8 @@ export default function ViewTaskModal(props) {
         setIsRatingFormVisible(false);
         setErrorRating(false);
         setRating(0);
+        setIsChange(!isChange)
+        onInit()
       }
     } catch (error) {
       console.log(error);

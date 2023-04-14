@@ -260,7 +260,7 @@ export default function AllProject() {
                 </div>
               );
             })}
-          {!projectList?.length && userDetails.role === "CONTRIBUTOR" && (
+          {!projectList?.length && (
             <h6>No Project Found</h6>
           )}
         </div>

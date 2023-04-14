@@ -20,6 +20,8 @@ import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
 import ViewTaskModal from "../Tasks/view-task";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 import {
   BsChevronDoubleLeft,
   BsChevronLeft,
@@ -1799,7 +1801,7 @@ export default function Dashboard(props) {
         isChange={isChange}
       />
 
-      <Modal
+      {/* <Modal
         className="profile-modal"
         show={showModalOnLogin}
         onHide={() => {
@@ -1818,7 +1820,29 @@ export default function Dashboard(props) {
         >
           <UserForm handleModalClose={handleProfileModalClose} />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+
+      <Offcanvas  
+        className="Offcanvas-modal profile-modal"
+        style={{width:'600px'}}
+        
+        placement="end"
+        show={showModalOnLogin}
+        onHide={() => {
+          handleProfileModalClose();
+        }}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> Profile Details</Offcanvas.Title>
+          <button onClick={skipReminder} className="skip-button">
+            SKIP
+          </button>
+        </Offcanvas.Header>
+        <Offcanvas.Body style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }} >
+        <UserForm handleModalClose={handleProfileModalClose} />
+
+        </Offcanvas.Body>
+      </Offcanvas>
 
       {loading ? <Loader /> : null}
       {toaster && (

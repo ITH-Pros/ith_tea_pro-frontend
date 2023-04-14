@@ -4,6 +4,7 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
 import { getRatings } from "../../../services/user/api";
+import Loader from "../../../components/Loader";
 
 const locales = {
   "en-US": require("date-fns"),
@@ -20,12 +21,15 @@ const localizer = dateFnsLocalizer({
 export default function MyCalendar() {
   const [myRatings, setMyRatings] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     getAllRatings();
   }, [selectedDate]);
 
   async function getAllRatings(data) {
+    setLoading(true);
     try {
       let dataToSend = {
         date: selectedDate.getDate(),
@@ -36,6 +40,7 @@ export default function MyCalendar() {
       const rating = await getRatings(dataToSend);
       if (rating.error) {
         console.log(rating?.error);
+        setLoading(false);
       } else {
         let dataToSet = rating.data?.[0]?.ratings?.map((item, index) => {
           return {
@@ -46,9 +51,11 @@ export default function MyCalendar() {
           };
         });
         setMyRatings(dataToSet);
+        setLoading(false);
       }
     } catch (error) {
       console.log("error", error);
+      setLoading(false);
     }
   }
 
@@ -72,6 +79,8 @@ export default function MyCalendar() {
             backgroundEvents={(el) => console.log("el", el)}
           />
         </div>
+      {loading ? <Loader /> : null}
+
       </div>
     </>
   );
