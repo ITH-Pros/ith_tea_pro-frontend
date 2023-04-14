@@ -22,6 +22,7 @@ import UserForm from "./main/edit-profile";
 import PasswordForm from "./setup-password";
 import ForgotPassword from "./auth/forgotPassword";
 import ResetPassword from "./auth/resetPassword";
+import TeamReport from "./main/Team-report";
 function App() {
   return (
     <ProSidebarProvider>
@@ -149,6 +150,18 @@ function App() {
             </>
           }
         />
+        <Route
+          path="/team-report"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <Header />
+              <TeamReport />
+            </ProtectedRoute>
+          }
+        />
+
+
         <Route
           path="/task/:projectId/:isArchive"
           element={
