@@ -271,6 +271,7 @@ th {
   position: relative;
   padding-top: 104px;
   border: 1px solid #ccc;
+  /* margin-left: 350px; */
 }
 
 #nav-filter {
@@ -603,6 +604,7 @@ th {
   color: #fff;
   padding: 8px;
   border-radius: 6px;
+  /* margin-left: 350px; */
 }
 
 .dashboard_camp #card-task {
