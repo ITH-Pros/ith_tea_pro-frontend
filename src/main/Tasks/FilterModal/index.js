@@ -15,6 +15,8 @@ import Select from "react-select";
 import { useAuth } from "../../../auth/AuthProvider";
 import FilterDropdown from "./FilterDropdown";
 import SortByDropdown from "./SortFilter";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 const FilterModal = (props) => {
   const { getTaskFilters, handleProjectId, isArchive } = props;
 
@@ -316,7 +318,228 @@ const FilterModal = (props) => {
         </Button>}
       </div>
       {filterModalShow && (
-        <Modal
+         
+        <Offcanvas  
+        className="Offcanvas-modal"
+        style={{width:'600px'}}
+          show={filterModalShow}
+          onHide={() => setFilterModalShow(false)}
+        placement="end"
+       
+       
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title id="contained-modal-title-vcenter">  Task Filter</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body  >
+        <Form noValidate>
+              <Form.Group controlId="formSelectProject">
+                <Row>
+                  <Col sm="3">
+                    <Form.Label>Project</Form.Label>
+                  </Col>
+                  <Col sm="9" className="filterFields">
+                    <Select
+                    styles={customStyles}
+                      onChange={(e) => onSelectData(e, "projectIds")}
+                      value={projectIds}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={projects}
+                      isDisabled={handleProjectId}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Created By</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                     styles={customStyles}
+                      onChange={(e) => onSelectData(e, "createdBy")}
+                      value={createdBy}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={usersList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Assigned To</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                     styles={customStyles}
+                      onChange={(e) => onSelectData(e, "assignedTo")}
+                      value={assignedTo}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={usersList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="category">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Category</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                     styles={customStyles}
+                      onChange={(e) => onSelectData(e, "category")}
+                      value={categoryData}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={categories}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Priority</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <Select
+                     styles={customStyles}
+                      onChange={(e) => onSelectData(e, "priority")}
+                      value={priorityData}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={priorityList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Status</Form.Label>
+                  </Col>
+
+                  <Col sm="9">
+                    <Select
+                     styles={customStyles}
+                      onChange={(e) => onSelectData(e, "status")}
+                      value={statusData}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={statusList}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDueDate">
+                <Row className="filterFields due-date">
+                  <FilterDropdown onFilterSelect={handleFilterSelect} />
+                </Row>
+              </Form.Group>
+              <Form.Group controlId="formDueDate">
+                <Row
+                  className="filterFields due-date"
+                  style={{ marginTop: "0px" }}
+                >
+                  <SortByDropdown
+                    onFilterSortSelect={handleFilterSortSelect}
+                    onFilterSortOrderSelect={handleFilterSortOrderSelect}
+                  />
+                </Row>
+              </Form.Group>
+
+              <Form.Group controlId="formDateCreated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Date Created</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <DatePicker
+                      selected={dateCreated}
+                      onChange={(date) => setDateCreated(date)}
+                      className="form-control"
+                      placeholderText="Select Date Created"
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+
+              <Form.Group controlId="formDateUpdated">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Date Updated</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <DatePicker
+                      selected={dateUpdated}
+                      onChange={(date) => setDateUpdated(date)}
+                      className="form-control"
+                      placeholderText="Select Date Updated"
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+
+              <Form.Group controlId="formDateCompleted">
+                <Row className="filterFields">
+                  <Col sm="3">
+                    <Form.Label>Date Completed</Form.Label>
+                  </Col>
+                  <Col sm="9">
+                    <DatePicker
+                      selected={dateCompleted}
+                      onChange={(date) => setDateCompleted(date)}
+                      className="form-control"
+                      placeholderText="Select Date Completed"
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+            </Form>
+
+            <div>
+              <img
+                onClick={closeModalAndgetAllTaskOfProject}
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  marginRight: "2px",
+                  cursor: "pointer",
+                }}
+                src={require("../../../assests/img/filter.png")}
+                alt="filter"
+              />
+              <span
+                onClick={closeModalAndgetAllTaskOfProject}
+                className="filter-task-tag  apply-footer-tag"
+              >
+                Apply
+              </span>
+            </div>
+
+        </Offcanvas.Body>
+       
+
+      </Offcanvas>
+         
+      
+      )}
+
+      {/* <Modal
           width={600}
           show={filterModalShow}
           onHide={() => setFilterModalShow(false)}
@@ -532,8 +755,15 @@ const FilterModal = (props) => {
               </span>
             </div>
           </Modal.Footer>
-        </Modal>
-      )}
+        </Modal> */}
+
+      
+
+    
+
+
+
+
       {loading && <Loader />}
     </>
   );

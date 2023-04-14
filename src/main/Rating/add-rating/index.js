@@ -16,6 +16,8 @@ import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { useAuth } from "../../../auth/AuthProvider";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 
 export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
@@ -390,7 +392,7 @@ export default function AddRating(props) {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         show={modalShow}
         onHide={() => setModalShow(false)}
         animation={false}
@@ -401,10 +403,28 @@ export default function AddRating(props) {
         <Modal.Body>
           <RatingModalBody />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+      <Offcanvas  
+        className="Offcanvas-modal"
+        style={{width:'500px'}}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> Add Rating</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body  >
+        <RatingModalBody />
+        </Offcanvas.Body>
+      </Offcanvas>
+
       {!modalShow &&  <Button variant="primary"
                               size="sm"
                                style={{fontSize:'10px'}} onClick={() => setModalShow(true)}>Add Rating</Button>}
+
+
+
     </>
   );
 }
