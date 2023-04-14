@@ -10,6 +10,7 @@ import {
 import "./index.css";
 import ImageUpload from "./imageUpload";
 import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 
 function UserForm(props) {
   const { handleModalClose } = props;
@@ -168,17 +169,17 @@ function UserForm(props) {
         </div>
         <div className="form-group col-12 text-center profil-ed">
           {!isEditable && (
-            <button onClick={handleSubmit} className="submit-button">
+            <Button variant="primary" size="sm" onClick={handleSubmit} >
               Update
-            </button>
+            </Button>
           )}
 
           {isEditable && (
-            <button className="submit-button edit" onClick={handleEditClick}>
+             <Button variant="primary" size="sm" onClick={handleEditClick}>
               Edit Profile
-            </button>
+            </Button>
           )}
-          <button  onClick={handleResetClick} className="submit-button edit">Reset Password</button>
+          <Button variant="secondary" size="sm" className="ms-2"  onClick={handleResetClick} >Reset Password</Button>
 
         </div>
 

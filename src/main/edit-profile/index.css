@@ -177,3 +177,6 @@ input:focus {
     margin: 20px auto;
   }
 }
+
+.upload-icon{ position: absolute; bottom: 3px; right: 0px;}
+.upload-icon .badge{ margin: 0px 3px ;}

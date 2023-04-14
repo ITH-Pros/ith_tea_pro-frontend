@@ -409,7 +409,7 @@ const ProjectCard = ({
               }}
             >
               <i
-                className="fa fa-user-plus add-user-icon"
+                className="fa fa-user-plus add-user-icon" 
                 aria-hidden="true"
               ></i>
             </div>
@@ -440,7 +440,7 @@ const ProjectCard = ({
                   !isArchive && modalTitle!=='Team Members'&&
                   userDetails.role !== "LEAD" && (
                     <div onClick={assignTeamUser} className="assignPopup">
-                      <UserIcon style={{width:'20px'}} firstName={"+"} />
+                      <UserIcon style={{width:'20px',}} firstName={"+"} className="plus_icon" />
                       <p className="ms-2 mb-0" style={{cursor:'pointer'}}>{"Add Team"}</p>
                     </div>
                   )}
