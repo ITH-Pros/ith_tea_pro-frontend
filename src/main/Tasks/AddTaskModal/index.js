@@ -11,6 +11,7 @@ import {
   getAllProjects,
   createTask,
   updateTaskDetails,
+  getProjectById,
   getLeadsUsingProjectId,
   getUserUsingProjectId,
   deleteTaskDetails,
@@ -49,6 +50,11 @@ export default function AddTaskModal(props) {
     setUploadedFiles(uploadedFiles);
   };
 
+  useEffect(() => {
+    setCategoryList([])
+    localStorage.removeItem('addTaskModal')
+
+  }, [localStorage.getItem('addTaskModal')]);
 
   const taskFormFields = {
     projectId: "",
@@ -84,11 +90,7 @@ export default function AddTaskModal(props) {
     getProjectList();
   }, []);
 
-  useEffect(() => {
-    setCategoryList(projectList[0]?.sections)
   
-    
-  }, [projectList]);
 
   useEffect(() => {
     if (taskFormValue.projectId && taskFormValue.leads) {
@@ -120,8 +122,9 @@ export default function AddTaskModal(props) {
 
 
   const patchFormForAdd = () => {
+
     if (selectedProjectFromTask) {
-      // console.log("selectedProjectFromTask", selectedProjectFromTask);
+      console.log("selectedProjectFromTask", selectedProjectFromTask);
       let project = projectList?.filter(
         (item) => item?._id === selectedProjectFromTask?._id
       );
@@ -130,8 +133,9 @@ export default function AddTaskModal(props) {
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
-        section: selectedProjectFromTask.section,
       });
+      getProjectByIdFunc(project[0]?._id);
+
     } else if (selectedTask) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
@@ -192,9 +196,10 @@ export default function AddTaskModal(props) {
       setTaskFormValue({
         ...taskFormValue,
         projectId: handleProjectId,
-
-        section: project?.sections?.[0],
       });
+      console.log(handleProjectId,'=======================handle project id')
+      getProjectByIdFunc(handleProjectId);
+
     } else if (userDetails.role === "CONTRIBUTOR") {
       setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id });
     } else {
@@ -212,6 +217,26 @@ export default function AddTaskModal(props) {
       } else {
         setProjectList(projects?.data);
         console.log('-------------------------------')
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  };
+
+  const getProjectByIdFunc = async (id) => {
+    let dataToSend = {
+      projectId:id
+    }
+    setLoading(true);
+    try {
+      const projects = await getProjectById(dataToSend);
+      setLoading(false);
+      if (projects.error) {
+        return;
+      } else {
+        setCategoryList(projects?.data)
+        console.log(projects,'-------------------------------')
       }
     } catch (error) {
       setLoading(false);
@@ -263,7 +288,7 @@ export default function AddTaskModal(props) {
     setTaskFormValue({
       projectId: project._id,
     });
-    setCategoryList(project?.sections);
+    getProjectByIdFunc(project?._id);
     getLeadsListUsingProjectId(project._id);
     updateTaskFormValue(e);
   };
@@ -637,7 +662,6 @@ export default function AddTaskModal(props) {
                     placeholder="Select Section"
                     onChange={updateTaskFormValue}
                     value={taskFormValue.section}
-                    disabled={selectedProjectFromTask}
                   >
                     <option value="" selected disabled>
                       Select Section

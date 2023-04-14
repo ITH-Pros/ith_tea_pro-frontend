@@ -254,7 +254,7 @@ export async function addSectionApi(data) {
 
 export async function getProjectById(data) {
   return axiosInstance
-    .get("projects/v1/specific", {
+    .get("projects/v1/categories", {
       params: data,
     })
     .then((res) => res.data);

@@ -66,10 +66,8 @@ export default function MyCalendar() {
             views={["month"]}
             view={"month"}
             defaultDate={new Date()}
-            onRangeChange={(el) => console.log("el", el)}
             onNavigate={handleDateChange}
             style={{ height: 400 }}
-            backgroundEvents={(el) => console.log("el", el)}
           />
         </div>
       </div>
