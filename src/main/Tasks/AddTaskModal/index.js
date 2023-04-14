@@ -283,6 +283,22 @@ export default function AddTaskModal(props) {
     }
   };
 
+  function formDateNightTime(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return ""; 
+    }
+    let utcTime = new Date();
+    utcTime = new Date(utcTime.setUTCHours(23,59,59))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
+
   const onchangeSelectedProject = (e) => {
     let project = projectList.find((el) => el._id === e.target.value);
     setTaskFormValue({
@@ -348,7 +364,7 @@ export default function AddTaskModal(props) {
       title && (dataToSend["title"] = title);
       description && (dataToSend["description"] = description);
       assignedTo && (dataToSend["assignedTo"] = assignedTo);
-      dueDate && (dataToSend["dueDate"] = dueDate);
+      dueDate && (dataToSend["dueDate"] = formDateNightTime(dueDate));
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
       leads && (dataToSend["tasklead"] = [leads]);
@@ -426,7 +442,7 @@ export default function AddTaskModal(props) {
       title && (dataToSend["title"] = title);
       description && (dataToSend["description"] = description);
       assignedTo && (dataToSend["assignedTo"] = assignedTo);
-      dueDate && (dataToSend["dueDate"] = dueDate);
+      dueDate && (dataToSend["dueDate"] = formDateNightTime(dueDate));
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
       leads && (dataToSend["tasklead"] = [leads]);
@@ -528,7 +544,7 @@ export default function AddTaskModal(props) {
       title && (dataToSend["title"] = title);
       description && (dataToSend["description"] = description);
       assignedTo && (dataToSend["assignedTo"] = assignedTo);
-      dueDate && (dataToSend["dueDate"] = dueDate);
+      (dataToSend["dueDate"] = formDateNightTime(dueDate));
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
       leads && (dataToSend["tasklead"] = [leads]);

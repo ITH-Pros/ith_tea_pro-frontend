@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-import { BsChevronDoubleLeft, BsChevronLeft, BsChevronRight, BsChevronDoubleRight , BsChevronDown } from "react-icons/bs";
-import { getTeamWork, updateTaskStatusById } from "../../services/user/api";
+import { BsChevronDoubleLeft, BsChevronDoubleRight , BsChevronDown } from "react-icons/bs";
+import { getTeamWork } from "../../services/user/api";
 import { useAuth } from "../../auth/AuthProvider";
 
 const CustomCalendar = (props) => {
@@ -10,6 +10,30 @@ const CustomCalendar = (props) => {
   const { userDetails } = useAuth();
   const { setTeamWorkList , isChange} = props;
 
+  function convertToUTCDay(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0,0,0))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
+  function convertToUTCNight(dateString) {
+    console.log(dateString,'------------------')
+    let utcTime = new Date(dateString);
+    
+    utcTime = new Date(utcTime.setUTCHours(23,59,59))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes*60*1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
   useEffect(() => {
 
     if (userDetails?.role !== "CONTRIBUTOR") {
@@ -32,12 +56,13 @@ const CustomCalendar = (props) => {
 
     if (currentView === "Week") {
       dataToSend = {
-        fromDate: weekStart,
-        toDate: weekEnd,
+        fromDate: convertToUTCDay(weekStart),
+        toDate: convertToUTCNight(weekEnd),
       };
     } else if (currentView === "Day") {
         dataToSend = {
-            currentDate: currentDate,
+          fromDate: convertToUTCDay(currentDate),
+          toDate: convertToUTCNight(currentDate),
         };
     }
     console.log("dataToSend", dataToSend);

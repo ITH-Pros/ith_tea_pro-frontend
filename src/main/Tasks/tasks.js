@@ -286,6 +286,31 @@ const Tasks = () => {
     }
   };
 
+  function convertToUTCDay(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0,0,0))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
+  function convertToUTCNight(dateString) {
+    console.log(dateString,'------------------')
+    let utcTime = new Date(dateString);
+    
+    utcTime = new Date(utcTime.setUTCHours(23,59,59))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes*60*1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
+
   const getTasksDataUsingProjectId = async () => {
     let paramsData;
     if (params?.projectId) {
@@ -338,7 +363,7 @@ const Tasks = () => {
           selectedFilter !== "Today" &&
           selectedFilter !== "Tomorrow"
         ) {
-          data.fromDate = filterData?.fromDate;
+          data.fromDate = convertToUTCDay(filterData?.fromDate);
         }
         if (
           filterData?.toDate &&
@@ -346,13 +371,14 @@ const Tasks = () => {
           selectedFilter !== "Today" &&
           selectedFilter !== "Tomorrow"
         ) {
-          data.toDate = filterData?.toDate;
+          data.toDate = convertToUTCNight(filterData?.toDate);
         }
         if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-          data.fromDate = filterData?.fromDate;
-          data.toDate = filterData?.toDate;
+          data.fromDate = convertToUTCDay(filterData?.fromDate);
+          data.toDate = convertToUTCNight(filterData?.toDate);
         }
       }
+    
       const tasks = await getProjectsTask(data);
       setLoading(false);
       if (tasks.error) {
@@ -537,7 +563,7 @@ const Tasks = () => {
           )}
 
 {projects.map((project, index) => (
-  ( // check if tasks array has data
+   project?.tasks?.length > 0 && ( // check if tasks array has data
     <Accordion.Item key={index} eventKey={index}>
       {project?._id?.projectId && project?._id?.section && (
         <Accordion.Header>
@@ -845,7 +871,7 @@ const Tasks = () => {
                         {task?.dueDate && (
                           <Badge bg={task?.dueToday ? "danger" : "primary"}>
                             Due{" "}
-                            {moment(task?.dueDate?.split("T")[0]).format(
+                            {moment((task?.dueDate)?.split("T")[0]).format(
                               "MMM DD,YYYY"
                             )}
                           </Badge>
