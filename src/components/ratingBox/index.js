@@ -68,7 +68,7 @@ const RatingBox = (props) => {
             Submit
           </button>
           <button
-            className="modal-close-btn"
+            className="btn btn-primary"
             onClick={() => setEditRatingEnabled(false)}
           >
             <i className="fa fa-times"></i>

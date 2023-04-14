@@ -58,7 +58,7 @@ const Modals = (props) => {
 
         <button
           disabled={submitBtnDisabled}
-          className="modal-close-btn"
+          className="btn btn-primary mt-3 pull-right"
           onClick={onClick}
         >
           {btnContent || "Submit"}
