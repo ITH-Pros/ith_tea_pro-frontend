@@ -44,7 +44,7 @@ function SortByDropdown(props) {
 
         </Col>
         <Col sm="9">
-        <select id="sort-by" value={sortBy} onChange={handleSortByChange}  className="mt-0">
+        <select id="sort-by" value={sortBy} onChange={handleSortByChange}  className="mb-2">
         <option value=" ">Select Sort Type</option>
         <option value="due-date">Due Date</option>
         <option value="status">Status</option>
