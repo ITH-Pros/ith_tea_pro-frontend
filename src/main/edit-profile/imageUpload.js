@@ -94,8 +94,9 @@ const ImageUpload = (props) => {
                 </div>
               </div>
             ) : (
-              <div className="upload-icon">
+              <div className="text-center">
                 {isEditable && <i className="fas fa-cloud-upload-alt"></i>}
+                <br/>
                 {isEditable && <span>Select an image file</span>}
               </div>
             )}
