@@ -214,8 +214,7 @@ const ProjectCard = ({
   return (
     <div
       className="project-card"
-      style={{ background: background || generateRandomColor() }}
-    >
+      style={{ border: `3px solid ${background}` }}>
       {isArchive && <h6 className="archived">Archived</h6>}
       <div
         className="menu-icon"
@@ -279,7 +278,7 @@ const ProjectCard = ({
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
         <h4>{name}</h4>
-        <p>{description}</p>
+        <p className="text-secondary">{description}</p>
       </div>
 
       <div className="project-stats row">
@@ -295,7 +294,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faFlag} />
-                  <span>{taskData?.overDueTasks || 0}%</span>
+                  <span className="text-secondary">{taskData?.overDueTasks || 0}%</span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -313,7 +312,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faTasks} />
-                  <span>{taskData?.COMPLETED || 0}%</span>
+                  <span className="text-secondary">{taskData?.COMPLETED || 0}%</span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -331,7 +330,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faCheck} />
-                  <span>{taskData?.ONGOING || 0}%</span>
+                  <span className="text-secondary">{taskData?.ONGOING || 0}%</span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -351,7 +350,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faBarChart} />
-                  <span>{taskData?.totalTask || 0}</span>
+                  <span className="text-secondary">{taskData?.totalTask || 0}</span>
                 </Button>
               </OverlayTrigger>
             ))}
