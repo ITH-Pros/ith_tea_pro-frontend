@@ -73,7 +73,7 @@ function FilterDropdown(props) {
 
   return (
     <div>
-                <Row className="filterFields">
+                <Row className="filterFields mb-0">
 
       <Col sm="3">
       <label htmlFor="filter-dropdown" style={{ fontSize: "0.9rem !important", fontWeight: "bold" }}>Due Date:</label>

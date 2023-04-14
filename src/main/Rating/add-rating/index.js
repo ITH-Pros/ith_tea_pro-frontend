@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { useAuth } from "../../../auth/AuthProvider";
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Textarea } from "@nextui-org/react";
 
 
 export default function AddRating(props) {
@@ -360,7 +361,7 @@ export default function AddRating(props) {
           </Row>
 
           <Row className="desc">
-            <Form.Control
+            <Textarea
               type="textArea"
               name="comment"
               placeholder="comment"

@@ -37,6 +37,7 @@ class UserIcon extends React.Component {
       color: "#fff",
       fontSize: "20px",
       textTransform: "uppercase",
+      marginLeft:'-10px',
     };
 
     return (

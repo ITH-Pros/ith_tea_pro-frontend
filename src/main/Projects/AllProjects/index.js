@@ -286,7 +286,7 @@ export default function AllProject() {
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="delete-popup">
+        <Modal.Body className="text-center">
           <h6>
             Are you sure you want to{" "}
             {isArchiveModalShow
@@ -297,11 +297,11 @@ export default function AllProject() {
             this project?
           </h6>
 
-          <div className="button-center-corformain">
+          <div className="button-center-corformain mt-3">
             {!isArchiveModalShow && (
               <Button
-                style={{ marginLeft: "16px" }}
-                className="btn btn-danger mb-3 mr-3"
+                style={{ marginLeft: "10px" }}
+                className="btn btn-danger btn-sm"
                 onClick={() => deleteProject()}
               >
                 Delete
@@ -309,16 +309,16 @@ export default function AllProject() {
             )}
             {isArchiveModalShow && (
               <Button
-                style={{ marginLeft: "16px" }}
-                className="btn btn-danger mb-3 mr-3"
+              
+                className="btn btn-danger btn-sm "
                 onClick={() => archiveProject()}
               >
                 {!isArchive ? "Archive" : "Unarchive"}
               </Button>
             )}
             <Button
-              style={{ marginLeft: "16px" }}
-              className="btn mb-3 mr-3"
+               style={{marginLeft:'10px'}}
+              className="btn btn-light btn-sm"
               onClick={() => {
                 setConfirmModalShow(false);
                 setIsArchiveModalShow(false);
