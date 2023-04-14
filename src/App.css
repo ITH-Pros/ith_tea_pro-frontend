@@ -101,7 +101,7 @@ textarea.form-control {
 .delete_icon {
   float: right;
   position: absolute;
-  right: 20px;
+  right: 0px;
   font-size: 30px;
   width: 50px;
   display: flex;
@@ -133,13 +133,7 @@ span.rbc-toolbar-label {
   background-color: #f4e9ff;
 }
 
-.button-center-corformain {
-  float: left;
-  width: 100%;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-}
+ 
 
 .profile-modal .modal-dialog {
   width: 650px !important;
@@ -158,10 +152,6 @@ span.rbc-toolbar-label {
 
  
 
-.confirmation-popup .button-center-corformain {
-  bottom: -10px !important;
-}
+ 
 
-.confirmation-popup .delete-popup h6 {
-  margin-top: -40px !important;
-}
+ 

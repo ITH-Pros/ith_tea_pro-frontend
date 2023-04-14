@@ -677,13 +677,13 @@ export default function Teams(props) {
           <Modal.Header closeButton>
             <Modal.Title>Confirmation</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="delete-popup">
+          <Modal.Body  className="text-center">
             <h6>Are you sure you want to delete this user ?</h6>
 
-            <div className="button-center-corformain">
+            <div className="button-center-corformain mt-3">
               <Button
-                style={{ marginLeft: "16px" }}
-                className="btn btn-danger mb-3 mr-3"
+                
+                className="btn btn-primary"
                 onClick={() => handleDeleteUser()}
               >
                 Delete
@@ -691,7 +691,7 @@ export default function Teams(props) {
 
               <Button
                 style={{ marginLeft: "16px" }}
-                className="btn mb-3 mr-3"
+                className="btn btn-light text-white"
                 onClick={() => {
                   setConfirmModalShow(false);
                 }}

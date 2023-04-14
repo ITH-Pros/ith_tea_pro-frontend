@@ -420,7 +420,7 @@ button.accordion-button {
 .dropdown .btn:first-child:active,
 .dropdown .btn.active,
 .dropdown .btn.show {
-  background: transparent !important;
+  background: transparent ;
   border: 0;
   color: #5f5f5fd9;
 }
@@ -500,3 +500,4 @@ button.accordion-button {
   text-align: end;}
  
  
+.action_btn { background: none !important; }

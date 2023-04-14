@@ -456,17 +456,18 @@ export default function Dashboard(props) {
                       className="text-end middle"
                       style={{ justifyContent: "end" }}
                     >
-                      <button
-                        className="addTaskBtn"
+                      <Button
+                        variant="primary"
+                        size="sm"
                         style={{
-                          float: "right",
+                          float: "right", padding:'4px 7px', fontSize:'10px'
                         }}
                         onClick={() => {
                           openAddtask(project);
                         }}
                       >
                         Add Task
-                      </button>
+                      </Button>
                     </Col>
                   </Row>
                 </Card>

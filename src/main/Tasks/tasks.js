@@ -582,8 +582,8 @@ const Tasks = () => {
                 </OverlayTrigger>
                 <div>
                   <Dropdown>
-                    <Dropdown.Toggle id="dropdown-basic">
-                      <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+                    <Dropdown.Toggle id="dropdown-basic" className="action_btn">
+                      <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>

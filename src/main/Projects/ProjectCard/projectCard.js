@@ -440,8 +440,8 @@ const ProjectCard = ({
                   !isArchive && modalTitle!=='Team Members'&&
                   userDetails.role !== "LEAD" && (
                     <div onClick={assignTeamUser} className="assignPopup">
-                      <UserIcon firstName={"+"} />
-                      <p className="ms-4 mb-0">{"Add Team"}</p>
+                      <UserIcon style={{width:'20px'}} firstName={"+"} />
+                      <p className="ms-2 mb-0" style={{cursor:'pointer'}}>{"Add Team"}</p>
                     </div>
                   )}
               </Col>
@@ -498,7 +498,7 @@ const ProjectCard = ({
                             <UserIcon key={index} firstName={user.name} />
                           )}
                           {user?.profilePicture && (
-                            <div className="user_pic_card">
+                            <div className="user_pic_card" style={{marginRight:'10px'}}>
                               <img
                                 style={{
                                   width: "30px",
@@ -511,7 +511,7 @@ const ProjectCard = ({
                             </div>
                           )}
                         </>
-                        <div className="ms-4">
+                        <div className="ms-2">
                           <p className="mb-0">
                             {user?.name} ({user?.role})
                           </p>
