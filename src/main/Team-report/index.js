@@ -106,7 +106,7 @@ export default function TeamReport(props) {
                   eventKey="task"
                   title={
                     <span>
-                      Task <span className="text-dark">45546</span>
+                      Task <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
@@ -182,7 +182,7 @@ export default function TeamReport(props) {
                   eventKey="contact"
                   title={
                     <span>
-                      Over Due Tasks <span className="text-dark">45546</span>
+                      Over Due Tasks <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
@@ -192,7 +192,7 @@ export default function TeamReport(props) {
                   eventKey="overduework"
                   title={
                     <span>
-                      Pending Rating <span className="text-dark">45546</span>
+                      Pending Rating <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
@@ -202,7 +202,7 @@ export default function TeamReport(props) {
                   eventKey="contact"
                   title={
                     <span>
-                      Delay Rated <span className="text-dark">45546</span>
+                      Delay Rated <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
@@ -212,7 +212,7 @@ export default function TeamReport(props) {
                   eventKey="profile"
                   title={
                     <span>
-                      Extra Contribution <span className="text-dark">446</span>
+                      Extra Contribution <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
