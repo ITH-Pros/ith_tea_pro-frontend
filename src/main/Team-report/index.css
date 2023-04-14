@@ -36,3 +36,8 @@
     margin-top: 5px;
     color: #746c6c;
 }
+
+
+#task_user { width: 100%;}
+#task_user .nav-tabs .nav-link{ color: #8355ad !important;}
+

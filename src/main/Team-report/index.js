@@ -54,26 +54,62 @@ export default function TeamReport(props) {
           </Row>
           <hr />
           <Row>
-            <Col lg={12}>
+            <Col lg={12} id="task_user">
               <Tabs
                 defaultActiveKey="profile"
                 id="uncontrolled-tab-example"
                 className="mb-3"
               >
-                <Tab eventKey="task" title={<span>Task <span className="text-dark">45546</span></span>} >
+                <Tab
+                  eventKey="task"
+                  title={
+                    <span>
+                      Today Tasks <small className="text-dark">446</small>
+                    </span>
+                  }
+                >
                   <div>Task</div>
                 </Tab>
-                <Tab eventKey="profile" title={<span>Task <span className="text-dark">45546</span></span>}>
-                <div>rgsgse</div>
+                <Tab
+                  eventKey="profile"
+                  title={
+                    <span>
+                      Over Due Tasks <small className="text-dark">46</small>
+                    </span>
+                  }
+                >
+                  <div>rgsgse</div>
                 </Tab>
-                <Tab eventKey="contact" title={<span>Task <span className="text-dark">45546</span></span>}>
-                <div>rgsgse</div>
+                <Tab
+                  eventKey="contact"
+                  title={
+                    <span>
+                      Pending Rating Tasks,{" "}
+                      <small className="text-dark">46</small>
+                    </span>
+                  }
+                >
+                  <div>rgsgse</div>
                 </Tab>
-                <Tab eventKey="overduework" title={<span>Task <span className="text-dark">45546</span></span>}>
-                <div>OVERDUE WORK</div>
+                <Tab
+                  eventKey="overduework"
+                  title={
+                    <span>
+                      Delay Rated, <small className="text-dark">446</small>
+                    </span>
+                  }
+                >
+                  <div>OVERDUE WORK</div>
                 </Tab>
-                <Tab eventKey="contact" title={<span>Task <span className="text-dark">45546</span></span>}>
-                <div>rgsgse</div>
+                <Tab
+                  eventKey="contact"
+                  title={
+                    <span>
+                      Adhoc Tasks <small className="text-dark">46</small>
+                    </span>
+                  }
+                >
+                  <div>rgsgse</div>
                 </Tab>
               </Tabs>
             </Col>
