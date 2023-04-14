@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row, Card } from "react-bootstrap";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
 import {
@@ -25,16 +25,14 @@ const customStyles = {
     ...provided,
     padding: 5,
   }),
-  valueContainer: (provided) => ({
-    ...provided,
-  }),
+ 
   control: (provided) => ({
     ...provided,
     boxShadow: "none",
  
     borderRadius: "5px",
     color: "#767474",
-    minHeight: "40px",
+  margin:'0px',
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   }),
@@ -54,8 +52,9 @@ const customStyles = {
     {
       ...provided,
 width:'200px',
-maxHeight: "40px",
+height: "40px",
 overflowY: "auto",
+padding:'0px 10px'
     }
   ),
 };
@@ -321,23 +320,26 @@ export default function AddProject(props) {
       style={{
         marginTop: "7%",
         background: "none",
-        marginRight: "0px",
+       
         padding: "0px",
         borderRadius: "0px",
       }}
     >
-      <h1 className="h1-text">
-        <i className="fa fa-database" aria-hidden="true"></i>{projectById?'Edit Project':'Add Project'}
-      </h1>
+     
 
-      
-      <div >
-        <Link className="h1-text pull-right" to="/project/all">
-          <Button variant="outline-primary">
+      <Row>
+        <Col lg={6}> <h1 className="h1-text mt-0">
+        <i className="fa fa-database" aria-hidden="true"></i>{projectById?'Edit Project':'Add Project'}
+      </h1></Col>
+        <Col lg={6} className="text-end">
+        <Link  to="/project/all">
+          <Button variant="btn btn-primary">
             <FontAwesomeIcon icon={faArrowLeft} /> Back
           </Button>
         </Link>
-        </div>
+        </Col>
+      </Row>
+     
 
         
    
@@ -345,10 +347,10 @@ export default function AddProject(props) {
     
       <Form
         noValidate
-        className="addUserFormBorder add-pro"
+        className="addUserFormBorder "
         validated={validated}
       >
-      
+      <Card className="px-4 py-4 mt-2">
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
             <Form.Label>Name</Form.Label>
@@ -431,6 +433,7 @@ export default function AddProject(props) {
         <div>
           <UpdateAndCancel />
         </div>
+        </Card>
       </Form>
       {toaster && (
         <Toaster

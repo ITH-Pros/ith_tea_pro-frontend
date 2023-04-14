@@ -277,8 +277,10 @@ a {
   margin-bottom: 4px;
   text-transform: capitalize;
   color: #7f7f7f;
+  display: flex;
+  align-items: center;
 }
-
+.assignPro span{ margin-left: 10px;}
 input[type="checkbox"] {
   width: 18px;
   height: 18px;

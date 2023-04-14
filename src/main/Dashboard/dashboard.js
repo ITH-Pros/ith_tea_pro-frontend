@@ -332,10 +332,10 @@ export default function Dashboard(props) {
     const dayOfMonth = dayBefore.getDate();
 
     return (
-      <div className="day v-align">
-        <p>{dayOfWeek}</p>
-        <span>{dayOfMonth}</span>
-      </div>
+      <span>
+        <p>{dayOfWeek} - <span>{dayOfMonth}</span></p>
+       
+      </span>
     );
   }
 
@@ -1498,16 +1498,16 @@ export default function Dashboard(props) {
                                 {(taskIndex === 0 ||
                                   task.dueDate !==
                                   teamWorkList[taskIndex - 1].dueDate) ? (
-                                    <Col lg={1} className="v-align">
-                                    <div>{formatDate(task.dueDate)}</div>
+                                    <Col lg={1} className="border-top day v-align completed_task">
+                                    {formatDate(task.dueDate)}
                                   </Col>
                                 ) :
-                                <Col lg={1} className="v-align">
-                                <div></div>
+                                <Col lg={1} className="v-align " >
+                                 
                               </Col>
                                 }
-                                <Col lg={11}>
-                                <Row className="d-flex justify-content-start list_task w-100 mx-0">
+                                <Col lg={11} className="border-start border-bottom d-flex justify-content-start px-0">
+                                <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
                                   <Col lg={4} className="middle">
                                     {((userDetails.role === "LEAD" &&
                                       (userDetails.id ===
@@ -1671,7 +1671,7 @@ export default function Dashboard(props) {
                                           <Button className="tooltip-button br0">
                                             {task?.assignedTo?.name && (
                                               <small
-                                                className="nameTag text-truncate"
+                                                className="nameTag text-truncate pt-2"
                                                 title="Assigned To"
                                               >
                                                 <img
@@ -1720,7 +1720,7 @@ export default function Dashboard(props) {
                                     className="text-end "
                                     style={{
                                       position: "absolute",
-                                      right: "0px",
+                                      right: "20px",
                                     }}
                                   >
                                     {((userDetails.role === "LEAD" &&

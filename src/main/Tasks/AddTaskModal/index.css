@@ -165,11 +165,7 @@ p {
   margin-bottom: 0px !important;
 }
 
-.taskModalForm .modal-body {
-  height: 75vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+ 
 
 button.btn-press.btn-gradient-border {
   

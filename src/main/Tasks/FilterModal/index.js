@@ -58,16 +58,14 @@ const FilterModal = (props) => {
       ...provided,
       padding: 5,
     }),
-    valueContainer: (provided) => ({
-      ...provided,
-    }),
+ 
     control: (provided) => ({
       ...provided,
       boxShadow: "none",
-   
+   height:'40px',
       borderRadius: "5px",
       color: "#767474",
-      minHeight: "40px",
+      padding:'0px',
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
     }),
@@ -87,8 +85,8 @@ const FilterModal = (props) => {
     valueContainer: (provided) =>(
       {
         ...provided,
- 
- 
+        padding:'0px 10px',
+        height:'40px',
  
       }
     ),

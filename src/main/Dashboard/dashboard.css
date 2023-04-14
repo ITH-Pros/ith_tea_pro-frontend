@@ -650,7 +650,7 @@ th {
 #agenda {
   width: auto;
   padding: 0px 10px;
-  background: #f0f0f0;
+  border-bottom: #f0f0f0 1px solid;
   padding: 8px;
 }
 #agenda .left-btn {
@@ -676,11 +676,11 @@ th {
 }
 #list_ui .list_task:hover{     background: #ebebeb80;
   border-radius: 0px;}
-#list_ui .day {
+#list_ui .day p {
   text-align: center;
-  font-size: 13px;
-  color: #a0a6c7;
-  line-height: 18px;
+  font-size: 13px !important;
+  color: #fff;
+  
 }
 #list_ui .v-align {
   display: flex;
@@ -688,8 +688,11 @@ th {
   align-items: center;
 }
 #list_ui .day span {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 15px;
+  color: #000;
+  line-height: 0px;
+  font-weight: 500;
+   
 }
 #list_ui .list_task {
   border: 0px !important;
@@ -701,12 +704,10 @@ th {
 #list_ui .border {
   border-bottom: 0px !important;
 }
-.completed {
-  background: #8355ad;
+.completed_task {
+  background: #8355ad78;
 }
-.completed p {
-  color: #000 !important;
-}
+ 
 
 #test.bs-popover-start > .popover-arrow::after {
   right: var(--bs-popover-border-width);

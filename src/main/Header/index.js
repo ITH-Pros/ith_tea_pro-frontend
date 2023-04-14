@@ -56,7 +56,7 @@ function Header() {
 
   return (
     <Navbar bg="light" variant="light" fixed="top">
-      <Container fluid="lg" style={{ maxWidth: "1240px" }}>
+      <Container fluid >
         <Navbar.Brand onClick={redirectToDashbord}>
                 <img style={{height:'35px',widows:'35px'}} src={require("../../assests/img/logo.png")} alt="logo" />
           <Text b color="#8355ad" style={{cursor:"pointer"}} hideIn="xs">

@@ -45,7 +45,7 @@ const AttachmentUploader = (props) => {
           <span className="text">Select file</span>
         </div>
       </label>
-      <input id="file-input" type="file" multiple onChange={handleFileSelect} />
+      <input id="file-input" type="file" multiple onChange={handleFileSelect} className="px-1 py-1"  style={{height:'auto'}}/>
       <div className="file-list">
         {files.map((file, index) => {
           return (

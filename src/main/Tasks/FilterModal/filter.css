@@ -62,9 +62,7 @@
     text-align: right;
     border-top: none;
     padding-right: 40px;
-    position: fixed;
-    bottom: 0 !important;
-    width: 598px;
+  
 }
 
 .filterFields {
@@ -86,16 +84,12 @@
     width: 100%;
 }
 
-.filterModal .modal-body {
-    height: 80vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+ 
 
 .filterModal.modal.show .modal-dialog {
     border-radius: 4px;
-    height: 100vh;
-    margin: 0;
+  
+   
 }
 
 .filterFields .react-datepicker-wrapper {
