@@ -335,3 +335,11 @@ export async function removeUserFromProject(data) {
     .patch("projects/v1/remove/users", data)
     .then((res) => res.data);
 }
+
+export async function getUserReportData(data) {
+  return axiosInstance
+    .get("task/v1/get/team/task", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
