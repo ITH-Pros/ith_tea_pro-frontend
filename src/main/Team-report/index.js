@@ -6,6 +6,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import Select from "react-select";
 import {
   Row,
   Container,
@@ -21,11 +22,45 @@ import {
 } from "react-bootstrap";
 import { getUserReportData } from "../../services/user/api";
 import { useAuth } from "../../auth/AuthProvider";
+const customStyles = {
+  option: (provided) => ({
+    ...provided,
+    padding: 5,
+  }),
 
+  control: (provided) => ({
+    ...provided,
+    boxShadow: "none",
+
+    borderRadius: "5px",
+    color: "#767474",
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+    color: "#999",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    fontSize: 14,
+    borderRadius: "0px 0px 10px 10px",
+    boxShadow: "10px 15px 30px rgba(0, 0, 0, 0.05)",
+    top: "40px",
+    padding: "5px",
+    zIndex: "2",
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    padding: "0px 10px",
+  }),
+};
 export default function TeamReport(props) {
   const [teamWorkList, setTeamWorkList] = useState([]);
   const { userDetails } = useAuth();
-
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
   useEffect(() => {
     console.log("Team Report");
     getUserReport();
@@ -59,11 +94,17 @@ export default function TeamReport(props) {
   return (
     <div className="rightDashboard" style={{ marginTop: "7%" }}>
       <div>
-        {/* <Card className="py-4 px-4">
+        <Card className="py-4 px-4">
           <Row>
-            <Col></Col>
+            <Col lg="6" className="m-auto">
+              <Select
+                styles={customStyles}
+                options={options}
+                placeholder="Select Member"
+              />
+            </Col>
           </Row>
-        </Card> */}
+        </Card>
         <Card className="py-4 px-4">
           <Row className="align-middle d-flex">
             <Col lg="1">
@@ -98,7 +139,7 @@ export default function TeamReport(props) {
           <Row>
             <Col lg={12} id="task_user">
               <Tabs
-                defaultActiveKey="profile"
+                defaultActiveKey="task"
                 id="uncontrolled-tab-example"
                 className="mb-3"
               >
@@ -126,7 +167,7 @@ export default function TeamReport(props) {
                           </td>
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b >Assigned :</b> Rajesh kumar
+                              <b>Assigned :</b> Rajesh kumar
                             </small>
                           </td>
                           <td style={{ width: "50px" }}>
@@ -192,7 +233,7 @@ export default function TeamReport(props) {
                   eventKey="overduework"
                   title={
                     <span>
-                      Pending Rating <span className="text-muted">(45546)</span>
+                      Pending Task <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
@@ -212,7 +253,8 @@ export default function TeamReport(props) {
                   eventKey="profile"
                   title={
                     <span>
-                      Extra Contribution <span className="text-muted">(45546)</span>
+                      Extra Contribution{" "}
+                      <span className="text-muted">(45546)</span>
                     </span>
                   }
                 >
