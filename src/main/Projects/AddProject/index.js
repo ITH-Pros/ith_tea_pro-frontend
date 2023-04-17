@@ -29,8 +29,9 @@ const customStyles = {
   control: (provided) => ({
     ...provided,
     boxShadow: "none",
- 
+ padding:'0px',
     borderRadius: "5px",
+    height: "45px",
     color: "#767474",
   margin:'0px',
     textOverflow: "ellipsis",
@@ -52,9 +53,10 @@ const customStyles = {
     {
       ...provided,
 width:'200px',
-height: "40px",
+height: "45px",
 overflowY: "auto",
-padding:'0px 10px'
+padding:'0px 10px',
+margin:'0px 3px'
     }
   ),
 };

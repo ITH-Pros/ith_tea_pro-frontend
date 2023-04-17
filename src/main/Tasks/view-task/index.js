@@ -439,8 +439,8 @@ export default function ViewTaskModal(props) {
 
               </div>
               <div
-                className="container"
-                style={{ width: "100%", padding: "0px" }}
+                className="container no_comment"
+                 
               >
                 {activeTab === "comments" && (
                   <>
@@ -455,8 +455,8 @@ export default function ViewTaskModal(props) {
                       ).toLocaleString("en-US", options);
 
                       return (
-                        <div className="comment" key={index}>
-                          <div className="commentedBy">
+                        <div className="comment mb-0 mt-0 pt-0" key={index}>
+                          <div className="commentedBy pb-2">
                             <UserIcon
                               style={{ float: "left" }}
                               key={index}
@@ -473,7 +473,7 @@ export default function ViewTaskModal(props) {
                         </div>
                       );
                     })}
-                    {!task?.comments?.length && <h6>No Comments</h6>}
+                    {!task?.comments?.length && <p className="text-muted">No Comments</p>}
                   </>
                 ) }
 
@@ -493,8 +493,8 @@ export default function ViewTaskModal(props) {
                       ).toLocaleString("en-US", options);
 
                       return (
-                        <div className="comment" key={index}>
-                          <div className="commentedBy">
+                        <div className="comment comment mb-0 mt-0 pt-0" key={index}>
+                          <div className="commentedBy pb-2">
                             <UserIcon
                               style={{ float: "left" }}
                               key={index}
@@ -510,7 +510,7 @@ export default function ViewTaskModal(props) {
                         </div>
                       );
                     })}
-                    {!task?.ratingComments?.length && <h6>No Rating Comments</h6>}
+                    {!task?.ratingComments?.length && <p className="text-muted">No Rating Comments</p>}
                   </>
                 )}
 

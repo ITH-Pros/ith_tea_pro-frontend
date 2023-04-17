@@ -30,7 +30,8 @@ import {
   Button,
   OverlayTrigger,
   Tooltip,
-  Row, Col
+  Row,
+  Col,
 } from "react-bootstrap";
 import moment from "moment";
 import { useAuth } from "../../auth/AuthProvider";
@@ -293,23 +294,22 @@ const Tasks = () => {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
-    return localTimeString
+    console.log("==========", localTimeString);
+    return localTimeString;
   }
-  
+
   function convertToUTCNight(dateString) {
-    console.log(dateString,'------------------')
+    console.log(dateString, "------------------");
     let utcTime = new Date(dateString);
     
     utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes*60*1000;
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
-    return localTimeString
+    console.log("==========", localTimeString);
+    return localTimeString;
   }
-  
 
   const getTasksDataUsingProjectId = async () => {
     let paramsData;
@@ -378,7 +378,7 @@ const Tasks = () => {
           data.toDate = convertToUTCNight(filterData?.toDate);
         }
       }
-    
+
       const tasks = await getProjectsTask(data);
       setLoading(false);
       if (tasks.error) {
@@ -465,59 +465,53 @@ const Tasks = () => {
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <Row>
           <Col lg={6}>
-          <h1 className="h1-text mt-0">
-          <i className="fa fa-list-ul" aria-hidden="true"></i>Task
-      
-        </h1>
+            <h1 className="h1-text mt-0">
+              <i className="fa fa-list-ul" aria-hidden="true"></i>Task
+            </h1>
           </Col>
           <Col lg={6}>
-          <div className="text-end">
-            {!isArchive && (
-              <button
-                className="addTaskBtn"
-                style={{
-                  float: "right",
-                }}
-                onClick={() => {
-                  setSelectedTask();
-                  setSelectedProject();
-                  localStorage.setItem('addTaskModal',true)
-                  setShowAddTask(true);
-                  
-                }}
-              >
-             <i class="fa fa-plus-circle" aria-hidden="true"></i>   Add Task
-              </button>
-            )}
-
-            {projects?.length !== 0 &&
-              userDetails?.role !== "CONTRIBUTOR" &&
-              !isArchive &&
-              selectedProjectId && (
+            <div className="text-end">
+              {!isArchive && (
                 <button
-                  className="addTaskBtn addSectionBtn"
-                
+                  className="addTaskBtn"
+                  style={{
+                    float: "right",
+                  }}
                   onClick={() => {
-                    showAddSectionModal(true);
+                    setSelectedTask();
+                    setSelectedProject();
+                    localStorage.setItem("addTaskModal", true);
+                    setShowAddTask(true);
                   }}
                 >
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>  Add Section
+                  <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Task
                 </button>
               )}
+
+              {projects?.length !== 0 &&
+                userDetails?.role !== "CONTRIBUTOR" &&
+                !isArchive &&
+                selectedProjectId && (
+                  <button
+                    className="addTaskBtn addSectionBtn"
+                    onClick={() => {
+                      showAddSectionModal(true);
+                    }}
+                  >
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+                    Section
+                  </button>
+                )}
               <button className="filter_btn">
-                 <FilterModal
-          handleProjectId={selectedProjectId}
-          getTaskFilters={getTaskFilters}
-          isArchive={isArchive}
-        />
+                <FilterModal
+                  handleProjectId={selectedProjectId}
+                  getTaskFilters={getTaskFilters}
+                  isArchive={isArchive}
+                />
               </button>
-                  
-          </div>
+            </div>
           </Col>
         </Row>
-     
-
-   
 
         <AddTaskModal
           selectedProjectFromTask={selectedProject}
@@ -534,392 +528,419 @@ const Tasks = () => {
           selectedTaskId={selectedTaskId}
           getTasksDataUsingProjectId={getTasksDataUsingProjectId}
         />
-        
+
         <Accordion alwaysOpen="true">
           {!projects?.length &&
             params?.projectId &&
             !isArchive &&
             userDetails?.role !== "CONTRIBUTOR" && (
               <div className="add-section-center">
-                <button
-                  style={{ border: "0px" }}
+                <Button
+                  variant="primary"
                   onClick={() => {
                     showAddSectionModal(true);
                   }}
                 >
-                  <i
-                    className="fa fa-plus-circle fa-3x addBtn-section"
-                    title="Add Project"
-                    aria-hidden="true"
-                  >
-                    Add Section
-                  </i>
-                </button>
+                  <i className="fa fa-plus-circle"> </i>{ ' '}
+                  Add Section
+                </Button>
               </div>
             )}
           {!projects?.length && !selectedProjectId && (
-            <h6 style={{textAlign:'center'}} >No Tasks Found</h6>
+            <p className="alig-nodata" style={{ textAlign: "center" }}>No Tasks Found</p>
           )}
 
-{projects.map((project, index) => (
-   project?.tasks?.length > 0 && ( // check if tasks array has data
-    <Accordion.Item key={index} eventKey={index}>
-      {project?._id?.projectId && project?._id?.section && (
-        <Accordion.Header>
-          {project?._id?.projectId} / {project?._id?.section}
-        </Accordion.Header>
-              )}
+          {projects.map(
+            (project, index) =>
+              project?.tasks?.length > 0 && ( // check if tasks array has data
+                <Accordion.Item key={index} eventKey={index}>
+                  {project?._id?.projectId && project?._id?.section && (
+                    <Accordion.Header>
+                      {project?._id?.projectId} / {project?._id?.section}
+                    </Accordion.Header>
+                  )}
 
-              <div className="d-flex rightTags">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip>
-                      {taskInfo && (
-                        <div>
-                          <div>Completed Tasks: {taskInfo.completedTasks}</div>
-                          <div>Pending Tasks: {taskInfo.pendingTasks}</div>
-                        </div>
-                      )}
-                    </Tooltip>
-                  }
-                >
-                  <div
-                    onMouseEnter={() => handleProgressBarHover(project)}
-                    onMouseLeave={() => setTaskInfo(null)}
-                  >
-                    {parseFloat(
-                      (Number(project?.completedTasks || 0) /
-                        Number(project?.totalTasks || 1)) *
-                        100
-                    ).toFixed(2) + " % "}
-                    <ProgressBar>
-                      <ProgressBar
-                        variant="success"
-                        now={
-                          100 *
+                  <div className="d-flex rightTags">
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip>
+                          {taskInfo && (
+                            <div>
+                              <div>
+                                Completed Tasks: {taskInfo.completedTasks}
+                              </div>
+                              <div>Pending Tasks: {taskInfo.pendingTasks}</div>
+                            </div>
+                          )}
+                        </Tooltip>
+                      }
+                    >
+                      <div
+                        onMouseEnter={() => handleProgressBarHover(project)}
+                        onMouseLeave={() => setTaskInfo(null)}
+                      >
+                        {parseFloat(
                           (Number(project?.completedTasks || 0) /
-                            Number(project?.totalTasks || 1))
-                        }
-                        key={1}
-                      />
-                    </ProgressBar>
-                  </div>
-                </OverlayTrigger>
-                <div>
-                  <Dropdown>
-                    <Dropdown.Toggle id="dropdown-basic" className="action_btn">
-                      <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      {!isArchive && (
-                        <Dropdown.Item
-                          onClick={() => {
-                            setSelectedTask();
-                  localStorage.setItem('addTaskModal',true)
-
-                    setShowAddTask(true);
-                    
-                            setSelectedProject({
-                              _id: project?.projectId,
-                              section: project?.sectionId,
-                            });
-                          }}
+                            Number(project?.totalTasks || 1)) *
+                            100
+                        ).toFixed(2) + " % "}
+                        <ProgressBar>
+                          <ProgressBar
+                            variant="success"
+                            now={
+                              100 *
+                              (Number(project?.completedTasks || 0) /
+                                Number(project?.totalTasks || 1))
+                            }
+                            key={1}
+                          />
+                        </ProgressBar>
+                      </div>
+                    </OverlayTrigger>
+                    <div>
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          id="dropdown-basic"
+                          className="action_btn"
                         >
                           <i
-                            className="fa fa-plus-circle"
+                            className="fa fa-ellipsis-v"
                             aria-hidden="true"
-                          ></i>{" "}
-                          Add Task
-                        </Dropdown.Item>
-                      )}
+                          ></i>
+                        </Dropdown.Toggle>
 
-                      {(userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
-                        <>
+                        <Dropdown.Menu>
                           {!isArchive && (
                             <Dropdown.Item
-                              onClick={() =>
-                                editSection({
-                                  section: project?._id?.section,
-                                  projectId: project?.projectId,
-                                  _id: project?.sectionId,
-                                })
-                              }
+                              onClick={() => {
+                                setSelectedTask();
+                                localStorage.setItem("addTaskModal", true);
+
+                                setShowAddTask(true);
+
+                                setSelectedProject({
+                                  _id: project?.projectId,
+                                  section: project?.sectionId,
+                                });
+                              }}
                             >
                               <i
-                                className="fa fa-pencil-square"
+                                className="fa fa-plus-circle"
                                 aria-hidden="true"
                               ></i>{" "}
-                              Edit Section
+                              Add Task
                             </Dropdown.Item>
                           )}
-                          {!isArchive && (
-                            <Dropdown.Item>
-                              <i
-                                className="fa fa-files-o"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Copy/Move
-                            </Dropdown.Item>
+
+                          {(userDetails.role === "SUPER_ADMIN" ||
+                            userDetails.role === "ADMIN") && (
+                            <>
+                              {!isArchive && (
+                                <Dropdown.Item
+                                  onClick={() =>
+                                    editSection({
+                                      section: project?._id?.section,
+                                      projectId: project?.projectId,
+                                      _id: project?.sectionId,
+                                    })
+                                  }
+                                >
+                                  <i
+                                    className="fa fa-pencil-square"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Edit Section
+                                </Dropdown.Item>
+                              )}
+                              {!isArchive && (
+                                <Dropdown.Item>
+                                  <i
+                                    className="fa fa-files-o"
+                                    aria-hidden="true"
+                                  ></i>{" "}
+                                  Copy/Move
+                                </Dropdown.Item>
+                              )}
+                              <Dropdown.Item
+                                disabled={project?.tasks?.length > 0}
+                                onClick={() =>
+                                  deleteConFirmation({
+                                    _id: project?.sectionId,
+                                  })
+                                }
+                              >
+                                <i
+                                  className="fa fa-trash"
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                Delete Section
+                              </Dropdown.Item>
+                            </>
                           )}
-                          <Dropdown.Item
-                            disabled={project?.tasks?.length > 0}
-                            onClick={() =>
-                              deleteConFirmation({ _id: project?.sectionId })
-                            }
-                          >
-                            <i className="fa fa-trash" aria-hidden="true"></i>{" "}
-                            Delete Section
-                          </Dropdown.Item>
-                        </>
-                      )}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-              <Accordion.Body>
-                <ul className="mb-0">
-                  {project?.tasks?.map((task) => (
-                    <li key={task?._id} className="share-wrapper-ui">
-                      
-                      <div
-                        className="clickLabelArea"
-                        
-                      >
-                        <Row className="align-items-center justify-content-start">
-                          <Col lg={5} className="align-items-center"> 
-                          <Row>
-                            <Col  lg={1}>
-                            <div>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </div>
+                  <Accordion.Body>
+                    <ul className="mb-0">
+                      {project?.tasks?.map((task) => (
+                        <li key={task?._id} className="share-wrapper-ui">
+                          <div className="clickLabelArea">
+                            <Row className="align-items-center justify-content-start">
+                              <Col lg={5} className="align-items-center">
+                                <Row>
+                                  <Col lg={1}>
+                                    <div>
+                                      {(userDetails.id ===
+                                        task?.assignedTo?._id ||
+                                        (userDetails.role === "LEAD" &&
+                                          (userDetails.id ===
+                                            task?.assignedTo?._id ||
+                                            task?.lead?.includes(
+                                              userDetails.id
+                                            ) ||
+                                            userDetails.id ===
+                                              task?.createdBy?._id)) ||
+                                        userDetails.role === "SUPER_ADMIN" ||
+                                        userDetails.role === "ADMIN") && (
+                                        <Dropdown>
+                                          <Dropdown.Toggle
+                                            variant="success"
+                                            id="dropdown-basic"
+                                          >
+                                            {task.status === "NOT_STARTED" && (
+                                              <i
+                                                className="fa fa-check-circle secondary"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                            {task.status === "ONGOING" && (
+                                              <i
+                                                className="fa fa-check-circle warning"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                            {task.status === "COMPLETED" && (
+                                              <i
+                                                className="fa fa-check-circle success"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                            {task.status === "ONHOLD" && (
+                                              <i
+                                                className="fa fa-check-circle warning"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                          </Dropdown.Toggle>
+
+                                          {task.status !== "COMPLETED" && (
+                                            <Dropdown.Menu>
+                                              <Dropdown.Item
+                                                onClick={(event) =>
+                                                  handleStatusChange(
+                                                    event,
+                                                    task?._id,
+                                                    "NOT_STARTED"
+                                                  )
+                                                }
+                                              >
+                                                <i
+                                                  className="fa fa-check-circle secondary"
+                                                  aria-hidden="true"
+                                                ></i>{" "}
+                                                Not Started
+                                              </Dropdown.Item>
+                                              <Dropdown.Item
+                                                onClick={(event) =>
+                                                  handleStatusChange(
+                                                    event,
+                                                    task?._id,
+                                                    "ONGOING"
+                                                  )
+                                                }
+                                              >
+                                                <i
+                                                  className="fa fa-check-circle warning"
+                                                  aria-hidden="true"
+                                                ></i>{" "}
+                                                Ongoing
+                                              </Dropdown.Item>
+                                              <Dropdown.Item
+                                                onClick={(event) =>
+                                                  handleStatusChange(
+                                                    event,
+                                                    task?._id,
+                                                    "COMPLETED"
+                                                  )
+                                                }
+                                              >
+                                                <i
+                                                  className="fa fa-check-circle success"
+                                                  aria-hidden="true"
+                                                ></i>{" "}
+                                                Completed
+                                              </Dropdown.Item>
+                                              <Dropdown.Item
+                                                onClick={(event) =>
+                                                  handleStatusChange(
+                                                    event,
+                                                    task?._id,
+                                                    "ONHOLD"
+                                                  )
+                                                }
+                                              >
+                                                <i
+                                                  className="fa fa-check-circle warning"
+                                                  aria-hidden="true"
+                                                ></i>{" "}
+                                                On Hold
+                                              </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                          )}
+                                        </Dropdown>
+                                      )}
+                                    </div>
+                                  </Col>
+                                  <Col lg={11}>
+                                    <p
+                                      className={
+                                        task?.status === "COMPLETED"
+                                          ? "line-strics"
+                                          : ""
+                                      }
+                                      // onClick={() => handleViewDetails(task?._id)}
+                                    >
+                                      <p
+                                        onClick={() =>
+                                          handleViewDetails(task?._id)
+                                        }
+                                        className="text-truncate"
+                                      >
+                                        {task?.title}
+                                      </p>
+                                    </p>
+                                  </Col>
+                                </Row>
+                              </Col>
+
+                              <Col lg={3}>
+                                {task?.status === "NOT_STARTED" && (
+                                  <Badge bg="secondary">NOT STARTED</Badge>
+                                )}
+                                {task?.status === "ONGOING" && (
+                                  <Badge bg="warning">ONGOING</Badge>
+                                )}
+                                {task?.status === "COMPLETED" && (
+                                  <Badge bg="success">
+                                    completed{" "}
+                                    {moment(
+                                      task?.completedDate?.split("T")[0]
+                                    ).format("MMM DD,YYYY")}
+                                  </Badge>
+                                )}
+                                {task?.status === "ONHOLD" && (
+                                  <Badge bg="primary">ON HOLD</Badge>
+                                )}
+                                {task?.priority === "LOW" && (
+                                  <Badge bg="primary">LOW</Badge>
+                                )}
+                                {task?.priority === "REPEATED" && (
+                                  <Badge bg="warning">REPEATED</Badge>
+                                )}
+                                {task?.priority === "MEDIUM" && (
+                                  <Badge bg="warning">MEDIUM</Badge>
+                                )}
+                                {task?.priority === "HIGH" && (
+                                  <Badge bg="danger">HIGH</Badge>
+                                )}
+                              </Col>
+                              <Col
+                                lg={3}
+                                className="align-items-center justify-content-start"
+                              >
+                                {!task?.assignedTo?.profilePicture &&
+                                  task?.assignedTo?.name && (
+                                    <div className="nameTag">
+                                      <UserIcon
+                                        key={index}
+                                        firstName={task?.assignedTo?.name || ""}
+                                      />
+                                    </div>
+                                  )}
+                                {task?.assignedTo?.profilePicture && (
+                                  <div
+                                    className="nameTag"
+                                    style={{ display: "contents" }}
+                                  >
+                                    <img
+                                      style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        borderRadius: "50%",
+                                      }}
+                                      src={`${task?.assignedTo?.profilePicture}`}
+                                      alt="profile"
+                                    ></img>
+                                  </div>
+                                )}
+                                <span> {task?.assignedTo?.name}</span>
+                                {!task?.assignedTo?.name && (
+                                  <span> NOT ASSIGNED </span>
+                                )}
+                              </Col>
+                              <Col lg={1}>
+                                {task?.dueDate && (
+                                  <Badge
+                                    bg={task?.dueToday ? "danger" : "primary"}
+                                  >
+                                    Due{" "}
+                                    {moment(
+                                      task?.dueDate?.split("T")[0]
+                                    ).format("MMM DD,YYYY")}
+                                  </Badge>
+                                  // onClick={() => handleViewDetails(task?._id)}
+                                )}
+                              </Col>
+                            </Row>
+                          </div>
                           {(userDetails.id === task?.assignedTo?._id ||
-                      (userDetails.role === "LEAD" &&
-                        (userDetails.id === task?.assignedTo?._id ||
-                          task?.lead?.includes(userDetails.id) ||
-                          userDetails.id === task?.createdBy?._id)) ||
-                      userDetails.role === "SUPER_ADMIN" ||
-                      userDetails.role === "ADMIN")&& (
-                        <Dropdown>
-                          <Dropdown.Toggle
-                            variant="success"
-                            id="dropdown-basic"
-                          >
-                            {task.status === "NOT_STARTED" && (
-                              <i
-                                className="fa fa-check-circle secondary"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "ONGOING" && (
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "COMPLETED" && (
-                              <i
-                                className="fa fa-check-circle success"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                            {task.status === "ONHOLD" && (
-                              <i
-                                className="fa fa-check-circle warning"
-                                aria-hidden="true"
-                              ></i>
-                            )}
-                          </Dropdown.Toggle>
-
-                          {task.status !== "COMPLETED" && (
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                onClick={(event) =>
-                                  handleStatusChange(
-                                    event,
-                                    task?._id,
-                                    "NOT_STARTED"
-                                  )
-                                }
+                            (userDetails.role === "LEAD" &&
+                              (userDetails.id === task?.assignedTo?._id ||
+                                task?.lead?.includes(userDetails.id) ||
+                                userDetails.id === task?.createdBy?._id)) ||
+                            userDetails.role === "SUPER_ADMIN" ||
+                            userDetails.role === "ADMIN") &&
+                            !isArchive && (
+                              <a
+                                style={{
+                                  float: "right",
+                                  color: "#6c757d",
+                                  cursor: "pointer",
+                                  marginRight: "10px",
+                                  position: "relative",
+                                  top: "10px",
+                                }}
+                                onClick={() => {
+                                  setSelectedProject();
+                                  setShowAddTask(true);
+                                  setSelectedTask(task);
+                                }}
                               >
                                 <i
-                                  className="fa fa-check-circle secondary"
+                                  className="fa fa-pencil-square-o"
                                   aria-hidden="true"
-                                ></i>{" "}
-                                Not Started
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={(event) =>
-                                  handleStatusChange(
-                                    event,
-                                    task?._id,
-                                    "ONGOING"
-                                  )
-                                }
-                              >
-                                <i
-                                  className="fa fa-check-circle warning"
-                                  aria-hidden="true"
-                                ></i>{" "}
-                                Ongoing
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={(event) =>
-                                  handleStatusChange(
-                                    event,
-                                    task?._id,
-                                    "COMPLETED"
-                                  )
-                                }
-                              >
-                                <i
-                                  className="fa fa-check-circle success"
-                                  aria-hidden="true"
-                                ></i>{" "}
-                                Completed
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={(event) =>
-                                  handleStatusChange(event, task?._id, "ONHOLD")
-                                }
-                              >
-                                <i
-                                  className="fa fa-check-circle warning"
-                                  aria-hidden="true"
-                                ></i>{" "}
-                                On Hold
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          )}
-                        </Dropdown>
-                      )}
-                          </div>
-                            </Col>
-                            <Col  lg={11}>
-                            <p
-                          className={
-                            task?.status === "COMPLETED" ? "line-strics" : ""
-                          }
-                          // onClick={() => handleViewDetails(task?._id)}
-                        >
-                         <p onClick={() => handleViewDetails(task?._id)} className="text-truncate">{task?.title}</p> 
-                        </p>
-                            </Col>
-                          </Row>
-                       
-                        </Col>
-                         
-                          <Col lg={3}>
-                          {task?.status === "NOT_STARTED" && (
-                          <Badge bg="secondary">NOT STARTED</Badge>
-                        )}
-                        {task?.status === "ONGOING" && (
-                          <Badge bg="warning">ONGOING</Badge>
-                        )}
-                        {task?.status === "COMPLETED" && (
-                          <Badge bg="success">
-                            completed{" "}
-                            {moment(task?.completedDate?.split("T")[0]).format(
-                              "MMM DD,YYYY"
+                                ></i>
+                              </a>
                             )}
-                          </Badge>
-                        )}
-                        {task?.status === "ONHOLD" && (
-                          <Badge bg="primary">ON HOLD</Badge>
-                        )}
-                        {task?.priority === "LOW" && (
-                          <Badge bg="primary">LOW</Badge>
-                        )}
-                        {task?.priority === "REPEATED" && (
-                          <Badge bg="warning">REPEATED</Badge>
-                        )}
-                        {task?.priority === "MEDIUM" && (
-                          <Badge bg="warning">MEDIUM</Badge>
-                        )}
-                        {task?.priority === "HIGH" && (
-                          <Badge bg="danger">HIGH</Badge>
-                        )}
-                          </Col>
-                          <Col lg={3} className="align-items-center justify-content-start">
-                          {!task?.assignedTo?.profilePicture&&task?.assignedTo?.name && (
-                          <div className="nameTag">
-                            <UserIcon
-                              key={index}
-                              firstName={task?.assignedTo?.name||''}
-                            />
-                          </div>
-                        )}
-                        {task?.assignedTo?.profilePicture && (
-                          <div className="nameTag" style={{display:'contents'}}>
-                            <img
-                              style={{
-                                width: "20px",
-                                height: "20px",
-                                borderRadius: "50%",
-                              }}
-                              src={`${task?.assignedTo?.profilePicture}`}
-                              alt="profile"
-                            ></img>
-                          </div>
-                        )}
-                        <span> {task?.assignedTo?.name}</span>
-                        {!task?.assignedTo?.name && <span> NOT ASSIGNED </span>}
-                          </Col>
-                          <Col lg={1}>
-                            
-                        {task?.dueDate && (
-                          <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                            Due{" "}
-                            {moment((task?.dueDate)?.split("T")[0]).format(
-                              "MMM DD,YYYY"
-                            )}
-                          </Badge>
-                          // onClick={() => handleViewDetails(task?._id)}
-                        )}
-                          </Col>
-                          
-                        </Row>
-                       
-
-                       
-                     
-
-                      </div>
-                      {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") &&
-                        !isArchive && (
-                          <a
-                            style={{
-                              float: "right",
-                              color: "#6c757d",
-                              cursor: "pointer",
-                              marginRight: "10px",
-                              position: "relative",
-                              top: "10px",
-                            }}
-                            onClick={() => {
-                              setSelectedProject();
-                              setShowAddTask(true);
-                              setSelectedTask(task);
-                            }}
-                          >
-                            <i
-                              className="fa fa-pencil-square-o"
-                              aria-hidden="true"
-                            ></i>
-                          </a>
-                        )}
-                    </li>
-                  ))}
-                </ul>
-              </Accordion.Body>
-            </Accordion.Item>)
-))}
+                        </li>
+                      ))}
+                    </ul>
+                  </Accordion.Body>
+                </Accordion.Item>
+              )
+          )}
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>
           )}
@@ -1017,7 +1038,7 @@ const Tasks = () => {
               )}
 
               <Button
-                style={{ marginLeft: "5px", color:'#fff' }}
+                style={{ marginLeft: "5px", color: "#fff" }}
                 className="btn btn-light"
                 onClick={() => setModalShow(false)}
               >
@@ -1078,7 +1099,11 @@ const Tasks = () => {
             >
               Close
             </Button>
-            <Button variant="primary" onClick={() => archiveSection()}>
+            <Button
+              variant="primary"
+              onClick={() => archiveSection()}
+              className="text-white"
+            >
               Save Changes
             </Button>
           </Modal.Footer>

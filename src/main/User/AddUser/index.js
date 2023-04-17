@@ -129,7 +129,7 @@ export default function AddUser(props) {
           </Form.Group>
         </Row>
 
-        <div style={{ marginRight: "10px" }} className="text-right">
+        <div  className="text-right">
           <Button
             className="btn-gradient-border btnDanger "
             type="button"

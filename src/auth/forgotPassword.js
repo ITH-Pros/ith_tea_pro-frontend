@@ -179,26 +179,28 @@ function ForgotPassword() {
           <a href="https://pro.ith.tech/login">
             <img src={require("../assests/img/logo.png")} alt="logo" />
           </a>
-          <div className="text">Tea Pro</div>
+          <div className="text mb-1">Tea Pro</div>
           <div>
-            <h2>Forgot Password</h2>
+            <h4 className="text-center">Forgot Password</h4>
 
             {!showOtp && !passWordSection && (
               <form onSubmit={sendOtp}>
-              <div>
-                <label htmlFor="email">Email:</label>
+              <div className="field mt-4">
+                {/* <label htmlFor="email">Email:</label> */}
+                <span className="fa fa-user"></span>
                 <input
                   type="email"
+                  placeholder="Email "
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
-              <button className="loginButton" type="submit">
+              <button className="loginButton mt-2" type="submit">
                 Submit
               </button>
-              <button onClick={backToLogin} className="loginButton" >
+              <button onClick={backToLogin} className="btn text-primary mt-2 pull-right " >
                Back to Login
               </button>
             </form>
@@ -208,8 +210,9 @@ function ForgotPassword() {
            
             {showOtp && (
             <form onSubmit={verifyEmailOrOTP}>
-              <div>
-                <label htmlFor="email">Email:</label>
+              <div className="field mt-4">
+                {/* <label htmlFor="email">Email:</label> */}
+                <span className="fa fa-user"></span>
                 <input
                   type="email"
                   id="email"
@@ -219,9 +222,11 @@ function ForgotPassword() {
                   disabled
                 />
               </div>
-              <div>
-                <label htmlFor="otp">OTP:</label>
+              <div className="field mt-4">
+                {/* <label htmlFor="otp">:</label> */}
+                <span className="fa fa-lock"></span>
                 <input
+                placeholder="OTP"
                   type="text"
                   id="otp"
                   value={otp}
@@ -232,7 +237,7 @@ function ForgotPassword() {
               <button className="loginButton" type="submit">
                 Submit
               </button>
-              <button onClick={backToLogin} className="loginButton" >
+              <button onClick={backToLogin} className="btn text-primary mt-2 pull-right" >
                Back to Login
               </button>
             </form>

@@ -84,7 +84,7 @@ export default function History(props) {
                   </div>
                   <div className="event-description">
                     {item?.actionTaken === "TASK_ADDED" && (
-                      <p>Task added by {item?.actionBy?.name}</p>
+                      <p><span className="text-dark">Task added by :</span> {item?.actionBy?.name}</p>
                     )}
                     {item?.actionTaken === "TASK_COMMENT" && (
                       <div className="event-description">
@@ -103,7 +103,7 @@ export default function History(props) {
                         <h4>
                           Task due date updated by {item?.actionBy?.name}:
                         </h4>
-                        <div className="details-card">
+                        <div className="details-card pb-0">
                           <div className="detail-item">
                             <span>Changed due date from:</span>
                             <p className="previous">
@@ -125,7 +125,7 @@ export default function History(props) {
                     {item.actionTaken === "TASK_STATUS_UPDATED" && (
                       <div className="event-description">
                         <h4>Task status updated by {item?.actionBy?.name}:</h4>
-                        <div className="details-card">
+                        <div className="details-card pb-0">
                           <div className="detail-item">
                             <span>Changed status from:</span>
                             <p
@@ -147,7 +147,7 @@ export default function History(props) {
                     {item.actionTaken === "TASK_UPDATED" && (
                       <div className="event-description">
                         <h4>Task updated by {item?.actionBy?.name}:</h4>
-                        <div className="details-card">
+                        <div className="details-card pb-0">
                           {item?.previous?.title !== item?.new?.title && (
                             <div className="detail-item">
                               <span>Changed title from:</span>

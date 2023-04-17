@@ -282,7 +282,7 @@ export default function AddRating(props) {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group as={Col} md="4" controlId="rating_date">
+            <Form.Group as={Col} md="6" controlId="rating_date">
               <Form.Label>Date</Form.Label>
               <Form.Control
                 required

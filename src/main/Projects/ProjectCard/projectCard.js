@@ -7,10 +7,9 @@ import { Modal, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Select from "react-select";
 import React from "react";
-import {CiCircleRemove} from 'react-icons/ci'
+import { CiCircleRemove } from "react-icons/ci";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Offcanvas from 'react-bootstrap/Offcanvas';
-
+import Offcanvas from "react-bootstrap/Offcanvas";
 
 import {
   faTasks,
@@ -24,7 +23,43 @@ import {
   getUnassignedUsers,
   removeUserFromProject,
 } from "../../../services/user/api";
+const customStyles = {
+  option: (provided) => ({
+    ...provided,
+    padding: 5,
+  }),
 
+  control: (provided) => ({
+    ...provided,
+    boxShadow: "none",
+    height: "45px",
+    borderRadius: "5px",
+    color: "#767474",
+    margin: "0px",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    marginBottom:'15px',
+  }),
+  placeholder: (provided) => ({
+    ...provided,
+  }),
+  menu: (provided) => ({
+    ...provided,
+    fontSize: 13,
+    borderRadius: "0px 0px 10px 10px",
+    boxShadow: "10px 15px 30px rgba(0, 0, 0, 0.05)",
+    top: "32px",
+    padding: "5px",
+    zIndex: "2",
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    width: "200px",
+    height: "45px",
+    overflowY: "auto",
+    padding: "0px 10px",
+  }),
+};
 const ProjectCard = ({
   name,
   description,
@@ -138,39 +173,38 @@ const ProjectCard = ({
     setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
   };
 
-  const handleConfirmation = (userId , username) => {
+  const handleConfirmation = (userId, username) => {
     setShowConfirmation(true);
     setSelectedUser(userId);
     setSelectedUserName(username);
   };
 
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [selectedUser , setSelectedUser] = useState(null);
-  const [selectedUserName , setSelectedUserName] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUserName, setSelectedUserName] = useState(null);
 
-
- 
-
-
-  function ConfirmationPopup({ show, onCancel, onConfirm ,  }) {
+  function ConfirmationPopup({ show, onCancel, onConfirm }) {
     return (
       <Modal show={show} onHide={onCancel} centered id="confirmation_ui">
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="text-center">Are you sure you want to remove {selectedUserName} ?
-
-      <div className="mt-3 mb-3 text-center">
-      <Button size="md" variant="secondary " onClick={onCancel}>Cancel</Button>
-          <Button size="md" variant="danger" style={{marginLeft:'10px'}} onClick={onConfirm}>Remove</Button>
-
-      </div>
-
-       
-        
+        <Modal.Body className="text-center">
+          Are you sure you want to remove {selectedUserName} ?
+          <div className="mt-3 mb-3 text-center">
+            <Button size="sm" variant="secondary " onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              style={{ marginLeft: "10px" }}
+              onClick={onConfirm}
+            >
+              Remove
+            </Button>
+          </div>
         </Modal.Body>
-      
-       
       </Modal>
     );
   }
@@ -191,7 +225,6 @@ const ProjectCard = ({
         setSelectedUser(null);
         setSelectedUserName(null);
         setModalShow(false);
-
       }
     } catch (error) {
       console.log("Error while getting user details");
@@ -199,19 +232,16 @@ const ProjectCard = ({
     }
   };
 
-  
-
   return (
-    <div
-      className="project-card"
-      style={{ border: `3px solid ${background}` }}>
+    <div className="project-card" style={{ border: `3px solid ${background}` }}>
       {isArchive && <h6 className="archived">Archived</h6>}
       <div
         className="menu-icon"
         onClick={handleMenuIconClick}
         onBlur={handleMenuIconClick}
       >
-        {(userDetails.role === "SUPER_ADMIN" || userDetails.role ==="ADMIN") && (
+        {(userDetails.role === "SUPER_ADMIN" ||
+          userDetails.role === "ADMIN") && (
           <button className="project-btn-more dropdown ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +304,7 @@ const ProjectCard = ({
       <div className="project-stats row">
         <div className="stat col-3">
           <>
-            {["top"].map((placement,index) => (
+            {["top"].map((placement, index) => (
               <OverlayTrigger
                 key={index}
                 placement={placement}
@@ -284,7 +314,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faFlag} />
-                  <span className="text-secondary">{taskData?.overDueTasks || 0}%</span>
+                  <span className="text-secondary">
+                    {taskData?.overDueTasks || 0}%
+                  </span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -292,9 +324,9 @@ const ProjectCard = ({
         </div>
         <div className="stat col-3">
           <>
-            {["top"].map((placement,index) => (
+            {["top"].map((placement, index) => (
               <OverlayTrigger
-                key={index+1}
+                key={index + 1}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>Completed tasks</Tooltip>
@@ -302,7 +334,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faTasks} />
-                  <span className="text-secondary">{taskData?.COMPLETED || 0}%</span>
+                  <span className="text-secondary">
+                    {taskData?.COMPLETED || 0}%
+                  </span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -310,9 +344,9 @@ const ProjectCard = ({
         </div>
         <div className="stat col-3">
           <>
-            {["top"].map((placement,index) => (
+            {["top"].map((placement, index) => (
               <OverlayTrigger
-                key={index+2}
+                key={index + 2}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>Ongoing tasks</Tooltip>
@@ -320,7 +354,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faCheck} />
-                  <span className="text-secondary">{taskData?.ONGOING || 0}%</span>
+                  <span className="text-secondary">
+                    {taskData?.ONGOING || 0}%
+                  </span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -328,9 +364,9 @@ const ProjectCard = ({
         </div>
         <div className="stat col-3">
           <>
-            {["top"].map((placement,index) => (
+            {["top"].map((placement, index) => (
               <OverlayTrigger
-                key={index+3}
+                key={index + 3}
                 placement={placement}
                 overlay={
                   <Tooltip id={`tooltip-${placement}`}>
@@ -340,7 +376,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faBarChart} />
-                  <span className="text-secondary">{taskData?.totalTask || 0}</span>
+                  <span className="text-secondary">
+                    {taskData?.totalTask || 0}
+                  </span>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -357,22 +395,26 @@ const ProjectCard = ({
                 .slice(0, 13)
                 .map((user, index) => (
                   <>
-                    {!user?.profilePicture &&(index<3)&& (
+                    {!user?.profilePicture && index < 3 && (
                       <UserIcon key={index} firstName={user.name} />
                     )}
-                    {(index > 2) && (index === 3) && (
-                      <span  onClick={() => {
-                        onClickOfIcons(
-                          accessibleBy.concat(managedBy),
-                          "Team Members"
-                        );
-                      }}>
-
-                        <UserIcon   key={index} firstName={'...'} />
+                    {index > 2 && index === 3 && (
+                      <span
+                        onClick={() => {
+                          onClickOfIcons(
+                            accessibleBy.concat(managedBy),
+                            "Team Members"
+                          );
+                        }}
+                      >
+                        <UserIcon
+                          key={index}
+                          firstName={"..."}
+                          className="team_icon"
+                        />
                       </span>
-
                     )}
-                    {user?.profilePicture &&(index<3)&&(
+                    {user?.profilePicture && index < 3 && (
                       <div key={index} className="user_pic_card">
                         <img
                           style={{
@@ -398,7 +440,7 @@ const ProjectCard = ({
               }}
             >
               <i
-                className="fa fa-user-plus add-user-icon" 
+                className="fa fa-user-plus add-user-icon"
                 aria-hidden="true"
               ></i>
             </div>}
@@ -406,31 +448,39 @@ const ProjectCard = ({
         </div>
       </div>
       {modalshow && (
-        <Offcanvas  
-        className="Offcanvas-modal"
-        style={{width:'500px'}}
-        show={modalshow}
-        placement="end"
-        onHide={() => {
+        <Offcanvas
+          className="Offcanvas-modal"
+          style={{ width: "500px" }}
+          show={modalshow}
+          placement="end"
+          onHide={() => {
             setModalShow(false);
             setShowSelectBox(false);
             setSelectedUnassignedUsers("");
             setListOfUnassignedUsers([]);
             setSelectedRole(null);
           }}
-      >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body className="pt-0"  >
-        <div>
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body className="pt-0">
+            <div>
               <Col sm={12}>
                 {userDetails.role !== "CONTRIBUTOR" &&
-                  !isArchive && modalTitle!=='Team Members'&&
+                  !isArchive &&
+                  modalTitle !== "Team Members" &&
                   userDetails.role !== "LEAD" && (
                     <div onClick={assignTeamUser} className="assignPopup">
-                      <UserIcon style={{width:'20px',}} firstName={"+"} className="plus_icon" />
-                      <p className="ms-2 mb-0" style={{cursor:'pointer'}}>{"Add Team"}</p>
+                      <UserIcon
+                        style={{ width: "20px" }}
+                        firstName={"+"}
+                        className="plus_icon"
+                      />
+                      <p className="ms-2 mb-0" style={{ cursor: "pointer" }}>
+                        {" "}
+                        {"Add Team"}
+                      </p>
                     </div>
                   )}
               </Col>
@@ -438,8 +488,8 @@ const ProjectCard = ({
                 {showSelectBox && (
                   <>
                     <div className="select-rol-con">
-                      <select
-                        className="form-control form-control-lg"
+                      <select size="lg"
+                        className="form-control form-control-lg mt-2"
                         value={selectedRole}
                         onChange={handleRoleChange}
                       >
@@ -449,6 +499,7 @@ const ProjectCard = ({
                       </select>
                       {selectedRole === "CONTRIBUTOR" && (
                         <Select
+                          styles={customStyles}
                           options={contributorOptions}
                           value={contributorOptions.filter((option) =>
                             selectedUnassignedUsers.includes(option.value)
@@ -459,7 +510,8 @@ const ProjectCard = ({
                       )}
                       {selectedRole === "LEAD" && (
                         <Select 
-                        placeholder="Select Member"
+                          styles={customStyles}
+                          placeholder="Select Member"
                           options={leadOptions}
                           value={leadOptions.filter((option) =>
                             selectedUnassignedUsers.includes(option.value)
@@ -470,24 +522,36 @@ const ProjectCard = ({
                       )}
                     </div>
                     {selectedUnassignedUsers && (
-                      <div className="assign-name">
-                        <Button variant="success"  size="sm"  onClick={assignTeamUsers}>Assign</Button>
+                      <div className="mb-3 pull-right">
+                        <Button
+                          variant="success"
+                          size="sm"
+                          onClick={assignTeamUsers}
+                        >
+                          Assign
+                        </Button>
                       </div>
                     )}
                   </>
                 )}
               </div>
-              <Row style={{marginTop:'15px'}}>
+              <div style={{clear:'both'}}></div>
+
+              <Row >
                 {users.map((user, index) => {
                   return (
                     <Col key={index} sm={12}>
-                      <div className="assignPopup">
+                      <div className="assignPopup ">
                         <>
                           {!user?.profilePicture && (
-                            <UserIcon key={index} firstName={user.name} />
+                            <UserIcon
+                              key={index}
+                              firstName={user.name}
+                              className="list_user"
+                            />
                           )}
                           {user?.profilePicture && (
-                            <div className="user_pic_card" style={{marginRight:'10px'}}>
+                            <div className="user_pic_card">
                               <img
                                 style={{
                                   width: "30px",
@@ -507,40 +571,30 @@ const ProjectCard = ({
                           <p className="userEmail">{user?.email}</p>
                         </div>
 
-                        {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && (
-
-                      <CiCircleRemove onClick={() => handleConfirmation(user._id , user.name)} style={{cursor:'pointer' }} className="delete_icon"/>
+                        {(userDetails.role === "SUPER_ADMIN" ||
+                          userDetails.role === "ADMIN") && (
+                          <CiCircleRemove
+                            onClick={() =>
+                              handleConfirmation(user._id, user.name)
+                            }
+                            style={{ cursor: "pointer" }}
+                            className="delete_icon"
+                          />
                         )}
-
-
-                 
-                      
-                   
                       </div>
-                      
-
-
                     </Col>
                   );
                 })}
               </Row>
             </div>
             <ConfirmationPopup
-            show={showConfirmation}
-            onCancel={() => setShowConfirmation(false)}
-            onConfirm={removeUser}
-             />
-        </Offcanvas.Body>
-      </Offcanvas>
-
+              show={showConfirmation}
+              onCancel={() => setShowConfirmation(false)}
+              onConfirm={removeUser}
+            />
+          </Offcanvas.Body>
+        </Offcanvas>
       )}
-
-     
-
-
-
-
-
     </div>
   );
 };

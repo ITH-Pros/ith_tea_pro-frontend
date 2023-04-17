@@ -261,7 +261,9 @@ export default function AllProject() {
               );
             })}
           {!projectList?.length && (
-            <h6>No Project Found</h6>
+            <div >
+            <p className="alig-nodata">No Project Found</p>
+            </div>
           )}
         </div>
       </div>
