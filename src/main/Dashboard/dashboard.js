@@ -436,7 +436,7 @@ export default function Dashboard(props) {
                         placement="top"
                         overlay={<Tooltip>{project?.name}</Tooltip>}
                       >
-                        <h5 className="text-truncate">{project?.name}</h5>
+                        <h5 className="text-truncate" style={{cursor:'pointer'}}>{project?.name}</h5>
                       </OverlayTrigger>
                     </Col>
                     <Col lg={4} className="middle">

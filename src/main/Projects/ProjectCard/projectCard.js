@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
 import "./projectCard.css";
 import UserIcon from "./profileImage";
@@ -39,18 +40,7 @@ const ProjectCard = ({
   handleArchiveModalShow,
   isArchive,
 }) => {
-  const generateRandomColor = () => {
-    const colors = [
-      "#e4ffc5",
-      "#ffd9d9",
-      "#e3e8ff",
-      "#e3d3ff",
-      "#d3fcff",
-      "#e5e5e5",
-      "#fffb6d",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
+
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [modalTitle, SetModalTitle] = useState("");
@@ -277,8 +267,8 @@ const ProjectCard = ({
       </div>
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
-        <h4>{name}</h4>
-        <p className="text-secondary">{description}</p>
+        <h4  style={{cursor:'pointer'}}>{name}</h4>
+        <p   style={{cursor:'pointer'}} className="text-secondary">{description}</p>
       </div>
 
       <div className="project-stats row">
@@ -398,7 +388,7 @@ const ProjectCard = ({
                   </>
                 ))}
             </div>
-            <div
+         {   userDetails.role !== "CONTRIBUTOR" && !isArchive &&   <div
               style={{ position: "relative", float: "right" }}
               onClick={() => {
                 onClickOfIcons(
@@ -411,7 +401,7 @@ const ProjectCard = ({
                 className="fa fa-user-plus add-user-icon" 
                 aria-hidden="true"
               ></i>
-            </div>
+            </div>}
           </div>
         </div>
       </div>
