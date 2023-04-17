@@ -69,10 +69,10 @@ export default function TeamReport(props) {
   const [teamWorkList, setTeamWorkList] = useState([]);
 const [userDetails,setUserDetails]=useState([])
 
-  const [member, selectedMember] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const [usersList, setUsersListValue] = useState([]);
   const [toaster, showToaster] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState('task');
   const [loading, setLoading] = useState(false);
 
@@ -85,14 +85,14 @@ const [userDetails,setUserDetails]=useState([])
   }, []);
 
   useEffect(() => {
-    if (member) {
-      setShowDetails(true);
-      getUserReport(member, selectedEvent)
+   
+    if (selectedOption) {
+      getUserDetails(selectedOption.value);
+
+      getUserReport(selectedOption?.value, selectedEvent)
       
-    } else {
-      setShowDetails(false);
-   }
-  }, [member, selectedEvent]);
+    } 
+  }, [selectedOption, selectedEvent]);
   const getUserDetails = async (id) => {
     setLoading(true);
     try {
@@ -141,7 +141,7 @@ const [userDetails,setUserDetails]=useState([])
     if (type) {
       if (type === 'task') {
         dataToSend.todayTasks=true
-        dataToSend.dueDate = convertToUTCDay(new Date());
+        dataToSend.currentDate = convertToUTCDay(new Date());
       }else if (type === 'overduetask') {
         dataToSend.overDueTasks=true
       }else if (type === 'pendingtask') {
@@ -180,6 +180,10 @@ const [userDetails,setUserDetails]=useState([])
       } else {
         console.log(users?.data?.users)
         setUsersListValue(users?.data?.users || []);
+        if (localStorage.getItem('selectedOptions')) {
+          setSelectedOption(JSON.parse(localStorage.getItem('selectedOptions')))
+
+        }
        
       }
     } catch (error) {
@@ -196,19 +200,28 @@ const [userDetails,setUserDetails]=useState([])
 
 
   }
+
+  const handleSelectChange = (selectedOption) => {
+    localStorage.setItem('selectedOptions',JSON.stringify(selectedOption))
+    getUserDetails(selectedOption.value);
+    setSelectedOption(selectedOption);
+  };
  
 
 
   return (
     <div className="rightDashboard" style={{ marginTop: "6%" }}>
       <div>
-      <div className={member?'c_card':'v_card'}>
+      <div className={selectedOption?'c_card':'v_card'}>
         <Card className="py-2 px-2 " style={{width:'300px'}}>
           <Row>
             <Col lg="12" className="m-auto">
               <Select
                 styles={customStyles}
-                onChange={(target) =>{getUserDetails(target.value); selectedMember(target?.value)}}
+                  value={selectedOption}
+                  onChange={handleSelectChange}
+          
+
                 options={usersList}
                 placeholder="Select Member"
               />
@@ -228,7 +241,7 @@ const [userDetails,setUserDetails]=useState([])
         </Card>
       </div>
       <div style={{clear:'both'}}></div>
-     { member&&  <Card className="py-4 px-4" style={{ borderRadius:'10px', border:'0px'}}>
+     { selectedOption&&  <Card className="py-4 px-4" style={{ borderRadius:'10px', border:'0px'}}>
           <Row className="align-middle d-flex">
             <Col lg="1">
               <div className="profile-userpic">

@@ -27,9 +27,9 @@ export default function Navbar() {
   return (
     <Layout>
       {accessToken && (
-        <Sidebar>
-          <Menu iconShape="circle">
-            <NavLink to="/" style={navLinkStyles}>
+        <Sidebar >
+          <Menu onClick={() => { console.log('------------------'); localStorage.removeItem('selectedOptions') }} iconShape="circle">
+            <NavLink to="/"  style={navLinkStyles}>
               <MenuItem icon={<FaHome />}> Dashboard </MenuItem>
             </NavLink>
             <NavLink to="/project/all" style={navLinkStyles}>

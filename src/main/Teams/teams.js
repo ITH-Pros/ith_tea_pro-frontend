@@ -2,6 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   getAllUsers,
   getAllProjects,
@@ -49,6 +51,7 @@ export default function Teams(props) {
   const [confirmModalShow, setConfirmModalShow] = useState(false);
 
   const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     onInit();
@@ -397,6 +400,17 @@ export default function Teams(props) {
       return error.message;
     }
   };
+  const redirectToTeamReport = (user) => {
+    let data = {
+      label: user?.name,
+      value:user?._id
+      
+    }
+    console.log(data)
+    localStorage.setItem('selectedOptions',JSON.stringify(data))
+    navigate("/team-report");
+    
+  }
 
   return (
     <>
@@ -428,11 +442,11 @@ export default function Teams(props) {
           </div>
         </h1>
 
-        <div className="container-team">
+        <div  className="container-team">
           {usersList &&
             usersList.map((user, index) => {
               return (
-                <div key={user._id} className="box">
+                <div onClick={()=>redirectToTeamReport(user)} key={user._id} className="box">
                   <div className="top-bar"></div>
                   <div className="top">
                     <Link
