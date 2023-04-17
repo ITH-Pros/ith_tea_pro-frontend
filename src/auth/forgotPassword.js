@@ -248,41 +248,70 @@ function ForgotPassword() {
 
             {passWordSection && (
             <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="newPassword">New Password:</label>
+              <div className="field mt-4">
+                {/* <label htmlFor="email">Email:</label> */}
+                <span className="fa fa-lock"></span>
+                {/* <label htmlFor="newPassword">:</label> */}
                 <div className="password-field">
                   <input
+                  placeholder="New Password"
                     type={showNewPassword ? "text" : "password"}
                     id="newPassword"
                     value={newPassword}
                     onChange={handleNewPasswordChange}
                     required
                   />
-                  <button
+                     <button
                     type="button"
                     className="eye-button"
                     onClick={toggleShowNewPassword}
                   >
-                    {showNewPassword ? "👁️" : "👁️‍🗨️"}
+                    <i
+                      style={{
+                        position: "absolute",
+                        top: "12px",
+
+                        cursor: "pointer",
+                      }}
+                      name="showPassword"
+                      className={
+                        showConfirmPassword ? "fa fa-eye" : " fa fa-eye-slash"
+                      }
+                    ></i>
+                    {/* {showConfirmPassword ? "fa fa-eye" : "fa fa-eye-slash"}️ */}
                   </button>
                 </div>
               </div>
-              <div>
-                <label htmlFor="confirmPassword">Confirm Password:</label>
+              <div className="field">
+                  <span className="fa fa-lock"></span>
+                {/* <label htmlFor="confirmPassword">:</label> */}
                 <div className="password-field">
                   <input
+                  placeholder="Confirm Password"
                     type={showConfirmPassword ? "text" : "password"}
                     id="confirmPassword"
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
                     required
                   />
-                  <button
+                    <button
                     type="button"
                     className="eye-button"
                     onClick={toggleShowConfirmPassword}
                   >
-                    {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+                    <i
+                      style={{
+                        position: "absolute",
+                        top: "12px",
+
+                        cursor: "pointer",
+                      }}
+                      name="showPassword"
+                      className={
+                        showConfirmPassword ? "fa fa-eye" : " fa fa-eye-slash"
+                      }
+                    ></i>
+                    {/* {showConfirmPassword ? "fa fa-eye" : "fa fa-eye-slash"}️ */}
                   </button>
                 </div>
               </div>
@@ -290,7 +319,7 @@ function ForgotPassword() {
               <button className="loginButton" type="submit" disabled={isSubmitDisabled}>
                 Submit
               </button>
-              <button onClick={backToLogin} className="loginButton" >
+              <button onClick={backToLogin} className="btn text-primary mt-2 pull-right" >
                Back to Login
               </button>
             </form>
