@@ -12,7 +12,7 @@ const CustomCalendar = (props) => {
 
   function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0,0,0))
+    utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
@@ -25,7 +25,7 @@ const CustomCalendar = (props) => {
     console.log(dateString,'------------------')
     let utcTime = new Date(dateString);
     
-    utcTime = new Date(utcTime.setUTCHours(23,59,59))
+    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
     const timeZoneOffsetMs = timeZoneOffsetMinutes*60*1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);

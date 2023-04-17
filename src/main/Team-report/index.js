@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import avtar from "../../assests/img/avtar.png";
 import { BsLinkedin, BsGithub, BsTwitter } from "react-icons/bs";
@@ -5,8 +6,15 @@ import "./index.css";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import moment from "moment";
+import Toaster from "../../components/Toaster";
+import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
 import Select from "react-select";
+import {
+  faGithub,
+  faLinkedin,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 import {
   Row,
   Container,
@@ -20,8 +28,11 @@ import {
   Col,
   Table,
 } from "react-bootstrap";
-import { getUserReportData } from "../../services/user/api";
+import { getUserReportData ,getAllUsersWithAdmin, getUserDetailsByUserId} from "../../services/user/api";
 import { useAuth } from "../../auth/AuthProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { Avatar } from "antd";
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -55,41 +66,125 @@ const customStyles = {
 };
 export default function TeamReport(props) {
   const [teamWorkList, setTeamWorkList] = useState([]);
-  const { userDetails } = useAuth();
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+const [userDetails,setUserDetails]=useState([])
+
+  const [member, selectedMember] = useState("");
+  const [usersList, setUsersListValue] = useState([]);
+  const [toaster, showToaster] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState('task');
+  const [loading, setLoading] = useState(false);
+
+  const setShowToaster = (param) => showToaster(param);
+  const [toasterMessage, setToasterMessage] = useState("");
   useEffect(() => {
     console.log("Team Report");
     getUserReport();
+    getAllMembers();
   }, []);
 
-  const getUserReport = async () => {
+  useEffect(() => {
+    if (member) {
+      setShowDetails(true);
+      getUserReport(member, selectedEvent)
+      
+    } else {
+      setShowDetails(false);
+   }
+  }, [member, selectedEvent]);
+  const getUserDetails = async (id) => {
+    setLoading(true);
+    try {
+      let params = {
+        userId:id
+      };
+      const userDetails = await getUserDetailsByUserId({ params });
+      setLoading(false);
+      if (userDetails.error) {
+        setToasterMessage(userDetails?.message || "Something Went Wrong");
+        setShowToaster(true);
+        return;
+      } else {
+        setUserDetails(userDetails.data);
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      setLoading(false);
+      return error.message;
+    }
+  };
+
+  const getUserReport = async (id, type) => {
+    setLoading(true);
+
+    console.log(id)
+    if (!id || !type) {
+      return;
+    }
     let dataToSend = {
-      userId: "6418afee47d49ebd9b3a124f",
-      overDueTasks: true,
+      userId: id,
+     
     };
+    if (type) {
+      if (type === 'task') {
+        dataToSend.todayTasks=true
+      }else if (type === 'overduetask') {
+        dataToSend.overDueTasks=true
+      }else if (type === 'pendingtask') {
+        dataToSend.pendingRatingTasks=true
+      }else if (type === 'delaytask') {
+        dataToSend.isDelayRated=true
+      } else {
+        dataToSend.adhocTasks = true;
+      }
+    }
     try {
       const res = await getUserReportData(dataToSend);
+    setLoading(false);
+
       if (res.error) {
         console.log("Error while getting team work list");
       } else {
         setTeamWorkList(res?.data);
       }
     } catch (error) {
+    setLoading(false);
+
       return error.message;
     }
   };
+  const getAllMembers = async function () {
+  
+    setLoading(true);
+    try {
+  
+      const users = await getAllUsersWithAdmin();
+      setLoading(false);
+      if (users.error) {
+        setToasterMessage(users?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        console.log(users?.data?.users)
+        setUsersListValue(users?.data?.users || []);
+       
+      }
+    } catch (error) {
+      setLoading(false);
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
+  const handleTabSelect = (eventKey) => {
+    setTeamWorkList([])
+    console.log(eventKey,'----------------------------------eventKey')
+    setSelectedEvent(eventKey);
 
-  function daysSince(dateStr) {
-    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-    const currentDate = new Date();
-    const date = new Date(dateStr);
-    const diffDays = Math?.round(Math?.abs((currentDate - date) / oneDay));
-    return diffDays;
+
   }
+ 
+
 
   return (
     <div className="rightDashboard" style={{ marginTop: "7%" }}>
@@ -99,40 +194,74 @@ export default function TeamReport(props) {
             <Col lg="6" className="m-auto">
               <Select
                 styles={customStyles}
-                options={options}
+                onChange={(target) =>{getUserDetails(target.value); selectedMember(target?.value)}}
+                options={usersList}
                 placeholder="Select Member"
               />
+              
+                     {/* <Select
+                      styles={customStyles}
+                      onChange={(e) => onSelectData(e, "projectIds")}
+                      value={projectIds}
+                      isMulti
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={projects}
+                      isDisabled={handleProjectId}
+                    /> */}
             </Col>
           </Row>
         </Card>
-        <Card className="py-4 px-4">
+     { member&&  <Card className="py-4 px-4">
           <Row className="align-middle d-flex">
             <Col lg="1">
               <div className="profile-userpic">
-                <img src={avtar} alt="userAvtar" />{" "}
+                <img src={userDetails?.profilePicture||avtar} />{" "}
               </div>
             </Col>
             <Col lg="5" className="user_details px-5 py-2">
-              <h1>Ayush (CONTRIBUTOR)</h1>
-              <h2>Frontend Developer</h2>
-              <p>ayush@ith.tech</p>
-              Lead - <Badge bg="dark">Vijay Pandey</Badge>
+              <h1>{userDetails?.name||'--'} ({ userDetails?.role||'--'})</h1>
+              <h2>{userDetails?.department||'--'} - ({userDetails?.designation||'--'})</h2>
+              <p>{userDetails?.email||'--'}</p>
             </Col>
             <Col lg="3 py-4">
               {/* <p>
-                Lead - <Badge bg="primary">Vijay Pandey</Badge>
+                Lead - <Badge bg="primary">Vi   jay Pandey</Badge>
               </p> */}
             </Col>
             <Col lg="3" className="px-5 py-2 text-end">
-              <Button variant="link" size="lg">
-                <BsLinkedin />
-              </Button>
-              <Button variant="secendery" size="lg" className="px-0">
-                <BsGithub />
-              </Button>
-              <Button variant="link" size="lg">
-                <BsTwitter />
-              </Button>
+             
+            <div className="team-socail">
+                        {userDetails?.githubLink && (
+                          <a
+                            href={userDetails?.githubLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faGithub} />
+                          </a>
+                        )}
+
+                        {userDetails?.linkedInLink && (
+                          <a
+                            href={userDetails?.linkedInLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faLinkedin} />
+                          </a>
+                        )}
+
+                        {userDetails?.twitterLink && (
+                          <a
+                            href={userDetails?.twitterLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faTwitter} />
+                          </a>
+                        )}
+                      </div>
             </Col>
           </Row>
           <hr />
@@ -142,129 +271,298 @@ export default function TeamReport(props) {
                 defaultActiveKey="task"
                 id="uncontrolled-tab-example"
                 className="mb-3"
+                onSelect={handleTabSelect}
+
               >
-                <Tab
+                <Tab 
                   eventKey="task"
+                  disabled={selectedEvent==="task"}
                   title={
                     <span>
-                      Task <span className="text-muted">(45546)</span>
+                      Task {selectedEvent==='task'&&<span className="text-muted">({teamWorkList?.length})</span>}
                     </span>
                   }
                 >
                   <div>
                     <Table responsive="md">
                       <tbody>
-                        <tr>
+                        {teamWorkList?.map((team,index) => [
+                          <tr>
                           <td style={{ width: "150px" }}>
                             <p className="text-truncate">
                               <Link to="/" className="text-muted">
-                                Started working on the ONDM Android MOBILE APP
+                               {team?.title||'--'}
                               </Link>
                             </p>
                           </td>
-                          <td style={{ width: "150px" }}>
-                            <Badge bg="danger">14/04/2023</Badge>
-                          </td>
-                          <td style={{ width: "150px" }}>
-                            <small className="text-muted">
-                              <b>Assigned :</b> Rajesh kumar
-                            </small>
-                          </td>
-                          <td style={{ width: "50px" }}>
-                            <Badge bg="warning">Pending</Badge>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ width: "150px" }}>
-                            <p className="text-truncate">
-                              <Link to="/" className="text-muted">
-                                Started working on the ONDM Android MOBILE APP
-                              </Link>
-                            </p>
-                          </td>
-                          <td style={{ width: "150px" }}>
-                            <Badge bg="danger">14/04/2023</Badge>
-                          </td>
+                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                              <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                         {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                     
+                      
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Assigned :</b> Rajesh kumar
+                              <b>Lead :</b>{team?.lead[0]?.name||'--'}
                             </small>
-                          </td>
-                          <td style={{ width: "50px" }}>
-                            <Badge bg="warning">Pending</Badge>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ width: "150px" }}>
-                            <p className="text-truncate">
-                              <Link to="/">
-                                Started working on the ONDM Android MOBILE APP
-                              </Link>
-                            </p>
-                          </td>
-                          <td style={{ width: "150px" }}>
-                            <Badge bg="danger">14/04/2023</Badge>
-                          </td>
+                            </td>
+                            { team?.isRated&& <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.rating||'--'}
+                            </small>
+                          </td>}
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Assigned :</b> Rajesh kumar
+                              <b>Status :</b>{team?.status||'--'}
                             </small>
                           </td>
-                          <td style={{ width: "50px" }}>
-                            <Badge bg="warning">Pending</Badge>
-                          </td>
+                        
                         </tr>
+                        ])}
+                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                        
+                      
                       </tbody>
                     </Table>
+                    
                   </div>
                 </Tab>
 
                 <Tab
-                  eventKey="contact"
+                  eventKey="overduetask"
+                  disabled={selectedEvent==="overduetask"}
+
                   title={
                     <span>
-                      Over Due Tasks <span className="text-muted">(45546)</span>
+                      Over Due Tasks  {selectedEvent==='overduetask'&&<span className="text-muted">({teamWorkList?.length})</span>}
                     </span>
                   }
                 >
-                  <div>rgsgse</div>
+                  <div>
+                  <Table responsive="md">
+                      <tbody>
+                        {teamWorkList?.map((team,index) => [
+                          <tr>
+                          <td style={{ width: "150px" }}>
+                            <p className="text-truncate">
+                              <Link to="/" className="text-muted">
+                               {team?.title||'--'}
+                              </Link>
+                            </p>
+                          </td>
+                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                              <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                         {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                     
+                      
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.lead[0]?.name||'--'}
+                            </small>
+                            </td>
+                            { team?.isRated&& <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.rating||'--'}
+                            </small>
+                          </td>}
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                          </td>
+                        
+                        </tr>
+                        ])}
+                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+
+                        
+                      
+                      </tbody>
+                    </Table>
+                  </div>
                 </Tab>
                 <Tab
-                  eventKey="overduework"
+                  eventKey="pendingtask"
+                  disabled={selectedEvent==="pendingtask"}
                   title={
                     <span>
-                      Pending Task <span className="text-muted">(45546)</span>
+                      Pending Task  {selectedEvent==='pendingtask'&&<span className="text-muted">({teamWorkList?.length})</span>}
                     </span>
                   }
                 >
-                  <div>OVERDUE WORK</div>
+                  <div>
+                  <Table responsive="md">
+                      <tbody>
+                        {teamWorkList?.map((team,index) => [
+                          <tr>
+                          <td style={{ width: "150px" }}>
+                            <p className="text-truncate">
+                              <Link to="/" className="text-muted">
+                               {team?.title||'--'}
+                              </Link>
+                            </p>
+                          </td>
+                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                              <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                         {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                     
+                      
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.lead[0]?.name||'--'}
+                            </small>
+                            </td>
+                            { team?.isRated&& <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.rating||'--'}
+                            </small>
+                          </td>}
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                          </td>
+                        
+                        </tr>
+                        ])}
+                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+
+                        
+                      
+                      </tbody>
+                    </Table>
+                  </div>
                 </Tab>
                 <Tab
-                  eventKey="contact"
+                  eventKey="delaytask"
+                  disabled={selectedEvent==="delaytask"}
                   title={
                     <span>
-                      Delay Rated <span className="text-muted">(45546)</span>
+                      Delay Rated  {selectedEvent==='delaytask'&&<span className="text-muted">({teamWorkList?.length})</span>}
                     </span>
                   }
                 >
-                  <div>rgsgse</div>
+                  <div>
+                  <Table responsive="md">
+                      <tbody>
+                        {teamWorkList?.map((team,index) => [
+                          <tr>
+                          <td style={{ width: "150px" }}>
+                            <p className="text-truncate">
+                              <Link to="/" className="text-muted">
+                               {team?.title||'--'}
+                              </Link>
+                            </p>
+                          </td>
+                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                              <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                         {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                     
+                      
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.lead[0]?.name||'--'}
+                            </small>
+                            </td>
+                            { team?.isRated&& <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.rating||'--'}
+                            </small>
+                          </td>}
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                          </td>
+                        
+                        </tr>
+                        ])}
+                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                        
+                      
+                      </tbody>
+                    </Table>
+                  </div>
                 </Tab>
                 <Tab
-                  eventKey="profile"
+                  eventKey="extracontribution"
+                  disabled={selectedEvent==="extracontribution"}
                   title={
                     <span>
                       Extra Contribution{" "}
-                      <span className="text-muted">(45546)</span>
+                      {selectedEvent==='extracontribution'&&<span className="text-muted">({teamWorkList?.length})</span>}
                     </span>
                   }
                 >
-                  <div>rgsgse</div>
+                  <div>
+                  <Table responsive="md">
+                      <tbody>
+                        {teamWorkList?.map((team,index) => [
+                          <tr>
+                          <td style={{ width: "150px" }}>
+                            <p className="text-truncate">
+                              <Link to="/" className="text-muted">
+                               {team?.title||'--'}
+                              </Link>
+                            </p>
+                          </td>
+                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                              <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                         {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
+                     
+                      
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.lead[0]?.name||'--'}
+                            </small>
+                            </td>
+                            { team?.isRated&& <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Lead :</b>{team?.rating||'--'}
+                            </small>
+                          </td>}
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                          </td>
+                        
+                        </tr>
+                        ])}
+                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+
+                        
+                      
+                      </tbody>
+                    </Table>
+                  </div>
                 </Tab>
               </Tabs>
             </Col>
           </Row>
-        </Card>
+        </Card>}
       </div>
+      {loading ? <Loader /> : null}
+      {toaster && (
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />)}
     </div>
   );
 }

@@ -49,6 +49,11 @@ export async function getAllUsersWithoutPagination(data) {
     .get("/user/v1/all", { params: data })
     .then((res) => res.data);
 }
+export async function getAllUsersWithAdmin(data) {
+  return axiosInstance
+    .get("/user/v1/all/users")
+    .then((res) => res.data);
+}
 
 export async function getAllMyWorks(data) {
   return axiosInstance
