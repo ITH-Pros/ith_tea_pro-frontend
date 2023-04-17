@@ -257,8 +257,8 @@ export default function ViewTaskModal(props) {
               {
                 task?.status === "COMPLETED" && (
                   <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
-                    <div className="col-sm-2 text-right">
-                      {task?.isRated && <span>Rating : {task?.rating}</span>}
+                    <div className="col-sm-12 text-start">
+                      {task?.isRated && <span>Rating : <span className="text-success">{task?.rating}</span></span>}
                       {!task?.isRated && !isRatingFormVisible && userDetails?.role !== "CONTRIBUTOR" && userDetails.id !== task?.assignedTo?._id  && (
                         <Button onClick={() => {handleAddRating(task)}}
                           variant="light"
@@ -279,10 +279,8 @@ export default function ViewTaskModal(props) {
                             onChange={(e) => handleRating(e.target.value)}
   
                           />
-                          {errorRating && (
-                            <p className="error text-end" style={{clear:'both'}}>Rating should be between 0 to 6</p>
-                          )}
-                        <div style={{clear:'both', display:'flex', justifyContent:'end'}}>
+                      
+                        <div style={{  justifyContent:'end',}}>
                           <Button
                             variant="light"
                             size="sm"
@@ -308,6 +306,9 @@ export default function ViewTaskModal(props) {
                          
                       }
                        </div>
+                       {errorRating && (
+                            <p className="error text-end" style={{clear:'both'}}>Rating should be between 0 to 6</p>
+                          )}
                           </div>
                       )}
                     </div>

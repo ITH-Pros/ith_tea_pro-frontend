@@ -188,18 +188,22 @@ p {
 .ratingForm {
   width: 220px;
   position: absolute;
-  right: 60px;
+  right: 50px;
   top: 20px;
 }
 .ratingForm input {
-  width: 50px;
-  margin-bottom: 5px;
-  float: right;
+  width:80px;
+ 
+  height: 38px;
+  float: left;
+  display: block;
+  margin-right: 5px;
+  float: left;
   display: block;
 }
 .ratingForm button {
-  float: right;
-  clear: both;
+  float: left;
+ 
 }
 
 .ql-editor {
