@@ -69,10 +69,10 @@ export default function TeamReport(props) {
   const [teamWorkList, setTeamWorkList] = useState([]);
 const [userDetails,setUserDetails]=useState([])
 
-  const [member, selectedMember] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const [usersList, setUsersListValue] = useState([]);
   const [toaster, showToaster] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState('task');
   const [loading, setLoading] = useState(false);
 
@@ -85,14 +85,14 @@ const [userDetails,setUserDetails]=useState([])
   }, []);
 
   useEffect(() => {
-    if (member) {
-      setShowDetails(true);
-      getUserReport(member, selectedEvent)
+   
+    if (selectedOption) {
+      getUserDetails(selectedOption.value);
+
+      getUserReport(selectedOption?.value, selectedEvent)
       
-    } else {
-      setShowDetails(false);
-   }
-  }, [member, selectedEvent]);
+    } 
+  }, [selectedOption, selectedEvent]);
   const getUserDetails = async (id) => {
     setLoading(true);
     try {
@@ -115,6 +115,17 @@ const [userDetails,setUserDetails]=useState([])
       return error.message;
     }
   };
+  function convertToUTCDay(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
 
   const getUserReport = async (id, type) => {
     setLoading(true);
@@ -130,6 +141,7 @@ const [userDetails,setUserDetails]=useState([])
     if (type) {
       if (type === 'task') {
         dataToSend.todayTasks=true
+        dataToSend.currentDate = convertToUTCDay(new Date());
       }else if (type === 'overduetask') {
         dataToSend.overDueTasks=true
       }else if (type === 'pendingtask') {
@@ -168,6 +180,10 @@ const [userDetails,setUserDetails]=useState([])
       } else {
         console.log(users?.data?.users)
         setUsersListValue(users?.data?.users || []);
+        if (localStorage.getItem('selectedOptions')) {
+          setSelectedOption(JSON.parse(localStorage.getItem('selectedOptions')))
+
+        }
        
       }
     } catch (error) {
@@ -184,19 +200,28 @@ const [userDetails,setUserDetails]=useState([])
 
 
   }
+
+  const handleSelectChange = (selectedOption) => {
+    localStorage.setItem('selectedOptions',JSON.stringify(selectedOption))
+    getUserDetails(selectedOption.value);
+    setSelectedOption(selectedOption);
+  };
  
 
 
   return (
     <div className="rightDashboard" style={{ marginTop: "6%" }}>
       <div>
-      <div className={member?'c_card':'v_card'}>
+      <div className={selectedOption?'c_card':'v_card'}>
         <Card className="py-2 px-2 " style={{width:'300px'}}>
           <Row>
             <Col lg="12" className="m-auto">
               <Select
                 styles={customStyles}
-                onChange={(target) =>{getUserDetails(target.value); selectedMember(target?.value)}}
+                  value={selectedOption}
+                  onChange={handleSelectChange}
+          
+
                 options={usersList}
                 placeholder="Select Member"
               />
@@ -216,7 +241,7 @@ const [userDetails,setUserDetails]=useState([])
         </Card>
       </div>
       <div style={{clear:'both'}}></div>
-     { member&&  <Card className="py-4 px-4" style={{ borderRadius:'10px', border:'0px'}}>
+     { selectedOption&&  <Card className="py-4 px-4" style={{ borderRadius:'10px', border:'0px'}}>
           <Row className="align-middle d-flex">
             <Col lg="1">
               <div className="profile-userpic">
@@ -299,30 +324,27 @@ const [userDetails,setUserDetails]=useState([])
                               </Link>
                             </p>
                           </td>
-                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                         <td style={{ width: "150px" }}>
                               <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                         {team?.completedDate&& <td style={{ width: "150px" }}>
-                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                     
-                      
+                          </td>
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                            </td>
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.lead[0]?.name||'--'}
                             </small>
                             </td>
+                            {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.rating||'--'}
                             </small>
                           </td>}
-                          <td style={{ width: "150px" }}>
-                            <small className="text-muted">
-                              <b>Status :</b>{team?.status||'--'}
-                            </small>
-                          </td>
-                        
                         </tr>
                         ])}
                       <div className="no_data_found">  {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
@@ -345,7 +367,7 @@ const [userDetails,setUserDetails]=useState([])
                   }
                 >
                   <div>
-                  <Table responsive="md">
+                  <Table responsive="md" className="mb-0">
                       <tbody>
                         {teamWorkList?.map((team,index) => [
                           <tr>
@@ -356,34 +378,30 @@ const [userDetails,setUserDetails]=useState([])
                               </Link>
                             </p>
                           </td>
-                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                         <td style={{ width: "150px" }}>
                               <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                         {team?.completedDate&& <td style={{ width: "150px" }}>
-                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                     
-                      
+                          </td>
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                            </td>
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.lead[0]?.name||'--'}
                             </small>
                             </td>
+                            {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.rating||'--'}
                             </small>
                           </td>}
-                          <td style={{ width: "150px" }}>
-                            <small className="text-muted">
-                              <b>Status :</b>{team?.status||'--'}
-                            </small>
-                          </td>
-                        
                         </tr>
                         ])}
-                      <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
-
+                      <div className="no_data_found">  {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
                         
                       
                       </tbody>
@@ -400,7 +418,7 @@ const [userDetails,setUserDetails]=useState([])
                   }
                 >
                   <div>
-                  <Table responsive="md">
+                  <Table responsive="md" className="mb-0">
                       <tbody>
                         {teamWorkList?.map((team,index) => [
                           <tr>
@@ -411,34 +429,30 @@ const [userDetails,setUserDetails]=useState([])
                               </Link>
                             </p>
                           </td>
-                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                         <td style={{ width: "150px" }}>
                               <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                         {team?.completedDate&& <td style={{ width: "150px" }}>
-                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                     
-                      
+                          </td>
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                            </td>
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.lead[0]?.name||'--'}
                             </small>
                             </td>
+                            {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.rating||'--'}
                             </small>
                           </td>}
-                          <td style={{ width: "150px" }}>
-                            <small className="text-muted">
-                              <b>Status :</b>{team?.status||'--'}
-                            </small>
-                          </td>
-                        
                         </tr>
                         ])}
-                       <div className="no_data_found">{!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
-
+                      <div className="no_data_found">  {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
                         
                       
                       </tbody>
@@ -455,7 +469,7 @@ const [userDetails,setUserDetails]=useState([])
                   }
                 >
                   <div>
-                  <Table responsive="md">
+                  <Table responsive="md" className="mb-0">
                       <tbody>
                         {teamWorkList?.map((team,index) => [
                           <tr>
@@ -466,33 +480,30 @@ const [userDetails,setUserDetails]=useState([])
                               </Link>
                             </p>
                           </td>
-                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                         <td style={{ width: "150px" }}>
                               <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                         {team?.completedDate&& <td style={{ width: "150px" }}>
-                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                     
-                      
+                          </td>
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                            </td>
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.lead[0]?.name||'--'}
                             </small>
                             </td>
+                            {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.rating||'--'}
                             </small>
                           </td>}
-                          <td style={{ width: "150px" }}>
-                            <small className="text-muted">
-                              <b>Status :</b>{team?.status||'--'}
-                            </small>
-                          </td>
-                        
                         </tr>
                         ])}
-                       <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
+                      <div className="no_data_found">  {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
                         
                       
                       </tbody>
@@ -510,7 +521,7 @@ const [userDetails,setUserDetails]=useState([])
                   }
                 >
                   <div>
-                  <Table responsive="md">
+                  <Table responsive="md" className="mb-0">
                       <tbody>
                         {teamWorkList?.map((team,index) => [
                           <tr>
@@ -521,34 +532,30 @@ const [userDetails,setUserDetails]=useState([])
                               </Link>
                             </p>
                           </td>
-                          {team?.dueDate&&<td style={{ width: "150px" }}>
+                         <td style={{ width: "150px" }}>
                               <Badge bg="primary">Due : {team?.dueDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                         {team?.completedDate&& <td style={{ width: "150px" }}>
-                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
-                          </td>}
-                     
-                      
+                          </td>
+                          <td style={{ width: "150px" }}>
+                            <small className="text-muted">
+                              <b>Status :</b>{team?.status||'--'}
+                            </small>
+                            </td>
                           <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.lead[0]?.name||'--'}
                             </small>
                             </td>
+                            {team?.completedDate&& <td style={{ width: "150px" }}>
+                              <Badge bg="success">Completed : {team?.completedDate?.split('T')[0]||'--'}</Badge>
+                          </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
                               <b>Lead :</b>{team?.rating||'--'}
                             </small>
                           </td>}
-                          <td style={{ width: "150px" }}>
-                            <small className="text-muted">
-                              <b>Status :</b>{team?.status||'--'}
-                            </small>
-                          </td>
-                        
                         </tr>
                         ])}
-                       <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
-
+                      <div className="no_data_found">  {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
                         
                       
                       </tbody>
