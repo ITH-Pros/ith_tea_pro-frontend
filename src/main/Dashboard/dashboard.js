@@ -793,7 +793,9 @@ export default function Dashboard(props) {
                     }
                   >
                     {myWorkList && myWorkList?.length === 0 && (
-                      <p>No task found.</p>
+                     <Row>
+                      <Col lg="12"><p>No task found.</p></Col>
+                     </Row>
                     )}
                     {myWorkList &&
                       myWorkList?.length > 0 &&

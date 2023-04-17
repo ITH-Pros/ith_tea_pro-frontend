@@ -643,7 +643,7 @@ export default function Teams(props) {
             setPageDetails={setPageDetails}
           />
         ) : (
-          <h6 className="text-center">No User Found</h6>
+          <p className="alig-nodata">No User Found</p>
         )}
 
         {loading ? <Loader /> : null}
@@ -681,22 +681,26 @@ export default function Teams(props) {
             <h6>Are you sure you want to delete this user ?</h6>
 
             <div className="button-center-corformain mt-3">
-              <Button
-                
-                className="btn btn-primary"
-                onClick={() => handleDeleteUser()}
-              >
-                Delete
-              </Button>
+         
 
               <Button
-                style={{ marginLeft: "16px" }}
-                className="btn btn-light text-white"
+              variant="light"
+              size="sm"
+                style={{ marginRight: "10px" }}
+                 
                 onClick={() => {
                   setConfirmModalShow(false);
                 }}
               >
                 Cancel
+              </Button>
+              <Button
+                 variant="danger"
+                 size="sm"
+                
+                onClick={() => handleDeleteUser()}
+              >
+                Delete
               </Button>
             </div>
           </Modal.Body>

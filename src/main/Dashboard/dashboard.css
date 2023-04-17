@@ -312,6 +312,7 @@ th {
   margin: 0;
   font-size: 14px;
   color: #6590ad;
+  cursor: pointer;
 }
 
  
@@ -614,6 +615,9 @@ th {
 .alig-nodata {
   align-items: center;
   justify-content: center;
+  text-align: center;
+  height: 70vh;
+  display: flex;
 }
 
 .nameTag {

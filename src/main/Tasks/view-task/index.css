@@ -63,7 +63,6 @@ p {
   padding-right: 0;
 }
 
-
 .heading {
   color: #666666;
   text-align: center;
@@ -74,8 +73,6 @@ body {
   color: #404040;
   background-color: #eee;
 }
-
- 
 
 .button-group {
   margin-bottom: 20px;
@@ -162,13 +159,13 @@ p {
   justify-content: left;
   align-items: center;
   margin: 20px 0px;
-  border-bottom: 1.5px solid #607D8B;
+  border-bottom: 1.5px solid #607d8b;
 }
 
 .toggle-button {
   background-color: #eee0;
   border: none;
-  color: #607D8B;
+  color: #607d8b;
   padding: 10px 40px;
   font-size: 16px;
   cursor: pointer !important;
@@ -179,7 +176,7 @@ p {
 }
 
 .toggle-button.active {
-  border-bottom: 3px solid #673AB7;
+  border-bottom: 3px solid #673ab7;
 }
 /* 
 .offcanvas.show:not(.hiding) {
@@ -187,12 +184,34 @@ p {
   width: 800px;
 } */
 
-.ratingForm{      width: 220px;
+.ratingForm {
+  width: 220px;
   position: absolute;
   right: 60px;
-  top: 20px;}
-  .ratingForm input{ width: 50px; margin-bottom: 5px; float: right; display: block;  }
-  .ratingForm button{  float: right;
-    clear: both;}
+  top: 20px;
+}
+.ratingForm input {
+  width: 50px;
+  margin-bottom: 5px;
+  float: right;
+  display: block;
+}
+.ratingForm button {
+  float: right;
+  clear: both;
+}
 
-    .ql-editor{ height: 150px; overflow-y: auto;}
+.ql-editor {
+  height: 150px;
+  overflow-y: auto;
+}
+
+.no_comment {
+  width: 100%;
+  padding: 0px;
+  min-height: 50px;
+  border: 1px #ccc dashed;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}

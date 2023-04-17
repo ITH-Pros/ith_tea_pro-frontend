@@ -38,6 +38,7 @@ class UserIcon extends React.Component {
       fontSize: "20px",
       textTransform: "uppercase",
       marginLeft:'-10px',
+      marginRight:'-5px'
     };
 
     return (

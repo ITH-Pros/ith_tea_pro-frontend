@@ -69,7 +69,7 @@ function Header() {
             <div className="user-text-name" key={userName}>
               <div onClick={redirectToUserDetail} className="user-icon">
                 {profilePicture && (
-                  <div className="user-pic">
+                  <div className="user-pic ms-2">
                    <button id='headerbuttontoupdateprofile' hidden={true} ></button>
                      
                     <img

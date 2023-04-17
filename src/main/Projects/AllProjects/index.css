@@ -139,6 +139,7 @@
   background-color: transparent;
   border: none;
   flex-shrink: 0;
+  top: 10px;
 }
 
 .more-wrapper {

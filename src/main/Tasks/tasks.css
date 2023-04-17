@@ -37,19 +37,9 @@
   align-items: center !important;
 }
 
-.addBtn-section {
-  padding: 16px 35px;
-  color: #8355ad;
-  object-fit: cover;
-  font-size: 20px;
-  border: 1px solid #8355ad !important;
-  border-radius: 5px;
-}
+ 
 
-.addBtn-section:hover {
-  background: #8355ad;
-  color: #fff !important;
-}
+ 
 
 .mr-3 {
   margin-right: 1rem;

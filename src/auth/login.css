@@ -196,11 +196,10 @@
 
 .loginContent {
   width: 426px;
-  background: #dde1e7;
+  background: #fff;
   border-radius: 10px;
   padding: 40px 30px;
-  box-shadow: -3px -3px 7px #ffffff73,
-    2px 2px 5px rgba(94, 104, 121, 0.288);
+ 
 }
 
 .loginContent img {
@@ -241,15 +240,14 @@
   outline: none;
   border: none;
   color: #595959;
-  background: #dde1e7;
+  background: #fff;
   border-radius: 25px;
   width: 100% !important;
   height: 38px !important;
-  margin: 10px 0px 0px 0px;
-  border: none !important;
-  border-radius: 0.3rem !important;
-  box-shadow: inset 2px 2px 5px #babecc,
-    inset -5px -5px 10px #ffffff73;
+  /* margin: 10px 0px 0px 0px; */
+  border-bottom: 1px #ccc solid !important;
+  border-radius: 0rem !important;
+  
 }
 
 .field input:focus~label {
@@ -262,7 +260,7 @@
 }
 
 .field span {
-  margin-left: 10px !important;
+  /* margin-left: 10px !important; */
   margin-top: -5px !important;
   position: absolute;
   width: 25px;
@@ -297,7 +295,7 @@
   height: 42px;
   color: #fff;
   font-size: 16px !important;
-  font-weight: 600;
+ 
   background: #8355ad;
   border: none;
   outline: none;
@@ -379,3 +377,10 @@
               -2px -2px 4px rgba(255, 255, 255, 0.5);
   cursor: pointer;
 }
+
+.eye-button{ position: absolute;
+  border: 0px;
+  right: 20px;
+  top: 0;
+  background: none;}
+  .error-msg{ color: red;}

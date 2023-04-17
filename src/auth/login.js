@@ -135,7 +135,7 @@ export default function Login() {
                 <button className="loginButton" onClick={handleLogin}>
                   Log in
                   </button>
-                  <button onClick={handleForgotClick} className="btn text-primary pull-right">Forgot Password</button>
+                  <button onClick={handleForgotClick} className="btn text-primary mt-2 pull-right">Forgot Password</button>
                 </form>
                 
             </div>

@@ -76,7 +76,7 @@
 .user-profile-pics {
   display: flex;
 }
- 
+
 
 .dropdown-content a {
   float: left;
@@ -127,13 +127,16 @@ background: #fff;
   border: 1px solid #cacaca7d;
   border-radius: 10px;
   padding: 8px 12px;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   position: relative;
   min-height: 61px;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 5px 13px #dee2e6;
 }
+
+.assignPopup .user-pic{ margin-left: 10px !important; margin-right: 10px !important;}
+ 
 
 .modal-dialog .modal-content {
   border: 0;
@@ -217,8 +220,12 @@ background: #fff;
     cursor: pointer;
     font-size: 12px!important;
     height: 35px!important;
-    margin-right: -10px;
+    margin-right: 10px;
+    margin-left: 10px ;
     width: 35px!important;
 }
 
  .plus_icon{ font-size: 20px !important; width: 20px !important;}
+ .user-profile-pics .user_pic_card{     margin-left: 20px !important;
+  position: absolute;}
+ .user-profile-pics .user-pic{ margin-left: -13px !important;}
