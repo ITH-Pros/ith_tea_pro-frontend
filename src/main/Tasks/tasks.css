@@ -267,7 +267,7 @@ button.accordion-button {
 }
 
 .accordion-header {
-  padding: 0rem 1rem;
+  /* padding: 0rem 1rem; */
   background-color: #f7f7f700 !important;
 }
 
