@@ -45,7 +45,7 @@ export default function Navbar() {
               <MenuItem icon={<FaUsers />}> Team </MenuItem>
             </NavLink>
             <NavLink to="/team-report" style={navLinkStyles}>
-              <MenuItem icon={<FaUser />}>  Report Card </MenuItem>
+              <MenuItem icon={<FaUser />}>Team Report </MenuItem>
             </NavLink>
             <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
               <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>
