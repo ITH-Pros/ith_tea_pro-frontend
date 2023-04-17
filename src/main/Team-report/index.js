@@ -37,12 +37,13 @@ const customStyles = {
   option: (provided) => ({
     ...provided,
     padding: 5,
+    fontSize:'13px'
   }),
 
   control: (provided) => ({
     ...provided,
     boxShadow: "none",
-
+    fontSize:'13px',
     borderRadius: "5px",
     color: "#767474",
   }),
@@ -199,11 +200,12 @@ const [userDetails,setUserDetails]=useState([])
 
 
   return (
-    <div className="rightDashboard" style={{ marginTop: "7%" }}>
+    <div className="rightDashboard" style={{ marginTop: "6%" }}>
       <div>
-        <Card className="py-4 px-4">
+      <div className={member?'c_card':'v_card'}>
+        <Card className="py-2 px-2 " style={{width:'300px'}}>
           <Row>
-            <Col lg="6" className="m-auto">
+            <Col lg="12" className="m-auto">
               <Select
                 styles={customStyles}
                 onChange={(target) =>{getUserDetails(target.value); selectedMember(target?.value)}}
@@ -224,14 +226,16 @@ const [userDetails,setUserDetails]=useState([])
             </Col>
           </Row>
         </Card>
-     { member&&  <Card className="py-4 px-4">
+      </div>
+      <div style={{clear:'both'}}></div>
+     { member&&  <Card className="py-4 px-4" style={{ borderRadius:'10px', border:'0px'}}>
           <Row className="align-middle d-flex">
             <Col lg="1">
               <div className="profile-userpic">
                 <img src={userDetails?.profilePicture||avtar} />{" "}
               </div>
             </Col>
-            <Col lg="5" className="user_details px-5 py-2">
+            <Col lg="5" className="user_details  py-2">
               <h1>{userDetails?.name||'--'} ({ userDetails?.role||'--'})</h1>
               <h2>{userDetails?.department||'--'} - ({userDetails?.designation||'--'})</h2>
               <p>{userDetails?.email||'--'}</p>
@@ -296,7 +300,7 @@ const [userDetails,setUserDetails]=useState([])
                   }
                 >
                   <div>
-                    <Table responsive="md">
+                    <Table responsive="md" className="mb-0">
                       <tbody>
                         {teamWorkList?.map((team,index) => [
                           <tr>
@@ -333,7 +337,7 @@ const [userDetails,setUserDetails]=useState([])
                         
                         </tr>
                         ])}
-                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                      <div className="no_data_found">  {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
                         
                       
                       </tbody>
@@ -390,7 +394,7 @@ const [userDetails,setUserDetails]=useState([])
                         
                         </tr>
                         ])}
-                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                      <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
 
                         
                       
@@ -445,7 +449,7 @@ const [userDetails,setUserDetails]=useState([])
                         
                         </tr>
                         ])}
-                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                       <div className="no_data_found">{!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
 
                         
                       
@@ -500,7 +504,7 @@ const [userDetails,setUserDetails]=useState([])
                         
                         </tr>
                         ])}
-                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                       <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
                         
                       
                       </tbody>
@@ -555,7 +559,7 @@ const [userDetails,setUserDetails]=useState([])
                         
                         </tr>
                         ])}
-                        {!teamWorkList?.length && <p>No Tasks Found</p>}
+                       <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div> 
 
                         
                       
