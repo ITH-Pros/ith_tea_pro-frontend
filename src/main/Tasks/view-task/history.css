@@ -38,7 +38,7 @@
 }
 
 .event-icon {
-  width: 43px;
+  width: 40px;
   height: 40px;
   margin-right: 10px;
   background-color: #8355ad;
@@ -66,14 +66,15 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+
 }
 
 .event-title {
   margin: 0;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 15px;
+  /* font-weight: bold; */
   color: #333;
+  margin-bottom: 5px;
 }
 
 .event-date {

@@ -49,6 +49,7 @@ export default function History(props) {
             <div className="timeline"></div>
             <div className="events">
               <div className="event">
+                <div className="d-block">
                 <div className="event-icon">
                   {item.actionTaken === "TASK_ADDED" && (
                     <i className="fas fa-tasks"></i>
@@ -66,11 +67,11 @@ export default function History(props) {
                     <i className="far fa-edit"></i>
                   )}
                 </div>
-
+</div>
                 <div className="event-content">
                   <div className="event-header">
                     <h3 className="event-title">
-                      {item.actionTaken === "TASK_ADDED" && "Task Added"}
+                      {item.actionTaken === "TASK_ADDED" && "Task Added"} 
                       {item.actionTaken === "TASK_COMMENT" && "Task Commented"}
                       {item.actionTaken === "TASK_DUEDATE_UPDATED" &&
                         "Task Due Date Updated"}
@@ -78,7 +79,7 @@ export default function History(props) {
                         "Task Status Updated"}
                       {item.actionTaken === "TASK_UPDATED" && "Task Updated"}
                     </h3>
-                    <span className="event-date">
+                    <span className="event-date ms-2">
                       {formatDate(item.createdAt)}
                     </span>
                   </div>

@@ -103,7 +103,7 @@ export default function Dashboard(props) {
             <button
               className="addTaskBtn"
               onClick={() => setTeamView(!teamView)}
-              style={{ float: "right" }}
+              style={{ position:'absolute', right:'40px', zIndex:'9' }}
             >
               {teamView ? "Self view" : "Team View"}{" "}
             </button>
@@ -125,7 +125,7 @@ export default function Dashboard(props) {
       </div>
 
       {teamView ? (
-        <div className="dashboard_camp">
+        <div className="dashboard_camp" >
           <div className=" ">
             <div className="d-flex" style={{ marginTop: "10px" }}>
               <h5 className="text-center h5cls">

@@ -55,7 +55,7 @@
 
 .bg-box .bg2 {
   background-image: url("../../public/img/image_processing.gif");
-  background-color: #f1f1f1;
+  background-color: #ededee;
   background-position: center;
   animation: fadeinTop 1s 0.3s both;
   margin: 0 3rem 4rem 0;
