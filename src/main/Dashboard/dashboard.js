@@ -327,7 +327,7 @@ export default function Dashboard(props) {
 
     // Subtract one day from the provided date
     const dayBefore = new Date(date);
-    dayBefore.setDate(dayBefore.getDate() - 1);
+    dayBefore.setDate(dayBefore.getDate() );
 
     // Get the day of the week and day of the month for the updated date
     const dayOfWeek = days[dayBefore.getDay()];

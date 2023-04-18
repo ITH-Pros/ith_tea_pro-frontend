@@ -7,6 +7,7 @@ import { useAuth } from "../../auth/AuthProvider";
 const CustomCalendar = (props) => {
   const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentUTCDate, setCurrentDateUTC] = useState(new Date());
   const { userDetails } = useAuth();
   const { setTeamWorkList , isChange} = props;
 
@@ -33,6 +34,12 @@ const CustomCalendar = (props) => {
     console.log("==========", localTimeString)
     return localTimeString
   }
+  useEffect(() => {
+    const currentDateMinusOneDay = new Date(currentDate);
+    currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
+    setCurrentDateUTC( currentDateMinusOneDay.toLocaleDateString());
+    
+    }, [currentDate ]);
   
   useEffect(() => {
 
@@ -127,7 +134,7 @@ const CustomCalendar = (props) => {
         <h4>
           {currentView === "Week"
             ?<> <span> Week of </span> <br/>  {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}</>
-            : currentDate.toLocaleDateString()}
+            :currentUTCDate}
         </h4>
       </Col>
       <Col lg={4} className="text-end px-0">
