@@ -15,6 +15,7 @@ import {
   getLeadsUsingProjectId,
   getUserUsingProjectId,
   deleteTaskDetails,
+  updateTaskStatusById,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
 import { CONSTANTS } from "../../../constants";
@@ -514,6 +515,23 @@ export default function AddTaskModal(props) {
     }, 500);
   };
 
+  const updateTaskStatus = async (dataToSend) => {
+    try {
+      const res = await updateTaskStatusById(dataToSend);
+      if (res.error) {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        console.log(res)
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
+
+
   const updateTask = async () => {
     setValidated(true);
     if (
@@ -561,6 +579,8 @@ export default function AddTaskModal(props) {
         setShowToaster(true);
         return;
       } else {
+        updateTaskStatus({status:dataToSend?.status,
+          taskId: dataToSend?.taskId})
         setSelectedLeads("");
         setTaskFormValue({
           ...taskFormValue,
@@ -576,6 +596,7 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
+        
         localStorage.setItem('showTaskToaster','Task Updated Succesfully !!')
 
       }
