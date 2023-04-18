@@ -9,6 +9,7 @@ import "./navbar.css";
 
 export default function Navbar() {
   const { accessToken } = useAuth();
+  const { userDetails } = useAuth();
 
   const navLinkStyles = ({ isActive }) => {
     return {
@@ -44,9 +45,9 @@ export default function Navbar() {
             <NavLink to="/team" style={navLinkStyles}>
               <MenuItem icon={<FaUsers />}> Team </MenuItem>
             </NavLink>
-            <NavLink to="/team-report" style={navLinkStyles}>
+           { userDetails?.role!=='CONTRIBUTOR'&&<NavLink to="/team-report" style={navLinkStyles}>
               <MenuItem icon={<FaUser />}>Team Report </MenuItem>
-            </NavLink>
+            </NavLink>}
             <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
               <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>
             </NavLink>
