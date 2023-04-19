@@ -108,11 +108,30 @@ export default function Dashboard(props) {
   const handleShowAllProjects = () => {
     navigate("/project/all");
   };
+  function formDateNightTime(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return ""; 
+    }
+    console.log(dateString,'-----------------------------------------------')
+    let utcTime = new Date(dateString );
+    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    console.log(localTimeString)
+    return localTimeString
+  }
 
   const getMyWork = async function () {
+    let dataToSend={
+      currentDate:formDateNightTime(new Date())
+    }
     setLoading(true);
     try {
-      const tasks = await getAllMyWorks();
+      const tasks = await getAllMyWorks(dataToSend);
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(

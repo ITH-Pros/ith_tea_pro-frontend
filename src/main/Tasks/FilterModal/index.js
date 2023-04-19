@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {
   getAllCategories,
   getAllProjects,
+  getAllLeads,
   getAllUsersWithoutPagination,
 } from "../../../services/user/api";
 import Select from "react-select";
@@ -36,8 +37,11 @@ const FilterModal = (props) => {
     fromDate: "",
     toDate: "",
   };
+  const [selectedFilterLead, setselectedFilterLead] = useState("");
+
   const [clearFilter, setClearFilterBoolean] = useState(false);
   const [projectIds, setProjectIds] = useState([]);
+  const [leadsArray, setleadsArray] = useState([]);
   const [assignedTo, setAssignedTo] = useState([]);
   const [createdBy, setCreatedBy] = useState([]);
   const [statusData, setStatusData] = useState([]);
@@ -86,6 +90,15 @@ const FilterModal = (props) => {
   };
 
   useEffect(() => {
+    console.log(selectedFilterLead)
+    if(selectedFilterLead){
+      console.log(selectedFilterLead.map(obj => obj._id))
+
+      localStorage.setItem('selectedLead',JSON.stringify(selectedFilterLead.map(obj => obj._id)))
+    }
+  }, [selectedFilterLead]);
+  useEffect(() => {
+    getLeadsList()
     getAllProjectsData();
     getAllCategoriesData();
     getAllUsersData();
@@ -103,7 +116,8 @@ const FilterModal = (props) => {
   }, []);
 
   const handleFilterSelect = (fromDate, toDate) => {
-    console.log("fromDate", fromDate);
+  
+    console.log("fromDate----------------------------toDate", fromDate, toDate);
     localStorage.setItem(
       "dueDate",
       JSON.stringify({ fromDate: fromDate, toDate: toDate })
@@ -189,6 +203,10 @@ const FilterModal = (props) => {
     localStorage.removeItem("sortType");
     localStorage.removeItem("sortOrder");
     localStorage.removeItem("selectedFilter");
+    localStorage.removeItem('fromDate')
+    localStorage.removeItem('toDate')
+    localStorage.removeItem("selectedLead")
+    setselectedFilterLead([])
     setClearFilterBoolean(false);
     getTaskFilters();
   };
@@ -203,6 +221,22 @@ const FilterModal = (props) => {
       if (projects.error) {
       } else {
         setProjects(projects.data);
+      }
+    } catch (error) {
+      setLoading(false);
+      return error.message;
+    }
+  };
+  const getLeadsList = async () => {
+    setLoading(true);
+
+    try {
+      const leads = await getAllLeads();
+      setLoading(false);
+
+      if (leads.error) {
+      } else {
+        setleadsArray(leads?.data?.users||[]);
       }
     } catch (error) {
       setLoading(false);
@@ -301,6 +335,7 @@ const FilterModal = (props) => {
                 onClick={() => {
                   clearFilterFormValue();
                   setClearFilterBoolean(false);
+
                   localStorage.removeItem("selectedFilterTypes");
                 }}
               >
@@ -315,7 +350,8 @@ const FilterModal = (props) => {
           className="Offcanvas-modal"
           style={{ width: "600px" }}
           show={filterModalShow}
-          onHide={() => setFilterModalShow(false)}
+          onHide={() => {localStorage.removeItem('fromDate');localStorage.removeItem('toDate');
+          setFilterModalShow(false);}}
           placement="end"
         >
           <Offcanvas.Header closeButton>
@@ -341,6 +377,23 @@ const FilterModal = (props) => {
                       getOptionValue={(options) => options["_id"]}
                       options={projects}
                       isDisabled={handleProjectId}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="3">
+                    <Form.Label>Lead</Form.Label>
+                  </Col>
+                  <Col sm="9" className="filterFields">
+                    <Select
+                    isMulti
+                      styles={customStyles}
+                      onChange={(e) => setselectedFilterLead(e)}
+                      value={selectedFilterLead}
+                      
+                      getOptionLabel={(options) => options["name"]}
+                      getOptionValue={(options) => options["_id"]}
+                      options={leadsArray}
                     />
                   </Col>
                 </Row>

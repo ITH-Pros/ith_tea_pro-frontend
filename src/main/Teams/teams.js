@@ -401,6 +401,9 @@ export default function Teams(props) {
     }
   };
   const redirectToTeamReport = (user) => {
+    if(userDetails.role === "CONTRIBUTOR" ){
+      return;
+    }
     let data = {
       label: user?.name,
       value:user?._id
@@ -446,7 +449,7 @@ export default function Teams(props) {
           {usersList &&
             usersList.map((user, index) => {
               return (
-                <div onClick={()=>redirectToTeamReport(user)} key={user._id} className="box">
+                <div  key={user._id} className="box">
                   <div className="top-bar"></div>
                   <div className="top">
                     <Link
@@ -535,11 +538,14 @@ export default function Teams(props) {
                       )}
                     </>
                     <div className="content-height">
+                    <span onClick={()=>redirectToTeamReport(user)} style={{cursor:'pointer'}}>
+
                       <strong style={{ FontSize: "14px", color: "#673AB7" }}>
                         {user.name} ({user.role})
                       </strong>
                       {user.designation && <p>{user?.designation}</p>}
                       <p>{user.email}</p>
+                      </span>
                       {user.employeeId && <p>{user?.employeeId} </p>}
                       {userDetails?.role !== "CONTRIBUTOR" &&
                         userAnalytics &&

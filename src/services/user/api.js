@@ -61,6 +61,11 @@ export async function getAllMyWorks(data) {
     .then((res) => res.data);
 }
 
+export async function getAllLeads(data) {
+  return axiosInstance
+    .get("/user/v1/all/leads")
+    .then((res) => res.data);
+}
 export async function getOverDueTaskListData(data) {
   return axiosInstance
     .get("/task/v1/overdue/tasks", { params: data })

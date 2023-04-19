@@ -327,6 +327,15 @@ const Tasks = () => {
       if (params?.projectId) {
         data.projectId = paramsData?.projectId;
       }
+      if(localStorage.getItem("selectedLead")){
+        console.log(JSON.parse(localStorage.getItem("selectedLead")))
+        let leadsToSend=(localStorage.getItem("selectedLead"))
+        let leads=JSON.parse(localStorage.getItem("selectedLead"))
+        if(leads?.length){
+
+          data.leads=(leadsToSend)
+        }
+      }
 
       if (localStorage.getItem("taskFilters")) {
         let filterData = JSON.parse(localStorage.getItem("taskFilters"));
@@ -358,22 +367,26 @@ const Tasks = () => {
           data.sortOrder = filterData?.sortOrder;
         }
         if (
-          filterData?.fromDate &&
-          filterData?.fromDate !== filterData?.toDate &&
+          filterData?.fromDate  &&(selectedFilter &&selectedFilter!=='null')&&
           selectedFilter !== "Today" &&
           selectedFilter !== "Tomorrow"
         ) {
+        console.log(selectedFilter,'----------------')
+
           data.fromDate = convertToUTCDay(filterData?.fromDate);
         }
         if (
-          filterData?.toDate &&
-          filterData?.fromDate !== filterData?.toDate &&
+          filterData?.toDate  &&(selectedFilter &&selectedFilter!=='null')&&
           selectedFilter !== "Today" &&
           selectedFilter !== "Tomorrow"
         ) {
+        console.log(selectedFilter,'----------------')
+
           data.toDate = convertToUTCNight(filterData?.toDate);
         }
         if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
+        console.log(selectedFilter,'----------------')
+
           data.fromDate = convertToUTCDay(filterData?.fromDate);
           data.toDate = convertToUTCNight(filterData?.toDate);
         }

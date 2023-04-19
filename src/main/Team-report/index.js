@@ -75,6 +75,7 @@ const [userDetails,setUserDetails]=useState([])
   const [toaster, showToaster] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState('task');
   const [loading, setLoading] = useState(false);
+  const [showTags, setShowTags] = useState(false);
 
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
@@ -83,6 +84,17 @@ const [userDetails,setUserDetails]=useState([])
     getUserReport();
     getAllMembers();
   }, []);
+
+
+
+  useEffect(() => {
+    if(userDetails?.role==='CONTRIBUTOR'){
+      setShowTags(false)
+    }else{
+      setShowTags(true)
+
+    }
+  }, [userDetails]);
 
   useEffect(() => {
    
@@ -107,6 +119,7 @@ const [userDetails,setUserDetails]=useState([])
         return;
       } else {
         setUserDetails(userDetails.data);
+     
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -342,7 +355,7 @@ const [userDetails,setUserDetails]=useState([])
                           </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Lead :</b>{team?.rating||'--'}
+                              <b>Rating :</b>{team?.rating||'--'}
                             </small>
                           </td>}
                         </tr>
@@ -396,7 +409,7 @@ const [userDetails,setUserDetails]=useState([])
                           </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Lead :</b>{team?.rating||'--'}
+                              <b>Rating :</b>{team?.rating||'--'}
                             </small>
                           </td>}
                         </tr>
@@ -408,12 +421,12 @@ const [userDetails,setUserDetails]=useState([])
                     </Table>
                   </div>
                 </Tab>
-                <Tab
+              { showTags&& <Tab
                   eventKey="pendingtask"
                   disabled={selectedEvent==="pendingtask"}
                   title={
                     <span>
-                      Pending Task  {selectedEvent==='pendingtask'&&<span className="text-muted">({teamWorkList?.length})</span>}
+                      Pending Rating Tasks  {selectedEvent==='pendingtask'&&<span className="text-muted">({teamWorkList?.length})</span>}
                     </span>
                   }
                 >
@@ -447,7 +460,7 @@ const [userDetails,setUserDetails]=useState([])
                           </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Lead :</b>{team?.rating||'--'}
+                              <b>Rating :</b>{team?.rating||'--'}
                             </small>
                           </td>}
                         </tr>
@@ -458,8 +471,8 @@ const [userDetails,setUserDetails]=useState([])
                       </tbody>
                     </Table>
                   </div>
-                </Tab>
-                <Tab
+                </Tab>}
+                 { showTags&& <Tab
                   eventKey="delaytask"
                   disabled={selectedEvent==="delaytask"}
                   title={
@@ -498,7 +511,7 @@ const [userDetails,setUserDetails]=useState([])
                           </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Lead :</b>{team?.rating||'--'}
+                              <b>Rating :</b>{team?.rating||'--'}
                             </small>
                           </td>}
                         </tr>
@@ -509,7 +522,7 @@ const [userDetails,setUserDetails]=useState([])
                       </tbody>
                     </Table>
                   </div>
-                </Tab>
+                </Tab>}
                 <Tab
                   eventKey="extracontribution"
                   disabled={selectedEvent==="extracontribution"}
@@ -550,7 +563,7 @@ const [userDetails,setUserDetails]=useState([])
                           </td>}
                             { team?.isRated&& <td style={{ width: "150px" }}>
                             <small className="text-muted">
-                              <b>Lead :</b>{team?.rating||'--'}
+                              <b>Rating :</b>{team?.rating||'--'}
                             </small>
                           </td>}
                         </tr>
