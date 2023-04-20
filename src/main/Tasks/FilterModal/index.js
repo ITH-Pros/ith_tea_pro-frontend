@@ -204,6 +204,7 @@ const FilterModal = (props) => {
     localStorage.removeItem("sortOrder");
     localStorage.removeItem("selectedFilter");
     localStorage.removeItem('fromDate')
+    localStorage.removeItem('filterClicked')
     localStorage.removeItem('toDate')
     localStorage.removeItem("selectedLead")
     setselectedFilterLead([])
@@ -255,7 +256,7 @@ const FilterModal = (props) => {
       if (categories.error) {
       } else {
         categories.data = categories?.data?.map((item, i) => ({
-          name: item?.name,
+          name: item?.projectId?.name + '  (' +item?.name +')' ,
           _id: item?._id,
         }));
         setCategories(categories?.data);
@@ -325,7 +326,12 @@ const FilterModal = (props) => {
           )}
         </Button>
         {clearFilter && (
-          <Button variant="light" style={{ marginRight: "10px" }}>
+          <Button onClick={() => {
+                  clearFilterFormValue();
+                  setClearFilterBoolean(false);
+
+                  localStorage.removeItem("selectedFilterTypes");
+                }} variant="light" style={{ marginRight: "10px" }}>
             {clearFilter && (
               <i className="fa fa-times-circle" aria-hidden="true"></i>
             )}
@@ -493,7 +499,7 @@ const FilterModal = (props) => {
               </Form.Group>
               <Form.Group controlId="formDueDate">
                 <Row className="filterFields due-date">
-                  <FilterDropdown onFilterSelect={handleFilterSelect} />
+                  <FilterDropdown onFilterSelect={handleFilterSelect} clearFilterProp={clearFilter} />
                 </Row>
               </Form.Group>
               <Form.Group controlId="formDueDate">
@@ -508,7 +514,7 @@ const FilterModal = (props) => {
                 </Row>
               </Form.Group>
 
-              <Form.Group controlId="formDateCreated">
+              {/* <Form.Group controlId="formDateCreated">
                 <Row className="filterFields">
                   <Col sm="3">
                     <Form.Label>Date Created</Form.Label>
@@ -522,9 +528,9 @@ const FilterModal = (props) => {
                     />
                   </Col>
                 </Row>
-              </Form.Group>
+              </Form.Group> */}
 
-              <Form.Group controlId="formDateUpdated">
+              {/* <Form.Group controlId="formDateUpdated">
                 <Row className="filterFields">
                   <Col sm="3">
                     <Form.Label>Date Updated</Form.Label>
@@ -554,7 +560,7 @@ const FilterModal = (props) => {
                     />
                   </Col>
                 </Row>
-              </Form.Group>
+              </Form.Group> */}
             </Form>
 
             <Button className="pull-right"

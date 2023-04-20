@@ -59,6 +59,7 @@ function FilterDropdown(props) {
     const selectedValue = event.target.value;
     setSelectedFilter(selectedValue);
     localStorage.setItem("selectedFilter", selectedValue);
+    localStorage.setItem("filterClicked", true);
     localStorage.setItem("selectedFilterTypes", selectedValue);
 
   };
@@ -73,12 +74,14 @@ function FilterDropdown(props) {
                     <Form.Label>From</Form.Label>
                   </Col>
                   <Col sm="9">
-                    <DatePicker
+                    <DatePicker 
+                    
                       selected={fromDate||new Date()}
                       onChange={(date) =>{ setFromDate(new Date(date))}}
                       className="form-control"
                       placeholderText="From Date"
-                      maxDate={toDate||new Date()}
+                maxDate={toDate || new Date()}
+                disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
                     />
                   </Col>
                 </Row>
@@ -95,7 +98,10 @@ function FilterDropdown(props) {
                       onChange={(date) =>{ localStorage.setItem('toDate',date); setToDate(new Date(date));}}
                       className="form-control"
                       minDate={fromDate}
-                      placeholderText="To Date"
+                placeholderText="To Date"
+                disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
+
+                
                     />
                   </Col>
                 </Row>

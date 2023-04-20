@@ -404,7 +404,7 @@ export default function AddTaskModal(props) {
         setTimeout(() => {
           setShowAddTaskModal(false);
 
-        }, 1000);
+        }, 500);
         getNewTasks(projectId);
       
         // onInit();

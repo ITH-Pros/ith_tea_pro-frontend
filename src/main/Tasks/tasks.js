@@ -351,7 +351,7 @@ const Tasks = () => {
         if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
           data.assignedTo = JSON.stringify(filterData?.assignedTo);
         }
-        if (filterData?.category) {
+        if (filterData?.category?.length) {
           data.sections = JSON.stringify(filterData?.category);
         }
         if (filterData?.priority) {
@@ -906,7 +906,7 @@ const Tasks = () => {
                               <Col lg={1}>
                                 {task?.dueDate && (
                                   <Badge
-                                    bg={(new Date(task?.dueDate ) < new Date())? "danger" : "primary"}
+                                    bg={((new Date(task?.dueDate ) < new Date()) && !(task?.status === "COMPLETED"))? "danger" : "primary"}
                                   >
                                     Due{" "}
                                     {moment(
