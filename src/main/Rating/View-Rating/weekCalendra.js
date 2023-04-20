@@ -45,11 +45,12 @@ export default function MyCalendar() {
         let dataToSet = rating.data?.[0]?.ratings?.map((item, index) => {
           return {
             id: index,
-            title: item.rating,
+            title: `${item.rating?.toFixed(2)}`,
             start: new Date(item.year, item.month - 1, item.date),
             end: new Date(item.year, item.month - 1, item.date),
           };
         });
+        console.log(dataToSet,'---------------------------------data to set')
         setMyRatings(dataToSet);
         setLoading(false);
       }

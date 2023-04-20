@@ -320,14 +320,14 @@ const FilterModal = (props) => {
         <Button variant="light" style={{ margin: "0px 5px" }}>
           {!isArchive && (
             <span onClick={setProjectAndOpenModal}>
-              <i class="fa fa-filter" aria-hidden="true"></i> Filter
+              <i className="fa fa-filter" aria-hidden="true"></i> Filter
             </span>
           )}
         </Button>
         {clearFilter && (
           <Button variant="light" style={{ marginRight: "10px" }}>
             {clearFilter && (
-              <i class="fa fa-times-circle" aria-hidden="true"></i>
+              <i className="fa fa-times-circle" aria-hidden="true"></i>
             )}
             {clearFilter && (
               <span

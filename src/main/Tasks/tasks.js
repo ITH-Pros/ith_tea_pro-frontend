@@ -497,7 +497,7 @@ const Tasks = () => {
                     setShowAddTask(true);
                   }}
                 >
-                  <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Task
+                  <i className="fa fa-plus-circle" aria-hidden="true"></i> Add Task
                 </button>
               )}
 
@@ -511,7 +511,7 @@ const Tasks = () => {
                       showAddSectionModal(true);
                     }}
                   >
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+                    <i className="fa fa-plus-circle" aria-hidden="true"></i> Add
                     Section
                   </button>
                 )}

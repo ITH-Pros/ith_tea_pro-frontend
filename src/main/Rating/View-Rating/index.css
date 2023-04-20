@@ -670,7 +670,8 @@ ul.weekdays {
 
 .rating_btn .btn {
   font-size: 15px !important;
-  margin-right: 10px;
+  margin-right: 112px !important;
+
 }
 
 .rbc-header {
@@ -687,4 +688,3 @@ ul.weekdays {
   line-height: 50px;
   text-align: center !important;
 }
-.rbc-current{ background: #8355ad  !important; color: #fff;}
