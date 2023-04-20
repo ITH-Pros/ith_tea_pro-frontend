@@ -906,7 +906,7 @@ const Tasks = () => {
                               <Col lg={1}>
                                 {task?.dueDate && (
                                   <Badge
-                                    bg={task?.dueToday ? "danger" : "primary"}
+                                    bg={(new Date(task?.dueDate ) < new Date())? "danger" : "primary"}
                                   >
                                     Due{" "}
                                     {moment(
