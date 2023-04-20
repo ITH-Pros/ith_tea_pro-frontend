@@ -357,7 +357,7 @@ export default function AddRatingModal(props) {
         </Row>
         <Row className="mb-3 desc">
           <Form.Label>Comment</Form.Label>
-          <FroalaEditorComponent
+          <FroalaEditorComponent className='text-Editor'
             tag="textarea"
             onModelChange={onChangeOfComments}
           />
