@@ -353,7 +353,7 @@ export default function AddRating(props) {
                 name="rating"
                 onChange={handleRatingFormChange}
                 value={ratingForm.rating}
-                disabled={taskFromDashBoard ? true : false}
+                // disabled={taskFromDashBoard ? true : false}
               >
                 <option value="" disabled>Select Rating</option>
                 <option value="0">0</option>

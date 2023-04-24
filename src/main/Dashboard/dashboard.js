@@ -47,6 +47,7 @@ import {
   Badge,
   Modal,
   Popover,
+  Form,
 } from "react-bootstrap";
 import CustomCalendar from "./custom-calender";
 
@@ -61,6 +62,7 @@ export default function Dashboard(props) {
   const [overdueWorkList, setOverdueWorkList] = useState();
   const [selectedTask, setSelectedTask] = useState({});
   const [pendingRatingList, setPendingRatingList] = useState();
+  const [teamMembers, setTeamMembers] = useState([]);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [showModalOnLogin, setShowModalOnLogin] = useState(true);
@@ -207,10 +209,16 @@ export default function Dashboard(props) {
     }
   };
 
-  const getPendingRating = async function () {
+  const getPendingRating = async function (e) {
     setLoading(true);
+    let dataToSend={
+      filterByTeamMember : e
+    }
+
+   
+
     try {
-      const tasks = await getAllPendingRating();
+      const tasks = await getAllPendingRating(dataToSend);
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(
@@ -403,6 +411,11 @@ export default function Dashboard(props) {
     setSelectedTaskId(taskId);
     setShowViewTask(true);
   };
+
+
+
+
+
 
   return (
     <div className="dashboard_camp  rightDashboard">
@@ -1022,7 +1035,26 @@ export default function Dashboard(props) {
               <Col lg={6} className="left-add">
                 <span>PENDING RATINGS</span>
               </Col>
-              <Col lg={6} className="right-filter"></Col>
+              <Col lg={6} className="right-filter">
+              {/* select box and lable name team member  */}
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Team Member</Form.Label>
+                  <Form.Control
+                    as="select"
+                    onChange={(event) => {
+                      getPendingRating(event.target.value);
+                    }}
+                  >
+                    <option value="">All</option>
+                    {teamMembers &&
+                      teamMembers.map((member) => (
+                        <option value={member?._id}>{member?.name}</option>
+                      ))}
+                  </Form.Control>
+                </Form.Group>
+
+
+              </Col>
             </Row>
             <Row>
               <Col lg={12} className="mt-3">

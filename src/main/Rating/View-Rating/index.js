@@ -192,24 +192,34 @@ export default function Dashboard(props) {
           
             </div>
             <Table responsive >
-              <thead>
-                <tr>
-                  <th style={{ width: "140" }}>Name</th>
-                  {Array(days)
-                    .fill(0)
-                    .map((rating, index) => {
-                      return (
-                        <th
-                           
-                          key={`${index}_${index}`}
-                        >
-                          {index + 1 < 10 ? "0" + (index + 1) : index + 1}
-                        </th>
-                      );
-                    })}
-                  <th style={{ color: "green" }}>Average</th>
-                </tr>
-              </thead>
+            <thead>
+  <tr>
+    <th style={{ width: "140" }}>Name</th>
+    <th>Day</th>
+    {Array(days)
+      .fill(0)
+      .map((rating, index) => {
+        const date = new Date(yearUse, months.indexOf(monthUse), index + 1);
+        const dayOfWeek = (date.getDay() + 1) % 7;
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const className = isWeekend ? "weekend" : "";
+
+        return (
+          <th key={index} className={className}>
+            <span>{index + 1 < 10 ? "0" : ""}{index + 1}</span><br></br>
+            <span>{dayNames[dayOfWeek]}</span>
+          </th>
+        );
+      })}
+    <th style={{ color: "green" }}>Average</th>
+  </tr>
+</thead>
+
+
+
+
+
               <tbody>
                 {ratingsArray.map((user, index) => {
                   return (
