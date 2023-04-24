@@ -334,7 +334,7 @@ export default function AddRating(props) {
               className="ps-0"
             >
               <Form.Label>Rating</Form.Label>
-              <Form.Control
+              {/* <Form.Control
                 required
                 type="number"
                 name="rating"
@@ -344,7 +344,34 @@ export default function AddRating(props) {
                 inputMode="numeric"
                 min="0"
                 max="6"
-              />
+              /> */}
+              {/* this would be a select box */}
+              <Form.Control
+                required
+                as="select"
+                type="select"
+                name="rating"
+                onChange={handleRatingFormChange}
+                value={ratingForm.rating}
+                disabled={taskFromDashBoard ? true : false}
+              >
+                <option value="" disabled>Select Rating</option>
+                <option value="0">0</option>
+                <option value="0.5">0.5</option>
+                <option value="1">1</option>
+                <option value="1.5">1.5</option>
+                <option value="2">2</option>
+                <option value="2.5">2.5</option>
+                <option value="3">3</option>
+                <option value="3.5">3.5</option>
+                <option value="4">4</option>
+                <option value="4.5">4.5</option>
+                <option value="5">5</option>
+                <option value="5.5">5.5</option>
+                <option value="6">6</option>
+              </Form.Control>
+
+
               <Form.Control.Feedback type="invalid">
                 Rating is required, value must be in range [0,6] !!
               </Form.Control.Feedback>
