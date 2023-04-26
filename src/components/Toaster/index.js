@@ -29,7 +29,7 @@ const Toaster = ({ message, show, close }) => {
   useEffect(() => {
     if (show) {
       toast.info(<div>{message}</div>, {
-        autoClose: 4000,
+        autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: false,
         pauseOnHover: false,

@@ -35,7 +35,7 @@ const RatingBox = (props) => {
           const rating = await updateUserRating(dataToSend);
           setLoading(false);
           if (rating.error) {
-            setToasterMessage(rating?.error?.message || "Something Went Wrong");
+            setToasterMessage(rating?.message || "Something Went Wrong");
             setShowToaster(true);
           } else {
             setToasterMessage("Rating Updated Succesfully");
@@ -68,7 +68,7 @@ const RatingBox = (props) => {
             Submit
           </button>
           <button
-            className="modal-close-btn"
+            className="btn btn-primary"
             onClick={() => setEditRatingEnabled(false)}
           >
             <i className="fa fa-times"></i>

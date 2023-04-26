@@ -7,6 +7,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@ionic/react": "^7.0.1",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "@nextui-org/react": "^1.0.0-beta.10",
@@ -16,12 +17,15 @@
     "@types/react-datepicker": "^4.8.0",
     "@types/react-select": "^5.0.1",
     "animate.css": "^4.1.1",
+    "antd": "^5.4.3",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
     "bootstrap-daterangepicker": "^3.1.0",
     "draft-js": "^0.11.7",
     "font-awesome": "^4.7.0",
+    "ionic5-calendar": "^0.5.9",
     "mdb-react-ui-kit": "^5.0.0",
+    "primereact": "^9.2.2",
     "react": "^18.2.0",
     "react-avatar": "^5.0.3",
     "react-big-calendar": "^1.6.8",
@@ -29,6 +33,7 @@
     "react-bootstrap-daterangepicker": "^8.0.0",
     "react-bootstrap-icons": "^1.10.2",
     "react-bootstrap-multiselect": "^2.4.1",
+    "react-calendar": "^4.2.1",
     "react-color-palette": "^6.2.0",
     "react-date-picker": "^9.1.0",
     "react-datepicker": "^4.10.0",
@@ -51,7 +56,9 @@
     "react-toastify": "^9.1.1",
     "react-tooltip": "^5.1.3",
     "react-tsparticles": "^2.6.0",
+    "reactstrap": "^9.1.9",
     "save": "^2.9.0",
+    "styled-components": "^5.3.9",
     "tsparticles-slim": "^2.6.0",
     "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4"
@@ -81,6 +88,6 @@
     ]
   },
   "devDependencies": {
-    "react-router-dom": "^6.5.0"
+    "react-router-dom": "^6.10.0"
   }
 }

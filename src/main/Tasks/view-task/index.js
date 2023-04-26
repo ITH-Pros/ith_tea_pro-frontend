@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-concat */
 /* eslint-disable react/jsx-no-target-blank */
 import React, {useState, useEffect } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Col from "react-bootstrap/Col";
@@ -9,8 +9,10 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
-
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import Modal from "react-bootstrap/Modal";
+
 import {
   addCommentOnTask,
   addRatingOnTask,
@@ -19,9 +21,10 @@ import {
 } from "../../../services/user/api";
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
+import History from "./history";
 export default function ViewTaskModal(props) {
 
-  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId } = props;
+  const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId , onInit  , isChange , setIsChange } = props;
   const [loading, setLoading] = useState(false);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
@@ -35,6 +38,7 @@ export default function ViewTaskModal(props) {
   const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
   const [errorRating, setErrorRating] = useState(false);
 
+ 
   useEffect(() => {
     if (selectedTaskId) {
       getTaskDetailsById(selectedTaskId);
@@ -50,26 +54,35 @@ export default function ViewTaskModal(props) {
     const day = date.getUTCDate().toString().padStart(2, "0");
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
     const year = date.getUTCFullYear();
-    return `${day}/${month}/${year}`;
+    if (day && month && year) {
+      
+      return `${day}/${month}/${year}`;
+    } else {
+      return '--';
+    }
   }
+
+  
 
   const updateTaskStatus = async (dataToSend) => {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
+        setToasterMessage(res?.message );
         showToaster(true);
       } else {
-        setToasterMessage(res?.message || "Something Went Wrong");
+        setToasterMessage(res?.message );
         showToaster(true);
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
         getTasksDataUsingProjectId();
+        setShowConfirmation(false)
+        console.log('isChange', isChange)
+        // setIsChange(!isChange)
+        
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      showToaster(true);
       return error.message;
     }
   };
@@ -80,8 +93,46 @@ export default function ViewTaskModal(props) {
       taskId: taskId,
       status: newStatus,
     };
+    // if (newStatus === 'COMPLETED') {
+    //   // confirm('Are you sure you want to complete the task.')
+
+    //   handleConfirmation(dataToSend)
+      
+      
+    // } else {
     updateTaskStatus(dataToSend);
+    // }  
   };
+
+  const handleConfirmation = (dataToSend) => {
+    setDataToSendForTaskStatus(dataToSend)
+    setShowConfirmation(true);
+ 
+  };
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [dataToSendForTaskStatus , setDataToSendForTaskStatus] = useState(null)
+
+
+
+
+  function ConfirmationPopup({ show, onCancel, onConfirm  }) {
+    return (
+      <Modal show={show} onHide={onCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to complete this task ?
+
+      <div>
+      <Button variant="secondary ml-2" onClick={onCancel}>Cancel</Button>
+          <Button variant="danger ml-2" onClick={onConfirm}>Complete</Button>
+
+      </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -121,10 +172,15 @@ export default function ViewTaskModal(props) {
       let response = await taskById(dataToSend);
       if (response.status === 200) {
         setTaskData(response?.data);
+        console.log(response?.data , "response?.data");
+        // console.log(response?.data);
         setShowViewTaskModal(true);
+        setActiveTab("comments")
         setIsRatingFormVisible(false);
         setErrorRating(false);
         setRating(0);
+        setIsChange(!isChange)
+        onInit()
       }
     } catch (error) {
       console.log(error);
@@ -136,6 +192,11 @@ export default function ViewTaskModal(props) {
   };
 
   const handleAddRating = (task) => {
+    // Reset Rating
+    // setRating('');
+
+    setErrorRating(false);
+
     setSelectedTaskIdForRating(task._id);
     setIsRatingFormVisible(true);
   }
@@ -150,13 +211,18 @@ export default function ViewTaskModal(props) {
         const rating = await addRatingOnTask(dataToSend);
         setLoading(false);
         if (rating.error) {
-          setToasterMessage(rating?.message || "Something Went Wrong");
+          setToasterMessage(rating?.message );
           showToaster(true);
         } else {
           setToasterMessage("Rating Added Succesfully");
           showToaster(true);
           setIsRatingFormVisible(false);
           getTaskDetailsById(selectedTaskIdForRating);
+          onInit()
+          if (userDetails?.role !== "CONTRIBUTOR") {
+            // getTeamWorkList();
+            setIsChange(!isChange);
+          }
         }
       } catch (error) {
         setLoading(false);
@@ -174,30 +240,25 @@ export default function ViewTaskModal(props) {
     }
   };
 
+
   return (
     <>
-      <Modal
-        show={showViewTaskModal}
-        size="xl"
-        className="taskModalForm"
-        aria-labelledby="contained-modal-title-vcenter"
-        onHide={() => {
+     
+      <Offcanvas className="Offcanvas-modal" style={{width:'800px'}} show={showViewTaskModal} placement='end'  onHide={() => {
           closeViewTaskModal();
           setShowViewTaskModal(false);
-        }}
-        backdrop="static"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Task Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="dv-50">
+        }} >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Task Details</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <div className="dv-50">
             <Form>
               {
                 task?.status === "COMPLETED" && (
                   <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
-                    <div className="col-sm-2 text-right">
-                      {task?.isRated && <span>Rating : {task?.rating}</span>}
+                    <div className="col-sm-12 text-start">
+                      {task?.isRated && <span>Rating : <span className="text-success">{task?.rating}</span></span>}
                       {!task?.isRated && !isRatingFormVisible && userDetails?.role !== "CONTRIBUTOR" && userDetails.id !== task?.assignedTo?._id  && (
                         <Button onClick={() => {handleAddRating(task)}}
                           variant="light"
@@ -211,16 +272,15 @@ export default function ViewTaskModal(props) {
                           <input 
                           required
                             type="number"
+                            style={{display:'block'}}
                             min="0"
                             max="6"
                             placeholder="0 - 6"
                             onChange={(e) => handleRating(e.target.value)}
   
                           />
-                          {errorRating && (
-                            <span className="error">Rating should be between 0 to 6</span>
-                          )}
-                        
+                      
+                        <div style={{  justifyContent:'end',}}>
                           <Button
                             variant="light"
                             size="sm"
@@ -243,7 +303,12 @@ export default function ViewTaskModal(props) {
                           >
                             Cancel
                           </Button>
+                         
                       }
+                       </div>
+                       {errorRating && (
+                            <p className="error text-end" style={{clear:'both'}}>Rating should be between 0 to 6</p>
+                          )}
                           </div>
                       )}
                     </div>
@@ -259,7 +324,7 @@ export default function ViewTaskModal(props) {
                   <p>{task?.section?.name} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
-                  <Form.Label>Lead Type</Form.Label>
+                  <Form.Label>Lead</Form.Label>
                   {task?.lead?.map((item, index) => {
                     return <p key={index}>{item?.name} </p>;
                   })}
@@ -276,7 +341,7 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group className="desc" as={Col} md="12">
                   <Form.Label>Task Description</Form.Label>
-                  <p
+                  <p className="text-muted"
                     dangerouslySetInnerHTML={{ __html: task?.description }}
                   ></p>
                 </Form.Group>
@@ -290,7 +355,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {formatDate(task?.dueDate)}{" "}
+                    {task?.dueDate?formatDate(task?.dueDate):'--'}{" "}
                   </p>
                 </Form.Group>
 
@@ -304,9 +369,14 @@ export default function ViewTaskModal(props) {
                     className="form-control form-control-lg"
                     defaultValue={task.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
-                    disabled={task.status === "COMPLETED"}
+                    disabled={task.status === "COMPLETED"||!(userDetails.id === task?.assignedTo?._id ||
+                      (userDetails.role === "LEAD" &&
+                        (userDetails.id === task?.assignedTo?._id ||
+                          task?.lead?.includes(userDetails.id) ||
+                          userDetails.id === task?.createdBy?._id)) ||
+                      userDetails.role === "SUPER_ADMIN" ||
+                      userDetails.role === "ADMIN") }
                   >
-                    <option value="ONGOING">Ongoing</option>
                     <option value="NOT_STARTED">NOT STARTED</option>
                     <option value="ONHOLD">On Hold</option>
                     <option value="ONGOING">On Going</option>
@@ -316,7 +386,7 @@ export default function ViewTaskModal(props) {
                 {task?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
-                    <p>{task?.completedDate} </p>
+                    <p>{formatDate(task?.completedDate)||'--'} </p>
                   </Form.Group>
                 )}
               </Row>
@@ -358,12 +428,22 @@ export default function ViewTaskModal(props) {
                 >
                   Ratings
                 </button>
+                {/* history */}
+                <button 
+                onClick={() => handleTabChange("history")}
+                className={`toggle-button ${
+                  activeTab === "history" ? "active" : ""
+                }`}
+                >
+                  History
+                </button>
+
               </div>
               <div
-                className="container"
-                style={{ width: "100%", padding: "0px" }}
+                className="container no_comment"
+                 
               >
-                {activeTab === "comments" ? (
+                {activeTab === "comments" && (
                   <>
                     {task?.comments?.map((item, index) => {
                       const options = {
@@ -376,8 +456,8 @@ export default function ViewTaskModal(props) {
                       ).toLocaleString("en-US", options);
 
                       return (
-                        <div className="comment" key={index}>
-                          <div className="commentedBy">
+                        <div className="comment mb-0 mt-0 pt-0" key={index}>
+                          <div className="commentedBy pb-2">
                             <UserIcon
                               style={{ float: "left" }}
                               key={index}
@@ -394,9 +474,12 @@ export default function ViewTaskModal(props) {
                         </div>
                       );
                     })}
-                    {!task?.comments?.length && <h6>No Comments</h6>}
+                    {!task?.comments?.length && <p className="text-muted">No Comments</p>}
                   </>
-                ) : (
+                ) }
+
+                {activeTab === "ratings" &&
+                (
                   <>
                     {task?.ratingComments?.map((item, index) => {
                       
@@ -411,8 +494,8 @@ export default function ViewTaskModal(props) {
                       ).toLocaleString("en-US", options);
 
                       return (
-                        <div className="comment" key={index}>
-                          <div className="commentedBy">
+                        <div className="comment comment mb-0 mt-0 pt-0" key={index}>
+                          <div className="commentedBy pb-2">
                             <UserIcon
                               style={{ float: "left" }}
                               key={index}
@@ -428,7 +511,17 @@ export default function ViewTaskModal(props) {
                         </div>
                       );
                     })}
-                    {!task?.ratingComments?.length && <h6>No Rating Comments</h6>}
+                    {!task?.ratingComments?.length && <p className="text-muted">No Rating Comments</p>}
+                  </>
+                )}
+
+                {activeTab === "history" &&
+                (
+                  <>
+                  {/* <h1>hello history</h1> */}
+                  <History
+                    taskId={task?._id}
+                  />
                   </>
                 )}
               </div>
@@ -444,34 +537,33 @@ export default function ViewTaskModal(props) {
                     onChange={handleTextChange}
                   />
                 </div>
-                <div
+                <div  
                   style={{
                     float: "left",
                     width: "100%",
                     textAlign: "right",
-                    marginTop: "50px",
+                 
+                    
                   }}
                 >
-                  <Button type="submit" className="btn btn-primary">
+                  <Button type="submit" className="btn btn-primary mb-2">
                     Post
                   </Button>
                 </div>
               </form>
             </div>}
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            onClick={() => {
-              closeViewTaskModal();
-              setShowViewTaskModal(false);
-            }}
-            variant="secondary"
-          >
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+      <ConfirmationPopup
+            show={showConfirmation}
+            onCancel={() => setShowConfirmation(false)}
+            onConfirm={() =>updateTaskStatus(dataToSendForTaskStatus)}
+             />
+
+
+
       {loading?<Loader />:null}
       {toaster && (
         <ToastContainer position="top-end" className="p-3">

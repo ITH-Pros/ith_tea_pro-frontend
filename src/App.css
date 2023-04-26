@@ -4,6 +4,34 @@
   box-sizing: border-box;
   margin-top: 0;
 }
+.rbc-event, .rbc-day-slot .rbc-background-event {
+  border: none;
+  box-sizing: border-box;
+  box-shadow: none;
+  margin: 0;
+  padding: 2px 5px;
+  background-color: #198754 !important;
+  border-radius: 5px;
+  color: #f8f9fa;
+  border-radius: 0;
+  cursor: pointer;
+  height: 30px;
+  width: 43px !important;
+  top: 0;
+  width: 100%;
+  text-align: left;
+  position: absolute;
+}
+.rbc-ellipsis, .rbc-show-more, .rbc-row-segment .rbc-event-content, .rbc-event-label {
+  display: block;
+  overflow: hidden;
+  text-overflow: none !important;
+  white-space: nowrap;
+}
+.rbc-current {
+  background: #ffff !important;
+  /* color: #fff; */
+}
 
 button.btn.btn-outline-primary {
   border-color: #985dcd !important;
@@ -83,25 +111,7 @@ textarea.form-control {
   outline: none;
 }
 
-.modal.show .modal-dialog,
-.modal-dialog.modal-xl {
-  transform: none;
-  box-shadow: 2px 0 123px 2px rgb(0 0 0 / 56%);
-  width: 600px;
-  position: fixed;
-  right: 0;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  z-index: 509;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  overflow: auto;
-  right: 0;
-  background-color: #fff;
-  border-radius: 10px;
-}
+ 
 
 .fr-toolbar .fr-command.fr-btn svg {
   width: 18px !important;
@@ -116,18 +126,19 @@ textarea.form-control {
   margin: 0 17px 0 2px !important;
 }
 
-.pull-right {
+.delete_icon {
   float: right;
   position: absolute;
-  right: 10px;
-  width: 137px;
+  right: 0px;
+  font-size: 30px;
+  width: 50px;
   display: flex;
 }
 
 .dropdown-item {
   color: #494949 !important;
   font-size: 14px !important;
-  font-weight: 700 !important;
+ 
   letter-spacing: 0.8px !important;
 }
 
@@ -150,13 +161,7 @@ span.rbc-toolbar-label {
   background-color: #f4e9ff;
 }
 
-.button-center-corformain {
-  float: left;
-  width: 100%;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-}
+ 
 
 .profile-modal .modal-dialog {
   width: 650px !important;
@@ -173,15 +178,8 @@ span.rbc-toolbar-label {
   overflow: hidden !important;
 }
 
-.confirmation-popup .modal-body {
-  height: 28vh !important;
-  overflow: hidden !important;
-}
+ 
 
-.confirmation-popup .button-center-corformain {
-  bottom: -10px !important;
-}
+ 
 
-.confirmation-popup .delete-popup h6 {
-  margin-top: -40px !important;
-}
+ 

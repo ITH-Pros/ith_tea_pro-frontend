@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +7,9 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Logo } from "./Logo.js";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 import "./index.css";
 import { getLogedInUserDetails } from "../../services/user/api";
 import { Text } from "@nextui-org/react";
@@ -12,11 +17,15 @@ import { Text } from "@nextui-org/react";
 function Header() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
-  const [profilePicture, setProfileLink] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(false);
 
   useEffect(() => {
     getUserDetails();
   }, []);
+
+  useEffect(() => {
+    setProfilePicture(localStorage.getItem('selectedProfilePicture'))
+  }, [localStorage.getItem('selectedProfilePicture')]);
 
   const redirectToDashbord = () => {
     navigate("/");
@@ -36,7 +45,7 @@ function Header() {
       } else {
         setUserName(response?.data.name);
         if (response.data.profilePicture) {
-          setProfileLink(response.data.profilePicture);
+          setProfilePicture(response.data.profilePicture);
         }
       }
     } catch (error) {
@@ -47,9 +56,9 @@ function Header() {
 
   return (
     <Navbar bg="light" variant="light" fixed="top">
-      <Container fluid="lg" style={{ maxWidth: "1240px" }}>
+      <Container fluid >
         <Navbar.Brand onClick={redirectToDashbord}>
-          <Logo />
+                <img style={{height:'35px',widows:'35px'}} src={require("../../assests/img/logo.png")} alt="logo" />
           <Text b color="#8355ad" style={{cursor:"pointer"}} hideIn="xs">
             Tea Pro
           </Text>
@@ -60,11 +69,12 @@ function Header() {
             <div className="user-text-name" key={userName}>
               <div onClick={redirectToUserDetail} className="user-icon">
                 {profilePicture && (
-                  <div className="user-pic">
+                  <div className="user-pic ms-2">
+                   <button id='headerbuttontoupdateprofile' hidden={true} ></button>
+                     
                     <img
                       style={{
-                        width: "30px",
-                        height: "30px",
+                        
                         borderRadius: "50%",
                       }}
                       src={`${profilePicture}`}
@@ -73,12 +83,18 @@ function Header() {
                   </div>
                 )}
                 {!profilePicture && <UserIcon firstName={userName} />}
-                <p
+               
+                <OverlayTrigger
+                              placement="bottom"
+                              overlay={<Tooltip>{userName}</Tooltip>}
+                            >
+                              <p 
                   className="text-truncate"
-                  style={{ marginBottom: "0px", marginLeft: "22px" }}
+                  style={{ marginBottom: "0px", marginLeft: "22px" , cursor:"pointer", paddingTop:'10px', maxWidth:'100px' }}
                 >
                   {userName}
                 </p>
+                            </OverlayTrigger>
               </div>
             </div>
           </Nav>

@@ -1,10 +1,9 @@
 import React,{ useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/auth/api";
 import "./login.css";
 import { useAuth } from "./AuthProvider";
 import Toaster from "../components/Toaster";
-
 export default function Login() {
 
     const { login, accessToken } = useAuth();
@@ -15,6 +14,16 @@ export default function Login() {
       password: "",
       showPassword: false,
     });
+ const navigate = useNavigate();
+
+  
+  
+  const handleForgotClick = (e) => {
+    e.preventDefault();
+    navigate('/forgot-password')
+
+     
+    };
 
   useEffect(() => {
     let passwordReset = localStorage.getItem("passwordReset");
@@ -82,7 +91,7 @@ export default function Login() {
               <div className="bg2"></div>
             </div>
             <div className="loginContent form">
-              <a href="https://projects.ith.tech/login">
+              <a href="https://pro.ith.tech/login">
                 <img src={require("../assests/img/logo.png")} alt="logo" />
               </a>
               <div className="text">Tea Pro</div>
@@ -125,11 +134,14 @@ export default function Login() {
                 </div>
                 <button className="loginButton" onClick={handleLogin}>
                   Log in
-                </button>
-              </form>
+                  </button>
+                  <button onClick={handleForgotClick} className="btn text-primary mt-2 pull-right">Forgot Password</button>
+                </form>
+                
             </div>
           </div>
-        </div>
+          </div>
+          
       )}
 
       {toaster && (

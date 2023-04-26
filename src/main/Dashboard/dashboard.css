@@ -6,10 +6,10 @@ td {
   color: black;
   margin: 0;
   padding: 0;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   width: 100%;
-  box-shadow: -5px -5px 9px rgba(255, 255, 255, 0.45), 5px 5px 9px;
+  box-shadow: none;
   font-size: large;
   font-weight: 600;
 }
@@ -58,7 +58,7 @@ span {
   transition: all 0.3s ease;
 }
 
-table> :not(caption)>*>* {
+table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
   background-color: var(--bs-table-bg);
   border-bottom-width: 1px;
@@ -71,11 +71,10 @@ table> :not(caption)>*>* {
   justify-content: center;
 }
 
-
 .input_dashboard {
   -webkit-backdrop-filter: blur(3.7px);
   backdrop-filter: blur(3.7px);
-  border: 1px solid rgb(126 103 217 / 99%);
+  border: 1px solid rgba(207, 207, 207, 0.99);
 }
 
 thead,
@@ -94,7 +93,7 @@ th {
   font-size: 13px !important;
 }
 
-.table> :not(caption)>*>* {
+.table > :not(caption) > * > * {
   background-color: var(--bs-table-bg);
   border-bottom-width: 1px;
   box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
@@ -193,7 +192,6 @@ th {
   box-shadow: inset 40px 40px 41px #5d6d74, inset -40px -40px 41px #97b1be;
 }
 
-
 .previous-rating {
   padding: 4px;
   border: 1px;
@@ -273,6 +271,7 @@ th {
   position: relative;
   padding-top: 104px;
   border: 1px solid #ccc;
+  /* margin-left: 350px; */
 }
 
 #nav-filter {
@@ -285,7 +284,6 @@ th {
   font-size: 14px;
   color: #000 !important;
   border: 0;
-  padding: 5px 10px;
 }
 
 #nav-filter .dropdown-item {
@@ -306,17 +304,18 @@ th {
   background: #fff;
   box-shadow: 0 2px 13px 0 rgb(0 0 0 / 6%);
   border-radius: 4px;
-  margin: .25rem 0;
+  margin: 0.25rem 0;
 }
 
 #card-task h5,
 #card-undefined h5 {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   color: #6590ad;
+  cursor: pointer;
 }
 
-#card-task p,
+ 
 #card-undefined p {
   margin: 0;
   font-size: 14px;
@@ -335,11 +334,7 @@ th {
   align-items: center;
 }
 
-#card-task:hover,
-#card-undefined:hover {
-  border: 1px #0dcaf0 solid;
-  cursor: pointer;
-}
+ 
 
 .left-add span {
   margin-right: 10px;
@@ -380,7 +375,7 @@ th {
 }
 
 .list_task {
-  padding: 5px 10px !important;
+  padding: 5px 0px !important;
   margin: 3px 0px;
   border-radius: 6px;
   margin-bottom: 5px;
@@ -571,9 +566,10 @@ th {
 }
 
 .btn-light.addRatingBtn {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 18px;
+  padding: 6px 10px;
+  line-height: 25px;
   border: 1px solid #8355ad;
   color: #f8f9fa;
   background: #8355ad;
@@ -605,10 +601,11 @@ th {
 }
 
 .skip-button {
-  background: #673AB7;
+  background: #673ab7;
   color: #fff;
   padding: 8px;
   border-radius: 6px;
+  /* margin-left: 350px; */
 }
 
 .dashboard_camp #card-task {
@@ -618,6 +615,9 @@ th {
 .alig-nodata {
   align-items: center;
   justify-content: center;
+  text-align: center;
+  height: 70vh;
+  display: flex;
 }
 
 .nameTag {
@@ -644,11 +644,78 @@ th {
   border: none !important;
   padding: 0 !important;
   margin: 0px 3px;
-  border-right: 1px solid #9E9E9E !important;
+  border-right: 1px solid #9e9e9e !important;
   border-radius: 0px !important;
   padding-right: 5px !important;
 }
 
 .br0 {
   border-right: 0px !important;
+}
+
+#agenda {
+  width: auto;
+  padding: 0px 10px;
+  border-bottom: #f0f0f0 1px solid;
+  padding: 8px;
+}
+#agenda .left-btn {
+  border-radius: 30px 0px 0px 30px !important;
+  color: #6c6666;
+  font-size: 11px;
+  float: left;
+  padding: 5px;
+}
+#agenda h4 {
+  font-size: 13px;
+  font-weight: 200 !important;
+  color: #5e5e5e;
+  margin-top: 5px;
+}
+#agenda h4 span{ color: #8355ad;}
+#agenda .right-btn {
+  border-radius: 0px 30px 30px 0px !important;
+  color: #6c6666;
+  font-size: 11px;
+  float: left;
+  padding: 5px;
+}
+#list_ui .list_task:hover{     background: #ebebeb80;
+  border-radius: 0px;}
+#list_ui .day p {
+  text-align: center;
+  font-size: 13px !important;
+  color: #fff;
+  
+}
+#list_ui .v-align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#list_ui .day span {
+  font-size: 15px;
+  color: #000;
+  line-height: 0px;
+  font-weight: 500;
+   
+}
+#list_ui .list_task {
+  border: 0px !important;
+  position: relative;
+}
+.list-day {
+  width: auto;
+}
+#list_ui .border {
+  border-bottom: 0px !important;
+}
+.completed_task {
+  background: #8355ad78;
+}
+ 
+
+#test.bs-popover-start > .popover-arrow::after {
+  right: var(--bs-popover-border-width);
+  border-left-color: #198754 !important;
 }

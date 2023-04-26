@@ -8,12 +8,12 @@
   padding: 30px;
   border-radius: 15px;
   position: relative;
-  padding-top: 135px;
+  padding-top: 100px;
 }
 
 .profile-images {
   position: absolute;
-  top: -75px;
+  top: -45px;
   right: 17px;
 }
 
@@ -35,10 +35,11 @@ input {
   display: block;
   width: 100%;
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 14px !important;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   box-sizing: border-box;
+  height: 35px;
 }
 
 input:focus {
@@ -48,9 +49,9 @@ input:focus {
 
 .submit-button {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  font-weight: bold;
+  padding:5px 10px;
+  font-size:14px !important;
+ 
   color: #fff;
   background-color: #4da6ff;
   border: none;
@@ -80,49 +81,26 @@ input:focus {
 
 .edit-detle {
   position: relative;
-  height: 180px;
-  width: 180px;
+  height: 125px;
+  width: 125px;
   margin: auto;
 }
 
-.edit-detle i.fas.fa-trash {
-  position: absolute;
-  left: 10px;
-  top: 128px;
-  border: 1px solid #E91E63;
-  color: #fff;
-  width: 35px;
-  height: 35px;
-  line-height: 35px;
-  text-align: center;
-  border-radius: 5px;
-  background: #E91E63;
-}
+ 
 
-.edit-detle i.fas.fa-edit {
-  position: absolute;
-  right: 10px;
-  top: 128px;
-  border: 1px solid #4CAF50;
-  color: #fff;
-  width: 35px;
-  height: 35px;
-  line-height: 35px;
-  text-align: center;
-  border-radius: 5px;
-  background: #4CAF50;
-}
+ 
 
 .image-upload label {
   display: block;
   font-size: 15px;
   font-weight: bold;
+  margin: 0px;
 }
 
 .image-upload img {
   width: 100%;
-  height: 185px;
-  object-fit: cover;
+  height: 125px;
+  /* object-fit: cover; */
   border-radius: 10px;
   cursor: pointer;
 }
@@ -186,9 +164,9 @@ input:focus {
 
 @media screen and (min-width: 768px) {
   .image-upload {
-    width: 180px;
+    width: 125px;
     margin: auto;
-    height: 180px;
+    height: 125px;
     background: #f9f1ff;
   }
 }
@@ -199,3 +177,6 @@ input:focus {
     margin: 20px auto;
   }
 }
+
+.upload-icon{ position: absolute; bottom: 3px; right: 0px;}
+.upload-icon .badge{ margin: 0px 3px ;}

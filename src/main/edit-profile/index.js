@@ -1,7 +1,6 @@
 /* eslint-disable no-mixed-operators */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import {
@@ -10,6 +9,8 @@ import {
 } from "../../services/user/api";
 import "./index.css";
 import ImageUpload from "./imageUpload";
+import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 
 function UserForm(props) {
   const { handleModalClose } = props;
@@ -33,6 +34,7 @@ function UserForm(props) {
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
   const navigate = useNavigate();
+
   const today = new Date();
 
   useEffect(() => {
@@ -47,6 +49,7 @@ function UserForm(props) {
     }
   };
 
+ 
   const patchValues = (currentUser) => {
     setName(currentUser?.name || "");
     setRole(currentUser?.role || "");
@@ -107,6 +110,7 @@ function UserForm(props) {
       linkedInLink: linkedin,
       profilePicture,
     };
+    console.log(profilePicture  )
 
     try {
       setLoading(true);
@@ -118,19 +122,28 @@ function UserForm(props) {
       } else {
         setLoading(false);
         showToaster(true);
+        localStorage.setItem("selectedProfilePicture",profilePicture)
         setToasterMessage("Profile updated successful");
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
-
         handleModalClose();
-        navigate("/");
+        console.log('inside handel function')
+        document.getElementById('headerbuttontoupdateprofile')?.click();
+        
       }
     } catch (error) {
       console.log("Error while updating user details");
+      document.getElementById('headerbuttontoupdateprofile')?.click();
       setLoading(false);
       return error.message;
     }
   };
+
+  const handleResetClick = (e) => {
+    // e.preventDefault();
+    navigate('/profile/reset-password')
+      
+    };
 
   function formatDate(date) {
     const d = new Date(date);
@@ -143,7 +156,7 @@ function UserForm(props) {
   }
 
   return (
-    <div className="addUserFrom-edit">
+    <div className="addUserFrom-edit " >
       <form className="row">
         <div className="profile-images">
           <div className="edit-detle">
@@ -154,18 +167,20 @@ function UserForm(props) {
             />
           </div>
         </div>
-        <div className="form-group col-12 text-right profil-ed">
+        <div className="form-group col-12 text-center profil-ed">
           {!isEditable && (
-            <button onClick={handleSubmit} className="submit-button">
+            <Button variant="primary" size="sm" onClick={handleSubmit} >
               Update
-            </button>
+            </Button>
           )}
 
           {isEditable && (
-            <button className="submit-button edit" onClick={handleEditClick}>
+             <Button variant="primary" size="sm" onClick={handleEditClick}>
               Edit Profile
-            </button>
+            </Button>
           )}
+          <Button variant="secondary" size="sm" className="ms-2"  onClick={handleResetClick} >Reset Password</Button>
+
         </div>
 
         <div className="form-group col-12">

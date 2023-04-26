@@ -1,12 +1,10 @@
 .user-icon {
-    display: flex;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
 }
 
-.user-icon .user-pic {
-    border: none !important;
-}
+ 
 
 .profile-modal {
     display: flex;

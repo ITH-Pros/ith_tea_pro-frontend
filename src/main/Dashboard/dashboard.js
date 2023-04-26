@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import moment from "moment";
-import { AiFillProject } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -21,6 +20,15 @@ import UserForm from "../edit-profile";
 import { useAuth } from "../../auth/AuthProvider";
 import AddRating from "../Rating/add-rating";
 import ViewTaskModal from "../Tasks/view-task";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
+import {
+  BsChevronDoubleLeft,
+  BsChevronLeft,
+  BsChevronDoubleRight,
+  BsChevronRight,
+  BsPersonAdd,
+} from "react-icons/bs";
 import {
   getAllMyWorks,
   getAllPendingRating,
@@ -38,7 +46,9 @@ import {
   Button,
   Badge,
   Modal,
+  Popover,
 } from "react-bootstrap";
+import CustomCalendar from "./custom-calender";
 
 export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState("");
@@ -59,6 +69,7 @@ export default function Dashboard(props) {
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const { userDetails } = useAuth();
   const setShowToaster = (param) => showToaster(param);
+  const [isChange, setIsChange] = useState(undefined);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,7 +80,6 @@ export default function Dashboard(props) {
   }, []);
 
   function onInit() {
-    console.log("jai shree ram")
     getAndSetAllProjects();
     if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
       getOverDueTaskList();
@@ -77,9 +87,7 @@ export default function Dashboard(props) {
     if (userDetails?.role !== "SUPER_ADMIN" || userDetails?.role !== "ADMIN") {
       getMyWork();
     }
-    if (userDetails?.role !== "CONTRIBUTOR") {
-      getTeamWorkList();
-    }
+
     getPendingRating();
   }
 
@@ -100,16 +108,34 @@ export default function Dashboard(props) {
   const handleShowAllProjects = () => {
     navigate("/project/all");
   };
+  function formDateNightTime(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return ""; 
+    }
+    console.log(dateString,'-----------------------------------------------')
+    let utcTime = new Date(dateString );
+    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    console.log(localTimeString)
+    return localTimeString
+  }
 
   const getMyWork = async function () {
+    let dataToSend={
+      currentDate:formDateNightTime(new Date())
+    }
     setLoading(true);
     try {
-      const tasks = await getAllMyWorks();
+      const tasks = await getAllMyWorks(dataToSend);
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(
-          tasks?.error?.message ||
-            "Something Went Wrong While Fetching My Work Data"
+          tasks?.message || "Something Went Wrong While Fetching My Work Data"
         );
         setShowToaster(true);
       } else {
@@ -188,7 +214,7 @@ export default function Dashboard(props) {
       setLoading(false);
       if (tasks.error) {
         setToasterMessage(
-          tasks?.error?.message ||
+          tasks?.message ||
             "Something Went Wrong while fetching Pending Ratings Data"
         );
         setShowToaster(true);
@@ -227,7 +253,7 @@ export default function Dashboard(props) {
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects.data);
@@ -250,6 +276,10 @@ export default function Dashboard(props) {
     setSelectedProject();
     setSelectedTask();
     onInit();
+    if (userDetails?.role !== "CONTRIBUTOR") {
+      // getTeamWorkList();
+      setIsChange(!isChange);
+    }
   };
 
   const openAddtask = (project) => {
@@ -277,11 +307,12 @@ export default function Dashboard(props) {
       } else {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
-        // getMyWork();
-        // getTeamWork();
-        // getOverDueTaskList();
-        // getPendingRating();
+
         onInit();
+        if (userDetails?.role !== "CONTRIBUTOR") {
+          // getTeamWorkList();
+          setIsChange(!isChange);
+        }
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -290,25 +321,52 @@ export default function Dashboard(props) {
     }
   };
 
-  const getTeamWorkList = async () => {
-    setLoading(true);
-    try {
-      const res = await getTeamWork();
-      setLoading(false);
+  // const getTeamWorkList = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await getTeamWork();
+  //     setLoading(false);
 
-      if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setTeamWorkList(res?.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
-    }
-  };
+  //     if (res.error) {
+  //       setToasterMessage(res?.message || "Something Went Wrong");
+  //       setShowToaster(true);
+  //     } else {
+  //       setTeamWorkList(res?.data);
+  //     }
+  //   } catch (error) {
+  //     setToasterMessage(error?.message || "Something Went Wrong");
+  //     setShowToaster(true);
+  //     setLoading(false);
+  //     return error.message;
+  //   }
+  // };
+
+  function formatDate(date) {
+    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+    // Subtract one day from the provided date
+    const dayBefore = new Date(date);
+    dayBefore.setDate(dayBefore.getDate() );
+
+    // Get the day of the week and day of the month for the updated date
+    const dayOfWeek = days[dayBefore.getDay()];
+    const dayOfMonth = dayBefore.getDate();
+
+    return (
+      <span>
+        <p>{dayOfWeek} - <span>{dayOfMonth}</span></p>
+       
+      </span>
+    );
+  }
+
+  function daysSince(dateStr) {
+    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+    const currentDate = new Date();
+    const date = new Date(dateStr);
+    const diffDays = Math?.round(Math?.abs((currentDate - date) / oneDay));
+    return diffDays;
+  }
 
   const skipReminder = async (event) => {
     event.preventDefault();
@@ -352,18 +410,19 @@ export default function Dashboard(props) {
         <Row>
           <Col lg={6} className="px-0">
             {props.showBtn && (
-               <h1 className="h1-text">
-               <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
-             </h1>
+              <h1 className="h1-text">
+                <i className="fa fa fa-home" aria-hidden="true"></i>My Dashboard
+              </h1>
             )}
           </Col>
           <Col lg={6} id="nav-filter" className="px-0">
             <Nav className="justify-content-end" activeKey="/home">
               <Nav.Item>
-                <Nav.Link eventKey="link-1">
+                <Nav.Link eventKey="link-1" className="px-0">
                   <Dropdown>
                     <Dropdown.Toggle
                       variant="secondary"
+                      size="lg"
                       onClick={handleShowAllProjects}
                       id="dropdown-basic"
                     >
@@ -391,29 +450,43 @@ export default function Dashboard(props) {
                   <Row className="d-flex justify-content-start">
                     <Col lg={6} className="middle">
                       <Avatar name={project.name} size={40} round="20px" />{" "}
-                      <h5 className="text-truncate">{project?.name}</h5>
+                      {/* <h5 className="text-truncate">{project?.name}</h5> */}
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>{project?.name}</Tooltip>}
+                      >
+                        <h5 className="text-truncate" style={{cursor:'pointer'}}>{project?.name}</h5>
+                      </OverlayTrigger>
                     </Col>
                     <Col lg={4} className="middle">
-                      <p className="text-truncate">
-                        {project?.description || "--"}
-                      </p>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip>{project?.description || "--"}</Tooltip>
+                        }
+                      >
+                        <p className="text-truncate">
+                          {project?.description || "--"}
+                        </p>
+                      </OverlayTrigger>
                     </Col>
                     <Col
                       lg={2}
                       className="text-end middle"
                       style={{ justifyContent: "end" }}
                     >
-                      <button
-                        className="addTaskBtn"
+                      <Button
+                        variant="primary"
+                        size="sm"
                         style={{
-                          float: "right",
+                          float: "right", padding:'4px 7px', fontSize:'10px'
                         }}
                         onClick={() => {
                           openAddtask(project);
                         }}
                       >
                         Add Task
-                      </button>
+                      </Button>
                     </Col>
                   </Row>
                 </Card>
@@ -426,7 +499,7 @@ export default function Dashboard(props) {
             getNewTasks={getNewTasks}
             showAddTask={showAddTask}
             closeModal={closeModal}
-            // handleOnInit={onInit}
+            // onInit={() => onInit()}
           />
           <button
             className="expend"
@@ -448,14 +521,14 @@ export default function Dashboard(props) {
                 <Col lg={6} className="left-add">
                   <span>OVERDUE WORK</span>
 
-                  <i
+                  {/* {<i
                     onClick={() => {
                       setSelectedTask();
                       setShowAddTask(true);
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
-                  ></i>
+                  ></i>} */}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -475,7 +548,10 @@ export default function Dashboard(props) {
                       overdueWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           <Col lg={4} className="middle">
-                            {(userDetails.id === task?.assignedTo?._id ||
+                            {((userDetails.role === "LEAD" &&
+                              (userDetails.id === task?.assignedTo?._id ||
+                                task?.lead?.includes(userDetails.id) ||
+                                userDetails.id === task?.createdBy?._id)) ||
                               userDetails.role === "SUPER_ADMIN" ||
                               userDetails.role === "ADMIN") && (
                               <Dropdown>
@@ -588,22 +664,22 @@ export default function Dashboard(props) {
                               </h5>
                             </OverlayTrigger>
                           </Col>
-                          <Col lg={4} className="middle">
+                          <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                Due Date:{" "}
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
-                                  {moment(task?.dueDate?.split("T")[0]).format(
+                                  {daysSince(task?.dueDate?.split("T")[0]) +
+                                    " Day ago"}
+                                  {/* {moment(task?.dueDate?.split("T")[0]).format(
                                     "DD/MM/YYYY"
-                                  )}
+                                  )} */}
                                 </Badge>
                               </small>
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                Completed:{" "}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]
@@ -612,8 +688,40 @@ export default function Dashboard(props) {
                               </small>
                             )}
                           </Col>
+                          <Col lg={3} className="middle">
+                            <>
+                              {["top"].map((placement) => (
+                                <OverlayTrigger
+                                  key={placement}
+                                  placement={placement}
+                                  overlay={
+                                    <Tooltip id={`tooltip-${placement}`}>
+                                      {task?.assignedTo?.name}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Button className="tooltip-button br0">
+                                    {task?.assignedTo?.name && (
+                                      <span
+                                        className="nameTag"
+                                        title="Assigned To"
+                                      >
+                                        <img src={avtar} alt="userAvtar" />{" "}
+                                        {task?.assignedTo?.name.split(" ")[0] +
+                                          " "}
+                                        {task?.assignedTo?.name.split(" ")[1] &&
+                                          task?.assignedTo?.name
+                                            .split(" ")[1]
+                                            ?.charAt(0) + "."}
+                                      </span>
+                                    )}
+                                  </Button>
+                                </OverlayTrigger>
+                              ))}
+                            </>
+                          </Col>
                           <Col
-                            lg={3}
+                            lg={2}
                             className="text-end middle"
                             style={{ justifyContent: "end" }}
                           >
@@ -637,30 +745,37 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                variant="defult"
-                                id="dropdown-basic"
-                              >
-                                <i className="fa fa-ellipsis-v"></i>
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setSelectedProject();
-                                    setShowAddTask(true);
-                                    setSelectedTask(task);
-                                  }}
+                            {((userDetails.role === "LEAD" &&
+                              (userDetails.id === task?.assignedTo?._id ||
+                                task?.lead?.includes(userDetails.id) ||
+                                userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="defult"
+                                  id="dropdown-basic"
                                 >
-                                  <i
-                                    className="fa fa-pencil-square"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Edit Task
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setSelectedProject();
+                                      setShowAddTask(true);
+                                      setSelectedTask(task);
+                                    }}
+                                  >
+                                    <i
+                                      className="fa fa-pencil-square"
+                                      aria-hidden="true"
+                                    ></i>{" "}
+                                    Edit Task
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            )}
                           </Col>
                         </Row>
                       ))}
@@ -683,6 +798,7 @@ export default function Dashboard(props) {
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
+                    style={{ cursor: "pointer" }}
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
@@ -696,7 +812,9 @@ export default function Dashboard(props) {
                     }
                   >
                     {myWorkList && myWorkList?.length === 0 && (
-                      <p>No task found.</p>
+                     <Row>
+                      <Col lg="12"><p>No task found.</p></Col>
+                     </Row>
                     )}
                     {myWorkList &&
                       myWorkList?.length > 0 &&
@@ -816,7 +934,6 @@ export default function Dashboard(props) {
                           <Col lg={4} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                Due Date:{" "}
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
@@ -828,7 +945,6 @@ export default function Dashboard(props) {
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                Completed:{" "}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]
@@ -862,30 +978,37 @@ export default function Dashboard(props) {
                             id="dropdown_action"
                             className="text-end middle"
                           >
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                variant="defult"
-                                id="dropdown-basic"
-                              >
-                                <i className="fa fa-ellipsis-v"></i>
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setSelectedProject();
-                                    setShowAddTask(true);
-                                    setSelectedTask(task);
-                                  }}
+                            {((userDetails.role === "LEAD" &&
+                              (userDetails.id === task?.assignedTo?._id ||
+                                task?.lead?.includes(userDetails.id) ||
+                                userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="defult"
+                                  id="dropdown-basic"
                                 >
-                                  <i
-                                    className="fa fa-pencil-square"
-                                    aria-hidden="true"
-                                  ></i>{" "}
-                                  Edit Task
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setSelectedProject();
+                                      setShowAddTask(true);
+                                      setSelectedTask(task);
+                                    }}
+                                  >
+                                    <i
+                                      className="fa fa-pencil-square"
+                                      aria-hidden="true"
+                                    ></i>{" "}
+                                    Edit Task
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            )}
                           </Col>
                         </Row>
                       ))}
@@ -944,7 +1067,6 @@ export default function Dashboard(props) {
                         <Col lg={2} className="middle">
                           {task?.status !== "COMPLETED" && (
                             <small>
-                              Due Date:{" "}
                               <Badge bg={task?.dueToday ? "danger" : "primary"}>
                                 {moment(task?.dueDate?.split("T")[0])}
                               </Badge>
@@ -989,7 +1111,10 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button">
                                         {task?.lead[0]?.name && (
-                                          <span className="nameTag">
+                                          <span
+                                            className="nameTag"
+                                            title="Lead"
+                                          >
                                             <img
                                               src={leadAvatar}
                                               alt="userAvtar"
@@ -1020,7 +1145,10 @@ export default function Dashboard(props) {
                                     >
                                       <Button className="tooltip-button br0">
                                         {task?.assignedTo?.name && (
-                                          <span className="nameTag">
+                                          <span
+                                            className="nameTag"
+                                            title="Assigned To"
+                                          >
                                             <img src={avtar} alt="userAvtar" />{" "}
                                             {task?.assignedTo?.name
                                               .split(" ")[0]
@@ -1047,13 +1175,12 @@ export default function Dashboard(props) {
                           style={{ justifyContent: "end" }}
                         >
                           {userDetails?.role !== "CONTRIBUTOR" && (
-                            <Button
-                              variant="light"
-                              size="sm"
-                              className="addRatingBtn"
-                            >
-                              <AddRating taskFromDashBoard={task} />{" "}
-                            </Button>
+                            <AddRating
+                              taskFromDashBoard={task}
+                              onInit={onInit}
+                              setIsChange={setIsChange}
+                              isChange={isChange}
+                            />
                           )}
                         </Col>
                       </Row>
@@ -1068,7 +1195,7 @@ export default function Dashboard(props) {
       {userDetails?.role !== "CONTRIBUTOR" && (
         <Container>
           <Row className="mt-3">
-            <Col lg={6} style={{ paddingLeft: "0px" }}>
+            {/* <Col lg={6} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
                   <span>TEAM WORK</span>
@@ -1080,6 +1207,7 @@ export default function Dashboard(props) {
                       setSelectedProject();
                     }}
                     className="fa fa-plus-circle"
+                    style={{ cursor: "pointer" }}
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
@@ -1099,8 +1227,12 @@ export default function Dashboard(props) {
                       teamWorkList?.length > 0 &&
                       teamWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          <Col lg={5} className="middle">
-                            {(userDetails.id === task?.assignedTo?._id ||
+                          <Col lg={4} className="middle">
+                            {(
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
                               userDetails.role === "SUPER_ADMIN" ||
                               userDetails.role === "ADMIN") && (
                               <Dropdown>
@@ -1199,17 +1331,22 @@ export default function Dashboard(props) {
                                 </Dropdown.Menu>
                               </Dropdown>
                             )}
-                            <h5
-                              onClick={() => handleViewDetails(task?._id)}
-                              className="text-truncate"
+
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip>{task?.title}</Tooltip>}
                             >
-                              {task?.title}
-                            </h5>
+                              <h5
+                                onClick={() => handleViewDetails(task?._id)}
+                                className="text-truncate"
+                              >
+                                {task?.title}
+                              </h5>
+                            </OverlayTrigger>
                           </Col>
-                          <Col lg={4} className="middle">
+                          <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
                               <small>
-                                Due Date:{" "}
                                 <Badge
                                   bg={task?.dueToday ? "danger" : "primary"}
                                 >
@@ -1221,7 +1358,6 @@ export default function Dashboard(props) {
                             )}
                             {task?.status === "COMPLETED" && (
                               <small>
-                                Completed:{" "}
                                 <Badge bg="success">
                                   {moment(
                                     task?.completedDate?.split("T")[0]
@@ -1229,6 +1365,38 @@ export default function Dashboard(props) {
                                 </Badge>
                               </small>
                             )}
+                          </Col>
+                          <Col lg={3} className="middle">
+                            <>
+                              {["top"].map((placement) => (
+                                <OverlayTrigger
+                                  key={placement}
+                                  placement={placement}
+                                  overlay={
+                                    <Tooltip id={`tooltip-${placement}`}>
+                                      {task?.assignedTo?.name}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Button className="tooltip-button br0">
+                                    {task?.assignedTo?.name && (
+                                      <small
+                                        className="nameTag text-truncate"
+                                        title="Assigned To"
+                                      >
+                                        <img src={avtar} alt="userAvtar" />{" "}
+                                        {task?.assignedTo?.name.split(" ")[0] +
+                                          " "}
+                                        {task?.assignedTo?.name.split(" ")[1] &&
+                                          task?.assignedTo?.name
+                                            .split(" ")[1]
+                                            ?.charAt(0) + "."}
+                                      </small>
+                                    )}
+                                  </Button>
+                                </OverlayTrigger>
+                              ))}
+                            </>
                           </Col>
                           <Col
                             lg={2}
@@ -1253,31 +1421,377 @@ export default function Dashboard(props) {
                           <Col
                             lg={1}
                             id="dropdown_action"
-                            className="text-end middle"
+                            className="text-end "
+                            style={{ position: "absolute", right: "0px" }}
                           >
-                            <Dropdown>
-                              <Dropdown.Toggle
-                                variant="defult"
-                                id="dropdown-basic"
-                              >
-                                <i className="fa fa-ellipsis-v"></i>
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setSelectedProject();
-                                    setShowAddTask(true);
-                                    setSelectedTask(task);
-                                  }}
+                            {(
+                              (userDetails.role === "LEAD" &&
+                                (userDetails.id === task?.assignedTo?._id ||
+                                  task?.lead?.includes(userDetails.id) ||
+                                  userDetails.id === task?.createdBy?._id)) ||
+                              userDetails.role === "SUPER_ADMIN" ||
+                              userDetails.role === "ADMIN") && (
+                              <Dropdown>
+                                <Dropdown.Toggle
+                                  variant="defult"
+                                  id="dropdown-basic"
+                                  style={{ padding: "0px", textAlign: "end" }}
                                 >
-                                  Edit
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
+                                  <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setSelectedProject();
+                                      setShowAddTask(true);
+                                      setSelectedTask(task);
+                                    }}
+                                  >
+                                    Edit
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            )}
                           </Col>
                         </Row>
                       ))}
+                  </Card>
+                </Col>
+              </Row>
+            </Col> */}
+            <Col lg={12} style={{ paddingLeft: "0px" }}>
+              <Row>
+                <Col lg={6} className="left-add">
+                  <span>Team Work</span>
+                  <i
+                    onClick={() => {
+                      setSelectedTask();
+                      setShowAddTask(true);
+                      setSelectedProject();
+                    }}
+                    className="fa fa-plus-circle"
+                    style={{ cursor: "pointer" }}
+                  ></i>
+                </Col>
+                <Col lg={6} className="right-filter"></Col>
+              </Row>
+              <Row>
+                <Col lg={12} className="mt-3">
+                  <Card id="card-task" style={{ overflowX: "hidden", paddingTop:'0px', height:'auto'  }}>
+                    {/* <Row id="agenda">
+                      <Col lg={4}>
+                        <Button variant="light" size="sm" className="left-btn">
+                          <BsChevronDoubleLeft /> Week
+                        </Button>
+                        <Button variant="light" size="sm" className="right-btn">
+                          <BsChevronLeft /> Day
+                        </Button>
+                      </Col>
+                      <Col lg={4}>
+                        <h4 className="text-center">April</h4>
+                      </Col>
+                      <Col lg={4} className="text-end">
+                        <Button variant="light" size="sm" className="left-btn">
+                          Day <BsChevronRight />
+                        </Button>
+                        <Button variant="light" size="sm" className="right-btn">
+                          Week <BsChevronDoubleRight />
+                        </Button>
+                      </Col>
+                    </Row> */}
+                    <CustomCalendar
+                      setTeamWorkList={setTeamWorkList}
+                      isChange={isChange}
+                    />
+                    <div className="mt-3" style={{ height:'90vh', overflowY:'auto', overflowX:'hidden' }}>
+                    <div id="list_ui" className="mt-2">
+                     
+                        <Row
+                          className={
+                            teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
+                          }
+                        >
+                          {teamWorkList && teamWorkList?.length === 0 && (
+                            <p>No task found.</p>
+                          )}
+                          {teamWorkList &&
+                            teamWorkList?.length > 0 &&
+                            teamWorkList?.map((task, taskIndex) => (
+                              <>
+                                {(taskIndex === 0 ||
+                                  task.dueDate !==
+                                  teamWorkList[taskIndex - 1].dueDate) ? (
+                                    <Col lg={1} className="border-top day v-align completed_task">
+                                    {formatDate(task.dueDate)}
+                                  </Col>
+                                ) :
+                                <Col lg={1} className="v-align " >
+                                 
+                              </Col>
+                                }
+                                <Col lg={11} className="border-start border-bottom d-flex justify-content-start px-0">
+                                <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
+                                  <Col lg={4} className="middle">
+                                    {((userDetails.role === "LEAD" &&
+                                      (userDetails.id ===
+                                        task?.assignedTo?._id ||
+                                        task?.lead?.includes(userDetails.id) ||
+                                        userDetails.id ===
+                                          task?.createdBy?._id)) ||
+                                      userDetails.role === "SUPER_ADMIN" ||
+                                      userDetails.role === "ADMIN") && (
+                                      <Dropdown>
+                                        <Dropdown.Toggle
+                                          variant="success"
+                                          id="dropdown-basic"
+                                          style={{ padding: "0" }}
+                                        >
+                                          {task.status === "NOT_STARTED" && (
+                                            <i
+                                              className="fa fa-check-circle secondary"
+                                              aria-hidden="true"
+                                            ></i>
+                                          )}
+                                          {task.status === "ONGOING" && (
+                                            <i
+                                              className="fa fa-check-circle warning"
+                                              aria-hidden="true"
+                                            ></i>
+                                          )}
+                                          {task.status === "COMPLETED" && (
+                                            <i
+                                              className="fa fa-check-circle success"
+                                              aria-hidden="true"
+                                            ></i>
+                                          )}
+                                          {task.status === "ONHOLD" && (
+                                            <i
+                                              className="fa fa-check-circle warning"
+                                              aria-hidden="true"
+                                            ></i>
+                                          )}
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                          <Dropdown.Item
+                                            onClick={(event) =>
+                                              handleStatusChange(
+                                                event,
+                                                task?._id,
+                                                "NOT_STARTED"
+                                              )
+                                            }
+                                          >
+                                            <i
+                                              className="fa fa-check-circle secondary"
+                                              aria-hidden="true"
+                                            ></i>
+                                            Not Started
+                                          </Dropdown.Item>
+                                          <Dropdown.Item
+                                            onClick={(event) =>
+                                              handleStatusChange(
+                                                event,
+                                                task?._id,
+                                                "ONGOING"
+                                              )
+                                            }
+                                          >
+                                            <i
+                                              className="fa fa-check-circle warning"
+                                              aria-hidden="true"
+                                            ></i>
+                                            Ongoing
+                                          </Dropdown.Item>
+                                          <Dropdown.Item
+                                            onClick={(event) =>
+                                              handleStatusChange(
+                                                event,
+                                                task?._id,
+                                                "COMPLETED"
+                                              )
+                                            }
+                                          >
+                                            <i
+                                              className="fa fa-check-circle success"
+                                              aria-hidden="true"
+                                            ></i>{" "}
+                                            Completed
+                                          </Dropdown.Item>
+                                          <Dropdown.Item
+                                            onClick={(event) =>
+                                              handleStatusChange(
+                                                event,
+                                                task?._id,
+                                                "ONHOLD"
+                                              )
+                                            }
+                                          >
+                                            <i
+                                              className="fa fa-check-circle warning"
+                                              aria-hidden="true"
+                                            ></i>{" "}
+                                            On Hold
+                                          </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                      </Dropdown>
+                                    )}
+
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>{task?.title}</Tooltip>}
+                                    >
+                                      <h5
+                                        onClick={() =>
+                                          handleViewDetails(task?._id)
+                                        }
+                                        className="text-truncate"
+                                      >
+                                        {task?.title}
+                                      </h5>
+                                    </OverlayTrigger>
+                                  </Col>
+                                  <Col lg={2} className="middle">
+                                    {task?.status !== "COMPLETED" && (
+                                      <small>
+                                        <Badge
+                                          bg={
+                                            task?.dueToday
+                                              ? "danger"
+                                              : "primary"
+                                          }
+                                        >
+                                          {moment(
+                                            task?.dueDate?.split("T")[0]
+                                          ).format("DD/MM/YYYY")}
+                                        </Badge>
+                                      </small>
+                                    )}
+                                    {task?.status === "COMPLETED" && (
+                                      <small>
+                                        <Badge bg="success">
+                                          {moment(
+                                            task?.completedDate?.split("T")[0]
+                                          ).format("DD/MM/YYYY")}
+                                        </Badge>
+                                      </small>
+                                    )}
+                                  </Col>
+                                  <Col lg={3} className="middle">
+                                    <>
+                                      {["top"].map((placement) => (
+                                        <OverlayTrigger
+                                          key={placement}
+                                          placement={placement}
+                                          overlay={
+                                            <Tooltip
+                                              id={`tooltip-${placement}`}
+                                            >
+                                              {task?.assignedTo?.name}
+                                            </Tooltip>
+                                          }
+                                        >
+                                          <Button className="tooltip-button br0">
+                                            {task?.assignedTo?.name && (
+                                              <small
+                                                className="nameTag text-truncate pt-2"
+                                                title="Assigned To"
+                                              >
+                                                <img
+                                                  src={avtar}
+                                                  alt="userAvtar"
+                                                />{" "}
+                                                {task?.assignedTo?.name.split(
+                                                  " "
+                                                )[0] + " "}
+                                                {task?.assignedTo?.name.split(
+                                                  " "
+                                                )[1] &&
+                                                  task?.assignedTo?.name
+                                                    .split(" ")[1]
+                                                    ?.charAt(0) + "."}
+                                              </small>
+                                            )}
+                                          </Button>
+                                        </OverlayTrigger>
+                                      ))}
+                                    </>
+                                  </Col>
+                                  <Col
+                                    lg={2}
+                                    className="text-end middle"
+                                    style={{ justifyContent: "end" }}
+                                  >
+                                    <small>
+                                      {task?.status === "NOT_STARTED" && (
+                                        <Badge bg="primary">NOT STARTED</Badge>
+                                      )}
+                                      {task?.status === "ONGOING" && (
+                                        <Badge bg="warning">ONGOING</Badge>
+                                      )}
+                                      {task?.status === "COMPLETED" && (
+                                        <Badge bg="success">COMPLETED</Badge>
+                                      )}
+                                      {task?.status === "ONHOLD" && (
+                                        <Badge bg="secondary">ON HOLD</Badge>
+                                      )}
+                                    </small>
+                                  </Col>
+                                  <Col
+                                    lg={1}
+                                    id="dropdown_action"
+                                    className="text-end "
+                                    style={{
+                                      position: "absolute",
+                                      right: "20px",
+                                    }}
+                                  >
+                                    {((userDetails.role === "LEAD" &&
+                                      (userDetails.id ===
+                                        task?.assignedTo?._id ||
+                                        task?.lead?.includes(userDetails.id) ||
+                                        userDetails.id ===
+                                          task?.createdBy?._id)) ||
+                                      userDetails.role === "SUPER_ADMIN" ||
+                                      userDetails.role === "ADMIN") && (
+                                      <Dropdown>
+                                        <Dropdown.Toggle
+                                          variant="defult"
+                                          id="dropdown-basic"
+                                          style={{
+                                            padding: "0px",
+                                            textAlign: "end",
+                                          }}
+                                        >
+                                          <i className="fa fa-ellipsis-v"></i>
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                          <Dropdown.Item
+                                            onClick={() => {
+                                              setSelectedProject();
+                                              setShowAddTask(true);
+                                              setSelectedTask(task);
+                                            }}
+                                          >
+                                            Edit
+                                          </Dropdown.Item>
+                                          <Dropdown.Item>
+                                            Add Subtask
+                                          </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                      </Dropdown>
+                                    )}
+                                  </Col>
+                                </Row>
+                                </Col>
+                              </>
+                            ))}
+                        </Row>
+                    
+                    </div>
+                    </div>
                   </Card>
                 </Col>
               </Row>
@@ -1303,9 +1817,12 @@ export default function Dashboard(props) {
         showViewTask={showViewTask}
         closeViewTaskModal={closeViewTaskModal}
         selectedTaskId={selectedTaskId}
+        onInit={onInit}
+        setIsChange={setIsChange}
+        isChange={isChange}
       />
 
-      <Modal
+      {/* <Modal
         className="profile-modal"
         show={showModalOnLogin}
         onHide={() => {
@@ -1324,7 +1841,29 @@ export default function Dashboard(props) {
         >
           <UserForm handleModalClose={handleProfileModalClose} />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+
+      <Offcanvas  
+        className="Offcanvas-modal profile-modal"
+        style={{width:'600px'}}
+        
+        placement="end"
+        show={showModalOnLogin}
+        onHide={() => {
+          handleProfileModalClose();
+        }}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> Profile Details</Offcanvas.Title>
+          <button onClick={skipReminder} className="skip-button">
+            SKIP
+          </button>
+        </Offcanvas.Header>
+        <Offcanvas.Body style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }} >
+        <UserForm handleModalClose={handleProfileModalClose} />
+
+        </Offcanvas.Body>
+      </Offcanvas>
 
       {loading ? <Loader /> : null}
       {toaster && (

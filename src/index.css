@@ -28,7 +28,7 @@ code {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: blue rgb(180, 54, 238);
+  scrollbar-color: #fff rgb(180, 54, 238);
 
 }
 
@@ -37,13 +37,13 @@ code {
 }
 
 *::-webkit-scrollbar-track {
-  background: rgb(188, 126, 247);
+  background: #fff;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: blue;
+  background-color: rgb(188, 126, 247);
   border-radius: 20px;
-  border: 3px solid orange;
+ 
 }
 
 .dashboard_camp {
@@ -56,3 +56,7 @@ code {
   margin-left: auto;
   margin-top: 5%;
 }
+.modal-header{ padding: 5px 10px !important;}
+.form-control-lg, .form-control{padding: 0 10px !important; font-size: 14px !important; border-radius: 5px !important;}
+.form-control-lg:focus{ outline: none !important; box-shadow: none !important;}
+.form-control:focus{outline: none !important; box-shadow: none !important;}

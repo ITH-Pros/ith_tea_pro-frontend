@@ -8,19 +8,24 @@ import "../rating.css";
 import {
   addRatingOnTask,
   getAllAssignedProject,
-  getProjectById,
+  getProjectByProjectId,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
+import { useAuth } from "../../../auth/AuthProvider";
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Textarea } from "@nextui-org/react";
+
 
 export default function AddRating(props) {
   const [modalShow, setModalShow] = useState(false);
+  const { userDetails } = useAuth();
 
   const RatingModalBody = () => {
-    const { taskFromDashBoard , handleOnInit } = props;
+    const { taskFromDashBoard , onInit , setIsChange , isChange  } = props;
     console.log("taskFromDashBoard", taskFromDashBoard);
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
@@ -103,6 +108,32 @@ export default function AddRating(props) {
         [name]: value,
       });
     };
+    function formDateNightTime(dateString) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return ""; 
+      }
+      console.log(dateString,'-----------------------------------------------')
+      let utcTime = new Date(dateString );
+      utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+      const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+      const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+      const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+      let localTimeString = new Date(localTime.toISOString());
+      console.log("==========", localTimeString)
+      console.log(localTimeString)
+      return localTimeString
+    }
+    function formDateDayTime(dateString) {
+      let utcTime = new Date(dateString);
+      utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
+      const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+      const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+      const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+      let localTimeString = new Date(localTime.toISOString());
+      console.log("==========", localTimeString)
+      return localTimeString
+    }
 
     const getAllPendingRatingTaskList = async function (data) {
       setLoading(true);
@@ -112,7 +143,8 @@ export default function AddRating(props) {
         const dataToSend = {
           projectId: selectedProject,
           userId: selectedUser,
-          dueDate: selectedDate,
+          fromDate: formDateDayTime(selectedDate),
+          toDate: formDateNightTime(selectedDate),
         };
 
         const response = await getTaskDetailsByProjectId(dataToSend);
@@ -161,8 +193,18 @@ export default function AddRating(props) {
           } else {
             setToasterMessage("Rating Added Succesfully");
             setShowToaster(true);
-            handleOnInit();
+            if(taskFromDashBoard){
+            onInit();
+            if (userDetails?.role !== "CONTRIBUTOR") {
+              // getTeamWorkList();
+              setIsChange(!isChange);
+            }
+            }
+            if(!taskFromDashBoard){
             navigate("/rating");
+            }
+            setModalShow(false);
+            
           }
         } catch (error) {
           setLoading(false);
@@ -188,7 +230,7 @@ export default function AddRating(props) {
           setRatingForm({ ...ratingForm, projectList: projects.data });
         }
       } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        setToasterMessage(error?.error?.message || "Something Went Wrong");
         setShowToaster(true);
         setLoading(false);
         return error.message;
@@ -201,16 +243,16 @@ export default function AddRating(props) {
       };
       setLoading(true);
       try {
-        const user = await getProjectById(dataToSend);
+        const user = await getProjectByProjectId(dataToSend);
         setLoading(false);
         if (user.error) {
           setToasterMessage(user?.message || "Something Went Wrong");
           setShowToaster(true);
         } else {
-          setRatingForm({ ...ratingForm, userList: user?.data?.accessibleBy });
+          setRatingForm({ ...ratingForm, userList: user?.data });
         }
       } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        setToasterMessage(error?.error?.message || "Something Went Wrong");
         setShowToaster(true);
         setLoading(false);
         return error.message;
@@ -242,7 +284,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 project is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col} md="6">
@@ -266,10 +307,9 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 User name is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group as={Col} md="4" controlId="rating_date">
+            <Form.Group as={Col} md="6" controlId="rating_date">
               <Form.Label>Date</Form.Label>
               <Form.Control
                 required
@@ -278,13 +318,13 @@ export default function AddRating(props) {
                 placeholder="Rating Date"
                 onChange={handleRatingFormChange}
                 max={new Date().toISOString().split("T")[0]}
+                min="2023-04-01"
                 value={ratingForm.selectedDate}
                 disabled={taskFromDashBoard ? true : false}
               />
               <Form.Control.Feedback type="invalid">
                 Date is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group
@@ -301,7 +341,6 @@ export default function AddRating(props) {
                 placeholder="0-6"
                 value={ratingForm.rating}
                 onChange={handleRatingFormChange}
-                pattern="[0-9]*"
                 inputMode="numeric"
                 min="0"
                 max="6"
@@ -309,7 +348,6 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 Rating is required, value must be in range [0,6] !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Row>
           <Row>
@@ -332,9 +370,8 @@ export default function AddRating(props) {
                 ))}
               </Form.Control>
               <Form.Control.Feedback type="invalid">
-                User name is required !!
+                Task is required !!
               </Form.Control.Feedback>
-              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group as={Col} md="12">
@@ -350,7 +387,7 @@ export default function AddRating(props) {
           </Row>
 
           <Row className="desc">
-            <Form.Control
+            <Textarea
               type="textArea"
               name="comment"
               placeholder="comment"
@@ -382,7 +419,7 @@ export default function AddRating(props) {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         show={modalShow}
         onHide={() => setModalShow(false)}
         animation={false}
@@ -393,8 +430,28 @@ export default function AddRating(props) {
         <Modal.Body>
           <RatingModalBody />
         </Modal.Body>
-      </Modal>
-      {!modalShow && <span onClick={() => setModalShow(true)}>Add Rating</span>}
+      </Modal> */}
+      <Offcanvas  
+        className="Offcanvas-modal"
+        style={{width:'500px'}}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title> Add Rating</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body  >
+        <RatingModalBody />
+        </Offcanvas.Body>
+      </Offcanvas>
+
+      {!modalShow &&  <Button variant="primary"
+                              size="sm"
+                               style={{fontSize:'10px'}} onClick={() => setModalShow(true)}>Add Rating</Button>}
+
+
+
     </>
   );
 }

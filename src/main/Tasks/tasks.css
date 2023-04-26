@@ -37,19 +37,9 @@
   align-items: center !important;
 }
 
-.addBtn-section {
-  padding: 16px 35px;
-  color: #8355ad;
-  object-fit: cover;
-  font-size: 20px;
-  border: 1px solid #8355ad !important;
-  border-radius: 5px;
-}
+ 
 
-.addBtn-section:hover {
-  background: #8355ad;
-  color: #fff !important;
-}
+ 
 
 .mr-3 {
   margin-right: 1rem;
@@ -277,7 +267,7 @@ button.accordion-button {
 }
 
 .accordion-header {
-  padding: 0rem 1rem;
+  /* padding: 0rem 1rem; */
   background-color: #f7f7f700 !important;
 }
 
@@ -285,7 +275,7 @@ button.accordion-button {
   background-color: #eee0 !important;
   font-size: 16px !important;
   margin-bottom: 0;
-  font-weight: 700;
+  font-weight: 500;
   color: #5f5f5f !important;
 }
 
@@ -308,6 +298,7 @@ button.accordion-button {
   white-space: normal;
   word-break: break-word;
   height: 50px;
+ 
 }
 
 .addtask {
@@ -405,6 +396,7 @@ button.accordion-button {
   width: 15px;
   height: 15px;
   border-radius: 50%;
+  border: 1px #ccc solid;
 }
 
 .accordion-item .dropdown-toggle::after {
@@ -418,7 +410,7 @@ button.accordion-button {
 .dropdown .btn:first-child:active,
 .dropdown .btn.active,
 .dropdown .btn.show {
-  background: transparent !important;
+  background: transparent ;
   border: 0;
   color: #5f5f5fd9;
 }
@@ -457,9 +449,7 @@ button.accordion-button {
   color: #6d757d !important;
 }
 
-.addSectionBtn {
-  margin-right: 5px;
-}
+ 
 
 .center {
   text-align: center;
@@ -469,6 +459,35 @@ button.accordion-button {
   height: 100px;
 }
 
-.clickLabelArea i {
+.clickLabelArea p {
   font-size: 16px;
 }
+.clickLabelArea .btn{ padding: 0px !important;}
+.clickLabelArea .nameTag{ display: contents;}
+
+.body_ui{ position: inherit;     height: 21vh !important;}
+
+
+.was-validated .form-control:invalid{background-position: right calc(0.375em + 1.1875rem) center !important;}
+
+
+
+#multi_accrodian{ width: 100%;    background: #ffffff; padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;}
+#multi_accrodian button{     background: #cccccc57;     margin-bottom: 3px;
+  border: 0px;
+  width: 100%;
+  padding: 7px 10px;
+  text-align: left;}
+#multi_accrodian button h3{ font-size: 18px; margin: 0px; font-weight: 400;}
+
+
+.filter_btn{    
+  border: 0px;
+  float: right;
+  background: none;
+  text-align: end;}
+ 
+ 
+.action_btn { background: none !important; }

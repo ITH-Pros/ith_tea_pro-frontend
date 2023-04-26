@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row, Card } from "react-bootstrap";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
 import {
@@ -25,17 +25,15 @@ const customStyles = {
     ...provided,
     padding: 5,
   }),
-  valueContainer: (provided) => ({
-    ...provided,
-  }),
+ 
   control: (provided) => ({
     ...provided,
     boxShadow: "none",
-    maxHeight: "40px",
-    overflowY: "auto",
+ padding:'0px',
     borderRadius: "5px",
+    height: "45px",
     color: "#767474",
-    minHeight: "40px",
+  margin:'0px',
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   }),
@@ -51,6 +49,16 @@ const customStyles = {
     padding: "5px",
     zIndex: "2",
   }),
+  valueContainer: (provided) =>(
+    {
+      ...provided,
+width:'200px',
+height: "45px",
+overflowY: "auto",
+padding:'0px 10px',
+margin:'0px 3px'
+    }
+  ),
 };
 
 
@@ -69,11 +77,12 @@ export default function AddProject(props) {
   const [projectList, setProjectListValue] = useState([]);
   const params = useParams();
   const setShowToaster = (param) => showToaster(param);
-  const [color, setColor] = useColor("hex", "#cc3636 ");
-
   const projectById = projectList.find(
     (project) => project._id === params.projectId
   );
+ 
+  const [color, setColor] = useColor("hex", projectById?.colorCode||"#ADD8E6");
+
 
   const projectFormFields = {
     name: "",
@@ -107,15 +116,18 @@ export default function AddProject(props) {
         description: projectById.description,
         selectedManagers: projectById.managedBy.map((el) => el._id),
         selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
+        colorCode:projectById?.colorCode
       });
+    
     }
+ 
   }, [projectById]);
 
   const getAndSetAllProjects = async function () {
     try {
       const projects = await getAllProjects();
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects.data);
@@ -168,7 +180,7 @@ export default function AddProject(props) {
       setLoading(false);
 
       if (user.error) {
-        setToasterMessage(user?.error?.message || "Something Went Wrong");
+        setToasterMessage(user?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setUserList(user.data);
@@ -187,7 +199,7 @@ export default function AddProject(props) {
       setLoading(false);
 
       if (lead.error) {
-        setToasterMessage(lead?.error?.message || "Something Went Wrong");
+        setToasterMessage(lead?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setLeadList(lead.data);
@@ -310,23 +322,26 @@ export default function AddProject(props) {
       style={{
         marginTop: "7%",
         background: "none",
-        marginRight: "0px",
+       
         padding: "0px",
         borderRadius: "0px",
       }}
     >
-      <h1 className="h1-text">
-        <i className="fa fa-database" aria-hidden="true"></i>Add Projects
-      </h1>
+     
 
-      
-      <div >
-        <Link className="h1-text pull-right" to="/project/all">
-          <Button variant="outline-primary">
+      <Row>
+        <Col lg={6}> <h1 className="h1-text mt-0">
+        <i className="fa fa-database" aria-hidden="true"></i>{projectById?'Edit Project':'Add Project'}
+      </h1></Col>
+        <Col lg={6} className="text-end">
+        <Link  to="/project/all">
+          <Button variant="btn btn-primary">
             <FontAwesomeIcon icon={faArrowLeft} /> Back
           </Button>
         </Link>
-        </div>
+        </Col>
+      </Row>
+     
 
         
    
@@ -334,10 +349,10 @@ export default function AddProject(props) {
     
       <Form
         noValidate
-        className="addUserFormBorder add-pro"
+        className="addUserFormBorder "
         validated={validated}
       >
-      
+      <Card className="px-4 py-4 mt-2">
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
             <Form.Label>Name</Form.Label>
@@ -353,7 +368,6 @@ export default function AddProject(props) {
             <Form.Control.Feedback type="invalid">
               Name is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
         </Row>
 
@@ -421,6 +435,7 @@ export default function AddProject(props) {
         <div>
           <UpdateAndCancel />
         </div>
+        </Card>
       </Form>
       {toaster && (
         <Toaster

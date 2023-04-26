@@ -542,7 +542,7 @@ function TaskModal(props) {
       };
       const taskRes = await getTaskDetailsByTaskId(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -556,7 +556,23 @@ function TaskModal(props) {
     }
   };
 
+  function formDateNightTime(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return ""; 
+    }
+    let utcTime = new Date();
+    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
+  }
+  
   const updateMutipleTaskDetails = async (data, taskDetails) => {
+    console.log('_+++++++++++++++++++++++++++++++++++++++')
     try {
       let dataToSend = {
         taskId: taskDetails._id,
@@ -566,14 +582,14 @@ function TaskModal(props) {
       data.title && (dataToSend["title"] = data.title);
       data.description && (dataToSend["description"] = data.description);
       data.assignedTo && (dataToSend["assignedTo"] = data.assignedTo);
-      data.dueDate && (dataToSend["dueDate"] = data.dueDate);
+     (dataToSend["dueDate"] =formDateNightTime(data.dueDate) );
       data.priority && (dataToSend["priority"] = data.priority);
       data.status && (dataToSend["status"] = data.status);
       data.completedDate && (dataToSend["completedDate"] = data.completedDate);
 
       const taskRes = await updateTaskDetails(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -598,7 +614,7 @@ function TaskModal(props) {
       setLoading(false);
 
       if (comment.error) {
-        setToasterMessage(comment?.error?.message || "Something Went Wrong");
+        setToasterMessage(comment?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setToasterMessage("Comment added succesfully");
@@ -619,10 +635,11 @@ function TaskModal(props) {
         taskId: selectedTaskDetails._id,
         ...data,
       };
+      console.log(dataToSend);
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(taskRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {

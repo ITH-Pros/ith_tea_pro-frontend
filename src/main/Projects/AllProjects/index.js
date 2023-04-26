@@ -13,8 +13,8 @@ import Loader from "../../../components/Loader";
 import { useAuth } from "../../../auth/AuthProvider";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
-import { Modal, Button } from "react-bootstrap";
-
+import { Modal, Button, Row, Col } from "react-bootstrap";
+import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
 export default function AllProject() {
   const { userDetails } = useAuth();
   const [toaster, showToaster] = useState(false);
@@ -35,7 +35,7 @@ export default function AllProject() {
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
 
   const handleIsArchive = () => {
-    setProjectListValue([])
+    setProjectListValue([]);
     setIsArchive(!isArchive);
   };
 
@@ -74,18 +74,18 @@ export default function AllProject() {
       dataToSend.isArchived = true;
     }
     try {
-    setLoading(true);
+      setLoading(true);
       const projects = await getAllProjects(dataToSend);
       if (projects.error) {
-        setLoading(false)
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setLoading(false);
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectListValue(projects?.data);
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       return error.message;
@@ -96,7 +96,7 @@ export default function AllProject() {
     try {
       const projects = await getTaskStatusAnalytics();
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectTaskAnalytics(projects?.data);
@@ -123,7 +123,7 @@ export default function AllProject() {
       setLoading(false);
 
       if (removeRes.error) {
-        setToasterMessage(removeRes?.error?.message || "Something Went Wrong");
+        setToasterMessage(removeRes?.message || "Something Went Wrong");
         setShowToaster(true);
         return;
       } else {
@@ -178,7 +178,7 @@ export default function AllProject() {
         setIsArchiveModalShow(false);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setConfirmModalShow(false);
       setIsArchiveModalShow(false);
       setShowToaster(true);
@@ -190,38 +190,55 @@ export default function AllProject() {
   return (
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
-        <h1 className="h1-text">
-          <i className="fa fa-database" aria-hidden="true"></i> Projects
-          <div className="projects-button">
-          {(userDetails.role === "SUPER_ADMIN" || userDetails.role === "ADMIN") && !isArchive && (
-          
-          <Link style={{float:'left'}}
-            to={{
-              pathname: "/project/add",
-            }}
-          >
-            <i
-              className="fa fa-plus-circle fa-3x addBtn"
-             
-              aria-hidden="true"
-            > &nbsp; Add Project </i> 
-          </Link>
-      
-    )}
-     {
-    (userDetails.role ==="ADMIN" || userDetails.role === "SUPER_ADMIN") && 
-  <button className="btn btn-primary" onClick={handleIsArchive}> {isArchive ? 'Active Projects':'Archive List'}</button>
-  }
-
-          </div>
-        </h1>
+        <Row>
+          <Col lg={6}>
+            <h1 className="h1-text mt-0">
+              <i>
+                <FaGem />
+              </i>{" "}
+              Projects
+            </h1>
+          </Col>
+          <Col lg={6}>
+            <div className="text-end">
+              {(userDetails.role === "SUPER_ADMIN" ||
+                userDetails.role === "ADMIN") &&
+                !isArchive && (
+                  <Link
+                    style={{ marginRight: "10px" }}
+                    to={{
+                      pathname: "/project/add",
+                    }}
+                  >
+                     <button className="btn btn-primary"> 
+                    <i
+                      className="fa fa-plus-circle"
+                      aria-hidden="true"
+                    >
+                       </i>
+                      
+                      &nbsp; Add Project{" "}
+                   
+                    </button>
+                  </Link>
+                )}
+              {(userDetails.role === "ADMIN" ||
+                userDetails.role === "SUPER_ADMIN") && (
+                <button className="btn btn-primary" onClick={handleIsArchive}>
+                  {" "}
+                  {isArchive ? "Active Projects" : "Archive List"}
+                </button>
+              )}
+            </div>
+          </Col>
+        </Row>
 
         <div className="project-boxes jsGridView">
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
                 <div key={projectIndex}>
-                  <ProjectCard 
+                  <ProjectCard
                     name={element.name}
                     background={element?.colorCode}
                     description={element?.description || "--"}
@@ -243,8 +260,10 @@ export default function AllProject() {
                 </div>
               );
             })}
-          {!projectList?.length && userDetails.role === "CONTRIBUTOR" && (
-            <h6>No Project Found</h6>
+          {!projectList?.length && (
+            <div >
+            <p className="alig-nodata">No Project Found</p>
+            </div>
           )}
         </div>
       </div>
@@ -269,7 +288,7 @@ export default function AllProject() {
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="delete-popup">
+        <Modal.Body className="text-center">
           <h6>
             Are you sure you want to{" "}
             {isArchiveModalShow
@@ -280,11 +299,11 @@ export default function AllProject() {
             this project?
           </h6>
 
-          <div className="button-center-corformain">
+          <div className="button-center-corformain mt-3">
             {!isArchiveModalShow && (
               <Button
-                style={{ marginLeft: "16px" }}
-                className="btn btn-danger mb-3 mr-3"
+                style={{ marginLeft: "10px" }}
+                className="btn btn-danger btn-sm"
                 onClick={() => deleteProject()}
               >
                 Delete
@@ -292,16 +311,16 @@ export default function AllProject() {
             )}
             {isArchiveModalShow && (
               <Button
-                style={{ marginLeft: "16px" }}
-                className="btn btn-danger mb-3 mr-3"
+              
+                className="btn btn-danger btn-sm "
                 onClick={() => archiveProject()}
               >
                 {!isArchive ? "Archive" : "Unarchive"}
               </Button>
             )}
             <Button
-              style={{ marginLeft: "16px" }}
-              className="btn mb-3 mr-3"
+               style={{marginLeft:'10px'}}
+              className="btn btn-light btn-sm"
               onClick={() => {
                 setConfirmModalShow(false);
                 setIsArchiveModalShow(false);

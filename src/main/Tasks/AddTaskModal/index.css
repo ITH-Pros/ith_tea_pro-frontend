@@ -15,12 +15,14 @@
 
 span.badge {
   font-size: 10px;
+  font-weight: 200;
+  border-radius: 10px;
 }
 
 .fa-check-circle {
   color: #17b667 !important;
   margin-right: 5px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
 }
 
 select {
@@ -163,14 +165,11 @@ p {
   margin-bottom: 0px !important;
 }
 
-.taskModalForm .modal-body {
-  height: 75vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+ 
 
 button.btn-press.btn-gradient-border {
-  margin-right: 12px;
+  
+  font-size: 14px;
 }
 
 .addFormBtn {

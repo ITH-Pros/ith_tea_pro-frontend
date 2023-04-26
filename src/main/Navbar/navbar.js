@@ -4,11 +4,12 @@ import React from "react";
 import { Layout } from "./Layout.js";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { BsBoxArrowRight } from "react-icons/bs";
-import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
+import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink, FaUsers } from "react-icons/fa";
 import "./navbar.css";
 
 export default function Navbar() {
   const { accessToken } = useAuth();
+  const { userDetails } = useAuth();
 
   const navLinkStyles = ({ isActive }) => {
     return {
@@ -27,9 +28,9 @@ export default function Navbar() {
   return (
     <Layout>
       {accessToken && (
-        <Sidebar>
-          <Menu iconShape="circle">
-            <NavLink to="/" style={navLinkStyles}>
+        <Sidebar >
+          <Menu onClick={() => { console.log('------------------'); localStorage.removeItem('selectedOptions') }} iconShape="circle">
+            <NavLink to="/"  style={navLinkStyles}>
               <MenuItem icon={<FaHome />}> Dashboard </MenuItem>
             </NavLink>
             <NavLink to="/project/all" style={navLinkStyles}>
@@ -42,8 +43,11 @@ export default function Navbar() {
               <MenuItem icon={<FaRegLaughWink />}> Rating </MenuItem>
             </NavLink>
             <NavLink to="/team" style={navLinkStyles}>
-              <MenuItem icon={<FaUser />}> Team </MenuItem>
+              <MenuItem icon={<FaUsers />}> Team </MenuItem>
             </NavLink>
+           { userDetails?.role!=='CONTRIBUTOR'&&<NavLink to="/team-report" style={navLinkStyles}>
+              <MenuItem icon={<FaUser />}>Team Report </MenuItem>
+            </NavLink>}
             <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
               <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>
             </NavLink>

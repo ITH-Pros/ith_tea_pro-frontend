@@ -63,7 +63,6 @@ p {
   padding-right: 0;
 }
 
-
 .heading {
   color: #666666;
   text-align: center;
@@ -73,11 +72,6 @@ body {
   font-family: Arial, sans-serif;
   color: #404040;
   background-color: #eee;
-}
-
-.container {
-  width: 520px;
-  margin-top: 20px;
 }
 
 .button-group {
@@ -130,10 +124,11 @@ body {
 .commentedBy {
   float: left;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   border-bottom: 1px solid #ddd;
   height: 40px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .comment-tex {
@@ -157,6 +152,7 @@ span.date.sub-text {
 p {
   font-size: 13px;
   margin-bottom: 0px;
+  color: #7f7c7c;
 }
 
 .toggle-tags {
@@ -164,13 +160,13 @@ p {
   justify-content: left;
   align-items: center;
   margin: 20px 0px;
-  border-bottom: 1.5px solid #607D8B;
+  border-bottom: 1.5px solid #607d8b;
 }
 
 .toggle-button {
   background-color: #eee0;
   border: none;
-  color: #607D8B;
+  color: #607d8b;
   padding: 10px 40px;
   font-size: 16px;
   cursor: pointer !important;
@@ -181,5 +177,46 @@ p {
 }
 
 .toggle-button.active {
-  border-bottom: 3px solid #673AB7;
+  border-bottom: 3px solid #673ab7;
+}
+/* 
+.offcanvas.show:not(.hiding) {
+
+  width: 800px;
+} */
+
+.ratingForm {
+  width: 220px;
+  position: absolute;
+  right: 50px;
+  top: 20px;
+}
+.ratingForm input {
+  width:80px;
+ 
+  height: 38px;
+  float: left;
+  display: block;
+  margin-right: 5px;
+  float: left;
+  display: block;
+}
+.ratingForm button {
+  float: left;
+ 
+}
+
+.ql-editor {
+  height: 150px;
+  overflow-y: auto;
+}
+
+.no_comment {
+  width: 100%;
+  padding: 0px;
+  min-height: 50px;
+  border: 1px #ccc dashed;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }

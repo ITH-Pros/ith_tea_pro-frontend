@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../../components/Loader";
 import { uploadProfileImage } from "../../services/user/api";
+import Badge from "react-bootstrap/Badge";
 
 const ImageUpload = (props) => {
   const {
@@ -12,6 +13,7 @@ const ImageUpload = (props) => {
   } = props;
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [inputKey, setInputKey] = useState(Date.now());
 
   useEffect(() => {
     if (selectedProfilePic) {
@@ -23,7 +25,11 @@ const ImageUpload = (props) => {
     const selectedImage = event.target.files[0];
     if (selectedImage && selectedImage.type.startsWith("image/")) {
       if (selectedImage.size > 5 * 1024 * 1024) {
-        alert(`Please select an image file that is less than or equal to 5MB. The selected file size is ${Math.round(selectedImage.size/1024/1024 * 100) / 100}MB`);
+        alert(
+          `Please select an image file that is less than or equal to 5MB. The selected file size is ${
+            Math.round((selectedImage.size / 1024 / 1024) * 100) / 100
+          }MB`
+        );
         return;
       }
       setImageUrl(URL.createObjectURL(selectedImage));
@@ -31,7 +37,7 @@ const ImageUpload = (props) => {
       try {
         const formData = new FormData();
         formData.append("file", selectedImage);
-  
+
         const response = await uploadProfileImage(formData);
         setLoading(false);
         if (response.error) {
@@ -48,14 +54,16 @@ const ImageUpload = (props) => {
         setLoading(false);
         return error.message;
       }
+      setInputKey(Date.now());
     } else {
       alert("Please select a valid image file (jpg, png, gif)");
     }
   };
-  
+
   const deleteImage = async () => {
     setImageUrl(null);
     setProfileImage(null);
+    setInputKey(Date.now());
   };
   return (
     <>
@@ -67,38 +75,44 @@ const ImageUpload = (props) => {
                 <img src={imageUrl} alt="Preview" />
                 <div className="upload-icon">
                   {isEditable && (
-                    <i
-                      style={{ cursor: "pointer" }}
-                      className="fas fa-edit"
-                    ></i>
+                    <Badge bg="secondary">
+                      <i
+                        style={{ cursor: "pointer" }}
+                        className="fas fa-edit"
+                      ></i>
+                    </Badge>
+                  )}
+                  {imageUrl && isEditable && (
+                    <Badge bg="danger" size="sm">
+                      <i
+                        style={{ cursor: "pointer" }}
+                        onClick={deleteImage}
+                        className="fas fa-trash"
+                      ></i>
+                    </Badge>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="upload-icon">
+              <div className="text-center">
                 {isEditable && <i className="fas fa-cloud-upload-alt"></i>}
+                <br/>
                 {isEditable && <span>Select an image file</span>}
               </div>
             )}
           </label>
           {
             <input
+              key={inputKey}
               id="image-input"
               type="file"
-              accept="image/*"
+              accept="image/jpeg, image/png, image/gif"
               onChange={handleImageChange}
             />
           }
         </div>
         {loading ? <Loader /> : null}
       </>
-      {imageUrl && isEditable && (
-        <i
-          style={{ cursor: "pointer" }}
-          onClick={deleteImage}
-          className="fas fa-trash"
-        ></i>
-      )}
     </>
   );
 };

@@ -55,7 +55,7 @@
 
 .bg-box .bg2 {
   background-image: url("../../public/img/image_processing.gif");
-  background-color: #f1f1f1;
+  background-color: #ededee;
   background-position: center;
   animation: fadeinTop 1s 0.3s both;
   margin: 0 3rem 4rem 0;
@@ -196,11 +196,10 @@
 
 .loginContent {
   width: 426px;
-  background: #dde1e7;
+  background: #fff;
   border-radius: 10px;
   padding: 40px 30px;
-  box-shadow: -3px -3px 7px #ffffff73,
-    2px 2px 5px rgba(94, 104, 121, 0.288);
+ 
 }
 
 .loginContent img {
@@ -241,15 +240,14 @@
   outline: none;
   border: none;
   color: #595959;
-  background: #dde1e7;
+  background: #fff;
   border-radius: 25px;
   width: 100% !important;
   height: 38px !important;
-  margin: 10px 0px 0px 0px;
-  border: none !important;
-  border-radius: 0.3rem !important;
-  box-shadow: inset 2px 2px 5px #babecc,
-    inset -5px -5px 10px #ffffff73;
+  /* margin: 10px 0px 0px 0px; */
+  border-bottom: 1px #ccc solid !important;
+  border-radius: 0rem !important;
+  
 }
 
 .field input:focus~label {
@@ -262,7 +260,7 @@
 }
 
 .field span {
-  margin-left: 10px !important;
+  /* margin-left: 10px !important; */
   margin-top: -5px !important;
   position: absolute;
   width: 25px;
@@ -297,7 +295,7 @@
   height: 42px;
   color: #fff;
   font-size: 16px !important;
-  font-weight: 600;
+ 
   background: #8355ad;
   border: none;
   outline: none;
@@ -347,3 +345,42 @@
   box-shadow: inset 2px 2px 5px #babecc,
     inset -5px -5px 10px #ffffff73;
 }
+
+.forgot-password,
+.reset-password {
+  margin-top: 10px;
+  border-radius: 16px;
+  border: none;
+  padding: 4px 4px;
+  margin-right: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2),
+              -4px -4px 8px rgba(255, 255, 255, 0.5);
+  transition: transform 0.2s ease-in-out;
+}
+
+.forgot-password {
+  background-color: #8355ad;
+  color: white;
+}
+
+.reset-password {
+  background-color: #8355ad;
+  color: white;
+}
+
+.forgot-password:hover,
+.reset-password:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),
+              -2px -2px 4px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.eye-button{ position: absolute;
+  border: 0px;
+  right: 20px;
+  top: 0;
+  background: none;}
+  .error-msg{ color: red;}

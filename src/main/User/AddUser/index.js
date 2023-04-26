@@ -58,7 +58,7 @@ export default function AddUser(props) {
         navigate("/team");
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
       setLoading(false);
       return error.message;
@@ -90,7 +90,6 @@ export default function AddUser(props) {
             <Form.Control.Feedback type="invalid">
               Name is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           
           <Form.Group as={Col} md="4">
@@ -106,7 +105,6 @@ export default function AddUser(props) {
             <Form.Control.Feedback type="invalid">
               Email is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           
           <Form.Group as={Col} md="4">
@@ -131,7 +129,7 @@ export default function AddUser(props) {
           </Form.Group>
         </Row>
 
-        <div style={{ marginRight: "10px" }} className="text-right">
+        <div  className="text-right">
           <Button
             className="btn-gradient-border btnDanger "
             type="button"

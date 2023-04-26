@@ -49,6 +49,11 @@ export async function getAllUsersWithoutPagination(data) {
     .get("/user/v1/all", { params: data })
     .then((res) => res.data);
 }
+export async function getAllUsersWithAdmin(data) {
+  return axiosInstance
+    .get("/user/v1/all/users")
+    .then((res) => res.data);
+}
 
 export async function getAllMyWorks(data) {
   return axiosInstance
@@ -56,6 +61,11 @@ export async function getAllMyWorks(data) {
     .then((res) => res.data);
 }
 
+export async function getAllLeads(data) {
+  return axiosInstance
+    .get("/user/v1/all/leads")
+    .then((res) => res.data);
+}
 export async function getOverDueTaskListData(data) {
   return axiosInstance
     .get("/task/v1/overdue/tasks", { params: data })
@@ -89,6 +99,11 @@ export async function assignUserToProjectByIds(data) {
     return (axiosInstance.patch('projects/v1/assign/projects', data).then(res => res.data))
 }
 
+export async function deleteUserById(data) {
+  return (axiosInstance.patch("user/v1/delete/user", data).then((res) => res.data));
+}
+
+
 export async function deleteProjectById(data) {
   return axiosInstance
     .patch("/projects/v1/delete", data)
@@ -104,6 +119,12 @@ export async function archiveProjectById(data) {
 export async function addNewProject(data) {
   return axiosInstance
     .post("/projects/v1/add/new", data)
+    .then((res) => res.data);
+}
+
+export async function resendActivationLinkApi(data) {
+  return axiosInstance
+    .post("auth/v1/resend/password/setup", data)
     .then((res) => res.data);
 }
 
@@ -243,7 +264,14 @@ export async function addSectionApi(data) {
 
 export async function getProjectById(data) {
   return axiosInstance
-    .get("projects/v1/specific", {
+    .get("projects/v1/categories", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+export async function getProjectByProjectId(data) {
+  return axiosInstance
+    .get("projects/v1/project/users/for/rating", {
       params: data,
     })
     .then((res) => res.data);
@@ -298,6 +326,29 @@ export async function addRatingOnTask(data) {
 export async function getUserAnalytics(data) {
   return axiosInstance
     .get("user/v1/team/analytics", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+
+
+export async function getTaskHistoryById(data) {
+  return axiosInstance
+    .get("tasklogs/v1/get", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+
+export async function removeUserFromProject(data) {
+  return axiosInstance
+    .patch("projects/v1/remove/users", data)
+    .then((res) => res.data);
+}
+
+export async function getUserReportData(data) {
+  return axiosInstance
+    .get("task/v1/get/team/task", {
       params: data,
     })
     .then((res) => res.data);

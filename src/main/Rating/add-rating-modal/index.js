@@ -196,7 +196,7 @@ export default function AddRatingModal(props) {
 
       const projects = await getAllAssignedProject(dataToSend);
       if (projects.error) {
-        setToasterMessage(projects?.error?.message || "Something Went Wrong");
+        setToasterMessage(projects?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setProjectOptions(projects.data);
@@ -214,7 +214,7 @@ export default function AddRatingModal(props) {
       const user = await getAllUserDataForRating();
       setLoading(false);
       if (user.error) {
-        setToasterMessage(user?.error?.message || "Something Went Wrong");
+        setToasterMessage(user?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setTeamOptions(user?.data);
@@ -233,7 +233,7 @@ export default function AddRatingModal(props) {
       const rating = await addRating(data);
       setLoading(false);
       if (rating.error) {
-        setToasterMessage(rating?.error?.message || "Something Went Wrong");
+        setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
         setToasterMessage("Rating Added Succesfully");
@@ -269,9 +269,8 @@ export default function AddRatingModal(props) {
               ))}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              User name is required !!
+              Project is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Col} md="6">
@@ -294,7 +293,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               User name is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Col} md="6">
@@ -315,9 +313,8 @@ export default function AddRatingModal(props) {
               ))}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              User name is required !!
+              Task is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="rating_date">
             <Form.Label>Date</Form.Label>
@@ -333,7 +330,6 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               Date is required !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group
@@ -357,12 +353,11 @@ export default function AddRatingModal(props) {
             <Form.Control.Feedback type="invalid">
               Rating is required, value must be in range [0,5] !!
             </Form.Control.Feedback>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3 desc">
           <Form.Label>Comment</Form.Label>
-          <FroalaEditorComponent
+          <FroalaEditorComponent className='text-Editor'
             tag="textarea"
             onModelChange={onChangeOfComments}
           />
