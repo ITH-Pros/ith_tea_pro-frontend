@@ -283,7 +283,7 @@ export default function Dashboard(props) {
                               index + 1 <= 9 ? "0" + (index + 1) : index + 1
                             }`;
                             return (
-                              <td key={index}  className={isWeekend ? 'weekendBox' : ''}>
+                              <td key={index}  >
                                 {userDetails?.role === "CONTRIBUTOR" ||
                                 new Date(dateToSend) > new Date() ? (
                                   <span
@@ -302,7 +302,7 @@ export default function Dashboard(props) {
                                         paddingLeft: "20px",
                                         paddingRight: "6px",
                                       }}
-                                      className={ weekendVaule ? 'weekend input_dashboard' : 'input_dashboard'}
+                                      className={ weekendVaule ? 'weekendBox input_dashboard' : 'input_dashboard'}
                                     ></span>
                                   </>
                                 )}
