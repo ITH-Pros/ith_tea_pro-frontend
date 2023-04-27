@@ -503,7 +503,7 @@ export default function Teams(props) {
                     )}
                   <div className="content">
                     <>
-                      {!user?.credentials && (
+                      {!user?.credentials && (userDetails?.role === "SUPER_ADMIN" ||userDetails?.role === "ADMIN") && (
                
                         <OverlayTrigger
                         placement="top"
