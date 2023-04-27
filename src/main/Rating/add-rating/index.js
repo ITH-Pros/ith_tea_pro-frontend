@@ -27,6 +27,7 @@ export default function AddRating(props) {
   const RatingModalBody = () => {
     const { taskFromDashBoard , onInit , setIsChange , isChange  } = props;
     console.log("taskFromDashBoard", taskFromDashBoard);
+    const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
     // console.log("taskFromDashBoard", taskFromDashBoard);
     // const { taskFromDashBoard } = props;
     // console.log("taskFromDashBoard", taskFromDashBoard)
@@ -350,28 +351,16 @@ export default function AddRating(props) {
                 required
                 as="select"
                 type="select"
-                name="rating"
+                name="rating" 
                 onChange={handleRatingFormChange}
                 value={ratingForm.rating}
                 // disabled={taskFromDashBoard ? true : false}
               >
                 <option value="" disabled>Select Rating</option>
-                <option value="0">0</option>
-                <option value="0.5">0.5</option>
-                <option value="1">1</option>
-                <option value="1.5">1.5</option>
-                <option value="2">2</option>
-                <option value="2.5">2.5</option>
-                <option value="3">3</option>
-                <option value="3.5">3.5</option>
-                <option value="4">4</option>
-                <option value="4.5">4.5</option>
-                <option value="5">5</option>
-                <option value="5.5">5.5</option>
-                <option value="6">6</option>
+  {ratingValues.map((value) => (
+    <option key={value} value={value}>{value}</option>
+  ))}
               </Form.Control>
-
-
               <Form.Control.Feedback type="invalid">
                 Rating is required, value must be in range [0,6] !!
               </Form.Control.Feedback>

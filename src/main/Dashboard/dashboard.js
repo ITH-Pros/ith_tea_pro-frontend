@@ -8,7 +8,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import "./dashboard.css";
 import Col from "react-bootstrap/Col";
 import Loader from "../../components/Loader";
-import { editLogedInUserDetails } from "../../services/user/api";
+import { editLogedInUserDetails, getAllUsers } from "../../services/user/api";
 import Toaster from "../../components/Toaster";
 import avtar from "../../assests/img/avtar.png";
 import leadAvatar from "../../assests/img/leadAvatar.jpeg";
@@ -91,6 +91,10 @@ export default function Dashboard(props) {
     }
 
     getPendingRating();
+    if (userDetails?.role !== "CONTRIBUTOR") {
+      getAndSetAllUsers();
+    }
+ 
   }
 
   const handleProfileModalClose = () => {
@@ -209,13 +213,47 @@ export default function Dashboard(props) {
     }
   };
 
+
+  const getAndSetAllUsers = async function () {
+
+    let options = {
+      currentPage: 1,
+      rowsPerPage: 50,
+    };
+   
+    setLoading(true);
+    try {
+      let params = {
+        limit: options?.rowsPerPage,
+        currentPage: options?.currentPage,
+      };
+   
+      const projects = await getAllUsers({ params });
+      setLoading(false);
+      if (projects.error) {
+        setToasterMessage(projects?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        setTeamMembers(projects?.data?.users || []);
+        
+      }
+    } catch (error) {
+      setLoading(false);
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
+
+
+
+
   const getPendingRating = async function (e) {
     setLoading(true);
     let dataToSend={
-      filterByTeamMember : e
+      // filterByTeamMember : e
+      memberId : e
     }
-
-   
 
     try {
       const tasks = await getAllPendingRating(dataToSend);
