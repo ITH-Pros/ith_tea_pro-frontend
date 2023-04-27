@@ -42,17 +42,31 @@ export default function MyCalendar() {
         console.log(rating?.error);
         setLoading(false);
       } else {
-        let dataToSet = rating.data?.[0]?.ratings?.map((item, index) => {
-          return {
+        let dataToSet = [];
+        const currentDate = new Date();
+        const firstDateOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+        for (let i = firstDateOfMonth; i < currentDate; i.setDate(i.getDate() + 1)) {
+          dataToSet.push({
+            id: i.getTime(),
+            title: "A",
+            start: new Date(i),
+            end: new Date(i),
+          });
+        }
+        const ratingData = rating.data?.[0]?.ratings;
+        if (ratingData) {
+          const ratingEvents = ratingData.map((item, index) => ({
             id: index,
             title: `${item.rating?.toFixed(2)}`,
             start: new Date(item.year, item.month - 1, item.date),
             end: new Date(item.year, item.month - 1, item.date),
-          };
-        });
-        console.log(dataToSet,'---------------------------------data to set')
+          }));
+          dataToSet = [...dataToSet, ...ratingEvents];
+        }
+        console.log(dataToSet, '---------------------------------data to set');
         setMyRatings(dataToSet);
         setLoading(false);
+      
       }
     } catch (error) {
       console.log("error", error);
@@ -75,7 +89,8 @@ export default function MyCalendar() {
             view={"month"}
             defaultDate={new Date()}
             onNavigate={handleDateChange}
-            style={{ height: 400 }}
+            className=""
+            style={{ height: 400  }}
           />
         </div>
       {loading ? <Loader /> : null}
