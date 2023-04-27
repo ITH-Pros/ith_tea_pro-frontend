@@ -690,5 +690,11 @@ ul.weekdays {
 }
 .weekend {
   color: red;
+
+}
+
+.weekendBox {
+  background-color: #ea7777;
+  /* height: 75px !important; */
 }
 

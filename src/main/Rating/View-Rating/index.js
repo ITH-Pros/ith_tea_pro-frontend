@@ -6,9 +6,7 @@ import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Row, Table } from "react-bootstrap";
-import {
-  getRatings,
-} from "../../../services/user/api";
+import { getRatings } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import Loader from "../../../components/Loader";
@@ -30,6 +28,7 @@ export default function Dashboard(props) {
   const [days, setDays] = useState(moment().daysInMonth());
   const [monthUse, setMonth] = useState(moment().format("MMMM"));
   const [yearUse, setYear] = useState(currentYear);
+  // const [isWeekendChecked, setIsWeekendChecked] = useState(false);
   let months = moment().year(Number)?._locale?._months;
   let years = [2022, 2023, 2024, 2025];
 
@@ -39,6 +38,15 @@ export default function Dashboard(props) {
       setTeamView(true);
     }
   }, []);
+
+  // set the isWeekendChecked state variable based on the weekend value
+  //  useEffect(() => {
+  //   setIsWeekendChecked(weekend);
+  // }, [weekend]);
+
+  const isWeekend = (dayOfWeek) => {
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  };
 
   function onInit() {
     let dataToSend = {
@@ -83,7 +91,7 @@ export default function Dashboard(props) {
         setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        console.log(rating.data)
+        console.log(rating.data);
         setRatings([...rating.data]);
       }
     } catch (error) {
@@ -97,36 +105,28 @@ export default function Dashboard(props) {
     <div>
       <div className="dashboard_camp">
         <Row>
-         
           <Col lg={12}>
-          {(userDetails?.role === "LEAD" ||
-            userDetails?.role === "CONTRIBUTOR") && (
-            <button
-              className="addTaskBtn"
-              onClick={() => setTeamView(!teamView)}
-              style={{ position:'absolute', right:'40px', zIndex:'9' }}
-            >
-              {teamView ? "Self view" : "Team View"}{" "}
-            </button>
-          )}
-    <div className="wrap  rating_btn" style={{height:'100%'}}>
-                {userDetails?.role !== "CONTRIBUTOR" && (
-                  
-                    <AddRating
-                   handleOnInit={onInit}
-    
-                    
-                     />
-                  
-                )}
-              </div>
+            {(userDetails?.role === "LEAD" ||
+              userDetails?.role === "CONTRIBUTOR") && (
+              <button
+                className="addTaskBtn"
+                onClick={() => setTeamView(!teamView)}
+                style={{ position: "absolute", right: "40px", zIndex: "9" }}
+              >
+                {teamView ? "Self view" : "Team View"}{" "}
+              </button>
+            )}
+            <div className="wrap  rating_btn" style={{ height: "100%" }}>
+              {userDetails?.role !== "CONTRIBUTOR" && (
+                <AddRating handleOnInit={onInit} />
+              )}
+            </div>
           </Col>
         </Row>
-      
       </div>
 
       {teamView ? (
-        <div className="dashboard_camp" >
+        <div className="dashboard_camp">
           <div className=" ">
             <div className="d-flex" style={{ marginTop: "10px" }}>
               <h5 className="text-center h5cls">
@@ -188,53 +188,82 @@ export default function Dashboard(props) {
                   </Form.Control>
                 </Form.Group>
               </h5>
-
-          
             </div>
-            <Table responsive >
-            <thead>
-  <tr>
-    <th style={{ width: "140" }}>Name</th>
-    <th>Day</th>
-    {Array(days)
-      .fill(0)
-      .map((rating, index) => {
-        const date = new Date(yearUse, months.indexOf(monthUse), index + 1);
-        const dayOfWeek = (date.getDay() + 1) % 7;
-        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        const className = isWeekend ? "weekend" : "";
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th style={{ width: "140" }}>Name</th>
+                  {/* <th>Day</th> */}
+                  {Array(days)
+                    .fill(0)
+                    .map((rating, index) => {
+                      const date = new Date(
+                        yearUse,
+                        months.indexOf(monthUse),
+                        index + 1
+                      );
+                      const dayOfWeek = (date.getDay() + 1) % 7;
+                      const dayNames = [
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                      ];
+                      const weekend = isWeekend(dayOfWeek);
+                      const className = weekend ? "weekend" : "";
 
-        return (
-          <th key={index} className={className}>
-            <span>{index + 1 < 10 ? "0" : ""}{index + 1}</span><br></br>
-            <span>{dayNames[dayOfWeek]}</span>
-          </th>
-        );
-      })}
-    <th style={{ color: "green" }}>Average</th>
-  </tr>
-</thead>
-
-
-
-
-
+                      return (
+                        <th key={index} className={className}>
+                          <span>
+                            {index + 1 < 10 ? "0" : ""}
+                            {index + 1}
+                          </span>
+                          <br></br>
+                          <span>{dayNames[dayOfWeek]}</span>
+                        </th>
+                      );
+                    })}
+                  <th style={{ color: "green" }}>Average</th>
+                </tr>
+              </thead>
               <tbody>
                 {ratingsArray.map((user, index) => {
                   return (
                     <tr key={index}>
-                      <td className="user_names text-truncate " style={{ width: "130" }}>
+                      <td
+                        className="user_names text-truncate "
+                        style={{ width: "130" }}
+                      >
                         {user.name}
                       </td>
 
                       {Array(days)
                         ?.fill(0)
                         ?.map((day, index) => {
-                          let ratingUserObj = user.ratings;
-                          let ratingCommentObj = ratingUserObj?.find(
-                            (el) => el.date - 1 === index
-                          );
+    let ratingUserObj = user.ratings;
+    let ratingCommentObj = ratingUserObj?.find(
+      (el) => el.date - 1 === index
+    );
+
+    const date = new Date(
+                        yearUse,
+                        months.indexOf(monthUse),
+                        index + 1
+                      );
+                      const dayOfWeek = (date.getDay() + 1) % 7;
+                      const dayNames = [
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                      ];
+                      const weekendVaule = isWeekend(dayOfWeek);
                           if (ratingCommentObj) {
                             return (
                               <RatingBox
@@ -242,6 +271,7 @@ export default function Dashboard(props) {
                                 index={index}
                                 getAllRatings={getAllRatings}
                                 ratingCommentObj={ratingCommentObj}
+                                className={weekendVaule ? 'weekendBox' : ''}
                               />
                             );
                           } else {
@@ -253,7 +283,7 @@ export default function Dashboard(props) {
                               index + 1 <= 9 ? "0" + (index + 1) : index + 1
                             }`;
                             return (
-                              <td key={index}>
+                              <td key={index}  className={isWeekend ? 'weekendBox' : ''}>
                                 {userDetails?.role === "CONTRIBUTOR" ||
                                 new Date(dateToSend) > new Date() ? (
                                   <span
@@ -262,7 +292,7 @@ export default function Dashboard(props) {
                                       paddingLeft: "20px",
                                       paddingRight: "6px",
                                     }}
-                                    className="input_dashboard"
+                                    className={ weekendVaule ? 'weekendBox input_dashboard' : 'input_dashboard'}
                                   ></span>
                                 ) : (
                                   <>
@@ -272,7 +302,7 @@ export default function Dashboard(props) {
                                         paddingLeft: "20px",
                                         paddingRight: "6px",
                                       }}
-                                      className="input_dashboard"
+                                      className={ weekendVaule ? 'weekend input_dashboard' : 'input_dashboard'}
                                     ></span>
                                   </>
                                 )}

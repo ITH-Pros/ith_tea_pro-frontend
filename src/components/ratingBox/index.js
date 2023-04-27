@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { updateUserRating } from "../../services/user/api";
 import Modals from "../modal";
 import Toaster from "../Toaster";
 import Loader from "../Loader";
 
 const RatingBox = (props) => {
-  const { ratingCommentObj, index, getAllRatings } = props;
+  const { ratingCommentObj, index, getAllRatings  } = props;
 
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
@@ -13,6 +13,7 @@ const RatingBox = (props) => {
   const [toaster, showToaster] = useState(false);
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
+
 
   const GetModalBody = () => {
     const RatingEditBox = () => {
@@ -51,7 +52,7 @@ const RatingBox = (props) => {
         }
       };
       return editRatingEnabled ? (
-        <div>
+        <div >
           <input
             type="number"
             value={newRating}
