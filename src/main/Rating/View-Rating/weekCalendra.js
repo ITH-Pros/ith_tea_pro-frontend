@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -23,7 +22,6 @@ export default function MyCalendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     getAllRatings();
   }, [selectedDate]);
@@ -44,15 +42,20 @@ export default function MyCalendar() {
       } else {
         let dataToSet = [];
         const currentDate = new Date();
-        const firstDateOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-        for (let i = firstDateOfMonth; i < currentDate; i.setDate(i.getDate() + 1)) {
-          dataToSet.push({
-            id: i.getTime(),
-            title: "A",
-            start: new Date(i),
-            end: new Date(i),
-          });
-        }
+const firstDateOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+for (let i = firstDateOfMonth; i <= currentDate; i.setDate(i.getDate() + 1)) {
+  const isToday = i.getDate() === currentDate.getDate() && i.getMonth() === currentDate.getMonth() && i.getFullYear() === currentDate.getFullYear();
+  if (!isToday) {
+    dataToSet.push({
+      id: i.getTime(),
+      title: "A",
+      start: new Date(i),
+      end: new Date(i),
+    });
+  }
+}
+
+        
         const ratingData = rating.data?.[0]?.ratings;
         if (ratingData) {
           const ratingEvents = ratingData.map((item, index) => ({
@@ -77,6 +80,15 @@ export default function MyCalendar() {
   const handleDateChange = (event) => {
     setSelectedDate(event);
   };
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    const currentDate = new Date();
+    if (event.title === "A" && event.start < currentDate) {
+      return {
+        className: "red-event",
+      };
+    }
+    return {};
+  };
 
   return (
     <>
@@ -90,11 +102,11 @@ export default function MyCalendar() {
             defaultDate={new Date()}
             onNavigate={handleDateChange}
             className=""
-            style={{ height: 400  }}
+            style={{ height: 400 }}
+            eventPropGetter={eventStyleGetter}
           />
         </div>
-      {loading ? <Loader /> : null}
-
+        {loading ? <Loader /> : null}
       </div>
     </>
   );

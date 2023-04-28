@@ -703,3 +703,10 @@ ul.weekdays {
   /* height: 75px !important; */
 }
 
+.red-event{
+  color: white;
+  background: red !important;
+  text-align: center;
+}
+
+
