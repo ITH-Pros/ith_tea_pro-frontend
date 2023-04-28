@@ -192,7 +192,7 @@ export default function Dashboard(props) {
             <Table responsive>
               <thead>
                 <tr>
-                  <th style={{ width: "140px", position: "sticky", left: "0", backgroundColor: "#fff" , zIndex: "9999" }}>Name</th>
+                  <th style={{ width: "140px", position: "sticky", left: "0", backgroundColor: "#fff"  }}>Name</th>
                   {/* <th>Day</th> */}
                   {Array(days)
                     .fill(0)
@@ -235,7 +235,7 @@ export default function Dashboard(props) {
                     <tr key={index}>
                       <td
                         className="user_names text-truncate "
-                        style={{ width: "130px", position: "sticky", left: "0" , backgroundColor: "#fff" , zIndex: "9999" }}
+                        style={{ width: "130px", position: "sticky", left: "0" , backgroundColor: "#fff" , zIndex: "9" }}
                       >
                         {user.name}
                       </td>
