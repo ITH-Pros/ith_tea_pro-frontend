@@ -192,7 +192,7 @@ export default function Dashboard(props) {
             <Table responsive>
               <thead>
                 <tr>
-                  <th style={{ width: "140" }}>Name</th>
+                  <th style={{ width: "140px", position: "sticky", left: "0", backgroundColor: "#fff" , zIndex: "9999" }}>Name</th>
                   {/* <th>Day</th> */}
                   {Array(days)
                     .fill(0)
@@ -235,7 +235,7 @@ export default function Dashboard(props) {
                     <tr key={index}>
                       <td
                         className="user_names text-truncate "
-                        style={{ width: "130" }}
+                        style={{ width: "130px", position: "sticky", left: "0" , backgroundColor: "#fff" , zIndex: "9999" }}
                       >
                         {user.name}
                       </td>
@@ -243,27 +243,27 @@ export default function Dashboard(props) {
                       {Array(days)
                         ?.fill(0)
                         ?.map((day, index) => {
-    let ratingUserObj = user.ratings;
-    let ratingCommentObj = ratingUserObj?.find(
-      (el) => el.date - 1 === index
-    );
+                          let ratingUserObj = user.ratings;
+                          let ratingCommentObj = ratingUserObj?.find(
+                            (el) => el.date - 1 === index
+                          );
 
-    const date = new Date(
-                        yearUse,
-                        months.indexOf(monthUse),
-                        index + 1
-                      );
-                      const dayOfWeek = (date.getDay() + 1) % 7;
-                      const dayNames = [
-                        "Sun",
-                        "Mon",
-                        "Tue",
-                        "Wed",
-                        "Thu",
-                        "Fri",
-                        "Sat",
-                      ];
-                      const weekendVaule = isWeekend(dayOfWeek);
+                          const date = new Date(
+                            yearUse,
+                            months.indexOf(monthUse),
+                            index + 1
+                          );
+                          const dayOfWeek = (date.getDay() + 1) % 7;
+                          const dayNames = [
+                            "Sun",
+                            "Mon",
+                            "Tue",
+                            "Wed",
+                            "Thu",
+                            "Fri",
+                            "Sat",
+                          ];
+                          const weekendVaule = isWeekend(dayOfWeek);
                           if (ratingCommentObj) {
                             return (
                               <RatingBox
@@ -271,7 +271,7 @@ export default function Dashboard(props) {
                                 index={index}
                                 getAllRatings={getAllRatings}
                                 ratingCommentObj={ratingCommentObj}
-                                className={weekendVaule ? 'weekendBox' : ''}
+                                className={weekendVaule ? "weekendBox" : ""}
                               />
                             );
                           } else {
@@ -283,7 +283,7 @@ export default function Dashboard(props) {
                               index + 1 <= 9 ? "0" + (index + 1) : index + 1
                             }`;
                             return (
-                              <td key={index}  >
+                              <td key={index}>
                                 {userDetails?.role === "CONTRIBUTOR" ||
                                 new Date(dateToSend) > new Date() ? (
                                   <span
@@ -292,7 +292,11 @@ export default function Dashboard(props) {
                                       paddingLeft: "20px",
                                       paddingRight: "6px",
                                     }}
-                                    className={ weekendVaule ? 'weekendBox input_dashboard' : 'input_dashboard'}
+                                    className={
+                                      weekendVaule
+                                        ? "weekendBox input_dashboard"
+                                        : "input_dashboard"
+                                    }
                                   ></span>
                                 ) : (
                                   <>
@@ -302,7 +306,11 @@ export default function Dashboard(props) {
                                         paddingLeft: "20px",
                                         paddingRight: "6px",
                                       }}
-                                      className={ weekendVaule ? 'weekendBox input_dashboard' : 'input_dashboard'}
+                                      className={
+                                        weekendVaule
+                                          ? "weekendBox input_dashboard"
+                                          : "input_dashboard"
+                                      }
                                     ></span>
                                   </>
                                 )}
