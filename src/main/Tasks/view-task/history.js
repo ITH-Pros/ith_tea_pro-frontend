@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getTaskHistoryById } from "../../../services/user/api";
 import "./history.css";
+import UTCtoIST from "../../../helpers/timeFormater";
 
 export default function History(props) {
   const { taskId } = props;
@@ -80,7 +81,7 @@ export default function History(props) {
                       {item.actionTaken === "TASK_UPDATED" && "Task Updated"}
                     </h3>
                     <span className="event-date ms-2">
-                      {formatDate(item.createdAt)}
+                      {UTCtoIST(item.createdAt)}
                     </span>
                   </div>
                   <div className="event-description">
