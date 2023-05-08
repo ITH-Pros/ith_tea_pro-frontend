@@ -701,7 +701,7 @@ const Tasks = () => {
                         <li key={task?._id} className="share-wrapper-ui">
                           <div className="clickLabelArea">
                             <Row className="align-items-center justify-content-start">
-                              <Col lg={5} className="align-items-center">
+                              <Col lg={4} className="align-items-center">
                                 <Row>
                                   <Col lg={1}>
                                     <div>
@@ -869,8 +869,7 @@ const Tasks = () => {
                                   <Badge bg="danger">HIGH</Badge>
                                 )}
                               </Col>
-                              <Col
-                                lg={3}
+                              <Col lg={2}
                                 className="align-items-center justify-content-start"
                               >
                                 {!task?.assignedTo?.profilePicture &&
@@ -903,6 +902,43 @@ const Tasks = () => {
                                   <span> NOT ASSIGNED </span>
                                 )}
                               </Col>
+{/* for lead  */}
+
+<Col lg={2}
+                                className="align-items-center justify-content-start"
+                              >
+                                {!task?.lead[0]?.profilePicture &&
+                                  task?.lead[0]?.name && (
+                                    <div className="nameTag">
+                                      <UserIcon
+                                        key={index}
+                                        firstName={task?.lead[0]?.name || ""}
+                                      />
+                                    </div>
+                                  )}
+                                {task?.lead[0]?.profilePicture && (
+                                  <div
+                                    className="nameTag"
+                                    style={{ display: "contents" }}
+                                  >
+                                    <img
+                                      style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        borderRadius: "50%",
+                                      }}
+                                      src={`${task?.lead[0]?.profilePicture}`}
+                                      alt="profile"
+                                    ></img>
+                                  </div>
+                                )}
+                                <span> {task?.lead[0]?.name}</span>
+                                {!task?.lead[0]?.name && (
+                                  <span> NOT ASSIGNED </span>
+                                )}
+                              </Col>
+
+
                               <Col lg={1}>
                                 {task?.dueDate && (
                                   <Badge
