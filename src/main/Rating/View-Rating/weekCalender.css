@@ -1,0 +1,135 @@
+/* Offcanvas Modal */
+.offcanvas {
+    font-family: Arial, sans-serif;
+  }
+  
+  .offcanvas .offcanvas-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #8355ad;
+  }
+  
+  .offcanvas .rating-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .offcanvas .rating-details__date,
+  .offcanvas .rating-details__rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .offcanvas .rating-details__date span:first-child,
+  .offcanvas .rating-details__rating span:first-child {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .offcanvas .rating-details__date span:last-child,
+  .offcanvas .rating-details__rating span:last-child {
+    font-weight: bold;
+    color: #8355ad;
+  }
+  
+  .offcanvas .rating-details__rating .task-rating {
+    margin-left: 1.5rem;
+  }
+  
+  .offcanvas .rating-details__rating .task-rating p {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .offcanvas .rating-details__rating .task-rating p:first-child {
+    font-weight: bold;
+  }
+  
+  .offcanvas .rating-details__rating .task-rating p:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Accordion */
+  .accordion .accordion-item {
+    margin-bottom: 1.5rem;
+  }
+  
+  .accordion .accordion-header {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .accordion .accordion-header:hover {
+    background-color: #eaeaea;
+  }
+  
+  .accordion .accordion-body {
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 6px;
+  }
+  
+  .offcanvas-header .close {
+    color: #8355ad;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+  
+  .offcanvas-header .close:hover {
+    opacity: 1;
+  }
+  
+  .offcanvas-body {
+    padding: 1.5rem;
+  }
+  
+  /* Additional Styling */
+  .offcanvas {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    /* border-radius: 8px; */
+    width: 400px; /* Adjust the width as per your requirements */
+  }
+  
+  .offcanvas-header {
+    border-bottom: none;
+  }
+  
+  .offcanvas-body {
+    overflow-y: auto;
+  }
+  
+  .offcanvas-footer {
+    border-top: none;
+    padding: 1rem;
+    background-color: #f8f8f8;
+  }
+  
+  .offcanvas-footer .btn {
+    background-color: #8355ad;
+    color: #fff;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .offcanvas-footer .btn:hover {
+    background-color: #6a3d92;
+  }
+
+ 
+  
+  

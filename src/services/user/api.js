@@ -208,6 +208,14 @@ export async function getRatings(data) {
     .then((res) => res.data);
 }
 
+export async function getRatingsDetailsByID(data) {
+  return axiosInstance
+    .get("rating/v1/day/rating", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+
 export async function getLogedInUserDetails(data) {
   return axiosInstance.get("user/v1/userId", data).then((res) => res.data);
 }
