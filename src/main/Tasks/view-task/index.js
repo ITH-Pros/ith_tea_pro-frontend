@@ -37,6 +37,8 @@ export default function ViewTaskModal(props) {
   const [isRatingFormVisible, setIsRatingFormVisible] = useState(false);
   const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
   const [errorRating, setErrorRating] = useState(false);
+  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
+
 
  
   useEffect(() => {
@@ -269,7 +271,7 @@ export default function ViewTaskModal(props) {
                       )}
                       {!task?.isRated && isRatingFormVisible && (
                         <div className="ratingForm">
-                          <input 
+                          {/* <input 
                           required
                             type="number"
                             style={{display:'block'}}
@@ -278,7 +280,19 @@ export default function ViewTaskModal(props) {
                             placeholder="0 - 6"
                             onChange={(e) => handleRating(e.target.value)}
   
-                          />
+                          /> */}
+
+                          {/* this would be a select box */}
+                          <select
+                            className="form-control form-control-lg"
+                            defaultValue={rating}
+                            onChange={(event) => handleRating(event.target.value)}
+                          >
+                                        <option value="" disabled>Select Rating</option>
+  {ratingValues.map((value) => (
+    <option key={value} value={value}>{value}</option>
+  ))}
+                          </select>
                       
                         <div style={{  justifyContent:'end',}}>
                           <Button
