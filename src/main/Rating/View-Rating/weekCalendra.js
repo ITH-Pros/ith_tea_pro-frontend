@@ -163,38 +163,42 @@ export default function MyCalendar() {
         </div>
         {loading ? <Loader /> : null}
       </div>
-      {/* <Modal className="" show={showModal} onHide={() => setShowModal(false)}>
-  <Modal.Header closeButton>
-    <Modal.Title>Rating Details</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
+
+
+
+<Offcanvas show={showModal} style={{ width: '600px' }} onHide={() => setShowModal(false)} placement="end" className="my-offcanvas">
+  <Offcanvas.Header closeButton className="my-offcanvas-header">
+    <Offcanvas.Title className="my-offcanvas-title">Rating Details</Offcanvas.Title>
+  </Offcanvas.Header>
+  <Offcanvas.Body className="my-offcanvas-body">
     <div className="rating-details">
       <div className="rating-details__date">
         <span>Date:</span>
         <span>
           {selectedRatingDate.getDate() +
-            "-" +
+            '-' +
             (selectedRatingDate.getMonth() + 1) +
-            "-" +
+            '-' +
             selectedRatingDate.getFullYear()}
         </span>
       </div>
       <div className="rating-details__rating">
         <span>Average Rating:</span>
-        <span>{ratingDetail?.rating || "Not Rated Yet"}</span>
+        <span>{ratingDetail?.rating || 'Not Rated Yet'}</span>
       </div>
       <div className="rating-details__rating">
         {ratingDetail && (
-          <Accordion>
+          <Accordion className="my-accordion">
             {ratingDetail?.taskIds?.map((task) => (
               <Accordion.Item key={task?._id} eventKey={task?._id}>
                 <Accordion.Header
                   onClick={() => setActiveTask(task?._id)}
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
+                  style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                  className="my-accordion-header"
                 >
                   {task?.title}
                 </Accordion.Header>
-                <Accordion.Body collapsible>
+                <Accordion.Body collapsible className="my-accordion-body">
                   <div className="task-rating">
                     <p>Rating: {task?.rating}</p>
                     {task?.ratingComments && (
@@ -208,57 +212,9 @@ export default function MyCalendar() {
         )}
       </div>
     </div>
-  </Modal.Body>
-</Modal> */}
+  </Offcanvas.Body>
+</Offcanvas>
 
-
-<Offcanvas show={showModal} style={{ width: '600px' }} onHide={() => setShowModal(false)}  placement="end">
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Rating Details</Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
-        <div className="rating-details">
-          <div className="rating-details__date">
-            <span>Date:</span>
-            <span>
-              {selectedRatingDate.getDate() +
-                '-' +
-                (selectedRatingDate.getMonth() + 1) +
-                '-' +
-                selectedRatingDate.getFullYear()}
-            </span>
-          </div>
-          <div className="rating-details__rating">
-            <span>Average Rating:</span>
-            <span>{ratingDetail?.rating || 'Not Rated Yet'}</span>
-          </div>
-          <div className="rating-details__rating">
-            {ratingDetail && (
-              <Accordion>
-                {ratingDetail?.taskIds?.map((task) => (
-                  <Accordion.Item key={task?._id} eventKey={task?._id}>
-                    <Accordion.Header
-                      onClick={() => setActiveTask(task?._id)}
-                      style={{ cursor: 'pointer', fontWeight: 'bold' }}
-                    >
-                      {task?.title}
-                    </Accordion.Header>
-                    <Accordion.Body collapsible>
-                      <div className="task-rating">
-                        <p>Rating: {task?.rating}</p>
-                        {task?.ratingComments && (
-                          <p>Comment: {task?.ratingComments[0]?.comment}</p>
-                        )}
-                      </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                ))}
-              </Accordion>
-            )}
-          </div>
-        </div>
-      </Offcanvas.Body>
-    </Offcanvas>
 
     </>
   );

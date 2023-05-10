@@ -1075,7 +1075,8 @@ export default function Dashboard(props) {
               </Col>
               <Col lg={6} className="right-filter">
               {/* select box and lable name team member  */}
-                <Form.Group controlId="formBasicEmail">
+              {(userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") && (
+                <Form.Group controlId="formBasicEmail" className="team-member-select">
                   <Form.Label>Team Member</Form.Label>
                   <Form.Control
                     as="select"
@@ -1090,6 +1091,8 @@ export default function Dashboard(props) {
                       ))}
                   </Form.Control>
                 </Form.Group>
+              )}
+
 
 
               </Col>

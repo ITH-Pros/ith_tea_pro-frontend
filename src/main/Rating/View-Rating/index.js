@@ -195,37 +195,22 @@ export default function Dashboard(props) {
                   <th style={{ width: "140px", position: "sticky", left: "0", backgroundColor: "#fff"  }}>Name</th>
                   {/* <th>Day</th> */}
                   {Array(days)
-                    .fill(0)
-                    .map((rating, index) => {
-                      const date = new Date(
-                        yearUse,
-                        months.indexOf(monthUse),
-                        index + 1
-                      );
-                      const dayOfWeek = (date.getDay() + 1) % 7;
-                      const dayNames = [
-                        "Sun",
-                        "Mon",
-                        "Tue",
-                        "Wed",
-                        "Thu",
-                        "Fri",
-                        "Sat",
-                      ];
-                      const weekend = isWeekend(dayOfWeek);
-                      const className = weekend ? "weekend" : "";
+  .fill(0)
+  .map((rating, index) => {
+    const date = new Date(yearUse, months.indexOf(monthUse), index + 1);
+    const dayOfWeek = date.getDay();
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const weekend = isWeekend(dayOfWeek);
+    const className = weekend ? "weekend" : "";
 
-                      return (
-                        <th key={index} className={className}>
-                          <span>
-                            {index + 1 < 10 ? "0" : ""}
-                            {index + 1}
-                          </span>
-                          <br></br>
-                          <span>{dayNames[dayOfWeek]}</span>
-                        </th>
-                      );
-                    })}
+    return (
+      <th key={index} className={className}>
+        <span>{index + 1 < 10 ? "0" : ""}{index + 1}</span>
+        <br></br>
+        <span>{dayNames[dayOfWeek]}</span>
+      </th>
+    );
+})}
                   <th style={{ color: "green" }}>Average</th>
                 </tr>
               </thead>
@@ -241,83 +226,70 @@ export default function Dashboard(props) {
                       </td>
 
                       {Array(days)
-                        ?.fill(0)
-                        ?.map((day, index) => {
-                          let ratingUserObj = user.ratings;
-                          let ratingCommentObj = ratingUserObj?.find(
-                            (el) => el.date - 1 === index
-                          );
+  .fill(0)
+  .map((day, index) => {
+    let ratingUserObj = user.ratings;
+    let ratingCommentObj = ratingUserObj?.find(
+      (el) => el.date - 1 === index
+    );
 
-                          const date = new Date(
-                            yearUse,
-                            months.indexOf(monthUse),
-                            index + 1
-                          );
-                          const dayOfWeek = (date.getDay() + 1) % 7;
-                          const dayNames = [
-                            "Sun",
-                            "Mon",
-                            "Tue",
-                            "Wed",
-                            "Thu",
-                            "Fri",
-                            "Sat",
-                          ];
-                          const weekendVaule = isWeekend(dayOfWeek);
-                          if (ratingCommentObj) {
-                            return (
-                              <RatingBox
-                                key={index}
-                                index={index}
-                                getAllRatings={getAllRatings}
-                                ratingCommentObj={ratingCommentObj}
-                                className={weekendVaule ? "weekendBox" : ""}
-                              />
-                            );
-                          } else {
-                            let dateToSend = `${yearUse}-${
-                              months.indexOf(monthUse) + 1 <= 9
-                                ? "0" + (months.indexOf(monthUse) + 1)
-                                : months.indexOf(monthUse) + 1
-                            }-${
-                              index + 1 <= 9 ? "0" + (index + 1) : index + 1
-                            }`;
-                            return (
-                              <td key={index}>
-                                {userDetails?.role === "CONTRIBUTOR" ||
-                                new Date(dateToSend) > new Date() ? (
-                                  <span
-                                    style={{
-                                      padding: "1px",
-                                      paddingLeft: "20px",
-                                      paddingRight: "6px",
-                                    }}
-                                    className={
-                                      weekendVaule
-                                        ? "weekendBox input_dashboard"
-                                        : "input_dashboard"
-                                    }
-                                  ></span>
-                                ) : (
-                                  <>
-                                    <span
-                                      style={{
-                                        padding: "1px",
-                                        paddingLeft: "20px",
-                                        paddingRight: "6px",
-                                      }}
-                                      className={
-                                        weekendVaule
-                                          ? "weekendBox input_dashboard"
-                                          : "input_dashboard"
-                                      }
-                                    ></span>
-                                  </>
-                                )}
-                              </td>
-                            );
-                          }
-                        })}
+    const date = new Date(
+      yearUse,
+      months.indexOf(monthUse),
+      index + 1
+    );
+    const dayOfWeek = date.getDay();
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const weekendValue = dayOfWeek === 0 || dayOfWeek === 6;
+    if (ratingCommentObj) {
+      return (
+        <RatingBox
+          key={index}
+          index={index}
+          getAllRatings={getAllRatings}
+          ratingCommentObj={ratingCommentObj}
+          className={weekendValue ? "weekendBox" : ""}
+        />
+      );
+    } else {
+      let dateToSend = `${yearUse}-${
+        months.indexOf(monthUse) + 1 <= 9
+          ? "0" + (months.indexOf(monthUse) + 1)
+          : months.indexOf(monthUse) + 1
+      }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
+      return (
+        <td key={index}>
+          {userDetails?.role === "CONTRIBUTOR" ||
+          new Date(dateToSend) > new Date() ? (
+            <span
+              style={{
+                padding: "1px",
+                paddingLeft: "20px",
+                paddingRight: "6px",
+              }}
+              className={
+                weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
+              }
+            ></span>
+          ) : (
+            <>
+              <span
+                style={{
+                  padding: "1px",
+                  paddingLeft: "20px",
+                  paddingRight: "6px",
+                }}
+                className={
+                  weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
+                }
+              ></span>
+            </>
+          )}
+        </td>
+      );
+    }
+  })}
+
                       <td className="userAverage">
                         {user.monthlyAverage
                           ? Math.round(user.monthlyAverage * 100) / 100
