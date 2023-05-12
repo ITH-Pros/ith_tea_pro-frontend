@@ -573,8 +573,8 @@ export default function Dashboard(props) {
           {(userDetails?.role === "SUPER_ADMIN" ||
             userDetails?.role === "ADMIN") && (
             <Col lg={6} style={{ paddingLeft: "0px" }}>
-              <Row>
-                <Col lg={6} className="left-add">
+              <Row className="mb-3">
+                <Col lg={6} className="left-add pb-1">
                   <span>OVERDUE WORK</span>
 
                   {/* {<i
@@ -1081,7 +1081,7 @@ export default function Dashboard(props) {
               <Col lg={6} className="right-filter">
               {/* select box and lable name team member  */}
               {(userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") && (
-                <Form.Group controlId="formBasicEmail" className="team-member-select">
+                <Form.Group controlId="formBasicEmail" className="team-member-select mb-0">
                   <Form.Label>Team Member</Form.Label>
                   <Form.Control
                     as="select"

@@ -90,7 +90,7 @@ function Header() {
                             >
                               <p 
                   className="text-truncate"
-                  style={{ marginBottom: "0px", marginLeft: "22px" , cursor:"pointer", paddingTop:'10px', maxWidth:'100px' }}
+                  style={{ marginBottom: "0px", marginLeft: "10px" , cursor:"pointer", paddingTop:'10px', maxWidth:'100px' }}
                 >
                   {userName}
                 </p>

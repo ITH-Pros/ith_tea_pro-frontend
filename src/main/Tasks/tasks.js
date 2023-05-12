@@ -870,7 +870,7 @@ const Tasks = () => {
                                 )}
                               </Col>
                               <Col lg={2}
-                                className="align-items-center justify-content-start"
+                                className="align-items-center justify-content-start ps-0"
                               >
                                 {!task?.assignedTo?.profilePicture &&
                                   task?.assignedTo?.name && (
