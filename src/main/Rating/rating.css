@@ -121,3 +121,9 @@
 .desc {
   margin-top: 10px;
 }
+
+@media screen and (max-width: 1300px) {
+  .dv-50-rating{
+    height: 80vh;
+  }
+}
