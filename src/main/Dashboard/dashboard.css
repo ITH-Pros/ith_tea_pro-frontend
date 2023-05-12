@@ -762,3 +762,9 @@ th {
   width: 162px;
 }
 
+
+@media screen and (max-width: 1300px) {
+  .team-member-select label{
+    width: 180px;
+  }
+}
