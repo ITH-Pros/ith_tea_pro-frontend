@@ -671,7 +671,8 @@ ul.weekdays {
 .rating_btn .btn {
   font-size: 15px !important;
   margin-right: 112px !important;
-
+  padding: 10px 12px;
+  line-height: 16px;
 }
 
 .rbc-header {
