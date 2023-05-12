@@ -103,7 +103,6 @@ export default function MyCalendar() {
   const handleDateChange = (event, s, a) => {
     if (a === "DATE") {
       setSelectedRatingDate(event);
-      setShowModal(true);
       console.log(a, "event");
       return;
     }
@@ -121,7 +120,6 @@ export default function MyCalendar() {
   };
 
   const getRatingDetail = async () => {
-    setLoading(true);
     setRatingDetail([]);
     let dataToSend = {
       date: selectedRatingDate.getDate(),
@@ -136,7 +134,10 @@ export default function MyCalendar() {
       if (!rating.data || rating.data.length === 0) { // Check if rating data is empty
         setShowModal(false);
       } else {
+        setLoading(true);
         setRatingDetail(rating.data);
+      setShowModal(true);
+
       }
       setLoading(false);
     }

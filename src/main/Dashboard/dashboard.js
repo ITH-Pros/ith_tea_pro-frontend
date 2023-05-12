@@ -486,7 +486,8 @@ export default function Dashboard(props) {
           </Col>
         </Row>
 
-        <Row className="row-bg">
+        {projectList?.length !== 0 && (
+          <Row className="row-bg " > 
           {projectList
             .slice(0, showAllProjects ? projectList.length : 2)
             .map((project) => (
@@ -563,6 +564,10 @@ export default function Dashboard(props) {
             )}
           </button>
         </Row>
+        )
+          }
+
+       
 
         <Row className="mt-3">
           {(userDetails?.role === "SUPER_ADMIN" ||
