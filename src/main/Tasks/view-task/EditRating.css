@@ -33,4 +33,32 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+  .modal-dialog .editBtn{
+    background: #8355ad !important;
+    border-color: #8355ad !important;
+    color: #fff;
+    border: 0;
+    padding: 2px 12px;
+    margin-right: 6px;
+    border-radius: 5px;
+  }
+  p.textFont{
+    font-size: 16px;
+  }
+  .ratingComment label{
+    width: 100%;
+  }
+  .modal-dialog .selectRating{
+    height: 22px !important;
+    border-radius: 3px;
+    margin-left: 2px;
+  }
+  .modal-dialog textarea{
+    border: 1px solid #ddd; 
+    border-radius: 3px;
+    margin-left: 2px;
+    border-radius: 3px;
+    margin-left: 2px;
+    width: 80%;
+    margin-top: 8px;
+  }

@@ -189,7 +189,11 @@ p {
   width: 220px;
   position: absolute;
   right: 50px;
+  display: flex;
   top: 20px;
+}
+.addRatingBtn.ml-2{
+  margin-left: .71rem;
 }
 .ratingForm input {
   width:80px;
@@ -219,4 +223,8 @@ p {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+}
+.text-muted.editBtn{ 
+  color: #fff !important;
+  margin-left: 5px;
 }

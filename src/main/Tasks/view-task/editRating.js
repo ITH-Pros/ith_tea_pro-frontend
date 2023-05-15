@@ -3,6 +3,7 @@ import './EditRating.css';
 import Toaster from '../../../components/Toaster';
 import Loader from '../../../components/Loader';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import { Row, Col } from "react-bootstrap";
 import { updateTaskRating } from '../../../services/user/api';
 
 
@@ -101,35 +102,37 @@ const EditRating = (props) => {
     <div>
       {showConfirmation && (
         <div>
-          <p>Are you sure you want to edit?</p>
-          <button onClick={() => handleConfirmation(true)}>Yes</button>
-          <button onClick={() => handleConfirmation(false)}>No</button>
+          <p className='mb-2 textFont'>Are you sure you want to edit?</p>
+          <button className="editBtn" onClick={() => handleConfirmation(true)}>Yes</button>
+          <button className="editBtn" onClick={() => handleConfirmation(false)}>No</button>
         </div>
       )}
       {showRating && (
-        <div>
+        <div className='ratingComment'>
+              
           <label>
             Rating:
-            <select value={rating} onChange={handleRatingChange}>
+            <select className='selectRating' value={rating} onChange={handleRatingChange}>
               {ratingOptions}
             </select>
-          </label>
+          </label> 
           <br />
           <label>
             Comment:
             <textarea type="text" value={comment} onChange={handleCommentChange} />
           </label>
           <br />
-          <button onClick={() =>{setConfirmationAgain(true);setShowRating(false)}} disabled={isSubmitDisabled}>
+          <button className="editBtn" onClick={() =>{setConfirmationAgain(true);setShowRating(false)}} disabled={isSubmitDisabled}>
             Submit
           </button>
+
         </div>
       )}
       {confirmationAgain && (
         <div>
-          <p>This action will be recorded, are sure you want to edit?</p>
-          <button  onClick={() => handleConfirmationAgain(true)} >Yes</button>
-            <button  onClick={() => handleConfirmationAgain(true)} >No</button>
+          <p className='mb-2 textFont'>This action will be recorded, are sure you want to edit?</p>
+          <button className="editBtn" onClick={() => handleConfirmationAgain(true)} >Yes</button>
+            <button className="editBtn" onClick={() => handleConfirmationAgain(true)} >No</button>
         </div>
         )}
 
