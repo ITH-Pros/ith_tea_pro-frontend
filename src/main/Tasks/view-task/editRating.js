@@ -127,7 +127,7 @@ const EditRating = (props) => {
       )}
       {confirmationAgain && (
         <div>
-          <p>this action will be recorded, are sure you want to edit?</p>
+          <p>This action will be recorded, are sure you want to edit?</p>
           <button  onClick={() => handleConfirmationAgain(true)} >Yes</button>
             <button  onClick={() => handleConfirmationAgain(true)} >No</button>
         </div>
