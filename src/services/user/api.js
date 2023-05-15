@@ -361,3 +361,9 @@ export async function getUserReportData(data) {
     })
     .then((res) => res.data);
 }
+
+export async function updateTaskRating(data) {
+  return axiosInstance
+    .patch("task/v1/update/rating", data)
+    .then((res) => res.data);
+}

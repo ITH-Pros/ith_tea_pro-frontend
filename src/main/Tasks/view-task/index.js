@@ -22,6 +22,7 @@ import {
 import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
 import History from "./history";
+import EditRating from "./editRating";
 export default function ViewTaskModal(props) {
 
   const {  closeViewTaskModal, selectedTaskId, getTasksDataUsingProjectId , onInit  , isChange , setIsChange } = props;
@@ -242,6 +243,10 @@ export default function ViewTaskModal(props) {
     }
   };
 
+  const [isEditModal, setIsEditModal] = useState(false);
+
+
+
 
   return (
     <>
@@ -261,6 +266,7 @@ export default function ViewTaskModal(props) {
                   <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
                     <div className="col-sm-12 text-start">
                       {task?.isRated && <span>Rating : <span className="text-success">{task?.rating}</span></span>}
+                      {(task?.isRated && userDetails?.role !== "CONTRIBUTOR" ) && <Button onClick={()=>setIsEditModal(true)}  className="text-muted">Edit</Button>}
                       {!task?.isRated && !isRatingFormVisible && userDetails?.role !== "CONTRIBUTOR" && userDetails.id !== task?.assignedTo?._id  && (
                         <Button onClick={() => {handleAddRating(task)}}
                           variant="light"
@@ -570,13 +576,32 @@ export default function ViewTaskModal(props) {
         </Offcanvas.Body>
       </Offcanvas>
 
+
+      <Modal
+        show={isEditModal}
+        onHide={() => setIsEditModal(false)}
+        animation={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Rating</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <EditRating
+            taskId={task}
+            taskRating={task?.rating}
+            onClose={() => setIsEditModal(false)}
+            getTaskDetailsById={getTaskDetailsById}
+           />
+        </Modal.Body>
+      </Modal>
+
+
+
       <ConfirmationPopup
             show={showConfirmation}
             onCancel={() => setShowConfirmation(false)}
             onConfirm={() =>updateTaskStatus(dataToSendForTaskStatus)}
              />
-
-
 
       {loading?<Loader />:null}
       {toaster && (
