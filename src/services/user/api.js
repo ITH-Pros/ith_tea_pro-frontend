@@ -364,6 +364,6 @@ export async function getUserReportData(data) {
 
 export async function updateTaskRating(data) {
   return axiosInstance
-    .patch("task/v1/update/rating", data)
+    .patch("task/v1/rate/updateRating", data)
     .then((res) => res.data);
 }

@@ -591,6 +591,9 @@ export default function ViewTaskModal(props) {
             taskRating={task?.rating}
             onClose={() => setIsEditModal(false)}
             getTaskDetailsById={getTaskDetailsById}
+            showToaster={showToaster}
+            setToasterMessage={setToasterMessage}
+            setLoading={setLoading}
            />
         </Modal.Body>
       </Modal>
@@ -610,6 +613,7 @@ export default function ViewTaskModal(props) {
           message={toasterMessage}
           show={toaster}
           close={() => showToaster(false)}
+
         />
         </ToastContainer>
       )}
