@@ -1,0 +1,75 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  td button {
+    margin-right: 5px;
+  }
+  
+  .confirmation-modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .confirmation-modal p {
+    margin-bottom: 10px;
+  }
+  
+  .confirmation-modal button {
+    margin-right: 10px;
+  }
+  
+  .edit-modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .edit-modal button {
+    margin-right: 10px;
+  }
+
+  .form-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  /* Add this CSS code to your index.css file or any other CSS file */
+.select-box {
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .select-box option {
+    padding: 4px;
+  }
+  
+  

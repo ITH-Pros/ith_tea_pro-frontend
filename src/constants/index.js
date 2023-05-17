@@ -2,7 +2,7 @@ exports.CONSTANTS = {
   statusList: ["NOT_STARTED", "ONGOING", "COMPLETED", "ONHOLD"],
   priorityList: ["None", "LOW", "REPEATED", "MEDIUM", "HIGH"],
   TASK_GROUPS: ["category", "status", "priority", "assignedTo", "createdBy"],
-  ROLES: ["CONTRIBUTOR", "SUPER_ADMIN", "ADMIN", "LEAD"],
+  ROLES: ["CONTRIBUTOR", "SUPER_ADMIN", "ADMIN", "LEAD" ],
   SORTEDBY: ["Date", "Time"],
   statusListObj: [
     { name: "NOT_STARTED", _id: "NOT_STARTED" },

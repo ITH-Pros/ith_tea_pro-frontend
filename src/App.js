@@ -23,6 +23,7 @@ import PasswordForm from "./setup-password";
 import ForgotPassword from "./auth/forgotPassword";
 import ResetPassword from "./auth/resetPassword";
 import TeamReport from "./main/Team-report";
+import Guest from "./main/guest";
 function App() {
   return (
     <ProSidebarProvider>
@@ -74,6 +75,10 @@ function App() {
             </>
           }
         >
+
+      
+
+
           <Route
             path="add"
             element={
@@ -137,6 +142,21 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+<Route
+            path="/guest"
+            element={
+              <>
+               <ProtectedRoute>
+                <Navbar />
+                <Header />
+                <Guest />{" "}
+              </ProtectedRoute>
+              </>
+            }
+          />
+
+
         <Route
           path="/task"
           exact={true}
@@ -198,6 +218,10 @@ function App() {
               </>
             }
           />
+       {/* guest */}
+         
+
+
           <Route path="view/:userId" element={<ViewUser />} />
         </Route>
         <Route path="*" element={<NoMatch />} />

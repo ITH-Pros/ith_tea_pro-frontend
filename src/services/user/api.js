@@ -367,3 +367,23 @@ export async function updateTaskRating(data) {
     .patch("task/v1/rate/updateRating", data)
     .then((res) => res.data);
 }
+
+export async function addGuestApi(data) {
+  return axiosInstance
+    .post("/user/v1/addGuest", data)
+    .then((res) => res.data);
+}
+
+export async function editGuestApi(data) {
+  return axiosInstance
+    .patch("guest/v1/edit", data)
+    .then((res) => res.data);
+}
+
+export async function getGuestApi(data) {
+  return axiosInstance
+    .get("user/v1/guest/pagination", {
+      params: data,
+    })
+    .then((res) => res.data);
+}

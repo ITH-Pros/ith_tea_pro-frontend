@@ -34,6 +34,8 @@ export default function History(props) {
       dateStyle: "medium",
       timeStyle: "medium",
     };
+
+    
     const mergedOptions = { ...defaultOptions, ...options };
     return new Date(dateString).toLocaleString("en-US", mergedOptions);
   }
@@ -45,6 +47,16 @@ export default function History(props) {
   return (
     <div className="history">
       {history.map((item, index) => {
+
+        const options = {
+                        timeZone: "Asia/Kolkata",
+                        dateStyle: "medium",
+                        timeStyle: "medium",
+                      };
+
+                      const createdAt = new Date(
+                        item?.createdAt
+                      ).toLocaleString("en-US", options);
         return (
           <div key={index} className="history-container">
             <div className="timeline"></div>
@@ -81,7 +93,7 @@ export default function History(props) {
                       {item.actionTaken === "TASK_UPDATED" && "Task Updated"}
                     </h3>
                     <span className="event-date ms-2">
-                      {UTCtoIST(item.createdAt)}
+                      {createdAt}
                     </span>
                   </div>
                   <div className="event-description">

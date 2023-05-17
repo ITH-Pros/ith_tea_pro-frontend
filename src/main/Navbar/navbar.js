@@ -48,6 +48,11 @@ export default function Navbar() {
            { userDetails?.role!=='CONTRIBUTOR'&&<NavLink to="/team-report" style={navLinkStyles}>
               <MenuItem icon={<FaUser />}>Team Report </MenuItem>
             </NavLink>}
+            {/* Guest */}
+            {<NavLink to="/guest" style={navLinkStyles}>
+              <MenuItem icon={<FaUser />}>Guest </MenuItem>
+            </NavLink>}
+
             <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
               <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>
             </NavLink>
