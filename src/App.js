@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "../src/main/Navbar/navbar";
 import Login from "./auth/login";
 import Dashboard from "./main/Dashboard/dashboard";
@@ -24,7 +24,9 @@ import ForgotPassword from "./auth/forgotPassword";
 import ResetPassword from "./auth/resetPassword";
 import TeamReport from "./main/Team-report";
 import Guest from "./main/guest";
+import { useAuth } from "./auth/AuthProvider";
 function App() {
+  const { userDetails } = useAuth();
   return (
     <ProSidebarProvider>
       <Routes>
@@ -144,17 +146,22 @@ function App() {
         />
 
 <Route
-            path="/guest"
-            element={
-              <>
-               <ProtectedRoute>
-                <Navbar />
-                <Header />
-                <Guest />{" "}
-              </ProtectedRoute>
-              </>
-            }
-          />
+  path="/guest"
+  element={
+    userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ? (
+      <>
+        <ProtectedRoute>
+          <Navbar />
+          <Header />
+          <Guest />
+        </ProtectedRoute>
+      </>
+    ) : (
+      <Navigate to="/" replace />
+    )
+  }
+/>
+
 
 
         <Route

@@ -49,9 +49,12 @@ export default function Navbar() {
               <MenuItem icon={<FaUser />}>Team Report </MenuItem>
             </NavLink>}
             {/* Guest */}
-            {<NavLink to="/guest" style={navLinkStyles}>
-              <MenuItem icon={<FaUser />}>Guest </MenuItem>
-            </NavLink>}
+            {userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ? (
+  <NavLink to="/guest" style={navLinkStyles}>
+    <MenuItem icon={<FaUser />}>Guest</MenuItem>
+  </NavLink>
+) : null}
+
 
             <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
               <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>

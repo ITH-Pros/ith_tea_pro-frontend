@@ -387,3 +387,11 @@ export async function getGuestApi(data) {
     })
     .then((res) => res.data);
 }
+
+export async function deleteGuestApi(data) {
+  return axiosInstance
+    .patch("guest/v1/delete", data)
+    .then((res) => res.data);
+}
+
+

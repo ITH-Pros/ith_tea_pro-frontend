@@ -78,7 +78,9 @@ export default function Dashboard(props) {
     setShowModalOnLogin(
       localStorage.getItem("profileCompleted") === "false" ? true : false
     );
+    if (userDetails?.role !== "GUEST") {
     onInit();
+    }
   }, []);
 
   function onInit() {
@@ -90,7 +92,11 @@ export default function Dashboard(props) {
       getMyWork();
     }
 
+   
     getPendingRating();
+
+    
+
     if (userDetails?.role !== "CONTRIBUTOR") {
       getAndSetAllUsers();
     }

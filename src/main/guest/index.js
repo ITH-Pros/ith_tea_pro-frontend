@@ -15,6 +15,7 @@ import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import {
   addGuestApi,
+  deleteGuestApi,
   editGuestApi,
   getAllProjects,
   getGuestApi,
@@ -57,9 +58,36 @@ export default function Guest({}) {
   }
 
   const handleShowProjectModal = (guest) => {
-    setSelectedProjects(guest.project);
+    console.log(guest);
+    setSelectedProjects(guest?.project);
     setShowProjectModal(true);
   };
+
+  const guestStatus = async () => {
+    let dataToSend = {
+        userId: selectedGuest._id,
+        active: !selectedGuest.active,
+    };
+    setLoading(true);
+    try {
+        const guest = await getGuestApi(dataToSend);
+        if (guest.error) {
+            setToasterMessage(guest?.message || "Something Went Wrong");
+            showToaster(true);
+        } else {
+               setToasterMessage(guest?.message || "Guest Updated Successfully");
+            showToaster(true);
+        }
+    } catch (error) {
+        setToasterMessage(error?.message || "Something Went Wrong");
+        showToaster(true);
+    }
+    setLoading(false);
+    }
+
+
+
+   
 
   const handleCloseProjectModal = () => {
     setShowProjectModal(false);
@@ -86,14 +114,29 @@ export default function Guest({}) {
     setShowAddEditModal(true);
   };
 
-  const handleDeleteGuest = () => {
-    // Delete the selected guest from the guests state array
-    setGuests((prevGuests) =>
-      prevGuests.filter((guest) => guest._id !== selectedGuest._id)
-    );
-
-    // Close the delete confirmation modal
-    setShowDeleteConfirmation(false);
+  const handleDeleteGuest = async () => {
+    let dataToSend = {
+        userId: selectedGuest._id,
+    };
+    setLoading(true);
+    try {
+        const guest = await deleteGuestApi(dataToSend);
+        if (guest.error) {
+            setToasterMessage(guest?.message || "Something Went Wrong");
+            showToaster(true);
+        } else {
+            setToasterMessage("Guest Deleted Successfully");
+            showToaster(true);
+            // onClose();
+            getGuests();
+            setShowDeleteConfirmation(false);
+        }
+    } catch (error) {
+        setToasterMessage(error?.message || "Something Went Wrong");
+        showToaster(true);
+    }
+    setLoading(false);
+    
   };
 
   const handleToggleActive = (guest) => {
@@ -109,9 +152,9 @@ export default function Guest({}) {
   };
 
   // Render the table rows
-  const tableRows = guests?.map((guest) => (
+  const tableRows = guests?.map((guest , i) => (
     <tr key={guest._id}>
-      <td>{guest._id}</td>
+      <td>{i+1}</td>
       <td>{guest.name}</td>
       <td>{guest.email}</td>
       <td>
@@ -153,6 +196,7 @@ export default function Guest({}) {
       name: formData.name,
       email: formData.email,
       projectIds: formData.project,
+      role: "GUEST"
     };
 
     // Add or edit the guest based on the selectedGuest value
@@ -345,6 +389,13 @@ export default function Guest({}) {
     );
   };
 
+  const addGuestButton = () => {
+    setSelectedGuest(null);
+    setShowAddEditModal(true) ;
+     getProjectList()
+  }
+
+
   return (
     <div className="rightDashboard" style={{ marginTop: "7%" }}>
       <h1 className="h1-text">
@@ -353,7 +404,7 @@ export default function Guest({}) {
           <Button
             variant="primary"
             size="md"
-            onClick={() =>{ setShowAddEditModal(true) ; getProjectList()}}
+            onClick={() =>{ addGuestButton() }}
           >
             <span
               className="fa fa-user-plus"
@@ -368,7 +419,7 @@ export default function Guest({}) {
       <table>
         <thead>
           <tr>
-            <th>Serial No</th>
+            <th>Sr. No.</th>
             <th>Name</th>
             <th>Email</th>
             <th>Project</th>
@@ -407,7 +458,7 @@ export default function Guest({}) {
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to delete this guest?</Modal.Body>
+        <Modal.Body>Are you sure you want to delete {selectedGuest?.name}</Modal.Body>
         <Modal.Footer>
           <Button
             variant="secondary"
@@ -516,7 +567,7 @@ export default function Guest({}) {
         <Modal.Body>
           <ul>
             {selectedProjects.map((project) => (
-              <li key={project._id}>{project.name}</li>
+              <li key={project?._id}>{project?.name}</li>
             ))}
           </ul>
         </Modal.Body>
