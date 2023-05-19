@@ -27,41 +27,48 @@ export default function Navbar() {
 
   return (
     <Layout>
-      {accessToken && (
-        <Sidebar >
-          <Menu onClick={() => { console.log('------------------'); localStorage.removeItem('selectedOptions') }} iconShape="circle">
-            <NavLink to="/"  style={navLinkStyles}>
-              <MenuItem icon={<FaHome />}> Dashboard </MenuItem>
+    {accessToken && (
+      <Sidebar>
+        <Menu onClick={() => { console.log('------------------'); localStorage.removeItem('selectedOptions') }} iconShape="circle">
+          <NavLink to="/" style={navLinkStyles}>
+            <MenuItem icon={<FaHome />}> Dashboard </MenuItem>
+          </NavLink>
+          <NavLink to="/project/all" style={navLinkStyles}>
+            <MenuItem icon={<FaGem />}> Project </MenuItem>
+          </NavLink>
+  
+          {userDetails?.role !== 'GUEST' && (
+            <>
+              <NavLink to="/task" style={navLinkStyles}>
+                <MenuItem icon={<FaList />}> Task </MenuItem>
+              </NavLink>
+              <NavLink to="/rating" style={navLinkStyles}>
+                <MenuItem icon={<FaRegLaughWink />}> Rating </MenuItem>
+              </NavLink>
+              <NavLink to="/team" style={navLinkStyles}>
+                <MenuItem icon={<FaUsers />}> Team </MenuItem>
+              </NavLink>
+              {userDetails?.role !== 'CONTRIBUTOR' && (
+                <NavLink to="/team-report" style={navLinkStyles}>
+                  <MenuItem icon={<FaUser />}>Team Report</MenuItem>
+                </NavLink>
+              )}
+            </>
+          )}
+  
+          {userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ? (
+            <NavLink to="/guest" style={navLinkStyles}>
+              <MenuItem icon={<FaUser />}>Guest</MenuItem>
             </NavLink>
-            <NavLink to="/project/all" style={navLinkStyles}>
-              <MenuItem icon={<FaGem />}> Project </MenuItem>
-            </NavLink>
-            <NavLink to="/task" style={navLinkStyles}>
-              <MenuItem icon={<FaList />}> Task </MenuItem>
-            </NavLink>
-            <NavLink to="/rating" style={navLinkStyles}>
-              <MenuItem icon={<FaRegLaughWink />}> Rating </MenuItem>
-            </NavLink>
-            <NavLink to="/team" style={navLinkStyles}>
-              <MenuItem icon={<FaUsers />}> Team </MenuItem>
-            </NavLink>
-           { userDetails?.role!=='CONTRIBUTOR'&&<NavLink to="/team-report" style={navLinkStyles}>
-              <MenuItem icon={<FaUser />}>Team Report </MenuItem>
-            </NavLink>}
-            {/* Guest */}
-            {userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ? (
-  <NavLink to="/guest" style={navLinkStyles}>
-    <MenuItem icon={<FaUser />}>Guest</MenuItem>
-  </NavLink>
-) : null}
-
-
-            <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
-              <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>
-            </NavLink>
-          </Menu>
-        </Sidebar>
-      )}
-    </Layout>
+          ) : null}
+  
+          <NavLink onClick={logOutFromSystem} style={navLinkStyles}>
+            <MenuItem icon={<BsBoxArrowRight />}> Logout </MenuItem>
+          </NavLink>
+        </Menu>
+      </Sidebar>
+    )}
+  </Layout>
+  
   );
 }

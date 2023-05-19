@@ -11,6 +11,7 @@ import "./index.css";
 import ImageUpload from "./imageUpload";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
+import { useAuth } from "../../auth/AuthProvider";
 
 function UserForm(props) {
   const { handleModalClose } = props;
@@ -34,6 +35,7 @@ function UserForm(props) {
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
   const navigate = useNavigate();
+  const {userDetails} = useAuth();
 
   const today = new Date();
 
@@ -42,7 +44,9 @@ function UserForm(props) {
   }, []);
 
   const onInit = () => {
+    if (userDetails?.role !== "GUEST") {
     getUserDetails();
+    }
 
     if (localStorage.getItem("isEditProfile") === "true") {
       setIsEditable(true);

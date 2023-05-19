@@ -13,14 +13,19 @@ import Tooltip from "react-bootstrap/Tooltip";
 import "./index.css";
 import { getLogedInUserDetails } from "../../services/user/api";
 import { Text } from "@nextui-org/react";
+import { useAuth } from "../../auth/AuthProvider";
 
 function Header() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [profilePicture, setProfilePicture] = useState(false);
 
+  const { userDetails } = useAuth();
+
   useEffect(() => {
+    if (userDetails?.role !== "GUEST") {
     getUserDetails();
+    }
   }, []);
 
   useEffect(() => {

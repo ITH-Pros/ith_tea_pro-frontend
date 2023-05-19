@@ -59,7 +59,7 @@ export default function Guest({}) {
 
   const handleShowProjectModal = (guest) => {
     console.log(guest);
-    setSelectedProjects(guest?.project);
+    setSelectedProjects(guest);
     setShowProjectModal(true);
   };
 
@@ -109,7 +109,7 @@ export default function Guest({}) {
     setFormData({
       name: guest.name,
       email: guest.email,
-      project: guest.project.map((project) => project._id),
+      project: guest.projects.map((project) => project._id),
     });
     setShowAddEditModal(true);
   };
@@ -160,7 +160,7 @@ export default function Guest({}) {
       <td>
         <i
           className="fa fa-eye"
-          onClick={() => handleShowProjectModal(guest)}
+          onClick={() => handleShowProjectModal(guest?.projects)}
           style={{ marginLeft: "4px", cursor: "pointer" }}
         ></i>
       </td>
@@ -435,7 +435,7 @@ export default function Guest({}) {
                 No data found
                 </td>
                 )}
-                { guests?.length >= 10 && (
+              
             <td colSpan="5">
               <div className="pagination">
                 <CustomPagination
@@ -445,7 +445,7 @@ export default function Guest({}) {
                 />
               </div>
             </td>
-            )}
+      
           </tr>
         </tfoot>
       </table>
@@ -565,11 +565,17 @@ export default function Guest({}) {
           <Modal.Title>Projects</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ul>
-            {selectedProjects.map((project) => (
-              <li key={project?._id}>{project?.name}</li>
-            ))}
-          </ul>
+        {selectedProjects.length > 0 ? (
+  <ul>
+    {selectedProjects.map((project) => (
+      <li key={project?._id}>{project?.name}</li>
+    ))}
+  </ul>
+) : (
+  <p>Project is not assigned</p>
+)}
+
+
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseProjectModal}>

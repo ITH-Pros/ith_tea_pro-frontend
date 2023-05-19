@@ -43,14 +43,14 @@ const CustomCalendar = (props) => {
   
   useEffect(() => {
 
-    if (userDetails?.role !== "CONTRIBUTOR" || userDetails?.role !== "GUEST" ) {
+    if (userDetails?.role !== "CONTRIBUTOR" ) {
         getTeamWorkList();
       }
     }, [currentDate,currentView ]);
 
     useEffect(() => {
 
-        if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined)  {
+        if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined )  {
             console.log(isChange);
             getTeamWorkList();
           }
