@@ -185,7 +185,7 @@ export default function MyCalendar() {
       </div>
       <div className="rating-details__rating">
         <span>Average Rating:</span>
-        <span>{ratingDetail?.rating || 'Not Rated Yet'}</span>
+        <span>{ratingDetail?.rating !== 0 ? (ratingDetail?.rating || 0).toFixed(2) : 0}</span>
       </div>
       <div className="rating-details__rating">
         {ratingDetail && (

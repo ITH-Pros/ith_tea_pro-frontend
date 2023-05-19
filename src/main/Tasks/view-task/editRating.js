@@ -100,7 +100,7 @@ export default function EditRating(props) {
       {showRating && (
         <div className="ratingComment">
           <label>
-            Rating:
+            Rating :
             <select
               className="selectRating"
               value={rating}
@@ -120,7 +120,7 @@ export default function EditRating(props) {
           </label>
           <br />
           <button
-            className="editBtn"
+            className="editBtn float-right"
             onClick={() => {
               setConfirmationAgain(true);
               setShowRating(false);
