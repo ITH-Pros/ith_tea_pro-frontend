@@ -6,21 +6,27 @@ import Toaster from "../components/Toaster";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-
   const [accessToken, setAccessToken] = useLocalStorage("_u", null);
   const [userDetails, setUserDetails] = useLocalStorage("user", null);
-  const [profileModalShow, setProfileModalShow] = useLocalStorage("profileModalShow",false);
+  const [profileModalShow, setProfileModalShow] = useLocalStorage(
+    "profileModalShow",
+    false
+  );
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
-  
+
   const setShowToaster = (param) => showToaster(param);
   const navigate = useNavigate();
 
   const login = async (data) => {
     setAccessToken(data?.token);
     setUserDetails(data?.user);
-    if (data?.user?.profileCompleted === false) {
-      setProfileModalShow(true);
+    console.log(data?.user?.role , "data?.user?.role");
+    if (data?.user?.role !== "GUEST") {
+      
+      if (data?.user?.profileCompleted === false) {
+        setProfileModalShow(true);
+      }
     }
     navigate("/");
   };
@@ -32,14 +38,14 @@ export const AuthProvider = ({ children }) => {
     setUserDetails(null);
   };
 
-  const value = useMemo(() => (
-    {
+  const value = useMemo(
+    () => ({
       accessToken,
       login,
       userDetails,
       logout,
-	  profileModalShow,
-	  setProfileModalShow
+      profileModalShow,
+      setProfileModalShow,
     }),
     [accessToken]
   );

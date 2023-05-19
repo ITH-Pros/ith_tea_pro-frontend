@@ -15,6 +15,7 @@ import Loader from "../../components/Loader";
 import Toaster from "../../components/Toaster";
 import {
   addGuestApi,
+  changeGuestStatus,
   deleteGuestApi,
   editGuestApi,
   getAllProjects,
@@ -115,6 +116,8 @@ export default function Guest({}) {
   };
 
   const handleDeleteGuest = async () => {
+    localStorage.setItem("setPageDetails" , JSON.stringify(pageDetails));
+
     let dataToSend = {
         userId: selectedGuest._id,
     };
@@ -127,8 +130,11 @@ export default function Guest({}) {
         } else {
             setToasterMessage("Guest Deleted Successfully");
             showToaster(true);
+            localStorage.getItem("setPageDetails");
+            setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
+            localStorage.removeItem("setPageDetails");
             // onClose();
-            getGuests();
+            getGuests(pageDetails);
             setShowDeleteConfirmation(false);
         }
     } catch (error) {
@@ -139,50 +145,74 @@ export default function Guest({}) {
     
   };
 
-  const handleToggleActive = (guest) => {
+  const handleToggleActive = async (guest) => {
+    localStorage.setItem("setPageDetails" , JSON.stringify(pageDetails))
+  
     // Update the active status of the selected guest
-    setGuests((prevGuests) =>
-      prevGuests.map((g) => {
-        if (g._id === guest._id) {
-          return { ...g, active: !g.active };
-        }
-        return g;
-      })
-    );
+    let dataToSend = {
+      userId: guest._id,
+      active: !guest.guestCredentials[0].isActive,
+    }
+    setLoading(true);
+    try {
+      const guest = await changeGuestStatus(dataToSend);
+      if (guest.error) {
+        setToasterMessage(guest?.message || "Something Went Wrong");
+        showToaster(true);
+        setLoading(false);
+      } else {
+        setToasterMessage("Guest Updated Successfully");
+        setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
+        localStorage.removeItem("setPageDetails");
+        showToaster(true);
+        getGuests(pageDetails);
+        setLoading(false);
+      }
+    }
+    catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      showToaster(true);
+      setLoading(false);
+    }
+
   };
 
   // Render the table rows
-  const tableRows = guests?.map((guest , i) => (
-    <tr key={guest._id}>
-      <td>{i+1}</td>
-      <td>{guest.name}</td>
-      <td>{guest.email}</td>
-      <td>
-        <i
-          className="fa fa-eye"
-          onClick={() => handleShowProjectModal(guest?.projects)}
-          style={{ marginLeft: "4px", cursor: "pointer" }}
-        ></i>
-      </td>
-      <td>
-        <Switch
-          onChange={() => handleToggleActive(guest)}
-          checked={guest.active}
-        />
-
-        <i
-          className="fa fa-trash"
-          onClick={() => handleDeleteConfirmation(guest)}
-          style={{ marginLeft: "4px" }}
-        ></i>
-        <i
-          className="fa fa-edit"
-          onClick={() => handleEditModal(guest)}
-          style={{ marginLeft: "4px" }}
-        ></i>
-      </td>
-    </tr>
-  ));
+  const tableRows = guests?.map((guest, index) => {
+    const serialNumber = (pageDetails.currentPage - 1) * pageDetails.rowsPerPage + index + 1;
+    return (
+      <tr key={guest._id}>
+        <td>{serialNumber}</td>
+        <td>{guest.name}</td>
+        <td>{guest.email}</td>
+        <td>
+          <i
+            className="fa fa-eye"
+            onClick={() => handleShowProjectModal(guest?.projects)}
+            style={{ marginLeft: "4px", cursor: "pointer" }}
+          ></i>
+        </td>
+        <td>
+          <Switch
+            onChange={() => handleToggleActive(guest)}
+            checked={guest?.guestCredentials[0]?.isActive}
+          />
+  
+          <i
+            className="fa fa-trash"
+            onClick={() => handleDeleteConfirmation(guest)}
+            style={{ marginLeft: "4px" }}
+          ></i>
+          {/* <i
+            className="fa fa-edit"
+            onClick={() => handleEditModal(guest)}
+            style={{ marginLeft: "4px" }}
+          ></i> */}
+        </td>
+      </tr>
+    );
+  });
+  
 
   const handleSubmit = () => {
     console.log(formData);
@@ -218,6 +248,12 @@ export default function Guest({}) {
 
   //  add guest API integration
   const addGuest = async (dataToSend) => {
+
+    let options = {
+      currentPage: 1,
+      rowsPerPage: 10,
+    };
+    
     setLoading(true);
     try {
       const guest = await addGuestApi(dataToSend);
@@ -225,10 +261,11 @@ export default function Guest({}) {
         setToasterMessage(guest?.message || "Something Went Wrong");
         showToaster(true);
       } else {
+       
         setToasterMessage("Guest Added Successfully");
         showToaster(true);
         // onClose();
-        getGuests();
+        getGuests(options);
         setShowAddEditModal(false);
       }
     } catch (error) {
@@ -238,8 +275,20 @@ export default function Guest({}) {
     setLoading(false);
   };
 
+  const setLocalStorage = () => {
+    localStorage.setItem("setPageDetails" , JSON.stringify(pageDetails));
+  }
+
+  const getLocalStorage = () => {
+    setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
+    localStorage.removeItem("setPageDetails");
+  }
+
   // Edit guest API integration
   const editGuest = async (dataToSend) => {
+
+    setLocalStorage();
+
     setLoading(true);
     try {
       const guest = await editGuestApi(dataToSend);
@@ -250,6 +299,7 @@ export default function Guest({}) {
         setToasterMessage("Guest Updated Successfully");
         showToaster(true);
         setShowAddEditModal(false);
+
 
         // onClose();
         getGuests();

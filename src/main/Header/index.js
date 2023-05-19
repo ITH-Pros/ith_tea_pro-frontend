@@ -23,9 +23,9 @@ function Header() {
   const { userDetails } = useAuth();
 
   useEffect(() => {
-    if (userDetails?.role !== "GUEST") {
+  
     getUserDetails();
-    }
+    
   }, []);
 
   useEffect(() => {

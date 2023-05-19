@@ -50,6 +50,7 @@ import {
   Form,
 } from "react-bootstrap";
 import CustomCalendar from "./custom-calender";
+import ResetPassword from "../../auth/resetPassword";
 
 export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState("");
@@ -75,12 +76,14 @@ export default function Dashboard(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    
     setShowModalOnLogin(
       localStorage.getItem("profileCompleted") === "false" ? true : false
     );
-    if (userDetails?.role !== "GUEST") {
+
+
     onInit();
-    }
+  
   }, []);
 
   function onInit() {
@@ -104,8 +107,10 @@ export default function Dashboard(props) {
   }
 
   const handleProfileModalClose = () => {
+
     setShowModalOnLogin(false);
     localStorage.removeItem("profileCompleted");
+    
   };
 
   const handleToRedirectTask = (projectId, isArchive) => {
@@ -492,8 +497,9 @@ export default function Dashboard(props) {
           </Col>
         </Row>
 
-        {projectList?.length !== 0 && (
+        {userDetails.role !== "GUEST" && projectList?.length !== 0 && (
           <Row className="row-bg " > 
+
           {projectList
             .slice(0, showAllProjects ? projectList.length : 2)
             .map((project) => (
@@ -1079,6 +1085,7 @@ export default function Dashboard(props) {
               </Row>
             </Col>
           )}
+          { userDetails?.role !== "GUEST" && ( 
           <Col lg={6} style={{ paddingRight: "0px" }}>
             <Row>
               <Col lg={6} className="left-add">
@@ -1273,6 +1280,7 @@ export default function Dashboard(props) {
               </Col>
             </Row>
           </Col>
+        )}
         </Row>
       </Container>
 
@@ -1548,6 +1556,7 @@ export default function Dashboard(props) {
               <Row>
                 <Col lg={6} className="left-add">
                   <span>Team Work</span>
+                  {userDetails?.role !== "GUEST" && (
                   <i
                     onClick={() => {
                       setSelectedTask();
@@ -1557,6 +1566,7 @@ export default function Dashboard(props) {
                     className="fa fa-plus-circle"
                     style={{ cursor: "pointer" }}
                   ></i>
+      )}
                 </Col>
                 <Col lg={6} className="right-filter"></Col>
               </Row>
@@ -1944,7 +1954,17 @@ export default function Dashboard(props) {
           </button>
         </Offcanvas.Header>
         <Offcanvas.Body style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }} >
+
+        {userDetails?.role !== "GUEST" && (
         <UserForm handleModalClose={handleProfileModalClose} />
+        )}
+
+        {userDetails?.role === "GUEST" && (
+          <ResetPassword handleModalClose={handleProfileModalClose}
+         />
+         ) }
+
+      
 
         </Offcanvas.Body>
       </Offcanvas>

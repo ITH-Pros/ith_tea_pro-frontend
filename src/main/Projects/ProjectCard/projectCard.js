@@ -430,20 +430,17 @@ const ProjectCard = ({
                   </>
                 ))}
             </div>
-         {   userDetails.role !== "CONTRIBUTOR" && !isArchive &&   <div
-              style={{ position: "relative", float: "right" }}
-              onClick={() => {
-                onClickOfIcons(
-                  accessibleBy.concat(managedBy),
-                  "Assigned and Managed By"
-                );
-              }}
-            >
-              <i
-                className="fa fa-user-plus add-user-icon"
-                aria-hidden="true"
-              ></i>
-            </div>}
+            {userDetails.role !== "CONTRIBUTOR" && !isArchive && userDetails.role !== "GUEST" && (
+  <div
+    style={{ position: "relative", float: "right" }}
+    onClick={() => {
+      onClickOfIcons(accessibleBy.concat(managedBy), "Assigned and Managed By");
+    }}
+  >
+    <i className="fa fa-user-plus add-user-icon" aria-hidden="true"></i>
+  </div>
+)}
+
           </div>
         </div>
       </div>

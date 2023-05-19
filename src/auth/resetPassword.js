@@ -4,7 +4,8 @@ import { resetPassword } from "../services/auth/api";
 import Toaster from "../components/Toaster";
 import Loader from "../components/Loader/index";
 
-function ResetPassword() {
+function ResetPassword(props) {
+  const { handleModalClose } = props;
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -75,6 +76,8 @@ function ResetPassword() {
           window.location.reload();
         }, 1000);
         // navigate("/profile");
+
+        handleModalClose();
       }
     } catch (error) {
       setLoading(false);

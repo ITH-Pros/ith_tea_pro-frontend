@@ -97,7 +97,7 @@ const [userDetails,setUserDetails]=useState([])
   }, [userDetails]);
 
   useEffect(() => {
-    if (userDetails?.role !== 'GUEST') {
+ 
    
     if (selectedOption) {
       getUserDetails(selectedOption.value);
@@ -105,7 +105,7 @@ const [userDetails,setUserDetails]=useState([])
       getUserReport(selectedOption?.value, selectedEvent)
       
     } 
-  }
+  
   }, [selectedOption, selectedEvent]);
   const getUserDetails = async (id) => {
     setLoading(true);

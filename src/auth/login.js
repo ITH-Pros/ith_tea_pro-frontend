@@ -68,10 +68,15 @@ export default function Login() {
         );
       } else {
         login(userLogin?.data);
-        localStorage.setItem(
-          "profileCompleted",
-          userLogin?.data.user.profileCompleted
-        );
+        if (userLogin?.data?.user?.role !== "GUEST") {
+          localStorage.setItem(
+            "profileCompleted",
+            userLogin?.data.user.profileCompleted
+          );
+     
+        }
+        
+    
       }
     } catch (error) {
       showToaster(true);

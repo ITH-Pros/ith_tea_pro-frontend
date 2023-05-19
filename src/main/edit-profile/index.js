@@ -44,9 +44,9 @@ function UserForm(props) {
   }, []);
 
   const onInit = () => {
-    if (userDetails?.role !== "GUEST") {
+  
     getUserDetails();
-    }
+
 
     if (localStorage.getItem("isEditProfile") === "true") {
       setIsEditable(true);
@@ -163,6 +163,7 @@ function UserForm(props) {
     <div className="addUserFrom-edit " >
       <form className="row">
         <div className="profile-images">
+        {userDetails?.role !== "GUEST" && (
           <div className="edit-detle">
             <ImageUpload
               setProfileImage={setProfileImage}
@@ -170,19 +171,23 @@ function UserForm(props) {
               isEditable={!isEditable}
             />
           </div>
+        )}
         </div>
         <div className="form-group col-12 text-center profil-ed">
-          {!isEditable && (
+        
+          {!isEditable && userDetails?.role !== "GUEST" && (
             <Button variant="primary" size="sm" onClick={handleSubmit} >
               Update
             </Button>
           )}
+        
 
-          {isEditable && (
+          {isEditable && userDetails?.role !== "GUEST" && (
              <Button variant="primary" size="sm" onClick={handleEditClick}>
               Edit Profile
             </Button>
           )}
+      
           <Button variant="secondary" size="sm" className="ms-2"  onClick={handleResetClick} >Reset Password</Button>
 
         </div>
@@ -209,57 +214,54 @@ function UserForm(props) {
           />
         </div>
 
-        <div className="form-group col-4">
-          <label htmlFor="employeeId">Employee ID:</label>
-          <input
-            type="text"
-            id="employeeId"
-            maxLength={20}
-            value={employeeId}
-            onChange={(event) => setEmployeeId(event.target.value)}
-            disabled={isEditable}
-          />
-        </div>
+        {userDetails?.role !== "GUEST" && (
 
-        <div className="form-group col-4">
-          <label htmlFor="dob">Date of Birth:</label>
-          <input
-            type="date"
-            id="dob"
-            value={formatDate(dob)}
-            max={formatDate(
-              new Date(
-                today.getFullYear() - 15,
-                today.getMonth(),
-                today.getDate()
-              )
-            )}
-            onChange={(event) => setDob(event.target.value)}
-            disabled={isEditable}
-          />
-        </div>
-        <div className="form-group col-6">
-          <label htmlFor="designation">Designation:</label>
-          <input
-            type="text"
-            id="designation"
-            value={designation}
-            maxLength="50"
-            onChange={(event) => setDesignation(event.target.value)}
-            disabled={isEditable}
-          />
-        </div>
-        <div className="form-group col-6">
-          <label htmlFor="department">Department:</label>
-          <input
-            type="text"
-            id="department"
-            value={department}
-            maxLength="50"
-            onChange={(event) => setDepartment(event.target.value)}
-            disabled={isEditable}
-          />
-        </div>
+        <><div className="form-group col-4">
+            <label htmlFor="employeeId">Employee ID:</label>
+            <input
+              type="text"
+              id="employeeId"
+              maxLength={20}
+              value={employeeId}
+              onChange={(event) => setEmployeeId(event.target.value)}
+              disabled={isEditable} />
+          </div><div className="form-group col-4">
+              <label htmlFor="dob">Date of Birth:</label>
+              <input
+                type="date"
+                id="dob"
+                value={formatDate(dob)}
+                max={formatDate(
+                  new Date(
+                    today.getFullYear() - 15,
+                    today.getMonth(),
+                    today.getDate()
+                  )
+                )}
+                onChange={(event) => setDob(event.target.value)}
+                disabled={isEditable} />
+            </div><div className="form-group col-6">
+              <label htmlFor="designation">Designation:</label>
+              <input
+                type="text"
+                id="designation"
+                value={designation}
+                maxLength="50"
+                onChange={(event) => setDesignation(event.target.value)}
+                disabled={isEditable} />
+            </div><div className="form-group col-6">
+              <label htmlFor="department">Department:</label>
+              <input
+                type="text"
+                id="department"
+                value={department}
+                maxLength="50"
+                onChange={(event) => setDepartment(event.target.value)}
+                disabled={isEditable} />
+            </div></>
+        )}
+
+
       </form>
       <form className="row">
         <div className="form-group">
@@ -272,52 +274,46 @@ function UserForm(props) {
             readOnly={true}
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="github">Github:</label>
-          <input
-            type="url"
-            id="github"
-            value={github}
-            onChange={(event) => setGithub(event.target.value)}
-            // readOnly={!isEditable}
-            disabled={isEditable}
-            className={github && !githubRegex.test(github) ? "invalid" : ""}
-          />
-          {github && !githubRegex.test(github) && (
-            <span className="error">Invalid Github URL</span>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="twitter">Twitter:</label>
-          <input
-            type="url"
-            id="twitter"
-            value={twitter}
-            onChange={(event) => setTwitter(event.target.value)}
-            disabled={isEditable}
-            className={twitter && !twitterRegex.test(twitter) ? "invalid" : ""}
-          />
-          {twitter && !twitterRegex.test(twitter) && (
-            <span className="error">Invalid Twitter URL</span>
-          )}
-        </div>
-        <div className="form-group">
-          <label htmlFor="linkedin">LinkedIn:</label>
-          <input
-            type="url"
-            id="linkedin"
-            value={linkedin}
-            onChange={(event) => setLinkedin(event.target.value)}
-            disabled={isEditable}
-            className={
-              linkedin && !linkedinRegex.test(linkedin) ? "invalid" : ""
-            }
-          />
-          {linkedin && !linkedinRegex.test(linkedin) && (
-            <span className="error">Invalid LinkedIn URL</span>
-          )}
-        </div>
+        {userDetails?.role !== "GUEST" && (
+        <><div className="form-group">
+            <label htmlFor="github">Github:</label>
+            <input
+              type="url"
+              id="github"
+              value={github}
+              onChange={(event) => setGithub(event.target.value)}
+              // readOnly={!isEditable}
+              disabled={isEditable}
+              className={github && !githubRegex.test(github) ? "invalid" : ""} />
+            {github && !githubRegex.test(github) && (
+              <span className="error">Invalid Github URL</span>
+            )}
+          </div><div className="form-group">
+              <label htmlFor="twitter">Twitter:</label>
+              <input
+                type="url"
+                id="twitter"
+                value={twitter}
+                onChange={(event) => setTwitter(event.target.value)}
+                disabled={isEditable}
+                className={twitter && !twitterRegex.test(twitter) ? "invalid" : ""} />
+              {twitter && !twitterRegex.test(twitter) && (
+                <span className="error">Invalid Twitter URL</span>
+              )}
+            </div><div className="form-group">
+              <label htmlFor="linkedin">LinkedIn:</label>
+              <input
+                type="url"
+                id="linkedin"
+                value={linkedin}
+                onChange={(event) => setLinkedin(event.target.value)}
+                disabled={isEditable}
+                className={linkedin && !linkedinRegex.test(linkedin) ? "invalid" : ""} />
+              {linkedin && !linkedinRegex.test(linkedin) && (
+                <span className="error">Invalid LinkedIn URL</span>
+              )}
+            </div></>
+        )}
       </form>
 
       {toaster && (

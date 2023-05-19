@@ -390,7 +390,13 @@ export async function getGuestApi(data) {
 
 export async function deleteGuestApi(data) {
   return axiosInstance
-    .patch("guest/v1/delete", data)
+    .patch("user/v1/delete/user", data)
+    .then((res) => res.data);
+}
+
+export async function changeGuestStatus(data) {
+  return axiosInstance
+    .patch("user/v1/active/guest", data)
     .then((res) => res.data);
 }
 
