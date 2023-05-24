@@ -19,7 +19,7 @@ import SortByDropdown from "./SortFilter";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
 const FilterModal = (props) => {
-  const { getTaskFilters, handleProjectId, isArchive } = props;
+  const { getTaskFilters, handleProjectId, isArchive , downloadExportData } = props;
 
   const { userDetails } = useAuth();
   const statusList = CONSTANTS.statusListObj;
@@ -325,6 +325,16 @@ const FilterModal = (props) => {
             </span>
           )}
         </Button>
+        <Button
+          variant="light"
+          style={{ margin: "0px 5px" }}>
+          {!isArchive && (
+            <span onClick={() => downloadExportData()}>
+              <i className="fa fa-sort" aria-hidden="true"></i> Export
+            </span>
+          )}
+          </Button>
+
         {clearFilter && (
           <Button onClick={() => {
                   clearFilterFormValue();

@@ -2,6 +2,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+
 import "./tasks.css";
 // import {
 //   Accordion,
@@ -13,6 +16,7 @@ import {
   addSectionApi,
   archiveSectionApi,
   deleteSectionApi,
+  downloadExcel,
   getProjectsTask,
   updateSection,
   updateTaskStatusById,
@@ -289,7 +293,7 @@ const Tasks = () => {
 
   function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
+    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
@@ -301,8 +305,8 @@ const Tasks = () => {
   function convertToUTCNight(dateString) {
     console.log(dateString, "------------------");
     let utcTime = new Date(dateString);
-    
-    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
@@ -327,13 +331,12 @@ const Tasks = () => {
       if (params?.projectId) {
         data.projectId = paramsData?.projectId;
       }
-      if(localStorage.getItem("selectedLead")){
-        console.log(JSON.parse(localStorage.getItem("selectedLead")))
-        let leadsToSend=(localStorage.getItem("selectedLead"))
-        let leads=JSON.parse(localStorage.getItem("selectedLead"))
-        if(leads?.length){
-
-          data.leads=(leadsToSend)
+      if (localStorage.getItem("selectedLead")) {
+        console.log(JSON.parse(localStorage.getItem("selectedLead")));
+        let leadsToSend = localStorage.getItem("selectedLead");
+        let leads = JSON.parse(localStorage.getItem("selectedLead"));
+        if (leads?.length) {
+          data.leads = leadsToSend;
         }
       }
 
@@ -367,25 +370,29 @@ const Tasks = () => {
           data.sortOrder = filterData?.sortOrder;
         }
         if (
-          filterData?.fromDate  &&(selectedFilter &&selectedFilter!=='null')&&
+          filterData?.fromDate &&
+          selectedFilter &&
+          selectedFilter !== "null" &&
           selectedFilter !== "Today" &&
           selectedFilter !== "Tomorrow"
         ) {
-        console.log(selectedFilter,'----------------')
+          console.log(selectedFilter, "----------------");
 
           data.fromDate = convertToUTCDay(filterData?.fromDate);
         }
         if (
-          filterData?.toDate  &&(selectedFilter &&selectedFilter!=='null')&&
+          filterData?.toDate &&
+          selectedFilter &&
+          selectedFilter !== "null" &&
           selectedFilter !== "Today" &&
           selectedFilter !== "Tomorrow"
         ) {
-        console.log(selectedFilter,'----------------')
+          console.log(selectedFilter, "----------------");
 
           data.toDate = convertToUTCNight(filterData?.toDate);
         }
         if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-        console.log(selectedFilter,'----------------')
+          console.log(selectedFilter, "----------------");
 
           data.fromDate = convertToUTCDay(filterData?.fromDate);
           data.toDate = convertToUTCNight(filterData?.toDate);
@@ -458,6 +465,92 @@ const Tasks = () => {
     }
   };
 
+  const exportTasks = async () => {
+    let data = {
+      groupBy: "default",
+    };
+    if (isArchive) {
+      data.isArchived = true;
+    }
+    if (params?.projectId) {
+      let paramsData = JSON.parse(params?.projectId);
+      data.projectId = paramsData?.projectId;
+    }
+    if (localStorage.getItem("selectedLead")) {
+      let leadsToSend = localStorage.getItem("selectedLead");
+      let leads = JSON.parse(localStorage.getItem("selectedLead"));
+      if (leads?.length) {
+        data.leads = leadsToSend;
+      }
+    }
+    if (localStorage.getItem("taskFilters")) {
+      let filterData = JSON.parse(localStorage.getItem("taskFilters"));
+      if (filterData?.projectIds) {
+        data.projectIds = JSON.stringify(filterData?.projectIds);
+      }
+      if (filterData?.createdBy) {
+        data.createdBy = JSON.stringify(filterData?.createdBy);
+      }
+      if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
+        data.assignedTo = JSON.stringify(filterData?.assignedTo);
+      }
+      if (filterData?.category?.length) {
+        data.sections = JSON.stringify(filterData?.category);
+      }
+      if (filterData?.priority) {
+        data.priority = JSON.stringify(filterData?.priority);
+      }
+      if (filterData?.status) {
+        data.status = JSON.stringify(filterData?.status);
+      }
+      if (filterData?.sortType) {
+        data.sortType = filterData?.sortType;
+      }
+      if (filterData?.sortOrder) {
+        data.sortOrder = filterData?.sortOrder;
+      }
+      if (filterData?.fromDate) {
+        data.fromDate = filterData?.fromDate;
+      }
+      if (filterData?.toDate) {
+        data.toDate = filterData?.toDate;
+      }
+    }
+    try {
+      const res = await downloadExcel(data);
+      if (res.error) {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        console.log(res); // Make sure the response contains the expected data
+
+        const blob = new Blob([res], {
+          type: ".xlsx",
+        });
+        
+        const url = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${Date.now()}.xlsx`);
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        link.remove();
+        
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+  };
+
+  const downloadExportData = () => {
+    exportTasks();
+  };
+
   const getNewTasks = (id) => {
     closeModal();
     getTasksDataUsingProjectId();
@@ -497,7 +590,8 @@ const Tasks = () => {
                     setShowAddTask(true);
                   }}
                 >
-                  <i className="fa fa-plus-circle" aria-hidden="true"></i> Add Task
+                  <i className="fa fa-plus-circle" aria-hidden="true"></i> Add
+                  Task
                 </button>
               )}
 
@@ -520,6 +614,7 @@ const Tasks = () => {
                   handleProjectId={selectedProjectId}
                   getTaskFilters={getTaskFilters}
                   isArchive={isArchive}
+                  downloadExportData={downloadExportData}
                 />
               </button>
             </div>
@@ -554,13 +649,14 @@ const Tasks = () => {
                     showAddSectionModal(true);
                   }}
                 >
-                  <i className="fa fa-plus-circle"> </i>{ ' '}
-                  Add Section
+                  <i className="fa fa-plus-circle"> </i> Add Section
                 </Button>
               </div>
             )}
           {!projects?.length && !selectedProjectId && (
-            <p className="alig-nodata" style={{ textAlign: "center" }}>No Tasks Found</p>
+            <p className="alig-nodata" style={{ textAlign: "center" }}>
+              No Tasks Found
+            </p>
           )}
 
           {projects.map(
@@ -869,7 +965,8 @@ const Tasks = () => {
                                   <Badge bg="danger">HIGH</Badge>
                                 )}
                               </Col>
-                              <Col lg={2}
+                              <Col
+                                lg={2}
                                 className="align-items-center justify-content-start ps-0"
                               >
                                 {!task?.assignedTo?.profilePicture &&
@@ -902,9 +999,10 @@ const Tasks = () => {
                                   <span> NOT ASSIGNED </span>
                                 )}
                               </Col>
-{/* for lead  */}
+                              {/* for lead  */}
 
-<Col lg={2}
+                              <Col
+                                lg={2}
                                 className="align-items-center justify-content-start"
                               >
                                 {!task?.lead[0]?.profilePicture &&
@@ -938,11 +1036,15 @@ const Tasks = () => {
                                 )}
                               </Col>
 
-
                               <Col lg={1}>
                                 {task?.dueDate && (
                                   <Badge
-                                    bg={((new Date(task?.dueDate ) < new Date()) && !(task?.status === "COMPLETED"))? "danger" : "primary"}
+                                    bg={
+                                      new Date(task?.dueDate) < new Date() &&
+                                      !(task?.status === "COMPLETED")
+                                        ? "danger"
+                                        : "primary"
+                                    }
                                   >
                                     Due{" "}
                                     {moment(

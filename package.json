@@ -23,7 +23,9 @@
     "bootstrap": "^5.2.3",
     "bootstrap-daterangepicker": "^3.1.0",
     "draft-js": "^0.11.7",
+    "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
+    "fs": "^0.0.1-security",
     "ionic5-calendar": "^0.5.9",
     "mdb-react-ui-kit": "^5.0.0",
     "primereact": "^9.2.2",
@@ -60,10 +62,12 @@
     "react-tsparticles": "^2.6.0",
     "reactstrap": "^9.1.9",
     "save": "^2.9.0",
+    "sheetjs-style": "^0.15.8",
     "styled-components": "^5.3.9",
     "tsparticles-slim": "^2.6.0",
     "uuidv4": "^6.2.13",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -146,6 +146,15 @@ export async function getProjectsTask(data) {
     .then((res) => res.data);
 }
 
+export async function downloadExcel(data) {
+  return axiosInstance
+    .get("/task/v1/downloadExcel", {
+      params: data,
+      responseType: 'arraybuffer'
+    })
+    .then((res) => res.data);
+}
+
 export async function archiveSectionApi(data) {
   return axiosInstance
     .patch("projects/v1/archive/section", data)
