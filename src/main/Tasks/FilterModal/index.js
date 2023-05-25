@@ -331,7 +331,7 @@ const FilterModal = (props) => {
           style={{ margin: "0px 5px" }}>
           {!isArchive   && (
             <span onClick={() => downloadExportData()}>
-              <i className="fa fa-sort" aria-hidden="true"></i> Export
+              <i className="fa fa-file-excel-o" aria-hidden="true"></i> Export
             </span>
           )}
           </Button>
