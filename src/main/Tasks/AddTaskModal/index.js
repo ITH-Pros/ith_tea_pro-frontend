@@ -22,7 +22,7 @@ import { CONSTANTS } from "../../../constants";
 import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Loader from "../../../components/Loader";
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import Offcanvas from "react-bootstrap/Offcanvas";
 // import {useEffectOnce} from './useEffectOnce';
 
 export default function AddTaskModal(props) {
@@ -46,16 +46,17 @@ export default function AddTaskModal(props) {
   const [leadLists, setLeadList] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const { userDetails } = useAuth();
+  const miscTypeArray = CONSTANTS.MISCTYPE;
+  const [showMiscType, setShowMiscType] = useState(false);
 
   const uploadedAttachmentsArray = (uploadedFiles) => {
     setUploadedFiles(uploadedFiles);
   };
 
   useEffect(() => {
-    setCategoryList([])
-    localStorage.removeItem('addTaskModal')
-
-  }, [localStorage.getItem('addTaskModal')]);
+    setCategoryList([]);
+    localStorage.removeItem("addTaskModal");
+  }, [localStorage.getItem("addTaskModal")]);
 
   const taskFormFields = {
     projectId: "",
@@ -69,6 +70,7 @@ export default function AddTaskModal(props) {
     status: statusList[0],
     attachments: [],
     tasklead: "",
+    miscType: "",
   };
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
   const [toaster, showToaster] = useState(false);
@@ -87,11 +89,8 @@ export default function AddTaskModal(props) {
   // });
 
   useEffect(() => {
-  
     getProjectList();
   }, []);
-
-  
 
   useEffect(() => {
     if (taskFormValue.projectId && taskFormValue.leads) {
@@ -117,13 +116,7 @@ export default function AddTaskModal(props) {
     }
   }, [showAddTask]);
 
-  
-
- 
-
-
   const patchFormForAdd = () => {
-
     if (selectedProjectFromTask) {
       console.log("selectedProjectFromTask", selectedProjectFromTask);
       let project = projectList?.filter(
@@ -136,7 +129,6 @@ export default function AddTaskModal(props) {
         projectId: project[0]?._id,
       });
       getProjectByIdFunc(project[0]?._id);
-
     } else if (selectedTask) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
@@ -173,6 +165,8 @@ export default function AddTaskModal(props) {
           : dueDateData.getDate());
 
       console.log("selectedTask", selectedTask);
+      setShowMiscType(false);
+
 
       setTaskFormValue({
         projectId: selectedTask?.projectId,
@@ -186,7 +180,16 @@ export default function AddTaskModal(props) {
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
+        
       });
+
+      if (selectedTask?.miscType) {
+        setTaskFormValue({
+          ...taskFormValue,
+          miscType: selectedTask?.miscType,
+        });
+        setShowMiscType(true);
+      }
     } else if (handleProjectId) {
       let project = projectList?.find((item) => item?._id === handleProjectId);
       getLeadsListUsingProjectId(project?._id);
@@ -198,9 +201,8 @@ export default function AddTaskModal(props) {
         ...taskFormValue,
         projectId: handleProjectId,
       });
-      console.log(handleProjectId,'=======================handle project id')
+      console.log(handleProjectId, "=======================handle project id");
       getProjectByIdFunc(handleProjectId);
-
     } else if (userDetails.role === "CONTRIBUTOR") {
       setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id });
     } else {
@@ -217,7 +219,7 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setProjectList(projects?.data);
-        console.log('-------------------------------')
+        console.log("-------------------------------");
       }
     } catch (error) {
       setLoading(false);
@@ -227,8 +229,8 @@ export default function AddTaskModal(props) {
 
   const getProjectByIdFunc = async (id) => {
     let dataToSend = {
-      projectId:id
-    }
+      projectId: id,
+    };
     setLoading(true);
     try {
       const projects = await getProjectById(dataToSend);
@@ -236,8 +238,8 @@ export default function AddTaskModal(props) {
       if (projects.error) {
         return;
       } else {
-        setCategoryList(projects?.data)
-        console.log(projects,'-------------------------------')
+        setCategoryList(projects?.data);
+        console.log(projects, "-------------------------------");
       }
     } catch (error) {
       setLoading(false);
@@ -287,20 +289,19 @@ export default function AddTaskModal(props) {
   function formDateNightTime(dateString) {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
-      return ""; 
+      return "";
     }
-    console.log(dateString,'-----------------------------------------------')
-    let utcTime = new Date(dateString );
-    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+    console.log(dateString, "-----------------------------------------------");
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
-    console.log(localTimeString)
-    return localTimeString
+    console.log("==========", localTimeString);
+    console.log(localTimeString);
+    return localTimeString;
   }
-  
 
   const onchangeSelectedProject = (e) => {
     let project = projectList.find((el) => el._id === e.target.value);
@@ -313,6 +314,8 @@ export default function AddTaskModal(props) {
   };
 
   const updateTaskFormValue = (e) => {
+    console.log(e.target.value, "======================");
+
     let updateValue = { ...taskFormValue, [e.target.name]: e.target.value };
     if (e.target.name === "status" && !(e.target.value === "COMPLETED")) {
       updateValue["completedDate"] = null;
@@ -330,6 +333,15 @@ export default function AddTaskModal(props) {
       updateValue["completedDate"] = patchDateValue;
     }
     setTaskFormValue(updateValue);
+
+    categoryList?.map((item) => {
+      if (item._id === e.target.value && item.name === "Misc") {
+        setShowMiscType(true);
+        return;
+      } else if (item._id === e.target.value && item.name !== "Misc") {
+        setShowMiscType(false);
+      }
+    });
   };
 
   const updateTaskDescriptionValue = (description) => {
@@ -360,10 +372,12 @@ export default function AddTaskModal(props) {
         status,
         leads,
         attachments,
+        miscType,
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
       section && (dataToSend["section"] = section);
+      miscType && (dataToSend["miscType"] = miscType);
       title && (dataToSend["title"] = title);
       description && (dataToSend["description"] = description);
       assignedTo && (dataToSend["assignedTo"] = assignedTo);
@@ -377,11 +391,10 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message||'Error while creating Task')
+        setToasterMessage(taskRes?.message || "Error while creating Task");
         setShowToaster(true);
         return;
       } else {
-        
         setTaskFormValue({
           ...taskFormValue,
           title: "",
@@ -392,21 +405,19 @@ export default function AddTaskModal(props) {
           priority: "",
           status: "",
           attachments: [],
-          leads:""
+          leads: "",
+          miscType: "",
         });
         setValidated(false);
         setSelectedLeads("");
         setCategoryList([]);
-        localStorage.setItem('showTaskToaster','Task Created Succesfully !!')
-
-
+        localStorage.setItem("showTaskToaster", "Task Created Succesfully !!");
 
         setTimeout(() => {
           setShowAddTaskModal(false);
-
         }, 500);
         getNewTasks(projectId);
-      
+
         // onInit();
       }
     } catch (error) {
@@ -456,11 +467,11 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message||'Error while creating Task')
+        setToasterMessage(taskRes?.message || "Error while creating Task");
         setShowToaster(true);
         return;
       } else {
-        setToasterMessage('Task Created Succesfully')
+        setToasterMessage("Task Created Succesfully");
         setShowToaster(true);
         resetFormValue();
         setValidated(false);
@@ -480,11 +491,11 @@ export default function AddTaskModal(props) {
       ...taskFormFields,
       projectId: taskFormValue?.projectId,
       section: taskFormValue?.section,
-      title:taskFormValue?.title,
-      description:taskFormValue?.description,
-      dueDate:taskFormValue?.dueDate,
-      priority:taskFormValue?.priority,
-      status:taskFormValue?.status,
+      title: taskFormValue?.title,
+      description: taskFormValue?.description,
+      dueDate: taskFormValue?.dueDate,
+      priority: taskFormValue?.priority,
+      status: taskFormValue?.status,
       leads: e.target.value,
     });
   };
@@ -522,7 +533,7 @@ export default function AddTaskModal(props) {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        console.log(res)
+        console.log(res);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -530,7 +541,6 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
-
 
   const updateTask = async () => {
     setValidated(true);
@@ -557,14 +567,16 @@ export default function AddTaskModal(props) {
         leads,
         attachments,
         completedDate,
+        miscType,
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
       section && (dataToSend["section"] = section);
+      miscType && (dataToSend["miscType"] = miscType);
       title && (dataToSend["title"] = title);
       description && (dataToSend["description"] = description);
       assignedTo && (dataToSend["assignedTo"] = assignedTo);
-      (dataToSend["dueDate"] = formDateNightTime(dueDate));
+      dataToSend["dueDate"] = formDateNightTime(dueDate);
       priority && (dataToSend["priority"] = priority);
       status && (dataToSend["status"] = status);
       leads && (dataToSend["tasklead"] = [leads]);
@@ -575,12 +587,14 @@ export default function AddTaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message||'Error while updating Task')
+        setToasterMessage(taskRes?.message || "Error while updating Task");
         setShowToaster(true);
         return;
       } else {
-        updateTaskStatus({status:dataToSend?.status,
-          taskId: dataToSend?.taskId})
+        updateTaskStatus({
+          status: dataToSend?.status,
+          taskId: dataToSend?.taskId,
+        });
         setSelectedLeads("");
         setTaskFormValue({
           ...taskFormValue,
@@ -592,13 +606,13 @@ export default function AddTaskModal(props) {
           priority: "",
           status: "",
           attachments: [],
+          miscType: "",
         });
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        
-        localStorage.setItem('showTaskToaster','Task Updated Succesfully !!')
 
+        localStorage.setItem("showTaskToaster", "Task Updated Succesfully !!");
       }
     } catch (error) {
       console.log(error);
@@ -617,7 +631,7 @@ export default function AddTaskModal(props) {
       const taskRes = await deleteTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message||'Error while deleting Task')
+        setToasterMessage(taskRes?.message || "Error while deleting Task");
         setShowToaster(true);
         return;
       } else {
@@ -632,13 +646,13 @@ export default function AddTaskModal(props) {
           priority: "",
           status: "",
           attachments: [],
+          miscType: "",
         });
 
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        localStorage.setItem('showTaskToaster','Task Deleted Succesfully !!')
-
+        localStorage.setItem("showTaskToaster", "Task Deleted Succesfully !!");
       }
     } catch (error) {
       console.log(error);
@@ -649,18 +663,21 @@ export default function AddTaskModal(props) {
 
   return (
     <>
-      <Offcanvas  
+      <Offcanvas
         className="Offcanvas-modal"
-        style={{width:'800px'}}
+        style={{ width: "800px" }}
         show={showAddTaskModal}
         placement="end"
         onHide={() => resetModalData()}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title> {selectedTask ? "Edit Task" : "Add Task"}</Offcanvas.Title>
+          <Offcanvas.Title>
+            {" "}
+            {selectedTask ? "Edit Task" : "Add Task"}
+          </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body  >
-        <div className="dv-50">
+        <Offcanvas.Body>
+          <div className="dv-50">
             <Form noValidate validated={validated}>
               <Row>
                 <Form.Group as={Col} md="6">
@@ -705,7 +722,7 @@ export default function AddTaskModal(props) {
                     <option value="" selected disabled>
                       Select Section
                     </option>
-                 
+
                     {categoryList?.map((section, index) => (
                       <option value={section._id} key={index}>
                         {section.name}
@@ -716,6 +733,40 @@ export default function AddTaskModal(props) {
                     Section is required !!
                   </Form.Control.Feedback>
                 </Form.Group>
+                {/*  */}
+
+                {/* if taskFormValue.section ==="" */}
+
+                {showMiscType && (
+                  <Form.Group as={Col} md="6">
+                    <Form.Label>Misc Type</Form.Label>
+                    <Form.Control
+                      size="lg"
+                      required
+                      as="select"
+                      type="select"
+                      name="miscType"
+                      placeholder="Select Misc Type"
+                      onChange={updateTaskFormValue}
+                      value={taskFormValue.miscType}
+                    >
+                      <option selected value="" disabled>
+                        Select Category
+                      </option>
+
+                      {miscTypeArray?.map((miscType, index) => (
+                        <option value={miscType} key={index}>
+                          {miscType}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                      Misc Type is required !!
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                )}
+
+                {/*  */}
                 <Form.Group as={Col} md="12">
                   <Form.Label>Lead</Form.Label>
                   <Form.Control
@@ -748,7 +799,6 @@ export default function AddTaskModal(props) {
                   <Form.Label>Task Title</Form.Label>
                   <Form.Control
                     required
-                   
                     type="text"
                     placeholder="Title"
                     value={taskFormValue.title}
@@ -795,7 +845,6 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
-                  
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-0">
                   <Form.Label>Due Date</Form.Label>
@@ -815,7 +864,7 @@ export default function AddTaskModal(props) {
                 <Form.Group as={Col} md="3">
                   <Form.Label>Priority</Form.Label>
                   <Form.Control
-                  required
+                    required
                     as="select"
                     type="select"
                     name="priority"
@@ -836,7 +885,7 @@ export default function AddTaskModal(props) {
                   <Form.Label>Status</Form.Label>
 
                   <Form.Control
-                  required
+                    required
                     as="select"
                     type="select"
                     name="status"
@@ -857,7 +906,6 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
-
                 </Form.Group>
                 {taskFormValue?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
@@ -887,14 +935,15 @@ export default function AddTaskModal(props) {
                 {selectedTask && (
                   <div>
                     <Button
-                      className="btn btn-primary" 
+                      className="btn btn-primary"
                       type="button"
                       onClick={updateTask}
                     >
                       Update
                     </Button>
                     <Button
-                      className="btn btn-danger" style={{marginLeft:'10px'}}
+                      className="btn btn-danger"
+                      style={{ marginLeft: "10px" }}
                       type="button"
                       onClick={deleteTask}
                     >
@@ -902,15 +951,22 @@ export default function AddTaskModal(props) {
                     </Button>
                   </div>
                 )}
-                {!selectedTask && !selectedProjectFromTask &&   !(selectedTask || handleProjectId || selectedProjectFromTask)&&(
-                  <Button
-                    className="btn btn-primary" style={{marginLeft:'10px'}}
-                    type="button"
-                    onClick={submitTaskAnother}
-                  >
-                    Create And Add Another
-                  </Button>
-                )}
+                {!selectedTask &&
+                  !selectedProjectFromTask &&
+                  !(
+                    selectedTask ||
+                    handleProjectId ||
+                    selectedProjectFromTask
+                  ) && (
+                    <Button
+                      className="btn btn-primary"
+                      style={{ marginLeft: "10px" }}
+                      type="button"
+                      onClick={submitTaskAnother}
+                    >
+                      Create And Add Another
+                    </Button>
+                  )}
               </div>
             </Form>
             {toaster && (

@@ -244,6 +244,7 @@ export default function ViewTaskModal(props) {
   };
 
   const [isEditModal, setIsEditModal] = useState(false);
+  
 
 
 
@@ -331,6 +332,15 @@ export default function ViewTaskModal(props) {
                           )}
                           </div>
                       )}
+                      <div className="pull-right">
+  {/* Task completion time  */}
+  {task?.status === "COMPLETED" && (
+    <div className="taskCompletionTime">
+      <span>Task Completion Time: </span>
+      {/* <span className="text-success">{formatCompletionTime(completionTime)}</span> */}
+    </div>
+  )}
+</div>
                     </div>
                   </Row>
                 )}
