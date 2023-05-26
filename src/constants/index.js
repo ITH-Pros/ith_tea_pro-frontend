@@ -4,7 +4,7 @@ exports.CONSTANTS = {
   TASK_GROUPS: ["category", "status", "priority", "assignedTo", "createdBy"],
   ROLES: ["CONTRIBUTOR", "SUPER_ADMIN", "ADMIN", "LEAD"  ],
   SORTEDBY: ["Date", "Time"],
-  MISCTYPE: [ "Meeting" , "Demo" , "Stakeholder meeting" ,"Others" , "MOM/Notes"],
+  MISCTYPE: [ "Meeting" , "Demo" , "Stakeholder meeting" , "MOM/Notes" ,"Others" ],
   statusListObj: [
     { name: "NOT_STARTED", _id: "NOT_STARTED" },
     { name: "ONGOING", _id: "ONGOING" },
