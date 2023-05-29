@@ -122,6 +122,34 @@ export default function Dashboard(props) {
     );
   };
 
+  const handleTaskReopen = async (taskId) => {
+    let dataToSend = {
+      taskId: taskId,
+      status: "OPEN",
+    };
+    // setLoading(true);
+    // try {
+    //   const tasks = await updateTaskStatusById(dataToSend);
+    //   setLoading(false);
+    //   if (tasks.error) {
+    //     setToasterMessage(
+    //       tasks?.message || "Something Went Wrong While Updating Task Status"
+    //     );
+    //     setShowToaster(true);
+    //   } else {
+    //     setToasterMessage("Task Reopened Successfully");
+    //     setShowToaster(true);
+    //     onInit();
+    //   }
+    // } catch (error) {
+    //   setLoading(false);
+    //   setToasterMessage(
+    //     error?.message || "Something Went Wrong While Updating Task Status"
+    //   );
+    //   setShowToaster(true);
+    // }
+  };
+
   const handleShowAllProjects = () => {
     navigate("/project/all");
   };
@@ -1870,6 +1898,13 @@ export default function Dashboard(props) {
                                             }}
                                           >
                                             Edit
+                                          </Dropdown.Item>
+                                          <Dropdown.Item
+                                            onClick={() =>
+                                              handleTaskReopen(task?._id)
+                                            }
+                                          >
+                                            Reopen task
                                           </Dropdown.Item>
                                           <Dropdown.Item>
                                             Add Subtask

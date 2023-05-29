@@ -696,7 +696,7 @@ const Tasks = () => {
 
           {projects.map(
             (project, index) =>
-              project?.tasks?.length > 0 && ( // check if tasks array has data
+              // check if tasks array has data
                 <Accordion.Item key={index} eventKey={index}>
                   {project?._id?.projectId && project?._id?.section && (
                     <Accordion.Header>
@@ -1125,7 +1125,7 @@ const Tasks = () => {
                     </ul>
                   </Accordion.Body>
                 </Accordion.Item>
-              )
+              
           )}
           {projects && projects.length === 0 && (
             <p> {isArchive ? "No Task archived." : ""} </p>

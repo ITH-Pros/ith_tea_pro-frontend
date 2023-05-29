@@ -491,6 +491,7 @@ export default function AddTaskModal(props) {
       ...taskFormFields,
       projectId: taskFormValue?.projectId,
       section: taskFormValue?.section,
+      miscType: taskFormValue?.miscType,
       title: taskFormValue?.title,
       description: taskFormValue?.description,
       dueDate: taskFormValue?.dueDate,

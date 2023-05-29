@@ -70,14 +70,14 @@ export default function MyCalendar() {
             i.getDate() === currentDate.getDate() &&
             i.getMonth() === currentDate.getMonth() &&
             i.getFullYear() === currentDate.getFullYear();
-          if (!isToday) {
-            dataToSet.push({
-              id: i.getTime(),
-              title: "A",
-              start: new Date(i),
-              end: new Date(i),
-            });
-          }
+          // if (!isToday) {
+          //   dataToSet.push({
+          //     id: i.getTime(),
+          //     title: "A",
+          //     start: new Date(i),
+          //     end: new Date(i),
+          //   });
+          // }
         }
 
         const ratingData = rating.data?.[0]?.ratings;
