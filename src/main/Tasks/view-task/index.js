@@ -267,7 +267,7 @@ export default function ViewTaskModal(props) {
                   <Row className="mb-3" style={{alignItems:"end", justifyContent:'end', justifyItems:'end'}}>
                     <div className="col-sm-12 text-start">
                       {task?.isRated && <span>Rating : <span className="text-success">{task?.rating}</span></span>}
-                      {(task?.isRated && userDetails?.role !== "CONTRIBUTOR" ) && <Button onClick={()=>setIsEditModal(true)}  className="text-muted editBtn">Edit</Button>}
+                      {(task?.isRated && (userDetails?.role !== "CONTRIBUTOR" || userDetails?.role !== "LEAD" ) ) && <Button onClick={()=>setIsEditModal(true)}  className="text-muted editBtn">Edit</Button>}
                       {!task?.isRated && !isRatingFormVisible && userDetails?.role !== "CONTRIBUTOR" && userDetails.id !== task?.assignedTo?._id  && (
                         <Button onClick={() => {handleAddRating(task)}}
                           variant="light"
