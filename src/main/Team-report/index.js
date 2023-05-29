@@ -489,7 +489,8 @@ const [userDetails,setUserDetails]=useState([])
                         {teamWorkList?.map((team,index) => [
                           <tr>
                           <td style={{ width: "150px" }}>
-                            <p className="text-truncate">
+                            <p className="text-truncate" style={{maxWidth:'200px'}}>
+                              
                               <Link to="/" className="text-muted">
                                {team?.title||'--'}
                               </Link>
