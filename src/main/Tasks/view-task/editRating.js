@@ -7,14 +7,22 @@ import { Row, Col } from "react-bootstrap";
 import { updateTaskRating } from "../../../services/user/api";
 
 export default function EditRating(props) {
-  const { taskId, taskRating, taskComment, onClose, getTaskDetailsById , showToaster , setToasterMessage , setLoading } = props;
+  const {
+    taskId,
+    taskRating,
+    taskComment,
+    onClose,
+    getTaskDetailsById,
+    showToaster,
+    setToasterMessage,
+    setLoading
+  } = props;
 
   const [showConfirmation, setShowConfirmation] = useState(true);
   const [showRating, setShowRating] = useState(false);
   const [rating, setRating] = useState(taskRating);
-  const [comment, setComment] = useState(
-    taskId?.ratingComments[0]?.comment || ""
-  );
+  const [comment, setComment] = useState(taskComment || "");
+  const [commentValid, setCommentValid] = useState(true); // Track comment validity
 
   const [confirmationAgain, setConfirmationAgain] = useState(false);
 
@@ -29,6 +37,7 @@ export default function EditRating(props) {
 
   const handleSubmit = async () => {
     setLoading(true);
+
 
     let dataToSend = {
       taskId: taskId?._id,
@@ -70,6 +79,7 @@ export default function EditRating(props) {
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
+    setCommentValid(true); // Reset comment validity when the comment changes
   };
 
   const ratingOptions = [];
@@ -80,6 +90,23 @@ export default function EditRating(props) {
       </option>
     );
   }
+
+  const submitButton = () => {
+
+
+    // Check if comment is valid (not empty)
+    if (comment.trim() === "") {
+        setCommentValid(false);
+        setLoading(false);
+        return; // Stop further execution
+      }
+    
+
+
+    setConfirmationAgain(true);
+    setShowRating(false);
+  }
+
 
   const isSubmitDisabled = rating === 0;
 
@@ -116,14 +143,15 @@ export default function EditRating(props) {
               type="text"
               value={comment}
               onChange={handleCommentChange}
+              required
             />
+            {!commentValid && <p className="requiredMessage">Comment is required</p>}
           </label>
           <br />
           <button
             className="editBtn float-right"
-            onClick={() => {
-              setConfirmationAgain(true);
-              setShowRating(false);
+            onClick={() => { submitButton()
+            
             }}
             disabled={isSubmitDisabled}
           >

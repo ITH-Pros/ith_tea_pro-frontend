@@ -68,3 +68,8 @@
   .float-right{
     float: right;
   }
+
+  .requiredMessage{
+    color: red;
+    font-size: 12px;
+  }
