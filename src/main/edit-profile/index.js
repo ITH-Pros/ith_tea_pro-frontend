@@ -163,7 +163,7 @@ function UserForm(props) {
     <div className="addUserFrom-edit " >
       <form className="row">
         <div className="profile-images">
-        {userDetails?.role !== "GUEST" && (
+       
           <div className="edit-detle">
             <ImageUpload
               setProfileImage={setProfileImage}
@@ -171,22 +171,22 @@ function UserForm(props) {
               isEditable={!isEditable}
             />
           </div>
-        )}
+      
         </div>
         <div className="form-group col-12 text-center profil-ed">
         
-          {!isEditable && userDetails?.role !== "GUEST" && (
+      
             <Button variant="primary" size="sm" onClick={handleSubmit} >
               Update
             </Button>
-          )}
+          
         
 
-          {isEditable && userDetails?.role !== "GUEST" && (
+      
              <Button variant="primary" size="sm" onClick={handleEditClick}>
               Edit Profile
             </Button>
-          )}
+
       
           <Button variant="secondary" size="sm" className="ms-2"  onClick={handleResetClick} >Reset Password</Button>
 
@@ -214,7 +214,7 @@ function UserForm(props) {
           />
         </div>
 
-        {userDetails?.role !== "GUEST" && (
+        
 
         <><div className="form-group col-4">
             <label htmlFor="employeeId">Employee ID:</label>
@@ -259,7 +259,7 @@ function UserForm(props) {
                 onChange={(event) => setDepartment(event.target.value)}
                 disabled={isEditable} />
             </div></>
-        )}
+     
 
 
       </form>
@@ -274,7 +274,7 @@ function UserForm(props) {
             readOnly={true}
           />
         </div>
-        {userDetails?.role !== "GUEST" && (
+       
         <><div className="form-group">
             <label htmlFor="github">Github:</label>
             <input
@@ -313,7 +313,6 @@ function UserForm(props) {
                 <span className="error">Invalid LinkedIn URL</span>
               )}
             </div></>
-        )}
       </form>
 
       {toaster && (

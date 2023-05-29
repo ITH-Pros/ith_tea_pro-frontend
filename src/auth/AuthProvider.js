@@ -22,12 +22,12 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(data?.token);
     setUserDetails(data?.user);
     console.log(data?.user?.role , "data?.user?.role");
-    if (data?.user?.role !== "GUEST") {
+
       
       if (data?.user?.profileCompleted === false) {
         setProfileModalShow(true);
       }
-    }
+    
     navigate("/");
   };
 

@@ -1990,14 +1990,10 @@ export default function Dashboard(props) {
         </Offcanvas.Header>
         <Offcanvas.Body style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }} >
 
-        {userDetails?.role !== "GUEST" && (
-        <UserForm handleModalClose={handleProfileModalClose} />
-        )}
 
-        {userDetails?.role === "GUEST" && (
-          <ResetPassword handleModalClose={handleProfileModalClose}
-         />
-         ) }
+        <UserForm handleModalClose={handleProfileModalClose} />
+        
+
 
       
 

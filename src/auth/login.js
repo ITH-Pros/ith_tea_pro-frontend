@@ -68,13 +68,12 @@ export default function Login() {
         );
       } else {
         login(userLogin?.data);
-        if (userLogin?.data?.user?.role !== "GUEST") {
           localStorage.setItem(
             "profileCompleted",
             userLogin?.data.user.profileCompleted
           );
      
-        }
+        
         
     
       }
