@@ -409,4 +409,10 @@ export async function changeGuestStatus(data) {
     .then((res) => res.data);
 }
 
+export async function reopenTaskById(data) {
+  return axiosInstance
+    .post("task/v1/reopen", data)
+    .then((res) => res.data);
+}
+
 

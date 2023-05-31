@@ -49,7 +49,7 @@ export default function AllProject() {
   };
 
   const handleToRedirectTask = (project) => {
-    if (userDetails.role !== "GUEST"){
+    if (userDetails?.role !== "GUEST"){
     navigate(
       `/task/${JSON.stringify({
         projectId: project._id,

@@ -169,7 +169,16 @@ const ProjectCard = ({
     label: user.name,
   }));
 
+  const guestOptions = listOfUnassignedUsers.map((user, index) => ({
+    value: user._id,
+    label: user.name,
+  }));
+
   const handleLeadsChange = (selectedOptions) => {
+    setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
+  };
+
+  const handleGuestsChange = (selectedOptions) => {
     setSelectedUnassignedUsers(selectedOptions.map((option) => option.value));
   };
 
@@ -493,6 +502,7 @@ const ProjectCard = ({
                         <option value="">Select a role</option>
                         <option value="CONTRIBUTOR">CONTRIBUTOR</option>
                         <option value="LEAD">LEAD</option>
+                        <option value="GUEST">GUEST</option>
                       </select>
                       {selectedRole === "CONTRIBUTOR" && (
                         <Select
@@ -515,6 +525,18 @@ const ProjectCard = ({
                           )}
                           isMulti
                           onChange={handleLeadsChange}
+                        />
+                      )}
+                      {selectedRole === "GUEST" && (
+                        <Select
+                          styles={customStyles}
+                          placeholder="Select Member"
+                          options={guestOptions}
+                          value={guestOptions.filter((option) =>
+                            selectedUnassignedUsers.includes(option.value)
+                          )}
+                          isMulti
+                          onChange={handleGuestsChange}
                         />
                       )}
                     </div>

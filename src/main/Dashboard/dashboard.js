@@ -8,7 +8,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import "./dashboard.css";
 import Col from "react-bootstrap/Col";
 import Loader from "../../components/Loader";
-import { editLogedInUserDetails, getAllUsers } from "../../services/user/api";
+import { editLogedInUserDetails, getAllUsers, reopenTaskById } from "../../services/user/api";
 import Toaster from "../../components/Toaster";
 import avtar from "../../assests/img/avtar.png";
 import leadAvatar from "../../assests/img/leadAvatar.jpeg";
@@ -488,6 +488,79 @@ export default function Dashboard(props) {
     setSelectedTaskId(taskId);
     setShowViewTask(true);
   };
+
+
+  // Reopen Task
+  const [reopenTaskModal, setReopenTaskModal] = useState(false);
+  const [newDueDate, setNewDueDate] = useState('');
+  const [showNewDueDateField, setShowNewDueDateField] = useState(false);
+  const [reopenTaskId, setReopenTaskId] = useState(null);
+
+  const openReopenTaskModal = (taskId) => {
+    setReopenTaskId(taskId);
+    setReopenTaskModal(true);
+  };
+
+  const closeReopenTaskModal = () => {
+    setReopenTaskModal(false);
+    setReopenTaskId(null);
+    setShowNewDueDateField(false);
+    setNewDueDate('');
+  };
+
+
+
+  const handleReopenConfirmation = () => {
+    setShowNewDueDateField(true);
+  };
+
+  const handleNewDueDate = (e) => {
+    const selectedDueDate = e.target.value;
+    setNewDueDate(selectedDueDate);
+  };
+
+  const handleSubmit =async() => {
+    console.log(newDueDate); // Access the new due date from the state
+
+    // ... Perform any additional actions upon submitting the new due date
+    if (newDueDate === '') {
+      setToasterMessage("Please Select New Due Date");
+      setShowToaster(true);
+      return;
+    }
+
+    let dataToSend = {
+      taskId: reopenTaskId,
+      dueDate: newDueDate,
+    };
+
+    try {
+      const res = await reopenTaskById(dataToSend);
+      if (res.error) {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+      }
+      else {
+        setToasterMessage(res?.message || "Something Went Wrong");
+        setShowToaster(true);
+        onInit();
+        if (userDetails?.role !== "CONTRIBUTOR") {
+          // getTeamWorkList();
+          setIsChange(!isChange);
+        }
+        closeReopenTaskModal();
+      }
+    } catch (error) {
+      setToasterMessage(error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      return error.message;
+    }
+   
+
+
+  };
+
+  
 
 
 
@@ -1899,13 +1972,16 @@ export default function Dashboard(props) {
                                           >
                                             Edit
                                           </Dropdown.Item>
+                                          {task?.status === "COMPLETED" &&  (
+                                            
                                           <Dropdown.Item
-                                            onClick={() =>
-                                              handleTaskReopen(task?._id)
+                                            onClick={() =>{openReopenTaskModal(task?._id)}
+                                             
                                             }
                                           >
                                             Reopen task
                                           </Dropdown.Item>
+                                          )}
                                           <Dropdown.Item>
                                             Add Subtask
                                           </Dropdown.Item>
@@ -1928,6 +2004,82 @@ export default function Dashboard(props) {
           </Row>
         </Container>
       )}
+
+      {/* modal for re-open task */}
+
+      <Offcanvas  
+       className="Offcanvas-modal profile-modal"
+        style={{ width: '600px' }}
+        placement="end"
+        show={reopenTaskModal}
+        onHide={closeReopenTaskModal}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>
+
+          </Offcanvas.Title>
+         
+        </Offcanvas.Header>
+        <Offcanvas.Body
+          style={{ height: '78vh', overflowY: 'scroll', overflowX: 'hidden' }}
+        >
+          <div className="modal-body">
+          {!showNewDueDateField && (
+            <div className="row">
+              <div className="col-md-12">
+                <div className="form-group">
+                  <p>Are you sure you want to reopen this task?</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+            {showNewDueDateField && (
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="form-group">
+                    <label>New Due Date</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={newDueDate}
+                      onChange={handleNewDueDate}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="row">
+              <div className="col-md-12">
+              {!showNewDueDateField && (
+                <><Button onClick={handleReopenConfirmation}>Yes</Button><Button variant="secondary" onClick={closeReopenTaskModal}>
+                    No
+                  </Button></>
+              )}
+                {showNewDueDateField && (
+                  <>
+                    <Button variant="primary" onClick={handleSubmit}>
+                      Submit
+                    </Button>
+                    <Button variant="secondary" onClick={closeReopenTaskModal}>
+                      Cancel
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+
+      {/* ///// */}
+      
+      
+
+
+
 
       <Modal
         show={modalShow}
