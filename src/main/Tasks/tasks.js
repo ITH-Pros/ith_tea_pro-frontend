@@ -969,7 +969,7 @@ const Tasks = () => {
                                 </Row>
                               </Col>
                               {task?.isReOpen && (
-                              <Col lg={1} >
+                              <Col  >
                                 <div className="d-flex align-items-center">
                                   <div className="d-flex align-items-center">
                                   <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
@@ -978,7 +978,7 @@ const Tasks = () => {
                               </Col>
                             )}
 
-                              <Col lg={2}>
+                              <Col lg={3}>
                                 {task?.status === "NOT_STARTED" && (
                                   <Badge bg="secondary">NOT STARTED</Badge>
                                 )}
