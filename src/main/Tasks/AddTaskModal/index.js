@@ -71,10 +71,10 @@ export default function AddTaskModal(props) {
     attachments: [],
     tasklead: "",
     miscType: "",
-    defaultTaskTime:{
-      hours:null,
-      minutes:null
-    }
+    defaultTaskTime: {
+      hours: null,
+      minutes: null,
+    },
   };
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
   const [toaster, showToaster] = useState(false);
@@ -183,7 +183,7 @@ export default function AddTaskModal(props) {
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
-        defaultTaskTime:selectedTask?.defaultTaskTime
+        defaultTaskTime: selectedTask?.defaultTaskTime,
       });
 
       if (selectedTask?.miscType) {
@@ -318,15 +318,15 @@ export default function AddTaskModal(props) {
 
   const updateTaskFormValue = (e) => {
     console.log(e.target.value, "======================");
-  
+
     let updateValue = { ...taskFormValue };
-  
+
     if (e.target.name.startsWith("defaultTaskTime")) {
       const [fieldName, subFieldName] = e.target.name.split(".");
       updateValue[fieldName][subFieldName] = e.target.value;
     } else {
       updateValue[e.target.name] = e.target.value;
-  
+
       if (e.target.name === "status" && !(e.target.value === "COMPLETED")) {
         updateValue["completedDate"] = null;
       }
@@ -343,9 +343,9 @@ export default function AddTaskModal(props) {
         updateValue["completedDate"] = patchDateValue;
       }
     }
-  
+
     setTaskFormValue(updateValue);
-  
+
     categoryList?.forEach((item) => {
       if (item._id === e.target.value && item.name === "Misc") {
         setShowMiscType(true);
@@ -354,8 +354,6 @@ export default function AddTaskModal(props) {
       }
     });
   };
-  
-  
 
   const updateTaskDescriptionValue = (description) => {
     setTaskFormValue({ ...taskFormValue, description });
@@ -386,7 +384,7 @@ export default function AddTaskModal(props) {
         leads,
         attachments,
         miscType,
-        defaultTaskTime
+        defaultTaskTime,
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -422,10 +420,10 @@ export default function AddTaskModal(props) {
           attachments: [],
           leads: "",
           miscType: "",
-          defaultTaskTime:{
-            hours:null,
-            minutes:null
-          }
+          defaultTaskTime: {
+            hours: null,
+            minutes: null,
+          },
         });
         setValidated(false);
         setSelectedLeads("");
@@ -470,7 +468,7 @@ export default function AddTaskModal(props) {
         completedDate,
         attachments,
         miscType,
-        defaultTaskTime
+        defaultTaskTime,
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -487,7 +485,6 @@ export default function AddTaskModal(props) {
       uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
       miscType && (dataToSend["miscType"] = miscType);
       defaultTaskTime && (dataToSend["defaultTaskTime"] = defaultTaskTime);
-
 
       const taskRes = await createTask(dataToSend);
       setLoading(false);
@@ -547,10 +544,10 @@ export default function AddTaskModal(props) {
       attachments: [],
       leads: "",
       miscType: "",
-      defaultTaskTime:{
-        hours:null,
-        minutes:null
-      }
+      defaultTaskTime: {
+        hours: null,
+        minutes: null,
+      },
     });
     setTimeout(() => {
       document.getElementById("handleresetbuttonid")?.click();
@@ -600,7 +597,7 @@ export default function AddTaskModal(props) {
         attachments,
         completedDate,
         miscType,
-        defaultTaskTime
+        defaultTaskTime,
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -694,9 +691,6 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
-
- 
-  
 
   return (
     <>
@@ -848,26 +842,30 @@ export default function AddTaskModal(props) {
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="5">
-  <Form.Label>Estimated Time</Form.Label>
-  <div className="d-flex">
-    <Form.Control
-      type="number"
-      placeholder="Hours"
-      name="defaultTaskTime.hours" // Unique name for hours input
-      value={taskFormValue.defaultTaskTime.hours}
-      onChange={updateTaskFormValue}
-    />
-    <span className="mx-2">:</span>
-    <Form.Control
-      type="number"
-      placeholder="Minutes"
-      name="defaultTaskTime.minutes" // Unique name for minutes input
-      value={taskFormValue.defaultTaskTime.minutes}
-      onChange={updateTaskFormValue}
-    />
-  </div>
-</Form.Group>
-
+                  <Form.Label>Estimated Time</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      required
+                      type="number"
+                      placeholder="Hours"
+                      name="defaultTaskTime.hours" // Unique name for hours input
+                      value={taskFormValue.defaultTaskTime.hours}
+                      onChange={updateTaskFormValue}
+                    />
+                    <span className="mx-2">:</span>
+                    <Form.Control
+                      required
+                      type="number"
+                      placeholder="Minutes"
+                      name="defaultTaskTime.minutes" // Unique name for minutes input
+                      value={taskFormValue.defaultTaskTime.minutes}
+                      onChange={updateTaskFormValue}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Estimated time is required !!
+                    </Form.Control.Feedback>
+                  </div>
+                </Form.Group>
               </Row>
 
               <Row className="mb-3">
