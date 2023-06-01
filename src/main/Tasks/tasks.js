@@ -600,6 +600,9 @@ const Tasks = () => {
     setSelectedTask();
   };
 
+
+  
+
   return (
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
@@ -832,6 +835,15 @@ const Tasks = () => {
                         <li key={task?._id} className="share-wrapper-ui">
                           <div className="clickLabelArea">
                             <Row className="align-items-center justify-content-start">
+                            {task?.isReOpen && (
+                          
+                                <div className="d-flex align-items-center">
+                                  <div className="d-flex align-items-center">
+                                  <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
+                                  </div>
+                                  </div>
+                       
+                            )}
                               <Col lg={4} className="align-items-center">
                                 <Row>
                                   <Col lg={1}>
@@ -968,15 +980,7 @@ const Tasks = () => {
                                   </Col>
                                 </Row>
                               </Col>
-                              {task?.isReOpen && (
-                              <Col  >
-                                <div className="d-flex align-items-center">
-                                  <div className="d-flex align-items-center">
-                                  <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
-                                  </div>
-                                  </div>
-                              </Col>
-                            )}
+                          
 
                               <Col lg={3}>
                                 {task?.status === "NOT_STARTED" && (
@@ -1009,8 +1013,7 @@ const Tasks = () => {
                                   <Badge bg="danger">HIGH</Badge>
                                 )}
                               </Col>
-                              <Col
-                                lg={2}
+                              <Col lg={2}
                                 className="align-items-center justify-content-start ps-0"
                               >
                                 {!task?.assignedTo?.profilePicture &&
@@ -1045,8 +1048,7 @@ const Tasks = () => {
                               </Col>
                               {/* for lead  */}
 
-                              <Col
-                                lg={2}
+                              <Col lg={2}
                                 className="align-items-center justify-content-start"
                               >
                                 {!task?.lead[0]?.profilePicture &&

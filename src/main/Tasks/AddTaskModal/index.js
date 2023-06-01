@@ -71,6 +71,10 @@ export default function AddTaskModal(props) {
     attachments: [],
     tasklead: "",
     miscType: "",
+    defaultTaskTime:{
+      hours:null,
+      minutes:null
+    }
   };
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
   const [toaster, showToaster] = useState(false);
@@ -167,7 +171,6 @@ export default function AddTaskModal(props) {
       console.log("selectedTask", selectedTask);
       setShowMiscType(false);
 
-
       setTaskFormValue({
         projectId: selectedTask?.projectId,
         leads: selectedTask?.lead[0]?._id || selectedTask?.lead[0],
@@ -180,7 +183,7 @@ export default function AddTaskModal(props) {
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
-        
+        defaultTaskTime:selectedTask?.defaultTaskTime
       });
 
       if (selectedTask?.miscType) {
@@ -315,34 +318,44 @@ export default function AddTaskModal(props) {
 
   const updateTaskFormValue = (e) => {
     console.log(e.target.value, "======================");
-
-    let updateValue = { ...taskFormValue, [e.target.name]: e.target.value };
-    if (e.target.name === "status" && !(e.target.value === "COMPLETED")) {
-      updateValue["completedDate"] = null;
+  
+    let updateValue = { ...taskFormValue };
+  
+    if (e.target.name.startsWith("defaultTaskTime")) {
+      const [fieldName, subFieldName] = e.target.name.split(".");
+      updateValue[fieldName][subFieldName] = e.target.value;
+    } else {
+      updateValue[e.target.name] = e.target.value;
+  
+      if (e.target.name === "status" && !(e.target.value === "COMPLETED")) {
+        updateValue["completedDate"] = null;
+      }
+      if (e.target.name === "status" && e.target.value === "COMPLETED") {
+        let today = new Date();
+        let patchDateValue =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1 <= 9
+            ? "0" + (today.getMonth() + 1)
+            : today.getMonth() + 1) +
+          "-" +
+          (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
+        updateValue["completedDate"] = patchDateValue;
+      }
     }
-    if (e.target.name === "status" && e.target.value === "COMPLETED") {
-      let today = new Date();
-      let patchDateValue =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1 <= 9
-          ? "0" + (today.getMonth() + 1)
-          : today.getMonth() + 1) +
-        "-" +
-        (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
-      updateValue["completedDate"] = patchDateValue;
-    }
+  
     setTaskFormValue(updateValue);
-
-    categoryList?.map((item) => {
+  
+    categoryList?.forEach((item) => {
       if (item._id === e.target.value && item.name === "Misc") {
         setShowMiscType(true);
-        return;
       } else if (item._id === e.target.value && item.name !== "Misc") {
         setShowMiscType(false);
       }
     });
   };
+  
+  
 
   const updateTaskDescriptionValue = (description) => {
     setTaskFormValue({ ...taskFormValue, description });
@@ -354,7 +367,7 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads 
+      !taskFormValue.leads
     ) {
       return;
     }
@@ -373,6 +386,7 @@ export default function AddTaskModal(props) {
         leads,
         attachments,
         miscType,
+        defaultTaskTime
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -387,6 +401,7 @@ export default function AddTaskModal(props) {
       leads && (dataToSend["tasklead"] = [leads]);
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+      defaultTaskTime && (dataToSend["defaultTaskTime"] = defaultTaskTime);
 
       const taskRes = await createTask(dataToSend);
       setLoading(false);
@@ -407,6 +422,10 @@ export default function AddTaskModal(props) {
           attachments: [],
           leads: "",
           miscType: "",
+          defaultTaskTime:{
+            hours:null,
+            minutes:null
+          }
         });
         setValidated(false);
         setSelectedLeads("");
@@ -449,6 +468,9 @@ export default function AddTaskModal(props) {
         status,
         leads,
         completedDate,
+        attachments,
+        miscType,
+        defaultTaskTime
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -463,6 +485,9 @@ export default function AddTaskModal(props) {
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
       uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+      miscType && (dataToSend["miscType"] = miscType);
+      defaultTaskTime && (dataToSend["defaultTaskTime"] = defaultTaskTime);
+
 
       const taskRes = await createTask(dataToSend);
       setLoading(false);
@@ -521,6 +546,11 @@ export default function AddTaskModal(props) {
       status: statusList[0],
       attachments: [],
       leads: "",
+      miscType: "",
+      defaultTaskTime:{
+        hours:null,
+        minutes:null
+      }
     });
     setTimeout(() => {
       document.getElementById("handleresetbuttonid")?.click();
@@ -549,7 +579,8 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads 
+      !taskFormValue.leads ||
+      !taskFormValue.defaultTaskTime
     ) {
       return;
     }
@@ -569,6 +600,7 @@ export default function AddTaskModal(props) {
         attachments,
         completedDate,
         miscType,
+        defaultTaskTime
       } = taskFormValue;
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
@@ -584,6 +616,7 @@ export default function AddTaskModal(props) {
       selectedTask && (dataToSend["taskId"] = selectedTask?._id);
       completedDate && (dataToSend["completedDate"] = completedDate);
       uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
+      defaultTaskTime && (dataToSend["defaultTaskTime"] = defaultTaskTime);
 
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
@@ -661,6 +694,9 @@ export default function AddTaskModal(props) {
       return error.message;
     }
   };
+
+ 
+  
 
   return (
     <>
@@ -796,7 +832,7 @@ export default function AddTaskModal(props) {
               </Row>
 
               <Row className="mb-3">
-                <Form.Group as={Col} md="12">
+                <Form.Group as={Col} md="7">
                   <Form.Label>Task Title</Form.Label>
                   <Form.Control
                     required
@@ -811,6 +847,27 @@ export default function AddTaskModal(props) {
                     Title is required !!
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group as={Col} md="5">
+  <Form.Label>Estimated Time</Form.Label>
+  <div className="d-flex">
+    <Form.Control
+      type="number"
+      placeholder="Hours"
+      name="defaultTaskTime.hours" // Unique name for hours input
+      value={taskFormValue.defaultTaskTime.hours}
+      onChange={updateTaskFormValue}
+    />
+    <span className="mx-2">:</span>
+    <Form.Control
+      type="number"
+      placeholder="Minutes"
+      name="defaultTaskTime.minutes" // Unique name for minutes input
+      value={taskFormValue.defaultTaskTime.minutes}
+      onChange={updateTaskFormValue}
+    />
+  </div>
+</Form.Group>
+
               </Row>
 
               <Row className="mb-3">

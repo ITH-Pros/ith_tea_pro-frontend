@@ -249,19 +249,14 @@ export default function ViewTaskModal(props) {
     const remainingMinutes = minutes % 60;
 
     return (
-    <div>
-
-
-      <label className="mb-0">
-        Task  Completion Time
-        </label>
-      <div>
-        {days > 0 && <p>Days: {days}</p>}
-        {hours > 0 && <p>Hours: {hours}</p>}
-        {remainingMinutes > 0 && <p>Minutes: {remainingMinutes}</p>}
+      <div className="task-completion-time">
+        <label className="mb-0">Task Completion Time</label>
+        <div>
+          {days > 0 && <p>Days: {days}</p>}
+          {hours > 0 && <p>Hours: {hours}</p>}
+          {remainingMinutes > 0 && <p>Minutes: {remainingMinutes}</p>}
+        </div>
       </div>
-    </div>
-
     );
   };
 
@@ -390,17 +385,6 @@ export default function ViewTaskModal(props) {
                         )}
                       </div>
                     )}
-                    <div className="pull-right">
-                      {/* Task completion time  */}
-                      {task?.status === "COMPLETED" && (
-                        <div className="taskCompletionTime">
-                          <MinutesToDaysHoursMinutes
-                            minutes={task?.timeTaken}
-                          />
-                          {/* <span className="text-success">{formatCompletionTime(completionTime)}</span> */}
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </Row>
               )}
@@ -426,6 +410,8 @@ export default function ViewTaskModal(props) {
                   <Form.Label>Task Title</Form.Label>
                   <p>{task?.title} </p>
                 </Form.Group>
+                {/* Estimated Time */}
+              
               </Row>
 
               <Row className="mb-3">
@@ -480,10 +466,34 @@ export default function ViewTaskModal(props) {
                   </select>
                 </Form.Group>
                 {task?.status === "COMPLETED" && (
-                  <Form.Group as={Col} md="4">
-                    <Form.Label>Completed Date</Form.Label>
-                    <p>{formatDate(task?.completedDate) || "--"} </p>
-                  </Form.Group>
+                  <Row className="mb-3 mt-3">
+                    <>
+                      <Form.Group as={Col} md="4">
+                        <Form.Label>Completed Date</Form.Label>
+                        <p>{formatDate(task?.completedDate) || "--"} </p>
+                      </Form.Group>
+
+                      {/* Task completion time  */}
+
+                      <Form.Group as={Col} md="4">
+                        {/* <Form.Label>Completed Date</Form.Label> */}
+                        <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
+                      </Form.Group>
+
+
+                      <Form.Group as={Col} md="4" className="estimated-time">
+                  <Form.Label>Estimated Time :</Form.Label>{" "}
+                  <div className="time">
+                    <p>{task?.defaultTaskTime?.hours} Hour</p>
+                    <span>:</span>
+                    <p>{task?.defaultTaskTime?.minutes} Minute</p>
+                  </div>
+                </Form.Group>
+
+
+
+                    </>
+                  </Row>
                 )}
               </Row>
               <Row className="mb-3">

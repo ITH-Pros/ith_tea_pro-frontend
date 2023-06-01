@@ -228,3 +228,60 @@ p {
   color: #fff !important;
   margin-left: 5px;
 }
+
+.task-completion-time {
+  margin-bottom: 10px;
+}
+
+.task-completion-time label {
+  font-weight: bold;
+}
+
+.task-completion-time p {
+  margin: 0;
+}
+
+.task-completion-time p:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.estimated-time {
+  display: flex;
+  align-items: center;
+}
+
+.estimated-time .time {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.estimated-time p,
+.estimated-time span {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+.estimated-time p {
+  margin-right: 8px;
+}
+
+.estimated-time span {
+  margin: 0 8px;
+  font-weight: bold;
+  color: #777;
+}
+
+.estimated-time p:last-child {
+  margin-right: 0;
+}
+
+.estimated-time p:not(:last-child)::after {
+  content: "\00B7";
+  margin-left: 8px;
+  color: #aaa;
+}
+
