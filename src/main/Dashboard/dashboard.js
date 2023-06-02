@@ -716,6 +716,17 @@ export default function Dashboard(props) {
                       overdueWorkList?.length > 0 &&
                       overdueWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
+
+
+                        {task?.isReOpen && (
+                          
+                          <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-center">
+                            <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
+                            </div>
+                            </div>
+                 
+                      )}
                           <Col lg={4} className="middle">
                             {((userDetails.role === "LEAD" &&
                               (userDetails.id === task?.assignedTo?._id ||
@@ -989,6 +1000,16 @@ export default function Dashboard(props) {
                       myWorkList?.length > 0 &&
                       myWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
+
+                        {task?.isReOpen && (
+                          
+                          <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-center">
+                            <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
+                            </div>
+                            </div>
+                 
+                      )}
                           <Col lg={4} className="middle">
                             {(userDetails.id === task?.assignedTo?._id ||
                               userDetails.role === "CONTRIBUTOR") && (
@@ -1231,6 +1252,16 @@ export default function Dashboard(props) {
                     pendingRatingList?.length > 0 &&
                     pendingRatingList?.map((task) => (
                       <Row className="d-flex justify-content-start list_task w-100 mx-0">
+
+                      {task?.isReOpen && (
+                          
+                          <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-center">
+                            <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
+                            </div>
+                            </div>
+                 
+                      )}
                         <Col lg={5} className="middle">
                           <span
                             style={{ fontSize: "20PX", marginRight: "10px" }}
@@ -1727,6 +1758,18 @@ export default function Dashboard(props) {
                                 }
                                 <Col lg={11} className="border-start border-bottom d-flex justify-content-start px-0">
                                 <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
+
+
+                                {task?.isReOpen && (
+                          
+                          <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-center">
+                            <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
+                            </div>
+                            </div>
+                 
+                      )}
+                     
                                   <Col lg={4} className="middle">
                                     {((userDetails.role === "LEAD" &&
                                       (userDetails.id ===
@@ -1736,6 +1779,10 @@ export default function Dashboard(props) {
                                           task?.createdBy?._id)) ||
                                       userDetails.role === "SUPER_ADMIN" ||
                                       userDetails.role === "ADMIN") && (
+
+
+
+                
                                       <Dropdown>
                                         <Dropdown.Toggle
                                           variant="success"

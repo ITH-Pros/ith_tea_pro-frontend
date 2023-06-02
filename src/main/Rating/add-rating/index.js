@@ -403,14 +403,13 @@ export default function AddRating(props) {
           </Row>
 
           <Row className="desc">
-            <Textarea
-              type="textArea"
-              name="comment"
-              placeholder="comment"
-              value={ratingForm.comment}
-              onChange={handleRatingFormChange}
-            />
-          </Row>
+  <textarea
+    name="comment"
+    placeholder="comment"
+    value={ratingForm.comment}
+    onChange={handleRatingFormChange}
+  ></textarea>
+</Row>
 
           <div className="text-right mt-2">
             <button
