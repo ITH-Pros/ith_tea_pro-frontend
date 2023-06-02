@@ -326,6 +326,8 @@ const FilterModal = (props) => {
           )}
         </Button>
 
+        {(userDetails?.role === "ADMIN" || userDetails?.role === "SUPER_ADMIN") && (
+
           <Button
           variant="light"
           style={{ margin: "0px 5px" }}>
@@ -335,6 +337,7 @@ const FilterModal = (props) => {
             </span>
           )}
           </Button>
+        )}
           
 
       

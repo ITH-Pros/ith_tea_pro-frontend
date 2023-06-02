@@ -82,6 +82,7 @@ export default function ViewTaskModal(props) {
         }
         getTasksDataUsingProjectId();
         setShowConfirmation(false);
+        onInit();
         console.log("isChange", isChange);
         // setIsChange(!isChange)
       }
