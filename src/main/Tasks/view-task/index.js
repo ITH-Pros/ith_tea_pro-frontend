@@ -290,6 +290,11 @@ export default function ViewTaskModal(props) {
                   }}
                 >
                   <div className="col-sm-12 text-start">
+                  {task?.section?.name !== "Misc" && (
+                    <div>
+
+
+                 
                     {task?.isRated && (
                       <span>
                         Rating :{" "}
@@ -307,6 +312,7 @@ export default function ViewTaskModal(props) {
                           Edit
                         </Button>
                       )}
+                  
                     {!task?.isRated &&
                       !isRatingFormVisible &&
                       userDetails?.role !== "CONTRIBUTOR" &&
@@ -387,6 +393,9 @@ export default function ViewTaskModal(props) {
                         )}
                       </div>
                     )}
+
+                    </div>
+                  )}
                   </div>
                 </Row>
               )}
