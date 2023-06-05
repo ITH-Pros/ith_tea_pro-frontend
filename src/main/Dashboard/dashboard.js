@@ -2088,6 +2088,7 @@ export default function Dashboard(props) {
                     <label>New Due Date</label>
                     <input
                       type="date"
+                      min={new Date().toISOString().split("T")[0]}
                       className="form-control"
                       value={newDueDate}
                       onChange={handleNewDueDate}

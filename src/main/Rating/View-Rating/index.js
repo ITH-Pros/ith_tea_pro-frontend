@@ -289,7 +289,6 @@ export default function Dashboard(props) {
       );
     }
   })}
-
                       <td className="userAverage">
                         {user.monthlyAverage
                           ? Math.round(user.monthlyAverage * 100) / 100
