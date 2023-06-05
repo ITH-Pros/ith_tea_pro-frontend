@@ -45,6 +45,8 @@ export default function Teams(props) {
     totalPages: 1,
   });
 
+  const [ assignManagerModalShow ,setAssignManagerModalShow] = useState(false);
+
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
 
@@ -52,6 +54,52 @@ export default function Teams(props) {
 
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
+
+
+  const [managerList, setManagerList] = useState([]);
+  const [selectedManagers, setSelectedManagers] = useState([]);
+
+  const openAssignManagerModal = (userId) => {
+    // Fetch manager list
+    getManagerList(userId);
+
+    // Show the modal
+    setAssignManagerModalShow(true);
+  };
+
+  const getManagerList = (userId) => {
+    // Make an API call or perform any necessary operations to fetch the manager list
+    // Once you have the data, update the managerList state
+    // Example manager data (replace this with your actual data)
+    const managers = [
+      { id: 1, name: "Manager 1" },
+      { id: 2, name: "Manager 2" },
+      { id: 3, name: "Manager 3" },
+    ];
+    setManagerList(managers);
+  };
+
+  const handleManagerSelection = (managerId) => {
+    // Update the selected managers array based on the checkbox selection
+    const index = selectedManagers.indexOf(managerId);
+    if (index > -1) {
+      // Manager already selected, remove from the array
+      setSelectedManagers((prevState) =>
+        prevState.filter((manager) => manager !== managerId)
+      );
+    } else {
+      // Manager not selected, add to the array
+      setSelectedManagers((prevState) => [...prevState, managerId]);
+    }
+  };
+
+  const assignManagers = () => {
+    // Perform any necessary actions with the selected managers
+    console.log("Selected Managers:", selectedManagers);
+
+    // Close the modal
+    setAssignManagerModalShow(false);
+  };
 
   useEffect(() => {
     onInit();
@@ -498,6 +546,31 @@ export default function Teams(props) {
                             ></i>{" "}
                             Delete user
                           </a>
+
+                          {/* Assign manager  */}
+                          <a
+                            onClick={() => {
+                              openAssignManagerModal(user._id);
+                              
+                            }}
+                            icon="pi pi-check"
+                            label="Confirm"
+                            // onClick={() => {
+                            //   handleEdit();
+                            // }}
+                          >
+                            {" "}
+                            <i
+                              className="fa fa-pencil-square"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Assign Manager
+                          </a>
+                          {/* Assign manager  */}
+
+                            
+
+
                         </div>
                       </button>
                     )}
@@ -725,6 +798,48 @@ export default function Teams(props) {
             </div>
           </Modal.Body>
         </Modal>
+
+        <Modal
+          show={assignManagerModalShow}
+          onHide={() => {
+            setAssignManagerModalShow(false);
+          }}
+          animation={false}
+          className="confirmation-popup"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body  className="text-center">
+          <h2>Assign Manager</h2>
+<div class="manager-list">
+
+  {managerList.map((manager) => (
+    <label key={manager.id} class="manager-label">
+      <input
+        type="checkbox"
+        value={manager.id}
+        checked={selectedManagers.includes(manager.id)}
+        onChange={() => handleManagerSelection(manager.id)}
+      />
+      {manager.name}
+    </label>
+  ))}
+</div>
+<button class="confirm-button" onClick={assignManagers}>Confirm</button>
+
+ 
+          </Modal.Body>
+        </Modal>
+
+
+
+            
+           
+
+
+
+
       </div>
     </>
   );
