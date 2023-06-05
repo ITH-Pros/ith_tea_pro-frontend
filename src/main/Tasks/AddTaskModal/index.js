@@ -82,15 +82,7 @@ export default function AddTaskModal(props) {
   const [toasterMessage, setToasterMessage] = useState("");
   const [selectedLeads, setSelectedLeads] = useState();
 
-  // useEffectOnce(() => {
-  //   console.log('useEffectOnce has run!');
-  //   setToasterMessage('')
-  //   setShowToaster(false);
-  //   return () => {
-  //     setToasterMessage('')
-  //     setShowToaster(false);
-  //   };
-  // });
+
 
   useEffect(() => {
     getProjectList();
@@ -137,7 +129,7 @@ export default function AddTaskModal(props) {
       let project = projectList?.filter(
         (item) => item?._id === selectedTask?.projectId
       );
-      console.log("project", selectedTask);
+      console.log("project", project);
 
       getLeadsListUsingProjectId(selectedTask?.projectId);
       setCategoryList(project[0]?.sections);
@@ -171,11 +163,23 @@ export default function AddTaskModal(props) {
       console.log("selectedTask", selectedTask);
       setShowMiscType(false);
 
+  
+      if (selectedTask?.miscType) {
+        setShowMiscType(true);
+      } else {
+        setShowMiscType(false);
+      }
+
       setTaskFormValue({
         projectId: selectedTask?.projectId,
-        leads: selectedTask?.lead[0]?._id || selectedTask?.lead[0],
         section: selectedTask?.section,
+        miscType: selectedTask?.miscType,
+        leads: selectedTask?.lead[0]?._id || selectedTask?.lead[0],
         title: selectedTask?.title,
+        defaultTaskTime :{
+          hours: selectedTask?.defaultTaskTime?.hours,
+          minutes: selectedTask?.defaultTaskTime?.minutes,
+        } ,
         description: selectedTask?.description,
         assignedTo: selectedTask?.assignedTo?._id || selectedTask?.assignedTo,
         dueDate: dueDateData,
@@ -183,16 +187,12 @@ export default function AddTaskModal(props) {
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
-        defaultTaskTime: selectedTask?.defaultTaskTime,
+       
       });
 
-      if (selectedTask?.miscType) {
-        setTaskFormValue({
-          ...taskFormValue,
-          miscType: selectedTask?.miscType,
-        });
-        setShowMiscType(true);
-      }
+     
+  
+
     } else if (handleProjectId) {
       let project = projectList?.find((item) => item?._id === handleProjectId);
       getLeadsListUsingProjectId(project?._id);
