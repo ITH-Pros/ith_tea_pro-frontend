@@ -12,6 +12,8 @@ import {
   getUserAnalytics,
   assignUserToProjectByIds,
   deleteUserById,
+  getAllManager,
+  assignManagerTOUserByIds,
 } from "../../services/user/api";
 import "./teams.css";
 import Loader from "../../components/Loader";
@@ -45,7 +47,7 @@ export default function Teams(props) {
     totalPages: 1,
   });
 
-  const [ assignManagerModalShow ,setAssignManagerModalShow] = useState(false);
+  const [assignManagerModalShow, setAssignManagerModalShow] = useState(false);
 
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
@@ -55,11 +57,14 @@ export default function Teams(props) {
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
-
   const [managerList, setManagerList] = useState([]);
   const [selectedManagers, setSelectedManagers] = useState([]);
 
   const openAssignManagerModal = (userId) => {
+    setSelectedManagers([]);
+    setManagerList([]);
+
+    setUserId(userId);
     // Fetch manager list
     getManagerList(userId);
 
@@ -67,16 +72,35 @@ export default function Teams(props) {
     setAssignManagerModalShow(true);
   };
 
-  const getManagerList = (userId) => {
+  const getManagerList = async (userId) => {
+    setLoading(true);
+    console.log("userId", userId);
     // Make an API call or perform any necessary operations to fetch the manager list
-    // Once you have the data, update the managerList state
-    // Example manager data (replace this with your actual data)
-    const managers = [
-      { id: 1, name: "Manager 1" },
-      { id: 2, name: "Manager 2" },
-      { id: 3, name: "Manager 3" },
-    ];
-    setManagerList(managers);
+
+    try {
+      const resp = await getAllManager();
+      if (resp.error) {
+        console.log(resp.error);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        usersList.map((user) => {
+          if (user?._id === userId) {
+            if(user?.manager?.length > 0){
+            setSelectedManagers(user?.manager);
+
+            } else {
+              setSelectedManagers([]);
+            }
+            console.log("user.manager", user?.manager);
+          }
+        });
+        setManagerList(resp?.data);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   const handleManagerSelection = (managerId) => {
@@ -93,12 +117,25 @@ export default function Teams(props) {
     }
   };
 
-  const assignManagers = () => {
+  const assignManagers = async () => {
     // Perform any necessary actions with the selected managers
     console.log("Selected Managers:", selectedManagers);
 
-    // Close the modal
-    setAssignManagerModalShow(false);
+    let data = {
+      managerId: selectedManagers,
+      userId: userId,
+    };
+    try {
+      const resp = await assignManagerTOUserByIds(data);
+      if (resp.error) {
+        console.log(resp.error);
+      } else {
+        setAssignManagerModalShow(false);
+        onInit();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -134,7 +171,7 @@ export default function Teams(props) {
   };
 
   const getAndSetAllUsers = async function (options) {
-    if(! options?.currentPage){
+    if (!options?.currentPage) {
       return;
     }
     setLoading(true);
@@ -143,7 +180,7 @@ export default function Teams(props) {
         limit: options?.rowsPerPage,
         currentPage: options?.currentPage,
       };
-   
+
       const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
@@ -357,9 +394,6 @@ export default function Teams(props) {
       setPageDetails(dataToSave);
       getAndSetAllUsers(dataToSave);
     };
-    
-    
-    
 
     const onChangeRowsPerPage = (e) => {
       let dataToSave = {
@@ -398,7 +432,7 @@ export default function Teams(props) {
           type="number"
           value={pageDetails.currentPage}
           name="currentPage"
-          onChange={(e)=>handleOnChange(e)}
+          onChange={(e) => handleOnChange(e)}
         />
         <span className="pagination-input">/</span>
         <span className="pagination-input"> {pageDetails.totalPages}</span>
@@ -449,19 +483,17 @@ export default function Teams(props) {
     }
   };
   const redirectToTeamReport = (user) => {
-    if(userDetails.role === "CONTRIBUTOR" ){
+    if (userDetails.role === "CONTRIBUTOR") {
       return;
     }
     let data = {
       label: user?.name,
-      value:user?._id
-      
-    }
-    console.log(data)
-    localStorage.setItem('selectedOptions',JSON.stringify(data))
+      value: user?._id,
+    };
+    console.log(data);
+    localStorage.setItem("selectedOptions", JSON.stringify(data));
     navigate("/team-report");
-    
-  }
+  };
 
   return (
     <>
@@ -493,11 +525,11 @@ export default function Teams(props) {
           </div>
         </h1>
 
-        <div  className="container-team">
+        <div className="container-team">
           {usersList &&
             usersList.map((user, index) => {
               return (
-                <div  key={user._id} className="box">
+                <div key={user._id} className="box">
                   <div className="top-bar"></div>
                   <div className="top">
                     <Link
@@ -551,7 +583,6 @@ export default function Teams(props) {
                           <a
                             onClick={() => {
                               openAssignManagerModal(user._id);
-                              
                             }}
                             icon="pi pi-check"
                             label="Confirm"
@@ -567,32 +598,30 @@ export default function Teams(props) {
                             Assign Manager
                           </a>
                           {/* Assign manager  */}
-
-                            
-
-
                         </div>
                       </button>
                     )}
                   <div className="content">
                     <>
-                      {!user?.credentials && (userDetails?.role === "SUPER_ADMIN" ||userDetails?.role === "ADMIN") && (
-               
-                        <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Resend Password Setup Link</Tooltip>}
-                      >
-                                <div className="contents">
-                        <img
-                          onClick={() => resendActivationLink(user?._id)}
-                       
-                          src={require("../../assests/img/resend-icon.jpg")}
-                          alt="resend"
-                          title="Resend Password Setup Link"
-                        ></img>
-                        </div>
-                      </OverlayTrigger>
-                      )}
+                      {!user?.credentials &&
+                        (userDetails?.role === "SUPER_ADMIN" ||
+                          userDetails?.role === "ADMIN") && (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip>Resend Password Setup Link</Tooltip>
+                            }
+                          >
+                            <div className="contents">
+                              <img
+                                onClick={() => resendActivationLink(user?._id)}
+                                src={require("../../assests/img/resend-icon.jpg")}
+                                alt="resend"
+                                title="Resend Password Setup Link"
+                              ></img>
+                            </div>
+                          </OverlayTrigger>
+                        )}
                       {!user?.profilePicture && (
                         <UserIcon key={index} firstName={user.name} />
                       )}
@@ -611,13 +640,15 @@ export default function Teams(props) {
                       )}
                     </>
                     <div className="content-height">
-                    <span onClick={()=>redirectToTeamReport(user)} style={{cursor:'pointer'}}>
-
-                      <strong style={{ FontSize: "14px", color: "#673AB7" }}>
-                        {user.name} ({user.role})
-                      </strong>
-                      {user.designation && <p>{user?.designation}</p>}
-                      <p>{user.email}</p>
+                      <span
+                        onClick={() => redirectToTeamReport(user)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <strong style={{ FontSize: "14px", color: "#673AB7" }}>
+                          {user.name} ({user.role})
+                        </strong>
+                        {user.designation && <p>{user?.designation}</p>}
+                        <p>{user.email}</p>
                       </span>
                       {user.employeeId && <p>{user?.employeeId} </p>}
                       {userDetails?.role !== "CONTRIBUTOR" &&
@@ -748,8 +779,6 @@ export default function Teams(props) {
           />
         )}
 
-        
-
         <Modals
           modalShow={modalShow}
           modalBody={<GetModalBody />}
@@ -770,17 +799,14 @@ export default function Teams(props) {
           <Modal.Header closeButton>
             <Modal.Title>Confirmation</Modal.Title>
           </Modal.Header>
-          <Modal.Body  className="text-center">
+          <Modal.Body className="text-center">
             <h6>Are you sure you want to delete this user ?</h6>
 
             <div className="button-center-corformain mt-3">
-         
-
               <Button
-              variant="light"
-              size="sm"
+                variant="light"
+                size="sm"
                 style={{ marginRight: "10px" }}
-                 
                 onClick={() => {
                   setConfirmModalShow(false);
                 }}
@@ -788,9 +814,8 @@ export default function Teams(props) {
                 Cancel
               </Button>
               <Button
-                 variant="danger"
-                 size="sm"
-                
+                variant="danger"
+                size="sm"
                 onClick={() => handleDeleteUser()}
               >
                 Delete
@@ -805,41 +830,55 @@ export default function Teams(props) {
             setAssignManagerModalShow(false);
           }}
           animation={false}
-          className="confirmation-popup"
+          dialogClassName="custom-modal"
         >
           <Modal.Header closeButton>
-            <Modal.Title>Confirmation</Modal.Title>
+            <Modal.Title>
+              <h2>Assign Manager</h2>
+            </Modal.Title>
           </Modal.Header>
-          <Modal.Body  className="text-center">
-          <h2>Assign Manager</h2>
-<div class="manager-list">
-
-  {managerList.map((manager) => (
-    <label key={manager.id} class="manager-label">
-      <input
-        type="checkbox"
-        value={manager.id}
-        checked={selectedManagers.includes(manager.id)}
-        onChange={() => handleManagerSelection(manager.id)}
-      />
-      {manager.name}
-    </label>
-  ))}
-</div>
-<button class="confirm-button" onClick={assignManagers}>Confirm</button>
-
- 
+          <Modal.Body>
+            <div className="search-container">
+              <div className="manager-list-container">
+                {managerList.map((manager) => (
+                  <label key={manager.id} className="manager-label">
+                    <input
+                      type="checkbox"
+                      value={manager._id}
+                      checked={selectedManagers.includes(manager._id)}
+                      onChange={() => handleManagerSelection(manager._id)}
+                    />
+                    <span className="checkmark"></span>
+                    <span className="manager-name">{manager.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
           </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="light"
+              size="sm"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                setAssignManagerModalShow(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="light"
+              size="sm"
+              className="confirm-button"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                assignManagers();
+              }}
+            >
+              Confirm
+            </Button>
+          </Modal.Footer>
         </Modal>
-
-
-
-            
-           
-
-
-
-
       </div>
     </>
   );

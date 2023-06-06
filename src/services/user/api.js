@@ -416,3 +416,17 @@ export async function reopenTaskById(data) {
 }
 
 
+export async function getAllManager(data) {
+  return axiosInstance.get("user/v1/leads/list", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+
+export async function assignManagerTOUserByIds(data) {
+  return axiosInstance.patch("user/v1/assign/manager", data)
+    .then((res) => res.data);
+}
+
+
+
