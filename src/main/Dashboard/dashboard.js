@@ -12,6 +12,7 @@ import {
   editLogedInUserDetails,
   getAllUsers,
   reopenTaskById,
+  verifyTaskById,
 } from "../../services/user/api";
 import Toaster from "../../components/Toaster";
 import avtar from "../../assests/img/avtar.png";
@@ -78,6 +79,49 @@ export default function Dashboard(props) {
   const setShowToaster = (param) => showToaster(param);
   const [isChange, setIsChange] = useState(undefined);
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
+const [comment, setComment] = useState("");
+const [verifyTaskId, setVerifyTaskId] = useState("");
+
+const openVerifyModal = (taskId) => {
+  setVerifyTaskId(taskId);
+  setShowModal(true);
+};
+
+const handleVerifyTask = async () => {
+  let dataToSend = {
+    taskId: verifyTaskId,
+    status: "VERIFIED",
+    verificationsComments: comment,
+  };
+  setLoading(true);
+  try {
+    const tasks = await verifyTaskById(dataToSend);
+    setLoading(false);
+    if (tasks.error) {
+      setToasterMessage(
+        tasks?.message || "Something Went Wrong While Updating Task Status"
+      );
+      setShowToaster(true);
+    } else {
+      setToasterMessage("Task Verified Successfully");
+      setShowToaster(true);
+      onInit();
+    }
+  } catch (error) {
+    setLoading(false);
+    setToasterMessage(
+      error?.message || "Something Went Wrong While Updating Task Status"
+    );
+    setShowToaster(true);
+  }
+};
+
+
+
+
+
 
   useEffect(() => {
     setShowModalOnLogin(
@@ -474,7 +518,12 @@ export default function Dashboard(props) {
     setSelectedTaskId(null);
   };
 
-  const handleViewDetails = (taskId) => {
+  const handleViewDetails = (taskId, param) => {
+    if (param === "isVerified") {
+      // add a new status in task that is VERIFIED in the task status array
+      // update the task status
+    }
+
     setSelectedTaskId(taskId);
     setShowViewTask(true);
   };
@@ -1402,7 +1451,6 @@ export default function Dashboard(props) {
         </Row>
       </Container>
 
-
       {/* Task verification */}
 
       {(userDetails?.role !== "CONTRIBUTOR " ||
@@ -1415,8 +1463,7 @@ export default function Dashboard(props) {
                   <Col lg={6} className="left-add">
                     <span>TASK VERIFICATION</span>
                   </Col>
-                  <Col lg={6} className="right-filter">
-                    {/* select box and label name team member */}
+                  {/* <Col lg={6} className="right-filter">
                     {(userDetails?.role === "SUPER_ADMIN" ||
                       userDetails?.role === "ADMIN") && (
                       <Form.Group
@@ -1440,7 +1487,7 @@ export default function Dashboard(props) {
                         </Form.Control>
                       </Form.Group>
                     )}
-                  </Col>
+                  </Col> */}
                 </Row>
                 <Row>
                   <Col lg={12} className="mt-3">
@@ -1613,14 +1660,22 @@ export default function Dashboard(props) {
                               className="text-end middle px-0"
                               style={{ justifyContent: "end" }}
                             >
-                        
-                                {/* <VerifyTask
+                              {/* <VerifyTask
                                   taskFromDashBoard={task}
                                   onInit={onInit}
                                   setIsChange={setIsChange}
                                   isChange={isChange}
                                 /> */}
 
+                              <Button
+                                onClick={() => {
+                                 
+                                  openVerifyModal(task._id);
+                                }}
+                                className="btn btn-primary btn-sm"
+                              >
+                                Verify
+                              </Button>
                             </Col>
                           </Row>
                         ))}
@@ -2289,8 +2344,6 @@ export default function Dashboard(props) {
         </Container>
       )}
 
-
-
       {/* modal for re-open task */}
 
       <Offcanvas
@@ -2426,6 +2479,33 @@ export default function Dashboard(props) {
           <UserForm handleModalClose={handleProfileModalClose} />
         </Offcanvas.Body>
       </Offcanvas>
+
+      {/* verify */}
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Verify Task</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group controlId="commentForm">
+            <Form.Label>Comment</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleVerifyTask}>
+            Verify
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {loading ? <Loader /> : null}
       {toaster && (

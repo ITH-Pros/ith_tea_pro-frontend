@@ -428,5 +428,12 @@ export async function assignManagerTOUserByIds(data) {
     .then((res) => res.data);
 }
 
+export async function verifyTaskById(data) {
+  return axiosInstance.patch("user/v1/verify", {
+      params: data,
+    })
+    .then((res) => res.data);
+}
+
 
 

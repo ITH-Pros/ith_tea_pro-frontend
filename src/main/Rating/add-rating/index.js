@@ -264,7 +264,7 @@ export default function AddRating(props) {
       <div className="dv-50-rating ">
         <Form className="margin-form" noValidate validated={validated}>
           <Row className="mb-3">
-            <Form.Group as={Col} md="6" className="form-group">
+            {/* <Form.Group as={Col} md="6" className="form-group">
               <Form.Label>Select Project</Form.Label>
               <Form.Control
                 required
@@ -285,7 +285,7 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 project is required !!
               </Form.Control.Feedback>
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group as={Col} md="6">
               <Form.Label>Select User</Form.Label>
@@ -332,7 +332,7 @@ export default function AddRating(props) {
               as={Col}
               md="6"
               controlId="validationCustom01"
-              className="ps-0"
+              className="ps-0 "
             >
               <Form.Label>Rating</Form.Label>
               {/* <Form.Control
@@ -367,7 +367,7 @@ export default function AddRating(props) {
             </Form.Group>
           </Row>
           <Row>
-            <Form.Group as={Col} md="12">
+            {/* <Form.Group as={Col} md="12">
               <Form.Label>Select Task</Form.Label>
               <Form.Control
                 required
@@ -388,7 +388,8 @@ export default function AddRating(props) {
               <Form.Control.Feedback type="invalid">
                 Task is required !!
               </Form.Control.Feedback>
-            </Form.Group>
+            </Form.Group> */}
+            { ratingForm?.taskList?.find((task) => task._id === ratingForm.selectedTask)?.completedDate &&
 
             <Form.Group as={Col} md="12">
               <Form.Label>Completed Date</Form.Label>
@@ -400,6 +401,7 @@ export default function AddRating(props) {
                 }
               </h5>
             </Form.Group>
+            }
           </Row>
 
           <Row className="desc">
