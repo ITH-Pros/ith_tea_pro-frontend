@@ -125,7 +125,7 @@ export default function Teams(props) {
     console.log("Selected Managers:", selectedManagers);
 
     let data = {
-      managerId: selectedManagers,
+      managerIds: selectedManagers,
       userId: userId,
     };
     try {
