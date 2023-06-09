@@ -5,14 +5,15 @@ import { useState, useEffect } from "react";
 import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Row, Table } from "react-bootstrap";
-import { getRatingList, getRatings } from "../../../services/user/api";
+import { Offcanvas, Row, Table } from "react-bootstrap";
+import { getRatingList, getRatings, verifyManager } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
 import AddRating from "../add-rating";
 import MyCalendar from "./weekCalendra";
+import RatingModalBody from "../add-rating-modal";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -29,9 +30,15 @@ export default function Dashboard(props) {
   const [monthUse, setMonth] = useState(moment().format("MMMM"));
   const [yearUse, setYear] = useState(currentYear);
   // const [isWeekendChecked, setIsWeekendChecked] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
   let months = moment().year(Number)?._locale?._months;
   let years = [2022, 2023, 2024, 2025];
-
+  const [ratingData,setRatingData] = useState({
+    user: {},
+    date: '',
+    month: '',
+    year: '',
+  });
   useEffect(() => {
     // getAllRatingslist();
     onInit();
@@ -45,25 +52,40 @@ export default function Dashboard(props) {
   //   setIsWeekendChecked(weekend);
   // }, [weekend]);
 
-  const getAllRatingslist = async function (data) {
+  const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
-    try {
-      // let { selectedProject, selectedUser, selectedDate } = ratingForm;
-
+    let setDate = date
+    let setMonth = month
+    if(date<10){
+     setDate = "0" +date
+    }
+    if(month<10){
+      setMonth = "0" + month
+     }
+    try {      
       const dataToSend = {
-        projectId: '' ,
-        userId: '',
-        fromDate:'' ,
-        toDate: '',
+        userId: user._id 
       };
-
-      const response = await getRatingList();
+      const response = await verifyManager(dataToSend);
       if (response.error) {
-        setToasterMessage(response.error);
+        setToasterMessage(response.message);
         setShowToaster(true);
-        console.log("error", response.error);
+        console.log("error", response );
       } else {
-        console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
+        if(response?.data?.ratingAllowed === true){
+          setRatingData((prevRatingData) => ({
+            ...prevRatingData,
+            user: user,
+            date: date,
+            month: month ,
+            year: year,
+          }));
+          setModalShow(true)
+        }
+        else
+        // setToasterMessage("You are not allowed to give rating.");
+        // setShowToaster(true);
+        console.log('error in verify manager')
       }
     } catch (error) {
       console.log("error", error);
@@ -130,6 +152,20 @@ export default function Dashboard(props) {
 
   return (
     <div>
+            <Offcanvas  
+      className="Offcanvas-modal"
+      style={{width:'500px'}}
+      show={modalShow}
+      onHide={() => setModalShow(false)}
+      placement="end"
+    >
+      <Offcanvas.Header closeButton>
+        <Offcanvas.Title> Add Rating</Offcanvas.Title>
+      </Offcanvas.Header>
+      <Offcanvas.Body  >
+      <RatingModalBody  data={ratingData} setModalShow={setModalShow}/>
+      </Offcanvas.Body>
+    </Offcanvas>
       <div className="dashboard_camp">
         <Row>
           <Col lg={12}>
@@ -143,11 +179,11 @@ export default function Dashboard(props) {
                 {teamView ? "Self view" : "Team View"}{" "}
               </button>
             )}
-            <div className="wrap  rating_btn" style={{ height: "100%" }}>
+            {/* <div className="wrap  rating_btn" style={{ height: "100%" }}>
               {userDetails?.role !== "CONTRIBUTOR" && (
                 <AddRating handleOnInit={onInit} />
               )}
-            </div>
+            </div> */}
           </Col>
         </Row>
       </div>
@@ -297,8 +333,10 @@ export default function Dashboard(props) {
               className={
                 weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
               }
-              onClick={()=>console.log(user)}
-            ></span>
+              // onClick={()=>console.log(user,'index',index+1,monthUse,yearUse)}
+              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse)}}
+            >
+            </span>
           ) : (
             <>
               <span
@@ -310,8 +348,10 @@ export default function Dashboard(props) {
                 className={
                   weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
                 }
-              onClick={()=>console.log(user)}
-              ></span>
+                // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
+              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse)}}
+
+                ></span>
             </>
           )}
         </td>

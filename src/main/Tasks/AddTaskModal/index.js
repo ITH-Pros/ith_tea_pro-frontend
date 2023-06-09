@@ -853,7 +853,7 @@ export default function AddTaskModal(props) {
                       // onChange={updateTaskFormValue}
                       onChange={(e) => {
                         const inputValue = e.target.value;
-                        if (inputValue.length <= 2) {
+                        if (inputValue.length <= 2 && inputValue >= 0) {
                           // Update the state value if the input is within the limit
                           updateTaskFormValue(e);
                         }
