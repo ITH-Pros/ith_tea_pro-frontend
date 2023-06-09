@@ -32,13 +32,11 @@ export default function AddRating(props) {
     // const { taskFromDashBoard } = props;
     // console.log("taskFromDashBoard", taskFromDashBoard)
     const ratingFormsFields = {
-      selectedProject: "",
       rating: "",
       comment: "",
       selectedDate: new Date().toISOString().split("T")[0],
       selectedUser: "",
       selectedTask: "",
-      projectList: [],
       userList: [],
       taskList: [],
     };
@@ -51,15 +49,8 @@ export default function AddRating(props) {
     const [validated, setValidated] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-      getProjectList();
-    }, []);
 
-    useEffect(() => {
-      if (ratingForm.selectedProject) {
-        getUsersList();
-      }
-    }, [ratingForm.selectedProject]);
+
 
     useEffect(() => {
       if (ratingForm.selectedUser && !taskFromDashBoard) {
@@ -169,7 +160,6 @@ export default function AddRating(props) {
       setValidated(true);
       event.preventDefault();
       if (
-        !ratingForm.selectedTask ||
         !ratingForm.selectedDate ||
         !ratingForm.selectedUser ||
         !ratingForm.rating ||
@@ -179,10 +169,17 @@ export default function AddRating(props) {
         return;
       } else {
         let { selectedTask, rating, comment } = ratingForm;
+        // convert date in day month year format for backend
+        let day = selectedTask.dueDate.split("T")[0].split("-")[2];
+        let month = selectedTask.dueDate.split("T")[0].split("-")[1];
+        let year = selectedTask.dueDate.split("T")[0].split("-")[0];
         let dataToSend = {
           taskId: selectedTask,
           rating: rating,
           comment: comment,
+          date: day,
+          month: month,
+          year: year,
         };
         setLoading(true);
         try {
@@ -215,36 +212,20 @@ export default function AddRating(props) {
       }
     };
 
-    const getProjectList = async function () {
-      setLoading(true);
-      try {
-        const dataToSend = {
-          alphabetical: true,
-        };
 
-        const projects = await getAllAssignedProject(dataToSend);
-        setLoading(false);
-        if (projects.error) {
-          setToasterMessage(projects?.message || "Something Went Wrong");
-          setShowToaster(true);
-        } else {
-          setRatingForm({ ...ratingForm, projectList: projects.data });
-        }
-      } catch (error) {
-        setToasterMessage(error?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-        setLoading(false);
-        return error.message;
+    useEffect(() => {
+      if (userDetails?.role !== "CONTRIBUTOR") {
+        getUsersList();
       }
-    };
+    });
+      
+
+
 
     const getUsersList = async function () {
-      let dataToSend = {
-        projectId: ratingForm.selectedProject,
-      };
       setLoading(true);
       try {
-        const user = await getProjectByProjectId(dataToSend);
+        const user = await getProjectByProjectId();
         setLoading(false);
         if (user.error) {
           setToasterMessage(user?.message || "Something Went Wrong");

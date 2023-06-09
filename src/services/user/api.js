@@ -337,7 +337,7 @@ export async function addCommentOnTask(data) {
 }
 
 export async function addRatingOnTask(data) {
-  return axiosInstance.post("task/v1/rate", data).then((res) => res.data);
+  return axiosInstance.post("rating/v1/user/insert", data).then((res) => res.data);
 }
 
 export async function getUserAnalytics(data) {
@@ -429,9 +429,7 @@ export async function assignManagerTOUserByIds(data) {
 }
 
 export async function verifyTaskById(data) {
-  return axiosInstance.patch("user/v1/verify", {
-      params: data,
-    })
+  return axiosInstance.patch("task/v1/verify", data)
     .then((res) => res.data);
 }
 

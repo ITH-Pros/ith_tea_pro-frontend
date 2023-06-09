@@ -108,6 +108,7 @@ const handleVerifyTask = async () => {
       setToasterMessage("Task Verified Successfully");
       setShowToaster(true);
       onInit();
+      setShowModal(false);
     }
   } catch (error) {
     setLoading(false);
@@ -1008,7 +1009,29 @@ const handleVerifyTask = async () => {
                     style={{ cursor: "pointer" }}
                   ></i>
                 </Col>
-                <Col lg={6} className="right-filter"></Col>
+                <Col lg={6} className="right-filter">
+                {(userDetails?.role === "SUPER_ADMIN" ||
+                    userDetails?.role === "ADMIN") && (
+                    <Form.Group
+                      controlId="formBasicEmail"
+                      className="team-member-select mb-0"
+                    >
+                      <Form.Label>Team Member</Form.Label>
+                      <Form.Control
+                        as="select"
+                        onChange={(event) => {
+                          getPendingRating(event.target.value);
+                        }}
+                      >
+                        <option value="">All</option>
+                        {teamMembers &&
+                          teamMembers.map((member) => (
+                            <option value={member?._id}>{member?.name}</option>
+                          ))}
+                      </Form.Control>
+                    </Form.Group>
+                  )}
+                </Col>
               </Row>
               <Row>
                 <Col lg={12} className="mt-3">
@@ -1236,14 +1259,13 @@ const handleVerifyTask = async () => {
               </Row>
             </Col>
           )}
-          {userDetails?.role !== "GUEST" && (
+          {/* {userDetails?.role !== "GUEST" && (
             <Col lg={6} style={{ paddingRight: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
                   <span>PENDING RATINGS</span>
                 </Col>
                 <Col lg={6} className="right-filter">
-                  {/* select box and lable name team member  */}
                   {(userDetails?.role === "SUPER_ADMIN" ||
                     userDetails?.role === "ADMIN") && (
                     <Form.Group
@@ -1304,7 +1326,6 @@ const handleVerifyTask = async () => {
                                 ></i>
                               )}
                             </span>
-                            {/* <h5 className="text-truncate">{task?.title}</h5> */}
                             <OverlayTrigger
                               placement="top"
                               overlay={<Tooltip>{task?.title}</Tooltip>}
@@ -1351,7 +1372,6 @@ const handleVerifyTask = async () => {
                                 <Badge bg="warning">ONGOING</Badge>
                               )}
                               {task?.status === "COMPLETED" && (
-                                // <Badge bg="success">COMPLETED</Badge>
                                 <>
                                   <>
                                     {["top"].map((placement) => (
@@ -1447,16 +1467,10 @@ const handleVerifyTask = async () => {
                 </Col>
               </Row>
             </Col>
-          )}
-        </Row>
-      </Container>
+          )} */}
 
-      {/* Task verification */}
 
-      {(userDetails?.role !== "CONTRIBUTOR " ||
-        userDetails?.role !== "GUEST") && (
-        <Container>
-          <Row>
+     
             {userDetails?.role !== "GUEST" && (
               <Col lg={6} style={{ paddingRight: "0px" }}>
                 <Row>
@@ -1684,9 +1698,13 @@ const handleVerifyTask = async () => {
                 </Row>
               </Col>
             )}
-          </Row>
-        </Container>
-      )}
+  
+        </Row>
+      </Container>
+
+      {/* Task verification */}
+
+     
 
       {userDetails?.role !== "CONTRIBUTOR" && (
         <Container>

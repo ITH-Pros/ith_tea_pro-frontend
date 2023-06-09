@@ -94,6 +94,7 @@
     ]
   },
   "devDependencies": {
+    "@angular/cli": "^16.0.5",
     "react-router-dom": "^6.10.0"
   }
 }
