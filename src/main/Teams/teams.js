@@ -95,6 +95,9 @@ export default function Teams(props) {
             console.log("user.manager", user?.manager);
           }
         });
+
+        // if(user.role === "C")
+
         setManagerList(resp?.data);
       }
     } catch (error) {
@@ -580,6 +583,7 @@ export default function Teams(props) {
                           </a>
 
                           {/* Assign manager  */}
+                          {}
                           <a
                             onClick={() => {
                               openAssignManagerModal(user._id);

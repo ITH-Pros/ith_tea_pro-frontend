@@ -8,6 +8,7 @@ import "../rating.css";
 import {
   addRatingOnTask,
   getAllAssignedProject,
+  getAllUsers,
   getProjectByProjectId,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
@@ -51,48 +52,6 @@ export default function AddRating(props) {
 
 
 
-
-    useEffect(() => {
-      if (ratingForm.selectedUser && !taskFromDashBoard) {
-        getAllPendingRatingTaskList();
-      }
-    }, [ratingForm.selectedDate, ratingForm.selectedUser]);
-
-    useEffect(() => {
-      if (ratingForm.userList?.length && taskFromDashBoard) {
-        setRatingForm({
-          ...ratingForm,
-          selectedUser:
-            taskFromDashBoard.assignedTo?._id || taskFromDashBoard.assignedTo,
-        });
-      }
-    }, [ratingForm.userList]);
-
-    useEffect(() => {
-      if (ratingForm.projectList?.length && taskFromDashBoard) {
-        let dueDateData = new Date(taskFromDashBoard?.dueDate.split("T")[0]);
-        dueDateData =
-          dueDateData.getFullYear() +
-          "-" +
-          (dueDateData.getMonth() + 1 <= 9
-            ? "0" + (dueDateData.getMonth() + 1)
-            : dueDateData.getMonth() + 1) +
-          "-" +
-          (dueDateData.getDate() <= 9
-            ? "0" + dueDateData.getDate()
-            : dueDateData.getDate());
-
-        setRatingForm({
-          ...ratingForm,
-          selectedProject:
-            taskFromDashBoard.projectId?._id || taskFromDashBoard.projectId,
-          taskList: [taskFromDashBoard],
-          selectedTask: taskFromDashBoard._id,
-          selectedDate: dueDateData,
-        });
-      }
-    }, [ratingForm.projectList]);
-
     const handleRatingFormChange = (event) => {
       const { name, value } = event.target;
       setRatingForm({
@@ -127,34 +86,7 @@ export default function AddRating(props) {
       return localTimeString
     }
 
-    const getAllPendingRatingTaskList = async function (data) {
-      setLoading(true);
-      try {
-        let { selectedProject, selectedUser, selectedDate } = ratingForm;
-
-        const dataToSend = {
-          projectId: selectedProject,
-          userId: selectedUser,
-          fromDate: formDateDayTime(selectedDate),
-          toDate: formDateNightTime(selectedDate),
-        };
-
-        const response = await getTaskDetailsByProjectId(dataToSend);
-        if (response.error) {
-          setToasterMessage(response.error);
-          setShowToaster(true);
-          console.log("error", response.error);
-        } else {
-          setRatingForm({
-            ...ratingForm,
-            taskList: response?.data,
-          });
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-      setLoading(false);
-    };
+   
 
     const handleSubmit = async (event) => {
       setValidated(true);
@@ -214,24 +146,32 @@ export default function AddRating(props) {
 
 
     useEffect(() => {
-      if (userDetails?.role !== "CONTRIBUTOR") {
+      if (userDetails?.role !== "CONTRIBUTOR" ) {
         getUsersList();
       }
     });
       
 
-
-
     const getUsersList = async function () {
-      setLoading(true);
+      let options = {
+        currentPage: 1,
+        rowsPerPage: 50,
+      };
+      // setLoading(true);
       try {
-        const user = await getProjectByProjectId();
+      
+        let params = {
+          limit: options?.rowsPerPage,
+          currentPage: options?.currentPage,
+        };
+  
+        const user = await getAllUsers({ params });
         setLoading(false);
         if (user.error) {
           setToasterMessage(user?.message || "Something Went Wrong");
           setShowToaster(true);
         } else {
-          setRatingForm({ ...ratingForm, userList: user?.data });
+          setRatingForm({ ...ratingForm, userList: user?.data?.users });
         }
       } catch (error) {
         setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -370,19 +310,6 @@ export default function AddRating(props) {
                 Task is required !!
               </Form.Control.Feedback>
             </Form.Group> */}
-            { ratingForm?.taskList?.find((task) => task._id === ratingForm.selectedTask)?.completedDate &&
-
-            <Form.Group as={Col} md="12">
-              <Form.Label>Completed Date</Form.Label>
-              <h5>
-                {
-                  ratingForm?.taskList
-                    ?.find((task) => task._id === ratingForm.selectedTask)
-                    ?.completedDate?.split("T")[0]
-                }
-              </h5>
-            </Form.Group>
-            }
           </Row>
 
           <Row className="desc">
