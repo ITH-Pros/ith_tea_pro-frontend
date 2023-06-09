@@ -9,6 +9,7 @@ import {
   addRatingOnTask,
   getAllAssignedProject,
   getProjectByProjectId,
+  getRatingList,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
@@ -18,6 +19,7 @@ import { Button, Modal } from "react-bootstrap";
 import { useAuth } from "../../../auth/AuthProvider";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Textarea } from "@nextui-org/react";
+import { CheckLg } from "react-bootstrap-icons";
 
 
 export default function AddRating(props) {
@@ -50,6 +52,9 @@ export default function AddRating(props) {
     const navigate = useNavigate();
 
 
+    // useEffect(()=>{
+    //   getAllRatings()
+    // })
 
 
     useEffect(() => {
@@ -149,6 +154,32 @@ export default function AddRating(props) {
             ...ratingForm,
             taskList: response?.data,
           });
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+      setLoading(false);
+    };
+
+    const getAllRatings = async function (data) {
+      setLoading(true);
+      try {
+        let { selectedProject, selectedUser, selectedDate } = ratingForm;
+
+        const dataToSend = {
+          projectId: selectedProject,
+          userId: selectedUser,
+          fromDate: formDateDayTime(selectedDate),
+          toDate: formDateNightTime(selectedDate),
+        };
+
+        const response = await getRatingList();
+        if (response.error) {
+          setToasterMessage(response.error);
+          setShowToaster(true);
+          console.log("error", response.error);
+        } else {
+          console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
         }
       } catch (error) {
         console.log("error", error);

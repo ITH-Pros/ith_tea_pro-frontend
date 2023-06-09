@@ -433,5 +433,8 @@ export async function verifyTaskById(data) {
     .then((res) => res.data);
 }
 
-
-
+export async function getRatingList(data) {
+  return axiosInstance
+    .get("/v1/list/for/rating", { params: data })
+    .then((res) => res.data);
+}

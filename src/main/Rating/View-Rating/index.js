@@ -6,7 +6,7 @@ import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Row, Table } from "react-bootstrap";
-import { getRatings } from "../../../services/user/api";
+import { getRatingList, getRatings } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import Loader from "../../../components/Loader";
@@ -33,6 +33,7 @@ export default function Dashboard(props) {
   let years = [2022, 2023, 2024, 2025];
 
   useEffect(() => {
+    // getAllRatingslist();
     onInit();
     if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
       setTeamView(true);
@@ -43,6 +44,32 @@ export default function Dashboard(props) {
   //  useEffect(() => {
   //   setIsWeekendChecked(weekend);
   // }, [weekend]);
+
+  const getAllRatingslist = async function (data) {
+    setLoading(true);
+    try {
+      // let { selectedProject, selectedUser, selectedDate } = ratingForm;
+
+      const dataToSend = {
+        projectId: '' ,
+        userId: '',
+        fromDate:'' ,
+        toDate: '',
+      };
+
+      const response = await getRatingList();
+      if (response.error) {
+        setToasterMessage(response.error);
+        setShowToaster(true);
+        console.log("error", response.error);
+      } else {
+        console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+    setLoading(false);
+  };
 
   const isWeekend = (dayOfWeek) => {
     return dayOfWeek === 0 || dayOfWeek === 6;
@@ -270,6 +297,7 @@ export default function Dashboard(props) {
               className={
                 weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
               }
+              onClick={()=>console.log(user)}
             ></span>
           ) : (
             <>
@@ -282,6 +310,7 @@ export default function Dashboard(props) {
                 className={
                   weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
                 }
+              onClick={()=>console.log(user)}
               ></span>
             </>
           )}
