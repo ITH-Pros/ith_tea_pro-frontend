@@ -21,7 +21,7 @@ const RatingBox = (props) => {
       const [editRatingEnabled, setEditRatingEnabled] = useState(false);
 
       const editUserRating = async () => {
-        if (newRating > 5 || newRating < 0) {
+        if (newRating > 6 || newRating < 0) {
           return;
         }
         if (newRating === selectedRating) {

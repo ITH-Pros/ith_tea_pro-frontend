@@ -9,6 +9,7 @@ import {
   addRatingOnTask,
   getAllAssignedProject,
   getProjectByProjectId,
+  getProjectsTask,
   getRatingList,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
@@ -25,7 +26,7 @@ export default function RatingModalBody (props)  {
   // const { taskFromDashBoard , onInit , setIsChange , isChange, setModalShow  } = props;
   // console.log("taskFromDashBoard", taskFromDashBoard);
   // const { taskFromDashBoard } = props;
-  // console.log("taskFromDashBoard", taskFromDashBoard)
+  console.log("userin add rating modal", data?.user)
   let user = data?.user;
   let date = data?.date;
   let month = data?.month;
@@ -57,6 +58,7 @@ export default function RatingModalBody (props)  {
         selectedUser: user.name,
         selectedDate: formattedDate
       }));
+      getTasksDataUsingProjectId(formattedDate);
       // console.log(ratingForm,'/////////////////////////////////////////////////////////////')
     }
     
@@ -111,108 +113,109 @@ export default function RatingModalBody (props)  {
       [name]: value,
     });
   };
-  function formDateNightTime(dateString) {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return ""; 
-    }
-    console.log(dateString,'-----------------------------------------------')
-    let utcTime = new Date(dateString );
-    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
-    console.log(localTimeString)
-    return localTimeString
-  }
-  function formDateDayTime(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
-    return localTimeString
-  }
+  // function formDateNightTime(dateString) {
+  //   const date = new Date(dateString);
+  //   if (isNaN(date.getTime())) {
+  //     return ""; 
+  //   }
+  //   console.log(dateString,'-----------------------------------------------')
+  //   let utcTime = new Date(dateString );
+  //   utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+  //   const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+  //   const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+  //   const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+  //   let localTimeString = new Date(localTime.toISOString());
+  //   console.log("==========", localTimeString)
+  //   console.log(localTimeString)
+  //   return localTimeString
+  // }
 
-  const getAllPendingRatingTaskList = async function (data) {
-    setLoading(true);
-    try {
-      let { selectedProject, selectedUser, selectedDate } = ratingForm;
+  // function formDateDayTime(dateString) {
+  //   let utcTime = new Date(dateString);
+  //   utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
+  //   const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+  //   const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+  //   const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+  //   let localTimeString = new Date(localTime.toISOString());
+  //   console.log("==========", localTimeString)
+  //   return localTimeString
+  // }
 
-      const dataToSend = {
-        projectId: selectedProject,
-        userId: selectedUser,
-        fromDate: formDateDayTime(selectedDate),
-        toDate: formDateNightTime(selectedDate),
-      };
+  // const getAllPendingRatingTaskList = async function (data) {
+  //   setLoading(true);
+  //   try {
+  //     let { selectedProject, selectedUser, selectedDate } = ratingForm;
 
-      const response = await getTaskDetailsByProjectId(dataToSend);
-      if (response.error) {
-        setToasterMessage(response.error);
-        setShowToaster(true);
-        console.log("error", response.error);
-      } else {
-        setRatingForm({
-          ...ratingForm,
-          taskList: response?.data,
-        });
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-    setLoading(false);
-  };
+  //     const dataToSend = {
+  //       projectId: selectedProject,
+  //       userId: selectedUser,
+  //       fromDate: formDateDayTime(selectedDate),
+  //       toDate: formDateNightTime(selectedDate),
+  //     };
 
-  const getAllRatings = async function (data) {
-    setLoading(true);
-    try {
-      let { selectedProject, selectedUser, selectedDate } = ratingForm;
+  //     const response = await getTaskDetailsByProjectId(dataToSend);
+  //     if (response.error) {
+  //       setToasterMessage(response.error);
+  //       setShowToaster(true);
+  //       console.log("error", response.error);
+  //     } else {
+  //       setRatingForm({
+  //         ...ratingForm,
+  //         taskList: response?.data,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  //   setLoading(false);
+  // };
 
-      const dataToSend = {
-        projectId: selectedProject,
-        userId: selectedUser,
-        fromDate: formDateDayTime(selectedDate),
-        toDate: formDateNightTime(selectedDate),
-      };
+  // const getAllRatings = async function (data) {
+  //   setLoading(true);
+  //   try {
+  //     let { selectedProject, selectedUser, selectedDate } = ratingForm;
 
-      const response = await getRatingList();
-      if (response.error) {
-        setToasterMessage(response.error);
-        setShowToaster(true);
-        console.log("error", response.error);
-      } else {
-        console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-    setLoading(false);
-  };
+  //     const dataToSend = {
+  //       projectId: selectedProject,
+  //       userId: selectedUser,
+  //       fromDate: formDateDayTime(selectedDate),
+  //       toDate: formDateNightTime(selectedDate),
+  //     };
+
+  //     const response = await getRatingList();
+  //     if (response.error) {
+  //       setToasterMessage(response.error);
+  //       setShowToaster(true);
+  //       console.log("error", response.error);
+  //     } else {
+  //       console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
+  //     }
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  //   setLoading(false);
+  // };
 
 
 
-  const getUsersList = async function () {
-    setLoading(true);
-    try {
-      const user = await getProjectByProjectId();
-      setLoading(false);
-      if (user.error) {
-        setToasterMessage(user?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setRatingForm({ ...ratingForm, userList: user?.data });
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
-    }
-  };
+  // const getUsersList = async function () {
+  //   setLoading(true);
+  //   try {
+  //     const user = await getProjectByProjectId();
+  //     setLoading(false);
+  //     if (user.error) {
+  //       setToasterMessage(user?.message || "Something Went Wrong");
+  //       setShowToaster(true);
+  //     } else {
+  //       setRatingForm({ ...ratingForm, userList: user?.data });
+  //     }
+  //   } catch (error) {
+  //     setToasterMessage(error?.error?.message || "Something Went Wrong");
+  //     setShowToaster(true);
+  //     setLoading(false);
+  //     return error.message;
+  //   }
+  // };
 
   const handleSubmit = async (event) => {
     setValidated(true);
@@ -234,10 +237,12 @@ export default function RatingModalBody (props)  {
         rating: rating,
         comment: comment,
         date: selectedDate?.split("-")[2],
-        month: selectedDate?.split("-")[0],
-        year: selectedDate?.split("-")[1],
+        month: selectedDate?.split("-")[1],
+        year: selectedDate?.split("-")[0],
         userId: user._id
       };
+      console.log(dataToSend)
+      return
       setLoading(true);
       try {
         const rating = await addRatingOnTask(dataToSend);
@@ -269,6 +274,110 @@ export default function RatingModalBody (props)  {
     }
   };
 
+  function convertToUTCDay(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString);
+    return localTimeString;
+  }
+
+  function convertToUTCNight(dateString) {
+    console.log(dateString, "------------------");
+    let utcTime = new Date(dateString);
+
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString);
+    return localTimeString;
+  }
+
+  const getTasksDataUsingProjectId = async (date) => {
+    const assignedTo = [user._id];
+    setLoading(true);
+    try {
+      let data = {
+        groupBy: "default",
+        assignedTo: assignedTo,
+        fromDate: convertToUTCDay(date),
+        toDate: convertToUTCNight(date)
+      };
+      console.log(data,'get task list ..................')
+      
+      const tasks = await getProjectsTask(data);
+      setLoading(false);
+      if (tasks.error) {
+        setToasterMessage(tasks?.error?.message || "Something Went Wrong");
+        setShowToaster(true);
+      } else {
+        let allTask = tasks?.data;
+        console.log(allTask)
+        return;
+        // allTask?.forEach((item, i) => {
+        //   item?.tasks?.map((task, j) => {
+        //     if (task?.dueDate) {
+        //       let dateMonth = task?.dueDate?.split("T")[0];
+        //       let today = new Date();
+
+        //       today =
+        //         today.getFullYear() +
+        //         "-" +
+        //         (today.getMonth() + 1 <= 9
+        //           ? "0" + (today.getMonth() + 1)
+        //           : today.getMonth() + 1) +
+        //         "-" +
+        //         (today.getDate() <= 9
+        //           ? "0" + today.getDate()
+        //           : today.getDate());
+        //       if (dateMonth === today) {
+        //         task.dueToday = true;
+        //       } else if (
+        //         new Date().getTime() > new Date(task?.dueDate).getTime()
+        //       ) {
+        //         task.dueToday = true;
+        //       } else {
+        //         task.dueToday = false;
+        //       }
+        //       if (
+        //         task?.completedDate &&
+        //         new Date(task?.completedDate).getTime() >
+        //           new Date(task?.dueDate).getTime()
+        //       ) {
+        //         task.dueToday = true;
+        //       }
+        //       if (
+        //         task?.completedDate &&
+        //         dateMonth === task?.completedDate?.split("T")[0]
+        //       ) {
+        //         task.dueToday = false;
+        //       }
+        //     }
+        //   });
+        //   allTask[i].tasks = item?.tasks;
+        // });
+        // setProjects(allTask);
+        // let paramsData;
+        // if (params?.projectId) {
+        //   paramsData = JSON.parse(params?.projectId);
+        // }
+        // if (paramsData?.projectId) {
+        //   setSelectedProjectId(paramsData?.projectId);
+        // }
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setShowToaster(true);
+      setLoading(false);
+      return error.message;
+    }
+  };
+
   return (
     <div className="dv-50-rating ">
       <Form className="margin-form" noValidate validated={validated}>
@@ -276,14 +385,14 @@ export default function RatingModalBody (props)  {
 
 
           <Form.Group as={Col} md="6">
-            <Form.Label>Select User</Form.Label>
-            <Form.Control
+            <Form.Label>{user?.name}</Form.Label>
+            {/* <Form.Control
               required
               as="select"
-              type="select"
+              type="text"
               name="selectedUser"
-              onChange={handleRatingFormChange}
               value={ratingForm.selectedUser.name}
+
               // disabled={taskFromDashBoard ? true : false}
             >
               <option value="" disabled>Select User</option>
@@ -291,12 +400,12 @@ export default function RatingModalBody (props)  {
                 <option value={module._id} key={module._id}>
                   {module.name}
                 </option>
-              ))} */}
-              <option value={ratingForm.selectedUser.name}>{ratingForm.selectedUser.name}</option>
+              ))}
+              <option value={ratingForm.selectedUser.name}>{ratingForm.selectedUser.name}</option> 
             </Form.Control>
             <Form.Control.Feedback type="invalid">
               User name is required !!
-            </Form.Control.Feedback>
+            </Form.Control.Feedback> */}
           </Form.Group>
 
           <Form.Group as={Col} md="6" controlId="rating_date">
@@ -320,7 +429,6 @@ export default function RatingModalBody (props)  {
             as={Col}
             md="6"
             controlId="validationCustom01"
-            className="ps-0 "
           >
             <Form.Label>Rating</Form.Label>
             {/* <Form.Control
@@ -345,9 +453,9 @@ export default function RatingModalBody (props)  {
               // disabled={taskFromDashBoard ? true : false}
             >
               <option value="" disabled>Select Rating</option>
-{ratingValues.map((value) => (
-  <option key={value} value={value}>{value}</option>
-))}
+                {ratingValues.map((value) => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
               Rating is required, value must be in range [0,6] !!

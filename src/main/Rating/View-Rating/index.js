@@ -54,6 +54,7 @@ export default function Dashboard(props) {
 
   const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
+    // console.log(user,date,month,year)
     let setDate = date
     let setMonth = month
     if(date<10){
@@ -334,14 +335,14 @@ export default function Dashboard(props) {
                 weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
               }
               // onClick={()=>console.log(user,'index',index+1,monthUse,yearUse)}
-              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse)}}
+              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse);}}
             >
             </span>
           ) : (
             <>
               <span
                 style={{
-                  padding: "1px",
+                  padding: "3px",
                   paddingLeft: "20px",
                   paddingRight: "6px",
                 }}
@@ -349,9 +350,9 @@ export default function Dashboard(props) {
                   weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
                 }
                 // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
-              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse)}}
+              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse);}}
 
-                ></span>
+                >{!weekendValue && '?'}</span>
             </>
           )}
         </td>
