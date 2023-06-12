@@ -33,6 +33,7 @@ export default function AddTaskModal(props) {
     closeModal,
     selectedTask,
     handleProjectId,
+
     // onInit
   } = props;
   const statusList = CONSTANTS.statusList;

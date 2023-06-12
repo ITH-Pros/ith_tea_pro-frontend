@@ -86,13 +86,13 @@ export default function Teams(props) {
         setLoading(false);
         usersList.map((user) => {
           if (user?._id === userId) {
-            if(user?.manager?.length > 0){
-            setSelectedManagers(user?.manager);
+            if(user?.managerIds?.length > 0){
+            setSelectedManagers(user?.managerIds);
 
             } else {
               setSelectedManagers([]);
             }
-            console.log("user.manager", user?.manager);
+            console.log("user.manager", user?.managerIds);
           }
         });
 
@@ -106,17 +106,17 @@ export default function Teams(props) {
     }
   };
 
-  const handleManagerSelection = (managerId) => {
+  const handleManagerSelection = (managerIds) => {
     // Update the selected managers array based on the checkbox selection
-    const index = selectedManagers.indexOf(managerId);
+    const index = selectedManagers.indexOf(managerIds);
     if (index > -1) {
       // Manager already selected, remove from the array
       setSelectedManagers((prevState) =>
-        prevState.filter((manager) => manager !== managerId)
+        prevState.filter((manager) => manager !== managerIds)
       );
     } else {
       // Manager not selected, add to the array
-      setSelectedManagers((prevState) => [...prevState, managerId]);
+      setSelectedManagers((prevState) => [...prevState, managerIds]);
     }
   };
 
@@ -132,9 +132,11 @@ export default function Teams(props) {
       const resp = await assignManagerTOUserByIds(data);
       if (resp.error) {
         console.log(resp.error);
+        setToasterMessage(resp?.message || "Something Went Wrong");
       } else {
         setAssignManagerModalShow(false);
         onInit();
+        setToasterMessage(resp?.message );
       }
     } catch (error) {
       console.log(error);
@@ -845,7 +847,7 @@ export default function Teams(props) {
             <div className="search-container">
               <div className="manager-list-container">
                 {managerList.map((manager) => (
-                  <label key={manager.id} className="manager-label">
+                  <label key={manager._id} className="manager-label">
                     <input
                       type="checkbox"
                       value={manager._id}

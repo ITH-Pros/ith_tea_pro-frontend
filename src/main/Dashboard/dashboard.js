@@ -83,6 +83,7 @@ export default function Dashboard(props) {
   const [showModal, setShowModal] = useState(false);
 const [comment, setComment] = useState("");
 const [verifyTaskId, setVerifyTaskId] = useState("");
+const [isReOpen, setIsReOpen] = useState(false);
 
 const openVerifyModal = (taskId) => {
   setVerifyTaskId(taskId);
@@ -328,6 +329,8 @@ const handleVerifyTask = async () => {
       memberId: e,
     };
 
+    console.log(dataToSend, "dataToSend");
+
     try {
       const tasks = await getAllPendingRating(dataToSend);
       setLoading(false);
@@ -338,6 +341,7 @@ const handleVerifyTask = async () => {
         );
         setShowToaster(true);
       } else {
+        console.log(tasks, "tasks");
         let allTask = tasks?.data;
         allTask?.map((item) => {
           let dateMonth = item?.dueDate?.split("T")[0];
@@ -406,6 +410,14 @@ const handleVerifyTask = async () => {
     setSelectedProject(project);
     setShowAddTask(true);
   };
+
+ const  reOpenTask = (task) => {
+  setSelectedProject();
+  // setShowAddTask(true);
+  setSelectedTask(task);
+  setIsReOpen(true);
+  }
+
 
   const handleStatusChange = (e, taskId, status) => {
     const newStatus = status;
@@ -534,10 +546,14 @@ const handleVerifyTask = async () => {
   const [newDueDate, setNewDueDate] = useState("");
   const [showNewDueDateField, setShowNewDueDateField] = useState(false);
   const [reopenTaskId, setReopenTaskId] = useState(null);
+  const [taskDetails , setTaskDetails] = useState(null);
 
   const openReopenTaskModal = (taskId) => {
-    setReopenTaskId(taskId);
+    console.log(taskId);
+    setReopenTaskId(taskId._id);
+    // setTaskDetails(taskId);
     setReopenTaskModal(true);
+
   };
 
   const closeReopenTaskModal = () => {
@@ -548,6 +564,7 @@ const handleVerifyTask = async () => {
   };
 
   const handleReopenConfirmation = () => {
+    reOpenTask(taskDetails);
     setShowNewDueDateField(true);
   };
 
@@ -585,6 +602,7 @@ const handleVerifyTask = async () => {
           setIsChange(!isChange);
         }
         closeReopenTaskModal();
+        setIsReOpen(false);
       }
     } catch (error) {
       setToasterMessage(error?.message || "Something Went Wrong");
@@ -696,6 +714,10 @@ const handleVerifyTask = async () => {
               getNewTasks={getNewTasks}
               showAddTask={showAddTask}
               closeModal={closeModal}
+  
+              handleSubmitReopen={handleSubmit}
+
+              
               // onInit={() => onInit()}
             />
             <button
@@ -1010,27 +1032,7 @@ const handleVerifyTask = async () => {
                   ></i>
                 </Col>
                 <Col lg={6} className="right-filter">
-                {(userDetails?.role === "SUPER_ADMIN" ||
-                    userDetails?.role === "ADMIN") && (
-                    <Form.Group
-                      controlId="formBasicEmail"
-                      className="team-member-select mb-0"
-                    >
-                      <Form.Label>Team Member</Form.Label>
-                      <Form.Control
-                        as="select"
-                        onChange={(event) => {
-                          getPendingRating(event.target.value);
-                        }}
-                      >
-                        <option value="">All</option>
-                        {teamMembers &&
-                          teamMembers.map((member) => (
-                            <option value={member?._id}>{member?.name}</option>
-                          ))}
-                      </Form.Control>
-                    </Form.Group>
-                  )}
+        
                 </Col>
               </Row>
               <Row>
@@ -1476,6 +1478,27 @@ const handleVerifyTask = async () => {
                 <Row>
                   <Col lg={6} className="left-add">
                     <span>TASK VERIFICATION</span>
+                    {(userDetails?.role === "SUPER_ADMIN" ||
+                    userDetails?.role === "ADMIN") && (
+                    <Form.Group
+                      controlId="formBasicEmail"
+                      className="team-member-select mb-0 "
+                    >
+                      <Form.Label>Team Member</Form.Label>
+                      <Form.Control
+                        as="select"
+                        onChange={(event) => {
+                          getPendingRating(event.target.value);
+                        }}
+                      >
+                        <option value="">All</option>
+                        {teamMembers &&
+                          teamMembers.map((member) => (
+                            <option value={member?._id}>{member?.name}</option>
+                          ))}
+                      </Form.Control>
+                    </Form.Group>
+                  )}
                   </Col>
                   {/* <Col lg={6} className="right-filter">
                     {(userDetails?.role === "SUPER_ADMIN" ||
@@ -2333,7 +2356,7 @@ const handleVerifyTask = async () => {
                                               <Dropdown.Item
                                                 onClick={() => {
                                                   openReopenTaskModal(
-                                                    task?._id
+                                                    task
                                                   );
                                                 }}
                                               >
@@ -2384,6 +2407,8 @@ const handleVerifyTask = async () => {
                   <div className="form-group">
                     <p>Are you sure you want to reopen this task?</p>
                   </div>
+                  
+
                 </div>
               </div>
             )}
@@ -2391,6 +2416,9 @@ const handleVerifyTask = async () => {
             {showNewDueDateField && (
               <div className="row">
                 <div className="col-md-12">
+
+
+
                   <div className="form-group">
                     <label>New Due Date</label>
                     <input

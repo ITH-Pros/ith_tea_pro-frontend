@@ -329,70 +329,7 @@ export default function ViewTaskModal(props) {
                           Add Rating
                         </Button>
                       )}
-                    {!task?.isRated && isRatingFormVisible && (
-                      <div className="ratingForm">
-                        {/* <input 
-                          required
-                            type="number"
-                            style={{display:'block'}}
-                            min="0"
-                            max="6"
-                            placeholder="0 - 6"
-                            onChange={(e) => handleRating(e.target.value)}
-  
-                          /> */}
-
-                        {/* this would be a select box */}
-                        <select
-                          className="form-control form-control-lg"
-                          defaultValue={rating}
-                          onChange={(event) => handleRating(event.target.value)}
-                        >
-                          <option value="" disabled>
-                            Select Rating
-                          </option>
-                          {ratingValues.map((value) => (
-                            <option key={value} value={value}>
-                              {value}
-                            </option>
-                          ))}
-                        </select>
-
-                        <div style={{ justifyContent: "end" }}>
-                          <Button
-                            variant="light"
-                            size="sm"
-                            className="addRatingBtn mr-2 ml-2"
-                            onClick={() => {
-                              addRating();
-                            }}
-                            disabled={errorRating}
-                          >
-                            Submit
-                          </Button>
-                          {errorRating && (
-                            <Button
-                              variant="light"
-                              size="sm"
-                              className="addRatingBtn"
-                              onClick={() => {
-                                setIsRatingFormVisible(false);
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          )}
-                        </div>
-                        {errorRating && (
-                          <p
-                            className="error text-end"
-                            style={{ clear: "both" }}
-                          >
-                            Rating should be between 0 to 6
-                          </p>
-                        )}
-                      </div>
-                    )}
+                  
 
                     </div>
                   )}
