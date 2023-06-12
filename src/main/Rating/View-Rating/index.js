@@ -47,6 +47,10 @@ export default function Dashboard(props) {
     }
   }, []);
 
+  useEffect(() => {
+    if (modalShow === false) onInit()
+  }, [modalShow])
+
   // set the isWeekendChecked state variable based on the weekend value
   //  useEffect(() => {
   //   setIsWeekendChecked(weekend);
@@ -73,20 +77,20 @@ export default function Dashboard(props) {
         setShowToaster(true);
         console.log("error", response );
       } else {
-        if(response?.data?.ratingAllowed === true){
-          setRatingData((prevRatingData) => ({
+        if (response?.data?.ratingAllowed === true) {
+          setRatingData(prevRatingData => ({
             ...prevRatingData,
             user: user,
             date: date,
-            month: month ,
+            month: month,
             year: year,
-          }));
+          }))
           setModalShow(true)
+        } else {
+          setToasterMessage('You are not allowed to give rating.')
+          setShowToaster(true)
         }
-        else
-        // setToasterMessage("You are not allowed to give rating.");
-        // setShowToaster(true);
-        console.log('error in verify manager')
+        // console.log('error in verify manager')
       }
     } catch (error) {
       console.log("error", error);

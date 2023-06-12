@@ -32,10 +32,10 @@ const Toaster = ({ message, show, close }) => {
         autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: false,
-        pauseOnHover: false,
+        pauseOnHover: true,
         draggable: false,
         progress: progress / 100,
-      });
+      })
     }
   }, [show]);
 

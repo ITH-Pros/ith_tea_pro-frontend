@@ -64,7 +64,7 @@ export default function Teams(props) {
     setSelectedManagers([]);
     setManagerList([]);
 
-    setUserId(userId);
+    setUserId(userId)  
     // Fetch manager list
     getManagerList(userId);
 
@@ -122,7 +122,7 @@ export default function Teams(props) {
     console.log("Selected Managers:", selectedManagers);
 
     let data = {
-      managerId: selectedManagers,
+      managerIds: selectedManagers,
       userId: userId,
     };
     try {
