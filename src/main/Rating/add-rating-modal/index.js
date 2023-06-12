@@ -1,155 +1,165 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable default-case */
 import React from "react";
-import { useState, useEffect } from "react";
-import "react-date-picker/dist/DatePicker.css";
-import "../rating.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import FroalaEditorComponent from "react-froala-wysiwyg";
-import "react-toastify/dist/ReactToastify.css";
-import "animate.css/animate.min.css";
-import "react-toastify/dist/ReactToastify.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import "../rating.css";
 import {
-  addRating,
+  addRatingOnTask,
   getAllAssignedProject,
-  getAllUserDataForRating,
+  getProjectByProjectId,
+  getRatingList,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
 import Toaster from "../../../components/Toaster";
 import Loader from "../../../components/Loader";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../auth/AuthProvider";
 
-export default function AddRatingModal(props) {
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const { selectedRating } = props;
-  // console.log("selectedRating", selectedRating);
+export default function RatingModalBody (props)  {
+  const {setModalShow, data } = props;
+  const { userDetails } = useAuth();
+  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
+  // const { taskFromDashBoard , onInit , setIsChange , isChange, setModalShow  } = props;
+  // console.log("taskFromDashBoard", taskFromDashBoard);
+  // const { taskFromDashBoard } = props;
+  // console.log("taskFromDashBoard", taskFromDashBoard)
+  let user = data?.user;
+  let date = data?.date;
+  let month = data?.month;
+  let year = data?.year;
+  const ratingFormsFields = {
+    rating: "",
+    comment: "",
+    selectedDate: "",
+    selectedUser: "",
+    selectedTask: "",
+    userList: [],
+    taskList: [],
+  };
 
-  useEffect(() => {
-    if (selectedRating) {
-      const today = new Date();
-      let patchDateValue =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1 <= 9
-          ? "0" + (today.getMonth() + 1)
-          : today.getMonth() + 1) +
-        "-" +
-        (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
-      setDate(patchDateValue);
-      setProject(selectedRating.projectId);
-      setTeam(selectedRating.assignedTo);
-      if (selectedRating.dueDate) {
-        const formattedDate = new Date(selectedRating.dueDate)
-          .toISOString()
-          .substr(0, 10);
-        setDate(formattedDate);
-      }
-      setComments(selectedRating.ratingComments);
-    }
-
-    getTaskList();
-  }, [selectedRating]);
-
-  useEffect(() => {
-    onInit();
-  }, []);
-
-  function onInit() {
-    getAndSetAllProjects();
-    getUsersList();
-  }
-  let today = new Date();
-  let patchDateValue =
-    today.getFullYear() +
-    "-" +
-    (today.getMonth() + 1 <= 9
-      ? "0" + (today.getMonth() + 1)
-      : today.getMonth() + 1) +
-    "-" +
-    (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
-  const [loading, setLoading] = useState(false);
-  const [projectOptions, setProjectOptions] = useState([]);
-  const [project, setProject] = useState("");
-  const [taskOptions, setTaskOptions] = useState([]);
-  const [task, setTask] = useState("");
-  const [teamOptions, setTeamOptions] = useState([]);
-  const [team, setTeam] = useState("");
-  const [date, setDate] = useState(patchDateValue);
-  const [rating, setRating] = useState("");
-  const [comments, setComments] = useState("");
-  const [validated, setValidated] = useState(false);
+  const [ratingForm, setRatingForm] = useState(ratingFormsFields);
   const [toaster, showToaster] = useState(false);
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
-  if (!team && location && location.state && location.state.userId) {
-    setTeam(location.state.userId);
+  const [loading, setLoading] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();
+
+
+  useEffect(()=>{
+    if(data!==undefined || data !=='' || data!=={}){
+      const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+      setRatingForm((prevRatingData) => ({
+        ...prevRatingData,
+        selectedUser: user.name,
+        selectedDate: formattedDate
+      }));
+      // console.log(ratingForm,'/////////////////////////////////////////////////////////////')
+    }
+    
+  },[data])
+
+
+  // useEffect(() => {
+  //   if (ratingForm.selectedUser && !taskFromDashBoard) {
+  //     getAllPendingRatingTaskList();
+  //   }
+  // }, [ratingForm.selectedDate, ratingForm.selectedUser]);
+
+  // useEffect(() => {
+  //   if (ratingForm.userList?.length && taskFromDashBoard) {
+  //     setRatingForm({
+  //       ...ratingForm,
+  //       selectedUser:
+  //         taskFromDashBoard.assignedTo?._id || taskFromDashBoard.assignedTo,
+  //     });
+  //   }
+  // }, [ratingForm.userList]);
+
+  // useEffect(() => {
+  //   if (ratingForm.projectList?.length && taskFromDashBoard) {
+  //     let dueDateData = new Date(taskFromDashBoard?.dueDate.split("T")[0]);
+  //     dueDateData =
+  //       dueDateData.getFullYear() +
+  //       "-" +
+  //       (dueDateData.getMonth() + 1 <= 9
+  //         ? "0" + (dueDateData.getMonth() + 1)
+  //         : dueDateData.getMonth() + 1) +
+  //       "-" +
+  //       (dueDateData.getDate() <= 9
+  //         ? "0" + dueDateData.getDate()
+  //         : dueDateData.getDate());
+
+  //     setRatingForm({
+  //       ...ratingForm,
+  //       selectedProject:
+  //         taskFromDashBoard.projectId?._id || taskFromDashBoard.projectId,
+  //       taskList: [taskFromDashBoard],
+  //       selectedTask: taskFromDashBoard._id,
+  //       selectedDate: dueDateData,
+  //     });
+  //   }
+  // }, [ratingForm.projectList]);
+
+  const handleRatingFormChange = (event) => {
+    const { name, value } = event.target;
+    setRatingForm({
+      ...ratingForm,
+      [name]: value,
+    });
+  };
+  function formDateNightTime(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return ""; 
+    }
+    console.log(dateString,'-----------------------------------------------')
+    let utcTime = new Date(dateString );
+    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    console.log(localTimeString)
+    return localTimeString
   }
-  if (
-    location &&
-    location.state &&
-    location.state.date &&
-    location.state.date !== date
-  ) {
-    setDate(location.state.date);
-    location.state.date = "";
+  function formDateDayTime(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    console.log("==========", localTimeString)
+    return localTimeString
   }
 
-  const onChangeOfTask = (e) => {
-    setTask(e.target.value);
-  };
-
-  const onChangeOfProject = (e) => {
-    setProject(e.target.value);
-    const selectedProject = projectOptions.find(
-      (project) => project._id === e.target.value
-    );
-    setTeamOptions(selectedProject?.accessibleBy);
-  };
-
-  const onchangeTeam = (e) => {
-    setTeam(e.target.value);
-    getTaskList(e.target.value);
-  };
-
-  const handleChangeDate = (e) => {
-    setDate(e.target.value);
-    getTaskList(e.target.value);
-  };
-
-  const getTaskList = async function (data) {
+  const getAllPendingRatingTaskList = async function (data) {
     setLoading(true);
     try {
-      const dataToSend = {};
+      let { selectedProject, selectedUser, selectedDate } = ratingForm;
 
-      if (selectedRating) {
-        dataToSend.projectId = selectedRating.projectId;
-        dataToSend.userId = selectedRating.assignedTo;
-        dataToSend.dueDate = date;
-      } else if (team === "") {
-        dataToSend.projectId = project;
-        dataToSend.userId = data;
-        dataToSend.dueDate = date;
-      } else {
-        dataToSend.projectId = project;
-        dataToSend.userId = team;
-        dataToSend.dueDate = data;
-      }
+      const dataToSend = {
+        projectId: selectedProject,
+        userId: selectedUser,
+        fromDate: formDateDayTime(selectedDate),
+        toDate: formDateNightTime(selectedDate),
+      };
 
       const response = await getTaskDetailsByProjectId(dataToSend);
       if (response.error) {
+        setToasterMessage(response.error);
+        setShowToaster(true);
         console.log("error", response.error);
       } else {
-        setTaskOptions(response.data);
-
-        if (selectedRating._id) {
-          setTask(selectedRating._id);
-        }
+        setRatingForm({
+          ...ratingForm,
+          taskList: response?.data,
+        });
       }
     } catch (error) {
       console.log("error", error);
@@ -157,67 +167,44 @@ export default function AddRatingModal(props) {
     setLoading(false);
   };
 
-  const onChangeOfComments = (e) => {
-    setComments(e);
-  };
-
-  const handleRatingChange = (e) => {
-    setRating(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    setValidated(true);
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!team || !date || !rating || rating > 6 || rating < 0) {
-      return;
-    } else {
-      let dataToSend = {
-        userId: team,
-        date: date?.split("-")[2],
-        year: date?.split("-")[0],
-        month: date?.split("-")[1],
-        rating: rating,
-        comment: comments,
-        taskId: task,
-        projectId: project,
-      };
-
-      addRatingFunc(dataToSend);
-    }
-  };
-
-  const getAndSetAllProjects = async function () {
+  const getAllRatings = async function (data) {
+    setLoading(true);
     try {
+      let { selectedProject, selectedUser, selectedDate } = ratingForm;
+
       const dataToSend = {
-        alphabetical: true,
+        projectId: selectedProject,
+        userId: selectedUser,
+        fromDate: formDateDayTime(selectedDate),
+        toDate: formDateNightTime(selectedDate),
       };
 
-      const projects = await getAllAssignedProject(dataToSend);
-      if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
+      const response = await getRatingList();
+      if (response.error) {
+        setToasterMessage(response.error);
         setShowToaster(true);
+        console.log("error", response.error);
       } else {
-        setProjectOptions(projects.data);
+        console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
+      console.log("error", error);
     }
+    setLoading(false);
   };
+
+
 
   const getUsersList = async function () {
     setLoading(true);
     try {
-      const user = await getAllUserDataForRating();
+      const user = await getProjectByProjectId();
       setLoading(false);
       if (user.error) {
         setToasterMessage(user?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        setTeamOptions(user?.data);
+        setRatingForm({ ...ratingForm, userList: user?.data });
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -227,51 +214,66 @@ export default function AddRatingModal(props) {
     }
   };
 
-  async function addRatingFunc(data) {
-    setLoading(true);
-    try {
-      const rating = await addRating(data);
-      setLoading(false);
-      if (rating.error) {
-        setToasterMessage(rating?.message || "Something Went Wrong");
+  const handleSubmit = async (event) => {
+    setValidated(true);
+    event.preventDefault();
+    let { rating, comment, selectedDate, selectedUser } = ratingForm;
+
+    console.log(selectedUser)
+    if (
+      !ratingForm.selectedDate ||
+      !ratingForm.selectedUser ||
+      !ratingForm.rating ||
+      ratingForm.rating > 6 ||
+      ratingForm.rating < 0
+    ) {
+      return;
+    } else {
+      // convert date in day month year format for backend
+      let dataToSend = {
+        rating: rating,
+        comment: comment,
+        date: selectedDate?.split("-")[2],
+        month: selectedDate?.split("-")[0],
+        year: selectedDate?.split("-")[1],
+        userId: user._id
+      };
+      setLoading(true);
+      try {
+        const rating = await addRatingOnTask(dataToSend);
+        setLoading(false);
+        if (rating.error) {
+          setToasterMessage(rating?.message || "Something Went Wrong");
+          setShowToaster(true);
+        } else {
+          setToasterMessage("Rating Added Succesfully");
+          setShowToaster(true);
+          // if(taskFromDashBoard){
+          // onInit();
+          // if (userDetails?.role !== "CONTRIBUTOR") {
+          //   // getTeamWorkList();
+          //   setIsChange(!isChange);
+          // }
+          // }
+          // if(!taskFromDashBoard){
+          // navigate("/rating");
+          // }
+          setModalShow(false);
+          
+        }
+      } catch (error) {
+        setLoading(false);
+        setToasterMessage(error?.message || "Something Went Wrong");
         setShowToaster(true);
-      } else {
-        setToasterMessage("Rating Added Succesfully");
-        setShowToaster(true);
-        navigate("/rating");
       }
-    } catch (error) {
-      setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
     }
-  }
+  };
 
   return (
     <div className="dv-50-rating ">
       <Form className="margin-form" noValidate validated={validated}>
         <Row className="mb-3">
-          <Form.Group as={Col} md="6">
-            <Form.Label>Select Project</Form.Label>
-            <Form.Control
-              required
-              as="select"
-              type="select"
-              name="select_project"
-              onChange={onChangeOfProject}
-              value={project}
-            >
-              <option value="">Select Project</option>
-              {projectOptions.map((module) => (
-                <option value={module._id} key={module._id}>
-                  {module.name}
-                </option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              Project is required !!
-            </Form.Control.Feedback>
-          </Form.Group>
+
 
           <Form.Group as={Col} md="6">
             <Form.Label>Select User</Form.Label>
@@ -279,53 +281,35 @@ export default function AddRatingModal(props) {
               required
               as="select"
               type="select"
-              name="select_team"
-              onChange={onchangeTeam}
-              value={team}
+              name="selectedUser"
+              onChange={handleRatingFormChange}
+              value={ratingForm.selectedUser.name}
+              // disabled={taskFromDashBoard ? true : false}
             >
-              <option value="">Select User</option>
-              {teamOptions.map((module) => (
+              <option value="" disabled>Select User</option>
+              {/* {ratingForm?.userList?.map((module) => (
                 <option value={module._id} key={module._id}>
                   {module.name}
                 </option>
-              ))}
+              ))} */}
+              <option value={ratingForm.selectedUser.name}>{ratingForm.selectedUser.name}</option>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
               User name is required !!
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group as={Col} md="6">
-            <Form.Label>Select Task</Form.Label>
-            <Form.Control
-              required
-              as="select"
-              type="select"
-              name="select_task"
-              onChange={onChangeOfTask}
-              value={task}
-            >
-              <option value="">Select Task</option>
-              {taskOptions.map((module) => (
-                <option value={module._id} key={module._id}>
-                  {module.title}
-                </option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              Task is required !!
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group as={Col} md="4" controlId="rating_date">
+          <Form.Group as={Col} md="6" controlId="rating_date">
             <Form.Label>Date</Form.Label>
             <Form.Control
               required
               type="date"
-              name="rating_date"
-              placeholder="Rating  date"
-              onChange={handleChangeDate}
+              name="selectedDate"
+              placeholder="Rating Date"
+              onChange={(e)=>console.log(e.target.value)}
               max={new Date().toISOString().split("T")[0]}
-              value={date}
+              value={ratingForm.selectedDate}
+              // disabled={taskFromDashBoard ? true : false}
             />
             <Form.Control.Feedback type="invalid">
               Date is required !!
@@ -334,36 +318,90 @@ export default function AddRatingModal(props) {
 
           <Form.Group
             as={Col}
-            md="2"
+            md="6"
             controlId="validationCustom01"
-            className="ps-0"
+            className="ps-0 "
           >
             <Form.Label>Rating</Form.Label>
-            <Form.Control
+            {/* <Form.Control
               required
               type="number"
-              placeholder="0-5"
-              value={rating}
-              onChange={handleRatingChange}
-              pattern="[0-9]*"
+              name="rating"
+              placeholder="0-6"
+              value={ratingForm.rating}
+              onChange={handleRatingFormChange}
               inputMode="numeric"
               min="0"
-              max="5"
-            />
+              max="6"
+            /> */}
+            {/* this would be a select box */}
+            <Form.Control
+              required
+              as="select"
+              type="select"
+              name="rating" 
+              onChange={handleRatingFormChange}
+              value={ratingForm.rating}
+              // disabled={taskFromDashBoard ? true : false}
+            >
+              <option value="" disabled>Select Rating</option>
+{ratingValues.map((value) => (
+  <option key={value} value={value}>{value}</option>
+))}
+            </Form.Control>
             <Form.Control.Feedback type="invalid">
-              Rating is required, value must be in range [0,5] !!
+              Rating is required, value must be in range [0,6] !!
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <Row className="mb-3 desc">
-          <Form.Label>Comment</Form.Label>
-          <FroalaEditorComponent className='text-Editor'
-            tag="textarea"
-            onModelChange={onChangeOfComments}
-          />
+        <Row>
+          {/* <Form.Group as={Col} md="12">
+            <Form.Label>Select Task</Form.Label>
+            <Form.Control
+              required
+              as="select"
+              type="select"
+              name="selectedTask"
+              onChange={handleRatingFormChange}
+              value={ratingForm.selectedTask}
+              disabled={taskFromDashBoard ? true : false}
+            >
+              <option value="" disabled>Select Task</option>
+              {ratingForm?.taskList?.map((module) => (
+                <option value={module?._id} key={module?._id}>
+                  {module?.title}
+                </option>
+              ))}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">
+              Task is required !!
+            </Form.Control.Feedback>
+          </Form.Group> */}
+          { ratingForm?.taskList?.find((task) => task._id === ratingForm.selectedTask)?.completedDate &&
+
+          <Form.Group as={Col} md="12">
+            <Form.Label>Completed Date</Form.Label>
+            <h5>
+              {
+                ratingForm?.taskList
+                  ?.find((task) => task._id === ratingForm.selectedTask)
+                  ?.completedDate?.split("T")[0]
+              }
+            </h5>
+          </Form.Group>
+          }
         </Row>
 
-        <div className="text-right">
+        <Row className="desc">
+<textarea
+  name="comment"
+  placeholder="comment"
+  value={ratingForm.comment}
+  onChange={handleRatingFormChange}
+></textarea>
+</Row>
+
+        <div className="text-right mt-2">
           <button
             onClick={handleSubmit}
             className="btn-gradient-border btnDanger submit"
@@ -382,4 +420,4 @@ export default function AddRatingModal(props) {
       )}
     </div>
   );
-}
+};

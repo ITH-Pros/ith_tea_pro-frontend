@@ -851,16 +851,32 @@ export default function AddTaskModal(props) {
                       placeholder="Hours"
                       name="defaultTaskTime.hours" // Unique name for hours input
                       value={taskFormValue.defaultTaskTime.hours}
-                      onChange={updateTaskFormValue}
+                      // onChange={updateTaskFormValue}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        if (inputValue.length <= 2 && inputValue >= 0) {
+                          // Update the state value if the input is within the limit
+                          updateTaskFormValue(e);
+                        }
+                      }}
                     />
                     <span className="mx-2">:</span>
                     <Form.Control
                       required
                       type="number"
+                      max='60'
+                      min='0'
                       placeholder="Minutes"
                       name="defaultTaskTime.minutes" // Unique name for minutes input
                       value={taskFormValue.defaultTaskTime.minutes}
-                      onChange={updateTaskFormValue}
+                      // onChange={updateTaskFormValue}
+                      onChange={(e) => {
+                        const inputValue = e.target.value;
+                        if (inputValue.length <= 2 && inputValue <= 60 && inputValue >= 0) {
+                          // Update the state value if the input is within the limit
+                          updateTaskFormValue(e);
+                        }
+                      }}
                     />
                     <Form.Control.Feedback type="invalid">
                       Estimated time is required !!
