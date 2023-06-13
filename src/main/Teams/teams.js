@@ -133,10 +133,12 @@ export default function Teams(props) {
       if (resp.error) {
         console.log(resp.error);
         setToasterMessage(resp?.message || "Something Went Wrong");
+        setShowToaster(true);
       } else {
+        setToasterMessage(resp?.message || "Something Went Wrong");
+        setShowToaster(true);
         setAssignManagerModalShow(false);
         onInit();
-        setToasterMessage(resp?.message );
       }
     } catch (error) {
       console.log(error);

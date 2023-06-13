@@ -20,6 +20,7 @@ import { useAuth } from "../../../auth/AuthProvider";
 
 export default function RatingModalBody (props)  {
   const {setModalShow, data } = props;
+  console.log(data,'data')
   const { userDetails } = useAuth();
   const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
   // const { taskFromDashBoard , onInit , setIsChange , isChange, setModalShow  } = props;
