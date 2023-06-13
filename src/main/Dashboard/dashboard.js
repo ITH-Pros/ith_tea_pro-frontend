@@ -99,7 +99,7 @@ const handleVerifyTask = async () => {
     setShowToaster(true);
     return;
   }
-  console.log("verifyTaskId", verifyTaskId);
+ 
 
   let dataToSend = {
     taskId: verifyTaskId,
