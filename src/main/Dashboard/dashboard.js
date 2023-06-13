@@ -85,12 +85,22 @@ const [comment, setComment] = useState("");
 const [verifyTaskId, setVerifyTaskId] = useState("");
 const [isReOpen, setIsReOpen] = useState(false);
 
+const verifyTaskNotAllowedRoles = ["CONTRIBUTOR", "GUEST"];
+
 const openVerifyModal = (taskId) => {
+  setComment("");
   setVerifyTaskId(taskId);
   setShowModal(true);
 };
 
 const handleVerifyTask = async () => {
+  if (!comment) {
+    setToasterMessage("Please Enter Comments");
+    setShowToaster(true);
+    return;
+  }
+  console.log("verifyTaskId", verifyTaskId);
+
   let dataToSend = {
     taskId: verifyTaskId,
     status: "VERIFIED",
@@ -1693,7 +1703,8 @@ const handleVerifyTask = async () => {
                               </small>
                             </Col>
 
-                            {(userDetails?.role !== "CONTRIBUTOR" || userDetails?.role !== "GUEST" ) && (
+                            {/* {(userDetails?.role !== "CONTRIBUTOR" || userDetails?.role !== "GUEST" )   && ( */}
+                            {!verifyTaskNotAllowedRoles.includes(userDetails?.role)     && (
 
 
                             <Col
