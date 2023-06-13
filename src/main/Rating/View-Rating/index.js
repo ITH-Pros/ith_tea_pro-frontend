@@ -47,6 +47,10 @@ export default function Dashboard(props) {
     }
   }, []);
 
+  useEffect(() => {
+    if (modalShow === false) onInit()
+  }, [modalShow])
+
   // set the isWeekendChecked state variable based on the weekend value
   //  useEffect(() => {
   //   setIsWeekendChecked(weekend);
@@ -54,6 +58,7 @@ export default function Dashboard(props) {
 
   const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
+    // console.log(user,date,month,year)
     let setDate = date
     let setMonth = month
     if(date<10){
@@ -72,20 +77,20 @@ export default function Dashboard(props) {
         setShowToaster(true);
         console.log("error", response );
       } else {
-        if(response?.data?.ratingAllowed === true){
-          setRatingData((prevRatingData) => ({
+        if (response?.data?.ratingAllowed === true) {
+          setRatingData(prevRatingData => ({
             ...prevRatingData,
             user: user,
             date: date,
-            month: month ,
+            month: month,
             year: year,
-          }));
+          }))
           setModalShow(true)
+        } else {
+          setToasterMessage('You are not allowed to give rating.')
+          setShowToaster(true)
         }
-        else
-        // setToasterMessage("You are not allowed to give rating.");
-        // setShowToaster(true);
-        console.log('error in verify manager')
+        // console.log('error in verify manager')
       }
     } catch (error) {
       console.log("error", error);
@@ -334,14 +339,14 @@ export default function Dashboard(props) {
                 weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
               }
               // onClick={()=>console.log(user,'index',index+1,monthUse,yearUse)}
-              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse)}}
+              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse);}}
             >
             </span>
           ) : (
             <>
               <span
                 style={{
-                  padding: "1px",
+                  padding: "3px",
                   paddingLeft: "20px",
                   paddingRight: "6px",
                 }}
@@ -349,9 +354,9 @@ export default function Dashboard(props) {
                   weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
                 }
                 // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
-              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse)}}
+              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse);}}
 
-                ></span>
+                >{!weekendValue && '?'}</span>
             </>
           )}
         </td>

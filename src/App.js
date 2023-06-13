@@ -23,8 +23,8 @@ import PasswordForm from "./setup-password";
 import ForgotPassword from "./auth/forgotPassword";
 import ResetPassword from "./auth/resetPassword";
 import TeamReport from "./main/Team-report";
-import Guest from "./main/guest";
 import { useAuth } from "./auth/AuthProvider";
+import ViewTask from "./main/Rating/View-Rating/viewTask";
 function App() {
   const { userDetails } = useAuth();
   return (
@@ -225,13 +225,24 @@ function App() {
               </>
             }
           />
-       {/* guest */}
-         
-
 
           <Route path="view/:userId" element={<ViewUser />} />
         </Route>
         <Route path="*" element={<NoMatch />} />
+
+        <Route
+          path="/view-task/:taskId"
+          element={
+            <>
+              <ProtectedRoute>
+                <Navbar />
+                <Header />
+                <ViewTask />
+              </ProtectedRoute>
+            </>
+          }
+        />
+
       </Routes>
     </ProSidebarProvider>
   );

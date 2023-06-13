@@ -64,7 +64,7 @@ export default function Teams(props) {
     setSelectedManagers([]);
     setManagerList([]);
 
-    setUserId(userId);
+    setUserId(userId)  
     // Fetch manager list
     getManagerList(userId);
 
