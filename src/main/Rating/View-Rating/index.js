@@ -327,40 +327,35 @@ export default function Dashboard(props) {
       }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
       return (
         <td key={index}>
-          {userDetails?.role === "CONTRIBUTOR" ||
-          new Date(dateToSend) > new Date() ? (
+          {userDetails?.role === 'CONTRIBUTOR' || new Date(dateToSend) > new Date() ? (
             <span
               style={{
-                padding: "1px",
-                paddingLeft: "20px",
-                paddingRight: "6px",
+                padding: '2px 15px',
               }}
-              className={
-                weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
-              }
+              className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
               // onClick={()=>console.log(user,'index',index+1,monthUse,yearUse)}
-              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse);}}
-            >
-            </span>
+              onClick={() => {
+                isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse)
+              }}
+            ></span>
           ) : (
             <>
               <span
                 style={{
-                  padding: "3px",
-                  paddingLeft: "20px",
-                  paddingRight: "6px",
+                  padding: '2px 15px',
                 }}
-                className={
-                  weekendValue ? "weekendBox input_dashboard" : "input_dashboard"
-                }
+                className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
                 // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
-              onClick={()=>{isRatingAllowed(user,index+1,(months.indexOf(monthUse) + 1),yearUse);}}
-
-                >{!weekendValue && '?'}</span>
+                onClick={() => {
+                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse)
+                }}
+              >
+                {!weekendValue && '?'}
+              </span>
             </>
           )}
         </td>
-      );
+      )
     }
   })}
                       <td className="userAverage">

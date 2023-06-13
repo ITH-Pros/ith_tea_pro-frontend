@@ -114,14 +114,12 @@ const RatingBox = (props) => {
       <td key={index}>
         <span
           style={{
-            cursor: "pointer",
-            padding: "3px",
-            paddingLeft: "6px",
-            paddingRight: "6px",
+            cursor: 'pointer',
+            padding: '2px 15px',
           }}
           className="input_dashboard"
         >
-          {`${formatedRating(ratingCommentObj?.rating)}`}{" "}
+          {`${formatedRating(ratingCommentObj?.rating)}`}{' '}
         </span>
       </td>
       {modalShow && (
@@ -145,6 +143,6 @@ const RatingBox = (props) => {
         />
       )}
     </>
-  );
+  )
 };
 export default RatingBox;

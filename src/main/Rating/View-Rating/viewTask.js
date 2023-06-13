@@ -217,7 +217,44 @@ export default function ViewTask(props) {
             <p>No Comments!</p>
           )}
         </Col>
+        <Col>
+          {' '}
+          <h6>Verified Comments</h6>
+          {task?.verificationComments?.length ? (
+            task?.verificationComments?.map((item, index) => {
+              const options = {
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'medium',
+                timeStyle: 'medium',
+              }
+              const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
 
+              return (
+                <div
+                  className="comment mb-0 mt-0 pt-0"
+                  key={index}
+                >
+                  <div className="commentedBy pb-2">
+                    <UserIcon
+                      style={{ float: 'left' }}
+                      key={index}
+                      firstName={item?.commentedBy?.name}
+                    />
+                    {item?.commentedBy?.name}
+                  </div>
+
+                  <p
+                    dangerouslySetInnerHTML={{ __html: item?.comment }}
+                    className="comment-tex"
+                  ></p>
+                  <span className="date sub-text">{createdAt}</span>
+                </div>
+              )
+            })
+          ) : (
+            <p>No Comments!</p>
+          )}
+        </Col>
         <Col>
           {' '}
           <h6>Ratings</h6>
