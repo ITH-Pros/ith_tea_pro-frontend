@@ -1692,6 +1692,10 @@ const handleVerifyTask = async () => {
                                 )}
                               </small>
                             </Col>
+
+                            {(userDetails?.role !== "CONTRIBUTOR" || userDetails?.role !== "GUEST" ) && (
+
+
                             <Col
                               lg={2}
                               className="text-end middle px-0"
@@ -1714,6 +1718,9 @@ const handleVerifyTask = async () => {
                                 Verify
                               </Button>
                             </Col>
+                            )}
+
+
                           </Row>
                         ))}
                     </Card>
@@ -2387,17 +2394,17 @@ const handleVerifyTask = async () => {
 
       {/* modal for re-open task */}
 
-      <Offcanvas
-        className="Offcanvas-modal profile-modal"
-        style={{ width: "600px" }}
-        placement="end"
+      <Modal
+ 
+
+
         show={reopenTaskModal}
         onHide={closeReopenTaskModal}
       >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title></Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body
+        <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body
           style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }}
         >
           <div className="modal-body">
@@ -2456,8 +2463,8 @@ const handleVerifyTask = async () => {
               </div>
             </div>
           </div>
-        </Offcanvas.Body>
-      </Offcanvas>
+        </Modal.Body>
+      </Modal>
 
       {/* ///// */}
 

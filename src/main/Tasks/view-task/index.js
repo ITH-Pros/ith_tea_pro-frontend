@@ -289,51 +289,7 @@ export default function ViewTaskModal(props) {
                     justifyItems: "end",
                   }}
                 >
-                  <div className="col-sm-12 text-start">
-                  {task?.section?.name !== "Misc" && (
-                    <div>
-
-
-                 
-                    {task?.isRated && (
-                      <span>
-                        Rating :{" "}
-                        <span className="text-success">{task?.rating}</span>
-                      </span>
-                    )}
-                    {task?.isRated &&
-                      (userDetails?.role !== "CONTRIBUTOR" ||
-                        userDetails?.role !== "LEAD" ||
-                        userDetails?.role !== "GUEST") && (
-                        <Button
-                          onClick={() => setIsEditModal(true)}
-                          className="text-muted editBtn"
-                        >
-                          Edit
-                        </Button>
-                      )}
-                  
-                    {!task?.isRated &&
-                      !isRatingFormVisible &&
-                      userDetails?.role !== "CONTRIBUTOR" &&
-                      userDetails.id !== task?.assignedTo?._id && (
-                        <Button
-                          onClick={() => {
-                            handleAddRating(task);
-                          }}
-                          variant="light"
-                          size="sm"
-                          className="addRatingBtn"
-                          style={{ fontSize: "15" }}
-                        >
-                          Add Rating
-                        </Button>
-                      )}
-                  
-
-                    </div>
-                  )}
-                  </div>
+                
                 </Row>
               )}
               <Row className="mb-3">
@@ -413,20 +369,30 @@ export default function ViewTaskModal(props) {
                     <option value="COMPLETED">Completed</option>
                   </select>
                 </Form.Group>
-                {task?.status === "COMPLETED" && (
+
                   <Row className="mb-3 mt-3">
                     <>
+                    {task?.status === "COMPLETED" && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Completed Date : </Form.Label>
                         <p>{formatDate(task?.completedDate) || "--"} </p>
                       </Form.Group>
+                )}
+
 
                       {/* Task completion time  */}
+
+                    {task?.status === "COMPLETED" && (
+
 
                       <Form.Group as={Col} md="5">
                         {/* <Form.Label>Completed Date</Form.Label> */}
                         <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
                       </Form.Group>
+                )}
+
+
+
 
 
                       <Form.Group as={Col} md="4" className="estimated-time">
@@ -442,7 +408,6 @@ export default function ViewTaskModal(props) {
 
                     </>
                   </Row>
-                )}
               </Row>
               <Row className="mb-3">
                 <Form.Group as={Col} md="12">

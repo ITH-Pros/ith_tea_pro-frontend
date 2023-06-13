@@ -848,6 +848,8 @@ export default function AddTaskModal(props) {
                     <Form.Control
                       required
                       type="number"
+                      max='24'
+                      min='0'
                       placeholder="Hours"
                       name="defaultTaskTime.hours" // Unique name for hours input
                       value={taskFormValue.defaultTaskTime.hours}
