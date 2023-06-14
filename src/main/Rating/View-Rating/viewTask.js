@@ -252,7 +252,7 @@ export default function ViewTask(props) {
               )
             })
           ) : (
-            <p>No Comments!</p>
+            <p>{task.isVerified ? 'No Comments!' : 'Not Verified'}</p>
           )}
         </Col>
         <Col>
