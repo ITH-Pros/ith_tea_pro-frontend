@@ -77,21 +77,19 @@ export default function ViewTask(props) {
   }
 
   return (
-    <div
-      className="col-6"
-      style={{ marginTop: '100px', left: '20em', position: 'absolute' }}
-    >
+    <div className="addUserFrom rightDashboard" style={{ marginTop: '7%', }}>
+    <div>
       <Row className="mb-3">
-        <Col>
-          <h6>Project Name</h6>
+        <Col className='d-flex'>
+          <h6 className='pe-2'>Project Name : </h6>
           <p>{task?.projectId?.name} </p>
         </Col>
-        <Col>
-          <h6>Section Name</h6>
+        <Col className='d-flex'>
+          <h6 className='pe-2'>Section Name : </h6>
           <p>{task?.section?.name} </p>
         </Col>
-        <Col>
-          <h6>Lead</h6>
+        <Col className='d-flex'>
+          <h6 className='pe-2'>Lead : </h6>
           {task?.lead?.map((item, index) => {
             return <p key={index}>{item?.name} </p>
           })}
@@ -116,50 +114,44 @@ export default function ViewTask(props) {
       </Row>
 
       <Row className="mb-3">
-        <Col>
-          <h6>Assigned To</h6>
+        <Col as={Col} md="3" className='d-flex'>
+          <h6 className='pe-2'>Assigned To : </h6>
           <p>{task?.assignedTo?.name || 'Not Assigned'} </p>
         </Col>
-        <Col className="px-0">
-          <h6>Due Date</h6>
+        <Col as={Col} md="3" className="d-flex">
+          <h6 className='pe-2'>Due Date : </h6>
           <p style={{ fontSize: '13px', marginBottom: '0' }}>{task?.dueDate ? formatDate(task?.dueDate) : '--'} </p>
         </Col>
 
-        <Col>
-          <h6>Priority</h6>
+        <Col as={Col} md="3" className='d-flex'>
+          <h6 className='pe-2'>Priority : </h6>
           <p>{task?.priority} </p>
         </Col>
-        <Col className="ps-0">
-          <h6>Status</h6>
+        <Col as={Col} md="3" className="d-flex">
+          <h6 className='pe-2'>Status : </h6>
 
           <p>{task.status}</p>
         </Col>
       </Row>
       <Row className="mb-3 mt-3">
-        <Col>
-          <h6>Completed Date : </h6>
+        <Col as={Col} md="3" className='d-flex'>
+          <h6 className='pe-2'>Completed Date : </h6>
           <p>{formatDate(task?.completedDate) || '--'} </p>
         </Col>
 
-        <Col
-          as={Col}
-          md="5"
-        >
+        <Col as={Col} md="3">
           <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
         </Col>
-        <Col>
-          <h6>Estimated Time :</h6>{' '}
+        <Col as={Col} md="3" className='d-flex'>
+          <h6 className='pe-2'>Estimated Time :</h6>{' '}
           <div className="time">
             <p>
               {task?.defaultTaskTime?.hours} Hour(s) {task?.defaultTaskTime?.minutes !== null && <>& {task?.defaultTaskTime?.minutes} Minute</>}
             </p>
           </div>
         </Col>
-      </Row>
-
-      <Row className="comment-section">
-        <Col>
-          <h6>Attachments</h6>
+        <Col as={Col} md="3" className='d-flex'>
+          <h6 className='pe-2'>Attachments : </h6>
           {task.attachments &&
             task.attachments.map((file, index) => {
               return (
@@ -179,9 +171,34 @@ export default function ViewTask(props) {
               )
             })}
         </Col>
-        <Col>
+      </Row>
+
+      <Row className="comment-section">
+        {/* <Col className='d-flex'>
+          <h6 className='pe-2'>Attachments : </h6>
+          {task.attachments &&
+            task.attachments.map((file, index) => {
+              return (
+                <Col
+                  key={index}
+                  sm={12}
+                >
+                  <div className="assignPopup">
+                    <a
+                      href={`${file}`}
+                      target="_blank"
+                    >
+                      {'Attachment' + ' ' + (index + 1)}
+                    </a>
+                  </div>
+                </Col>
+              )
+            })}
+        </Col> */}
+        <Col className='d-flex' as={Col}
+          md="4">
           {' '}
-          <h6>Comments</h6>
+          <h6 className='pe-2'>Comments : </h6>
           {task?.comments?.length ? (
             task?.comments?.map((item, index) => {
               const options = {
@@ -217,9 +234,10 @@ export default function ViewTask(props) {
             <p>No Comments!</p>
           )}
         </Col>
-        <Col>
+        <Col className='d-flex' as={Col}
+          md="5">
           {' '}
-          <h6>Verified Comments</h6>
+          <h6 className='pe-2'>Verified Comments : </h6>
           {task?.verificationComments?.length ? (
             task?.verificationComments?.map((item, index) => {
               const options = {
@@ -255,9 +273,9 @@ export default function ViewTask(props) {
             <p>No Comments!</p>
           )}
         </Col>
-        <Col>
+        <Col className='d-flex'>
           {' '}
-          <h6>Ratings</h6>
+          <h6 className='pe-2'>Ratings : </h6>
           {task?.ratingComments?.length ? (
             task?.ratingComments?.map((item, index) => {
               const options = {
@@ -318,6 +336,7 @@ export default function ViewTask(props) {
           />
         </ToastContainer>
       )}
+    </div>
     </div>
   )
 }
