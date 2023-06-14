@@ -2430,9 +2430,7 @@ const handleVerifyTask = async () => {
       {/* modal for re-open task */}
 
       <Modal
- 
-
-
+        centered
         show={reopenTaskModal}
         onHide={closeReopenTaskModal}
       >
@@ -2440,7 +2438,7 @@ const handleVerifyTask = async () => {
           <Modal.Title></Modal.Title>
         </Modal.Header>
         <Modal.Body
-          style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }}
+          style={{ overflowY: "scroll", overflowX: "hidden" }}
         >
           <div className="modal-body">
             {!showNewDueDateField && (
@@ -2480,7 +2478,7 @@ const handleVerifyTask = async () => {
                 {!showNewDueDateField && (
                   <>
                     <Button onClick={handleReopenConfirmation}>Yes</Button>
-                    <Button variant="secondary" onClick={closeReopenTaskModal}>
+                    <Button variant="secondary" className="ms-2" onClick={closeReopenTaskModal}>
                       No
                     </Button>
                   </>
@@ -2490,7 +2488,7 @@ const handleVerifyTask = async () => {
                     <Button variant="primary" onClick={handleSubmit}>
                       Submit
                     </Button>
-                    <Button variant="secondary" onClick={closeReopenTaskModal}>
+                    <Button variant="secondary" className="ms-2" onClick={closeReopenTaskModal}>
                       Cancel
                     </Button>
                   </>

@@ -864,7 +864,7 @@ export default function Teams(props) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button
+            <Button className="btn btn-secondary"
               variant="light"
               size="sm"
               style={{ marginRight: "10px" }}
@@ -877,7 +877,7 @@ export default function Teams(props) {
             <Button
               variant="light"
               size="sm"
-              className="confirm-button"
+              className="confirm-button btn btn-primary"
               style={{ marginRight: "10px" }}
               onClick={() => {
                 assignManagers();
