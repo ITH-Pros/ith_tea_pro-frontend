@@ -492,4 +492,5 @@ button.accordion-button {
  
 .action_btn { background: none !important; }
 
-.red-flag { color: red; }
+.red-flag { color: red;
+padding-left: 10px; }

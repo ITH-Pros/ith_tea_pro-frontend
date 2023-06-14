@@ -777,16 +777,16 @@ const handleVerifyTask = async () => {
                       overdueWorkList?.length > 0 &&
                       overdueWorkList?.map((task) => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          {task?.isReOpen && (
+                          {/* {task?.isReOpen && (
                             <div className="d-flex align-items-center">
-                              <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag red-flag"
+                                  class="fa fa-flag"
                                   aria-hidden="true"
                                 ></i>
                               </div>
                             </div>
-                          )}
+                          )} */}
                           <Col lg={4} className="middle">
                             {((userDetails.role === "LEAD" &&
                               (userDetails.id === task?.assignedTo?._id ||
@@ -903,6 +903,14 @@ const handleVerifyTask = async () => {
                                 {task?.title}
                               </h5>
                             </OverlayTrigger>
+                              {task?.isReOpen && (                                
+                                <div className="d-flex align-items-center red-flag">
+                                  <i
+                                    class="fa fa-flag"
+                                    aria-hidden="true"
+                                  ></i>
+                                </div> 
+                            )}
                           </Col>
                           <Col lg={2} className="middle">
                             {task?.status !== "COMPLETED" && (
@@ -1066,9 +1074,9 @@ const handleVerifyTask = async () => {
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           {task?.isReOpen && (
                             <div className="d-flex align-items-center">
-                              <div className="d-flex align-items-center">
+                              <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag red-flag"
+                                  class="fa fa-flag"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1486,7 +1494,7 @@ const handleVerifyTask = async () => {
             {userDetails?.role !== "GUEST" && (
               <Col lg={6} style={{ paddingRight: "0px" }}>
                 <Row>
-                  <Col lg={6} className="left-add">
+                  <Col lg={12} className="left-add varificationTask">
                     <span>TASK VERIFICATION</span>
                     {(userDetails?.role === "SUPER_ADMIN" ||
                     userDetails?.role === "ADMIN") && (
@@ -1551,16 +1559,16 @@ const handleVerifyTask = async () => {
                         pendingRatingList?.length > 0 &&
                         pendingRatingList?.map((task) => (
                           <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                            {task?.isReOpen && (
+                            {/* {task?.isReOpen && (
                               <div className="d-flex align-items-center">
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center red-flag">
                                   <i
-                                    className="fa fa-flag red-flag"
+                                    className="fa fa-flag"
                                     aria-hidden="true"
                                   ></i>
                                 </div>
                               </div>
-                            )}
+                            )} */}
                             <Col lg={5} className="middle">
                               <span
                                 style={{
@@ -1587,7 +1595,15 @@ const handleVerifyTask = async () => {
                                 >
                                   {task?.title}
                                 </h5>
-                              </OverlayTrigger>
+                              </OverlayTrigger>.
+                                {task?.isReOpen && ( 
+                                  <div className="d-flex align-items-center red-flag">
+                                    <i
+                                      className="fa fa-flag"
+                                      aria-hidden="true"
+                                    ></i>
+                                  </div> 
+                              )}
                             </Col>
                             <Col lg={2} className="middle">
                               {task?.status !== "COMPLETED" && (
@@ -2106,16 +2122,16 @@ const handleVerifyTask = async () => {
                                   className="border-start border-bottom d-flex justify-content-start px-0"
                                 >
                                   <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
-                                    {task?.isReOpen && (
+                                    {/* {task?.isReOpen && (
                                       <div className="d-flex align-items-center">
-                                        <div className="d-flex align-items-center">
+                                        <div className="d-flex align-items-center red-flag">
                                           <i
-                                            class="fa fa-flag red-flag"
+                                            class="fa fa-flag"
                                             aria-hidden="true"
                                           ></i>
                                         </div>
                                       </div>
-                                    )}
+                                    )} */}
 
                                     <Col lg={4} className="middle">
                                       {((userDetails.role === "LEAD" &&
@@ -2240,6 +2256,14 @@ const handleVerifyTask = async () => {
                                           {task?.title}
                                         </h5>
                                       </OverlayTrigger>
+                                        {task?.isReOpen && (
+                                       <div className="red-flag">
+                                          <i
+                                            class="fa fa-flag"
+                                            aria-hidden="true"
+                                          ></i>
+                                        </div> 
+                                    )}
                                     </Col>
                                     <Col lg={2} className="middle">
                                       {task?.status !== "COMPLETED" && (

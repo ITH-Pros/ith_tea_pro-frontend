@@ -358,17 +358,17 @@ th {
   background: #5d6d74 !important;
 }
 
-.right-filter {
-  align-items: flex-end;
-  justify-content: flex-end;
+.varificationTask {
+  align-items: center;
+  justify-content: space-between;
   display: flex;
 }
 
-.right-filter button {
+/* .right-filter button {
   padding: 5px;
   font-size: 13px;
   margin-left: 20px;
-}
+} */
 
 .right-filter .dropdown-toggle::after {
   display: none;

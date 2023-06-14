@@ -838,8 +838,8 @@ const Tasks = () => {
                             {task?.isReOpen && (
                           
                                 <div className="d-flex align-items-center">
-                                  <div className="d-flex align-items-center">
-                                  <i class="fa fa-flag red-flag"  aria-hidden="true"></i>
+                                  <div className="d-flex align-items-center red-flag">
+                                  <i class="fa fa-flag"  aria-hidden="true"></i>
                                   </div>
                                   </div>
                        
