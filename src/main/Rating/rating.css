@@ -122,6 +122,10 @@
   margin-top: 10px;
 }
 
+.btn:disabled{
+  background-color:#555555 !important
+}
+
 @media screen and (max-width: 1300px) {
   .dv-50-rating{
     height: 80vh;

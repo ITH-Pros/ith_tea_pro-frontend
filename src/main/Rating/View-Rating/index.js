@@ -306,8 +306,7 @@ export default function Dashboard(props) {
       months.indexOf(monthUse),
       index + 1
     );
-    const dayOfWeek = date.getDay();
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayOfWeek = date.getDay()
     const weekendValue = dayOfWeek === 0 || dayOfWeek === 6;
     if (ratingCommentObj) {
       return (
