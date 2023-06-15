@@ -141,7 +141,10 @@ textarea.form-control {
  
   letter-spacing: 0.8px !important;
 }
-
+.dropdown-item:active { 
+  background-color: #8355ad;
+  color: #fff !important;
+}
 span.rbc-toolbar-label {
   color: #8355ad;
   font-size: 20px;

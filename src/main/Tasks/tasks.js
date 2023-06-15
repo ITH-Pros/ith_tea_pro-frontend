@@ -835,15 +835,7 @@ const Tasks = () => {
                         <li key={task?._id} className="share-wrapper-ui">
                           <div className="clickLabelArea">
                             <Row className="align-items-center justify-content-start">
-                            {task?.isReOpen && (
-                          
-                                <div className="d-flex align-items-center">
-                                  <div className="d-flex align-items-center red-flag">
-                                  <i class="fa fa-flag"  aria-hidden="true"></i>
-                                  </div>
-                                  </div>
-                       
-                            )}
+                           
                               <Col lg={4} className="align-items-center">
                                 <Row>
                                   <Col lg={1}>
@@ -957,9 +949,10 @@ const Tasks = () => {
                                           )}
                                         </Dropdown>
                                       )}
+                                      
                                     </div>
                                   </Col>
-                                  <Col lg={11}>
+                                  <Col lg={9}>
                                     <p
                                       className={
                                         task?.status === "COMPLETED"
@@ -978,7 +971,16 @@ const Tasks = () => {
                                       </p>
                                     </p>
                                   </Col>
+                                  <Col lg={2}>
+                                  {task?.isReOpen && (                          
+                                    <div className="d-flex align-items-center red-flag">
+                                      <i class="fa fa-flag"  aria-hidden="true"></i>
+                                    </div>
+                                                                    
+                                )}
+                                  </Col>
                                 </Row>
+                               
                               </Col>
                           
 
