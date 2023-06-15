@@ -331,7 +331,7 @@ const ProjectCard = ({
             ))}
           </>
         </div>
-        <div className="stat col-3">
+        <div className="stat col-3 px-0">
           <>
             {["top"].map((placement, index) => (
               <OverlayTrigger
