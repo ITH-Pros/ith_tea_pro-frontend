@@ -464,11 +464,12 @@ button.modal-close-btn:hover {
 }
 
 .custom-modal input[type="checkbox"]:checked ~ .checkmark {
-  border-color: #4caf50;
+  border-color: #8355ad;
 }
 
 .custom-modal input[type="checkbox"]:checked ~ .checkmark::after {
   display: block;
+  background-color: #8355ad
 }
 
 .custom-modal .manager-name {
