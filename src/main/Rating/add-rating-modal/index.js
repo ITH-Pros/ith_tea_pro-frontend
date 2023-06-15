@@ -317,11 +317,11 @@ export default function RatingModalBody(props) {
         onSubmit={handleSubmit}
       >
         <Row className="mb-3">
-          <Form.Group
+          <Col
             as={Col}
-            md="6"
+            md="12"
           >
-            <Form.Label>{user?.name}</Form.Label>
+            <h3 className="userName">{user?.name}</h3>
             {/* <Form.Control
               required
               as="select" 
@@ -342,7 +342,7 @@ export default function RatingModalBody(props) {
             <Form.Control.Feedback type="invalid">
               User name is required !!
             </Form.Control.Feedback> */}
-          </Form.Group>
+          </Col>
 
           <Form.Group
             as={Col}
@@ -472,7 +472,7 @@ export default function RatingModalBody(props) {
 
       {userTasks?.length > 0 ? (
         <div style={{ marginTop: '30px' }}>
-          <h2>Task List</h2>
+          <h5>Task List</h5>
           {userTasks.length > 0
             ? userTasks?.map((task, index) => {
                 return (

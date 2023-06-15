@@ -956,8 +956,7 @@ export default function AddTaskModal(props) {
                 </Form.Group>
                 <Form.Group
                   as={Col}
-                  md="3"
-                  className="px-0"
+                  md="3" 
                 >
                   <Form.Label>Due Date</Form.Label>
                   <Form.Control

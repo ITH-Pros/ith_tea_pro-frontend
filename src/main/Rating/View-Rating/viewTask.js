@@ -195,8 +195,47 @@ export default function ViewTask(props) {
               )
             })}
         </Col> */}
-        <Col className='d-flex' as={Col}
-          md="4">
+         <Col as={Col}
+          md="3">
+          {' '}
+          <h6 className='pe-2'>Ratings : </h6>
+          {task?.ratingComments?.length ? (
+            task?.ratingComments?.map((item, index) => {
+              const options = {
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'medium',
+                timeStyle: 'medium',
+              }
+
+              const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
+
+              return (
+                <div
+                  className="comment comment mb-0 mt-0 pt-0"
+                  key={index}
+                >
+                  <div className="commentedBy pb-2">
+                    <UserIcon
+                      style={{ float: 'left' }}
+                      key={index}
+                      firstName={item?.commentedBy?.name}
+                    />
+                    {item?.commentedBy?.name}
+                  </div>
+                  <p
+                    dangerouslySetInnerHTML={{ __html: item?.comment }}
+                    className="comment-tex"
+                  ></p>
+                  <span className="date sub-text">{createdAt}</span>
+                </div>
+              )
+            })
+          ) : (
+            <p>No Ratings!</p>
+          )}
+        </Col>
+        <Col as={Col}
+          md="3">
           {' '}
           <h6 className='pe-2'>Comments : </h6>
           {task?.comments?.length ? (
@@ -234,7 +273,7 @@ export default function ViewTask(props) {
             <p>No Comments!</p>
           )}
         </Col>
-        <Col className='d-flex' as={Col}
+        <Col as={Col}
           md="5">
           {' '}
           <h6 className='pe-2'>Verified Comments : </h6>
@@ -273,44 +312,7 @@ export default function ViewTask(props) {
             <p>{task.isVerified ? 'No Comments!' : 'Not Verified'}</p>
           )}
         </Col>
-        <Col className='d-flex'>
-          {' '}
-          <h6 className='pe-2'>Ratings : </h6>
-          {task?.ratingComments?.length ? (
-            task?.ratingComments?.map((item, index) => {
-              const options = {
-                timeZone: 'Asia/Kolkata',
-                dateStyle: 'medium',
-                timeStyle: 'medium',
-              }
-
-              const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
-
-              return (
-                <div
-                  className="comment comment mb-0 mt-0 pt-0"
-                  key={index}
-                >
-                  <div className="commentedBy pb-2">
-                    <UserIcon
-                      style={{ float: 'left' }}
-                      key={index}
-                      firstName={item?.commentedBy?.name}
-                    />
-                    {item?.commentedBy?.name}
-                  </div>
-                  <p
-                    dangerouslySetInnerHTML={{ __html: item?.comment }}
-                    className="comment-tex"
-                  ></p>
-                  <span className="date sub-text">{createdAt}</span>
-                </div>
-              )
-            })
-          ) : (
-            <p>No Ratings!</p>
-          )}
-        </Col>
+       
       </Row>
       <Row>
         <Accordion>

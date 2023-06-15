@@ -125,6 +125,11 @@
 .btn:disabled{
   background-color:#555555 !important
 }
+.userName{
+  font-size: 20px;
+  text-transform: capitalize;
+  font-weight: 300;
+}
 
 @media screen and (max-width: 1300px) {
   .dv-50-rating{

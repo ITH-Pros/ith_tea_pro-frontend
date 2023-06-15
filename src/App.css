@@ -185,4 +185,6 @@ span.rbc-toolbar-label {
 
  
 
- 
+.accordion-button:focus{
+  box-shadow: none;
+}

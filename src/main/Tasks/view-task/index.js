@@ -333,7 +333,7 @@ export default function ViewTaskModal(props) {
                   <Form.Label>Assigned To</Form.Label>
                   <p>{task?.assignedTo?.name || "Not Assigned"} </p>
                 </Form.Group>
-                <Form.Group as={Col} md="3" className="px-0">
+                <Form.Group as={Col} md="3" className="px-1">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
                     {task?.dueDate ? formatDate(task?.dueDate) : "--"}{" "}
