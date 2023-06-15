@@ -385,7 +385,7 @@ export default function ViewTaskModal(props) {
                     {task?.status === "COMPLETED" && (
 
 
-                      <Form.Group as={Col} md="5">
+                      <Form.Group as={Col} md="6">
                         {/* <Form.Label>Completed Date</Form.Label> */}
                         <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
                       </Form.Group>
@@ -395,7 +395,7 @@ export default function ViewTaskModal(props) {
 
 
 
-                      <Form.Group as={Col} md="4" className="estimated-time">
+                      <Form.Group as={Col} md="3" className="estimated-time">
                   <Form.Label>Estimated Time :</Form.Label>{" "}
                   <div className="time">
                     <p>{task?.defaultTaskTime?.hours} Hour</p>

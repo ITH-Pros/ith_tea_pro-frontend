@@ -871,7 +871,7 @@ export default function AddTaskModal(props) {
                   md="5"
                 >
                   <Form.Label>Estimated Time</Form.Label>
-                  <div className="d-flex flex-wrap">
+                  <div className="d-flex flexWrap">
                     <Form.Control
                       className="timeWth"
                       required
