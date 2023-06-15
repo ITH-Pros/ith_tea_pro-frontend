@@ -9,7 +9,6 @@ import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
 import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
 import { Accordion, Button } from 'react-bootstrap'
-import UserIcon from '../../Projects/ProjectCard/profileImage'
 
 export default function RatingModalBody(props) {
   const { setModalShow, data } = props
@@ -496,49 +495,45 @@ export default function RatingModalBody(props) {
                             >
                               {ele?.title}{' '}
                             </a>{' '}
-                            {ele?.isVerified ? <i style={{ color: 'green' }}>Verified</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
+                            {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
                             <br></br>
-                            <span style={{ color: '#808080' }}>
-                              <strong>{ele?.status}</strong>
+                            <span>
+                              Status: <strong style={{ color: '#808080' }}>{ele?.status}</strong>
                             </span>
-                            <Col>
-                              {' '}
-                              <h6>Verified Comments</h6>
-                              {ele?.verificationComments?.length ? (
-                                ele?.verificationComments?.map((item, index) => {
-                                  const options = {
-                                    timeZone: 'Asia/Kolkata',
-                                    dateStyle: 'medium',
-                                    timeStyle: 'medium',
-                                  }
-                                  const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
+                            {ele?.isVerified && (
+                              <Col style={{ marginTop: '20px' }}>
+                                {' '}
+                                <h6>
+                                  <strong>Verification Comments</strong>
+                                </h6>
+                                {ele?.verificationComments?.length ? (
+                                  ele?.verificationComments?.map((item, index) => {
+                                    const options = {
+                                      timeZone: 'Asia/Kolkata',
+                                      dateStyle: 'medium',
+                                      timeStyle: 'medium',
+                                    }
+                                    const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
 
-                                  return (
-                                    <div
-                                      className="comment mb-0 mt-0 pt-0"
-                                      key={index}
-                                    >
-                                      <div className="commentedBy pb-2">
-                                        <UserIcon
-                                          style={{ float: 'left' }}
-                                          key={index}
-                                          firstName={item?.commentedBy?.name}
-                                        />
-                                        {item?.commentedBy?.name}
+                                    return (
+                                      <div
+                                        className="comment mb-0 mt-0 pt-0"
+                                        key={index}
+                                      >
+                                        <div className="pb-2">{item?.commentedBy?.name}</div>
+                                        <p
+                                          dangerouslySetInnerHTML={{ __html: item?.comment }}
+                                          className="comment-tex"
+                                        ></p>
+                                        <span className="date sub-text">{createdAt}</span>
                                       </div>
-
-                                      <p
-                                        dangerouslySetInnerHTML={{ __html: item?.comment }}
-                                        className="comment-tex"
-                                      ></p>
-                                      <span className="date sub-text">{createdAt}</span>
-                                    </div>
-                                  )
-                                })
-                              ) : (
-                                <p>{task.isVerified ? 'No Comments!' : 'Not Verified'}</p>
-                              )}
-                            </Col>
+                                    )
+                                  })
+                                ) : (
+                                  <p>No Comments!</p>
+                                )}
+                              </Col>
+                            )}
                           </Accordion.Body>
                         )
                       })}

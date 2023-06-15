@@ -211,7 +211,7 @@ export default function ViewTask(props) {
 
               return (
                 <div
-                  className="comment comment mb-0 mt-0 pt-0"
+                  className="comment comment mb-0 mt-0 pt-0 w-100"
                   key={index}
                 >
                   <div className="commentedBy pb-2">
@@ -249,7 +249,7 @@ export default function ViewTask(props) {
 
               return (
                 <div
-                  className="comment mb-0 mt-0 pt-0"
+                  className="comment mb-0 mt-0 pt-0 w-100"
                   key={index}
                 >
                   <div className="commentedBy pb-2">
