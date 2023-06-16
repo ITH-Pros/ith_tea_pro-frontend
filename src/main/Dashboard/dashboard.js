@@ -623,7 +623,8 @@ const handleVerifyTask = async () => {
 
   return (
     <div className="dashboard_camp  rightDashboard">
-      ;<Container>
+      ;
+      <Container>
         <Row>
           <Col
             lg={6}
@@ -1650,16 +1651,11 @@ const handleVerifyTask = async () => {
           )}
         </Row>
       </Container>
-
-      {
-        /* Task verification */
-      }
-
-      {
-        userDetails?.role !== 'CONTRIBUTOR' && (
-          <Container>
-            <Row className="mt-3">
-              {/* <Col lg={6} style={{ paddingLeft: "0px" }}>
+      {/* Task verification */}
+      {userDetails?.role !== 'CONTRIBUTOR' && (
+        <Container>
+          <Row className="mt-3">
+            {/* <Col lg={6} style={{ paddingLeft: "0px" }}>
               <Row>
                 <Col lg={6} className="left-add">
                   <span>TEAM WORK</span>
@@ -1924,47 +1920,47 @@ const handleVerifyTask = async () => {
                 </Col>
               </Row>
             </Col> */}
-              <Col
-                lg={12}
-                style={{ paddingLeft: '0px' }}
-              >
-                <Row>
-                  <Col
-                    lg={6}
-                    className="left-add"
-                  >
-                    <span>Team Work</span>
-                    {userDetails?.role !== 'GUEST' && (
-                      <i
-                        onClick={() => {
-                          setSelectedTask()
-                          setShowAddTask(true)
-                          setSelectedProject()
-                        }}
-                        className="fa fa-plus-circle"
-                        style={{ cursor: 'pointer' }}
-                      ></i>
-                    )}
-                  </Col>
-                  <Col
-                    lg={6}
-                    className="right-filter"
-                  ></Col>
-                </Row>
-                <Row>
-                  <Col
-                    lg={12}
-                    className="mt-3"
-                  >
-                    <Card
-                      id="card-task"
-                      style={{
-                        overflowX: 'hidden',
-                        paddingTop: '0px',
-                        height: 'auto',
+            <Col
+              lg={12}
+              style={{ paddingLeft: '0px' }}
+            >
+              <Row>
+                <Col
+                  lg={6}
+                  className="left-add"
+                >
+                  <span>Team Work</span>
+                  {userDetails?.role !== 'GUEST' && (
+                    <i
+                      onClick={() => {
+                        setSelectedTask()
+                        setShowAddTask(true)
+                        setSelectedProject()
                       }}
-                    >
-                      {/* <Row id="agenda">
+                      className="fa fa-plus-circle"
+                      style={{ cursor: 'pointer' }}
+                    ></i>
+                  )}
+                </Col>
+                <Col
+                  lg={6}
+                  className="right-filter"
+                ></Col>
+              </Row>
+              <Row>
+                <Col
+                  lg={12}
+                  className="mt-3"
+                >
+                  <Card
+                    id="card-task"
+                    style={{
+                      overflowX: 'hidden',
+                      paddingTop: '0px',
+                      height: 'auto',
+                    }}
+                  >
+                    {/* <Row id="agenda">
                       <Col lg={4}>
                         <Button variant="light" size="sm" className="left-btn">
                           <BsChevronDoubleLeft /> Week
@@ -1985,47 +1981,47 @@ const handleVerifyTask = async () => {
                         </Button>
                       </Col>
                     </Row> */}
-                      <CustomCalendar
-                        setTeamWorkList={setTeamWorkList}
-                        isChange={isChange}
-                      />
+                    <CustomCalendar
+                      setTeamWorkList={setTeamWorkList}
+                      isChange={isChange}
+                    />
+                    <div
+                      className="mt-3"
+                      style={{
+                        height: '90vh',
+                        overflowY: 'auto',
+                        overflowX: 'hidden',
+                      }}
+                    >
                       <div
-                        className="mt-3"
-                        style={{
-                          height: '90vh',
-                          overflowY: 'auto',
-                          overflowX: 'hidden',
-                        }}
+                        id="list_ui"
+                        className="mt-2"
                       >
-                        <div
-                          id="list_ui"
-                          className="mt-2"
-                        >
-                          <Row className={teamWorkList?.length === 0 ? 'alig-nodata' : 'px-0'}>
-                            {teamWorkList && teamWorkList?.length === 0 && <p>No task found.</p>}
-                            {teamWorkList &&
-                              teamWorkList?.length > 0 &&
-                              teamWorkList?.map((task, taskIndex) => (
-                                <>
-                                  {taskIndex === 0 || task.dueDate !== teamWorkList[taskIndex - 1].dueDate ? (
-                                    <Col
-                                      lg={1}
-                                      className="border-top day v-align completed_task"
-                                    >
-                                      {formatDate(task.dueDate)}
-                                    </Col>
-                                  ) : (
-                                    <Col
-                                      lg={1}
-                                      className="v-align "
-                                    ></Col>
-                                  )}
+                        <Row className={teamWorkList?.length === 0 ? 'alig-nodata' : 'px-0'}>
+                          {teamWorkList && teamWorkList?.length === 0 && <p>No task found.</p>}
+                          {teamWorkList &&
+                            teamWorkList?.length > 0 &&
+                            teamWorkList?.map((task, taskIndex) => (
+                              <>
+                                {taskIndex === 0 || task.dueDate !== teamWorkList[taskIndex - 1].dueDate ? (
                                   <Col
-                                    lg={11}
-                                    className="border-start border-bottom d-flex justify-content-start px-0"
+                                    lg={1}
+                                    className="border-top day v-align completed_task"
                                   >
-                                    <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
-                                      {/* {task?.isReOpen && (
+                                    {formatDate(task.dueDate)}
+                                  </Col>
+                                ) : (
+                                  <Col
+                                    lg={1}
+                                    className="v-align "
+                                  ></Col>
+                                )}
+                                <Col
+                                  lg={11}
+                                  className="border-start border-bottom d-flex justify-content-start px-0"
+                                >
+                                  <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
+                                    {/* {task?.isReOpen && (
                                       <div className="d-flex align-items-center">
                                         <div className="d-flex align-items-center red-flag">
                                           <i
@@ -2036,217 +2032,214 @@ const handleVerifyTask = async () => {
                                       </div>
                                     )} */}
 
-                                      <Col
-                                        lg={4}
-                                        className="middle"
-                                      >
-                                        {((userDetails.role === 'LEAD' && (userDetails.id === task?.assignedTo?._id || task?.lead?.includes(userDetails.id) || userDetails.id === task?.createdBy?._id)) || userDetails.role === 'SUPER_ADMIN' || userDetails.role === 'ADMIN') && (
-                                          <Dropdown>
-                                            <Dropdown.Toggle
-                                              variant="success"
-                                              id="dropdown-basic"
-                                              style={{ padding: '0' }}
-                                            >
-                                              {task.status === 'NOT_STARTED' && (
-                                                <i
-                                                  className="fa fa-check-circle secondary"
-                                                  aria-hidden="true"
-                                                ></i>
-                                              )}
-                                              {task.status === 'ONGOING' && (
-                                                <i
-                                                  className="fa fa-check-circle warning"
-                                                  aria-hidden="true"
-                                                ></i>
-                                              )}
-                                              {task.status === 'COMPLETED' && (
-                                                <i
-                                                  className="fa fa-check-circle success"
-                                                  aria-hidden="true"
-                                                ></i>
-                                              )}
-                                              {task.status === 'ONHOLD' && (
-                                                <i
-                                                  className="fa fa-check-circle warning"
-                                                  aria-hidden="true"
-                                                ></i>
-                                              )}
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
-                                              <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
-                                                <i
-                                                  className="fa fa-check-circle secondary"
-                                                  aria-hidden="true"
-                                                ></i>
-                                                Not Started
-                                              </Dropdown.Item>
-                                              <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONGOING')}>
-                                                <i
-                                                  className="fa fa-check-circle warning"
-                                                  aria-hidden="true"
-                                                ></i>
-                                                Ongoing
-                                              </Dropdown.Item>
-                                              <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'COMPLETED')}>
-                                                <i
-                                                  className="fa fa-check-circle success"
-                                                  aria-hidden="true"
-                                                ></i>{' '}
-                                                Completed
-                                              </Dropdown.Item>
-                                              <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
-                                                <i
-                                                  className="fa fa-check-circle warning"
-                                                  aria-hidden="true"
-                                                ></i>{' '}
-                                                On Hold
-                                              </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                          </Dropdown>
-                                        )}
-
-                                        <OverlayTrigger
-                                          placement="top"
-                                          overlay={<Tooltip>{task?.title}</Tooltip>}
-                                        >
-                                          <h5
-                                            onClick={() => handleViewDetails(task?._id)}
-                                            className="text-truncate"
+                                    <Col
+                                      lg={4}
+                                      className="middle"
+                                    >
+                                      {((userDetails.role === 'LEAD' && (userDetails.id === task?.assignedTo?._id || task?.lead?.includes(userDetails.id) || userDetails.id === task?.createdBy?._id)) || userDetails.role === 'SUPER_ADMIN' || userDetails.role === 'ADMIN') && (
+                                        <Dropdown>
+                                          <Dropdown.Toggle
+                                            variant="success"
+                                            id="dropdown-basic"
+                                            style={{ padding: '0' }}
                                           >
-                                            {task?.title}
-                                          </h5>
-                                        </OverlayTrigger>
-                                        {task?.isReOpen && (
-                                          <div className="red-flag">
-                                            <i
-                                              class="fa fa-flag"
-                                              aria-hidden="true"
-                                            ></i>
-                                          </div>
-                                        )}
-                                      </Col>
-                                      <Col
-                                        lg={2}
-                                        className="middle"
+                                            {task.status === 'NOT_STARTED' && (
+                                              <i
+                                                className="fa fa-check-circle secondary"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                            {task.status === 'ONGOING' && (
+                                              <i
+                                                className="fa fa-check-circle warning"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                            {task.status === 'COMPLETED' && (
+                                              <i
+                                                className="fa fa-check-circle success"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                            {task.status === 'ONHOLD' && (
+                                              <i
+                                                className="fa fa-check-circle warning"
+                                                aria-hidden="true"
+                                              ></i>
+                                            )}
+                                          </Dropdown.Toggle>
+
+                                          <Dropdown.Menu>
+                                            <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
+                                              <i
+                                                className="fa fa-check-circle secondary"
+                                                aria-hidden="true"
+                                              ></i>
+                                              Not Started
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONGOING')}>
+                                              <i
+                                                className="fa fa-check-circle warning"
+                                                aria-hidden="true"
+                                              ></i>
+                                              Ongoing
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'COMPLETED')}>
+                                              <i
+                                                className="fa fa-check-circle success"
+                                                aria-hidden="true"
+                                              ></i>{' '}
+                                              Completed
+                                            </Dropdown.Item>
+                                            <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
+                                              <i
+                                                className="fa fa-check-circle warning"
+                                                aria-hidden="true"
+                                              ></i>{' '}
+                                              On Hold
+                                            </Dropdown.Item>
+                                          </Dropdown.Menu>
+                                        </Dropdown>
+                                      )}
+
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>{task?.title}</Tooltip>}
                                       >
-                                        {task?.status !== 'COMPLETED' && (
-                                          <small>
-                                            <Badge bg={task?.dueToday ? 'danger' : 'primary'}>{moment(task?.dueDate?.split('T')[0]).format('DD/MM/YYYY')}</Badge>
-                                          </small>
-                                        )}
-                                        {task?.status === 'COMPLETED' && (
-                                          <small>
-                                            <Badge bg="success">{moment(task?.completedDate?.split('T')[0]).format('DD/MM/YYYY')}</Badge>
-                                          </small>
-                                        )}
-                                      </Col>
-                                      <Col
-                                        lg={3}
-                                        className="middle"
-                                      >
-                                        <>
-                                          {['top'].map(placement => (
-                                            <OverlayTrigger
-                                              key={placement}
-                                              placement={placement}
-                                              overlay={<Tooltip id={`tooltip-${placement}`}>{task?.assignedTo?.name}</Tooltip>}
-                                            >
-                                              <Button className="tooltip-button br0">
-                                                {task?.assignedTo?.name && (
-                                                  <small
-                                                    className="nameTag text-truncate pt-2"
-                                                    title="Assigned To"
-                                                  >
-                                                    <img
-                                                      src={avtar}
-                                                      alt="userAvtar"
-                                                    />{' '}
-                                                    {task?.assignedTo?.name.split(' ')[0] + ' '}
-                                                    {task?.assignedTo?.name.split(' ')[1] && task?.assignedTo?.name.split(' ')[1]?.charAt(0) + '.'}
-                                                  </small>
-                                                )}
-                                              </Button>
-                                            </OverlayTrigger>
-                                          ))}
-                                        </>
-                                      </Col>
-                                      <Col
-                                        lg={2}
-                                        className="text-end middle"
-                                        style={{ justifyContent: 'end' }}
-                                      >
+                                        <h5
+                                          onClick={() => handleViewDetails(task?._id)}
+                                          className="text-truncate"
+                                        >
+                                          {task?.title}
+                                        </h5>
+                                      </OverlayTrigger>
+                                      {task?.isReOpen && (
+                                        <div className="red-flag">
+                                          <i
+                                            class="fa fa-flag"
+                                            aria-hidden="true"
+                                          ></i>
+                                        </div>
+                                      )}
+                                    </Col>
+                                    <Col
+                                      lg={2}
+                                      className="middle"
+                                    >
+                                      {task?.status !== 'COMPLETED' && (
                                         <small>
-                                          {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
-                                          {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
-                                          {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                                          {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                                          <Badge bg={task?.dueToday ? 'danger' : 'primary'}>{moment(task?.dueDate?.split('T')[0]).format('DD/MM/YYYY')}</Badge>
                                         </small>
-                                      </Col>
-                                      <Col
-                                        lg={1}
-                                        id="dropdown_action"
-                                        className="text-end "
-                                        style={{
-                                          position: 'absolute',
-                                          right: '20px',
-                                        }}
-                                      >
-                                        {((userDetails.role === 'LEAD' && (userDetails.id === task?.assignedTo?._id || task?.lead?.includes(userDetails.id) || userDetails.id === task?.createdBy?._id)) || userDetails.role === 'SUPER_ADMIN' || userDetails.role === 'ADMIN') && (
-                                          <Dropdown>
-                                            <Dropdown.Toggle
-                                              variant="defult"
-                                              id="dropdown-basic"
-                                              style={{
-                                                padding: '0px',
-                                                textAlign: 'end',
+                                      )}
+                                      {task?.status === 'COMPLETED' && (
+                                        <small>
+                                          <Badge bg="success">{moment(task?.completedDate?.split('T')[0]).format('DD/MM/YYYY')}</Badge>
+                                        </small>
+                                      )}
+                                    </Col>
+                                    <Col
+                                      lg={3}
+                                      className="middle"
+                                    >
+                                      <>
+                                        {['top'].map(placement => (
+                                          <OverlayTrigger
+                                            key={placement}
+                                            placement={placement}
+                                            overlay={<Tooltip id={`tooltip-${placement}`}>{task?.assignedTo?.name}</Tooltip>}
+                                          >
+                                            <Button className="tooltip-button br0">
+                                              {task?.assignedTo?.name && (
+                                                <small
+                                                  className="nameTag text-truncate pt-2"
+                                                  title="Assigned To"
+                                                >
+                                                  <img
+                                                    src={avtar}
+                                                    alt="userAvtar"
+                                                  />{' '}
+                                                  {task?.assignedTo?.name.split(' ')[0] + ' '}
+                                                  {task?.assignedTo?.name.split(' ')[1] && task?.assignedTo?.name.split(' ')[1]?.charAt(0) + '.'}
+                                                </small>
+                                              )}
+                                            </Button>
+                                          </OverlayTrigger>
+                                        ))}
+                                      </>
+                                    </Col>
+                                    <Col
+                                      lg={2}
+                                      className="text-end middle"
+                                      style={{ justifyContent: 'end' }}
+                                    >
+                                      <small>
+                                        {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                                        {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
+                                        {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
+                                        {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                                      </small>
+                                    </Col>
+                                    <Col
+                                      lg={1}
+                                      id="dropdown_action"
+                                      className="text-end "
+                                      style={{
+                                        position: 'absolute',
+                                        right: '20px',
+                                      }}
+                                    >
+                                      {((userDetails.role === 'LEAD' && (userDetails.id === task?.assignedTo?._id || task?.lead?.includes(userDetails.id) || userDetails.id === task?.createdBy?._id)) || userDetails.role === 'SUPER_ADMIN' || userDetails.role === 'ADMIN') && (
+                                        <Dropdown>
+                                          <Dropdown.Toggle
+                                            variant="defult"
+                                            id="dropdown-basic"
+                                            style={{
+                                              padding: '0px',
+                                              textAlign: 'end',
+                                            }}
+                                          >
+                                            <i className="fa fa-ellipsis-v"></i>
+                                          </Dropdown.Toggle>
+
+                                          <Dropdown.Menu>
+                                            <Dropdown.Item
+                                              onClick={() => {
+                                                setSelectedProject()
+                                                setShowAddTask(true)
+                                                setSelectedTask(task)
                                               }}
                                             >
-                                              <i className="fa fa-ellipsis-v"></i>
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
+                                              Edit
+                                            </Dropdown.Item>
+                                            {task?.status === 'COMPLETED' && (
                                               <Dropdown.Item
                                                 onClick={() => {
-                                                  setSelectedProject()
-                                                  setShowAddTask(true)
-                                                  setSelectedTask(task)
+                                                  openReopenTaskModal(task)
                                                 }}
                                               >
-                                                Edit
+                                                Reopen task
                                               </Dropdown.Item>
-                                              {task?.status === 'COMPLETED' && (
-                                                <Dropdown.Item
-                                                  onClick={() => {
-                                                    openReopenTaskModal(task)
-                                                  }}
-                                                >
-                                                  Reopen task
-                                                </Dropdown.Item>
-                                              )}
-                                              <Dropdown.Item>Add Subtask</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                          </Dropdown>
-                                        )}
-                                      </Col>
-                                    </Row>
-                                  </Col>
-                                </>
-                              ))}
-                          </Row>
-                        </div>
+                                            )}
+                                            <Dropdown.Item>Add Subtask</Dropdown.Item>
+                                          </Dropdown.Menu>
+                                        </Dropdown>
+                                      )}
+                                    </Col>
+                                  </Row>
+                                </Col>
+                              </>
+                            ))}
+                        </Row>
                       </div>
-                    </Card>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Container>
-        )
-      }
-
+                    </div>
+                  </Card>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      )}
       {/* modal for re-open task */}
-
       <Modal
         centered
         show={reopenTaskModal}
@@ -2327,9 +2320,7 @@ const handleVerifyTask = async () => {
           </div>
         </Modal.Body>
       </Modal>
-
       {/* ///// */}
-
       <Modal
         show={modalShow}
         onHide={() => setModalShow(false)}
@@ -2342,7 +2333,6 @@ const handleVerifyTask = async () => {
           <AddRatingModal />
         </Modal.Body>
       </Modal>
-
       <ViewTaskModal
         showViewTask={showViewTask}
         closeViewTaskModal={closeViewTaskModal}
@@ -2351,7 +2341,6 @@ const handleVerifyTask = async () => {
         setIsChange={setIsChange}
         isChange={isChange}
       />
-
       {/* <Modal
         className="profile-modal"
         show={showModalOnLogin}
@@ -2372,7 +2361,6 @@ const handleVerifyTask = async () => {
           <UserForm handleModalClose={handleProfileModalClose} />
         </Modal.Body>
       </Modal> */}
-
       <Offcanvas
         className="Offcanvas-modal profile-modal"
         style={{ width: '600px' }}
@@ -2395,9 +2383,7 @@ const handleVerifyTask = async () => {
           <UserForm handleModalClose={handleProfileModalClose} />
         </Offcanvas.Body>
       </Offcanvas>
-
       {/* verify */}
-
       <Modal
         centered
         show={showModal}
@@ -2432,7 +2418,6 @@ const handleVerifyTask = async () => {
           </Button>
         </Modal.Footer>
       </Modal>
-
       {loading ? <Loader /> : null}
       {toaster && (
         <Toaster
