@@ -475,70 +475,76 @@ export default function RatingModalBody(props) {
           {userTasks.length > 0
             ? userTasks?.map((task, index) => {
                 return (
-                  <Accordion defaultActiveKey="0">
-                    <Accordion.Item eventKey={index}>
-                      <Accordion.Header>
-                        <strong>
-                          {task?._id?.projectId}
-                          {' / '}
-                          {task?._id?.section}
-                        </strong>
-                      </Accordion.Header>
+                  <div>
+                    <br></br>
+                    <span>
+                      {' '}
+                      <strong>
+                        {task?._id?.projectId}
+                        {' / '}
+                        {task?._id?.section}
+                      </strong>
+                    </span>
+                    <div>
                       {task?.tasks?.map((ele, i) => {
                         return (
-                          <Accordion.Body>
-                            {i + 1}
-                            {'. '}
-                            <a
-                              href={'view-task/' + ele._id}
-                              target="_blank"
-                            >
-                              {ele?.title}{' '}
-                            </a>{' '}
-                            {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
-                            <br></br>
-                            <span>
-                              Status: <strong style={{ color: '#808080' }}>{ele?.status}</strong>
-                            </span>
-                            {ele?.isVerified && (
-                              <Col style={{ marginTop: '20px' }}>
-                                {' '}
-                                <h6>
-                                  <strong>Verification Comments</strong>
-                                </h6>
-                                {ele?.verificationComments?.length ? (
-                                  ele?.verificationComments?.map((item, index) => {
-                                    const options = {
-                                      timeZone: 'Asia/Kolkata',
-                                      dateStyle: 'medium',
-                                      timeStyle: 'medium',
-                                    }
-                                    const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
+                          <Accordion defaultActiveKey={index} flush>
+                            <Accordion.Item eventKey={i+1}>
+                              <Accordion.Header>
+                                <a
+                                  href={'view-task/' + ele._id}
+                                  target="_blank"
+                                >
+                                  {ele?.title}{' '}
+                                </a>{' '}
+                                {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
+                                <br></br>
+                                <span>
+                                <strong style={{ color: '#808080' }}>{ele?.status}</strong>
+                                </span>
+                              </Accordion.Header>
+                              <Accordion.Body>
+                                {ele?.isVerified && (
+                                  <Col style={{ marginTop: '20px' }}>
+                                    {' '}
+                                    <h6>
+                                      <strong>Verification Comments</strong>
+                                    </h6>
+                                    {ele?.verificationComments?.length ? (
+                                      ele?.verificationComments?.map((item, index) => {
+                                        const options = {
+                                          timeZone: 'Asia/Kolkata',
+                                          dateStyle: 'medium',
+                                          timeStyle: 'medium',
+                                        }
+                                        const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
 
-                                    return (
-                                      <div
-                                        className="comment mb-0 mt-0 pt-0"
-                                        key={index}
-                                      >
-                                        <div className="pb-2">{item?.commentedBy?.name}</div>
-                                        <p
-                                          dangerouslySetInnerHTML={{ __html: item?.comment }}
-                                          className="comment-tex"
-                                        ></p>
-                                        <span className="date sub-text">{createdAt}</span>
-                                      </div>
-                                    )
-                                  })
-                                ) : (
-                                  <p>No Comments!</p>
+                                        return (
+                                          <div
+                                            className="comment mb-0 mt-0 pt-0"
+                                            key={index}
+                                          >
+                                            <div className="pb-2">{item?.commentedBy?.name}</div>
+                                            <p
+                                              dangerouslySetInnerHTML={{ __html: item?.comment }}
+                                              className="comment-tex"
+                                            ></p>
+                                            <span className="date sub-text">{createdAt}</span>
+                                          </div>
+                                        )
+                                      })
+                                    ) : (
+                                      <p>No Comments!</p>
+                                    )}
+                                  </Col>
                                 )}
-                              </Col>
-                            )}
-                          </Accordion.Body>
+                              </Accordion.Body>
+                            </Accordion.Item>
+                          </Accordion>
                         )
                       })}
-                    </Accordion.Item>
-                  </Accordion>
+                    </div>
+                  </div>
                 )
               })
             : 'No tasks found!'}
