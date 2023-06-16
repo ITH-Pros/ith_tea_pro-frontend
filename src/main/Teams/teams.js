@@ -797,6 +797,7 @@ export default function Teams(props) {
         />
 
         <Modal
+          centered
           show={confirmModalShow}
           onHide={() => {
             setConfirmModalShow(false);
@@ -808,13 +809,13 @@ export default function Teams(props) {
             <Modal.Title>Confirmation</Modal.Title>
           </Modal.Header>
           <Modal.Body className="text-center">
-            <h6>Are you sure you want to delete this user ?</h6>
+          <div className="form-group py-3">
+            <p>Are you sure you want to delete this user ?</p>
+            </div>
 
-            <div className="button-center-corformain mt-3">
-              <Button
-                variant="light"
-                size="sm"
-                style={{ marginRight: "10px" }}
+            <div className="row text-right">
+              <div className="col-md-12">
+              <Button  
                 onClick={() => {
                   setConfirmModalShow(false);
                 }}
@@ -822,17 +823,18 @@ export default function Teams(props) {
                 Cancel
               </Button>
               <Button
-                variant="danger"
-                size="sm"
+               variant="secondary" className="ms-2"
                 onClick={() => handleDeleteUser()}
               >
                 Delete
               </Button>
             </div>
+            </div>
           </Modal.Body>
         </Modal>
 
         <Modal
+          centered
           show={assignManagerModalShow}
           onHide={() => {
             setAssignManagerModalShow(false);
@@ -842,7 +844,7 @@ export default function Teams(props) {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <h2>Assign Manager</h2>
+             Assign Manager 
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -864,9 +866,8 @@ export default function Teams(props) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button className="btn btn-secondary"
-              variant="light"
-              size="sm"
+            <Button
+              variant="secondary" 
               style={{ marginRight: "10px" }}
               onClick={() => {
                 setAssignManagerModalShow(false);
@@ -875,9 +876,7 @@ export default function Teams(props) {
               Cancel
             </Button>
             <Button
-              variant="light"
-              size="sm"
-              className="confirm-button btn btn-primary"
+              variant="primary"               
               style={{ marginRight: "10px" }}
               onClick={() => {
                 assignManagers();

@@ -871,8 +871,9 @@ export default function AddTaskModal(props) {
                   md="5"
                 >
                   <Form.Label>Estimated Time</Form.Label>
-                  <div className="d-flex">
+                  <div className="d-flex flexWrap">
                     <Form.Control
+                      className="timeWth"
                       required
                       type="number"
                       max="23"
@@ -889,8 +890,9 @@ export default function AddTaskModal(props) {
                         }
                       }}
                     />
-                    <span className="mx-2">:</span>
+                    <span className="mx-2 centerColon">:</span>
                     <Form.Control
+                     className="timeWth"
                       required
                       type="number"
                       max="59"
@@ -954,8 +956,7 @@ export default function AddTaskModal(props) {
                 </Form.Group>
                 <Form.Group
                   as={Col}
-                  md="3"
-                  className="px-0"
+                  md="3" 
                 >
                   <Form.Label>Due Date</Form.Label>
                   <Form.Control

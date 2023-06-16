@@ -271,10 +271,10 @@ p {
 }
 
 
-.estimated-time {
+/* .estimated-time {
   display: flex;
   align-items: center;
-}
+} */
 
 .estimated-time .time {
   display: flex;

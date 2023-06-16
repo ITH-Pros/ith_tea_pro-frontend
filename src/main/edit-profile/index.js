@@ -183,7 +183,7 @@ function UserForm(props) {
         
 
       
-             <Button variant="primary" size="sm" onClick={handleEditClick}>
+             <Button variant="primary" size="sm" onClick={handleEditClick} className="ms-2">
               Edit Profile
             </Button>
 

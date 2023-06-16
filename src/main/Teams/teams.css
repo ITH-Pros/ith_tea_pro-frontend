@@ -407,17 +407,17 @@ button.modal-close-btn:hover {
   border-radius: 5px;
 }
 
-.custom-modal .modal-header {
+/* .custom-modal .modal-header {
   background-color: #f2f2f2;
   padding: 15px;
   border-bottom: none;
-}
+} */
 
-.custom-modal .modal-title {
+/* .custom-modal .modal-title {
   font-size: 24px;
   font-weight: bold;
   margin: 0;
-}
+} */
 
 .custom-modal .modal-body {
   padding: 20px;
@@ -464,11 +464,12 @@ button.modal-close-btn:hover {
 }
 
 .custom-modal input[type="checkbox"]:checked ~ .checkmark {
-  border-color: #4caf50;
+  border-color: #8355ad;
 }
 
 .custom-modal input[type="checkbox"]:checked ~ .checkmark::after {
   display: block;
+  background-color: #8355ad
 }
 
 .custom-modal .manager-name {
@@ -476,13 +477,13 @@ button.modal-close-btn:hover {
   font-weight: bold;
 }
 
-.custom-modal .modal-footer {
+/* .custom-modal .modal-footer {
   border-top: none;
   padding: 15px;
   text-align: right;
-}
+} */
 
-.custom-modal .modal-footer button {
+/* .custom-modal .modal-footer button {
   background-color: #4caf50;
   color: #fff;
   border: none;
@@ -490,7 +491,7 @@ button.modal-close-btn:hover {
   font-size: 16px;
   cursor: pointer;
   border-radius:0.375rem
-}
+} */
 
 .custom-modal .modal-footer button:not(:last-child) {
   margin-right: 10px;

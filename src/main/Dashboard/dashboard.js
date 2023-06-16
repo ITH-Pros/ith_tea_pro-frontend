@@ -2440,7 +2440,7 @@ const handleVerifyTask = async () => {
         <Modal.Body
           style={{ overflowY: "scroll", overflowX: "hidden" }}
         >
-          <div className="modal-body">
+          <div className="p-3">
             {!showNewDueDateField && (
               <div className="row">
                 <div className="col-md-12">
@@ -2473,7 +2473,7 @@ const handleVerifyTask = async () => {
               </div>
             )}
 
-            <div className="row">
+            <div className="row text-right">
               <div className="col-md-12">
                 {!showNewDueDateField && (
                   <>
@@ -2568,7 +2568,7 @@ const handleVerifyTask = async () => {
 
       {/* verify */}
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal centered show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Verify Task</Modal.Title>
         </Modal.Header>

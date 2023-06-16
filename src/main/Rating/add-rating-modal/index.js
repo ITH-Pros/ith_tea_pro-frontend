@@ -5,27 +5,14 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useState, useEffect } from "react";
 import "../rating.css";
-import {
-  addRatingOnTask,
-  // getAllAssignedProject,
-  // getProjectByProjectId,
-  getProjectsTask,
-  // getRatingList,
-  // getTaskDetailsByProjectId,
-} from '../../../services/user/api'
+import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
 import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../auth/AuthProvider'
 import { Accordion, Button } from 'react-bootstrap'
 
 export default function RatingModalBody(props) {
   const { setModalShow, data } = props
   const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6]
-  // const { taskFromDashBoard , onInit , setIsChange , isChange, setModalShow  } = props;
-  // console.log("taskFromDashBoard", taskFromDashBoard);
-  // const { taskFromDashBoard } = props;
-  // console.log("userin add rating modal", data?.user)
   let user = data?.user
   let date = data?.date
   let month = data?.month
@@ -46,7 +33,6 @@ export default function RatingModalBody(props) {
   const [toasterMessage, setToasterMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [validated, setValidated] = useState(false)
-  const navigate = useNavigate()
   const [userTasks, setUserTasks] = useState('')
 
   useEffect(() => {
@@ -310,7 +296,7 @@ export default function RatingModalBody(props) {
         setShowToaster(true)
       } else {
         let allTask = tasks?.data
-        console.log(allTask)
+        // console.log(allTask)
         setUserTasks(allTask)
       }
     } catch (error) {
@@ -330,11 +316,11 @@ export default function RatingModalBody(props) {
         onSubmit={handleSubmit}
       >
         <Row className="mb-3">
-          <Form.Group
+          <Col
             as={Col}
-            md="6"
+            md="12"
           >
-            <Form.Label>{user?.name}</Form.Label>
+            <h3 className="userName">{user?.name}</h3>
             {/* <Form.Control
               required
               as="select" 
@@ -355,7 +341,7 @@ export default function RatingModalBody(props) {
             <Form.Control.Feedback type="invalid">
               User name is required !!
             </Form.Control.Feedback> */}
-          </Form.Group>
+          </Col>
 
           <Form.Group
             as={Col}
@@ -467,7 +453,7 @@ export default function RatingModalBody(props) {
               placeholder="comment"
               value={ratingForm.comment}
               onChange={handleRatingFormChange}
-            ></Form.Control>
+            />
             <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
           </Form.Group>
           <Button
@@ -476,51 +462,90 @@ export default function RatingModalBody(props) {
             type="submit"
             className="text-center"
             style={{ marginTop: '20px' }}
+            disabled={!userTasks.length}
           >
             Submit
           </Button>
         </Row>
       </Form>
 
-      <div style={{ marginTop: '30px' }}>
-        <h2>Task List</h2>
-        {userTasks.length > 0
-          ? userTasks?.map((task, index) => {
-              return (
-                <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey={index}>
-                    <Accordion.Header>
-                      <strong>
-                        {task?._id?.projectId}
-                        {' / '}
-                        {task?._id?.section}
-                      </strong>
-                    </Accordion.Header>
-                    {task?.tasks?.map((ele, i) => {
-                      return (
-                        <Accordion.Body>
-                          {i + 1}
-                          {'. '}
-                          <a
-                            href={'view-task/' + ele._id}
-                            target="_blank"
-                          >
-                            {ele?.title}{' '}
-                          </a>{' '}
-                          {ele?.isVerified ? <i style={{ color: 'green' }}>Verified</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
-                          <br></br>
-                          <span style={{ color: '#808080' }}>
-                            <strong>{ele?.status}</strong>
-                          </span>
-                        </Accordion.Body>
-                      )
-                    })}
-                  </Accordion.Item>
-                </Accordion>
-              )
-            })
-          : 'No tasks found!'}
-      </div>
+      {userTasks?.length > 0 ? (
+        <div style={{ marginTop: '30px' }}>
+          <h5>Task List</h5>
+          {userTasks.length > 0
+            ? userTasks?.map((task, index) => {
+                return (
+                  <Accordion defaultActiveKey="0">
+                    <Accordion.Item eventKey={index}>
+                      <Accordion.Header>
+                        <strong>
+                          {task?._id?.projectId}
+                          {' / '}
+                          {task?._id?.section}
+                        </strong>
+                      </Accordion.Header>
+                      {task?.tasks?.map((ele, i) => {
+                        return (
+                          <Accordion.Body>
+                            {i + 1}
+                            {'. '}
+                            <a
+                              href={'view-task/' + ele._id}
+                              target="_blank"
+                            >
+                              {ele?.title}{' '}
+                            </a>{' '}
+                            {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
+                            <br></br>
+                            <span>
+                              Status: <strong style={{ color: '#808080' }}>{ele?.status}</strong>
+                            </span>
+                            {ele?.isVerified && (
+                              <Col style={{ marginTop: '20px' }}>
+                                {' '}
+                                <h6>
+                                  <strong>Verification Comments</strong>
+                                </h6>
+                                {ele?.verificationComments?.length ? (
+                                  ele?.verificationComments?.map((item, index) => {
+                                    const options = {
+                                      timeZone: 'Asia/Kolkata',
+                                      dateStyle: 'medium',
+                                      timeStyle: 'medium',
+                                    }
+                                    const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
+
+                                    return (
+                                      <div
+                                        className="comment mb-0 mt-0 pt-0"
+                                        key={index}
+                                      >
+                                        <div className="pb-2">{item?.commentedBy?.name}</div>
+                                        <p
+                                          dangerouslySetInnerHTML={{ __html: item?.comment }}
+                                          className="comment-tex"
+                                        ></p>
+                                        <span className="date sub-text">{createdAt}</span>
+                                      </div>
+                                    )
+                                  })
+                                ) : (
+                                  <p>No Comments!</p>
+                                )}
+                              </Col>
+                            )}
+                          </Accordion.Body>
+                        )
+                      })}
+                    </Accordion.Item>
+                  </Accordion>
+                )
+              })
+            : 'No tasks found!'}
+        </div>
+      ) : (
+        <div style={{ marginTop: '30px' }}>No tasks available, cannot rate.</div>
+      )}
 
       {loading ? <Loader /> : null}
       {toaster && (
