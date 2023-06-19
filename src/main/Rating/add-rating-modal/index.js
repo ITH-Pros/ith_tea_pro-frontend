@@ -21,7 +21,6 @@ export default function RatingModalBody(props) {
     rating: '',
     comment: '',
     selectedDate: '',
-    selectedUser: '',
     selectedTask: '',
     userList: [],
     taskList: [],
@@ -40,7 +39,6 @@ export default function RatingModalBody(props) {
       const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`
       setRatingForm(prevRatingData => ({
         ...prevRatingData,
-        selectedUser: user.name,
         selectedDate: formattedDate,
       }))
       let id = [user._id]
@@ -205,10 +203,9 @@ export default function RatingModalBody(props) {
   const handleSubmit = async event => {
     setValidated(true)
     event.preventDefault()
-    let { rating, comment, selectedDate, selectedUser } = ratingForm
+    let { rating, comment, selectedDate } = ratingForm
 
-    // console.log(selectedUser)
-    if (!ratingForm.comment || !ratingForm.selectedDate || !ratingForm.selectedUser || !ratingForm.rating || ratingForm.rating > 6 || ratingForm.rating < 0) {
+    if (!ratingForm.comment || !ratingForm.selectedDate || !ratingForm.rating || ratingForm.rating > 6 || ratingForm.rating < 0) {
       return
     } else {
       // convert date in day month year format for backend
@@ -308,20 +305,22 @@ export default function RatingModalBody(props) {
   }
 
   return (
-    <div className="dv-50-rating ">
-      <Form
-        className="margin-form"
-        noValidate
-        validated={validated}
-        onSubmit={handleSubmit}
-      >
-        <Row className="mb-3">
-          <Col
-            as={Col}
-            md="12"
+    <>
+      {userTasks?.length > 0 ? (
+        <div className="dv-50-rating ">
+          <Form
+            className="margin-form"
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
           >
-            <h3 className="userName">{user?.name}</h3>
-            {/* <Form.Control
+            <Row className="mb-3">
+              <Col
+                as={Col}
+                md="12"
+              >
+                <h3 className="userName">{user?.name}</h3>
+                {/* <Form.Control
               required
               as="select" 
               type="text"
@@ -341,37 +340,37 @@ export default function RatingModalBody(props) {
             <Form.Control.Feedback type="invalid">
               User name is required !!
             </Form.Control.Feedback> */}
-          </Col>
+              </Col>
 
-          <Form.Group
-            as={Col}
-            md="6"
-            controlId="rating_date"
-          >
-            <Form.Label>Date</Form.Label>
-            <Form.Control
-              required
-              type="date"
-              name="selectedDate"
-              placeholder="Rating Date"
-              // onChange={(e)=>console.log(e.target.value)}
-              max={new Date().toISOString().split('T')[0]}
-              value={ratingForm.selectedDate}
-              // disabled={taskFromDashBoard ? true : false}
-            />
-            <Form.Control.Feedback type="invalid">
-              {ratingForm.selectedDate === '' && 'Date is required !!'}
-              {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
-            </Form.Control.Feedback>
-          </Form.Group>
+              <Form.Group
+                as={Col}
+                md="6"
+                controlId="rating_date"
+              >
+                <Form.Label>Date</Form.Label>
+                <Form.Control
+                  required
+                  type="date"
+                  name="selectedDate"
+                  placeholder="Rating Date"
+                  // onChange={(e)=>console.log(e.target.value)}
+                  max={new Date().toISOString().split('T')[0]}
+                  value={ratingForm.selectedDate}
+                  // disabled={taskFromDashBoard ? true : false}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {ratingForm.selectedDate === '' && 'Date is required !!'}
+                  {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          <Form.Group
-            as={Col}
-            md="6"
-            controlId="validationCustom01"
-          >
-            <Form.Label>Rating</Form.Label>
-            {/* <Form.Control
+              <Form.Group
+                as={Col}
+                md="6"
+                controlId="validationCustom01"
+              >
+                <Form.Label>Rating</Form.Label>
+                {/* <Form.Control
               required
               type="number"
               name="rating"
@@ -382,36 +381,36 @@ export default function RatingModalBody(props) {
               min="0"
               max="6"
             /> */}
-            {/* this would be a select box */}
-            <Form.Control
-              required
-              as="select"
-              type="select"
-              name="rating"
-              onChange={handleRatingFormChange}
-              value={ratingForm.rating}
-              // disabled={taskFromDashBoard ? true : false}
-            >
-              <option
-                value=""
-                disabled
-              >
-                Select Rating
-              </option>
-              {ratingValues.map(value => (
-                <option
-                  key={value}
-                  value={value}
+                {/* this would be a select box */}
+                <Form.Control
+                  required
+                  as="select"
+                  type="select"
+                  name="rating"
+                  onChange={handleRatingFormChange}
+                  value={ratingForm.rating}
+                  // disabled={taskFromDashBoard ? true : false}
                 >
-                  {value}
-                </option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
-          </Form.Group>
-        </Row>
-        <Row>
-          {/* <Form.Group as={Col} md="12">
+                  <option
+                    value=""
+                    disabled
+                  >
+                    Select Rating
+                  </option>
+                  {ratingValues.map(value => (
+                    <option
+                      key={value}
+                      value={value}
+                    >
+                      {value}
+                    </option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Row>
+              {/* <Form.Group as={Col} md="12">
             <Form.Label>Select Task</Form.Label>
             <Form.Control
               required
@@ -433,121 +432,125 @@ export default function RatingModalBody(props) {
               Task is required !!
             </Form.Control.Feedback>
           </Form.Group> */}
-          {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
-            <Form.Group
-              as={Col}
-              md="12"
-            >
-              <Form.Label>Completed Date</Form.Label>
-              <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
-            </Form.Group>
-          )}
-        </Row>
+              {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
+                <Form.Group
+                  as={Col}
+                  md="12"
+                >
+                  <Form.Label>Completed Date</Form.Label>
+                  <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
+                </Form.Group>
+              )}
+            </Row>
 
-        <Row className="desc">
-          <Form.Group>
-            <Form.Control
-              required
-              as="textarea"
-              name="comment"
-              placeholder="comment"
-              value={ratingForm.comment}
-              onChange={handleRatingFormChange}
-            />
-            <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
-          </Form.Group>
-          <Button
-            size="sm"
-            md="6"
-            type="submit"
-            className="text-center"
-            style={{ marginTop: '20px' }}
-            disabled={!userTasks.length}
-          >
-            Submit
-          </Button>
-        </Row>
-      </Form>
+            <Row className="desc">
+              <Form.Group>
+                <Form.Control
+                  required
+                  as="textarea"
+                  name="comment"
+                  placeholder="comment"
+                  value={ratingForm.comment}
+                  onChange={handleRatingFormChange}
+                />
+                <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
+              </Form.Group>
+              <Button
+                size="sm"
+                md="6"
+                type="submit"
+                className="text-center"
+                style={{ marginTop: '20px' }}
+                disabled={!userTasks.length}
+              >
+                Submit
+              </Button>
+            </Row>
+          </Form>
 
-      {userTasks?.length > 0 ? (
-        <div style={{ marginTop: '30px' }}>
-          <h5>Task List</h5>
-          {userTasks.length > 0
-            ? userTasks?.map((task, index) => {
-                return (
-                  <div>
-                    <br></br>
-                    <span>
-                      {' '}
-                      <strong>
-                        {task?._id?.projectId}
-                        {' / '}
-                        {task?._id?.section}
-                      </strong>
-                    </span>
+          <div style={{ marginTop: '30px' }}>
+            <h5>Task List</h5>
+            {userTasks.length > 0
+              ? userTasks?.map((task, index) => {
+                  return (
                     <div>
-                      {task?.tasks?.map((ele, i) => {
-                        return (
-                          <Accordion defaultActiveKey={index} flush>
-                            <Accordion.Item eventKey={i+1}>
-                              <Accordion.Header>
-                                <a
-                                  href={'view-task/' + ele._id}
-                                  target="_blank"
-                                >
-                                  {ele?.title}{' '}
-                                </a>{' '}
-                                {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
-                                <br></br>
-                                <span>
-                                <strong style={{ color: '#808080' }}>{ele?.status}</strong>
-                                </span>
-                              </Accordion.Header>
-                              <Accordion.Body>
-                                {ele?.isVerified && (
-                                  <Col style={{ marginTop: '20px' }}>
-                                    {' '}
-                                    <h6>
-                                      <strong>Verification Comments</strong>
-                                    </h6>
-                                    {ele?.verificationComments?.length ? (
-                                      ele?.verificationComments?.map((item, index) => {
-                                        const options = {
-                                          timeZone: 'Asia/Kolkata',
-                                          dateStyle: 'medium',
-                                          timeStyle: 'medium',
-                                        }
-                                        const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
+                      <br></br>
+                      <span>
+                        {' '}
+                        <strong>
+                          {task?._id?.projectId}
+                          {' / '}
+                          {task?._id?.section}
+                        </strong>
+                      </span>
+                      <div>
+                        {task?.tasks?.map((ele, i) => {
+                          return (
+                            <Accordion
+                              defaultActiveKey={index}
+                              flush
+                            >
+                              <Accordion.Item eventKey={i + 1}>
+                                <Accordion.Header>
+                                  <a
+                                    href={'view-task/' + ele._id}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    {ele?.title}{' '}
+                                  </a>{' '}
+                                  {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
+                                  <br></br>
+                                  <span>
+                                    <strong style={{ color: '#808080' }}>{ele?.status}</strong>
+                                  </span>
+                                </Accordion.Header>
+                                <Accordion.Body>
+                                  {ele?.isVerified && (
+                                    <Col style={{ marginTop: '20px' }}>
+                                      {' '}
+                                      <h6>
+                                        <strong>Verification Comments</strong>
+                                      </h6>
+                                      {ele?.verificationComments?.length ? (
+                                        ele?.verificationComments?.map((item, index) => {
+                                          const options = {
+                                            timeZone: 'Asia/Kolkata',
+                                            dateStyle: 'medium',
+                                            timeStyle: 'medium',
+                                          }
+                                          const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
 
-                                        return (
-                                          <div
-                                            className="comment mb-0 mt-0 pt-0"
-                                            key={index}
-                                          >
-                                            <div className="pb-2">{item?.commentedBy?.name}</div>
-                                            <p
-                                              dangerouslySetInnerHTML={{ __html: item?.comment }}
-                                              className="comment-tex"
-                                            ></p>
-                                            <span className="date sub-text">{createdAt}</span>
-                                          </div>
-                                        )
-                                      })
-                                    ) : (
-                                      <p>No Comments!</p>
-                                    )}
-                                  </Col>
-                                )}
-                              </Accordion.Body>
-                            </Accordion.Item>
-                          </Accordion>
-                        )
-                      })}
+                                          return (
+                                            <div
+                                              className="comment mb-0 mt-0 pt-0"
+                                              key={index}
+                                            >
+                                              <div className="pb-2">{item?.commentedBy?.name}</div>
+                                              <p
+                                                dangerouslySetInnerHTML={{ __html: item?.comment }}
+                                                className="comment-tex"
+                                              ></p>
+                                              <span className="date sub-text">{createdAt}</span>
+                                            </div>
+                                          )
+                                        })
+                                      ) : (
+                                        <p>No Comments!</p>
+                                      )}
+                                    </Col>
+                                  )}
+                                </Accordion.Body>
+                              </Accordion.Item>
+                            </Accordion>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
-                )
-              })
-            : 'No tasks found!'}
+                  )
+                })
+              : 'No tasks found!'}
+          </div>
         </div>
       ) : (
         <div style={{ marginTop: '30px' }}>No tasks available, cannot rate.</div>
@@ -561,6 +564,6 @@ export default function RatingModalBody(props) {
           close={() => showToaster(false)}
         />
       )}
-    </div>
+    </>
   )
 };
