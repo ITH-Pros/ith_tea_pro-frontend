@@ -33,6 +33,7 @@ import { useAuth } from "../../auth/AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Avatar } from "antd";
+import RatingGraph from "../Rating/rating-graph/rating-graph";
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -268,10 +269,14 @@ const [userDetails,setUserDetails]=useState([])
               <h2>{userDetails?.department||'--'} - ({userDetails?.designation||'--'})</h2>
               <p>{userDetails?.email||'--'}</p>
             </Col>
-            <Col lg="3 py-4">
+            <Col lg="3 py-4 pull-right">
               {/* <p>
                 Lead - <Badge bg="primary">Vi   jay Pandey</Badge>
               </p> */}
+              {/* </RatingGraph> */}
+              <RatingGraph  selectedUserId={selectedOption.value}  />
+
+
             </Col>
             <Col lg="3" className="px-5 py-2 text-end">
              

@@ -14,11 +14,15 @@ import Toaster from "../../../components/Toaster";
 import AddRating from "../add-rating";
 import MyCalendar from "./weekCalendra";
 import RatingModalBody from "../add-rating-modal";
+import RatingGraph from "../rating-graph/rating-graph";
 
 var month = moment().month();
 let currentYear = moment().year();
 
 export default function Dashboard(props) {
+
+  const ratings = [2, 3, 4, 5, 4, 3, 2, 4, 5, 6];
+
   const [ratingsArray, setRatings] = useState([]);
   const [toasterMessage, setToasterMessage] = useState("");
   const [toaster, showToaster] = useState(false);
@@ -380,7 +384,9 @@ export default function Dashboard(props) {
           <div></div>
         </div>
       ) : (
-        <MyCalendar />
+        <div>
+            <MyCalendar />
+          </div>
       )}
     </div>
   );

@@ -803,7 +803,7 @@ const handleVerifyTask = async () => {
                             <div className="d-flex align-items-center">
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag"
+                                  class="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -894,7 +894,7 @@ const handleVerifyTask = async () => {
                             {task?.isReOpen && (
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag"
+                                  class="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1052,7 +1052,7 @@ const handleVerifyTask = async () => {
                             <div className="d-flex align-items-center">
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag"
+                                  class="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1254,7 +1254,7 @@ const handleVerifyTask = async () => {
                             <div className="d-flex align-items-center">
                               <div className="d-flex align-items-center">
                                 <i
-                                  class="fa fa-flag red-flag"
+                                  class="fa fa-retweet red-flag"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1488,7 +1488,7 @@ const handleVerifyTask = async () => {
                               <div className="d-flex align-items-center">
                                 <div className="d-flex align-items-center red-flag">
                                   <i
-                                    className="fa fa-flag"
+                                    className="fa fa-retweet"
                                     aria-hidden="true"
                                   ></i>
                                 </div>
@@ -1528,7 +1528,7 @@ const handleVerifyTask = async () => {
                             {task?.isReOpen && (
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  className="fa fa-flag"
+                                  className="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -2024,7 +2024,7 @@ const handleVerifyTask = async () => {
                                       <div className="d-flex align-items-center">
                                         <div className="d-flex align-items-center red-flag">
                                           <i
-                                            class="fa fa-flag"
+                                            class="fa fa-retweet"
                                             aria-hidden="true"
                                           ></i>
                                         </div>
@@ -2115,7 +2115,7 @@ const handleVerifyTask = async () => {
                                       {task?.isReOpen && (
                                         <div className="red-flag">
                                           <i
-                                            class="fa fa-flag"
+                                            class="fa fa-retweet"
                                             aria-hidden="true"
                                           ></i>
                                         </div>

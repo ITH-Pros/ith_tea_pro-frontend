@@ -1,131 +1,67 @@
-/* Offcanvas Modal */
-.my-offcanvas {
-  font-family: Arial, sans-serif;
-}
-
-.my-offcanvas .my-offcanvas-title {
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
-  color: #8355ad;
-}
-
-.my-offcanvas .rating-details {
+.calendars {
   display: flex;
-  flex-direction: column;
-}
-
-.my-offcanvas .rating-details__date,
-.my-offcanvas .rating-details__rating {
-  display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
-.my-offcanvas .rating-details__date span:first-child,
-.my-offcanvas .rating-details__rating span:first-child {
-  font-weight: bold;
-  color: #333;
+.line-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.my-offcanvas .rating-details__date span:last-child,
-.my-offcanvas .rating-details__rating span:last-child {
-  font-weight: bold;
-  color: #8355ad;
+.rating-graph {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.my-offcanvas .rating-details__rating .task-rating {
-  margin-left: 1.5rem;
-}
-
-.my-offcanvas .rating-details__rating .task-rating p {
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.my-offcanvas .rating-details__rating .task-rating p:first-child {
-  font-weight: bold;
-}
-
-.my-offcanvas .rating-details__rating .task-rating p:last-child {
-  margin-bottom: 0;
-}
-
-/* Accordion */
-.my-accordion .my-accordion-item {
-  margin-bottom: 1.5rem;
-}
-
-.my-accordion .my-accordion-header {
-  cursor: pointer;
-  font-weight: bold;
-  padding: 1rem;
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-
-.my-accordion .my-accordion-header:hover {
-  background-color: #eaeaea;
-}
-
-.my-accordion .my-accordion-body {
-  padding: 1rem;
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
-  border-top: none;
-  border-radius: 6px;
-}
-
-.my-offcanvas-header .close {
-  color: #8355ad;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
-}
-
-.my-offcanvas-header .close:hover {
-  opacity: 1;
-}
-
-.my-offcanvas-body {
-  padding: 1.5rem;
-}
-
-/* Additional Styling */
 .my-offcanvas {
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  /* border-radius: 8px; */
-  width: 400px; /* Adjust the width as per your requirements */
+  max-width: 600px;
 }
 
 .my-offcanvas-header {
+  background-color: #f8f9fa;
   border-bottom: none;
 }
 
-.my-offcanvas-body {
-  overflow-y: auto;
-}
-
-.my-offcanvas-footer {
-  border-top: none;
-  padding: 1rem;
-  background-color: #f8f8f8;
-}
-
-.my-offcanvas-footer .btn {
-  background-color: #8355ad;
-  color: #fff;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
+.my-offcanvas-title {
+  color: #333;
   font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.my-offcanvas-footer .btn:hover {
-  background-color: #6a3d92;
+.my-offcanvas-body {
+  padding: 20px;
+}
+
+.rating-details {
+  margin-bottom: 20px;
+}
+
+.rating-details__date,
+.rating-details__rating {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.my-accordion-header {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.my-accordion-body {
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.task-rating {
+  margin-bottom: 10px;
+}
+
+.red-event {
+  background-color: red !important;
+  color: white;
 }
