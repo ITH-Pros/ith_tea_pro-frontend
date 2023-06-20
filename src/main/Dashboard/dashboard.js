@@ -264,203 +264,184 @@ const handleVerifyTask = async () => {
   };
 
   const getOverDueTaskList = async function () {
-    setLoading(true);
+    setLoading(true)
     try {
-      const tasks = await getOverDueTaskListData();
-      setLoading(false);
+      const tasks = await getOverDueTaskListData()
+      setLoading(false)
       if (tasks.error) {
-        setToasterMessage(
-          tasks?.error?.message ||
-            "Something Went Wrong While Fetching Overdue Tasks Data"
-        );
-        setShowToaster(true);
+        setToasterMessage(tasks?.error?.message || 'Something Went Wrong While Fetching Overdue Tasks Data')
+        setShowToaster(true)
       } else {
-        let allTask = tasks?.data;
-        allTask?.map((item) => {
-          let dateMonth = item?.dueDate?.split("T")[0];
-          let today = new Date();
-          today =
-            today.getFullYear() +
-            "-" +
-            (today.getMonth() + 1 <= 9
-              ? "0" + (today.getMonth() + 1)
-              : today.getMonth() + 1) +
-            "-" +
-            (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
+        let allTask = tasks?.data
+        console.log('object1', allTask)
+        allTask?.map(item => {
+          let dateMonth = item?.dueDate?.split('T')[0]
+          let today = new Date()
+          today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
           if (dateMonth === today) {
-            item.dueToday = true;
+            item.dueToday = true
           } else if (new Date().getTime() > new Date(item?.dueDate).getTime()) {
-            item.dueToday = true;
+            item.dueToday = true
           } else {
-            item.dueToday = false;
+            item.dueToday = false
           }
-        });
-        setOverdueWorkList(allTask);
+        })
+        setOverdueWorkList(allTask)
+        console.log('object2', allTask)
       }
     } catch (error) {
-      setLoading(false);
-      return error.message;
+      setLoading(false)
+      return error.message
     }
-  };
+  }
 
   const getAndSetAllUsers = async function () {
     let options = {
       currentPage: 1,
       rowsPerPage: 50,
-    };
+    }
 
-    setLoading(true);
+    setLoading(true)
     try {
       let params = {
         limit: options?.rowsPerPage,
         currentPage: options?.currentPage,
-      };
+      }
 
-      const projects = await getAllUsers({ params });
-      setLoading(false);
+      const projects = await getAllUsers({ params })
+      setLoading(false)
       if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        setToasterMessage(projects?.message || 'Something Went Wrong')
+        setShowToaster(true)
       } else {
-        setTeamMembers(projects?.data?.users || []);
+        setTeamMembers(projects?.data?.users || [])
       }
     } catch (error) {
-      setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
+      setLoading(false)
+      setToasterMessage(error?.error?.message || 'Something Went Wrong')
+      setShowToaster(true)
+      return error.message
     }
-  };
+  }
 
   const getPendingRating = async function (e) {
-    setLoading(true);
+    setLoading(true)
     let dataToSend = {
       // filterByTeamMember : e
       memberId: e,
-    };
+    }
 
-    console.log(dataToSend, "dataToSend");
+    console.log(dataToSend, 'dataToSend')
 
     try {
-      const tasks = await getAllPendingRating(dataToSend);
-      setLoading(false);
+      const tasks = await getAllPendingRating(dataToSend)
+      setLoading(false)
       if (tasks.error) {
-        setToasterMessage(
-          tasks?.message ||
-            "Something Went Wrong while fetching Pending Ratings Data"
-        );
-        setShowToaster(true);
+        setToasterMessage(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
+        setShowToaster(true)
       } else {
-        console.log(tasks, "tasks");
-        let allTask = tasks?.data;
-        allTask?.map((item) => {
-          let dateMonth = item?.dueDate?.split("T")[0];
-          let today = new Date();
-          today =
-            today.getFullYear() +
-            "-" +
-            (today.getMonth() + 1 <= 9
-              ? "0" + (today.getMonth() + 1)
-              : today.getMonth() + 1) +
-            "-" +
-            (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
+        console.log(tasks, 'tasks')
+        let allTask = tasks?.data
+        allTask?.map(item => {
+          let dateMonth = item?.dueDate?.split('T')[0]
+          let today = new Date()
+          today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
           if (dateMonth === today) {
-            item.dueToday = true;
+            item.dueToday = true
           } else if (new Date().getTime() > new Date(item?.dueDate).getTime()) {
-            item.dueToday = true;
+            item.dueToday = true
           } else {
-            item.dueToday = false;
+            item.dueToday = false
           }
-        });
-        setPendingRatingList(allTask);
+        })
+        setPendingRatingList(allTask)
       }
     } catch (error) {
-      setLoading(false);
-      return error.message;
+      setLoading(false)
+      return error.message
     }
-  };
-
-  const getAndSetAllProjects = async function () {
-    setLoading(true);
-    try {
-      const projects = await getAllProjects();
-      setLoading(false);
-      if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
-      } else {
-        setProjectListValue(projects.data);
-      }
-    } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      setLoading(false);
-      return error.message;
-    }
-  };
-
-  const getNewTasks = (data) => {
-    closeModal();
-    getAndSetAllProjects();
-  };
-
-  const closeModal = () => {
-    setShowAddTask(false);
-    setSelectedProject();
-    setSelectedTask();
-    onInit();
-    if (userDetails?.role !== "CONTRIBUTOR") {
-      // getTeamWorkList();
-      setIsChange(!isChange);
-    }
-  };
-
-  const openAddtask = (project) => {
-    setSelectedTask();
-    setSelectedProject(project);
-    setShowAddTask(true);
-  };
-
- const  reOpenTask = (task) => {
-  setSelectedProject();
-  // setShowAddTask(true);
-  setSelectedTask(task);
-  setIsReOpen(true);
   }
 
+  const getAndSetAllProjects = async function () {
+    setLoading(true)
+    try {
+      const projects = await getAllProjects()
+      setLoading(false)
+      if (projects.error) {
+        setToasterMessage(projects?.message || 'Something Went Wrong')
+        setShowToaster(true)
+      } else {
+        setProjectListValue(projects.data)
+      }
+    } catch (error) {
+      setToasterMessage(error?.error?.message || 'Something Went Wrong')
+      setShowToaster(true)
+      setLoading(false)
+      return error.message
+    }
+  }
+
+  const getNewTasks = data => {
+    closeModal()
+    getAndSetAllProjects()
+  }
+
+  const closeModal = () => {
+    setShowAddTask(false)
+    setSelectedProject()
+    setSelectedTask()
+    onInit()
+    if (userDetails?.role !== 'CONTRIBUTOR') {
+      // getTeamWorkList();
+      setIsChange(!isChange)
+    }
+  }
+
+  const openAddtask = project => {
+    setSelectedTask()
+    setSelectedProject(project)
+    setShowAddTask(true)
+  }
+
+  const reOpenTask = task => {
+    setSelectedProject()
+    // setShowAddTask(true);
+    setSelectedTask(task)
+    setIsReOpen(true)
+  }
 
   const handleStatusChange = (e, taskId, status) => {
-    const newStatus = status;
+    const newStatus = status
 
     let dataToSend = {
       taskId: taskId,
       status: newStatus,
-    };
-    updateTaskStatus(dataToSend);
-  };
+    }
+    updateTaskStatus(dataToSend)
+  }
 
-  const updateTaskStatus = async (dataToSend) => {
+  const updateTaskStatus = async dataToSend => {
     try {
-      const res = await updateTaskStatusById(dataToSend);
+      const res = await updateTaskStatusById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
       } else {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
 
-        onInit();
-        if (userDetails?.role !== "CONTRIBUTOR") {
+        onInit()
+        if (userDetails?.role !== 'CONTRIBUTOR') {
           // getTeamWorkList();
-          setIsChange(!isChange);
+          setIsChange(!isChange)
         }
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
+      setToasterMessage(error?.message || 'Something Went Wrong')
+      setShowToaster(true)
+      return error.message
     }
-  };
+  }
 
   // const getTeamWorkList = async () => {
   //   setLoading(true);
@@ -483,15 +464,15 @@ const handleVerifyTask = async () => {
   // };
 
   function formatDate(date) {
-    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
     // Subtract one day from the provided date
-    const dayBefore = new Date(date);
-    dayBefore.setDate(dayBefore.getDate());
+    const dayBefore = new Date(date)
+    dayBefore.setDate(dayBefore.getDate())
 
     // Get the day of the week and day of the month for the updated date
-    const dayOfWeek = days[dayBefore.getDay()];
-    const dayOfMonth = dayBefore.getDate();
+    const dayOfWeek = days[dayBefore.getDay()]
+    const dayOfMonth = dayBefore.getDate()
 
     return (
       <span>
@@ -499,127 +480,126 @@ const handleVerifyTask = async () => {
           {dayOfWeek} - <span>{dayOfMonth}</span>
         </p>
       </span>
-    );
+    )
   }
 
   function daysSince(dateStr) {
-    const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-    const currentDate = new Date();
-    const date = new Date(dateStr);
-    const diffDays = Math?.round(Math?.abs((currentDate - date) / oneDay));
-    return diffDays;
+    const oneDay = 24 * 60 * 60 * 1000 // hours * minutes * seconds * milliseconds
+    const currentDate = new Date()
+    const date = new Date(dateStr)
+    const diffDays = Math?.round(Math?.abs((currentDate - date) / oneDay))
+    return diffDays
   }
 
-  const skipReminder = async (event) => {
-    event.preventDefault();
+  const skipReminder = async event => {
+    event.preventDefault()
     const dataToSend = {
       profileCompleted: true,
-    };
+    }
 
     try {
-      setLoading(true);
-      const response = await editLogedInUserDetails(dataToSend);
-      setLoading(false);
+      setLoading(true)
+      const response = await editLogedInUserDetails(dataToSend)
+      setLoading(false)
 
       if (response.error) {
-        showToaster(true);
-        setToasterMessage("Something Went Wrong While Skipping the Reminder");
-        return;
+        showToaster(true)
+        setToasterMessage('Something Went Wrong While Skipping the Reminder')
+        return
       } else {
-        showToaster(true);
-        setToasterMessage("Profile Update Skipped Succesfully");
-        handleProfileModalClose();
+        showToaster(true)
+        setToasterMessage('Profile Update Skipped Succesfully')
+        handleProfileModalClose()
       }
     } catch (error) {
-      setLoading(false);
-      return error.message;
+      setLoading(false)
+      return error.message
     }
-  };
+  }
 
   const closeViewTaskModal = () => {
-    setShowViewTask(false);
-    setSelectedTaskId(null);
-  };
+    setShowViewTask(false)
+    setSelectedTaskId(null)
+  }
 
   const handleViewDetails = (taskId, param) => {
-    if (param === "isVerified") {
+    if (param === 'isVerified') {
       // add a new status in task that is VERIFIED in the task status array
       // update the task status
     }
 
-    setSelectedTaskId(taskId);
-    setShowViewTask(true);
-  };
+    setSelectedTaskId(taskId)
+    setShowViewTask(true)
+  }
 
   // Reopen Task
-  const [reopenTaskModal, setReopenTaskModal] = useState(false);
-  const [newDueDate, setNewDueDate] = useState("");
-  const [showNewDueDateField, setShowNewDueDateField] = useState(false);
-  const [reopenTaskId, setReopenTaskId] = useState(null);
-  const [taskDetails , setTaskDetails] = useState(null);
+  const [reopenTaskModal, setReopenTaskModal] = useState(false)
+  const [newDueDate, setNewDueDate] = useState('')
+  const [showNewDueDateField, setShowNewDueDateField] = useState(false)
+  const [reopenTaskId, setReopenTaskId] = useState(null)
+  const [taskDetails, setTaskDetails] = useState(null)
 
-  const openReopenTaskModal = (taskId) => {
-    console.log(taskId);
-    setReopenTaskId(taskId._id);
+  const openReopenTaskModal = taskId => {
+    console.log(taskId)
+    setReopenTaskId(taskId._id)
     // setTaskDetails(taskId);
-    setReopenTaskModal(true);
-
-  };
+    setReopenTaskModal(true)
+  }
 
   const closeReopenTaskModal = () => {
-    setReopenTaskModal(false);
-    setReopenTaskId(null);
-    setShowNewDueDateField(false);
-    setNewDueDate("");
-  };
+    setReopenTaskModal(false)
+    setReopenTaskId(null)
+    setShowNewDueDateField(false)
+    setNewDueDate('')
+  }
 
   const handleReopenConfirmation = () => {
-    reOpenTask(taskDetails);
-    setShowNewDueDateField(true);
-  };
+    reOpenTask(taskDetails)
+    setShowNewDueDateField(true)
+  }
 
-  const handleNewDueDate = (e) => {
-    const selectedDueDate = e.target.value;
-    setNewDueDate(selectedDueDate);
-  };
+  const handleNewDueDate = e => {
+    const selectedDueDate = e.target.value
+    setNewDueDate(selectedDueDate)
+  }
 
   const handleSubmit = async () => {
-    console.log(newDueDate); // Access the new due date from the state
+    console.log(newDueDate) // Access the new due date from the state
 
     // ... Perform any additional actions upon submitting the new due date
-    if (newDueDate === "") {
-      setToasterMessage("Please Select New Due Date");
-      setShowToaster(true);
-      return;
+    if (newDueDate === '') {
+      setToasterMessage('Please Select New Due Date')
+      setShowToaster(true)
+      return
     }
 
     let dataToSend = {
       taskId: reopenTaskId,
       dueDate: newDueDate,
-    };
+    }
 
     try {
-      const res = await reopenTaskById(dataToSend);
+      const res = await reopenTaskById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
       } else {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
-        onInit();
-        if (userDetails?.role !== "CONTRIBUTOR") {
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
+        onInit()
+        if (userDetails?.role !== 'CONTRIBUTOR') {
           // getTeamWorkList();
-          setIsChange(!isChange);
+          setIsChange(!isChange)
         }
-        closeReopenTaskModal();
-        setIsReOpen(false);
+        closeReopenTaskModal()
+        setIsReOpen(false)
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
+      setToasterMessage(error?.message || 'Something Went Wrong')
+      setShowToaster(true)
+      return error.message
     }
-  };
+  }
 
   return (
     <div className="dashboard_camp  rightDashboard">
@@ -899,6 +879,14 @@ const handleVerifyTask = async () => {
                                 ></i>
                               </div>
                             )}
+                            {task?.isDelayTask && (
+                              <div className="d-flex align-items-center red-flag">
+                                <i
+                                  class="fa fa-flag"
+                                  aria-hidden="true"
+                                ></i>
+                              </div>
+                            )}
                           </Col>
                           <Col
                             lg={2}
@@ -1056,6 +1044,14 @@ const handleVerifyTask = async () => {
                                   aria-hidden="true"
                                 ></i>
                               </div>
+                            </div>
+                          )}
+                          {task?.isDelayTask && (
+                            <div className="d-flex align-items-center red-flag">
+                              <i
+                                class="fa fa-flag"
+                                aria-hidden="true"
+                              ></i>
                             </div>
                           )}
                           <Col
@@ -1524,11 +1520,18 @@ const handleVerifyTask = async () => {
                                 {task?.title}
                               </h5>
                             </OverlayTrigger>
-                            .
                             {task?.isReOpen && (
                               <div className="d-flex align-items-center red-flag">
                                 <i
                                   className="fa fa-retweet"
+                                  aria-hidden="true"
+                                ></i>
+                              </div>
+                            )}
+                            {task?.isDelayTask && (
+                              <div className="d-flex align-items-center red-flag">
+                                <i
+                                  class="fa fa-flag"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -2116,6 +2119,14 @@ const handleVerifyTask = async () => {
                                         <div className="red-flag">
                                           <i
                                             class="fa fa-retweet"
+                                            aria-hidden="true"
+                                          ></i>
+                                        </div>
+                                      )}
+                                      {task?.isDelayTask && (
+                                        <div className="d-flex align-items-center red-flag">
+                                          <i
+                                            class="fa fa-flag"
                                             aria-hidden="true"
                                           ></i>
                                         </div>

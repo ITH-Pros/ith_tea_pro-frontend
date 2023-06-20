@@ -36,139 +36,109 @@ export default function AddTaskModal(props) {
 
     // onInit
   } = props;
-  const statusList = CONSTANTS.statusList;
-  const priorityList = CONSTANTS.priorityList;
-  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [categoryList, setCategoryList] = useState();
-  const [projectList, setProjectList] = useState([]);
-  const [userList, setUserList] = useState([]);
-  const [validated, setValidated] = useState(false);
-  const [leadLists, setLeadList] = useState([]);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const { userDetails } = useAuth();
-  const miscTypeArray = CONSTANTS.MISCTYPE;
-  const [showMiscType, setShowMiscType] = useState(false);
+  console.log(selectedTask)
+  const statusList = CONSTANTS.statusList
+  const priorityList = CONSTANTS.priorityList
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [categoryList, setCategoryList] = useState()
+  const [projectList, setProjectList] = useState([])
+  const [userList, setUserList] = useState([])
+  const [validated, setValidated] = useState(false)
+  const [leadLists, setLeadList] = useState([])
+  const [uploadedFiles, setUploadedFiles] = useState([])
+  const { userDetails } = useAuth()
+  const miscTypeArray = CONSTANTS.MISCTYPE
+  const [showMiscType, setShowMiscType] = useState(false)
 
-  const uploadedAttachmentsArray = (uploadedFiles) => {
-    setUploadedFiles(uploadedFiles);
-  };
+  const uploadedAttachmentsArray = uploadedFiles => {
+    setUploadedFiles(uploadedFiles)
+  }
 
   useEffect(() => {
-    setCategoryList([]);
-    localStorage.removeItem("addTaskModal");
-  }, [localStorage.getItem("addTaskModal")]);
+    setCategoryList([])
+    localStorage.removeItem('addTaskModal')
+  }, [localStorage.getItem('addTaskModal')])
 
   const taskFormFields = {
-    projectId: "",
-    section: "",
-    title: "",
-    description: "",
-    assignedTo: "",
-    dueDate: "",
-    completedDate: "",
+    projectId: '',
+    section: '',
+    title: '',
+    description: '',
+    assignedTo: '',
+    dueDate: '',
+    completedDate: '',
     priority: priorityList[0],
     status: statusList[0],
     attachments: [],
-    tasklead: "",
-    miscType: "",
+    tasklead: '',
+    miscType: '',
     defaultTaskTime: {
       hours: null,
       minutes: null,
     },
-  };
-  const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [selectedLeads, setSelectedLeads] = useState();
-
-
+  }
+  const [taskFormValue, setTaskFormValue] = useState(taskFormFields)
+  const [toaster, showToaster] = useState(false)
+  const setShowToaster = param => showToaster(param)
+  const [toasterMessage, setToasterMessage] = useState('')
+  const [selectedLeads, setSelectedLeads] = useState()
 
   useEffect(() => {
-    getProjectList();
-  }, []);
+    getProjectList()
+  }, [])
 
   useEffect(() => {
     if (taskFormValue.projectId && taskFormValue.leads) {
-      if (
-        leadLists.find((el) => el._id === taskFormValue?.leads)?.role ===
-        "ADMIN"
-      ) {
-        getUserListUsingProjectId(
-          taskFormValue?.projectId,
-          taskFormValue?.leads
-        );
+      if (leadLists.find(el => el._id === taskFormValue?.leads)?.role === 'ADMIN') {
+        getUserListUsingProjectId(taskFormValue?.projectId, taskFormValue?.leads)
       } else {
-        getUserListUsingProjectId(taskFormValue?.projectId);
+        getUserListUsingProjectId(taskFormValue?.projectId)
       }
     }
-  }, [taskFormValue.projectId, taskFormValue.leads]);
+  }, [taskFormValue.projectId, taskFormValue.leads])
 
   useEffect(() => {
     if (showAddTask) {
-      setShowAddTaskModal(true);
-      getProjectList();
-      patchFormForAdd();
+      setShowAddTaskModal(true)
+      getProjectList()
+      patchFormForAdd()
     }
-  }, [showAddTask]);
+  }, [showAddTask])
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-      console.log("selectedProjectFromTask", selectedProjectFromTask);
-      let project = projectList?.filter(
-        (item) => item?._id === selectedProjectFromTask?._id
-      );
-      getLeadsListUsingProjectId(project[0]?._id);
-      setCategoryList(project[0]?.sections);
+      console.log('selectedProjectFromTask', selectedProjectFromTask)
+      let project = projectList?.filter(item => item?._id === selectedProjectFromTask?._id)
+      getLeadsListUsingProjectId(project[0]?._id)
+      setCategoryList(project[0]?.sections)
       setTaskFormValue({
         ...taskFormValue,
         projectId: project[0]?._id,
-      });
-      getProjectByIdFunc(project[0]?._id);
+      })
+      getProjectByIdFunc(project[0]?._id)
     } else if (selectedTask) {
-      let project = projectList?.filter(
-        (item) => item?._id === selectedTask?.projectId
-      );
-      console.log("project", project);
+      let project = projectList?.filter(item => item?._id === selectedTask?.projectId)
+      console.log('project', project)
 
-      getLeadsListUsingProjectId(selectedTask?.projectId);
-      setCategoryList(project[0]?.sections);
-      let dueDateData = new Date(selectedTask?.dueDate?.split("T")[0]);
-      let completedDateData = new Date(selectedTask?.completedDate);
+      getLeadsListUsingProjectId(selectedTask?.projectId)
+      setCategoryList(project[0]?.sections)
+      let dueDateData = new Date(selectedTask?.dueDate?.split('T')[0])
+      let completedDateData = new Date(selectedTask?.completedDate)
       if (selectedTask?.completedDate) {
-        completedDateData =
-          completedDateData.getFullYear() +
-          "-" +
-          (completedDateData.getMonth() + 1 <= 9
-            ? "0" + (completedDateData.getMonth() + 1)
-            : completedDateData.getMonth() + 1) +
-          "-" +
-          (completedDateData.getDate() <= 9
-            ? "0" + completedDateData.getDate()
-            : completedDateData.getDate());
+        completedDateData = completedDateData.getFullYear() + '-' + (completedDateData.getMonth() + 1 <= 9 ? '0' + (completedDateData.getMonth() + 1) : completedDateData.getMonth() + 1) + '-' + (completedDateData.getDate() <= 9 ? '0' + completedDateData.getDate() : completedDateData.getDate())
       } else {
-        completedDateData = "";
+        completedDateData = ''
       }
-      dueDateData =
-        dueDateData.getFullYear() +
-        "-" +
-        (dueDateData.getMonth() + 1 <= 9
-          ? "0" + (dueDateData.getMonth() + 1)
-          : dueDateData.getMonth() + 1) +
-        "-" +
-        (dueDateData.getDate() <= 9
-          ? "0" + dueDateData.getDate()
-          : dueDateData.getDate());
+      dueDateData = dueDateData.getFullYear() + '-' + (dueDateData.getMonth() + 1 <= 9 ? '0' + (dueDateData.getMonth() + 1) : dueDateData.getMonth() + 1) + '-' + (dueDateData.getDate() <= 9 ? '0' + dueDateData.getDate() : dueDateData.getDate())
 
-      console.log("selectedTask", selectedTask);
-      setShowMiscType(false);
+      console.log('selectedTask', selectedTask)
+      setShowMiscType(false)
 
-  
       if (selectedTask?.miscType) {
-        setShowMiscType(true);
+        setShowMiscType(true)
       } else {
-        setShowMiscType(false);
+        setShowMiscType(false)
       }
 
       setTaskFormValue({
@@ -177,42 +147,37 @@ export default function AddTaskModal(props) {
         miscType: selectedTask?.miscType,
         leads: selectedTask?.lead[0]?._id || selectedTask?.lead[0],
         title: selectedTask?.title,
-        defaultTaskTime :{
+        defaultTaskTime: {
           hours: selectedTask?.defaultTaskTime?.hours,
           minutes: selectedTask?.defaultTaskTime?.minutes,
-        } ,
+        },
         description: selectedTask?.description,
         assignedTo: selectedTask?.assignedTo?._id || selectedTask?.assignedTo,
         dueDate: dueDateData,
-        completedDate: completedDateData ? completedDateData : "",
+        completedDate: completedDateData ? completedDateData : '',
         priority: selectedTask?.priority,
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
-       
-      });
-
-     
-  
-
+      })
     } else if (handleProjectId) {
-      let project = projectList?.find((item) => item?._id === handleProjectId);
-      getLeadsListUsingProjectId(project?._id);
+      let project = projectList?.find(item => item?._id === handleProjectId)
+      getLeadsListUsingProjectId(project?._id)
       if (leadLists.length === 1) {
-        setSelectedLeads(project?.managedBy);
+        setSelectedLeads(project?.managedBy)
       }
-      setCategoryList(project?.sections);
+      setCategoryList(project?.sections)
       setTaskFormValue({
         ...taskFormValue,
         projectId: handleProjectId,
-      });
-      console.log(handleProjectId, "=======================handle project id");
-      getProjectByIdFunc(handleProjectId);
-    } else if (userDetails.role === "CONTRIBUTOR") {
-      setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id });
+      })
+      console.log(handleProjectId, '=======================handle project id')
+      getProjectByIdFunc(handleProjectId)
+    } else if (userDetails.role === 'CONTRIBUTOR') {
+      setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id })
     } else {
-      resetFormValue();
+      resetFormValue()
     }
-  };
+  }
 
   const getProjectList = async () => {
     setLoading(true);
