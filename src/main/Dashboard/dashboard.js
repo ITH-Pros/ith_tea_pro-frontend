@@ -1,168 +1,129 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
-import moment from "moment";
-import { useState, useEffect } from "react";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import "./dashboard.css";
-import Col from "react-bootstrap/Col";
-import Loader from "../../components/Loader";
-import {
-  editLogedInUserDetails,
-  getAllUsers,
-  reopenTaskById,
-  verifyTaskById,
-} from "../../services/user/api";
-import Toaster from "../../components/Toaster";
-import avtar from "../../assests/img/avtar.png";
-import leadAvatar from "../../assests/img/leadAvatar.jpeg";
-import Avatar from "react-avatar";
-import { useNavigate } from "react-router-dom";
-import AddTaskModal from "../Tasks/AddTaskModal";
-import AddRatingModal from "../Rating/add-rating-modal";
-import UserForm from "../edit-profile";
-import { useAuth } from "../../auth/AuthProvider";
-import AddRating from "../Rating/add-rating";
-import ViewTaskModal from "../Tasks/view-task";
-import Offcanvas from "react-bootstrap/Offcanvas";
+import React from 'react'
+import moment from 'moment'
+import { useState, useEffect } from 'react'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
+import './dashboard.css'
+import Col from 'react-bootstrap/Col'
+import Loader from '../../components/Loader'
+import { editLogedInUserDetails, getAllUsers, reopenTaskById, verifyTaskById } from '../../services/user/api'
+import Toaster from '../../components/Toaster'
+import avtar from '../../assests/img/avtar.png'
+import leadAvatar from '../../assests/img/leadAvatar.jpeg'
+import Avatar from 'react-avatar'
+import { useNavigate } from 'react-router-dom'
+import AddTaskModal from '../Tasks/AddTaskModal'
+import AddRatingModal from '../Rating/add-rating-modal'
+import UserForm from '../edit-profile'
+import { useAuth } from '../../auth/AuthProvider'
+import AddRating from '../Rating/add-rating'
+import ViewTaskModal from '../Tasks/view-task'
+import Offcanvas from 'react-bootstrap/Offcanvas'
 
-import {
-  BsChevronDoubleLeft,
-  BsChevronLeft,
-  BsChevronDoubleRight,
-  BsChevronRight,
-  BsPersonAdd,
-} from "react-icons/bs";
-import {
-  getAllMyWorks,
-  getAllPendingRating,
-  getAllProjects,
-  getTeamWork,
-  updateTaskStatusById,
-  getOverDueTaskListData,
-} from "../../services/user/api";
-import {
-  Row,
-  Container,
-  Nav,
-  Dropdown,
-  Card,
-  Button,
-  Badge,
-  Modal,
-  Popover,
-  Form,
-} from "react-bootstrap";
-import CustomCalendar from "./custom-calender";
-import ResetPassword from "../../auth/resetPassword";
+import { BsChevronDoubleLeft, BsChevronLeft, BsChevronDoubleRight, BsChevronRight, BsPersonAdd } from 'react-icons/bs'
+import { getAllMyWorks, getAllPendingRating, getAllProjects, getTeamWork, updateTaskStatusById, getOverDueTaskListData } from '../../services/user/api'
+import { Row, Container, Nav, Dropdown, Card, Button, Badge, Modal, Popover, Form } from 'react-bootstrap'
+import CustomCalendar from './custom-calender'
+import ResetPassword from '../../auth/resetPassword'
+import ProjectGrid from './projectGrid'
 
 export default function Dashboard(props) {
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [projectList, setProjectListValue] = useState([]);
-  const [showAddTask, setShowAddTask] = useState(false);
-  const [selectedProject, setSelectedProject] = useState({});
-  const [myWorkList, setMyWorkList] = useState();
-  const [overdueWorkList, setOverdueWorkList] = useState();
-  const [selectedTask, setSelectedTask] = useState({});
-  const [pendingRatingList, setPendingRatingList] = useState();
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [showAllProjects, setShowAllProjects] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
-  const [showModalOnLogin, setShowModalOnLogin] = useState(true);
-  const [teamWorkList, setTeamWorkList] = useState([]);
-  const [showViewTask, setShowViewTask] = useState(false);
-  const [selectedTaskId, setSelectedTaskId] = useState("");
-  const { userDetails } = useAuth();
-  const setShowToaster = (param) => showToaster(param);
-  const [isChange, setIsChange] = useState(undefined);
-  const navigate = useNavigate();
+  const [toasterMessage, setToasterMessage] = useState('')
+  const [toaster, showToaster] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [projectList, setProjectListValue] = useState([])
+  const [showAddTask, setShowAddTask] = useState(false)
+  const [selectedProject, setSelectedProject] = useState({})
+  const [myWorkList, setMyWorkList] = useState()
+  const [overdueWorkList, setOverdueWorkList] = useState()
+  const [selectedTask, setSelectedTask] = useState({})
+  const [pendingRatingList, setPendingRatingList] = useState()
+  const [teamMembers, setTeamMembers] = useState([])
+  const [showAllProjects, setShowAllProjects] = useState(false)
+  const [modalShow, setModalShow] = useState(false)
+  const [showModalOnLogin, setShowModalOnLogin] = useState(true)
+  const [teamWorkList, setTeamWorkList] = useState([])
+  const [showViewTask, setShowViewTask] = useState(false)
+  const [selectedTaskId, setSelectedTaskId] = useState('')
+  const { userDetails } = useAuth()
+  const setShowToaster = param => showToaster(param)
+  const [isChange, setIsChange] = useState(undefined)
+  const navigate = useNavigate()
 
-  const [showModal, setShowModal] = useState(false);
-const [comment, setComment] = useState("");
-const [verifyTaskId, setVerifyTaskId] = useState("");
-const [isReOpen, setIsReOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false)
+  const [comment, setComment] = useState('')
+  const [verifyTaskId, setVerifyTaskId] = useState('')
+  const [isReOpen, setIsReOpen] = useState(false)
+  const [showUserGrid, setShowUserGrid] = useState(false)
 
-const verifyTaskNotAllowedRoles = ["CONTRIBUTOR", "GUEST"];
+  const verifyTaskNotAllowedRoles = ['CONTRIBUTOR', 'GUEST']
 
-const openVerifyModal = (taskId) => {
-  setComment("");
-  setVerifyTaskId(taskId);
-  setShowModal(true);
-};
-
-const handleVerifyTask = async () => {
-  if (!comment) {
-    setToasterMessage("Please Enter Comments");
-    setShowToaster(true);
-    return;
+  const openVerifyModal = taskId => {
+    setComment('')
+    setVerifyTaskId(taskId)
+    setShowModal(true)
   }
- 
 
-  let dataToSend = {
-    taskId: verifyTaskId,
-    status: "VERIFIED",
-    verificationsComments: comment,
-  };
-  setLoading(true);
-  try {
-    const tasks = await verifyTaskById(dataToSend);
-    setLoading(false);
-    if (tasks.error) {
-      setToasterMessage(
-        tasks?.message || "Something Went Wrong While Updating Task Status"
-      );
-      setShowToaster(true);
-    } else {
-      setToasterMessage("Task Verified Successfully");
-      setShowToaster(true);
-      onInit();
-      setShowModal(false);
+  const handleVerifyTask = async () => {
+    if (!comment) {
+      setToasterMessage('Please Enter Comments')
+      setShowToaster(true)
+      return
     }
-  } catch (error) {
-    setLoading(false);
-    setToasterMessage(
-      error?.message || "Something Went Wrong While Updating Task Status"
-    );
-    setShowToaster(true);
+
+    let dataToSend = {
+      taskId: verifyTaskId,
+      status: 'VERIFIED',
+      verificationsComments: comment,
+    }
+    setLoading(true)
+    try {
+      const tasks = await verifyTaskById(dataToSend)
+      setLoading(false)
+      if (tasks.error) {
+        setToasterMessage(tasks?.message || 'Something Went Wrong While Updating Task Status')
+        setShowToaster(true)
+      } else {
+        setToasterMessage('Task Verified Successfully')
+        setShowToaster(true)
+        onInit()
+        setShowModal(false)
+      }
+    } catch (error) {
+      setLoading(false)
+      setToasterMessage(error?.message || 'Something Went Wrong While Updating Task Status')
+      setShowToaster(true)
+    }
   }
-};
-
-
-
-
-
 
   useEffect(() => {
-    setShowModalOnLogin(
-      localStorage.getItem("profileCompleted") === "false" ? true : false
-    );
+    setShowModalOnLogin(localStorage.getItem('profileCompleted') === 'false' ? true : false)
 
-    onInit();
-  }, []);
+    onInit()
+  }, [])
 
   function onInit() {
-    getAndSetAllProjects();
-    if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
-      getOverDueTaskList();
+    getAndSetAllProjects()
+    if (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') {
+      getOverDueTaskList()
     }
-    if (userDetails?.role !== "SUPER_ADMIN" || userDetails?.role !== "ADMIN") {
-      getMyWork();
+    if (userDetails?.role !== 'SUPER_ADMIN' || userDetails?.role !== 'ADMIN') {
+      getMyWork()
     }
 
-    getPendingRating();
+    getPendingRating()
 
-    if (userDetails?.role !== "CONTRIBUTOR") {
-      getAndSetAllUsers();
+    if (userDetails?.role !== 'CONTRIBUTOR') {
+      getAndSetAllUsers()
     }
   }
 
   const handleProfileModalClose = () => {
-    setShowModalOnLogin(false);
-    localStorage.removeItem("profileCompleted");
-  };
+    setShowModalOnLogin(false)
+    localStorage.removeItem('profileCompleted')
+  }
 
   const handleToRedirectTask = (projectId, isArchive) => {
     navigate(
@@ -170,14 +131,14 @@ const handleVerifyTask = async () => {
         projectId: projectId,
         isArchive: isArchive,
       })}/}`
-    );
-  };
+    )
+  }
 
-  const handleTaskReopen = async (taskId) => {
+  const handleTaskReopen = async taskId => {
     let dataToSend = {
       taskId: taskId,
-      status: "OPEN",
-    };
+      status: 'OPEN',
+    }
     // setLoading(true);
     // try {
     //   const tasks = await updateTaskStatusById(dataToSend);
@@ -199,69 +160,60 @@ const handleVerifyTask = async () => {
     //   );
     //   setShowToaster(true);
     // }
-  };
+  }
 
   const handleShowAllProjects = () => {
-    navigate("/project/all");
-  };
+    navigate('/project/all')
+  }
   function formDateNightTime(dateString) {
-    const date = new Date(dateString);
+    const date = new Date(dateString)
     if (isNaN(date.getTime())) {
-      return "";
+      return ''
     }
-    console.log(dateString, "-----------------------------------------------");
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString);
-    console.log(localTimeString);
-    return localTimeString;
+    // console.log(dateString, '-----------------------------------------------')
+    let utcTime = new Date(dateString)
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
+    let localTimeString = new Date(localTime.toISOString())
+    // console.log('==========', localTimeString)
+    // console.log(localTimeString)
+    return localTimeString
   }
 
   const getMyWork = async function () {
     let dataToSend = {
       currentDate: formDateNightTime(new Date()),
-    };
-    setLoading(true);
+    }
+    setLoading(true)
     try {
-      const tasks = await getAllMyWorks(dataToSend);
-      setLoading(false);
+      const tasks = await getAllMyWorks(dataToSend)
+      setLoading(false)
       if (tasks.error) {
-        setToasterMessage(
-          tasks?.message || "Something Went Wrong While Fetching My Work Data"
-        );
-        setShowToaster(true);
+        setToasterMessage(tasks?.message || 'Something Went Wrong While Fetching My Work Data')
+        setShowToaster(true)
       } else {
-        let allTask = tasks?.data;
-        allTask?.map((item) => {
-          let dateMonth = item?.dueDate?.split("T")[0];
-          let today = new Date();
-          today =
-            today.getFullYear() +
-            "-" +
-            (today.getMonth() + 1 <= 9
-              ? "0" + (today.getMonth() + 1)
-              : today.getMonth() + 1) +
-            "-" +
-            (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
+        let allTask = tasks?.data
+        allTask?.map(item => {
+          let dateMonth = item?.dueDate?.split('T')[0]
+          let today = new Date()
+          today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
           if (dateMonth === today) {
-            item.dueToday = true;
+            item.dueToday = true
           } else if (new Date().getTime() > new Date(item?.dueDate).getTime()) {
-            item.dueToday = true;
+            item.dueToday = true
           } else {
-            item.dueToday = false;
+            item.dueToday = false
           }
-        });
-        setMyWorkList(allTask);
+        })
+        setMyWorkList(allTask)
       }
     } catch (error) {
-      setLoading(false);
-      return error.message;
+      setLoading(false)
+      return error.message
     }
-  };
+  }
 
   const getOverDueTaskList = async function () {
     setLoading(true)
@@ -631,6 +583,23 @@ const handleVerifyTask = async () => {
               <Nav.Item>
                 <Nav.Link
                   eventKey="link-1"
+                  className="px-3"
+                >
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="secondary"
+                      size="lg"
+                      onClick={()=>{setShowUserGrid(!showUserGrid)}}
+                      id="dropdown-basic"
+                    >
+                      User analytics
+                    </Dropdown.Toggle>
+                  </Dropdown>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  eventKey="link-2"
                   className="px-0"
                 >
                   <Dropdown>
@@ -648,6 +617,8 @@ const handleVerifyTask = async () => {
             </Nav>
           </Col>
         </Row>
+       {showUserGrid && <ProjectGrid/>}
+
 
         {userDetails.role !== 'GUEST' && projectList?.length !== 0 && (
           <Row className="row-bg ">
@@ -750,15 +721,6 @@ const handleVerifyTask = async () => {
                   className="left-add pb-1"
                 >
                   <span>OVERDUE WORK</span>
-
-                  {/* {<i
-                    onClick={() => {
-                      setSelectedTask();
-                      setShowAddTask(true);
-                      setSelectedProject();
-                    }}
-                    className="fa fa-plus-circle"
-                  ></i>} */}
                 </Col>
                 <Col
                   lg={6}
@@ -779,16 +741,6 @@ const handleVerifyTask = async () => {
                       overdueWorkList?.length > 0 &&
                       overdueWorkList?.map(task => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          {/* {task?.isReOpen && (
-                            <div className="d-flex align-items-center">
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  class="fa fa-retweet"
-                                  aria-hidden="true"
-                                ></i>
-                              </div>
-                            </div>
-                          )} */}
                           <Col
                             lg={4}
                             className="middle"
@@ -874,7 +826,7 @@ const handleVerifyTask = async () => {
                             {task?.isReOpen && (
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-retweet"
+                                  className="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -882,7 +834,7 @@ const handleVerifyTask = async () => {
                             {task?.isDelayTask && (
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag"
+                                  className="fa fa-flag"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1040,7 +992,7 @@ const handleVerifyTask = async () => {
                             <div className="d-flex align-items-center">
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-retweet"
+                                  className="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1049,7 +1001,7 @@ const handleVerifyTask = async () => {
                           {task?.isDelayTask && (
                             <div className="d-flex align-items-center red-flag">
                               <i
-                                class="fa fa-flag"
+                                className="fa fa-flag"
                                 aria-hidden="true"
                               ></i>
                             </div>
@@ -1201,215 +1153,6 @@ const handleVerifyTask = async () => {
               </Row>
             </Col>
           )}
-          {/* {userDetails?.role !== "GUEST" && (
-            <Col lg={6} style={{ paddingRight: "0px" }}>
-              <Row>
-                <Col lg={6} className="left-add">
-                  <span>PENDING RATINGS</span>
-                </Col>
-                <Col lg={6} className="right-filter">
-                  {(userDetails?.role === "SUPER_ADMIN" ||
-                    userDetails?.role === "ADMIN") && (
-                    <Form.Group
-                      controlId="formBasicEmail"
-                      className="team-member-select mb-0"
-                    >
-                      <Form.Label>Team Member</Form.Label>
-                      <Form.Control
-                        as="select"
-                        onChange={(event) => {
-                          getPendingRating(event.target.value);
-                        }}
-                      >
-                        <option value="">All</option>
-                        {teamMembers &&
-                          teamMembers.map((member) => (
-                            <option value={member?._id}>{member?.name}</option>
-                          ))}
-                      </Form.Control>
-                    </Form.Group>
-                  )}
-                </Col>
-              </Row>
-              <Row>
-                <Col lg={12} className="mt-3">
-                  <Card
-                    id="card-task"
-                    className={
-                      pendingRatingList?.length === 0 ? "alig-nodata" : "px-3"
-                    }
-                  >
-                    {pendingRatingList && pendingRatingList?.length === 0 && (
-                      <p>No task found.</p>
-                    )}
-                    {pendingRatingList &&
-                      pendingRatingList?.length > 0 &&
-                      pendingRatingList?.map((task) => (
-                        <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          {task?.isReOpen && (
-                            <div className="d-flex align-items-center">
-                              <div className="d-flex align-items-center">
-                                <i
-                                  class="fa fa-retweet red-flag"
-                                  aria-hidden="true"
-                                ></i>
-                              </div>
-                            </div>
-                          )}
-                          <Col lg={5} className="middle">
-                            <span
-                              style={{ fontSize: "20PX", marginRight: "10px" }}
-                              round="20px"
-                            >
-                              {task?.status === "COMPLETED" && (
-                                <i
-                                  className="fa fa-check-circle"
-                                  aria-hidden="true"
-                                ></i>
-                              )}
-                            </span>
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={<Tooltip>{task?.title}</Tooltip>}
-                            >
-                              <h5
-                                onClick={() => handleViewDetails(task?._id)}
-                                className="text-truncate"
-                              >
-                                {task?.title}
-                              </h5>
-                            </OverlayTrigger>
-                          </Col>
-                          <Col lg={2} className="middle">
-                            {task?.status !== "COMPLETED" && (
-                              <small>
-                                <Badge
-                                  bg={task?.dueToday ? "danger" : "primary"}
-                                >
-                                  {moment(task?.dueDate?.split("T")[0])}
-                                </Badge>
-                              </small>
-                            )}
-                            {task?.status === "COMPLETED" && (
-                              <small>
-                                {" "}
-                                <Badge bg="success">
-                                  {moment(
-                                    task?.completedDate?.split("T")[0]
-                                  ).format("DD/MM/YYYY")}
-                                </Badge>
-                              </small>
-                            )}
-                          </Col>
-                          <Col
-                            lg={3}
-                            className="text-end middle ps-0"
-                            style={{ justifyContent: "end" }}
-                          >
-                            <small>
-                              {task?.status === "NOT_STARTED" && (
-                                <Badge bg="primary">NOT STARTED</Badge>
-                              )}
-                              {task?.status === "ONGOING" && (
-                                <Badge bg="warning">ONGOING</Badge>
-                              )}
-                              {task?.status === "COMPLETED" && (
-                                <>
-                                  <>
-                                    {["top"].map((placement) => (
-                                      <OverlayTrigger
-                                        key={placement}
-                                        placement={placement}
-                                        overlay={
-                                          <Tooltip id={`tooltip-${placement}`}>
-                                            {task?.lead[0]?.name}
-                                          </Tooltip>
-                                        }
-                                      >
-                                        <Button className="tooltip-button">
-                                          {task?.lead[0]?.name && (
-                                            <span
-                                              className="nameTag"
-                                              title="Lead"
-                                            >
-                                              <img
-                                                src={leadAvatar}
-                                                alt="userAvtar"
-                                              />{" "}
-                                              {task?.lead[0]?.name
-                                                .split(" ")[0]
-                                                ?.charAt(0)}
-                                              {task?.lead[0]?.name
-                                                .split(" ")[1]
-                                                ?.charAt(0)}
-                                            </span>
-                                          )}
-                                        </Button>
-                                      </OverlayTrigger>
-                                    ))}
-                                  </>
-
-                                  <>
-                                    {["top"].map((placement) => (
-                                      <OverlayTrigger
-                                        key={placement}
-                                        placement={placement}
-                                        overlay={
-                                          <Tooltip id={`tooltip-${placement}`}>
-                                            {task?.assignedTo?.name}
-                                          </Tooltip>
-                                        }
-                                      >
-                                        <Button className="tooltip-button br0">
-                                          {task?.assignedTo?.name && (
-                                            <span
-                                              className="nameTag"
-                                              title="Assigned To"
-                                            >
-                                              <img
-                                                src={avtar}
-                                                alt="userAvtar"
-                                              />{" "}
-                                              {task?.assignedTo?.name
-                                                .split(" ")[0]
-                                                ?.charAt(0)}
-                                              {task?.assignedTo?.name
-                                                .split(" ")[1]
-                                                ?.charAt(0)}
-                                            </span>
-                                          )}
-                                        </Button>
-                                      </OverlayTrigger>
-                                    ))}
-                                  </>
-                                </>
-                              )}
-                              {task?.status === "ONHOLD" && (
-                                <Badge bg="secondary">ON HOLD</Badge>
-                              )}
-                            </small>
-                          </Col>
-                          <Col
-                            lg={2}
-                            className="text-end middle px-0"
-                            style={{ justifyContent: "end" }}
-                          >
-                            {userDetails?.role !== "CONTRIBUTOR" && (
-                              <AddRating
-                                taskFromDashBoard={task}
-                                onInit={onInit}
-                                setIsChange={setIsChange}
-                                isChange={isChange}
-                              />
-                            )}
-                          </Col>
-                        </Row>
-                      ))}
-                  </Card>
-                </Col>
-              </Row>
-            </Col>
-          )} */}
 
           {userDetails?.role !== 'GUEST' && (
             <Col
@@ -1440,31 +1183,6 @@ const handleVerifyTask = async () => {
                     </Form.Group>
                   )}
                 </Col>
-                {/* <Col lg={6} className="right-filter">
-                    {(userDetails?.role === "SUPER_ADMIN" ||
-                      userDetails?.role === "ADMIN") && (
-                      <Form.Group
-                        controlId="formBasicEmail"
-                        className="team-member-select mb-0"
-                      >
-                        <Form.Label>Team Member</Form.Label>
-                        <Form.Control
-                          as="select"
-                          onChange={(event) => {
-                            getPendingRating(event.target.value);
-                          }}
-                        >
-                          <option value="">All</option>
-                          {teamMembers &&
-                            teamMembers.map((member) => (
-                              <option value={member?._id}>
-                                {member?.name}
-                              </option>
-                            ))}
-                        </Form.Control>
-                      </Form.Group>
-                    )}
-                  </Col> */}
               </Row>
               <Row>
                 <Col
@@ -1480,16 +1198,6 @@ const handleVerifyTask = async () => {
                       pendingRatingList?.length > 0 &&
                       pendingRatingList?.map(task => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          {/* {task?.isReOpen && (
-                              <div className="d-flex align-items-center">
-                                <div className="d-flex align-items-center red-flag">
-                                  <i
-                                    className="fa fa-retweet"
-                                    aria-hidden="true"
-                                  ></i>
-                                </div>
-                              </div>
-                            )} */}
                           <Col
                             lg={5}
                             className="middle"
@@ -1531,7 +1239,7 @@ const handleVerifyTask = async () => {
                             {task?.isDelayTask && (
                               <div className="d-flex align-items-center red-flag">
                                 <i
-                                  class="fa fa-flag"
+                                  className="fa fa-flag"
                                   aria-hidden="true"
                                 ></i>
                               </div>
@@ -1657,271 +1365,6 @@ const handleVerifyTask = async () => {
       {userDetails?.role !== 'CONTRIBUTOR' && (
         <Container>
           <Row className="mt-3">
-            {/* <Col lg={6} style={{ paddingLeft: "0px" }}>
-              <Row>
-                <Col lg={6} className="left-add">
-                  <span>TEAM WORK</span>
-
-                  <i
-                    onClick={() => {
-                      setSelectedTask();
-                      setShowAddTask(true);
-                      setSelectedProject();
-                    }}
-                    className="fa fa-plus-circle"
-                    style={{ cursor: "pointer" }}
-                  ></i>
-                </Col>
-                <Col lg={6} className="right-filter"></Col>
-              </Row>
-              <Row>
-                <Col lg={12} className="mt-3">
-                  <Card
-                    id="card-task"
-                    className={
-                      teamWorkList?.length === 0 ? "alig-nodata" : "px-3"
-                    }
-                  >
-                    {teamWorkList && teamWorkList?.length === 0 && (
-                      <p>No task found.</p>
-                    )}
-                    {teamWorkList &&
-                      teamWorkList?.length > 0 &&
-                      teamWorkList?.map((task) => (
-                        <Row className="d-flex justify-content-start list_task w-100 mx-0">
-                          <Col lg={4} className="middle">
-                            {(
-                              (userDetails.role === "LEAD" &&
-                                (userDetails.id === task?.assignedTo?._id ||
-                                  task?.lead?.includes(userDetails.id) ||
-                                  userDetails.id === task?.createdBy?._id)) ||
-                              userDetails.role === "SUPER_ADMIN" ||
-                              userDetails.role === "ADMIN") && (
-                              <Dropdown>
-                                <Dropdown.Toggle
-                                  variant="success"
-                                  id="dropdown-basic"
-                                  style={{ padding: "0" }}
-                                >
-                                  {task.status === "NOT_STARTED" && (
-                                    <i
-                                      className="fa fa-check-circle secondary"
-                                      aria-hidden="true"
-                                    ></i>
-                                  )}
-                                  {task.status === "ONGOING" && (
-                                    <i
-                                      className="fa fa-check-circle warning"
-                                      aria-hidden="true"
-                                    ></i>
-                                  )}
-                                  {task.status === "COMPLETED" && (
-                                    <i
-                                      className="fa fa-check-circle success"
-                                      aria-hidden="true"
-                                    ></i>
-                                  )}
-                                  {task.status === "ONHOLD" && (
-                                    <i
-                                      className="fa fa-check-circle warning"
-                                      aria-hidden="true"
-                                    ></i>
-                                  )}
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    onClick={(event) =>
-                                      handleStatusChange(
-                                        event,
-                                        task?._id,
-                                        "NOT_STARTED"
-                                      )
-                                    }
-                                  >
-                                    <i
-                                      className="fa fa-check-circle secondary"
-                                      aria-hidden="true"
-                                    ></i>
-                                    Not Started
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    onClick={(event) =>
-                                      handleStatusChange(
-                                        event,
-                                        task?._id,
-                                        "ONGOING"
-                                      )
-                                    }
-                                  >
-                                    <i
-                                      className="fa fa-check-circle warning"
-                                      aria-hidden="true"
-                                    ></i>
-                                    Ongoing
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    onClick={(event) =>
-                                      handleStatusChange(
-                                        event,
-                                        task?._id,
-                                        "COMPLETED"
-                                      )
-                                    }
-                                  >
-                                    <i
-                                      className="fa fa-check-circle success"
-                                      aria-hidden="true"
-                                    ></i>{" "}
-                                    Completed
-                                  </Dropdown.Item>
-                                  <Dropdown.Item
-                                    onClick={(event) =>
-                                      handleStatusChange(
-                                        event,
-                                        task?._id,
-                                        "ONHOLD"
-                                      )
-                                    }
-                                  >
-                                    <i
-                                      className="fa fa-check-circle warning"
-                                      aria-hidden="true"
-                                    ></i>{" "}
-                                    On Hold
-                                  </Dropdown.Item>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            )}
-
-                            <OverlayTrigger
-                              placement="top"
-                              overlay={<Tooltip>{task?.title}</Tooltip>}
-                            >
-                              <h5
-                                onClick={() => handleViewDetails(task?._id)}
-                                className="text-truncate"
-                              >
-                                {task?.title}
-                              </h5>
-                            </OverlayTrigger>
-                          </Col>
-                          <Col lg={2} className="middle">
-                            {task?.status !== "COMPLETED" && (
-                              <small>
-                                <Badge
-                                  bg={task?.dueToday ? "danger" : "primary"}
-                                >
-                                  {moment(task?.dueDate?.split("T")[0]).format(
-                                    "DD/MM/YYYY"
-                                  )}
-                                </Badge>
-                              </small>
-                            )}
-                            {task?.status === "COMPLETED" && (
-                              <small>
-                                <Badge bg="success">
-                                  {moment(
-                                    task?.completedDate?.split("T")[0]
-                                  ).format("DD/MM/YYYY")}
-                                </Badge>
-                              </small>
-                            )}
-                          </Col>
-                          <Col lg={3} className="middle">
-                            <>
-                              {["top"].map((placement) => (
-                                <OverlayTrigger
-                                  key={placement}
-                                  placement={placement}
-                                  overlay={
-                                    <Tooltip id={`tooltip-${placement}`}>
-                                      {task?.assignedTo?.name}
-                                    </Tooltip>
-                                  }
-                                >
-                                  <Button className="tooltip-button br0">
-                                    {task?.assignedTo?.name && (
-                                      <small
-                                        className="nameTag text-truncate"
-                                        title="Assigned To"
-                                      >
-                                        <img src={avtar} alt="userAvtar" />{" "}
-                                        {task?.assignedTo?.name.split(" ")[0] +
-                                          " "}
-                                        {task?.assignedTo?.name.split(" ")[1] &&
-                                          task?.assignedTo?.name
-                                            .split(" ")[1]
-                                            ?.charAt(0) + "."}
-                                      </small>
-                                    )}
-                                  </Button>
-                                </OverlayTrigger>
-                              ))}
-                            </>
-                          </Col>
-                          <Col
-                            lg={2}
-                            className="text-end middle"
-                            style={{ justifyContent: "end" }}
-                          >
-                            <small>
-                              {task?.status === "NOT_STARTED" && (
-                                <Badge bg="primary">NOT STARTED</Badge>
-                              )}
-                              {task?.status === "ONGOING" && (
-                                <Badge bg="warning">ONGOING</Badge>
-                              )}
-                              {task?.status === "COMPLETED" && (
-                                <Badge bg="success">COMPLETED</Badge>
-                              )}
-                              {task?.status === "ONHOLD" && (
-                                <Badge bg="secondary">ON HOLD</Badge>
-                              )}
-                            </small>
-                          </Col>
-                          <Col
-                            lg={1}
-                            id="dropdown_action"
-                            className="text-end "
-                            style={{ position: "absolute", right: "0px" }}
-                          >
-                            {(
-                              (userDetails.role === "LEAD" &&
-                                (userDetails.id === task?.assignedTo?._id ||
-                                  task?.lead?.includes(userDetails.id) ||
-                                  userDetails.id === task?.createdBy?._id)) ||
-                              userDetails.role === "SUPER_ADMIN" ||
-                              userDetails.role === "ADMIN") && (
-                              <Dropdown>
-                                <Dropdown.Toggle
-                                  variant="defult"
-                                  id="dropdown-basic"
-                                  style={{ padding: "0px", textAlign: "end" }}
-                                >
-                                  <i className="fa fa-ellipsis-v"></i>
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    onClick={() => {
-                                      setSelectedProject();
-                                      setShowAddTask(true);
-                                      setSelectedTask(task);
-                                    }}
-                                  >
-                                    Edit
-                                  </Dropdown.Item>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            )}
-                          </Col>
-                        </Row>
-                      ))}
-                  </Card>
-                </Col>
-              </Row>
-            </Col> */}
             <Col
               lg={12}
               style={{ paddingLeft: '0px' }}
@@ -2027,7 +1470,7 @@ const handleVerifyTask = async () => {
                                       <div className="d-flex align-items-center">
                                         <div className="d-flex align-items-center red-flag">
                                           <i
-                                            class="fa fa-retweet"
+                                            className="fa fa-retweet"
                                             aria-hidden="true"
                                           ></i>
                                         </div>
@@ -2118,7 +1561,7 @@ const handleVerifyTask = async () => {
                                       {task?.isReOpen && (
                                         <div className="red-flag">
                                           <i
-                                            class="fa fa-retweet"
+                                            className="fa fa-retweet"
                                             aria-hidden="true"
                                           ></i>
                                         </div>
@@ -2126,7 +1569,7 @@ const handleVerifyTask = async () => {
                                       {task?.isDelayTask && (
                                         <div className="d-flex align-items-center red-flag">
                                           <i
-                                            class="fa fa-flag"
+                                            className="fa fa-flag"
                                             aria-hidden="true"
                                           ></i>
                                         </div>

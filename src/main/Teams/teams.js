@@ -447,7 +447,7 @@ export default function Teams(props) {
   }
 
   const AssignedManager = (user) => {
-    const filteredManagers  = managerList.filter(manager => user?.managerIds.includes(manager._id));
+    const filteredManagers  = managerList.filter(manager => user?.managerIds?.includes(manager._id));
     const managerNames = filteredManagers.map(manager => manager.name);
 
   return (
@@ -649,12 +649,13 @@ export default function Teams(props) {
                         {user.designation && <p>{user?.designation}</p>}
                         <p>{user.email}</p>
                       </span>
-                      <> 
-                      {AssignedManager(user)}
-                      </>
+
                       {user.employeeId && <p>{user?.employeeId} </p>}
                       {userDetails?.role !== 'CONTRIBUTOR' && userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
                         <div className="user-analytics">
+                                                <> 
+                      {AssignedManager(user)}
+                      </>
                           <div className="user-analytics-item">
                             <div className="user-analytics-item-value">Completed After Due Date: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)}%</div>
 

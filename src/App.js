@@ -1,57 +1,52 @@
-import "./App.css";
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "../src/main/Navbar/navbar";
-import Login from "./auth/login";
-import Dashboard from "./main/Dashboard/dashboard";
-import Project from "./main/Projects/";
-import Rating from "./main/Rating/rating";
-import Task from "./main/Tasks/tasks";
-import Team from "./main/Teams/teams";
-import NoMatch from "./main/404/index";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import User from "./main/User";
-import AddUser from "./main/User/AddUser";
-import ViewUser from "./main/User/ViewUser";
-import AddProject from "./main/Projects/AddProject";
-import AllProject from "./main/Projects/AllProjects";
-import { CheckRole } from "./components/checkRole";
-import { ProSidebarProvider } from "react-pro-sidebar";
-import Header from "./main/Header";
-import UserForm from "./main/edit-profile";
-import PasswordForm from "./setup-password";
-import ForgotPassword from "./auth/forgotPassword";
-import ResetPassword from "./auth/resetPassword";
-import TeamReport from "./main/Team-report";
-import { useAuth } from "./auth/AuthProvider";
-import ViewTask from "./main/Rating/View-Rating/viewTask";
+import './App.css'
+import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Navbar from '../src/main/Navbar/navbar'
+import Login from './auth/login'
+import Dashboard from './main/Dashboard/dashboard'
+import Project from './main/Projects/'
+import Rating from './main/Rating/rating'
+import Task from './main/Tasks/tasks'
+import Team from './main/Teams/teams'
+import NoMatch from './main/404/index'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import User from './main/User'
+import AddUser from './main/User/AddUser'
+import ViewUser from './main/User/ViewUser'
+import AddProject from './main/Projects/AddProject'
+import AllProject from './main/Projects/AllProjects'
+import { CheckRole } from './components/checkRole'
+import { ProSidebarProvider } from 'react-pro-sidebar'
+import Header from './main/Header'
+import UserForm from './main/edit-profile'
+import PasswordForm from './setup-password'
+import ForgotPassword from './auth/forgotPassword'
+import ResetPassword from './auth/resetPassword'
+import TeamReport from './main/Team-report'
+import { useAuth } from './auth/AuthProvider'
+import ViewTask from './main/Rating/View-Rating/viewTask'
+import ProjectGrid from './main/Dashboard/projectGrid'
 function App() {
-  const { userDetails } = useAuth();
+  const { userDetails } = useAuth()
   return (
     <ProSidebarProvider>
       <Routes>
         {
           <Route
             path="/login"
-            element={
-              <Login />
-            }
+            element={<Login />}
           />
         }
         {
           <Route
             path="/forgot-password"
-            element={
-              <ForgotPassword />
-            }
+            element={<ForgotPassword />}
           />
         }
-     
+
         <Route
           path="/set-password/:token"
-          element={
-            <PasswordForm />
-          }
+          element={<PasswordForm />}
         />
 
         <Route
@@ -66,26 +61,33 @@ function App() {
         />
 
         <Route
+          path="/grid"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <Header />
+              <ProjectGrid showBtn={true} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/project"
           element={
             <>
               <ProtectedRoute>
                 <Navbar />
                 <Header />
-                <Project />{" "}
+                <Project />{' '}
               </ProtectedRoute>
             </>
           }
         >
-
-      
-
-
           <Route
             path="add"
             element={
               <>
-                <CheckRole role={["SUPER_ADMIN","ADMIN"]}>
+                <CheckRole role={['SUPER_ADMIN', 'ADMIN']}>
                   <AddProject />
                 </CheckRole>
               </>
@@ -95,14 +97,17 @@ function App() {
             path="add/:projectId"
             element={
               <>
-                <CheckRole role={["SUPER_ADMIN","ADMIN"]}>
+                <CheckRole role={['SUPER_ADMIN', 'ADMIN']}>
                   <AddProject />
                 </CheckRole>
               </>
             }
           />
 
-          <Route path="all" element={<AllProject />} />
+          <Route
+            path="all"
+            element={<AllProject />}
+          />
         </Route>
         <Route
           path="/rating/"
@@ -125,12 +130,10 @@ function App() {
             </ProtectedRoute>
           }
         />
-           {
+        {
           <Route
             path="/profile/reset-password"
-            element={
-              <ResetPassword />
-            }
+            element={<ResetPassword />}
           />
         }
 
@@ -145,7 +148,7 @@ function App() {
           }
         />
 
-{/* <Route
+        {/* <Route
   path="/guest"
   element={
     userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ? (
@@ -161,8 +164,6 @@ function App() {
     )
   }
 /> */}
-
-
 
         <Route
           path="/task"
@@ -187,7 +188,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
 
         <Route
           path="/task/:projectId/:isArchive"
@@ -219,16 +219,22 @@ function App() {
             path="add"
             element={
               <>
-                <CheckRole role={["SUPER_ADMIN","ADMIN"]}>
+                <CheckRole role={['SUPER_ADMIN', 'ADMIN']}>
                   <AddUser />
                 </CheckRole>
               </>
             }
           />
 
-          <Route path="view/:userId" element={<ViewUser />} />
+          <Route
+            path="view/:userId"
+            element={<ViewUser />}
+          />
         </Route>
-        <Route path="*" element={<NoMatch />} />
+        <Route
+          path="*"
+          element={<NoMatch />}
+        />
 
         <Route
           path="/view-task/:taskId"
@@ -242,10 +248,9 @@ function App() {
             </>
           }
         />
-
       </Routes>
     </ProSidebarProvider>
-  );
+  )
 }
 
-export default App;
+export default App
