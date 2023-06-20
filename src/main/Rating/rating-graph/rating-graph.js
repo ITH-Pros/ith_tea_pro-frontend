@@ -1,4 +1,3 @@
-
 import { dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,8 +23,11 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function RatingGraph(props) {
-    const {selectedUserId} = props;
-    console.log(selectedUserId, "---------------------------------selectedUserId");
+  const { selectedUserId } = props;
+  console.log(
+    selectedUserId,
+    "---------------------------------selectedUserId"
+  );
 
   const [myRatings, setMyRatings] = useState([]);
   const [myGraphRatings, setMyGraphRatings] = useState([]);
@@ -41,7 +43,6 @@ export default function RatingGraph(props) {
     getUserRatings();
   }, [selectedDate]);
 
-
   async function getUserRatings() {
     setLoading(true);
     try {
@@ -51,9 +52,9 @@ export default function RatingGraph(props) {
         year: selectedDate.getFullYear(),
         userRating: true,
       };
-      if(selectedUserId){
+      if (selectedUserId) {
         dataToSend.userId = selectedUserId;
-        }
+      }
 
       const rating = await getRatings(dataToSend);
       if (rating.error) {
@@ -72,7 +73,10 @@ export default function RatingGraph(props) {
           userRatingForGraph.push(userRatingObj[i]);
         }
         setUserRatingForGraph(userRatingForGraph);
-        console.log(userRatingForGraph, "---------------------------------Rating of User");
+        console.log(
+          userRatingForGraph,
+          "---------------------------------Rating of User"
+        );
       }
     } catch (error) {
       setLoading(false);
@@ -95,8 +99,16 @@ export default function RatingGraph(props) {
       } else {
         let dataToSet = [];
         const currentDate = new Date();
-        const firstDateOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-        for (let i = firstDateOfMonth; i <= currentDate; i.setDate(i.getDate() + 1)) {
+        const firstDateOfMonth = new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          1
+        );
+        for (
+          let i = firstDateOfMonth;
+          i <= currentDate;
+          i.setDate(i.getDate() + 1)
+        ) {
           const isToday =
             i.getDate() === currentDate.getDate() &&
             i.getMonth() === currentDate.getMonth() &&
@@ -133,32 +145,6 @@ export default function RatingGraph(props) {
       setLoading(false);
     }
   }
-
-
-
-
-//   const getRatingDetail = async () => {
-//     setRatingDetail([]);
-//     let dataToSend = {
-//       date: selectedRatingDate.getDate(),
-//       month: selectedRatingDate.getMonth() + 1,
-//       year: selectedRatingDate.getFullYear(),
-//     };
-//     const rating = await getRatingsDetailsByID(dataToSend);
-//     if (rating.error) {
-//       console.log(rating?.error);
-//       setLoading(false);
-//     } else {
-//       if (!rating.data || rating.data.length === 0) {
-//         // Check if rating data is empty
-
-//       } else {
-//         setLoading(true);
-//         setRatingDetail(rating.data);
-//       }
-//       setLoading(false);
-//     }
-//   };
 
   const LineGraph = () => {
     const lineChartData = {
@@ -203,21 +189,66 @@ export default function RatingGraph(props) {
     return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   };
 
+  const handleYearChange = (event) => {
+    const selectedYear = parseInt(event.target.value);
+    setSelectedDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setFullYear(selectedYear);
+      return newDate;
+    });
+  };
+
+  const handleMonthChange = (event) => {
+    const selectedMonth = parseInt(event.target.value);
+    setSelectedDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(selectedMonth - 1);
+      return newDate;
+    });
+  };
+
   return (
     <>
-     {/* <div className=""> */}
-        <LineGraph />
-      {/* </div> */}
-      
-      <div className="">
-        {loading ? <Loader /> : null}
+      <div>
+        <label htmlFor="year">Year:</label>
+        <select
+          id="year"
+          onChange={handleYearChange}
+          value={selectedDate.getFullYear()}
+        >
+          <option value={2021}>2021</option>
+          <option value={2022}>2022</option>
+          <option value={2023}>2023</option>
+          {/* Add more options for other years */}
+        </select>
       </div>
+
+      <div>
+        <label htmlFor="month">Month:</label>
+        <select
+          id="month"
+          onChange={handleMonthChange}
+          value={selectedDate.getMonth() + 1}
+        >
+          <option value={1}>January</option>
+          <option value={2}>February</option>
+          <option value={3}>March</option>
+          <option value={4}>April</option>
+          <option value={5}>May</option>
+          <option value={6}>June</option>
+          <option value={7}>July</option>
+          <option value={8}>August</option>
+          <option value={9}>September</option>
+          <option value={10}>October</option>
+          <option value={11}>November</option>
+          <option value={12}>December</option>
+          {/* Add more options for other months */}
+        </select>
+      </div>
+
+      <LineGraph />
+
+      <div className="">{loading ? <Loader /> : null}</div>
     </>
   );
 }
-
-// export default MyCalendar;
-
-
-
-

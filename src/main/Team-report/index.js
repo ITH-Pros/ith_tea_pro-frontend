@@ -268,18 +268,8 @@ const [userDetails,setUserDetails]=useState([])
               <h1>{userDetails?.name||'--'} ({ userDetails?.role||'--'})</h1>
               <h2>{userDetails?.department||'--'} - ({userDetails?.designation||'--'})</h2>
               <p>{userDetails?.email||'--'}</p>
-            </Col>
-            <Col lg="3 py-4 pull-right">
-              {/* <p>
-                Lead - <Badge bg="primary">Vi   jay Pandey</Badge>
-              </p> */}
-              {/* </RatingGraph> */}
-              <RatingGraph  selectedUserId={selectedOption.value}  />
 
-
-            </Col>
-            <Col lg="3" className="px-5 py-2 text-end">
-             
+                       
             <div className="team-socail">
                         {userDetails?.githubLink && (
                           <a
@@ -311,6 +301,9 @@ const [userDetails,setUserDetails]=useState([])
                           </a>
                         )}
                       </div>
+            </Col>
+            <Col lg="6 py-4 pull-right">
+              <RatingGraph  selectedUserId={selectedOption.value}  />
             </Col>
           </Row>
           <hr />

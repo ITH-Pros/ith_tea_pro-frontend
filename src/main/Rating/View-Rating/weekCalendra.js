@@ -55,6 +55,7 @@ export default function MyCalendar() {
         year: selectedDate.getFullYear(),
         userRating: true,
       };
+      
       const rating = await getRatings(dataToSend);
       if (rating.error) {
         console.log(rating?.error);
@@ -226,7 +227,7 @@ export default function MyCalendar() {
      <div className="rating-graph ">
         <LineGraph />
       </div>
-      
+
       <div className="">
         <div>
           <Calendar
