@@ -68,11 +68,11 @@ export default function ProjectGrid() {
       >
         <div
           className="project-boxes  d-grid"
-          style={{ gridTemplateColumns: '4fr 1fr' }}
+          style={{ gridTemplateColumns: '4fr 1fr',height:'auto' }}
         >
           <div
             className="project-boxes  d-grid"
-            style={{ gridTemplateColumns: 'auto auto auto auto' }}
+            style={{ gridTemplateColumns: 'auto auto auto auto',height:'auto' }}
           >
             {projectList &&
               projectList.map((element, projectIndex) => {
@@ -108,8 +108,9 @@ export default function ProjectGrid() {
           </div>
           <div
             className="d-grid free-users"
-            style={{ border: `3px solid`, height: '150px', width: '150px' }}
+            style={{ border: `3px solid`, height: 'fit-content', width: '200px',padding: '10px' }}
           >
+            <h4>Free Resources</h4>
             {freeUsersList.length > 0 ? (
               <ul>
                 {freeUsersList.map((username, index) => {
