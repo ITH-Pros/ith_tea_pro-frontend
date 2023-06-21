@@ -9,6 +9,7 @@ import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
 import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
 import { Accordion, Button } from 'react-bootstrap'
+import { useAuth } from '../../../auth/AuthProvider'
 
 export default function RatingModalBody(props) {
   const { setModalShow, data } = props
@@ -33,6 +34,8 @@ export default function RatingModalBody(props) {
   const [loading, setLoading] = useState(false)
   const [validated, setValidated] = useState(false)
   const [userTasks, setUserTasks] = useState('')
+  const [isNotVerified, setIsNotVerified] = useState(false)
+  const { userDetails } = useAuth()
 
   useEffect(() => {
     if (data !== undefined || data !== '' || data !== {}) {
@@ -47,6 +50,18 @@ export default function RatingModalBody(props) {
       getTasksDataUsingProjectId(formattedDate)
     }
   }, [data])
+
+  useEffect(() => {
+    if (userTasks.length > 0 && (userDetails?.role!=="SUPER_ADMIN" && userDetails.role!=="ADMIN") ) {
+      let isAnyElementNotVerified = userTasks?.some(element => {
+        return element._id.section !== 'Misc' && !element.tasks.every(task => task.isVerified)
+      })
+      console.log('inside if')
+      setIsNotVerified(isAnyElementNotVerified)
+    }
+    console.log('outside if')
+
+  }, [userTasks])
 
   const handleRatingFormChange = event => {
     const { name, value } = event.target
@@ -73,7 +88,7 @@ export default function RatingModalBody(props) {
         year: selectedDate?.split('-')[0],
         userId: user._id,
       }
-      console.log('handle submit...............', dataToSend)
+      // console.log('handle submit...............', dataToSend)
       setLoading(true)
       try {
         const rating = await addRatingOnTask(dataToSend)
@@ -154,7 +169,7 @@ export default function RatingModalBody(props) {
     <>
       {userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
-          <Form
+          {!isNotVerified ? <Form
             className="margin-form"
             noValidate
             validated={validated}
@@ -254,12 +269,12 @@ export default function RatingModalBody(props) {
                 type="submit"
                 className="text-center"
                 style={{ marginTop: '20px' }}
-                disabled={!userTasks.length}
+                disabled={isNotVerified}
               >
                 Submit
               </Button>
             </Row>
-          </Form>
+          </Form>:<strong>Verify tasks to give rating</strong>}
 
           <div style={{ marginTop: '30px' }}>
             <h5>Task List</h5>
@@ -292,45 +307,64 @@ export default function RatingModalBody(props) {
                                   >
                                     {ele?.title}{' '}
                                   </a>{' '}
-                                  {ele?.isVerified ? (
-                                    <i
-                                      className="fa fa-check"
-                                      style={{ color: 'green' }}
-                                      aria-hidden="true"
-                                    >{' '}</i>
-                                  ) : (
-                                    <i
-                                      className="fa fa-times"
-                                      style={{ color: 'red' }}
-                                      aria-hidden="true"
-                                    >{' '}</i>
-                                  )}
+                                  {task?._id?.section !== 'Misc' &&
+                                    (ele?.isVerified ? (
+                                      <i
+                                        title="Verified"
+                                        className="fa fa-check"
+                                        style={{ color: 'green' }}
+                                        aria-hidden="true"
+                                      >
+                                        {' '}
+                                      </i>
+                                    ) : (
+                                      <i
+                                        title="Not Verified"
+                                        className="fa fa-times"
+                                        style={{ color: 'red' }}
+                                        aria-hidden="true"
+                                      >
+                                        {' '}
+                                      </i>
+                                    ))}
                                   <br></br>
                                   <span>
-                                  {ele?.status === 'NOT_STARTED' && (
-                                    <i
-                                      className="fa fa-check-circle secondary"
-                                      aria-hidden="true"
-                                    >{' '}</i>
-                                  )}
-                                  {ele?.status === 'ONGOING' && (
-                                    <i
-                                      className="fa fa-check-circle warning"
-                                      aria-hidden="true"
-                                    >{' '}</i>
-                                  )}
-                                  {ele?.status === 'COMPLETED' && (
-                                    <i
-                                      className="fa fa-check-circle success"
-                                      aria-hidden="true"
-                                    >{' '}</i>
-                                  )}
-                                  {ele?.status === 'ONHOLD' && (
-                                    <i
-                                      className="fa fa-check-circle warning"
-                                      aria-hidden="true"
-                                    >{' '}</i>
-                                  )}
+                                    {ele?.status === 'NOT_STARTED' && (
+                                      <i
+                                        title={ele?.status}
+                                        className="fa fa-check-circle secondary"
+                                        aria-hidden="true"
+                                      >
+                                        {' '}
+                                      </i>
+                                    )}
+                                    {ele?.status === 'ONGOING' && (
+                                      <i
+                                        title={ele?.status}
+                                        className="fa fa-check-circle warning"
+                                        aria-hidden="true"
+                                      >
+                                        {' '}
+                                      </i>
+                                    )}
+                                    {ele?.status === 'COMPLETED' && (
+                                      <i
+                                        title={ele?.status}
+                                        className="fa fa-check-circle success"
+                                        aria-hidden="true"
+                                      >
+                                        {' '}
+                                      </i>
+                                    )}
+                                    {ele?.status === 'ONHOLD' && (
+                                      <i
+                                        title={ele?.status}
+                                        className="fa fa-check-circle warning"
+                                        aria-hidden="true"
+                                      >
+                                        {' '}
+                                      </i>
+                                    )}
                                   </span>
                                 </Accordion.Header>
                                 <Accordion.Body>

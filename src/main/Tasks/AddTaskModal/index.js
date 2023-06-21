@@ -117,6 +117,7 @@ export default function AddTaskModal(props) {
         projectId: selectedProjectFromTask._id,
         section: selectedProjectFromTask.section,
       })
+      
       getProjectByIdFunc(project[0]?._id)
     } else if (selectedTask) {
       let project = projectList?.filter(item => item?._id === selectedTask?.projectId)
