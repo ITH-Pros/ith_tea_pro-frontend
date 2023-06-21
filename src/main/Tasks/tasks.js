@@ -931,7 +931,7 @@ const Tasks = () => {
                                 {task?.isReOpen && (
                                   <div className="d-flex align-items-center red-flag">
                                     <i
-                                      class="fa fa-retweet"
+                                      className="fa fa-retweet"
                                       aria-hidden="true"
                                     ></i>
                                   </div>
@@ -939,7 +939,7 @@ const Tasks = () => {
                                 {task?.isDelayTask && (
                                   <div className="d-flex align-items-center red-flag">
                                     <i
-                                      class="fa fa-flag"
+                                      className="fa fa-flag"
                                       aria-hidden="true"
                                     ></i>
                                   </div>

@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import { useState, useEffect } from "react";
-import "../rating.css";
+import React from 'react'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import { useState, useEffect } from 'react'
+import '../rating.css'
 import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
 import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
@@ -45,51 +45,8 @@ export default function RatingModalBody(props) {
       id = JSON.stringify(id)
       localStorage.setItem('userId', id)
       getTasksDataUsingProjectId(formattedDate)
-
-      // console.log(ratingForm,'/////////////////////////////////////////////////////////////')
     }
   }, [data])
-
-  // useEffect(() => {
-  //   if (ratingForm.selectedUser && !taskFromDashBoard) {
-  //     getAllPendingRatingTaskList();
-  //   }
-  // }, [ratingForm.selectedDate, ratingForm.selectedUser]);
-
-  // useEffect(() => {
-  //   if (ratingForm.userList?.length && taskFromDashBoard) {
-  //     setRatingForm({
-  //       ...ratingForm,
-  //       selectedUser:
-  //         taskFromDashBoard.assignedTo?._id || taskFromDashBoard.assignedTo,
-  //     });
-  //   }
-  // }, [ratingForm.userList]);
-
-  // useEffect(() => {
-  //   if (ratingForm.projectList?.length && taskFromDashBoard) {
-  //     let dueDateData = new Date(taskFromDashBoard?.dueDate.split("T")[0]);
-  //     dueDateData =
-  //       dueDateData.getFullYear() +
-  //       "-" +
-  //       (dueDateData.getMonth() + 1 <= 9
-  //         ? "0" + (dueDateData.getMonth() + 1)
-  //         : dueDateData.getMonth() + 1) +
-  //       "-" +
-  //       (dueDateData.getDate() <= 9
-  //         ? "0" + dueDateData.getDate()
-  //         : dueDateData.getDate());
-
-  //     setRatingForm({
-  //       ...ratingForm,
-  //       selectedProject:
-  //         taskFromDashBoard.projectId?._id || taskFromDashBoard.projectId,
-  //       taskList: [taskFromDashBoard],
-  //       selectedTask: taskFromDashBoard._id,
-  //       selectedDate: dueDateData,
-  //     });
-  //   }
-  // }, [ratingForm.projectList]);
 
   const handleRatingFormChange = event => {
     const { name, value } = event.target
@@ -98,107 +55,6 @@ export default function RatingModalBody(props) {
       [name]: value,
     })
   }
-  // function formDateNightTime(dateString) {
-  //   const date = new Date(dateString);
-  //   if (isNaN(date.getTime())) {
-  //     return "";
-  //   }
-  //   console.log(dateString,'-----------------------------------------------')
-  //   let utcTime = new Date(dateString );
-  //   utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
-  //   const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-  //   const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
-  //   const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-  //   let localTimeString = new Date(localTime.toISOString());
-  //   console.log("==========", localTimeString)
-  //   console.log(localTimeString)
-  //   return localTimeString
-  // }
-
-  // function formDateDayTime(dateString) {
-  //   let utcTime = new Date(dateString);
-  //   utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
-  //   const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-  //   const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-  //   const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-  //   let localTimeString = new Date(localTime.toISOString());
-  //   console.log("==========", localTimeString)
-  //   return localTimeString
-  // }
-
-  // const getAllPendingRatingTaskList = async function (data) {
-  //   setLoading(true);
-  //   try {
-  //     let { selectedProject, selectedUser, selectedDate } = ratingForm;
-
-  //     const dataToSend = {
-  //       projectId: selectedProject,
-  //       userId: selectedUser,
-  //       fromDate: formDateDayTime(selectedDate),
-  //       toDate: formDateNightTime(selectedDate),
-  //     };
-
-  //     const response = await getTaskDetailsByProjectId(dataToSend);
-  //     if (response.error) {
-  //       setToasterMessage(response.error);
-  //       setShowToaster(true);
-  //       console.log("error", response.error);
-  //     } else {
-  //       setRatingForm({
-  //         ...ratingForm,
-  //         taskList: response?.data,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  //   setLoading(false);
-  // };
-
-  // const getAllRatings = async function (data) {
-  //   setLoading(true);
-  //   try {
-  //     let { selectedProject, selectedUser, selectedDate } = ratingForm;
-
-  //     const dataToSend = {
-  //       projectId: selectedProject,
-  //       userId: selectedUser,
-  //       fromDate: formDateDayTime(selectedDate),
-  //       toDate: formDateNightTime(selectedDate),
-  //     };
-
-  //     const response = await getRatingList();
-  //     if (response.error) {
-  //       setToasterMessage(response.error);
-  //       setShowToaster(true);
-  //       console.log("error", response.error);
-  //     } else {
-  //       console.log(response.data,';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;')
-  //     }
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  //   setLoading(false);
-  // };
-
-  // const getUsersList = async function () {
-  //   setLoading(true);
-  //   try {
-  //     const user = await getProjectByProjectId();
-  //     setLoading(false);
-  //     if (user.error) {
-  //       setToasterMessage(user?.message || "Something Went Wrong");
-  //       setShowToaster(true);
-  //     } else {
-  //       setRatingForm({ ...ratingForm, userList: user?.data });
-  //     }
-  //   } catch (error) {
-  //     setToasterMessage(error?.error?.message || "Something Went Wrong");
-  //     setShowToaster(true);
-  //     setLoading(false);
-  //     return error.message;
-  //   }
-  // };
 
   const handleSubmit = async event => {
     setValidated(true)
@@ -228,16 +84,6 @@ export default function RatingModalBody(props) {
         } else {
           setToasterMessage('Rating Added Succesfully')
           setShowToaster(true)
-          // if(taskFromDashBoard){
-          // onInit();
-          // if (userDetails?.role !== "CONTRIBUTOR") {
-          //   // getTeamWorkList();
-          //   setIsChange(!isChange);
-          // }
-          // }
-          // if(!taskFromDashBoard){
-          // navigate("/rating");
-          // }
           setModalShow(false)
         }
       } catch (error) {
@@ -320,26 +166,6 @@ export default function RatingModalBody(props) {
                 md="12"
               >
                 <h3 className="userName">{user?.name}</h3>
-                {/* <Form.Control
-              required
-              as="select" 
-              type="text"
-              name="selectedUser"
-              value={ratingForm.selectedUser.name}
-
-              // disabled={taskFromDashBoard ? true : false}
-            >
-              <option value="" disabled>Select User</option>
-              {/* {ratingForm?.userList?.map((module) => (
-                <option value={module._id} key={module._id}>
-                  {module.name}
-                </option>
-              ))}
-              <option value={ratingForm.selectedUser.name}>{ratingForm.selectedUser.name}</option> 
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              User name is required !!
-            </Form.Control.Feedback> */}
               </Col>
 
               <Form.Group
@@ -370,17 +196,7 @@ export default function RatingModalBody(props) {
                 controlId="validationCustom01"
               >
                 <Form.Label>Rating</Form.Label>
-                {/* <Form.Control
-              required
-              type="number"
-              name="rating"
-              placeholder="0-6"
-              value={ratingForm.rating}
-              onChange={handleRatingFormChange}
-              inputMode="numeric"
-              min="0"
-              max="6"
-            /> */}
+
                 {/* this would be a select box */}
                 <Form.Control
                   required
@@ -389,7 +205,6 @@ export default function RatingModalBody(props) {
                   name="rating"
                   onChange={handleRatingFormChange}
                   value={ratingForm.rating}
-                  // disabled={taskFromDashBoard ? true : false}
                 >
                   <option
                     value=""
@@ -410,28 +225,6 @@ export default function RatingModalBody(props) {
               </Form.Group>
             </Row>
             <Row>
-              {/* <Form.Group as={Col} md="12">
-            <Form.Label>Select Task</Form.Label>
-            <Form.Control
-              required
-              as="select"
-              type="select"
-              name="selectedTask"
-              onChange={handleRatingFormChange}
-              value={ratingForm.selectedTask}
-              disabled={taskFromDashBoard ? true : false}
-            >
-              <option value="" disabled>Select Task</option>
-              {ratingForm?.taskList?.map((module) => (
-                <option value={module?._id} key={module?._id}>
-                  {module?.title}
-                </option>
-              ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              Task is required !!
-            </Form.Control.Feedback>
-          </Form.Group> */}
               {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
                 <Form.Group
                   as={Col}
@@ -499,10 +292,45 @@ export default function RatingModalBody(props) {
                                   >
                                     {ele?.title}{' '}
                                   </a>{' '}
-                                  {ele?.isVerified ? <i style={{ color: 'green' }}>(Verified)</i> : <i style={{ color: 'red' }}>(Not Verified)</i>}
+                                  {ele?.isVerified ? (
+                                    <i
+                                      className="fa fa-check"
+                                      style={{ color: 'green' }}
+                                      aria-hidden="true"
+                                    >{' '}</i>
+                                  ) : (
+                                    <i
+                                      className="fa fa-times"
+                                      style={{ color: 'red' }}
+                                      aria-hidden="true"
+                                    >{' '}</i>
+                                  )}
                                   <br></br>
                                   <span>
-                                    <strong style={{ color: '#808080' }}>{ele?.status}</strong>
+                                  {ele?.status === 'NOT_STARTED' && (
+                                    <i
+                                      className="fa fa-check-circle secondary"
+                                      aria-hidden="true"
+                                    >{' '}</i>
+                                  )}
+                                  {ele?.status === 'ONGOING' && (
+                                    <i
+                                      className="fa fa-check-circle warning"
+                                      aria-hidden="true"
+                                    >{' '}</i>
+                                  )}
+                                  {ele?.status === 'COMPLETED' && (
+                                    <i
+                                      className="fa fa-check-circle success"
+                                      aria-hidden="true"
+                                    >{' '}</i>
+                                  )}
+                                  {ele?.status === 'ONHOLD' && (
+                                    <i
+                                      className="fa fa-check-circle warning"
+                                      aria-hidden="true"
+                                    >{' '}</i>
+                                  )}
                                   </span>
                                 </Accordion.Header>
                                 <Accordion.Body>
@@ -566,4 +394,4 @@ export default function RatingModalBody(props) {
       )}
     </>
   )
-};
+}

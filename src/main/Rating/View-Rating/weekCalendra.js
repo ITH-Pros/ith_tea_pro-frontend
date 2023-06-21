@@ -46,39 +46,79 @@ export default function MyCalendar() {
     }
   }, [selectedRatingDate]);
 
+  // async function getUserRatings() {
+  //   setLoading(true);
+  //   try {
+  //     let dataToSend = {
+  //       date: selectedDate.getDate(),
+  //       month: selectedDate.getMonth() + 1,
+  //       year: selectedDate.getFullYear(),
+  //       userRating: true,
+  //     };
+
+  //     const rating = await getRatings(dataToSend);
+  //     if (rating.error) {
+  //       console.log(rating?.error);
+  //       setLoading(false);
+  //     } else {
+  //       let userRatingObj = {};
+  //       rating.data?.[0]?.ratings?.forEach((element) => {
+  //         userRatingObj[element.date] = element.rating;
+  //       });
+  //       let userRatingForGraph = [];
+  //       for (let i = 1; i < daysInThisMonth(); i++) {
+  //         if (!userRatingObj[i]) {
+  //           userRatingObj[i] = userRatingObj[i - 1] || 5; // REMOVE IT AND HANDLE IF date 1 rating is not there
+  //         }
+  //         userRatingForGraph.push(userRatingObj[i]);
+  //       }
+  //       setUserRatingForGraph(userRatingForGraph);
+  //       console.log(userRatingForGraph, "---------------------------------Rating of User");
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //   }
+  // }
+
   async function getUserRatings() {
-    setLoading(true);
-    try {
-      let dataToSend = {
-        date: selectedDate.getDate(),
-        month: selectedDate.getMonth() + 1,
-        year: selectedDate.getFullYear(),
-        userRating: true,
-      };
-      
-      const rating = await getRatings(dataToSend);
-      if (rating.error) {
-        console.log(rating?.error);
-        setLoading(false);
-      } else {
-        let userRatingObj = {};
-        rating.data?.[0]?.ratings?.forEach((element) => {
-          userRatingObj[element.date] = element.rating;
-        });
-        let userRatingForGraph = [];
-        for (let i = 1; i < daysInThisMonth(); i++) {
-          if (!userRatingObj[i]) {
-            userRatingObj[i] = userRatingObj[i - 1] || 5; // REMOVE IT AND HANDLE IF date 1 rating is not there
-          }
-          userRatingForGraph.push(userRatingObj[i]);
+  setLoading(true);
+  try {
+    let dataToSend = {
+      date: selectedDate.getDate(),
+      month: selectedDate.getMonth() + 1,
+      year: selectedDate.getFullYear(),
+      userRating: true,
+    };
+
+    const rating = await getRatings(dataToSend);
+    if (rating.error) {
+      console.log(rating?.error);
+      setLoading(false);
+    } else {
+      let userRatingObj = {};
+      rating.data?.[0]?.ratings?.forEach((element) => {
+        userRatingObj[element.date] = element.rating;
+      });
+      let userRatingForGraph = [];
+      for (let i = 1; i < daysInThisMonth(); i++) {
+        if (!userRatingObj[i]) {
+          userRatingObj[i] = userRatingObj[i - 1] || 5; // REMOVE IT AND HANDLE IF date 1 rating is not there
         }
+        userRatingForGraph.push(userRatingObj[i]);
+      }
+
+      if (userRatingForGraph.length > 0) {
         setUserRatingForGraph(userRatingForGraph);
         console.log(userRatingForGraph, "---------------------------------Rating of User");
       }
-    } catch (error) {
+
       setLoading(false);
     }
+  } catch (error) {
+    setLoading(false);
   }
+}
+
 
   async function getAllRatings() {
     setLoading(true);
@@ -179,6 +219,45 @@ export default function MyCalendar() {
     }
   };
 
+  // const LineGraph = () => {
+  //   const lineChartData = {
+  //     labels: Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
+  //     datasets: [
+  //       {
+  //         label: "Rating",
+  //         data: userRatingForGraph,
+  //         fill: false,
+  //         borderColor: "rgb(75, 192, 192)",
+  //         tension: 0.1,
+  //       },
+  //     ],
+  //   };
+
+  //   const lineChartOptions = {
+  //     scales: {
+  //       x: {
+  //         type: "linear",
+  //         min: 1,
+  //         max: daysInThisMonth(),
+  //         ticks: {
+  //           stepSize: 1,
+  //         },
+  //       },
+  //       y: {
+  //         beginAtZero: true,
+  //         max: 6,
+  //       },
+  //     },
+  //   };
+
+  //   return (
+  //     <div className="line-chart">
+  //       <Line data={lineChartData} options={lineChartOptions} />
+  //     </div>
+  //   );
+  // };
+
+
   const LineGraph = () => {
     const lineChartData = {
       labels: Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
@@ -186,13 +265,14 @@ export default function MyCalendar() {
         {
           label: "Rating",
           data: userRatingForGraph,
-          fill: false,
+          fill: true,
           borderColor: "rgb(75, 192, 192)",
           tension: 0.1,
+          steppedLine: true,
         },
       ],
     };
-
+  
     const lineChartOptions = {
       scales: {
         x: {
@@ -209,18 +289,23 @@ export default function MyCalendar() {
         },
       },
     };
-
+  
     return (
       <div className="line-chart">
         <Line data={lineChartData} options={lineChartOptions} />
       </div>
     );
   };
+  
 
   const daysInThisMonth = () => {
-    var now = new Date();
-    return new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const daysUntilCurrentDate = Math.min(currentDate.getDate(), lastDayOfMonth.getDate());
+    return lastDayOfMonth.getDate() - firstDayOfMonth.getDate() + 1 - (lastDayOfMonth.getDate() - daysUntilCurrentDate);
   };
+  
 
   return (
     <>

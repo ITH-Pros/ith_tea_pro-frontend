@@ -14,7 +14,9 @@ import { useAuth } from "../../../auth/AuthProvider";
 import Toaster from "../../../components/Toaster";
 import ProjectCard from "../ProjectCard/projectCard";
 import { Modal, Button, Row, Col } from "react-bootstrap";
-import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
+import { FaGem } from "react-icons/fa";
+
+
 export default function AllProject() {
   const { userDetails } = useAuth();
   const [toaster, showToaster] = useState(false);

@@ -15,11 +15,11 @@ const Loader = () => {
   return (
     <Wrapper>
       <div className="wrapper_loader">
-        <div class="vertical-centered-box">
-          <div class="content">
-            <div class="loader-circle"></div>
-            <div class="loader-line-mask">
-              <div class="loader-line"></div>
+        <div className="vertical-centered-box">
+          <div className="content">
+            <div className="loader-circle"></div>
+            <div className="loader-line-mask">
+              <div className="loader-line"></div>
             </div>
             <div className="loader_wrap">
               <TeaCupImage src={require('../../assests/img/loader.png')} />
