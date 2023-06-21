@@ -166,6 +166,14 @@ export async function getRatings(data) {
     .then(res => res.data)
 }
 
+export async function getRatingsByUser(data) {
+  return axiosInstance
+    .get('rating/v1/all/rating/duration', {
+      params: data,
+    })
+    .then(res => res.data)
+}
+
 export async function getRatingsDetailsByID(data) {
   return axiosInstance
     .get('rating/v1/day/rating', {

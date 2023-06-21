@@ -114,7 +114,8 @@ export default function AddTaskModal(props) {
       setCategoryList(project[0]?.sections)
       setTaskFormValue({
         ...taskFormValue,
-        projectId: project[0]?._id,
+        projectId: selectedProjectFromTask._id,
+        section: selectedProjectFromTask.section,
       })
       getProjectByIdFunc(project[0]?._id)
     } else if (selectedTask) {

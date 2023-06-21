@@ -81,43 +81,44 @@ export default function MyCalendar() {
   // }
 
   async function getUserRatings() {
-  setLoading(true);
-  try {
-    let dataToSend = {
-      date: selectedDate.getDate(),
-      month: selectedDate.getMonth() + 1,
-      year: selectedDate.getFullYear(),
-      userRating: true,
-    };
-
-    const rating = await getRatings(dataToSend);
-    if (rating.error) {
-      console.log(rating?.error);
-      setLoading(false);
-    } else {
-      let userRatingObj = {};
-      rating.data?.[0]?.ratings?.forEach((element) => {
-        userRatingObj[element.date] = element.rating;
-      });
-      let userRatingForGraph = [];
-      for (let i = 1; i < daysInThisMonth(); i++) {
-        if (!userRatingObj[i]) {
-          userRatingObj[i] = userRatingObj[i - 1] || 5; // REMOVE IT AND HANDLE IF date 1 rating is not there
+    setLoading(true);
+    try {
+      let dataToSend = {
+        date: selectedDate.getDate(),
+        month: selectedDate.getMonth() + 1,
+        year: selectedDate.getFullYear(),
+        userRating: true,
+      };
+  
+      const rating = await getRatings(dataToSend);
+      if (rating.error) {
+        console.log(rating?.error);
+        setLoading(false);
+      } else {
+        let userRatingObj = {};
+        rating.data?.[0]?.ratings?.forEach((element) => {
+          userRatingObj[element.date] = element.rating;
+        });
+        let userRatingForGraph = [];
+        const currentMonthDays = daysInThisMonth();
+  
+        for (let i = 1; i <= currentMonthDays; i++) {
+          if (!userRatingObj[i]) {
+            userRatingObj[i] = userRatingObj[i - 1] || 0;
+          }
+          userRatingForGraph.push(userRatingObj[i]);
         }
-        userRatingForGraph.push(userRatingObj[i]);
-      }
-
-      if (userRatingForGraph.length > 0) {
+  
         setUserRatingForGraph(userRatingForGraph);
         console.log(userRatingForGraph, "---------------------------------Rating of User");
+  
+        setLoading(false);
       }
-
+    } catch (error) {
       setLoading(false);
     }
-  } catch (error) {
-    setLoading(false);
   }
-}
+  
 
 
   async function getAllRatings() {

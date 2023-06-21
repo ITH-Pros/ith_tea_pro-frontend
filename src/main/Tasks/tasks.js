@@ -76,6 +76,19 @@ const Tasks = () => {
     }
   }, [localStorage.getItem("showTaskToaster")]);
 
+  const handleAddTaskFromSection = (project) => {
+    console.log("section" , project);
+    setSelectedTask()
+    localStorage.setItem('addTaskModal', true)
+    setShowAddTask(true)
+    
+    setSelectedProject({
+      
+      _id: project?.projectId,
+      section: project?.sectionId,
+    })
+  }
+
   useEffect(() => {
     getTasksDataUsingProjectId();
     let paramsData;
@@ -762,20 +775,16 @@ const Tasks = () => {
                       {!isArchive && (
                         <Dropdown.Item
                           onClick={() => {
-                            setSelectedTask()
-                            localStorage.setItem('addTaskModal', true)
-                            setShowAddTask(true)
-                            setSelectedProject({
-                              _id: project?.projectId,
-                              section: project?.sectionId,
-                            })
+                            handleAddTaskFromSection(project)
+
+                         
                           }}
                         >
                           <i
                             className="fa fa-plus-circle"
                             aria-hidden="true"
                           ></i>{' '}
-                          Add Task
+                          Add Tasks
                         </Dropdown.Item>
                       )}
 
