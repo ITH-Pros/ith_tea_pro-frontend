@@ -38,13 +38,13 @@ export default function MyCalendar() {
   useEffect(() => {
     getAllRatings();
     getUserRatings();
-  }, [selectedDate]);
+  }, []);
 
-  useEffect(() => {
-    if (selectedRatingDate) {
-      getRatingDetail();
-    }
-  }, [selectedRatingDate]);
+  // useEffect(() => {
+  //   if (selectedRatingDate) {
+  //     getRatingDetail();
+  //   }
+  // }, [selectedRatingDate]);
 
   async function getUserRatings() {
     setLoading(true);
@@ -72,7 +72,7 @@ export default function MyCalendar() {
           userRatingForGraph.push(userRatingObj[i]);
         }
         setUserRatingForGraph(userRatingForGraph);
-        console.log(userRatingForGraph, "---------------------------------Rating of User");
+        // console.log(userRatingForGraph, "---------------------------------Rating of User");
       }
     } catch (error) {
       setLoading(false);
@@ -112,7 +112,7 @@ export default function MyCalendar() {
         }
 
         const ratingData = rating.data?.[0]?.ratings;
-        console.log(ratingData, "---------------------------------rating data");
+        // console.log(ratingData, "---------------------------------rating data");
 
         if (ratingData) {
           const ratingEvents = ratingData.map((item, index) => ({
@@ -124,7 +124,7 @@ export default function MyCalendar() {
           dataToSet = [...dataToSet, ...ratingEvents];
         }
 
-        console.log(dataToSet, "---------------------------------data to set");
+        // console.log(dataToSet, "---------------------------------data to set");
         setMyRatings(dataToSet);
         setLoading(false);
       }
@@ -154,29 +154,29 @@ export default function MyCalendar() {
     return {};
   };
 
-  const getRatingDetail = async () => {
-    setRatingDetail([]);
-    let dataToSend = {
-      date: selectedRatingDate.getDate(),
-      month: selectedRatingDate.getMonth() + 1,
-      year: selectedRatingDate.getFullYear(),
-    };
-    const rating = await getRatingsDetailsByID(dataToSend);
-    if (rating.error) {
-      console.log(rating?.error);
-      setLoading(false);
-    } else {
-      if (!rating.data || rating.data.length === 0) {
-        // Check if rating data is empty
-        setShowModal(false);
-      } else {
-        setLoading(true);
-        setRatingDetail(rating.data);
-        setShowModal(true);
-      }
-      setLoading(false);
-    }
-  };
+  // const getRatingDetail = async () => {
+  //   setRatingDetail([]);
+  //   let dataToSend = {
+  //     date: selectedRatingDate.getDate(),
+  //     month: selectedRatingDate.getMonth() + 1,
+  //     year: selectedRatingDate.getFullYear(),
+  //   };
+  //   const rating = await getRatingsDetailsByID(dataToSend);
+  //   if (rating.error) {
+  //     console.log(rating?.error);
+  //     setLoading(false);
+  //   } else {
+  //     if (!rating.data || rating.data.length === 0) {
+  //       // Check if rating data is empty
+  //       setShowModal(false);
+  //     } else {
+  //       setLoading(true);
+  //       setRatingDetail(rating.data);
+  //       setShowModal(true);
+  //     }
+  //     setLoading(false);
+  //   }
+  // };
 
   const LineGraph = () => {
     const lineChartData = {

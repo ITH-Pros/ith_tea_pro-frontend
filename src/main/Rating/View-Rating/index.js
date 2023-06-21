@@ -149,7 +149,7 @@ export default function Dashboard(props) {
         setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        console.log(rating.data);
+        // console.log(rating.data);
         setRatings([...rating.data]);
       }
     } catch (error) {
