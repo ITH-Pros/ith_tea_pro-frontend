@@ -33,7 +33,7 @@ export default function RatingGraph(props) {
 
   useEffect(() => {
     getUserRatings();
-  }, [selectedDate, selectedUserId , viewMode]);
+  }, [selectedDate, selectedUserId, viewMode]);
 
   async function getUserRatings() {
     setLoading(true);
@@ -56,16 +56,24 @@ export default function RatingGraph(props) {
       }
       const rating = await getRatingsByUser(dataToSend);
 
-
       if (rating.error) {
         console.log(rating?.error);
-    setLoading(true);
-
+        setLoading(true);
       } else {
+
         let userRatingObj = {};
+
+        if(viewMode === "month"){
+
         rating.data?.[0]?.ratings?.forEach((element) => {
           userRatingObj[element.date] = element.rating;
         });
+        }else if(viewMode === "year"){
+            rating.data?.[0]?.monthlyAverages?.forEach((element) => {
+                userRatingObj[element.month] = element.avg;
+                });
+        }
+
         let userRatingForGraph = [];
         const currentMonthDays = daysInThisMonth();
 
@@ -92,12 +100,13 @@ export default function RatingGraph(props) {
           : Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
       datasets: [
         {
-          label: "Rating",
-          data: userRatingForGraph,
-          fill: true,
-          borderColor: "rgb(75, 192, 192)",
-          tension: 0.1,
-        },
+            label: "Rating",
+            data: userRatingForGraph,
+            fill: true,
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)", // Adjust the alpha value to make it lighter
+            tension: 0.1,
+          }
       ],
     };
 
@@ -167,14 +176,14 @@ export default function RatingGraph(props) {
     });
   };
 
-    const handleMonthChange = (event) => {
-        const selectedMonth = parseInt(event.target.value);
-        setSelectedDate((prevDate) => {
-            const newDate = new Date(prevDate);
-            newDate.setMonth(selectedMonth - 1);
-            return newDate;
-        });
-    };
+  const handleMonthChange = (event) => {
+    const selectedMonth = parseInt(event.target.value);
+    setSelectedDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(selectedMonth - 1);
+      return newDate;
+    });
+  };
 
   return (
     <>
@@ -210,21 +219,19 @@ export default function RatingGraph(props) {
         </div>
       )}
 
-
-        <div>
-          <label htmlFor="year">Year:</label>
-          <select
-            id="year"
-            onChange={handleYearChange}
-            value={selectedDate.getFullYear()}
-          >
-            <option value={2021}>2021</option>
-            <option value={2022}>2022</option>
-            <option value={2023}>2023</option>
-            {/* Add more options for other years */}
-          </select>
-        </div>
-      
+      <div>
+        <label htmlFor="year">Year:</label>
+        <select
+          id="year"
+          onChange={handleYearChange}
+          value={selectedDate.getFullYear()}
+        >
+          <option value={2021}>2021</option>
+          <option value={2022}>2022</option>
+          <option value={2023}>2023</option>
+          {/* Add more options for other years */}
+        </select>
+      </div>
 
       <LineGraph />
 
