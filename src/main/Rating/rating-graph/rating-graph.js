@@ -2,9 +2,8 @@ import { dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
-import { getRatings, getRatingsByUser } from "../../../services/user/api";
+import { getRatingsByUser } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
-
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 
@@ -38,9 +37,7 @@ export default function RatingGraph(props) {
   async function getUserRatings() {
     setLoading(true);
     try {
-      let dataToSend = {
-        // userRating: true,
-      };
+      let dataToSend = {};
 
       if (viewMode === "month") {
         dataToSend.month = selectedDate.getMonth() + 1;
@@ -54,24 +51,23 @@ export default function RatingGraph(props) {
       if (selectedUserId) {
         dataToSend.userId = selectedUserId;
       }
+
       const rating = await getRatingsByUser(dataToSend);
 
       if (rating.error) {
         console.log(rating?.error);
         setLoading(true);
       } else {
-
         let userRatingObj = {};
 
-        if(viewMode === "month"){
-
-        rating.data?.[0]?.ratings?.forEach((element) => {
-          userRatingObj[element.date] = element.rating;
-        });
-        }else if(viewMode === "year"){
-            rating.data?.[0]?.monthlyAverages?.forEach((element) => {
-                userRatingObj[element.month] = element.avg;
-                });
+        if (viewMode === "month") {
+          rating.data?.[0]?.ratings?.forEach((element) => {
+            userRatingObj[element.date] = element.rating;
+          });
+        } else if (viewMode === "year") {
+          rating.data?.[0]?.monthlyAverages?.forEach((element) => {
+            userRatingObj[element.month] = element.avg;
+          });
         }
 
         let userRatingForGraph = [];
@@ -100,13 +96,13 @@ export default function RatingGraph(props) {
           : Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
       datasets: [
         {
-            label: "Rating",
-            data: userRatingForGraph,
-            fill: true,
-            borderColor: "rgb(75, 192, 192)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)", // Adjust the alpha value to make it lighter
-            tension: 0.1,
-          }
+          label: "Rating",
+          data: userRatingForGraph,
+          fill: true,
+          borderColor: "rgb(75, 192, 192)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          tension: 0.1,
+        },
       ],
     };
 

@@ -168,7 +168,7 @@ export async function getRatings(data) {
 
 export async function getRatingsByUser(data) {
   return axiosInstance
-    .get('rating/v1/all/rating/duration', {
+    .get('analytics/v1/all/rating', {
       params: data,
     })
     .then(res => res.data)
