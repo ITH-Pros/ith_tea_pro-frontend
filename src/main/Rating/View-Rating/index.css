@@ -719,6 +719,7 @@ ul.weekdays {
 
 
 
+ 
 
-
-
+.tableFixHead tbody { display:block; max-height:450px; overflow-y:scroll; }
+.tableFixHead thead, table tbody tr { display:table; width:100%; table-layout:fixed; }
