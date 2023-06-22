@@ -4,7 +4,7 @@ import { getFreeUsers, getUsersByProject } from '../../services/user/api'
 import './dashboard.css'
 import Loader from '../../components/Loader'
 import Toaster from '../../components/Toaster'
-import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
+import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 
 export default function ProjectGrid() {
   const [toaster, showToaster] = useState(false)
@@ -63,21 +63,19 @@ export default function ProjectGrid() {
 
   return (
     <>
-      <div
-        style={{ marginTop: '2%' }}
+      <div className='mb-3 mt-3'
+        // style={{ marginTop: '2%' }}
       >
-        <div
-          className="project-boxes  d-grid"
-          style={{ gridTemplateColumns: '4fr 1fr',height:'auto' }}
-        >
-          <div
-            className="project-boxes  d-grid"
-            style={{ gridTemplateColumns: 'auto auto auto auto',height:'auto' }}
-          >
+        <Row>
+
+          <Col md='9'>
+
+            <Row className='mr-0'>
             {projectList &&
               projectList.map((element, projectIndex) => {
-                return (
-                  <OverlayTrigger
+                return (                    
+                      <Col md= '3'>
+                      <OverlayTrigger
                     trigger="hover"
                     placement="right"
                     overlay={
@@ -90,25 +88,30 @@ export default function ProjectGrid() {
                       </Tooltip>
                     }
                   >
-                    <div
+                      <div
                       key={projectIndex}
-                      className="project-card"
-                      style={{ border: `3px solid`, height: '150px', width: '150px' }}
+                      className="card project-card-grid"
+                      style={{ height: '150px' }}
                     >
                       <span>{element?.projectName}</span>
                     </div>
                   </OverlayTrigger>
+                      </Col>
+                   
                 )
               })}
+                    </Row>
+
             {!projectList?.length && (
               <div>
                 <p className="alig-nodata">No Project Found</p>
               </div>
             )}
-          </div>
+          </Col>
+          <Col md='3'>
           <div
-            className="d-grid free-users"
-            style={{ border: `3px solid`, height: 'fit-content', width: '200px',padding: '10px' }}
+            className="free-users"
+            // style={{ border: `3px solid`, height: 'fit-content', width: '200px',padding: '10px' }}
           >
             <h4>Free Resources</h4>
             {freeUsersList.length > 0 ? (
@@ -121,7 +124,8 @@ export default function ProjectGrid() {
               <>No user is free!</>
             )}
           </div>
-        </div>
+          </Col>
+        </Row>
       </div>
       {loading ? <Loader /> : null}
       {toaster && (
