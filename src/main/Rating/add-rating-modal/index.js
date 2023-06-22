@@ -283,14 +283,14 @@ export default function RatingModalBody(props) {
                   return (
                     <div>
                       <br></br>
-                      <span>
+                      <p>
                         {' '}
-                        <strong>
+                        <strong className='fw-normal'>
                           {task?._id?.projectId}
                           {' / '}
                           {task?._id?.section}
                         </strong>
-                      </span>
+                      </p>
                       <div>
                         {task?.tasks?.map((ele, i) => {
                           return (
@@ -298,21 +298,34 @@ export default function RatingModalBody(props) {
                               defaultActiveKey={index}
                               flush
                             >
-                              <Accordion.Item eventKey={i + 1}>
-                                <Accordion.Header>
-                                  <a
+                              <Accordion.Item eventKey={i + 1} className='mb-0'>
+                                <Accordion.Header  className='gap_status'>
+                                  <p   className='text-dark fw-normal'
                                     href={'view-task/' + ele._id}
-                                    target="_blank"
+                                    
                                     rel="noreferrer"
                                   >
                                     {ele?.title}{' '}
-                                  </a>{' '}
+                                    
+                                  </p>{' '}
+                                  {ele?.isReOpen && (
+                                    <i
+                                      className="fa fa-retweet red-flag"
+                                      aria-hidden="true"
+                                    ></i>
+                                  )}
+                                  {ele?.isDelayTask && (
+                                    <i
+                                      className="fa fa-flag red-flag"
+                                      aria-hidden="true"
+                                    ></i>
+                                  )}
                                   {task?._id?.section !== 'Misc' &&
                                     (ele?.isVerified ? (
                                       <i
                                         title="Verified"
                                         className="fa fa-check"
-                                        style={{ color: 'green' }}
+                                        style={{ color: 'green',  }}
                                         aria-hidden="true"
                                       >
                                         {' '}
@@ -321,14 +334,14 @@ export default function RatingModalBody(props) {
                                       <i
                                         title="Not Verified"
                                         className="fa fa-times"
-                                        style={{ color: 'red' }}
+                                        style={{ color: 'red', }}
                                         aria-hidden="true"
                                       >
                                         {' '}
                                       </i>
                                     ))}
                                   <br></br>
-                                  <span>
+                                  <span > 
                                     {ele?.status === 'NOT_STARTED' && (
                                       <i
                                         title={ele?.status}
@@ -369,7 +382,7 @@ export default function RatingModalBody(props) {
                                 </Accordion.Header>
                                 <Accordion.Body>
                                   {ele?.isVerified && (
-                                    <Col style={{ marginTop: '20px' }}>
+                                    <Col >
                                       {' '}
                                       <h6>
                                         <strong>Verification Comments</strong>
@@ -385,7 +398,7 @@ export default function RatingModalBody(props) {
 
                                           return (
                                             <div
-                                              className="comment mb-0 mt-0 pt-0"
+                                              className="comment mb-0 mt-0 pt-0 px-0"
                                               key={index}
                                             >
                                               <div className="pb-2">{item?.commentedBy?.name}</div>

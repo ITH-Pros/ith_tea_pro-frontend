@@ -923,7 +923,7 @@ const Tasks = () => {
                                   )}
                                 </div>
                               </Col>
-                              <Col lg={9}>
+                              <Col lg={8}>
                                 <p
                                   className={task?.status === 'COMPLETED' ? 'line-strics' : ''}
                                   // onClick={() => handleViewDetails(task?._id)}
@@ -936,22 +936,22 @@ const Tasks = () => {
                                   </p>
                                 </p>
                               </Col>
-                              <Col lg={2}>
+                              <Col lg={3} className="d-flex align-items-center ">
                                 {task?.isReOpen && (
-                                  <div className="d-flex align-items-center red-flag">
+                                  <a className="text-primar">
                                     <i
                                       className="fa fa-retweet"
                                       aria-hidden="true"
                                     ></i>
-                                  </div>
+                                  </a>
                                 )}
                                 {task?.isDelayTask && (
-                                  <div className="d-flex align-items-center red-flag">
+                                  <a className="text-warning" style={{marginLeft:'10px'}}>
                                     <i
-                                      className="fa fa-flag"
+                                      className="fa fa-flag"y
                                       aria-hidden="true"
                                     ></i>
-                                  </div>
+                                  </a>
                                 )}
                               </Col>
                             </Row>

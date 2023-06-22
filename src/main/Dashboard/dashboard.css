@@ -778,12 +778,20 @@ th {
 
 .free-users{
       height: 100%;
-      padding: 20px;
+      padding: 15px;
       box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
       border-left: 5px solid #8355ad !important;
       background: #fff;
       border-radius: 0.375rem;
+     
     }
+    .scroll-y-team{ height: 315px;
+      overflow-y: auto;}
+ .free-users h4{ font-size: 22px;}   
+ .free-users  ul{ padding: 0px; list-style: none; font-size: 14px;}
+ .free-users  ul li{  border-bottom: 1px #ccc dashed; padding: 4px 0px;    color: #5e5c61;}
+
+
 
 @media screen and (max-width: 1300px) {
   .team-member-select label{

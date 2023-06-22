@@ -459,16 +459,25 @@ export default function Teams(props) {
           </span>
         ))
       ) : (
-        <span>No manager found!{' '} <span
+
+        
+        
+        <Button  variant="primary" size="sm" className="add_m">
+          
+    
+           <span
         className="fa fa-user-plus"
         title="Assign Manager"
         aria-hidden="true"
-        style={{ marginRight: '5px' }}
+        
         onClick={() => {
           openAssignManagerModal(user._id)
         }}
       >
-      </span></span>
+      </span>
+ 
+      </Button>
+   
       )}
     </span>
   );

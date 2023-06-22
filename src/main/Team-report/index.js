@@ -269,7 +269,7 @@ export default function TeamReport(props) {
                   )}
                 </div>
               </Col>
-              <Col lg="6 py-4 pull-right">
+              <Col lg="6  pull-right">
                 <RatingGraph selectedUserId={selectedOption.value} />
               </Col>
             </Row>
