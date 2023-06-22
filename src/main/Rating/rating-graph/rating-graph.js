@@ -101,7 +101,7 @@ export default function RatingGraph(props) {
           data: userRatingForGraph,
           fill: true,
           borderColor: "rgb(75, 192, 192)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          backgroundColor: "rgba(75, 192, 192, 0.5)",
           tension: 0.1,
         },
       ],
