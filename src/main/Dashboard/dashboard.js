@@ -580,7 +580,7 @@ export default function Dashboard(props) {
               className="justify-content-end"
               activeKey="/home"
             >
-              <Nav.Item>
+              {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && <Nav.Item>
                 <Nav.Link
                   eventKey="link-1"
                   className="px-3"
@@ -596,7 +596,7 @@ export default function Dashboard(props) {
                     </Dropdown.Toggle>
                   </Dropdown>
                 </Nav.Link>
-              </Nav.Item>
+              </Nav.Item>}
               <Nav.Item>
                 <Nav.Link
                   eventKey="link-2"
@@ -617,7 +617,7 @@ export default function Dashboard(props) {
             </Nav>
           </Col>
         </Row>
-       {showUserGrid && <ProjectGrid/>}
+       {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (showUserGrid && <ProjectGrid/>)}
 
 
         {userDetails.role !== 'GUEST' && projectList?.length !== 0 && (
