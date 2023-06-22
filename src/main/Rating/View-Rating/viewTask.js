@@ -63,7 +63,7 @@ export default function ViewTask(props) {
 
     return (
       <div className="task-completion-time">
-        <h6 className="mb-0">Task Completion Time : </h6>{' '}
+        <label className="form-label">Task Completion Time : </label>{' '}
         <div className="time-details">
           {days > 0 && <p>Days: {days}</p>}
           {hours > 0 && <p>Hours: {hours}</p>}

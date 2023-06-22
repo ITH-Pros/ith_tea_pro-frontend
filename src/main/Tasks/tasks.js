@@ -782,8 +782,8 @@ const Tasks = () => {
                             className="align-items-center"
                           >
                             <Row>
-                              <Col lg={1}>
-                                <div>
+                              <Col lg={1} >
+                                <div >
                                   {(userDetails.id === task?.assignedTo?._id ||
                                     (userDetails.role === 'LEAD' && (userDetails.id === task?.assignedTo?._id || task?.lead?.includes(userDetails.id) || userDetails.id === task?.createdBy?._id)) ||
                                     userDetails.role === 'SUPER_ADMIN' ||

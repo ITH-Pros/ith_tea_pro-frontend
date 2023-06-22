@@ -250,8 +250,8 @@ export default function ViewTaskModal(props) {
     const remainingMinutes = minutes % 60;
 
     return (
-      <div className="task-completion-time">
-      <label className="mb-0">Task Completion Time : {" "}</label> { " "}
+      <div className="task-completion-time d-block">
+   <label className="form-label">Task Completion Time : </label>{' '}
       <div className="time-details">
         {days > 0 && <p>Days: {days}</p>}
         {hours > 0 && <p>Hours: {hours}</p>}

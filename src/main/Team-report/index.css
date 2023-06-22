@@ -3,8 +3,8 @@
 /* Profile sidebar */
 
 .profile-userpic {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border: 2px #cccccc8a solid;
   border-radius: 50%;
   overflow: hidden;
@@ -20,7 +20,8 @@
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;
 }
-
+.user_details{  border: 1px #ccc dashed;    background: #ebebeb54;
+  border-radius: 10px; }
 .user_details h1 {
   font-size: 16px;
   color: #8355ad;

@@ -261,6 +261,7 @@ export default function Dashboard(props) {
                 </Form.Group>
               </h5>
             </div>
+            <div class="tableFixHead">
             <Table responsive>
               <thead>
                 <tr>
@@ -371,6 +372,7 @@ export default function Dashboard(props) {
                 })}
               </tbody>
             </Table>
+            </div>
           </div>
 
           {loading ? <Loader /> : null}
