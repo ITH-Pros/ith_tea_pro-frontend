@@ -20,7 +20,6 @@ import AddTaskModal from './AddTaskModal'
 import { Accordion, ProgressBar, Dropdown, Badge, Modal, Button, OverlayTrigger, Tooltip, Row, Col } from 'react-bootstrap'
 import moment from 'moment'
 import { useAuth } from '../../auth/AuthProvider'
-import { useParams } from 'react-router-dom'
 import ViewTaskModal from './view-task'
 import UserIcon from '../Projects/ProjectCard/profileImage'
 import Offcanvas from 'react-bootstrap/Offcanvas'
@@ -46,7 +45,8 @@ const Tasks = () => {
   const [sectionName, setSectionName] = useState('')
   const [archiveSectionModal, setArchiveSectionModal] = useState(false)
   const { userDetails } = useAuth()
-  const params = useParams()
+  const params = JSON.parse(localStorage.getItem('project_details'))
+
   useEffect(() => {
     if (localStorage.getItem('showTaskToaster')) {
       setTimeout(() => {
@@ -74,8 +74,7 @@ const Tasks = () => {
     let paramsData
 
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId)
-      localStorage.setItem('tasksParamsData', params?.projectId)
+      paramsData = params?.projectId
     }
 
     if (paramsData?.projectId) {
@@ -118,7 +117,7 @@ const Tasks = () => {
         getTasksDataUsingProjectId()
         let paramsData
         if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId)
+          paramsData = params?.projectId
         }
         if (paramsData?.projectId) {
           setSelectedProjectId(paramsData?.projectId)
@@ -147,7 +146,7 @@ const Tasks = () => {
         getTasksDataUsingProjectId()
         let paramsData
         if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId)
+          paramsData = params?.projectId
         }
         if (paramsData?.projectId) {
           setSelectedProjectId(paramsData?.projectId)
@@ -186,7 +185,7 @@ const Tasks = () => {
         getTasksDataUsingProjectId()
         let paramsData
         if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId)
+          paramsData = params?.projectId
         }
         if (paramsData?.projectId) {
           setSelectedProjectId(paramsData?.projectId)
@@ -267,7 +266,7 @@ const Tasks = () => {
           getTasksDataUsingProjectId()
           let paramsData
           if (params?.projectId) {
-            paramsData = JSON.parse(params?.projectId)
+            paramsData = params?.projectId
           }
           if (paramsData?.projectId) {
             setSelectedProjectId(paramsData?.projectId)
@@ -303,14 +302,14 @@ const Tasks = () => {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    console.log('==========', localTimeString)
+    // console.log('==========', localTimeString)
     return localTimeString
   }
 
   const getTasksDataUsingProjectId = async () => {
     let paramsData
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId)
+      paramsData = params?.projectId
     }
     setLoading(true)
     try {
@@ -324,7 +323,7 @@ const Tasks = () => {
         data.projectId = paramsData?.projectId
       }
       if (localStorage.getItem('selectedLead')) {
-        console.log(JSON.parse(localStorage.getItem('selectedLead')))
+        // console.log(JSON.parse(localStorage.getItem('selectedLead')))
         let leadsToSend = localStorage.getItem('selectedLead')
         let leads = JSON.parse(localStorage.getItem('selectedLead'))
         if (leads?.length) {
@@ -430,7 +429,7 @@ const Tasks = () => {
   const exportTasks = async () => {
     let paramsData
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId)
+      paramsData = params?.projectId
     }
     setLoading(true)
     try {

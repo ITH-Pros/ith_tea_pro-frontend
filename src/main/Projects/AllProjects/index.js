@@ -51,12 +51,14 @@ export default function AllProject() {
   };
 
   const handleToRedirectTask = (project) => {
-    if (userDetails?.role !== "GUEST"){
-    navigate(
-      `/task/${JSON.stringify({
-        projectId: project._id,
+    let data={
+       projectId: project._id,
         isArchive: isArchive,
-      })}/}`
+    }
+    if (userDetails?.role !== "GUEST"){
+      localStorage.setItem('project_details',JSON.stringify(data))
+    navigate(
+      `/task/${project._id}`
     );
     }
   };

@@ -14,7 +14,7 @@ import Toaster from "../../../components/Toaster";
 import AddRating from "../add-rating";
 import MyCalendar from "./weekCalendra";
 import RatingModalBody from "../add-rating-modal";
-import RatingGraph from "../rating-graph/rating-graph";
+import TasksModalBody from "../add-rating-modal/viewTaskModal";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -159,20 +159,25 @@ export default function Dashboard(props) {
     }
   }
 
+  const hideModal = () =>{
+    setModalShow(false)
+    localStorage.removeItem('userId')
+  }
+
   return (
     <div>
-            <Offcanvas  
+      <Offcanvas  
       className="Offcanvas-modal"
       style={{width:'500px'}}
       show={modalShow}
-      onHide={() => setModalShow(false)}
+      onHide={() => hideModal()}
       placement="end"
     >
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title> Add Rating</Offcanvas.Title>
+        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? 'Add Rating' : 'View Tasks'}</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body  >
-      <RatingModalBody  data={ratingData} setModalShow={setModalShow}/>
+      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow}/>: <TasksModalBody data={ratingData} setModalShow={setModalShow}/>}
       </Offcanvas.Body>
     </Offcanvas>
       <div className="dashboard_camp">
@@ -261,7 +266,7 @@ export default function Dashboard(props) {
                 </Form.Group>
               </h5>
             </div>
-            <div class="tableFixHead">
+            <div className="tableFixHead">
             <Table responsive>
               <thead>
                 <tr>
@@ -321,6 +326,11 @@ export default function Dashboard(props) {
           getAllRatings={getAllRatings}
           ratingCommentObj={ratingCommentObj}
           className={weekendValue ? "weekendBox" : ""}
+          month={months.indexOf(monthUse) + 1}
+          year={yearUse}
+          user={user}
+          setTaskModalShow={setModalShow}
+          setRatingData={setRatingData}
         />
       );
     } else {
@@ -337,10 +347,6 @@ export default function Dashboard(props) {
                 padding: '2px 15px',
               }}
               className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
-              // onClick={()=>console.log(user,'index',index+1,monthUse,yearUse)}
-              onClick={() => {
-                isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse)
-              }}
             ></span>
           ) : (
             <>

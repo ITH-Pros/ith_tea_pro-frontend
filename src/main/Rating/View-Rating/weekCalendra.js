@@ -110,7 +110,7 @@ export default function MyCalendar() {
         }
   
         setUserRatingForGraph(userRatingForGraph);
-        console.log(userRatingForGraph, "---------------------------------Rating of User");
+        // console.log(userRatingForGraph, "---------------------------------Rating of User");
   
         setLoading(false);
       }
