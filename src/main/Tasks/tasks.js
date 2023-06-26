@@ -300,108 +300,96 @@ const Tasks = () => {
   }
 
   const getTasksDataUsingProjectId = async () => {
-    setLoading(true)
- 
+    try {
+      let paramsData = projectId || null;
+      setLoading(true);
+  
       let data = {
         groupBy: 'default',
-      }
-      if (isArchive) {
-        data.isArchived = true
-      }
-      if (projectId) {
-        data.projectId = projectId
-      }
+        isArchived: isArchive || false,
+        projectId: paramsData
+      };
+  
       if (localStorage.getItem('selectedLead')) {
-        // console.log(JSON.parse(localStorage.getItem('selectedLead')))
-        let leadsToSend = localStorage.getItem('selectedLead')
-        let leads = JSON.parse(localStorage.getItem('selectedLead'))
-        if (leads?.length) {
-          data.leads = leadsToSend
+        let leads = JSON.parse(localStorage.getItem('selectedLead'));
+        if (leads && leads.length > 0) {
+          data.leads = leads;
         }
       }
-
+  
       if (localStorage.getItem('taskFilters')) {
-        let filterData = JSON.parse(localStorage.getItem('taskFilters'))
-        let selectedFilter = localStorage.getItem('selectedFilterTypes')
-        console.log(filterData, 'taskfiters////////////////////')
-        // console.log(filterData)
+        let filterData = JSON.parse(localStorage.getItem('taskFilters'));
+        let selectedFilter = localStorage.getItem('selectedFilterTypes');
+  
         if (filterData?.projectIds) {
-          data.projectIds = JSON.stringify(filterData?.projectIds)
+          data.projectIds = filterData.projectIds;
         }
         if (filterData?.createdBy) {
-          data.createdBy = JSON.stringify(filterData?.createdBy)
+          data.createdBy = filterData.createdBy;
         }
-        if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
-          data.assignedTo = JSON.stringify(filterData?.assignedTo)
+        if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
+          data.assignedTo = filterData.assignedTo;
         }
-        if (filterData?.category?.length) {
-          data.sections = JSON.stringify(filterData?.category)
+        if (filterData?.category && filterData.category.length > 0) {
+          data.sections = filterData.category;
         }
         if (filterData?.priority) {
-          data.priority = JSON.stringify(filterData?.priority)
+          data.priority = filterData.priority;
         }
         if (filterData?.status) {
-          data.status = JSON.stringify(filterData?.status)
+          data.status = filterData.status;
         }
         if (filterData?.sortType) {
-          data.sortType = filterData?.sortType
+          data.sortType = filterData.sortType;
         }
         if (filterData?.sortOrder) {
-          data.sortOrder = filterData?.sortOrder
+          data.sortOrder = filterData.sortOrder;
         }
         if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          // console.log(selectedFilter, '----------------')
-          data.fromDate = convertToUTCDay(filterData?.fromDate)
+          data.fromDate = convertToUTCDay(filterData.fromDate);
         }
         if (filterData?.toDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          // console.log(selectedFilter, '----------------')
-          data.toDate = convertToUTCNight(filterData?.toDate)
+          data.toDate = convertToUTCNight(filterData.toDate);
         }
         if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
-          data.fromDate = convertToUTCDay(filterData?.fromDate)
-          data.toDate = convertToUTCNight(filterData?.toDate)
+          data.fromDate = convertToUTCDay(filterData.fromDate);
+          data.toDate = convertToUTCNight(filterData.toDate);
         }
       }
-      try {
-      const tasks = await getProjectsTask(data)
-      console.log(tasks,'//////////////////////////////////////////////')
-      setLoading(false)
+  
+      const tasks = await getProjectsTask(data);
+      setLoading(false);
+  
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong in get project task')
-        setShowToaster(true)
+        setToasterMessage(tasks.error.message);
+        setShowToaster(true);
       } else {
-        let allTask = tasks?.data
-        allTask?.forEach((item, i) => {
-          item?.tasks?.map((task, j) => {
-            if (task?.dueDate) {
-              let dateMonth = task?.dueDate?.split('T')[0]
-              let today = new Date()
-
-              today = today.getFullYear() + '-' + (today.getMonth() + 1 <= 9 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1) + '-' + (today.getDate() <= 9 ? '0' + today.getDate() : today.getDate())
-              if (dateMonth === today) {
-                task.dueToday = true
-              } else if (new Date().getTime() > new Date(task?.dueDate).getTime()) {
-                task.dueToday = true
+        let allTasks = tasks.data;
+        allTasks.forEach((item) => {
+          item.tasks.forEach((task) => {
+            if (task.dueDate) {
+              let today = new Date().toISOString().split('T')[0];
+  
+              if (task.dueDate.split('T')[0] === today || new Date(task.dueDate).getTime() < new Date().getTime()) {
+                task.dueToday = true;
               } else {
-                task.dueToday = false
+                task.dueToday = false;
               }
-              if (task?.completedDate && new Date(task?.completedDate).getTime() > new Date(task?.dueDate).getTime()) {
-                task.dueToday = true
+  
+              if (task.completedDate && new Date(task.completedDate).getTime() > new Date(task.dueDate).getTime()) {
+                task.dueToday = true;
               }
-              if (task?.completedDate && dateMonth === task?.completedDate?.split('T')[0]) {
-                task.dueToday = false
+  
+              if (task.completedDate && task.completedDate.split('T')[0] === task.dueDate.split('T')[0]) {
+                task.dueToday = false;
               }
             }
-          })
-          allTask[i].tasks = item?.tasks
-        })
-        setProjects(allTask)
-        let paramsData
-        if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId)
-        }
-        if (paramsData?.projectId) {
-          setSelectedProjectId(paramsData?.projectId)
+          });
+        });
+  
+        setProjects(allTasks);
+        if (paramsData) {
+          setSelectedProjectId(paramsData);
         }
       }
     } catch (error) {
@@ -410,7 +398,8 @@ const Tasks = () => {
       setLoading(false)
       console.log(error.message)
     }
-  }
+  };
+  
 
   const exportTasks = async () => {
     let paramsData
