@@ -12,7 +12,7 @@ import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
 
 export default function RatingModalBody(props) {
-  const { setModalShow, data } = props
+  const { setModalShow, data, raitngForDay } = props
   const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6]
   let user = data?.user
   let date = data?.date
@@ -159,112 +159,118 @@ export default function RatingModalBody(props) {
       {userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
           {!isNotVerified ? (
-            <Form
-              className="margin-form"
-              noValidate
-              validated={validated}
-              onSubmit={handleSubmit}
-            >
-              <Row className="mb-3">
-                <Col
-                  as={Col}
-                  md="12"
-                >
-                  <h3 className="userName">{user?.name}</h3>
-                </Col>
-
-                <Form.Group
-                  as={Col}
-                  md="6"
-                  controlId="rating_date"
-                >
-                  <Form.Label>Date</Form.Label>
-                  <Form.Control
-                    required
-                    type="date"
-                    name="selectedDate"
-                    placeholder="Rating Date"
-                    // onChange={(e)=>console.log(e.target.value)}
-                    max={new Date().toISOString().split('T')[0]}
-                    value={ratingForm.selectedDate}
-                    // disabled={taskFromDashBoard ? true : false}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {ratingForm.selectedDate === '' && 'Date is required !!'}
-                    {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group
-                  as={Col}
-                  md="6"
-                  controlId="validationCustom01"
-                >
-                  <Form.Label>Rating</Form.Label>
-
-                  {/* this would be a select box */}
-                  <Form.Control
-                    required
-                    as="select"
-                    type="select"
-                    name="rating"
-                    onChange={handleRatingFormChange}
-                    value={ratingForm.rating}
-                  >
-                    <option
-                      value=""
-                      disabled
-                    >
-                      Select Rating
-                    </option>
-                    {ratingValues.map(value => (
-                      <option
-                        key={value}
-                        value={value}
-                      >
-                        {value}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
-                </Form.Group>
-              </Row>
-              <Row>
-                {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
-                  <Form.Group
+            raitngForDay > 0 ? (
+              <div>
+              <h3>Rating: {raitngForDay}</h3>
+              </div>
+            ) : (
+              <Form
+                className="margin-form"
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+              >
+                <Row className="mb-3">
+                  <Col
                     as={Col}
                     md="12"
                   >
-                    <Form.Label>Completed Date</Form.Label>
-                    <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
-                  </Form.Group>
-                )}
-              </Row>
+                    <h3 className="userName">{user?.name}</h3>
+                  </Col>
 
-              <Row className="desc">
-                <Form.Group>
-                  <Form.Control
-                    required
-                    as="textarea"
-                    name="comment"
-                    placeholder="comment"
-                    value={ratingForm.comment}
-                    onChange={handleRatingFormChange}
-                  />
-                  <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
-                </Form.Group>
-                <Button
-                  size="sm"
-                  md="6"
-                  type="submit"
-                  className="text-center"
-                  style={{ marginTop: '20px' }}
-                  disabled={isNotVerified}
-                >
-                  Submit
-                </Button>
-              </Row>
-            </Form>
+                  <Form.Group
+                    as={Col}
+                    md="6"
+                    controlId="rating_date"
+                  >
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control
+                      required
+                      type="date"
+                      name="selectedDate"
+                      placeholder="Rating Date"
+                      // onChange={(e)=>console.log(e.target.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      defaultValue={ratingForm.selectedDate}
+                      // disabled={taskFromDashBoard ? true : false}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {ratingForm.selectedDate === '' && 'Date is required !!'}
+                      {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group
+                    as={Col}
+                    md="6"
+                    controlId="validationCustom01"
+                  >
+                    <Form.Label>Rating</Form.Label>
+
+                    {/* this would be a select box */}
+                    <Form.Control
+                      required
+                      as="select"
+                      type="select"
+                      name="rating"
+                      onChange={handleRatingFormChange}
+                      value={ratingForm.rating}
+                    >
+                      <option
+                        value=""
+                        disabled
+                      >
+                        Select Rating
+                      </option>
+                      {ratingValues.map(value => (
+                        <option
+                          key={value}
+                          value={value}
+                        >
+                          {value}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+                <Row>
+                  {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
+                    <Form.Group
+                      as={Col}
+                      md="12"
+                    >
+                      <Form.Label>Completed Date</Form.Label>
+                      <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
+                    </Form.Group>
+                  )}
+                </Row>
+
+                <Row className="desc">
+                  <Form.Group>
+                    <Form.Control
+                      required
+                      as="textarea"
+                      name="comment"
+                      placeholder="comment"
+                      value={ratingForm.comment}
+                      onChange={handleRatingFormChange}
+                    />
+                    <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
+                  </Form.Group>
+                  <Button
+                    size="sm"
+                    md="6"
+                    type="submit"
+                    className="text-center"
+                    style={{ marginTop: '20px' }}
+                    disabled={isNotVerified}
+                  >
+                    Submit
+                  </Button>
+                </Row>
+              </Form>
+            )
           ) : (
             <strong>Verify tasks to give rating</strong>
           )}
@@ -274,7 +280,7 @@ export default function RatingModalBody(props) {
             {userTasks.length > 0
               ? userTasks?.map((task, index) => {
                   return (
-                    <div>
+                    <div key={index}>
                       <br></br>
                       <p>
                         {' '}
@@ -290,63 +296,64 @@ export default function RatingModalBody(props) {
                             <Accordion
                               defaultActiveKey={index}
                               flush
+                              key={i}
                             >
                               <Accordion.Item
                                 eventKey={i + 1}
                                 className="mb-0"
                               >
                                 <Accordion.Header className="gap_status">
-                                <span>
+                                  <span>
                                     {ele?.status === 'NOT_STARTED' && (
                                       <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>{ele?.status}</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-check-circle secondary"
-                                        aria-hidden="true"
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-check-circle secondary"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
                                       </OverlayTrigger>
                                     )}
                                     {ele?.status === 'ONGOING' && (
                                       <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>{ele?.status}</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-check-circle warning"
-                                        aria-hidden="true"
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-check-circle warning"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
                                       </OverlayTrigger>
                                     )}
                                     {ele?.status === 'COMPLETED' && (
                                       <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>{ele?.status}</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-check-circle success"
-                                        aria-hidden="true"
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-check-circle success"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
                                       </OverlayTrigger>
                                     )}
                                     {ele?.status === 'ONHOLD' && (
                                       <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>{ele?.status}</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-check-circle warning"
-                                        aria-hidden="true"
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-check-circle warning"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
                                       </OverlayTrigger>
                                     )}
                                   </span>
@@ -388,33 +395,32 @@ export default function RatingModalBody(props) {
                                   {task?._id?.section !== 'Misc' &&
                                     (ele?.isVerified ? (
                                       <OverlayTrigger
-                                    placement="top"
-                                    overlay={<Tooltip>Verified</Tooltip>}
-                                  >
-                                      <i
-                                        className="fa fa-check"
-                                        style={{ color: 'green' }}
-                                        aria-hidden="true"
+                                        placement="top"
+                                        overlay={<Tooltip>Verified</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-check"
+                                          style={{ color: 'green' }}
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
                                       </OverlayTrigger>
                                     ) : (
                                       <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>Not Verified</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-times"
-                                        style={{ color: 'red', fontSize: '15px' }}
-                                        aria-hidden="true"
+                                        placement="top"
+                                        overlay={<Tooltip>Not Verified</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-times"
+                                          style={{ color: 'red', fontSize: '15px' }}
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
                                       </OverlayTrigger>
                                     ))}
                                   <br></br>
-                                  
                                 </Accordion.Header>
                                 <Accordion.Body>
                                   {ele?.isVerified && (

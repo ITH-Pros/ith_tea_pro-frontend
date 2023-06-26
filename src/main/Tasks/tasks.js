@@ -4,14 +4,7 @@
 import React, { useState, useEffect } from 'react'
 import * as FileSaver from 'file-saver'
 import * as XLSX from 'xlsx'
-
 import './tasks.css'
-// import {
-//   Accordion,
-//   AccordionBody,
-//   AccordionHeader,
-//   AccordionItem,
-// } from "react-headless-accordion";
 import { addSectionApi, archiveSectionApi, deleteSectionApi, downloadExcel, getProjectsTask, updateSection, updateTaskStatusById } from '../../services/user/api'
 import Loader from '../../components/Loader'
 import Toaster from '../../components/Toaster'
@@ -23,6 +16,7 @@ import { useAuth } from '../../auth/AuthProvider'
 import ViewTaskModal from './view-task'
 import UserIcon from '../Projects/ProjectCard/profileImage'
 import Offcanvas from 'react-bootstrap/Offcanvas'
+import { useParams } from 'react-router-dom'
 
 const Tasks = () => {
   const [projects, setProjects] = useState([])
@@ -46,6 +40,7 @@ const Tasks = () => {
   const [archiveSectionModal, setArchiveSectionModal] = useState(false)
   const { userDetails } = useAuth()
   const params = JSON.parse(localStorage.getItem('project_details'))
+  const {projectId} = useParams;
 
   useEffect(() => {
     if (localStorage.getItem('showTaskToaster')) {
@@ -58,7 +53,7 @@ const Tasks = () => {
   }, [localStorage.getItem('showTaskToaster')])
 
   const handleAddTaskFromSection = project => {
-    console.log('section', project)
+    // console.log('section', project)
     setSelectedTask()
     localStorage.setItem('addTaskModal', true)
     setShowAddTask(true)
@@ -70,9 +65,8 @@ const Tasks = () => {
   }
 
   useEffect(() => {
-    getTasksDataUsingProjectId()
+    getTasksDataUsingProjectId(projectId)
     let paramsData
-
     if (params?.projectId) {
       paramsData = params?.projectId
     }
@@ -127,7 +121,7 @@ const Tasks = () => {
         setShowToaster(true)
       }
     } catch (error) {
-      console.log('error', error)
+      console.log('error in deleteSection', error)
     }
   }
 
@@ -156,7 +150,7 @@ const Tasks = () => {
         setShowToaster(true)
       }
     } catch (error) {
-      console.log('error', error)
+      console.log('error in archiveSection', error)
     }
   }
 
@@ -195,7 +189,7 @@ const Tasks = () => {
         setShowToaster(true)
       }
     } catch (error) {
-      console.log('error', error)
+      console.log('error in sectionUpdate', error)
     }
   }
 
@@ -222,15 +216,15 @@ const Tasks = () => {
     try {
       const res = await updateTaskStatusById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || 'Something Went Wrong')
+        setToasterMessage(res?.message || 'Something Went Wrong in update task status')
         setShowToaster(true)
       } else {
-        setToasterMessage(res?.message || 'Something Went Wrong')
+        setToasterMessage(res?.message || 'Response in update task status 1')
         setShowToaster(true)
         getTasksDataUsingProjectId()
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
+      setToasterMessage(error?.error?.message || 'Something Went Wrong in update task status error')
       setShowToaster(true)
       return error.message
     }
@@ -256,10 +250,10 @@ const Tasks = () => {
         const res = await addSectionApi(dataToSend)
         setLoading(false)
         if (res.error) {
-          setToasterMessage(res?.message || 'Something Went Wrong')
+          setToasterMessage(res?.message || 'Something Went Wrong in add section')
           setShowToaster(true)
         } else {
-          setToasterMessage(res?.message || 'Something Went Wrong')
+          setToasterMessage(res?.message || 'Response in add section')
           setShowToaster(true)
           setModalShow(false)
           closeModal()
@@ -274,7 +268,7 @@ const Tasks = () => {
           // getProjectList();
         }
       } catch (error) {
-        setToasterMessage(error?.error?.message || 'Something Went Wrong')
+        setToasterMessage(error?.error?.message || 'Something Went Wrong in add section error')
         setShowToaster(true)
         setLoading(false)
         return error.message
@@ -289,14 +283,13 @@ const Tasks = () => {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    console.log('==========', localTimeString)
+    // console.log('==========', localTimeString)
     return localTimeString
   }
 
   function convertToUTCNight(dateString) {
-    console.log(dateString, '------------------')
+    // console.log(dateString, '------------------')
     let utcTime = new Date(dateString)
-
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
@@ -307,20 +300,16 @@ const Tasks = () => {
   }
 
   const getTasksDataUsingProjectId = async () => {
-    let paramsData
-    if (params?.projectId) {
-      paramsData = params?.projectId
-    }
     setLoading(true)
-    try {
+ 
       let data = {
         groupBy: 'default',
       }
       if (isArchive) {
         data.isArchived = true
       }
-      if (params?.projectId) {
-        data.projectId = paramsData?.projectId
+      if (projectId) {
+        data.projectId = projectId
       }
       if (localStorage.getItem('selectedLead')) {
         // console.log(JSON.parse(localStorage.getItem('selectedLead')))
@@ -333,9 +322,9 @@ const Tasks = () => {
 
       if (localStorage.getItem('taskFilters')) {
         let filterData = JSON.parse(localStorage.getItem('taskFilters'))
-        let selectedFilter = localStorage.getItem('selectedFilter')
-        console.log(selectedFilter, 'selectedFilter')
-        console.log(filterData)
+        let selectedFilter = localStorage.getItem('selectedFilterTypes')
+        console.log(filterData, 'taskfiters////////////////////')
+        // console.log(filterData)
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds)
         }
@@ -361,27 +350,24 @@ const Tasks = () => {
           data.sortOrder = filterData?.sortOrder
         }
         if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          console.log(selectedFilter, '----------------')
-
+          // console.log(selectedFilter, '----------------')
           data.fromDate = convertToUTCDay(filterData?.fromDate)
         }
         if (filterData?.toDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          console.log(selectedFilter, '----------------')
-
+          // console.log(selectedFilter, '----------------')
           data.toDate = convertToUTCNight(filterData?.toDate)
         }
         if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
-          console.log(selectedFilter, '----------------')
-
           data.fromDate = convertToUTCDay(filterData?.fromDate)
           data.toDate = convertToUTCNight(filterData?.toDate)
         }
       }
-
+      try {
       const tasks = await getProjectsTask(data)
+      console.log(tasks,'//////////////////////////////////////////////')
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong')
+        setToasterMessage(tasks?.error?.message || 'Something Went Wrong in get project task')
         setShowToaster(true)
       } else {
         let allTask = tasks?.data
@@ -419,10 +405,10 @@ const Tasks = () => {
         }
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
+      setToasterMessage(error?.message || 'Something Went Wrong in get project task error')
       setShowToaster(true)
       setLoading(false)
-      return error.message
+      console.log(error.message)
     }
   }
 
@@ -443,7 +429,7 @@ const Tasks = () => {
         data.projectId = paramsData?.projectId
       }
       if (localStorage.getItem('selectedLead')) {
-        console.log(JSON.parse(localStorage.getItem('selectedLead')))
+        // console.log(JSON.parse(localStorage.getItem('selectedLead')))
         let leadsToSend = localStorage.getItem('selectedLead')
         let leads = JSON.parse(localStorage.getItem('selectedLead'))
         if (leads?.length) {
@@ -454,8 +440,8 @@ const Tasks = () => {
       if (localStorage.getItem('taskFilters')) {
         let filterData = JSON.parse(localStorage.getItem('taskFilters'))
         let selectedFilter = localStorage.getItem('selectedFilter')
-        console.log(selectedFilter, 'selectedFilter')
-        console.log(filterData)
+        // console.log(selectedFilter, 'selectedFilter')
+        // console.log(filterData)
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds)
         }
@@ -481,17 +467,17 @@ const Tasks = () => {
           data.sortOrder = filterData?.sortOrder
         }
         if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          console.log(selectedFilter, '----------------')
+          // console.log(selectedFilter, '----------------')
 
           data.fromDate = convertToUTCDay(filterData?.fromDate)
         }
         if (filterData?.toDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          console.log(selectedFilter, '----------------')
+          // console.log(selectedFilter, '----------------')
 
           data.toDate = convertToUTCNight(filterData?.toDate)
         }
         if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
-          console.log(selectedFilter, '----------------')
+          // console.log(selectedFilter, '----------------')
 
           data.fromDate = convertToUTCDay(filterData?.fromDate)
           data.toDate = convertToUTCNight(filterData?.toDate)
@@ -500,10 +486,10 @@ const Tasks = () => {
       const res = await downloadExcel(data)
 
       if (res.error) {
-        setToasterMessage(res?.message || 'Something Went Wrong')
+        setToasterMessage(res?.message || 'Something Went Wrong in download excel')
         setShowToaster(true)
       } else {
-        console.log(res) // Make sure the response contains the expected data
+        console.log(res,'download excel') // Make sure the response contains the expected data
 
         const blob = new Blob([res], {
           type: '.xlsx',
@@ -523,7 +509,7 @@ const Tasks = () => {
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      setToasterMessage(error?.message || 'Something Went Wrong')
+      setToasterMessage(error?.message || 'Something Went Wrong in download excel error')
       setShowToaster(true)
       return error.message
     }

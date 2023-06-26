@@ -6,12 +6,11 @@ import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Offcanvas, Row, Table } from "react-bootstrap";
-import { getRatingList, getRatings, verifyManager } from "../../../services/user/api";
+import { getRatings, verifyManager } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
-import AddRating from "../add-rating";
 import MyCalendar from "./weekCalendra";
 import RatingModalBody from "../add-rating-modal";
 import TasksModalBody from "../add-rating-modal/viewTaskModal";
@@ -43,6 +42,8 @@ export default function Dashboard(props) {
     month: '',
     year: '',
   });
+  const [raitngForDay, setRatingForDay] = useState()
+
   useEffect(() => {
     // getAllRatingslist();
     onInit();
@@ -55,10 +56,9 @@ export default function Dashboard(props) {
     if (modalShow === false) onInit()
   }, [modalShow])
 
-  // set the isWeekendChecked state variable based on the weekend value
-  //  useEffect(() => {
-  //   setIsWeekendChecked(weekend);
-  // }, [weekend]);
+   useEffect(() => {
+    console.log(raitngForDay,'view-rating component;;;;;;;;;;;;;;;;')
+  }, [raitngForDay]);
 
   const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
@@ -174,10 +174,10 @@ export default function Dashboard(props) {
       placement="end"
     >
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? 'Add Rating' : 'View Tasks'}</Offcanvas.Title>
+        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >0 ? ('View Tasks'):  ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body  >
-      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow}/>: <TasksModalBody data={ratingData} setModalShow={setModalShow}/>}
+      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay} />: <TasksModalBody data={ratingData} setModalShow={setModalShow}/>}
       </Offcanvas.Body>
     </Offcanvas>
       <div className="dashboard_camp">
@@ -226,7 +226,7 @@ export default function Dashboard(props) {
                     onChange={onchangeMonth}
                     value={monthUse}
                   >
-                    <option value="" disabled>
+                    <option defaultValue="" disabled>
                       Select Month
                     </option>
                     {months.map((monthh, index) => (
@@ -331,6 +331,7 @@ export default function Dashboard(props) {
           user={user}
           setTaskModalShow={setModalShow}
           setRatingData={setRatingData}
+          setRatingForDay = {setRatingForDay}
         />
       );
     } else {
@@ -357,7 +358,7 @@ export default function Dashboard(props) {
                 className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
                 // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
                 onClick={() => {
-                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse)
+                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse); setRatingForDay(0)
                 }}
               >
                 {!weekendValue && '?'}

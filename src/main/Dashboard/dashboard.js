@@ -125,12 +125,9 @@ export default function Dashboard(props) {
     localStorage.removeItem('profileCompleted')
   }
 
-  const handleToRedirectTask = (projectId, isArchive) => {
+  const handleToRedirectTask = (projectId) => {
     navigate(
-      `/task/${JSON.stringify({
-        projectId: projectId,
-        isArchive: isArchive,
-      })}/}`
+      `/task/${projectId}`
     )
   }
 
@@ -628,9 +625,6 @@ export default function Dashboard(props) {
             {projectList.slice(0, showAllProjects ? projectList.length : 2).map(project => (
               <Col lg={6}>
                 <Card
-                  onClick={() => {
-                    handleToRedirectTask(project?._id, project?.isArchived)
-                  }}
                   id={`card-${project.id}`}
                   key={project?.id}
                 >
@@ -652,6 +646,9 @@ export default function Dashboard(props) {
                         <h5
                           className="text-truncate"
                           style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            handleToRedirectTask(project?._id)
+                          }}
                         >
                           {project?.name}
                         </h5>
@@ -700,9 +697,7 @@ export default function Dashboard(props) {
               showAddTask={showAddTask}
               closeModal={closeModal}
               handleSubmitReopen={handleSubmit}
-
-              // onInit={() => onInit()}
-            />
+              />
             <button
               className="expend"
               onClick={() => setShowAllProjects(!showAllProjects)}
@@ -1761,7 +1756,7 @@ export default function Dashboard(props) {
                     <label>New Due Date</label>
                     {'  '}
                     <a
-                      href={'view-task/' + reopenTaskId}
+                      href={'view-  ' + reopenTaskId}
                       target="_blank"
                     >
                       (View task here)

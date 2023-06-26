@@ -36,7 +36,7 @@ export default function AddTaskModal(props) {
 
     // onInit
   } = props;
-  console.log(selectedTask)
+  // console.log(selectedTask)
   const statusList = CONSTANTS.statusList
   const priorityList = CONSTANTS.priorityList
   const [showAddTaskModal, setShowAddTaskModal] = useState(false)
@@ -190,7 +190,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setProjectList(projects?.data);
-        console.log("-------------------------------");
       }
     } catch (error) {
       setLoading(false);

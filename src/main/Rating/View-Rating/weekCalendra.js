@@ -323,7 +323,7 @@ export default function MyCalendar() {
             events={myRatings}
             localizer={localizer}
             views={["month"]}
-            view={"month"}
+            defaultView={"month"}
             defaultDate={new Date()}
             onNavigate={(a, e, s) => handleDateChange(a, e, s)}
             // onClick={handleDateChange}

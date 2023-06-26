@@ -6,7 +6,7 @@ import Loader from "../Loader";
 
 
 const RatingBox = (props) => {
-  const { ratingCommentObj, index, getAllRatings, month, year,user, setTaskModalShow, setRatingData } = props;
+  const { ratingCommentObj, index, getAllRatings, month, year,user, setTaskModalShow, setRatingData, setRatingForDay } = props;
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,6 +23,7 @@ const RatingBox = (props) => {
           month: month,
           year: year,
         }))
+      setRatingForDay(ratingCommentObj?.rating)
   }
 
   const GetModalBody = () => {

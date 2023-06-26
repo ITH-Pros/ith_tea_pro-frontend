@@ -81,7 +81,7 @@ function FilterDropdown(props) {
                       className="form-control"
                       placeholderText="From Date"
                 maxDate={toDate || new Date()}
-                disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
+                // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
                     />
                   </Col>
                 </Row>
@@ -99,7 +99,7 @@ function FilterDropdown(props) {
                       className="form-control"
                       minDate={fromDate}
                 placeholderText="To Date"
-                disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
+                // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
 
                 
                     />
