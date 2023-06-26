@@ -70,17 +70,17 @@ export default function ProjectGrid() {
 
           <Col md='9'>
 
-            <Row className='mr-0'>
+            <Row>
             {projectList &&
               projectList.map((element, projectIndex) => {
                 return (                    
-                      <Col md= '3'>
+                      <Col md= '3' className='px-0 px-2 py-2'>
                       <OverlayTrigger
                     trigger="hover"
                     placement="right"
                     overlay={
                       <Tooltip>
-                        <ol style={{ textAlign: 'left' }}>
+                        <ol style={{ textAlign: 'left', padding:'0px', margin:'0px', listStyle:'none' }}>
                           {element?.users?.map((ele)=>{
                             return (<li>{ele}</li>)
                           })}
@@ -90,7 +90,7 @@ export default function ProjectGrid() {
                   >
                       <div
                       key={projectIndex}
-                      className="card project-card-grid"
+                      className="card project-card-grid m-0"
                       style={{ height: '150px' }}
                     >
                       <span>{element?.projectName}</span>
@@ -108,12 +108,13 @@ export default function ProjectGrid() {
               </div>
             )}
           </Col>
-          <Col md='3'>
+          <Col md='3' className='py-2'>
           <div
             className="free-users"
             // style={{ border: `3px solid`, height: 'fit-content', width: '200px',padding: '10px' }}
           >
             <h4>Free Resources</h4>
+            <div className='scroll-y-team'>
             {freeUsersList.length > 0 ? (
               <ul>
                 {freeUsersList.map((username, index) => {
@@ -123,6 +124,7 @@ export default function ProjectGrid() {
             ) : (
               <>No user is free!</>
             )}
+            </div>
           </div>
           </Col>
         </Row>

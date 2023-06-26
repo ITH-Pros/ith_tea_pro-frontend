@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { updateUserRating } from "../../services/user/api";
 import Modals from "../modal";
 import Toaster from "../Toaster";
 import Loader from "../Loader";
 
-const RatingBox = (props) => {
-  const { ratingCommentObj, index, getAllRatings  } = props;
 
+const RatingBox = (props) => {
+  const { ratingCommentObj, index, getAllRatings, month, year,user, setTaskModalShow, setRatingData } = props;
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -14,6 +14,16 @@ const RatingBox = (props) => {
   const setShowToaster = (param) => showToaster(param);
   const [toasterMessage, setToasterMessage] = useState("");
 
+  const viewDayTask = () => {
+        setTaskModalShow(true)
+        setRatingData(prevRatingData => ({
+          ...prevRatingData,
+          user: user,
+          date: index+1,
+          month: month,
+          year: year,
+        }))
+  }
 
   const GetModalBody = () => {
     const RatingEditBox = () => {
@@ -118,6 +128,7 @@ const RatingBox = (props) => {
             padding: '2px 15px',
           }}
           className="input_dashboard"
+          onClick={()=>viewDayTask()}
         >
           {`${formatedRating(ratingCommentObj?.rating)}`}{' '}
         </span>

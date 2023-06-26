@@ -12,11 +12,7 @@
   margin-bottom: 20px;
 }
 
-.rating-graph {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+ 
 
 .my-offcanvas {
   max-width: 600px;
@@ -65,3 +61,8 @@
   background-color: red !important;
   color: white;
 }
+
+
+#calender-ui { width: auto; margin-top: 25px;}
+#calender-ui .rbc-toolbar{ font-size: 12px !important;}
+#calender-ui .rbc-header{ font-size: 12px; padding: 5px;}

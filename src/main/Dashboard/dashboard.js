@@ -580,23 +580,27 @@ export default function Dashboard(props) {
               className="justify-content-end"
               activeKey="/home"
             >
-              <Nav.Item>
-                <Nav.Link
-                  eventKey="link-1"
-                  className="px-3"
-                >
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="secondary"
-                      size="lg"
-                      onClick={()=>{setShowUserGrid(!showUserGrid)}}
-                      id="dropdown-basic"
-                    >
-                      User analytics
-                    </Dropdown.Toggle>
-                  </Dropdown>
-                </Nav.Link>
-              </Nav.Item>
+              {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="link-1"
+                    className="px-3"
+                  >
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="secondary"
+                        size="lg"
+                        onClick={() => {
+                          setShowUserGrid(!showUserGrid)
+                        }}
+                        id="dropdown-basic"
+                      >
+                        User analytics
+                      </Dropdown.Toggle>
+                    </Dropdown>
+                  </Nav.Link>
+                </Nav.Item>
+              )}
               <Nav.Item>
                 <Nav.Link
                   eventKey="link-2"
@@ -617,8 +621,7 @@ export default function Dashboard(props) {
             </Nav>
           </Col>
         </Row>
-       {showUserGrid && <ProjectGrid/>}
-
+        {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && showUserGrid && <ProjectGrid />}
 
         {userDetails.role !== 'GUEST' && projectList?.length !== 0 && (
           <Row className="row-bg ">
@@ -824,19 +827,29 @@ export default function Dashboard(props) {
                               </h5>
                             </OverlayTrigger>
                             {task?.isReOpen && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-retweet"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Re-opened</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-retweet"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                             {task?.isDelayTask && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-flag"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Overdue</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-flag"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                           </Col>
@@ -989,21 +1002,29 @@ export default function Dashboard(props) {
                       myWorkList?.map(task => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           {task?.isReOpen && (
-                            <div className="d-flex align-items-center">
-                              <div className="d-flex align-items-center red-flag">
+                            <div className="red-flag">
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Re-opened</Tooltip>}
+                              >
                                 <i
                                   className="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
-                              </div>
+                              </OverlayTrigger>
                             </div>
                           )}
                           {task?.isDelayTask && (
-                            <div className="d-flex align-items-center red-flag">
-                              <i
-                                className="fa fa-flag"
-                                aria-hidden="true"
-                              ></i>
+                            <div className="red-flag">
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Overdue</Tooltip>}
+                              >
+                                <i
+                                  className="fa fa-flag"
+                                  aria-hidden="true"
+                                ></i>
+                              </OverlayTrigger>
                             </div>
                           )}
                           <Col
@@ -1229,19 +1250,29 @@ export default function Dashboard(props) {
                               </h5>
                             </OverlayTrigger>
                             {task?.isReOpen && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-retweet"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Re-opened</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-retweet"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                             {task?.isDelayTask && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-flag"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Overdue</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-flag"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                           </Col>
@@ -1468,7 +1499,7 @@ export default function Dashboard(props) {
                                   <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
                                     {/* {task?.isReOpen && (
                                       <div className="d-flex align-items-center">
-                                        <div className="d-flex align-items-center red-flag">
+                                        <div className="red-flag">
                                           <i
                                             className="fa fa-retweet"
                                             aria-hidden="true"
@@ -1560,18 +1591,28 @@ export default function Dashboard(props) {
                                       </OverlayTrigger>
                                       {task?.isReOpen && (
                                         <div className="red-flag">
-                                          <i
-                                            className="fa fa-retweet"
-                                            aria-hidden="true"
-                                          ></i>
+                                          <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>Re-opened</Tooltip>}
+                                          >
+                                            <i
+                                              className="fa fa-retweet"
+                                              aria-hidden="true"
+                                            ></i>
+                                          </OverlayTrigger>
                                         </div>
                                       )}
                                       {task?.isDelayTask && (
-                                        <div className="d-flex align-items-center red-flag">
-                                          <i
-                                            className="fa fa-flag"
-                                            aria-hidden="true"
-                                          ></i>
+                                        <div className="red-flag">
+                                          <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>Overdue</Tooltip>}
+                                          >
+                                            <i
+                                              className="fa fa-flag"
+                                              aria-hidden="true"
+                                            ></i>
+                                          </OverlayTrigger>
                                         </div>
                                       )}
                                     </Col>

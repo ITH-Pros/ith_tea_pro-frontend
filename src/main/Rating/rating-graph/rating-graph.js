@@ -6,6 +6,7 @@ import { getRatingsByUser } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
+import { Row, Col } from "react-bootstrap";
 
 Chart.register(...registerables);
 
@@ -100,7 +101,7 @@ export default function RatingGraph(props) {
           data: userRatingForGraph,
           fill: true,
           borderColor: "rgb(75, 192, 192)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          backgroundColor: "rgba(75, 192, 192, 0.5)",
           tension: 0.1,
         },
       ],
@@ -183,18 +184,21 @@ export default function RatingGraph(props) {
 
   return (
     <>
-      <div>
-        <label htmlFor="view-mode">View Mode:</label>
-        <select id="view-mode" onChange={handleViewModeChange} value={viewMode}>
+<Row className="mb-4">
+<Col lg={4}>
+<div>
+        {/* <label htmlFor="view-mode">View Mode:</label> */}
+        <select  className="form-control" placeholder="View Mode" id="view-mode" onChange={handleViewModeChange} value={viewMode}>
           <option value="month">Month Wise</option>
           <option value="year">Year Wise</option>
         </select>
       </div>
-
-      {viewMode === "month" && (
+</Col>
+<Col lg={4}>
+{viewMode === "month" && (
         <div>
-          <label htmlFor="month">Month:</label>
-          <select
+          
+          <select placeholder="Month" className="form-control"
             id="month"
             onChange={handleMonthChange}
             value={selectedDate.getMonth() + 1}
@@ -214,10 +218,11 @@ export default function RatingGraph(props) {
           </select>
         </div>
       )}
-
-      <div>
-        <label htmlFor="year">Year:</label>
-        <select
+</Col>
+<Col lg={4}>
+<div>
+       
+        <select placeholder="Year" className="form-control"
           id="year"
           onChange={handleYearChange}
           value={selectedDate.getFullYear()}
@@ -228,6 +233,14 @@ export default function RatingGraph(props) {
           {/* Add more options for other years */}
         </select>
       </div>
+</Col>
+</Row>
+
+ 
+
+
+
+
 
       <LineGraph />
 

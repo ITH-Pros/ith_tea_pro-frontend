@@ -1,110 +1,89 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import * as FileSaver from "file-saver";
-import * as XLSX from "xlsx";
+import React, { useState, useEffect } from 'react'
+import * as FileSaver from 'file-saver'
+import * as XLSX from 'xlsx'
 
-import "./tasks.css";
+import './tasks.css'
 // import {
 //   Accordion,
 //   AccordionBody,
 //   AccordionHeader,
 //   AccordionItem,
 // } from "react-headless-accordion";
-import {
-  addSectionApi,
-  archiveSectionApi,
-  deleteSectionApi,
-  downloadExcel,
-  getProjectsTask,
-  updateSection,
-  updateTaskStatusById,
-} from "../../services/user/api";
-import Loader from "../../components/Loader";
-import Toaster from "../../components/Toaster";
-import FilterModal from "./FilterModal";
-import AddTaskModal from "./AddTaskModal";
-import {
-  Accordion,
-  ProgressBar,
-  Dropdown,
-  Badge,
-  Modal,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-  Row,
-  Col,
-} from "react-bootstrap";
-import moment from "moment";
-import { useAuth } from "../../auth/AuthProvider";
-import { useParams } from "react-router-dom";
-import ViewTaskModal from "./view-task";
-import UserIcon from "../Projects/ProjectCard/profileImage";
-import Offcanvas from "react-bootstrap/Offcanvas";
+import { addSectionApi, archiveSectionApi, deleteSectionApi, downloadExcel, getProjectsTask, updateSection, updateTaskStatusById } from '../../services/user/api'
+import Loader from '../../components/Loader'
+import Toaster from '../../components/Toaster'
+import FilterModal from './FilterModal'
+import AddTaskModal from './AddTaskModal'
+import { Accordion, ProgressBar, Dropdown, Badge, Modal, Button, OverlayTrigger, Tooltip, Row, Col } from 'react-bootstrap'
+import moment from 'moment'
+import { useAuth } from '../../auth/AuthProvider'
+import ViewTaskModal from './view-task'
+import UserIcon from '../Projects/ProjectCard/profileImage'
+import Offcanvas from 'react-bootstrap/Offcanvas'
 
 const Tasks = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const [selectedProject, setSelectedProject] = useState({});
-  const [showAddTask, setShowAddTask] = useState(false);
-  const [selectedTask, setSelectedTask] = useState({});
-  const [modalShow, setModalShow] = useState(false);
-  const [sectionEditMode, setSectionEditMode] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState("");
-  const [selectedSectionId, setSelectedSectionId] = useState("");
-  const [showViewTask, setShowViewTask] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [selectedTaskId, setSelectedTaskId] = useState("");
-  const [deleteSectionModal, setDeleteSectionModal] = useState(false);
-  const [isArchive, setIsArchive] = useState(false);
-  const [taskInfo, setTaskInfo] = useState(null);
-  const [sectionName, setSectionName] = useState("");
-  const [archiveSectionModal, setArchiveSectionModal] = useState(false);
-  const { userDetails } = useAuth();
-  const params = useParams();
-  useEffect(() => {
-    if (localStorage.getItem("showTaskToaster")) {
-      setTimeout(() => {
-        setToasterMessage(localStorage.getItem("showTaskToaster"));
-        setShowToaster(true);
-        localStorage.removeItem("showTaskToaster");
-      }, 500);
-    }
-  }, [localStorage.getItem("showTaskToaster")]);
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [toasterMessage, setToasterMessage] = useState('')
+  const [toaster, showToaster] = useState(false)
+  const [selectedProject, setSelectedProject] = useState({})
+  const [showAddTask, setShowAddTask] = useState(false)
+  const [selectedTask, setSelectedTask] = useState({})
+  const [modalShow, setModalShow] = useState(false)
+  const [sectionEditMode, setSectionEditMode] = useState(false)
+  const [selectedProjectId, setSelectedProjectId] = useState('')
+  const [selectedSectionId, setSelectedSectionId] = useState('')
+  const [showViewTask, setShowViewTask] = useState(false)
+  const setShowToaster = param => showToaster(param)
+  const [selectedTaskId, setSelectedTaskId] = useState('')
+  const [deleteSectionModal, setDeleteSectionModal] = useState(false)
+  const [isArchive, setIsArchive] = useState(false)
+  const [taskInfo, setTaskInfo] = useState(null)
+  const [sectionName, setSectionName] = useState('')
+  const [archiveSectionModal, setArchiveSectionModal] = useState(false)
+  const { userDetails } = useAuth()
+  const params = JSON.parse(localStorage.getItem('project_details'))
 
-  const handleAddTaskFromSection = (project) => {
-    console.log("section" , project);
+  useEffect(() => {
+    if (localStorage.getItem('showTaskToaster')) {
+      setTimeout(() => {
+        setToasterMessage(localStorage.getItem('showTaskToaster'))
+        setShowToaster(true)
+        localStorage.removeItem('showTaskToaster')
+      }, 500)
+    }
+  }, [localStorage.getItem('showTaskToaster')])
+
+  const handleAddTaskFromSection = project => {
+    console.log('section', project)
     setSelectedTask()
     localStorage.setItem('addTaskModal', true)
     setShowAddTask(true)
-    
+
     setSelectedProject({
-      
       _id: project?.projectId,
       section: project?.sectionId,
     })
   }
 
   useEffect(() => {
-    getTasksDataUsingProjectId();
-    let paramsData;
+    getTasksDataUsingProjectId()
+    let paramsData
 
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId);
-      localStorage.setItem("tasksParamsData", params?.projectId);
+      paramsData = params?.projectId
     }
 
     if (paramsData?.projectId) {
-      setSelectedProjectId(paramsData?.projectId);
+      setSelectedProjectId(paramsData?.projectId)
     }
     if (paramsData?.isArchive) {
-      setIsArchive(paramsData?.isArchive);
+      setIsArchive(paramsData?.isArchive)
     }
-  }, [isArchive]);
+  }, [isArchive])
 
   // useEffectOnce(() => {
   //   console.log('useEffectOnce has run!');
@@ -112,508 +91,444 @@ const Tasks = () => {
   //   };
   // });
 
-  const handleProgressBarHover = (project) => {
-    const completedTasks = project.completedTasks || 0;
-    const totalTasks = project.totalTasks || 0;
-    const pendingTasks = totalTasks - completedTasks;
-    setTaskInfo({ completedTasks, pendingTasks });
-  };
+  const handleProgressBarHover = project => {
+    const completedTasks = project.completedTasks || 0
+    const totalTasks = project.totalTasks || 0
+    const pendingTasks = totalTasks - completedTasks
+    setTaskInfo({ completedTasks, pendingTasks })
+  }
 
-  const deleteConFirmation = (sectionId) => {
-    setSelectedSectionId(sectionId?._id);
-    setDeleteSectionModal(true);
-  };
+  const deleteConFirmation = sectionId => {
+    setSelectedSectionId(sectionId?._id)
+    setDeleteSectionModal(true)
+  }
 
   const deleteSection = async () => {
     let dataToSend = {
       sectionId: selectedSectionId,
-    };
+    }
     try {
-      const res = await deleteSectionApi(dataToSend);
+      const res = await deleteSectionApi(dataToSend)
       if (res.status === 200) {
-        setToasterMessage("Section deleted successfully");
-        setShowToaster(true);
-        setDeleteSectionModal(false);
-        closeModal();
-        getTasksDataUsingProjectId();
-        let paramsData;
+        setToasterMessage('Section deleted successfully')
+        setShowToaster(true)
+        setDeleteSectionModal(false)
+        closeModal()
+        getTasksDataUsingProjectId()
+        let paramsData
         if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId);
+          paramsData = params?.projectId
         }
         if (paramsData?.projectId) {
-          setSelectedProjectId(paramsData?.projectId);
+          setSelectedProjectId(paramsData?.projectId)
         }
       } else {
-        setToasterMessage(res?.message);
-        setShowToaster(true);
+        setToasterMessage(res?.message)
+        setShowToaster(true)
       }
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error)
     }
-  };
+  }
 
   const archiveSection = async () => {
     let dataToSend = {
       sectionId: selectedSectionId,
       isArchived: true,
-    };
+    }
     try {
-      const res = await archiveSectionApi(dataToSend);
+      const res = await archiveSectionApi(dataToSend)
       if (res.status === 200) {
-        setToasterMessage("Section archived successfully");
-        setShowToaster(true);
-        setArchiveSectionModal(false);
-        closeModal();
-        getTasksDataUsingProjectId();
-        let paramsData;
+        setToasterMessage('Section archived successfully')
+        setShowToaster(true)
+        setArchiveSectionModal(false)
+        closeModal()
+        getTasksDataUsingProjectId()
+        let paramsData
         if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId);
+          paramsData = params?.projectId
         }
         if (paramsData?.projectId) {
-          setSelectedProjectId(paramsData?.projectId);
+          setSelectedProjectId(paramsData?.projectId)
         }
       } else {
-        setToasterMessage(res?.message);
-        setShowToaster(true);
+        setToasterMessage(res?.message)
+        setShowToaster(true)
       }
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error)
     }
-  };
+  }
 
   const editSection = (sectionId, projectId) => {
-    setSelectedProjectId(sectionId?.projectId);
-    setSectionName(sectionId?.section);
-    setSelectedSectionId(sectionId?._id);
-    setModalShow(true);
-    setSectionEditMode(true);
-  };
+    setSelectedProjectId(sectionId?.projectId)
+    setSectionName(sectionId?.section)
+    setSelectedSectionId(sectionId?._id)
+    setModalShow(true)
+    setSectionEditMode(true)
+  }
 
   const sectionUpdate = async () => {
     let dataToSend = {
       name: sectionName,
       projectId: selectedProjectId,
       sectionId: selectedSectionId,
-    };
+    }
     try {
-      const res = await updateSection(dataToSend);
+      const res = await updateSection(dataToSend)
       if (res.status === 200) {
-        setToasterMessage("Section updated successfully");
-        setSectionEditMode(false);
-        setShowToaster(true);
-        setModalShow(false);
-        closeModal();
-        getTasksDataUsingProjectId();
-        let paramsData;
+        setToasterMessage('Section updated successfully')
+        setSectionEditMode(false)
+        setShowToaster(true)
+        setModalShow(false)
+        closeModal()
+        getTasksDataUsingProjectId()
+        let paramsData
         if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId);
+          paramsData = params?.projectId
         }
         if (paramsData?.projectId) {
-          setSelectedProjectId(paramsData?.projectId);
+          setSelectedProjectId(paramsData?.projectId)
         }
       } else {
-        setToasterMessage(res?.message);
-        setShowToaster(true);
+        setToasterMessage(res?.message)
+        setShowToaster(true)
       }
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error)
     }
-  };
+  }
 
-  const handleViewDetails = (taskId) => {
-    setSelectedTaskId(taskId);
-    setShowViewTask(true);
-  };
+  const handleViewDetails = taskId => {
+    setSelectedTaskId(taskId)
+    setShowViewTask(true)
+  }
 
   const closeViewTaskModal = () => {
-    setShowViewTask(false);
-    setSelectedTaskId(null);
-  };
+    setShowViewTask(false)
+    setSelectedTaskId(null)
+  }
 
   const handleStatusChange = (e, taskId, status) => {
-    const newStatus = status;
+    const newStatus = status
     let dataToSend = {
       taskId: taskId,
       status: newStatus,
-    };
-    updateTaskStatus(dataToSend);
-  };
+    }
+    updateTaskStatus(dataToSend)
+  }
 
-  const updateTaskStatus = async (dataToSend) => {
+  const updateTaskStatus = async dataToSend => {
     try {
-      const res = await updateTaskStatusById(dataToSend);
+      const res = await updateTaskStatusById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
       } else {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
-        getTasksDataUsingProjectId();
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
+        getTasksDataUsingProjectId()
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
+      setToasterMessage(error?.error?.message || 'Something Went Wrong')
+      setShowToaster(true)
+      return error.message
     }
-  };
+  }
 
-  const showAddSectionModal = (isTrue) => {
-    setSectionName("");
-    setModalShow(isTrue);
-  };
+  const showAddSectionModal = isTrue => {
+    setSectionName('')
+    setModalShow(isTrue)
+  }
 
   const addSection = async () => {
     if (sectionEditMode) {
-      sectionUpdate();
-      return;
+      sectionUpdate()
+      return
     } else {
-      setLoading(true);
+      setLoading(true)
       try {
         let dataToSend = {
           name: sectionName,
           projectId: selectedProjectId,
-        };
+        }
 
-        const res = await addSectionApi(dataToSend);
-        setLoading(false);
+        const res = await addSectionApi(dataToSend)
+        setLoading(false)
         if (res.error) {
-          setToasterMessage(res?.message || "Something Went Wrong");
-          setShowToaster(true);
+          setToasterMessage(res?.message || 'Something Went Wrong')
+          setShowToaster(true)
         } else {
-          setToasterMessage(res?.message || "Something Went Wrong");
-          setShowToaster(true);
-          setModalShow(false);
-          closeModal();
-          getTasksDataUsingProjectId();
-          let paramsData;
+          setToasterMessage(res?.message || 'Something Went Wrong')
+          setShowToaster(true)
+          setModalShow(false)
+          closeModal()
+          getTasksDataUsingProjectId()
+          let paramsData
           if (params?.projectId) {
-            paramsData = JSON.parse(params?.projectId);
+            paramsData = params?.projectId
           }
           if (paramsData?.projectId) {
-            setSelectedProjectId(paramsData?.projectId);
+            setSelectedProjectId(paramsData?.projectId)
           }
           // getProjectList();
         }
       } catch (error) {
-        setToasterMessage(error?.error?.message || "Something Went Wrong");
-        setShowToaster(true);
-        setLoading(false);
-        return error.message;
+        setToasterMessage(error?.error?.message || 'Something Went Wrong')
+        setShowToaster(true)
+        setLoading(false)
+        return error.message
       }
     }
-  };
+  }
 
   function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString);
-    return localTimeString;
+    let utcTime = new Date(dateString)
+    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
+    let localTimeString = new Date(localTime.toISOString())
+    console.log('==========', localTimeString)
+    return localTimeString
   }
 
   function convertToUTCNight(dateString) {
-    console.log(dateString, "------------------");
-    let utcTime = new Date(dateString);
+    console.log(dateString, '------------------')
+    let utcTime = new Date(dateString)
 
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString);
-    return localTimeString;
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
+    let localTimeString = new Date(localTime.toISOString())
+    // console.log('==========', localTimeString)
+    return localTimeString
   }
 
   const getTasksDataUsingProjectId = async () => {
-    let paramsData;
-    if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId);
-    }
-    setLoading(true);
     try {
+      let paramsData = params?.projectId || null;
+      setLoading(true);
+  
       let data = {
-        groupBy: "default",
+        groupBy: 'default',
+        isArchived: isArchive || false,
+        projectId: paramsData
       };
-      if (isArchive) {
-        data.isArchived = true;
-      }
-      if (params?.projectId) {
-        data.projectId = paramsData?.projectId;
-      }
-      if (localStorage.getItem("selectedLead")) {
-        console.log(JSON.parse(localStorage.getItem("selectedLead")));
-        let leadsToSend = localStorage.getItem("selectedLead");
-        let leads = JSON.parse(localStorage.getItem("selectedLead"));
-        if (leads?.length) {
-          data.leads = leadsToSend;
+  
+      if (localStorage.getItem('selectedLead')) {
+        let leads = JSON.parse(localStorage.getItem('selectedLead'));
+        if (leads && leads.length > 0) {
+          data.leads = leads;
         }
       }
-
-      if (localStorage.getItem("taskFilters")) {
-        let filterData = JSON.parse(localStorage.getItem("taskFilters"));
-        let selectedFilter = localStorage.getItem("selectedFilter");
-        console.log(selectedFilter, "selectedFilter");
-        console.log(filterData);
+  
+      if (localStorage.getItem('taskFilters')) {
+        let filterData = JSON.parse(localStorage.getItem('taskFilters'));
+        let selectedFilter = localStorage.getItem('selectedFilter');
+  
         if (filterData?.projectIds) {
-          data.projectIds = JSON.stringify(filterData?.projectIds);
+          data.projectIds = filterData.projectIds;
         }
         if (filterData?.createdBy) {
-          data.createdBy = JSON.stringify(filterData?.createdBy);
+          data.createdBy = filterData.createdBy;
         }
-        if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
-          data.assignedTo = JSON.stringify(filterData?.assignedTo);
+        if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
+          data.assignedTo = filterData.assignedTo;
         }
-        if (filterData?.category?.length) {
-          data.sections = JSON.stringify(filterData?.category);
+        if (filterData?.category && filterData.category.length > 0) {
+          data.sections = filterData.category;
         }
         if (filterData?.priority) {
-          data.priority = JSON.stringify(filterData?.priority);
+          data.priority = filterData.priority;
         }
         if (filterData?.status) {
-          data.status = JSON.stringify(filterData?.status);
+          data.status = filterData.status;
         }
         if (filterData?.sortType) {
-          data.sortType = filterData?.sortType;
+          data.sortType = filterData.sortType;
         }
         if (filterData?.sortOrder) {
-          data.sortOrder = filterData?.sortOrder;
+          data.sortOrder = filterData.sortOrder;
         }
-        if (
-          filterData?.fromDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          console.log(selectedFilter, "----------------");
-
-          data.fromDate = convertToUTCDay(filterData?.fromDate);
+        if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
+          data.fromDate = convertToUTCDay(filterData.fromDate);
         }
-        if (
-          filterData?.toDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          console.log(selectedFilter, "----------------");
-
-          data.toDate = convertToUTCNight(filterData?.toDate);
+        if (filterData?.toDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
+          data.toDate = convertToUTCNight(filterData.toDate);
         }
-        if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-          console.log(selectedFilter, "----------------");
-
-          data.fromDate = convertToUTCDay(filterData?.fromDate);
-          data.toDate = convertToUTCNight(filterData?.toDate);
+        if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
+          data.fromDate = convertToUTCDay(filterData.fromDate);
+          data.toDate = convertToUTCNight(filterData.toDate);
         }
       }
-
+  
       const tasks = await getProjectsTask(data);
       setLoading(false);
+  
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || "Something Went Wrong");
+        setToasterMessage(tasks.error.message);
         setShowToaster(true);
       } else {
-        let allTask = tasks?.data;
-        allTask?.forEach((item, i) => {
-          item?.tasks?.map((task, j) => {
-            if (task?.dueDate) {
-              let dateMonth = task?.dueDate?.split("T")[0];
-              let today = new Date();
-
-              today =
-                today.getFullYear() +
-                "-" +
-                (today.getMonth() + 1 <= 9
-                  ? "0" + (today.getMonth() + 1)
-                  : today.getMonth() + 1) +
-                "-" +
-                (today.getDate() <= 9
-                  ? "0" + today.getDate()
-                  : today.getDate());
-              if (dateMonth === today) {
-                task.dueToday = true;
-              } else if (
-                new Date().getTime() > new Date(task?.dueDate).getTime()
-              ) {
+        let allTasks = tasks.data;
+        allTasks.forEach((item) => {
+          item.tasks.forEach((task) => {
+            if (task.dueDate) {
+              let today = new Date().toISOString().split('T')[0];
+  
+              if (task.dueDate.split('T')[0] === today || new Date(task.dueDate).getTime() < new Date().getTime()) {
                 task.dueToday = true;
               } else {
                 task.dueToday = false;
               }
-              if (
-                task?.completedDate &&
-                new Date(task?.completedDate).getTime() >
-                  new Date(task?.dueDate).getTime()
-              ) {
+  
+              if (task.completedDate && new Date(task.completedDate).getTime() > new Date(task.dueDate).getTime()) {
                 task.dueToday = true;
               }
-              if (
-                task?.completedDate &&
-                dateMonth === task?.completedDate?.split("T")[0]
-              ) {
+  
+              if (task.completedDate && task.completedDate.split('T')[0] === task.dueDate.split('T')[0]) {
                 task.dueToday = false;
               }
             }
           });
-          allTask[i].tasks = item?.tasks;
         });
-        setProjects(allTask);
-        let paramsData;
-        if (params?.projectId) {
-          paramsData = JSON.parse(params?.projectId);
-        }
-        if (paramsData?.projectId) {
-          setSelectedProjectId(paramsData?.projectId);
+  
+        setProjects(allTasks);
+        if (paramsData) {
+          setSelectedProjectId(paramsData);
         }
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      setToasterMessage(error.message);
       setShowToaster(true);
       setLoading(false);
       return error.message;
     }
   };
+  
 
   const exportTasks = async () => {
-    let paramsData;
+    let paramsData
     if (params?.projectId) {
-      paramsData = JSON.parse(params?.projectId);
+      paramsData = params?.projectId
     }
-    setLoading(true);
+    setLoading(true)
     try {
       let data = {
-        groupBy: "default",
-      };
+        groupBy: 'default',
+      }
       if (isArchive) {
-        data.isArchived = true;
+        data.isArchived = true
       }
       if (params?.projectId) {
-        data.projectId = paramsData?.projectId;
+        data.projectId = paramsData?.projectId
       }
-      if (localStorage.getItem("selectedLead")) {
-        console.log(JSON.parse(localStorage.getItem("selectedLead")));
-        let leadsToSend = localStorage.getItem("selectedLead");
-        let leads = JSON.parse(localStorage.getItem("selectedLead"));
+      if (localStorage.getItem('selectedLead')) {
+        console.log(JSON.parse(localStorage.getItem('selectedLead')))
+        let leadsToSend = localStorage.getItem('selectedLead')
+        let leads = JSON.parse(localStorage.getItem('selectedLead'))
         if (leads?.length) {
-          data.leads = leadsToSend;
+          data.leads = leadsToSend
         }
       }
 
-      if (localStorage.getItem("taskFilters")) {
-        let filterData = JSON.parse(localStorage.getItem("taskFilters"));
-        let selectedFilter = localStorage.getItem("selectedFilter");
-        console.log(selectedFilter, "selectedFilter");
-        console.log(filterData);
+      if (localStorage.getItem('taskFilters')) {
+        let filterData = JSON.parse(localStorage.getItem('taskFilters'))
+        let selectedFilter = localStorage.getItem('selectedFilter')
+        console.log(selectedFilter, 'selectedFilter')
+        console.log(filterData)
         if (filterData?.projectIds) {
-          data.projectIds = JSON.stringify(filterData?.projectIds);
+          data.projectIds = JSON.stringify(filterData?.projectIds)
         }
         if (filterData?.createdBy) {
-          data.createdBy = JSON.stringify(filterData?.createdBy);
+          data.createdBy = JSON.stringify(filterData?.createdBy)
         }
         if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
-          data.assignedTo = JSON.stringify(filterData?.assignedTo);
+          data.assignedTo = JSON.stringify(filterData?.assignedTo)
         }
         if (filterData?.category?.length) {
-          data.sections = JSON.stringify(filterData?.category);
+          data.sections = JSON.stringify(filterData?.category)
         }
         if (filterData?.priority) {
-          data.priority = JSON.stringify(filterData?.priority);
+          data.priority = JSON.stringify(filterData?.priority)
         }
         if (filterData?.status) {
-          data.status = JSON.stringify(filterData?.status);
+          data.status = JSON.stringify(filterData?.status)
         }
         if (filterData?.sortType) {
-          data.sortType = filterData?.sortType;
+          data.sortType = filterData?.sortType
         }
         if (filterData?.sortOrder) {
-          data.sortOrder = filterData?.sortOrder;
+          data.sortOrder = filterData?.sortOrder
         }
-        if (
-          filterData?.fromDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          console.log(selectedFilter, "----------------");
+        if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
+          console.log(selectedFilter, '----------------')
 
-          data.fromDate = convertToUTCDay(filterData?.fromDate);
+          data.fromDate = convertToUTCDay(filterData?.fromDate)
         }
-        if (
-          filterData?.toDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          console.log(selectedFilter, "----------------");
+        if (filterData?.toDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
+          console.log(selectedFilter, '----------------')
 
-          data.toDate = convertToUTCNight(filterData?.toDate);
+          data.toDate = convertToUTCNight(filterData?.toDate)
         }
-        if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-          console.log(selectedFilter, "----------------");
+        if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
+          console.log(selectedFilter, '----------------')
 
-          data.fromDate = convertToUTCDay(filterData?.fromDate);
-          data.toDate = convertToUTCNight(filterData?.toDate);
+          data.fromDate = convertToUTCDay(filterData?.fromDate)
+          data.toDate = convertToUTCNight(filterData?.toDate)
         }
       }
-      const res = await downloadExcel(data);
-    
+      const res = await downloadExcel(data)
+
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
+        setToasterMessage(res?.message || 'Something Went Wrong')
+        setShowToaster(true)
       } else {
-        console.log(res); // Make sure the response contains the expected data
+        console.log(res) // Make sure the response contains the expected data
 
         const blob = new Blob([res], {
-          type: ".xlsx",
-        });
-        
-        const url = window.URL.createObjectURL(blob);
-        
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `${Date.now()}.xlsx`);
-        
-        document.body.appendChild(link);
-        link.click();
-        
-        link.remove();
-        
+          type: '.xlsx',
+        })
+
+        const url = window.URL.createObjectURL(blob)
+
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `${Date.now()}.xlsx`)
+
+        document.body.appendChild(link)
+        link.click()
+
+        link.remove()
       }
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
-      setLoading(false);
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
-      return error.message;
+      setLoading(false)
+      setToasterMessage(error?.message || 'Something Went Wrong')
+      setShowToaster(true)
+      return error.message
     }
-  };
+  }
 
   const downloadExportData = () => {
-    exportTasks();
-  };
+    exportTasks()
+  }
 
-  const getNewTasks = (id) => {
-    closeModal();
-    getTasksDataUsingProjectId();
-  };
+  const getNewTasks = id => {
+    closeModal()
+    getTasksDataUsingProjectId()
+  }
 
   const getTaskFilters = () => {
-    getTasksDataUsingProjectId();
-  };
+    getTasksDataUsingProjectId()
+  }
 
   const closeModal = () => {
-    setShowAddTask(false);
-    setSelectedProject();
-    setSelectedTask();
-  };
-
-
-  
+    setShowAddTask(false)
+    setSelectedProject()
+    setSelectedTask()
+  }
 
   return (
     <>
@@ -776,8 +691,6 @@ const Tasks = () => {
                         <Dropdown.Item
                           onClick={() => {
                             handleAddTaskFromSection(project)
-
-                         
                           }}
                         >
                           <i
@@ -850,8 +763,8 @@ const Tasks = () => {
                             className="align-items-center"
                           >
                             <Row>
-                              <Col lg={1}>
-                                <div>
+                              <Col lg={1} >
+                                <div >
                                   {(userDetails.id === task?.assignedTo?._id ||
                                     (userDetails.role === 'LEAD' && (userDetails.id === task?.assignedTo?._id || task?.lead?.includes(userDetails.id) || userDetails.id === task?.createdBy?._id)) ||
                                     userDetails.role === 'SUPER_ADMIN' ||
@@ -923,7 +836,7 @@ const Tasks = () => {
                                   )}
                                 </div>
                               </Col>
-                              <Col lg={9}>
+                              <Col lg={8}>
                                 <p
                                   className={task?.status === 'COMPLETED' ? 'line-strics' : ''}
                                   // onClick={() => handleViewDetails(task?._id)}
@@ -936,21 +849,36 @@ const Tasks = () => {
                                   </p>
                                 </p>
                               </Col>
-                              <Col lg={2}>
+                              <Col
+                                lg={3}
+                                className="d-flex align-items-center "
+                              >
                                 {task?.isReOpen && (
-                                  <div className="d-flex align-items-center red-flag">
-                                    <i
-                                      className="fa fa-retweet"
-                                      aria-hidden="true"
-                                    ></i>
+                                  <div className="text-danger">
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Re-opened</Tooltip>}
+                                    >
+                                      <i
+                                        className="fa fa-retweet"
+                                        aria-hidden="true"
+                                      ></i>
+                                    </OverlayTrigger>
                                   </div>
                                 )}
                                 {task?.isDelayTask && (
-                                  <div className="d-flex align-items-center red-flag">
-                                    <i
-                                      className="fa fa-flag"
-                                      aria-hidden="true"
-                                    ></i>
+                                  <div className="text-danger"
+                                  style={{marginLeft:'10px'}}
+                                  >
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Overdue</Tooltip>}
+                                    >
+                                      <i
+                                        className="fa fa-flag"
+                                        aria-hidden="true"
+                                      ></i>
+                                    </OverlayTrigger>
                                   </div>
                                 )}
                               </Col>
@@ -1243,6 +1171,6 @@ const Tasks = () => {
       </div>
     </>
   )
-};
+}
 
-export default Tasks;
+export default Tasks

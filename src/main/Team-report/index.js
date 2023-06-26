@@ -219,16 +219,15 @@ export default function TeamReport(props) {
             className="py-4 px-4"
             style={{ borderRadius: '10px', border: '0px' }}
           >
-            <Row className="align-middle d-flex">
-              <Col lg="1">
-                <div className="profile-userpic">
+            <Row className="align-middle ">
+              
+              <Col
+                lg="6"
+                className="user_details  py-2 text-center"
+              >
+                 <div className="profile-userpic m-auto mb-3 mt-4">
                   <img src={userDetails?.profilePicture || avtar} />{' '}
                 </div>
-              </Col>
-              <Col
-                lg="5"
-                className="user_details  py-2"
-              >
                 <h1>
                   {userDetails?.name || '--'} ({userDetails?.role || '--'})
                 </h1>
@@ -269,7 +268,7 @@ export default function TeamReport(props) {
                   )}
                 </div>
               </Col>
-              <Col lg="6 py-4 pull-right">
+              <Col lg="6 ">
                 <RatingGraph selectedUserId={selectedOption.value} />
               </Col>
             </Row>

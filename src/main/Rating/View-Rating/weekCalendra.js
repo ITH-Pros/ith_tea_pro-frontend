@@ -4,7 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
 import { getRatings, getRatingsDetailsByID } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
-import { Accordion, Modal } from "react-bootstrap";
+import { Accordion, Modal, Row, Col } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
@@ -110,7 +110,7 @@ export default function MyCalendar() {
         }
   
         setUserRatingForGraph(userRatingForGraph);
-        console.log(userRatingForGraph, "---------------------------------Rating of User");
+        // console.log(userRatingForGraph, "---------------------------------Rating of User");
   
         setLoading(false);
       }
@@ -293,7 +293,7 @@ export default function MyCalendar() {
   
     return (
       <div className="line-chart">
-        <Line data={lineChartData} options={lineChartOptions} />
+        <Line data={lineChartData} options={lineChartOptions} height={250} />
       </div>
     );
   };
@@ -310,12 +310,15 @@ export default function MyCalendar() {
 
   return (
     <>
-     <div className="rating-graph ">
+    <Row>
+<Col lg={6}>
+<div className="rating-graph ">
         <LineGraph />
       </div>
-
-      <div className="">
-        <div>
+</Col>
+<Col lg={6}>
+<div className="">
+        <div id="calender-ui">
           <Calendar
             events={myRatings}
             localizer={localizer}
@@ -331,6 +334,12 @@ export default function MyCalendar() {
         </div>
         {loading ? <Loader /> : null}
       </div>
+</Col>
+
+    </Row>
+  
+
+ 
 
      
 
