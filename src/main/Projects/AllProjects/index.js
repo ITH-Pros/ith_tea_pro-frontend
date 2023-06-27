@@ -149,7 +149,7 @@ export default function AllProject() {
   const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
 
   const handleArchiveModalShow = (project) => {
-    // console.log("project", project);
+    // // console.log("project", project);
     setSelectedProject(project);
     setConfirmModalShow(true);
     setIsArchiveModalShow(true);

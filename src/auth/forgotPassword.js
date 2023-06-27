@@ -64,7 +64,7 @@ function ForgotPassword() {
       if (response.error) {
         setToasterMessage(response?.message);
         showToaster(true);
-        console.log(response.error,'-----------------error')
+        // console.log(response.error,'-----------------error')
       }
       else {
         setToasterMessage(response?.message);
@@ -78,7 +78,7 @@ function ForgotPassword() {
 
       setToasterMessage(error?.error?.message);
       showToaster(true);
-      console.log(error,'-----------------error')
+      // console.log(error,'-----------------error')
     }
   };
 
@@ -91,7 +91,7 @@ function ForgotPassword() {
       otp: otp,
     };
     // Make API call with dataToSend
-    console.log(dataToSend,'---------------data to send ')
+    // console.log(dataToSend,'---------------data to send ')
     try {
       const response = await verifyOtp(dataToSend);
     setLoading(false);
@@ -99,12 +99,12 @@ function ForgotPassword() {
       if (response.error) {
         setToasterMessage(response?.message);
         showToaster(true);
-        console.log(response,'-----------------3error')
+        // console.log(response,'-----------------3error')
       }
       else {
         setToasterMessage(response?.message);
         showToaster(true);
-        console.log(response,'-----------------3success')
+        // console.log(response,'-----------------3success')
         setOtpLogId(response.data.otpLogId);
         // navigate("/reset-password");
         setPassWordSection(true);
@@ -115,7 +115,7 @@ function ForgotPassword() {
     catch (error) {
     setLoading(false);
 
-      console.log(error,'-----------------5error')
+      // console.log(error,'-----------------5error')
     }
   };
 
@@ -138,7 +138,7 @@ function ForgotPassword() {
       if(response.error){
         setToasterMessage(response?.message);
         showToaster(true);
-        console.log(response.error,'-----------------error')
+        // console.log(response.error,'-----------------error')
       }
       else{
         setToasterMessage(response?.message);
@@ -156,7 +156,7 @@ function ForgotPassword() {
 
       setToasterMessage(error?.error?.message);
         showToaster(true);
-      console.log(error,'-----------------error')
+      // console.log(error,'-----------------error')
     }
   };
 

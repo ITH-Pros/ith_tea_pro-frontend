@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     setAccessToken(data?.token);
     setUserDetails(data?.user);
-    console.log(data?.user?.role , "data?.user?.role");
+    // // console.log(data?.user?.role , "data?.user?.role");
 
       
       if (data?.user?.profileCompleted === false) {

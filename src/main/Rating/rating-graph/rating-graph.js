@@ -56,7 +56,7 @@ export default function RatingGraph(props) {
       const rating = await getRatingsByUser(dataToSend);
 
       if (rating.error) {
-        console.log(rating?.error);
+        // console.log(rating?.error);
         setLoading(true);
       } else {
         let userRatingObj = {};

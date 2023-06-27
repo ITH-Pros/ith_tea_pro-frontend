@@ -110,7 +110,7 @@ const ProjectCard = ({
         setSelectedRole(null);
       }
     } catch (error) {
-      console.log("Error while getting user details");
+      // console.log("Error while getting user details");
       return error.message;
     }
   };
@@ -123,13 +123,13 @@ const ProjectCard = ({
     try {
       const response = await getUnassignedUsers(dataToSend);
       if (response.error) {
-        console.log("Error while getting user details");
+        // console.log("Error while getting user details");
         return;
       } else {
         setListOfUnassignedUsers(response?.data);
       }
     } catch (error) {
-      console.log("Error while getting user details");
+      // console.log("Error while getting user details");
       return error.message;
     }
   };
@@ -226,7 +226,7 @@ const ProjectCard = ({
     try {
       const response = await removeUserFromProject(dataToSend);
       if (response.error) {
-        console.log("Error while getting user details");
+        // console.log("Error while getting user details");
         return;
       } else {
         getAndSetAllProjects();
@@ -236,7 +236,7 @@ const ProjectCard = ({
         setModalShow(false);
       }
     } catch (error) {
-      console.log("Error while getting user details");
+      // console.log("Error while getting user details");
       // return error.message;
     }
   };

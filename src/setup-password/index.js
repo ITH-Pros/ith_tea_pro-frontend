@@ -82,7 +82,7 @@ function PasswordForm() {
           navigate("/login");
         }
       } catch (error) {
-        console.log("Error while getting user details");
+        // console.log("Error while getting user details");
         return error.message;
       }
     }

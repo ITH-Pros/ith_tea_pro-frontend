@@ -40,7 +40,7 @@ const Tasks = () => {
   const [archiveSectionModal, setArchiveSectionModal] = useState(false)
   const { userDetails } = useAuth()
   const params = JSON.parse(localStorage.getItem('project_details'))
-  const {projectId} = useParams;
+  const {projectId} = useParams();
 
   useEffect(() => {
     if (localStorage.getItem('showTaskToaster')) {
@@ -53,7 +53,7 @@ const Tasks = () => {
   }, [localStorage.getItem('showTaskToaster')])
 
   const handleAddTaskFromSection = project => {
-    // console.log('section', project)
+    // // console.log('section', project)
     setSelectedTask()
     localStorage.setItem('addTaskModal', true)
     setShowAddTask(true)
@@ -80,7 +80,7 @@ const Tasks = () => {
   }, [isArchive])
 
   // useEffectOnce(() => {
-  //   console.log('useEffectOnce has run!');
+  //   // console.log('useEffectOnce has run!');
   //   return () => {
   //   };
   // });
@@ -121,7 +121,7 @@ const Tasks = () => {
         setShowToaster(true)
       }
     } catch (error) {
-      console.log('error in deleteSection', error)
+      // console.log('error in deleteSection', error)
     }
   }
 
@@ -150,7 +150,7 @@ const Tasks = () => {
         setShowToaster(true)
       }
     } catch (error) {
-      console.log('error in archiveSection', error)
+      // console.log('error in archiveSection', error)
     }
   }
 
@@ -189,7 +189,7 @@ const Tasks = () => {
         setShowToaster(true)
       }
     } catch (error) {
-      console.log('error in sectionUpdate', error)
+      // console.log('error in sectionUpdate', error)
     }
   }
 
@@ -283,19 +283,19 @@ const Tasks = () => {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    // console.log('==========', localTimeString)
+    // // console.log('==========', localTimeString)
     return localTimeString
   }
 
   function convertToUTCNight(dateString) {
-    // console.log(dateString, '------------------')
+    // // console.log(dateString, '------------------')
     let utcTime = new Date(dateString)
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    // console.log('==========', localTimeString)
+    // // console.log('==========', localTimeString)
     return localTimeString
   }
 
@@ -313,37 +313,37 @@ const Tasks = () => {
       if (localStorage.getItem('selectedLead')) {
         let leads = JSON.parse(localStorage.getItem('selectedLead'));
         if (leads && leads.length > 0) {
-          data.leads = leads;
+          data.leads = JSON.stringify(leads);
         }
       }
   
       if (localStorage.getItem('taskFilters')) {
         let filterData = JSON.parse(localStorage.getItem('taskFilters'));
         let selectedFilter = localStorage.getItem('selectedFilterTypes');
-  
+        console.log(filterData)
         if (filterData?.projectIds) {
-          data.projectIds = filterData.projectIds;
+          data.projectIds = JSON.stringify(filterData.projectIds);
         }
         if (filterData?.createdBy) {
-          data.createdBy = filterData.createdBy;
+          data.createdBy = JSON.stringify(filterData.createdBy);
         }
         if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
-          data.assignedTo = filterData.assignedTo;
+          data.assignedTo = JSON.stringify(filterData.assignedTo);
         }
         if (filterData?.category && filterData.category.length > 0) {
-          data.sections = filterData.category;
+          data.sections = JSON.stringify(filterData.category);
         }
         if (filterData?.priority) {
-          data.priority = filterData.priority;
+          data.priority = JSON.stringify(filterData.priority);
         }
         if (filterData?.status) {
-          data.status = filterData.status;
+          data.status = JSON.stringify(filterData.status);
         }
         if (filterData?.sortType) {
-          data.sortType = filterData.sortType;
+          data.sortType = JSON.stringify(filterData.sortType);
         }
         if (filterData?.sortOrder) {
-          data.sortOrder = filterData.sortOrder;
+          data.sortOrder = JSON.stringify(filterData.sortOrder);
         }
         if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
           data.fromDate = convertToUTCDay(filterData.fromDate);
@@ -396,7 +396,7 @@ const Tasks = () => {
       setToasterMessage(error?.message || 'Something Went Wrong in get project task error')
       setShowToaster(true)
       setLoading(false)
-      console.log(error.message)
+      // console.log(error.message)
     }
   };
   
@@ -418,7 +418,7 @@ const Tasks = () => {
         data.projectId = paramsData?.projectId
       }
       if (localStorage.getItem('selectedLead')) {
-        // console.log(JSON.parse(localStorage.getItem('selectedLead')))
+        // // console.log(JSON.parse(localStorage.getItem('selectedLead')))
         let leadsToSend = localStorage.getItem('selectedLead')
         let leads = JSON.parse(localStorage.getItem('selectedLead'))
         if (leads?.length) {
@@ -429,8 +429,8 @@ const Tasks = () => {
       if (localStorage.getItem('taskFilters')) {
         let filterData = JSON.parse(localStorage.getItem('taskFilters'))
         let selectedFilter = localStorage.getItem('selectedFilter')
-        // console.log(selectedFilter, 'selectedFilter')
-        // console.log(filterData)
+        // // console.log(selectedFilter, 'selectedFilter')
+        // // console.log(filterData)
         if (filterData?.projectIds) {
           data.projectIds = JSON.stringify(filterData?.projectIds)
         }
@@ -456,17 +456,17 @@ const Tasks = () => {
           data.sortOrder = filterData?.sortOrder
         }
         if (filterData?.fromDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          // console.log(selectedFilter, '----------------')
+          // // console.log(selectedFilter, '----------------')
 
           data.fromDate = convertToUTCDay(filterData?.fromDate)
         }
         if (filterData?.toDate && selectedFilter && selectedFilter !== 'null' && selectedFilter !== 'Today' && selectedFilter !== 'Tomorrow') {
-          // console.log(selectedFilter, '----------------')
+          // // console.log(selectedFilter, '----------------')
 
           data.toDate = convertToUTCNight(filterData?.toDate)
         }
         if (selectedFilter === 'Today' || selectedFilter === 'Tomorrow') {
-          // console.log(selectedFilter, '----------------')
+          // // console.log(selectedFilter, '----------------')
 
           data.fromDate = convertToUTCDay(filterData?.fromDate)
           data.toDate = convertToUTCNight(filterData?.toDate)
@@ -478,7 +478,7 @@ const Tasks = () => {
         setToasterMessage(res?.message || 'Something Went Wrong in download excel')
         setShowToaster(true)
       } else {
-        console.log(res,'download excel') // Make sure the response contains the expected data
+        // console.log(res,'download excel') // Make sure the response contains the expected data
 
         const blob = new Blob([res], {
           type: '.xlsx',
@@ -562,7 +562,7 @@ const Tasks = () => {
                 </button>
               )}
 
-              {projects?.length !== 0 && userDetails?.role !== 'CONTRIBUTOR' && !isArchive && selectedProjectId && (
+              {/* {projects?.length !== 0 && userDetails?.role !== 'CONTRIBUTOR' && !isArchive && selectedProjectId && (
                 <button
                   className="addTaskBtn addSectionBtn"
                   onClick={() => {
@@ -575,7 +575,7 @@ const Tasks = () => {
                   ></i>{' '}
                   Add Section
                 </button>
-              )}
+              )} */}
               <button className="filter_btn">
                 <FilterModal
                   handleProjectId={selectedProjectId}
@@ -606,7 +606,7 @@ const Tasks = () => {
         />
 
         <Accordion alwaysOpen="true">
-          {!projects?.length && params?.projectId && !isArchive && userDetails?.role !== 'CONTRIBUTOR' && (
+          {/* {!projects?.length && params?.projectId && !isArchive && userDetails?.role !== 'CONTRIBUTOR' && (
             <div className="add-section-center">
               <Button
                 variant="primary"
@@ -617,7 +617,7 @@ const Tasks = () => {
                 <i className="fa fa-plus-circle"> </i> Add Section
               </Button>
             </div>
-          )}
+          )} */}
           {!projects?.length && !selectedProjectId && (
             <p
               className="alig-nodata"

@@ -56,13 +56,9 @@ export default function Dashboard(props) {
     if (modalShow === false) onInit()
   }, [modalShow])
 
-   useEffect(() => {
-    console.log(raitngForDay,'view-rating component;;;;;;;;;;;;;;;;')
-  }, [raitngForDay]);
-
   const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
-    // console.log(user,date,month,year)
+    // // console.log(user,date,month,year)
     let setDate = date
     let setMonth = month
     if(date<10){
@@ -79,7 +75,7 @@ export default function Dashboard(props) {
       if (response.error) {
         setToasterMessage(response.message);
         setShowToaster(true);
-        console.log("error", response );
+        // console.log("error", response );
       } else {
         if (response?.data?.ratingAllowed === true) {
           setRatingData(prevRatingData => ({
@@ -94,10 +90,10 @@ export default function Dashboard(props) {
           setToasterMessage('You are not allowed to give rating.')
           setShowToaster(true)
         }
-        // console.log('error in verify manager')
+        // // console.log('error in verify manager')
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
     setLoading(false);
   };
@@ -149,7 +145,7 @@ export default function Dashboard(props) {
         setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        // console.log(rating.data);
+        // // console.log(rating.data);
         setRatings([...rating.data]);
       }
     } catch (error) {
@@ -174,10 +170,10 @@ export default function Dashboard(props) {
       placement="end"
     >
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >0 ? ('View Tasks'):  ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
+        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >0 ? ('View Tasks') : ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body  >
-      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay} />: <TasksModalBody data={ratingData} setModalShow={setModalShow}/>}
+      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay} />: <TasksModalBody data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay}/>}
       </Offcanvas.Body>
     </Offcanvas>
       <div className="dashboard_camp">
@@ -356,7 +352,7 @@ export default function Dashboard(props) {
                   padding: '2px 15px',
                 }}
                 className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
-                // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
+                // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
                 onClick={() => {
                   isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse); setRatingForDay(0)
                 }}

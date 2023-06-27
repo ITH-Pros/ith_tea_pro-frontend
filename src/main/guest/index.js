@@ -59,7 +59,7 @@ export default function Guest({}) {
   }
 
   const handleShowProjectModal = (guest) => {
-    console.log(guest);
+    // console.log(guest);
     setSelectedProjects(guest);
     setShowProjectModal(true);
   };
@@ -215,7 +215,7 @@ export default function Guest({}) {
   
 
   const handleSubmit = () => {
-    console.log(formData);
+    // console.log(formData);
 
     if (!formData.name || !formData.email || !formData.project.length) {
       alert("Please fill all the fields");
@@ -345,7 +345,7 @@ export default function Guest({}) {
     try {
         const project = await getAllProjects();
         if (project.error) {
-            console.log(project?.error);
+            // console.log(project?.error);
           
         } else {
             setProjects(project?.data);

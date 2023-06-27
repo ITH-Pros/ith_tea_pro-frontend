@@ -167,15 +167,15 @@ export default function Dashboard(props) {
     if (isNaN(date.getTime())) {
       return ''
     }
-    // console.log(dateString, '-----------------------------------------------')
+    // // console.log(dateString, '-----------------------------------------------')
     let utcTime = new Date(dateString)
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    // console.log('==========', localTimeString)
-    // console.log(localTimeString)
+    // // console.log('==========', localTimeString)
+    // // console.log(localTimeString)
     return localTimeString
   }
 
@@ -222,7 +222,7 @@ export default function Dashboard(props) {
         setShowToaster(true)
       } else {
         let allTask = tasks?.data
-        console.log('object1', allTask)
+        // console.log('object1', allTask)
         allTask?.map(item => {
           let dateMonth = item?.dueDate?.split('T')[0]
           let today = new Date()
@@ -236,7 +236,7 @@ export default function Dashboard(props) {
           }
         })
         setOverdueWorkList(allTask)
-        console.log('object2', allTask)
+        // console.log('object2', allTask)
       }
     } catch (error) {
       setLoading(false)
@@ -280,7 +280,7 @@ export default function Dashboard(props) {
       memberId: e,
     }
 
-    console.log(dataToSend, 'dataToSend')
+    // console.log(dataToSend, 'dataToSend')
 
     try {
       const tasks = await getAllPendingRating(dataToSend)
@@ -289,7 +289,7 @@ export default function Dashboard(props) {
         setToasterMessage(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
         setShowToaster(true)
       } else {
-        console.log(tasks, 'tasks')
+        // console.log(tasks, 'tasks')
         let allTask = tasks?.data
         allTask?.map(item => {
           let dateMonth = item?.dueDate?.split('T')[0]
@@ -489,7 +489,7 @@ export default function Dashboard(props) {
   const [taskDetails, setTaskDetails] = useState(null)
 
   const openReopenTaskModal = taskId => {
-    console.log(taskId)
+    // console.log(taskId)
     setReopenTaskId(taskId._id)
     // setTaskDetails(taskId);
     setReopenTaskModal(true)
@@ -513,7 +513,7 @@ export default function Dashboard(props) {
   }
 
   const handleSubmit = async () => {
-    console.log(newDueDate) // Access the new due date from the state
+    // console.log(newDueDate) // Access the new due date from the state
 
     // ... Perform any additional actions upon submitting the new due date
     if (newDueDate === '') {

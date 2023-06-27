@@ -31,7 +31,6 @@ export default function Navbar() {
         <Sidebar>
           <Menu
             onClick={() => {
-              console.log('------------------')
               localStorage.removeItem('selectedOptions')
             }}
             iconShape="circle"

@@ -54,7 +54,7 @@ function ResetPassword(props) {
       newPassword: newPassword,
       confirmPassword: confirmPassword,
     };
-    console.log(dataToSend, "---------------data to send ");
+    // console.log(dataToSend, "---------------data to send ");
     // Make API call with dataToSend
     try {
       const response = await resetPassword(dataToSend);
@@ -63,9 +63,9 @@ function ResetPassword(props) {
       if (response.error) {
         setToasterMessage(response?.message);
         setShowToaster(true);
-        console.log(response?.message || "response.error");
+        // console.log(response?.message || "response.error");
       } else {
-        console.log(response?.message || "else");
+        // console.log(response?.message || "else");
 
         setToasterMessage(response?.message);
         setShowToaster(true);
@@ -83,7 +83,7 @@ function ResetPassword(props) {
       setLoading(false);
       setToasterMessage(error?.error?.message || "Something Went Wrong");
       setShowToaster(true);
-      console.log(error?.error?.message || "error");
+      // console.log(error?.error?.message || "error");
     }
   };
 

@@ -73,7 +73,7 @@ function UserForm(props) {
     try {
       const response = await getLogedInUserDetails();
       if (response.error) {
-        console.log("Error while getting user details");
+        // console.log("Error while getting user details");
         setLoading(false);
         return;
       } else {
@@ -81,7 +81,7 @@ function UserForm(props) {
         setLoading(false);
       }
     } catch (error) {
-      console.log("Error while getting user details");
+      // console.log("Error while getting user details");
       setLoading(false);
       return error.message;
     }
@@ -114,13 +114,13 @@ function UserForm(props) {
       linkedInLink: linkedin,
       profilePicture,
     };
-    console.log(profilePicture  )
+    // console.log(profilePicture  )
 
     try {
       setLoading(true);
       const response = await editLogedInUserDetails(dataToSend);
       if (response.error) {
-        console.log("Error while updating user details");
+        // console.log("Error while updating user details");
         setLoading(false);
         return;
       } else {
@@ -131,12 +131,12 @@ function UserForm(props) {
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
         handleModalClose();
-        console.log('inside handel function')
+        // console.log('inside handel function')
         document.getElementById('headerbuttontoupdateprofile')?.click();
         
       }
     } catch (error) {
-      console.log("Error while updating user details");
+      // console.log("Error while updating user details");
       document.getElementById('headerbuttontoupdateprofile')?.click();
       setLoading(false);
       return error.message;

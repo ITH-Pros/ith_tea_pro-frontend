@@ -41,7 +41,7 @@ const ImageUpload = (props) => {
         const response = await uploadProfileImage(formData);
         setLoading(false);
         if (response.error) {
-          console.log("Error while Updating details");
+          // console.log("Error while Updating details");
           return;
         } else {
           setProfileImage(response.url);
@@ -50,7 +50,7 @@ const ImageUpload = (props) => {
           showToasterMessage();
         }
       } catch (error) {
-        console.log("Error while Updating details");
+        // console.log("Error while Updating details");
         setLoading(false);
         return error.message;
       }

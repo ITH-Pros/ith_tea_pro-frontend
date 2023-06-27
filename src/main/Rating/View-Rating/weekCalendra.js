@@ -58,7 +58,7 @@ export default function MyCalendar() {
 
   //     const rating = await getRatings(dataToSend);
   //     if (rating.error) {
-  //       console.log(rating?.error);
+  //       // console.log(rating?.error);
   //       setLoading(false);
   //     } else {
   //       let userRatingObj = {};
@@ -73,7 +73,7 @@ export default function MyCalendar() {
   //         userRatingForGraph.push(userRatingObj[i]);
   //       }
   //       setUserRatingForGraph(userRatingForGraph);
-  //       console.log(userRatingForGraph, "---------------------------------Rating of User");
+  //       // console.log(userRatingForGraph, "---------------------------------Rating of User");
   //     }
   //   } catch (error) {
   //     setLoading(false);
@@ -92,7 +92,7 @@ export default function MyCalendar() {
   
       const rating = await getRatings(dataToSend);
       if (rating.error) {
-        console.log(rating?.error);
+        // console.log(rating?.error);
         setLoading(false);
       } else {
         let userRatingObj = {};
@@ -110,7 +110,7 @@ export default function MyCalendar() {
         }
   
         setUserRatingForGraph(userRatingForGraph);
-        // console.log(userRatingForGraph, "---------------------------------Rating of User");
+        // // console.log(userRatingForGraph, "---------------------------------Rating of User");
   
         setLoading(false);
       }
@@ -132,7 +132,7 @@ export default function MyCalendar() {
       };
       const rating = await getRatings(dataToSend);
       if (rating.error) {
-        console.log(rating?.error);
+        // console.log(rating?.error);
         setLoading(false);
       } else {
         let dataToSet = [];
@@ -154,7 +154,7 @@ export default function MyCalendar() {
         }
 
         const ratingData = rating.data?.[0]?.ratings;
-        // console.log(ratingData, "---------------------------------rating data");
+        // // console.log(ratingData, "---------------------------------rating data");
 
         if (ratingData) {
           const ratingEvents = ratingData.map((item, index) => ({
@@ -166,12 +166,12 @@ export default function MyCalendar() {
           dataToSet = [...dataToSet, ...ratingEvents];
         }
 
-        // console.log(dataToSet, "---------------------------------data to set");
+        // // console.log(dataToSet, "---------------------------------data to set");
         setMyRatings(dataToSet);
         setLoading(false);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setLoading(false);
     }
   }
@@ -179,7 +179,7 @@ export default function MyCalendar() {
   const handleDateChange = (event, s, a) => {
     if (a === "DATE") {
       setSelectedRatingDate(event);
-      console.log(a, "event");
+      // console.log(a, "event");
       return;
     }
 
@@ -205,7 +205,7 @@ export default function MyCalendar() {
   //   };
   //   const rating = await getRatingsDetailsByID(dataToSend);
   //   if (rating.error) {
-  //     console.log(rating?.error);
+  //     // console.log(rating?.error);
   //     setLoading(false);
   //   } else {
   //     if (!rating.data || rating.data.length === 0) {

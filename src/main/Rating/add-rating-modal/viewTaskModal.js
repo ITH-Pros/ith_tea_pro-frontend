@@ -1,18 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
 import { useState, useEffect } from 'react'
 import '../rating.css'
-import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
+import { getProjectsTask } from '../../../services/user/api'
 import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
 import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
 
 export default function TasksModalBody(props) {
-  const { setModalShow, data } = props
+  const { setModalShow, data, raitngForDay} = props
   let user = data?.user
   let date = data?.date
   let month = data?.month
@@ -86,6 +84,7 @@ export default function TasksModalBody(props) {
     <>
       {userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
+              <h3>Rating: {raitngForDay}</h3>
           <div style={{ marginTop: '30px' }}>
             <h5>{user?.name} tasks for {date}/{month}/{year} </h5>
             {userTasks.length > 0 &&

@@ -25,8 +25,8 @@ function FilterDropdown(props) {
    }
   }, [toDate]);
   useEffect(() => {
-    console.log(fromDate,'-------------------------from date')
-    console.log(toDate,'-------------------------to date')
+    // console.log(fromDate,'-------------------------from date')
+    // console.log(toDate,'-------------------------to date')
     if(fromDate && toDate){
       props.onFilterSelect(fromDate, toDate);
 
@@ -42,9 +42,9 @@ function FilterDropdown(props) {
   useEffect(() => {
     const dueDate = JSON.parse(localStorage.getItem("dueDate"));
     const selectedFilter = localStorage.getItem("selectedFilterTypes");
-    console.log(selectedFilter,'selectedFilterTypes')
+    // console.log(selectedFilter,'selectedFilterTypes')
     if (dueDate && selectedFilter === "range") {
-      console.log(dueDate?.fromDate,'=====================')
+      // console.log(dueDate?.fromDate,'=====================')
       // setFromDate(dueDate?.fromDate?.split('T')[0]);
       // setToDate(dueDate?.toDate);
       setSelectedFilter("range");

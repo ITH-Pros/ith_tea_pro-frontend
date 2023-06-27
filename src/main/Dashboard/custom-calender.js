@@ -18,12 +18,12 @@ const CustomCalendar = (props) => {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
+    // console.log("==========", localTimeString)
     return localTimeString
   }
   
   function convertToUTCNight(dateString) {
-    console.log(dateString,'------------------')
+    // console.log(dateString,'------------------')
     let utcTime = new Date(dateString);
     
     utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
@@ -31,7 +31,7 @@ const CustomCalendar = (props) => {
     const timeZoneOffsetMs = timeZoneOffsetMinutes*60*1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
+    // console.log("==========", localTimeString)
     return localTimeString
   }
   useEffect(() => {
@@ -51,7 +51,7 @@ const CustomCalendar = (props) => {
     useEffect(() => {
 
         if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined )  {
-            console.log(isChange);
+            // console.log(isChange);
             getTeamWorkList();
           }
         }, [isChange]);
@@ -72,11 +72,11 @@ const CustomCalendar = (props) => {
           toDate: convertToUTCNight(currentDate),
         };
     }
-    console.log("dataToSend", dataToSend);
+    // console.log("dataToSend", dataToSend);
     try {
       const res = await getTeamWork(dataToSend);
       if (res.error) {
-        console.log("Error while getting team work list");
+        // console.log("Error while getting team work list");
 
       } else {
         setTeamWorkList(res?.data);
@@ -90,11 +90,11 @@ const CustomCalendar = (props) => {
     if (currentView === "Week") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
       setCurrentDate(newDate);
-      console.log(`Previous week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
+      // console.log(`Previous week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     } else if (currentView === "Day") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
       setCurrentDate(newDate);
-      console.log(`Previous day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
+      // console.log(`Previous day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     }
   };
 
@@ -102,23 +102,23 @@ const CustomCalendar = (props) => {
     if (currentView === "Week") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
       setCurrentDate(newDate);
-      console.log(`Next week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
+      // console.log(`Next week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     } else if (currentView === "Day") {
       const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
       setCurrentDate(newDate);
-      console.log(`Next day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
+      // console.log(`Next day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     }
   };
 
   const handleViewChange = (view) => {
     setCurrentView(view);
-    console.log(`View changed: currentView=${view}, currentDate=${currentDate.toLocaleDateString()}`);
+    // console.log(`View changed: currentView=${view}, currentDate=${currentDate.toLocaleDateString()}`);
   };
 
   const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
   const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + (7 - currentDate.getDay()));
 
-  console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`)
+  // console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`)
 
   return (
     <Row id="agenda" className="align-items-center" >

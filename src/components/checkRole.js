@@ -3,7 +3,7 @@ import { useAuth } from "../auth/AuthProvider";
 
 export const CheckRole = ({ children, role }) => {
     const { userDetails } = useAuth();
-    console.log(role, userDetails.role , role.includes(userDetails.role))
+    // console.log(role, userDetails.role , role.includes(userDetails.role))
     if (Array.isArray(role) && !role.includes(userDetails.role)) {
         return <Navigate to="/" />;
     } 

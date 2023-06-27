@@ -54,13 +54,13 @@ export default function Teams(props) {
 
   const getManagerList = async userId => {
     setLoading(true)
-    console.log('userId', userId)
+    // console.log('userId', userId)
     // Make an API call or perform any necessary operations to fetch the manager list
 
     try {
       const resp = await getAllManager()
       if (resp.error) {
-        console.log(resp.error)
+        // console.log(resp.error)
         setLoading(false)
       } else {
         setLoading(false)
@@ -71,17 +71,17 @@ export default function Teams(props) {
             } else {
               setSelectedManagers([])
             }
-            console.log('user.manager', user?.managerIds)
+            // console.log('user.manager', user?.managerIds)
           }
         })
 
         // if(user.role === "C")
-        console.log(resp?.data)
+        // console.log(resp?.data)
         setManagerList(resp?.data)
       }
     } catch (error) {
       setLoading(false)
-      console.log(error)
+      // console.log(error)
     }
   }
 
@@ -99,7 +99,7 @@ export default function Teams(props) {
 
   const assignManagers = async () => {
     // Perform any necessary actions with the selected managers
-    console.log('Selected Managers:', selectedManagers)
+    // console.log('Selected Managers:', selectedManagers)
 
     let data = {
       managerIds: selectedManagers,
@@ -108,7 +108,7 @@ export default function Teams(props) {
     try {
       const resp = await assignManagerTOUserByIds(data)
       if (resp.error) {
-        console.log(resp.error)
+        // console.log(resp.error)
         setToasterMessage(resp?.message || 'Something Went Wrong')
         setShowToaster(true)
       } else {
@@ -118,7 +118,7 @@ export default function Teams(props) {
         onInit()
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
@@ -441,7 +441,7 @@ export default function Teams(props) {
       label: user?.name,
       value: user?._id,
     }
-    console.log(data)
+    // console.log(data)
     localStorage.setItem('selectedOptions', JSON.stringify(data))
     navigate('/team-report')
   }

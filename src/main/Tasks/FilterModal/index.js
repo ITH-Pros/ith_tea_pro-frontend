@@ -91,12 +91,12 @@ const FilterModal = (props) => {
 
   useEffect(() => {
     if(selectedFilterLead){
-      console.log(selectedFilterLead.map(obj => obj._id))
+      // console.log(selectedFilterLead.map(obj => obj._id))
 
       localStorage.setItem('selectedLead',JSON.stringify(selectedFilterLead.map(obj => obj._id)))
     }
   }, [selectedFilterLead]);
-  
+
   useEffect(() => {
     getLeadsList()
     getAllProjectsData();
@@ -117,7 +117,7 @@ const FilterModal = (props) => {
 
   const handleFilterSelect = (fromDate, toDate) => {
   
-    // console.log("fromDate----------------------------toDate", fromDate, toDate);
+    // // console.log("fromDate----------------------------toDate", fromDate, toDate);
     localStorage.setItem(
       "dueDate",
       JSON.stringify({ fromDate: fromDate, toDate: toDate })
@@ -272,7 +272,7 @@ const FilterModal = (props) => {
       const users = await getAllUsersWithoutPagination();
       setLoading(false);
       if (users.error) {
-        console.log(users?.error);
+        // console.log(users?.error);
       } else {
         setUsersList(users.data?.users);
       }

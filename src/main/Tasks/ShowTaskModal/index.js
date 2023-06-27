@@ -567,12 +567,12 @@ function TaskModal(props) {
     const timeZoneOffsetMs = timeZoneOffsetMinutes *  60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString)
+    // console.log("==========", localTimeString)
     return localTimeString
   }
   
   const updateMutipleTaskDetails = async (data, taskDetails) => {
-    console.log('_+++++++++++++++++++++++++++++++++++++++')
+    // console.log('_+++++++++++++++++++++++++++++++++++++++')
     try {
       let dataToSend = {
         taskId: taskDetails._id,
@@ -635,7 +635,7 @@ function TaskModal(props) {
         taskId: selectedTaskDetails._id,
         ...data,
       };
-      console.log(dataToSend);
+      // console.log(dataToSend);
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
