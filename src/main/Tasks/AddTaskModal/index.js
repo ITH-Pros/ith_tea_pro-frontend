@@ -495,6 +495,7 @@ export default function AddTaskModal(props) {
     setValidated(false);
     resetFormValue();
     setCategoryList([]);
+    setShowMiscType(false);
 
     setShowAddTaskModal(false);
   };
