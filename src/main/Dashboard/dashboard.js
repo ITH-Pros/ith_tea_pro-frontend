@@ -779,7 +779,7 @@ export default function Dashboard(props) {
                                 <Dropdown.Menu>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                     <i
-                                      className="fa fa-check-circle secondary"
+                                      className="fa fa-check-circle secondary  "
                                       aria-hidden="true"
                                     ></i>{' '}
                                     Not Started
@@ -800,7 +800,7 @@ export default function Dashboard(props) {
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                     <i
-                                      className="fa fa-check-circle warning"
+                                      className="fa fa-check-circle primary"
                                       aria-hidden="true"
                                     ></i>{' '}
                                     On Hold
@@ -904,10 +904,10 @@ export default function Dashboard(props) {
                             style={{ justifyContent: 'end' }}
                           >
                             <small>
-                              {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                              {task?.status === 'NOT_STARTED' && <Badge bg="secondary">NOT STARTED</Badge>}
                               {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                               {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                              {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                              {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                             </small>
                           </Col>
                           <Col
@@ -1062,7 +1062,7 @@ export default function Dashboard(props) {
                                 <Dropdown.Menu>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                     <i
-                                      className="fa fa-check-circle secondary"
+                                      className="fa fa-check-circle secondary "
                                       aria-hidden="true"
                                     ></i>{' '}
                                     Not Started
@@ -1083,7 +1083,7 @@ export default function Dashboard(props) {
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                     <i
-                                      className="fa fa-check-circle warning"
+                                      className="fa fa-check-circle primary"
                                       aria-hidden="true"
                                     ></i>{' '}
                                     On Hold
@@ -1124,10 +1124,10 @@ export default function Dashboard(props) {
                             style={{ justifyContent: 'end' }}
                           >
                             <small>
-                              {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                              {task?.status === 'NOT_STARTED' && <Badge bg=" secondary ">NOT STARTED</Badge>}
                               {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                               {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                              {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                              {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                             </small>
                           </Col>
                           <Col
@@ -1293,7 +1293,7 @@ export default function Dashboard(props) {
                             style={{ justifyContent: 'end' }}
                           >
                             <small>
-                              {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                              {task?.status === 'NOT_STARTED' && <Badge bg="secondary">NOT STARTED</Badge>}
                               {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                               {task?.status === 'COMPLETED' && (
                                 <>
@@ -1350,7 +1350,7 @@ export default function Dashboard(props) {
                                   </>
                                 </>
                               )}
-                              {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                              {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                             </small>
                           </Col>
 
@@ -1543,7 +1543,7 @@ export default function Dashboard(props) {
                                           <Dropdown.Menu>
                                             <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                               <i
-                                                className="fa fa-check-circle secondary"
+                                                className="fa fa-check-circle  secondary "
                                                 aria-hidden="true"
                                               ></i>
                                               Not Started
@@ -1564,7 +1564,7 @@ export default function Dashboard(props) {
                                             </Dropdown.Item>
                                             <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                               <i
-                                                className="fa fa-check-circle warning"
+                                                className="fa fa-check-circle primary "
                                                 aria-hidden="true"
                                               ></i>{' '}
                                               On Hold
@@ -1662,10 +1662,10 @@ export default function Dashboard(props) {
                                       style={{ justifyContent: 'end' }}
                                     >
                                       <small>
-                                        {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                                        {task?.status === 'NOT_STARTED' && <Badge bg=" secondary">NOT STARTED</Badge>}
                                         {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                                         {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                                        {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                                        {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                                       </small>
                                     </Col>
                                     <Col
@@ -1755,15 +1755,10 @@ export default function Dashboard(props) {
                   <div className="form-group">
                     <label>New Due Date</label>
                     {'  '}
-                    <a
-                      href={'view-  ' + reopenTaskId}
-                      target="_blank"
-                    >
-                      (View task here)
-                    </a>
                     <input
                       type="date"
                       min={new Date().toISOString().split('T')[0]}
+                      max="9999-12-31"
                       className="form-control"
                       value={newDueDate}
                       onChange={handleNewDueDate}

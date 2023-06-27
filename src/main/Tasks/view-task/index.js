@@ -439,14 +439,6 @@ export default function ViewTaskModal(props) {
                 >
                   Comments
                 </button>
-                <button
-                  onClick={() => handleTabChange("ratings")}
-                  className={`toggle-button ${
-                    activeTab === "ratings" ? "active" : ""
-                  }`}
-                >
-                  Ratings
-                </button>
                 {/* history */}
                 <button
                   onClick={() => handleTabChange("history")}
