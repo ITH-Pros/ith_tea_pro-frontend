@@ -110,14 +110,9 @@ export default function MyCalendar() {
         }
         
         setUserRatingForGraph(userRatingForGraph);
-<<<<<<< HEAD
-        // // console.log(userRatingForGraph, "---------------------------------Rating of User");
-  
-=======
 
         // console.log(userRatingForGraph, "---------------------------------Rating of User");
 
->>>>>>> cf8a777f32b5e5d51cd96c5eb7715f42f75c4346
         setLoading(false);
       }
     } catch (error) {
