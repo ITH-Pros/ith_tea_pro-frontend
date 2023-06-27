@@ -1755,15 +1755,10 @@ export default function Dashboard(props) {
                   <div className="form-group">
                     <label>New Due Date</label>
                     {'  '}
-                    <a
-                      href={'view-  ' + reopenTaskId}
-                      target="_blank"
-                    >
-                      (View task here)
-                    </a>
                     <input
                       type="date"
                       min={new Date().toISOString().split('T')[0]}
+                      max="9999-12-31"
                       className="form-control"
                       value={newDueDate}
                       onChange={handleNewDueDate}
