@@ -189,6 +189,7 @@ export default function RatingModalBody(props) {
                       type="date"
                       name="selectedDate"
                       placeholder="Rating Date"
+                      disabled="true"
                       // onChange={(e)=>console.log(e.target.value)}
                       max={new Date().toISOString().split('T')[0]}
                       defaultValue={ratingForm.selectedDate}
