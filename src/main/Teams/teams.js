@@ -98,6 +98,15 @@ export default function Teams(props) {
   }
 
   const assignManagers = async () => {
+
+    if(selectedManagers.length === 0){
+      setToasterMessage('Please select manager')
+      setShowToaster(true)
+      return
+    }
+
+
+
     // Perform any necessary actions with the selected managers
     console.log('Selected Managers:', selectedManagers)
 
