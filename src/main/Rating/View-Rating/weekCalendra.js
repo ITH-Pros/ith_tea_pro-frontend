@@ -100,16 +100,17 @@ export default function MyCalendar() {
           userRatingObj[element.date] = element.rating;
         });
         let userRatingForGraph = [];
-        const currentMonthDays = daysInThisMonth();
-
-        for (let i = 1; i <= currentMonthDays; i++) {
+        const totalDays = getTotalDaysInMonth(selectedDate);
+        
+        for (let i = 1; i <= totalDays; i++) {
           if (!userRatingObj[i]) {
             userRatingObj[i] = userRatingObj[i - 1] || 0;
           }
           userRatingForGraph.push(userRatingObj[i]);
         }
-
+        
         setUserRatingForGraph(userRatingForGraph);
+
         // console.log(userRatingForGraph, "---------------------------------Rating of User");
 
         setLoading(false);
@@ -117,6 +118,17 @@ export default function MyCalendar() {
     } catch (error) {
       setLoading(false);
     }
+  }
+
+  function getTotalDaysInMonth(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are zero-based, so add 1
+    
+    const totalDays = new Date(year, month, 0).getDate();
+    console.log(totalDays);
+
+    return totalDays;
   }
 
   async function getAllRatings() {
@@ -264,9 +276,27 @@ export default function MyCalendar() {
   //   );
   // };
 
+  const getDatesForXAxis = () => {
+ 
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+  
+      if (
+        selectedDate.getFullYear() === currentYear &&
+        selectedDate.getMonth() === currentMonth
+      ) {
+        const totalDays = currentDate.getDate();
+        return Array.from({ length: totalDays }, (_, i) => i + 1);
+      }
+  
+      return Array.from({ length: getTotalDaysInMonth(selectedDate) }, (_, i) => i + 1);
+    
+  };
+
   const LineGraph = () => {
     const lineChartData = {
-      labels: Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
+      labels: getDatesForXAxis(),
       datasets: [
         {
           label: "Rating",
@@ -284,7 +314,7 @@ export default function MyCalendar() {
         x: {
           type: "linear",
           min: 1,
-          max: daysInThisMonth(),
+          max: getTotalDaysInMonth(selectedDate),
           ticks: {
             stepSize: 1,
           },
