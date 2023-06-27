@@ -470,8 +470,8 @@ export default function Teams(props) {
         ))
       ) : (
 
-        
-        
+
+
         <Button  variant="primary" size="sm" className="add_m">
           
     
@@ -487,6 +487,8 @@ export default function Teams(props) {
       </span>
  
       </Button>
+    
+
    
       )}
     </span>
@@ -673,7 +675,13 @@ export default function Teams(props) {
                       {userDetails?.role !== 'CONTRIBUTOR' && userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
                         <div className="user-analytics">
                                                 <> 
-                      {AssignedManager(user)}
+                      { (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ) && (
+
+                        AssignedManager(user)
+
+                      )
+                      
+                      }
                       </>
                           <div className="user-analytics-item">
                             <div className="user-analytics-item-value">Completed After Due Date: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)}%</div>
