@@ -797,7 +797,7 @@ const Tasks = () => {
                                         <Dropdown.Menu>
                                           <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                             <i
-                                              className="fa fa-check-circle secondary"
+                                              className="fa fa-check-circle secondary  "
                                               aria-hidden="true"
                                             ></i>{' '}
                                             Not Started
@@ -818,7 +818,7 @@ const Tasks = () => {
                                           </Dropdown.Item>
                                           <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                             <i
-                                              className="fa fa-check-circle warning"
+                                              className="fa fa-check-circle primary"
                                               aria-hidden="true"
                                             ></i>{' '}
                                             On Hold
