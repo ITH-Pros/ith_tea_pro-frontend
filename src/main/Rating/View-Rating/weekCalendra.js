@@ -38,7 +38,7 @@ export default function MyCalendar() {
   useEffect(() => {
     getAllRatings();
     getUserRatings();
-  }, []);
+  }, [selectedDate]);
 
   // useEffect(() => {
   //   if (selectedRatingDate) {
@@ -89,7 +89,7 @@ export default function MyCalendar() {
         year: selectedDate.getFullYear(),
         userRating: true,
       };
-  
+
       const rating = await getRatings(dataToSend);
       if (rating.error) {
         console.log(rating?.error);
@@ -101,25 +101,23 @@ export default function MyCalendar() {
         });
         let userRatingForGraph = [];
         const currentMonthDays = daysInThisMonth();
-  
+
         for (let i = 1; i <= currentMonthDays; i++) {
           if (!userRatingObj[i]) {
             userRatingObj[i] = userRatingObj[i - 1] || 0;
           }
           userRatingForGraph.push(userRatingObj[i]);
         }
-  
+
         setUserRatingForGraph(userRatingForGraph);
         // console.log(userRatingForGraph, "---------------------------------Rating of User");
-  
+
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
     }
   }
-  
-
 
   async function getAllRatings() {
     setLoading(true);
@@ -137,8 +135,16 @@ export default function MyCalendar() {
       } else {
         let dataToSet = [];
         const currentDate = new Date();
-        const firstDateOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-        for (let i = firstDateOfMonth; i <= currentDate; i.setDate(i.getDate() + 1)) {
+        const firstDateOfMonth = new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          1
+        );
+        for (
+          let i = firstDateOfMonth;
+          i <= currentDate;
+          i.setDate(i.getDate() + 1)
+        ) {
           const isToday =
             i.getDate() === currentDate.getDate() &&
             i.getMonth() === currentDate.getMonth() &&
@@ -258,7 +264,6 @@ export default function MyCalendar() {
   //   );
   // };
 
-
   const LineGraph = () => {
     const lineChartData = {
       labels: Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
@@ -273,7 +278,7 @@ export default function MyCalendar() {
         },
       ],
     };
-  
+
     const lineChartOptions = {
       scales: {
         x: {
@@ -290,58 +295,66 @@ export default function MyCalendar() {
         },
       },
     };
-  
+
     return (
       <div className="line-chart">
         <Line data={lineChartData} options={lineChartOptions} height={250} />
       </div>
     );
   };
-  
 
   const daysInThisMonth = () => {
     const currentDate = new Date();
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const daysUntilCurrentDate = Math.min(currentDate.getDate(), lastDayOfMonth.getDate());
-    return lastDayOfMonth.getDate() - firstDayOfMonth.getDate() + 1 - (lastDayOfMonth.getDate() - daysUntilCurrentDate);
+    const firstDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const lastDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
+    const daysUntilCurrentDate = Math.min(
+      currentDate.getDate(),
+      lastDayOfMonth.getDate()
+    );
+    return (
+      lastDayOfMonth.getDate() -
+      firstDayOfMonth.getDate() +
+      1 -
+      (lastDayOfMonth.getDate() - daysUntilCurrentDate)
+    );
   };
-  
 
   return (
     <>
-    <Row>
-<Col lg={6}>
-<div className="rating-graph ">
-        <LineGraph />
-      </div>
-</Col>
-<Col lg={6}>
-<div className="">
-        <div id="calender-ui">
-          <Calendar
-            events={myRatings}
-            localizer={localizer}
-            views={["month"]}
-            defaultView={"month"}
-            defaultDate={new Date()}
-            onNavigate={(a, e, s) => handleDateChange(a, e, s)}
-            // onClick={handleDateChange}
-            className=""
-            style={{ height: 400 }}
-            eventPropGetter={eventStyleGetter}
-          />
-        </div>
-        {loading ? <Loader /> : null}
-      </div>
-</Col>
-
-    </Row>
-  
-
- 
-
-     
+      <Row>
+        <Col lg={6}>
+          <div className="rating-graph ">
+            <LineGraph />
+          </div>
+        </Col>
+        <Col lg={6}>
+          <div className="">
+            <div id="calender-ui">
+              <Calendar
+                events={myRatings}
+                localizer={localizer}
+                views={["month"]}
+                defaultView={"month"}
+                defaultDate={new Date()}
+                onNavigate={(a, e, s) => handleDateChange(a, e, s)}
+                // onClick={handleDateChange}
+                className=""
+                style={{ height: 400 }}
+                eventPropGetter={eventStyleGetter}
+              />
+            </div>
+            {loading ? <Loader /> : null}
+          </div>
+        </Col>
+      </Row>
 
       <Offcanvas
         show={showModal}
