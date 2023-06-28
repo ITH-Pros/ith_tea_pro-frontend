@@ -53,7 +53,7 @@ const Tasks = () => {
   }, [localStorage.getItem('showTaskToaster')])
 
   const handleAddTaskFromSection = project => {
-    // // console.log('section', project)
+    console.log('section', project)
     setSelectedTask()
     localStorage.setItem('addTaskModal', true)
     setShowAddTask(true)
@@ -61,6 +61,7 @@ const Tasks = () => {
     setSelectedProject({
       _id: project?.projectId,
       section: project?.sectionId,
+      sectionName: project?._id.section,
     })
   }
 

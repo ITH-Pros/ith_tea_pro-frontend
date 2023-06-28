@@ -109,6 +109,7 @@ export default function AddTaskModal(props) {
   }, [showAddTask])
 
   const patchFormForAdd = () => {
+    console.log('selectedProjectFromTask', selectedProjectFromTask)
     if (selectedProjectFromTask) {
       // console.log('selectedProjectFromTask', selectedProjectFromTask)
       let project = projectList?.filter(item => item?._id === selectedProjectFromTask?._id)
@@ -119,6 +120,12 @@ export default function AddTaskModal(props) {
         projectId: selectedProjectFromTask._id,
         section: selectedProjectFromTask.section,
       })
+
+      if (selectedProjectFromTask?.sectionName === 'Misc') {
+        setShowMiscType(true)
+      } else {
+        setShowMiscType(false)
+      }
       
       
       getProjectByIdFunc(project[0]?._id)
