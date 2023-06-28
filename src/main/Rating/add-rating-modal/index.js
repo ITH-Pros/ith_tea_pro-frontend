@@ -156,7 +156,7 @@ export default function RatingModalBody(props) {
 
   return (
     <>
-      {userTasks?.length > 0 ? (
+      {loading ? (''):(userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
           {!isNotVerified ? (
             raitngForDay > 0 ? (
@@ -193,7 +193,7 @@ export default function RatingModalBody(props) {
                       // onChange={(e)=>console.log(e.target.value)}
                       max={new Date().toISOString().split('T')[0]}
                       defaultValue={ratingForm.selectedDate}
-                      // disabled={taskFromDashBoard ? true : false}
+                      // disabled={taskFromDashBoard ? true : false}  
                     />
                     <Form.Control.Feedback type="invalid">
                       {ratingForm.selectedDate === '' && 'Date is required !!'}
@@ -472,7 +472,7 @@ export default function RatingModalBody(props) {
         </div>
       ) : (
         <div style={{ marginTop: '30px' }}>No tasks available, cannot rate.</div>
-      )}
+      ))}
 
       {loading ? <Loader /> : null}
       {toaster && (
