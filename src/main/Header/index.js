@@ -45,7 +45,7 @@ function Header() {
     try {
       const response = await getLogedInUserDetails();
       if (response.error) {
-        console.log("Error while getting user details");
+        // console.log("Error while getting user details");
         return;
       } else {
         setUserName(response?.data.name);
@@ -54,7 +54,7 @@ function Header() {
         }
       }
     } catch (error) {
-      console.log("Error while getting user details");
+      // console.log("Error while getting user details");
       return error.message;
     }
   };

@@ -22,7 +22,7 @@ const AttachmentUploader = (props) => {
         formData.append("file", file);
         const response = await uploadProfileImage(formData);
         if (response.error) {
-          console.log("Error while Updating details");
+          // console.log("Error while Updating details");
           return;
         } else {
           newUrls.push(response?.url);

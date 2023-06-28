@@ -24,12 +24,12 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   function (res) {
-    // console.log(res?.status,'-----------------------------RES')
+    // // console.log(res?.status,'-----------------------------RES')
     return res;
   },
   async function (error) {
 
-    // console.log(error,'-----------------------------RES')
+    // // console.log(error,'-----------------------------RES')
 
     if (error.response) {
       if (error.response.status === 403 ) {

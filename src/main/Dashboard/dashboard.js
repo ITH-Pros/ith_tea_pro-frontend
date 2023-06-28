@@ -125,12 +125,9 @@ export default function Dashboard(props) {
     localStorage.removeItem('profileCompleted')
   }
 
-  const handleToRedirectTask = (projectId, isArchive) => {
+  const handleToRedirectTask = (projectId) => {
     navigate(
-      `/task/${JSON.stringify({
-        projectId: projectId,
-        isArchive: isArchive,
-      })}/}`
+      `/task/${projectId}`
     )
   }
 
@@ -170,15 +167,15 @@ export default function Dashboard(props) {
     if (isNaN(date.getTime())) {
       return ''
     }
-    // console.log(dateString, '-----------------------------------------------')
+    // // console.log(dateString, '-----------------------------------------------')
     let utcTime = new Date(dateString)
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    // console.log('==========', localTimeString)
-    // console.log(localTimeString)
+    // // console.log('==========', localTimeString)
+    // // console.log(localTimeString)
     return localTimeString
   }
 
@@ -225,7 +222,7 @@ export default function Dashboard(props) {
         setShowToaster(true)
       } else {
         let allTask = tasks?.data
-        console.log('object1', allTask)
+        // console.log('object1', allTask)
         allTask?.map(item => {
           let dateMonth = item?.dueDate?.split('T')[0]
           let today = new Date()
@@ -239,7 +236,7 @@ export default function Dashboard(props) {
           }
         })
         setOverdueWorkList(allTask)
-        console.log('object2', allTask)
+        // console.log('object2', allTask)
       }
     } catch (error) {
       setLoading(false)
@@ -283,7 +280,7 @@ export default function Dashboard(props) {
       memberId: e,
     }
 
-    console.log(dataToSend, 'dataToSend')
+    // console.log(dataToSend, 'dataToSend')
 
     try {
       const tasks = await getAllPendingRating(dataToSend)
@@ -292,7 +289,7 @@ export default function Dashboard(props) {
         setToasterMessage(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
         setShowToaster(true)
       } else {
-        console.log(tasks, 'tasks')
+        // console.log(tasks, 'tasks')
         let allTask = tasks?.data
         allTask?.map(item => {
           let dateMonth = item?.dueDate?.split('T')[0]
@@ -492,7 +489,7 @@ export default function Dashboard(props) {
   const [taskDetails, setTaskDetails] = useState(null)
 
   const openReopenTaskModal = taskId => {
-    console.log(taskId)
+    // console.log(taskId)
     setReopenTaskId(taskId._id)
     // setTaskDetails(taskId);
     setReopenTaskModal(true)
@@ -516,7 +513,7 @@ export default function Dashboard(props) {
   }
 
   const handleSubmit = async () => {
-    console.log(newDueDate) // Access the new due date from the state
+    // console.log(newDueDate) // Access the new due date from the state
 
     // ... Perform any additional actions upon submitting the new due date
     if (newDueDate === '') {
@@ -580,23 +577,27 @@ export default function Dashboard(props) {
               className="justify-content-end"
               activeKey="/home"
             >
-              {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && <Nav.Item>
-                <Nav.Link
-                  eventKey="link-1"
-                  className="px-3"
-                >
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="secondary"
-                      size="lg"
-                      onClick={()=>{setShowUserGrid(!showUserGrid)}}
-                      id="dropdown-basic"
-                    >
-                      User analytics
-                    </Dropdown.Toggle>
-                  </Dropdown>
-                </Nav.Link>
-              </Nav.Item>}
+              {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="link-1"
+                    className="px-3"
+                  >
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="secondary"
+                        size="lg"
+                        onClick={() => {
+                          setShowUserGrid(!showUserGrid)
+                        }}
+                        id="dropdown-basic"
+                      >
+                        User analytics
+                      </Dropdown.Toggle>
+                    </Dropdown>
+                  </Nav.Link>
+                </Nav.Item>
+              )}
               <Nav.Item>
                 <Nav.Link
                   eventKey="link-2"
@@ -617,17 +618,13 @@ export default function Dashboard(props) {
             </Nav>
           </Col>
         </Row>
-       {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (showUserGrid && <ProjectGrid/>)}
-
+        {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && showUserGrid && <ProjectGrid />}
 
         {userDetails.role !== 'GUEST' && projectList?.length !== 0 && (
           <Row className="row-bg ">
             {projectList.slice(0, showAllProjects ? projectList.length : 2).map(project => (
               <Col lg={6}>
                 <Card
-                  onClick={() => {
-                    handleToRedirectTask(project?._id, project?.isArchived)
-                  }}
                   id={`card-${project.id}`}
                   key={project?.id}
                 >
@@ -649,6 +646,9 @@ export default function Dashboard(props) {
                         <h5
                           className="text-truncate"
                           style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            handleToRedirectTask(project?._id)
+                          }}
                         >
                           {project?.name}
                         </h5>
@@ -697,9 +697,7 @@ export default function Dashboard(props) {
               showAddTask={showAddTask}
               closeModal={closeModal}
               handleSubmitReopen={handleSubmit}
-
-              // onInit={() => onInit()}
-            />
+              />
             <button
               className="expend"
               onClick={() => setShowAllProjects(!showAllProjects)}
@@ -781,7 +779,7 @@ export default function Dashboard(props) {
                                 <Dropdown.Menu>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                     <i
-                                      className="fa fa-check-circle secondary"
+                                      className="fa fa-check-circle secondary  "
                                       aria-hidden="true"
                                     ></i>{' '}
                                     Not Started
@@ -802,7 +800,7 @@ export default function Dashboard(props) {
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                     <i
-                                      className="fa fa-check-circle warning"
+                                      className="fa fa-check-circle primary"
                                       aria-hidden="true"
                                     ></i>{' '}
                                     On Hold
@@ -824,19 +822,29 @@ export default function Dashboard(props) {
                               </h5>
                             </OverlayTrigger>
                             {task?.isReOpen && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-retweet"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Re-opened</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-retweet"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                             {task?.isDelayTask && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-flag"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Overdue</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-flag"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                           </Col>
@@ -896,10 +904,10 @@ export default function Dashboard(props) {
                             style={{ justifyContent: 'end' }}
                           >
                             <small>
-                              {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                              {task?.status === 'NOT_STARTED' && <Badge bg="secondary">NOT STARTED</Badge>}
                               {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                               {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                              {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                              {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                             </small>
                           </Col>
                           <Col
@@ -989,21 +997,29 @@ export default function Dashboard(props) {
                       myWorkList?.map(task => (
                         <Row className="d-flex justify-content-start list_task w-100 mx-0">
                           {task?.isReOpen && (
-                            <div className="d-flex align-items-center">
-                              <div className="d-flex align-items-center red-flag">
+                            <div className="red-flag">
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Re-opened</Tooltip>}
+                              >
                                 <i
                                   className="fa fa-retweet"
                                   aria-hidden="true"
                                 ></i>
-                              </div>
+                              </OverlayTrigger>
                             </div>
                           )}
                           {task?.isDelayTask && (
-                            <div className="d-flex align-items-center red-flag">
-                              <i
-                                className="fa fa-flag"
-                                aria-hidden="true"
-                              ></i>
+                            <div className="red-flag">
+                              <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Overdue</Tooltip>}
+                              >
+                                <i
+                                  className="fa fa-flag"
+                                  aria-hidden="true"
+                                ></i>
+                              </OverlayTrigger>
                             </div>
                           )}
                           <Col
@@ -1046,7 +1062,7 @@ export default function Dashboard(props) {
                                 <Dropdown.Menu>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                     <i
-                                      className="fa fa-check-circle secondary"
+                                      className="fa fa-check-circle secondary "
                                       aria-hidden="true"
                                     ></i>{' '}
                                     Not Started
@@ -1067,7 +1083,7 @@ export default function Dashboard(props) {
                                   </Dropdown.Item>
                                   <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                     <i
-                                      className="fa fa-check-circle warning"
+                                      className="fa fa-check-circle primary"
                                       aria-hidden="true"
                                     ></i>{' '}
                                     On Hold
@@ -1108,10 +1124,10 @@ export default function Dashboard(props) {
                             style={{ justifyContent: 'end' }}
                           >
                             <small>
-                              {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                              {task?.status === 'NOT_STARTED' && <Badge bg=" secondary ">NOT STARTED</Badge>}
                               {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                               {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                              {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                              {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                             </small>
                           </Col>
                           <Col
@@ -1229,19 +1245,29 @@ export default function Dashboard(props) {
                               </h5>
                             </OverlayTrigger>
                             {task?.isReOpen && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-retweet"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Re-opened</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-retweet"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                             {task?.isDelayTask && (
-                              <div className="d-flex align-items-center red-flag">
-                                <i
-                                  className="fa fa-flag"
-                                  aria-hidden="true"
-                                ></i>
+                              <div className="red-flag">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Overdue</Tooltip>}
+                                >
+                                  <i
+                                    className="fa fa-flag"
+                                    aria-hidden="true"
+                                  ></i>
+                                </OverlayTrigger>
                               </div>
                             )}
                           </Col>
@@ -1267,7 +1293,7 @@ export default function Dashboard(props) {
                             style={{ justifyContent: 'end' }}
                           >
                             <small>
-                              {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                              {task?.status === 'NOT_STARTED' && <Badge bg="secondary">NOT STARTED</Badge>}
                               {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                               {task?.status === 'COMPLETED' && (
                                 <>
@@ -1324,7 +1350,7 @@ export default function Dashboard(props) {
                                   </>
                                 </>
                               )}
-                              {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                              {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                             </small>
                           </Col>
 
@@ -1468,7 +1494,7 @@ export default function Dashboard(props) {
                                   <Row className="d-flex justify-content-start list_task w-100 mx-0 mb-0 px-2">
                                     {/* {task?.isReOpen && (
                                       <div className="d-flex align-items-center">
-                                        <div className="d-flex align-items-center red-flag">
+                                        <div className="red-flag">
                                           <i
                                             className="fa fa-retweet"
                                             aria-hidden="true"
@@ -1517,7 +1543,7 @@ export default function Dashboard(props) {
                                           <Dropdown.Menu>
                                             <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'NOT_STARTED')}>
                                               <i
-                                                className="fa fa-check-circle secondary"
+                                                className="fa fa-check-circle  secondary "
                                                 aria-hidden="true"
                                               ></i>
                                               Not Started
@@ -1538,7 +1564,7 @@ export default function Dashboard(props) {
                                             </Dropdown.Item>
                                             <Dropdown.Item onClick={event => handleStatusChange(event, task?._id, 'ONHOLD')}>
                                               <i
-                                                className="fa fa-check-circle warning"
+                                                className="fa fa-check-circle primary "
                                                 aria-hidden="true"
                                               ></i>{' '}
                                               On Hold
@@ -1560,18 +1586,28 @@ export default function Dashboard(props) {
                                       </OverlayTrigger>
                                       {task?.isReOpen && (
                                         <div className="red-flag">
-                                          <i
-                                            className="fa fa-retweet"
-                                            aria-hidden="true"
-                                          ></i>
+                                          <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>Re-opened</Tooltip>}
+                                          >
+                                            <i
+                                              className="fa fa-retweet"
+                                              aria-hidden="true"
+                                            ></i>
+                                          </OverlayTrigger>
                                         </div>
                                       )}
                                       {task?.isDelayTask && (
-                                        <div className="d-flex align-items-center red-flag">
-                                          <i
-                                            className="fa fa-flag"
-                                            aria-hidden="true"
-                                          ></i>
+                                        <div className="red-flag">
+                                          <OverlayTrigger
+                                            placement="top"
+                                            overlay={<Tooltip>Overdue</Tooltip>}
+                                          >
+                                            <i
+                                              className="fa fa-flag"
+                                              aria-hidden="true"
+                                            ></i>
+                                          </OverlayTrigger>
                                         </div>
                                       )}
                                     </Col>
@@ -1626,10 +1662,10 @@ export default function Dashboard(props) {
                                       style={{ justifyContent: 'end' }}
                                     >
                                       <small>
-                                        {task?.status === 'NOT_STARTED' && <Badge bg="primary">NOT STARTED</Badge>}
+                                        {task?.status === 'NOT_STARTED' && <Badge bg=" secondary">NOT STARTED</Badge>}
                                         {task?.status === 'ONGOING' && <Badge bg="warning">ONGOING</Badge>}
                                         {task?.status === 'COMPLETED' && <Badge bg="success">COMPLETED</Badge>}
-                                        {task?.status === 'ONHOLD' && <Badge bg="secondary">ON HOLD</Badge>}
+                                        {task?.status === 'ONHOLD' && <Badge bg="primary">ON HOLD</Badge>}
                                       </small>
                                     </Col>
                                     <Col
@@ -1719,15 +1755,10 @@ export default function Dashboard(props) {
                   <div className="form-group">
                     <label>New Due Date</label>
                     {'  '}
-                    <a
-                      href={'view-task/' + reopenTaskId}
-                      target="_blank"
-                    >
-                      (View task here)
-                    </a>
                     <input
                       type="date"
                       min={new Date().toISOString().split('T')[0]}
+                      max="9999-12-31"
                       className="form-control"
                       value={newDueDate}
                       onChange={handleNewDueDate}

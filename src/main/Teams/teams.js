@@ -53,37 +53,38 @@ export default function Teams(props) {
   }
 
   const getManagerList = async userId => {
-    setLoading(true)
-    console.log('userId', userId)
-    // Make an API call or perform any necessary operations to fetch the manager list
-
+    setLoading(true);
+    console.log('userId', userId);
+    
     try {
-      const resp = await getAllManager()
+      const resp = await getAllManager();
+      
       if (resp.error) {
-        console.log(resp.error)
-        setLoading(false)
+        console.log(resp.error);
+        setLoading(false);
       } else {
-        setLoading(false)
-        usersList.map(user => {
+        setLoading(false);
+        const updatedManagerList = resp.data.filter(manager => manager._id !== userId);
+        console.log(updatedManagerList);
+        setManagerList(updatedManagerList);
+        
+        usersList.forEach(user => {
           if (user?._id === userId) {
             if (user?.managerIds?.length > 0) {
-              setSelectedManagers(user?.managerIds)
+              setSelectedManagers(user?.managerIds);
             } else {
-              setSelectedManagers([])
+              setSelectedManagers([]);
             }
-            console.log('user.manager', user?.managerIds)
+            console.log('user.manager', user?.managerIds);
           }
-        })
-
-        // if(user.role === "C")
-        console.log(resp?.data)
-        setManagerList(resp?.data)
+        });
       }
     } catch (error) {
-      setLoading(false)
-      console.log(error)
+      setLoading(false);
+      console.log(error);
     }
-  }
+  };
+  
 
   const handleManagerSelection = managerIds => {
     // Update the selected managers array based on the checkbox selection
@@ -98,8 +99,17 @@ export default function Teams(props) {
   }
 
   const assignManagers = async () => {
+
+    if(selectedManagers.length === 0){
+      setToasterMessage('Please select  manager')
+      setShowToaster(true)
+      return
+    }
+    
+
+
     // Perform any necessary actions with the selected managers
-    console.log('Selected Managers:', selectedManagers)
+    // console.log('Selected Managers:', selectedManagers)
 
     let data = {
       managerIds: selectedManagers,
@@ -108,7 +118,7 @@ export default function Teams(props) {
     try {
       const resp = await assignManagerTOUserByIds(data)
       if (resp.error) {
-        console.log(resp.error)
+        // console.log(resp.error)
         setToasterMessage(resp?.message || 'Something Went Wrong')
         setShowToaster(true)
       } else {
@@ -118,7 +128,7 @@ export default function Teams(props) {
         onInit()
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 
@@ -441,7 +451,7 @@ export default function Teams(props) {
       label: user?.name,
       value: user?._id,
     }
-    console.log(data)
+    // console.log(data)
     localStorage.setItem('selectedOptions', JSON.stringify(data))
     navigate('/team-report')
   }
@@ -460,8 +470,8 @@ export default function Teams(props) {
         ))
       ) : (
 
-        
-        
+
+
         <Button  variant="primary" size="sm" className="add_m">
           
     
@@ -477,6 +487,8 @@ export default function Teams(props) {
       </span>
  
       </Button>
+    
+
    
       )}
     </span>
@@ -663,7 +675,13 @@ export default function Teams(props) {
                       {userDetails?.role !== 'CONTRIBUTOR' && userAnalytics && Array.isArray(userAnalytics) && userAnalytics.find(analytics => analytics?._id === user?._id) && (
                         <div className="user-analytics">
                                                 <> 
-                      {AssignedManager(user)}
+                      { (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ) && (
+
+                        AssignedManager(user)
+
+                      )
+                      
+                      }
                       </>
                           <div className="user-analytics-item">
                             <div className="user-analytics-item-value">Completed After Due Date: {userAnalytics.find(analytics => analytics?._id === user._id).completedAfterDueDatePercentage.toFixed(2)}%</div>

@@ -59,7 +59,7 @@ export default function TeamReport(props) {
   const setShowToaster = param => showToaster(param)
   const [toasterMessage, setToasterMessage] = useState('')
   useEffect(() => {
-    console.log('Team Report')
+    // console.log('Team Report')
     getUserReport()
     getAllMembers()
   }, [])
@@ -108,14 +108,14 @@ export default function TeamReport(props) {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    console.log('==========', localTimeString)
+    // console.log('==========', localTimeString)
     return localTimeString
   }
 
   const getUserReport = async (id, type) => {
     setLoading(true)
 
-    console.log(id)
+    // console.log(id)
     if (!id || !type) {
       return
     }
@@ -141,7 +141,7 @@ export default function TeamReport(props) {
       setLoading(false)
 
       if (res.error) {
-        console.log('Error while getting team work list')
+        // console.log('Error while getting team work list')
       } else {
         setTeamWorkList(res?.data)
       }
@@ -160,7 +160,7 @@ export default function TeamReport(props) {
         setToasterMessage(users?.message || 'Something Went Wrong')
         setShowToaster(true)
       } else {
-        console.log(users?.data?.users)
+        // console.log(users?.data?.users)
         setUsersListValue(users?.data?.users || [])
         if (localStorage.getItem('selectedOptions')) {
           setSelectedOption(JSON.parse(localStorage.getItem('selectedOptions')))
@@ -175,7 +175,7 @@ export default function TeamReport(props) {
   }
   const handleTabSelect = eventKey => {
     setTeamWorkList([])
-    console.log(eventKey, '----------------------------------eventKey')
+    // console.log(eventKey, '----------------------------------eventKey')
     setSelectedEvent(eventKey)
   }
 
@@ -208,7 +208,6 @@ export default function TeamReport(props) {
                   options={usersList}
                   placeholder="Select Member"
                 />
-
               </Col>
             </Row>
           </Card>
@@ -220,12 +219,11 @@ export default function TeamReport(props) {
             style={{ borderRadius: '10px', border: '0px' }}
           >
             <Row className="align-middle ">
-              
               <Col
                 lg="6"
                 className="user_details  py-2 text-center"
               >
-                 <div className="profile-userpic m-auto mb-3 mt-4">
+                <div className="profile-userpic m-auto mb-3 mt-4">
                   <img src={userDetails?.profilePicture || avtar} />{' '}
                 </div>
                 <h1>
@@ -300,8 +298,10 @@ export default function TeamReport(props) {
                               <td style={{ width: '150px' }}>
                                 <p className="text-truncate">
                                   <Link
-                                    to="/"
+                                    to={`/view-task/${team._id}`}
                                     className="text-muted"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     {team?.title || '--'}
                                   </Link>
@@ -358,9 +358,11 @@ export default function TeamReport(props) {
                             <tr>
                               <td style={{ width: '150px' }}>
                                 <p className="text-truncate">
-                                  <Link
-                                    to="/"
+                                <Link
+                                    to={`/view-task/${team._id}`}
                                     className="text-muted"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     {team?.title || '--'}
                                   </Link>
@@ -417,10 +419,12 @@ export default function TeamReport(props) {
                               <tr>
                                 <td style={{ width: '150px' }}>
                                   <p className="text-truncate">
-                                    <Link
-                                      to="/"
-                                      className="text-muted"
-                                    >
+                                  <Link
+                                    to={`/view-task/${team._id}`}
+                                    className="text-muted"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                       {team?.title || '--'}
                                     </Link>
                                   </p>
@@ -480,10 +484,12 @@ export default function TeamReport(props) {
                                     className="text-truncate"
                                     style={{ maxWidth: '200px' }}
                                   >
-                                    <Link
-                                      to="/"
-                                      className="text-muted"
-                                    >
+                                  <Link
+                                    to={`/view-task/${team._id}`}
+                                    className="text-muted"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
                                       {team?.title || '--'}
                                     </Link>
                                   </p>
@@ -538,10 +544,12 @@ export default function TeamReport(props) {
                           {teamWorkList?.map((team, index) => [
                             <tr>
                               <td style={{ width: '150px' }}>
-                                <p className="text-truncate">
-                                  <Link
-                                    to="/"
+                              <p className="text-truncate">
+                              <Link
+                                    to={`/view-task/${team._id}`}
                                     className="text-muted"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     {team?.title || '--'}
                                   </Link>

@@ -19,12 +19,12 @@ export default function History(props) {
     try {
       const response = await getTaskHistoryById(dataToSend);
       if (response.error) {
-        console.log("error");
+        // console.log("error");
       } else {
         setHistory(response.data);
       }
     } catch (error) {
-      console.log("error");
+      // console.log("error");
     }
   };
 

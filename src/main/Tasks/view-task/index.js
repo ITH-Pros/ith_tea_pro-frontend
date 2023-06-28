@@ -83,7 +83,7 @@ export default function ViewTaskModal(props) {
         getTasksDataUsingProjectId();
         setShowConfirmation(false);
         onInit();
-        console.log("isChange", isChange);
+        // console.log("isChange", isChange);
         // setIsChange(!isChange)
       }
     } catch (error) {
@@ -162,7 +162,7 @@ export default function ViewTaskModal(props) {
         }
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -174,8 +174,8 @@ export default function ViewTaskModal(props) {
       let response = await taskById(dataToSend);
       if (response.status === 200) {
         setTaskData(response?.data);
-        console.log(response?.data, "response?.data");
-        // console.log(response?.data);
+        // console.log(response?.data, "response?.data");
+        // // console.log(response?.data);
         setShowViewTaskModal(true);
         setActiveTab("comments");
         setIsRatingFormVisible(false);
@@ -185,7 +185,7 @@ export default function ViewTaskModal(props) {
         onInit();
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -442,14 +442,6 @@ export default function ViewTaskModal(props) {
                   }`}
                 >
                   Comments
-                </button>
-                <button
-                  onClick={() => handleTabChange("ratings")}
-                  className={`toggle-button ${
-                    activeTab === "ratings" ? "active" : ""
-                  }`}
-                >
-                  Ratings
                 </button>
                 {/* history */}
                 <button

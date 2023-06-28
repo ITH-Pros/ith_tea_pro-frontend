@@ -26,6 +26,7 @@ import TeamReport from './main/Team-report'
 import { useAuth } from './auth/AuthProvider'
 import ViewTask from './main/Rating/View-Rating/viewTask'
 import ProjectGrid from './main/Dashboard/projectGrid'
+import ViewUserTasks from './main/Rating/View-Rating/viewUserTasks'
 function App() {
   const { userDetails } = useAuth()
   return (
@@ -190,7 +191,7 @@ function App() {
         />
 
         <Route
-          path="/task/:projectId/:isArchive"
+          path="/task/:projectId"
           element={
             <>
               <ProtectedRoute>
@@ -231,6 +232,20 @@ function App() {
             element={<ViewUser />}
           />
         </Route>
+
+        <Route
+          path="/view-user-tasks/:userId"
+          element={
+            <>
+              <ProtectedRoute>
+                <Navbar />
+                <Header />
+                <ViewUserTasks />
+              </ProtectedRoute>
+            </>
+          }
+        />
+
         <Route
           path="*"
           element={<NoMatch />}

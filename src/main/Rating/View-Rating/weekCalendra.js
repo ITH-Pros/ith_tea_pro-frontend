@@ -38,7 +38,7 @@ export default function MyCalendar() {
   useEffect(() => {
     getAllRatings();
     getUserRatings();
-  }, []);
+  }, [selectedDate]);
 
   // useEffect(() => {
   //   if (selectedRatingDate) {
@@ -58,7 +58,7 @@ export default function MyCalendar() {
 
   //     const rating = await getRatings(dataToSend);
   //     if (rating.error) {
-  //       console.log(rating?.error);
+  //       // console.log(rating?.error);
   //       setLoading(false);
   //     } else {
   //       let userRatingObj = {};
@@ -73,7 +73,7 @@ export default function MyCalendar() {
   //         userRatingForGraph.push(userRatingObj[i]);
   //       }
   //       setUserRatingForGraph(userRatingForGraph);
-  //       console.log(userRatingForGraph, "---------------------------------Rating of User");
+  //       // console.log(userRatingForGraph, "---------------------------------Rating of User");
   //     }
   //   } catch (error) {
   //     setLoading(false);
@@ -89,10 +89,10 @@ export default function MyCalendar() {
         year: selectedDate.getFullYear(),
         userRating: true,
       };
-  
+
       const rating = await getRatings(dataToSend);
       if (rating.error) {
-        console.log(rating?.error);
+        // console.log(rating?.error);
         setLoading(false);
       } else {
         let userRatingObj = {};
@@ -100,26 +100,36 @@ export default function MyCalendar() {
           userRatingObj[element.date] = element.rating;
         });
         let userRatingForGraph = [];
-        const currentMonthDays = daysInThisMonth();
-  
-        for (let i = 1; i <= currentMonthDays; i++) {
+        const totalDays = getTotalDaysInMonth(selectedDate);
+        
+        for (let i = 1; i <= totalDays; i++) {
           if (!userRatingObj[i]) {
             userRatingObj[i] = userRatingObj[i - 1] || 0;
           }
           userRatingForGraph.push(userRatingObj[i]);
         }
-  
+        
         setUserRatingForGraph(userRatingForGraph);
-        console.log(userRatingForGraph, "---------------------------------Rating of User");
-  
+
+        // console.log(userRatingForGraph, "---------------------------------Rating of User");
+
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
     }
   }
-  
 
+  function getTotalDaysInMonth(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are zero-based, so add 1
+    
+    const totalDays = new Date(year, month, 0).getDate();
+    console.log(totalDays);
+
+    return totalDays;
+  }
 
   async function getAllRatings() {
     setLoading(true);
@@ -132,13 +142,21 @@ export default function MyCalendar() {
       };
       const rating = await getRatings(dataToSend);
       if (rating.error) {
-        console.log(rating?.error);
+        // console.log(rating?.error);
         setLoading(false);
       } else {
         let dataToSet = [];
         const currentDate = new Date();
-        const firstDateOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-        for (let i = firstDateOfMonth; i <= currentDate; i.setDate(i.getDate() + 1)) {
+        const firstDateOfMonth = new Date(
+          selectedDate.getFullYear(),
+          selectedDate.getMonth(),
+          1
+        );
+        for (
+          let i = firstDateOfMonth;
+          i <= currentDate;
+          i.setDate(i.getDate() + 1)
+        ) {
           const isToday =
             i.getDate() === currentDate.getDate() &&
             i.getMonth() === currentDate.getMonth() &&
@@ -154,7 +172,7 @@ export default function MyCalendar() {
         }
 
         const ratingData = rating.data?.[0]?.ratings;
-        // console.log(ratingData, "---------------------------------rating data");
+        // // console.log(ratingData, "---------------------------------rating data");
 
         if (ratingData) {
           const ratingEvents = ratingData.map((item, index) => ({
@@ -166,12 +184,12 @@ export default function MyCalendar() {
           dataToSet = [...dataToSet, ...ratingEvents];
         }
 
-        // console.log(dataToSet, "---------------------------------data to set");
+        // // console.log(dataToSet, "---------------------------------data to set");
         setMyRatings(dataToSet);
         setLoading(false);
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setLoading(false);
     }
   }
@@ -179,7 +197,7 @@ export default function MyCalendar() {
   const handleDateChange = (event, s, a) => {
     if (a === "DATE") {
       setSelectedRatingDate(event);
-      console.log(a, "event");
+      // console.log(a, "event");
       return;
     }
 
@@ -205,7 +223,7 @@ export default function MyCalendar() {
   //   };
   //   const rating = await getRatingsDetailsByID(dataToSend);
   //   if (rating.error) {
-  //     console.log(rating?.error);
+  //     // console.log(rating?.error);
   //     setLoading(false);
   //   } else {
   //     if (!rating.data || rating.data.length === 0) {
@@ -258,10 +276,27 @@ export default function MyCalendar() {
   //   );
   // };
 
+  const getDatesForXAxis = () => {
+ 
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+  
+      if (
+        selectedDate.getFullYear() === currentYear &&
+        selectedDate.getMonth() === currentMonth
+      ) {
+        const totalDays = currentDate.getDate();
+        return Array.from({ length: totalDays }, (_, i) => i + 1);
+      }
+  
+      return Array.from({ length: getTotalDaysInMonth(selectedDate) }, (_, i) => i + 1);
+    
+  };
 
   const LineGraph = () => {
     const lineChartData = {
-      labels: Array.from({ length: daysInThisMonth() }, (_, i) => i + 1),
+      labels: getDatesForXAxis(),
       datasets: [
         {
           label: "Rating",
@@ -273,13 +308,13 @@ export default function MyCalendar() {
         },
       ],
     };
-  
+
     const lineChartOptions = {
       scales: {
         x: {
           type: "linear",
           min: 1,
-          max: daysInThisMonth(),
+          max: getTotalDaysInMonth(selectedDate),
           ticks: {
             stepSize: 1,
           },
@@ -290,58 +325,66 @@ export default function MyCalendar() {
         },
       },
     };
-  
+
     return (
       <div className="line-chart">
         <Line data={lineChartData} options={lineChartOptions} height={250} />
       </div>
     );
   };
-  
 
   const daysInThisMonth = () => {
     const currentDate = new Date();
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const daysUntilCurrentDate = Math.min(currentDate.getDate(), lastDayOfMonth.getDate());
-    return lastDayOfMonth.getDate() - firstDayOfMonth.getDate() + 1 - (lastDayOfMonth.getDate() - daysUntilCurrentDate);
+    const firstDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const lastDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
+    const daysUntilCurrentDate = Math.min(
+      currentDate.getDate(),
+      lastDayOfMonth.getDate()
+    );
+    return (
+      lastDayOfMonth.getDate() -
+      firstDayOfMonth.getDate() +
+      1 -
+      (lastDayOfMonth.getDate() - daysUntilCurrentDate)
+    );
   };
-  
 
   return (
     <>
-    <Row>
-<Col lg={6}>
-<div className="rating-graph ">
-        <LineGraph />
-      </div>
-</Col>
-<Col lg={6}>
-<div className="">
-        <div id="calender-ui">
-          <Calendar
-            events={myRatings}
-            localizer={localizer}
-            views={["month"]}
-            view={"month"}
-            defaultDate={new Date()}
-            onNavigate={(a, e, s) => handleDateChange(a, e, s)}
-            // onClick={handleDateChange}
-            className=""
-            style={{ height: 400 }}
-            eventPropGetter={eventStyleGetter}
-          />
-        </div>
-        {loading ? <Loader /> : null}
-      </div>
-</Col>
-
-    </Row>
-  
-
- 
-
-     
+      <Row>
+        <Col lg={6}>
+          <div className="rating-graph ">
+            <LineGraph />
+          </div>
+        </Col>
+        <Col lg={6}>
+          <div className="">
+            <div id="calender-ui">
+              <Calendar
+                events={myRatings}
+                localizer={localizer}
+                views={["month"]}
+                defaultView={"month"}
+                defaultDate={new Date()}
+                onNavigate={(a, e, s) => handleDateChange(a, e, s)}
+                // onClick={handleDateChange}
+                className=""
+                style={{ height: 400 }}
+                eventPropGetter={eventStyleGetter}
+              />
+            </div>
+            {loading ? <Loader /> : null}
+          </div>
+        </Col>
+      </Row>
 
       <Offcanvas
         show={showModal}

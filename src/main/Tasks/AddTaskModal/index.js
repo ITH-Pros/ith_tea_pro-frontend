@@ -36,7 +36,7 @@ export default function AddTaskModal(props) {
 
     // onInit
   } = props;
-  console.log(selectedTask)
+  // // console.log(selectedTask)
   const statusList = CONSTANTS.statusList
   const priorityList = CONSTANTS.priorityList
   const [showAddTaskModal, setShowAddTaskModal] = useState(false)
@@ -50,6 +50,8 @@ export default function AddTaskModal(props) {
   const { userDetails } = useAuth()
   const miscTypeArray = CONSTANTS.MISCTYPE
   const [showMiscType, setShowMiscType] = useState(false)
+  const [hours, setHours] = useState('');
+  const [minutes, setMinutes] = useState('');
 
   const uploadedAttachmentsArray = uploadedFiles => {
     setUploadedFiles(uploadedFiles)
@@ -74,8 +76,8 @@ export default function AddTaskModal(props) {
     tasklead: '',
     miscType: '',
     defaultTaskTime: {
-      hours: null,
-      minutes: null,
+      hours: 0,
+      minutes: 0,
     },
   }
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields)
@@ -108,7 +110,7 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-      console.log('selectedProjectFromTask', selectedProjectFromTask)
+      // console.log('selectedProjectFromTask', selectedProjectFromTask)
       let project = projectList?.filter(item => item?._id === selectedProjectFromTask?._id)
       getLeadsListUsingProjectId(project[0]?._id)
       setCategoryList(project[0]?.sections)
@@ -121,7 +123,7 @@ export default function AddTaskModal(props) {
       getProjectByIdFunc(project[0]?._id)
     } else if (selectedTask) {
       let project = projectList?.filter(item => item?._id === selectedTask?.projectId)
-      console.log('project', project)
+      // console.log('project', project)
 
       getLeadsListUsingProjectId(selectedTask?.projectId)
       setCategoryList(project[0]?.sections)
@@ -134,7 +136,7 @@ export default function AddTaskModal(props) {
       }
       dueDateData = dueDateData.getFullYear() + '-' + (dueDateData.getMonth() + 1 <= 9 ? '0' + (dueDateData.getMonth() + 1) : dueDateData.getMonth() + 1) + '-' + (dueDateData.getDate() <= 9 ? '0' + dueDateData.getDate() : dueDateData.getDate())
 
-      console.log('selectedTask', selectedTask)
+      // console.log('selectedTask', selectedTask)
       setShowMiscType(false)
 
       if (selectedTask?.miscType) {
@@ -172,7 +174,7 @@ export default function AddTaskModal(props) {
         ...taskFormValue,
         projectId: handleProjectId,
       })
-      console.log(handleProjectId, '=======================handle project id')
+      // console.log(handleProjectId, '=======================handle project id')
       getProjectByIdFunc(handleProjectId)
     } else if (userDetails.role === 'CONTRIBUTOR') {
       setTaskFormValue({ ...taskFormValue, assignedTo: userDetails?.id })
@@ -190,7 +192,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setProjectList(projects?.data);
-        console.log("-------------------------------");
       }
     } catch (error) {
       setLoading(false);
@@ -210,7 +211,7 @@ export default function AddTaskModal(props) {
         return;
       } else {
         setCategoryList(projects?.data);
-        console.log(projects, "-------------------------------");
+        // console.log(projects, "-------------------------------");
       }
     } catch (error) {
       setLoading(false);
@@ -262,15 +263,15 @@ export default function AddTaskModal(props) {
     if (isNaN(date.getTime())) {
       return "";
     }
-    console.log(dateString, "-----------------------------------------------");
+    // console.log(dateString, "-----------------------------------------------");
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    console.log("==========", localTimeString);
-    console.log(localTimeString);
+    // console.log("==========", localTimeString);
+    // console.log(localTimeString);
     return localTimeString;
   }
 
@@ -285,16 +286,10 @@ export default function AddTaskModal(props) {
   };
 
   const updateTaskFormValue = (e) => {
-    console.log(e.target.value, "======================");
+    // console.log(e.target.value, "======================");
 
     let updateValue = { ...taskFormValue };
-
-    if (e.target.name.startsWith("defaultTaskTime")) {
-      const [fieldName, subFieldName] = e.target.name.split(".");
-      updateValue[fieldName][subFieldName] = e.target.value;
-    } else {
-      updateValue[e.target.name] = e.target.value;
-
+    
       if (e.target.name === "status" && !(e.target.value === "COMPLETED")) {
         updateValue["completedDate"] = null;
       }
@@ -310,10 +305,15 @@ export default function AddTaskModal(props) {
           (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
         updateValue["completedDate"] = patchDateValue;
       }
-    }
+    
 
     setTaskFormValue(updateValue);
-
+    setTaskFormValue({
+      defaultTaskTime: {
+        hours: hours,
+        minutes: minutes,
+      },
+    });
     categoryList?.forEach((item) => {
       if (item._id === e.target.value && item.name === "Misc") {
         setShowMiscType(true);
@@ -496,14 +496,18 @@ export default function AddTaskModal(props) {
     setValidated(false);
     resetFormValue();
     setCategoryList([]);
+    setShowMiscType(false);
 
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
+    setHours(0);
+    setMinutes(0);
     setTaskFormValue({
       projectId: "",
       section: "",
       title: "",
+      description:"",
       assignedTo: "",
       dueDate: "",
       completedDate: "",
@@ -513,13 +517,13 @@ export default function AddTaskModal(props) {
       leads: "",
       miscType: "",
       defaultTaskTime: {
-        hours: null,
-        minutes: null,
+        hours: 0,
+        minutes: 0,
       },
     });
-    setTimeout(() => {
-      document.getElementById("handleresetbuttonid")?.click();
-    }, 500);
+    // setTimeout(() => {
+    //   document.getElementById("handleresetbuttonid")?.click();
+    // }, 500);
   };
 
   const updateTaskStatus = async (dataToSend) => {
@@ -529,7 +533,7 @@ export default function AddTaskModal(props) {
         setToasterMessage(res?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        console.log(res);
+        // console.log(res);
       }
     } catch (error) {
       setToasterMessage(error?.error?.message || "Something Went Wrong");
@@ -614,7 +618,7 @@ export default function AddTaskModal(props) {
         localStorage.setItem("showTaskToaster", "Task Updated Succesfully !!");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setLoading(false);
       return error.message;
     }
@@ -654,7 +658,7 @@ export default function AddTaskModal(props) {
         localStorage.setItem("showTaskToaster", "Task Deleted Succesfully !!");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setLoading(false);
       return error.message;
     }
@@ -847,13 +851,13 @@ export default function AddTaskModal(props) {
                       min="0"
                       placeholder="Hours"
                       name="defaultTaskTime.hours" // Unique name for hours input
-                      value={taskFormValue.defaultTaskTime.hours}
+                      value={hours}
                       // onChange={updateTaskFormValue}
                       onChange={e => {
                         const inputValue = e.target.value
                         if (inputValue.length <= 2 && inputValue >= 0) {
                           // Update the state value if the input is within the limit
-                          updateTaskFormValue(e)
+                          setHours(inputValue)
                         }
                       }}
                     />
@@ -866,13 +870,13 @@ export default function AddTaskModal(props) {
                       min="0"
                       placeholder="Minutes"
                       name="defaultTaskTime.minutes" // Unique name for minutes input
-                      value={taskFormValue.defaultTaskTime.minutes}
+                      value={minutes}
                       // onChange={updateTaskFormValue}
                       onChange={e => {
                         const inputValue = e.target.value
                         if (inputValue.length <= 2 && inputValue <= 59 && inputValue >= 0) {
                           // Update the state value if the input is within the limit
-                          updateTaskFormValue(e)
+                          setMinutes(inputValue)
                         }
                       }}
                     />
@@ -1022,7 +1026,7 @@ export default function AddTaskModal(props) {
                   <Button
                     className="btn btn-primary"
                     type="button"
-                    onClick={submitTask}
+                    onClick={resetFormValue}
                   >
                     Create
                   </Button>

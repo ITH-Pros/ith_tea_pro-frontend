@@ -6,15 +6,14 @@ import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Offcanvas, Row, Table } from "react-bootstrap";
-import { getRatingList, getRatings, verifyManager } from "../../../services/user/api";
+import { getRatings, verifyManager } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import Loader from "../../../components/Loader";
 import Toaster from "../../../components/Toaster";
-import AddRating from "../add-rating";
 import MyCalendar from "./weekCalendra";
 import RatingModalBody from "../add-rating-modal";
-import RatingGraph from "../rating-graph/rating-graph";
+import TasksModalBody from "../add-rating-modal/viewTaskModal";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -43,6 +42,8 @@ export default function Dashboard(props) {
     month: '',
     year: '',
   });
+  const [raitngForDay, setRatingForDay] = useState()
+
   useEffect(() => {
     // getAllRatingslist();
     onInit();
@@ -55,14 +56,9 @@ export default function Dashboard(props) {
     if (modalShow === false) onInit()
   }, [modalShow])
 
-  // set the isWeekendChecked state variable based on the weekend value
-  //  useEffect(() => {
-  //   setIsWeekendChecked(weekend);
-  // }, [weekend]);
-
   const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
-    // console.log(user,date,month,year)
+    // // console.log(user,date,month,year)
     let setDate = date
     let setMonth = month
     if(date<10){
@@ -79,7 +75,7 @@ export default function Dashboard(props) {
       if (response.error) {
         setToasterMessage(response.message);
         setShowToaster(true);
-        console.log("error", response );
+        // console.log("error", response );
       } else {
         if (response?.data?.ratingAllowed === true) {
           setRatingData(prevRatingData => ({
@@ -94,10 +90,10 @@ export default function Dashboard(props) {
           setToasterMessage('You are not allowed to give rating.')
           setShowToaster(true)
         }
-        // console.log('error in verify manager')
+        // // console.log('error in verify manager')
       }
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
     setLoading(false);
   };
@@ -149,7 +145,7 @@ export default function Dashboard(props) {
         setToasterMessage(rating?.message || "Something Went Wrong");
         setShowToaster(true);
       } else {
-        // console.log(rating.data);
+        // // console.log(rating.data);
         setRatings([...rating.data]);
       }
     } catch (error) {
@@ -159,20 +155,25 @@ export default function Dashboard(props) {
     }
   }
 
+  const hideModal = () =>{
+    setModalShow(false)
+    localStorage.removeItem('userId')
+  }
+
   return (
     <div>
-            <Offcanvas  
+      <Offcanvas  
       className="Offcanvas-modal"
       style={{width:'500px'}}
       show={modalShow}
-      onHide={() => setModalShow(false)}
+      onHide={() => hideModal()}
       placement="end"
     >
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title> Add Rating</Offcanvas.Title>
+        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >0 ? ('View Tasks') : ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body  >
-      <RatingModalBody  data={ratingData} setModalShow={setModalShow}/>
+      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay} />: <TasksModalBody data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay}/>}
       </Offcanvas.Body>
     </Offcanvas>
       <div className="dashboard_camp">
@@ -221,7 +222,7 @@ export default function Dashboard(props) {
                     onChange={onchangeMonth}
                     value={monthUse}
                   >
-                    <option value="" disabled>
+                    <option defaultValue="" disabled>
                       Select Month
                     </option>
                     {months.map((monthh, index) => (
@@ -261,7 +262,7 @@ export default function Dashboard(props) {
                 </Form.Group>
               </h5>
             </div>
-            <div class="tableFixHead">
+            <div className="tableFixHead">
             <Table responsive>
               <thead>
                 <tr>
@@ -321,6 +322,12 @@ export default function Dashboard(props) {
           getAllRatings={getAllRatings}
           ratingCommentObj={ratingCommentObj}
           className={weekendValue ? "weekendBox" : ""}
+          month={months.indexOf(monthUse) + 1}
+          year={yearUse}
+          user={user}
+          setTaskModalShow={setModalShow}
+          setRatingData={setRatingData}
+          setRatingForDay = {setRatingForDay}
         />
       );
     } else {
@@ -337,10 +344,6 @@ export default function Dashboard(props) {
                 padding: '2px 15px',
               }}
               className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
-              // onClick={()=>console.log(user,'index',index+1,monthUse,yearUse)}
-              onClick={() => {
-                isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse)
-              }}
             ></span>
           ) : (
             <>
@@ -349,9 +352,9 @@ export default function Dashboard(props) {
                   padding: '2px 15px',
                 }}
                 className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
-                // onClick={()=>{console.log(user,'index',index+1,monthUse,yearUse);}}
+                // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
                 onClick={() => {
-                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse)
+                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse); setRatingForDay(0)
                 }}
               >
                 {!weekendValue && '?'}

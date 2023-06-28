@@ -33,7 +33,7 @@ export default function ViewTask(props) {
     try {
       let response = await taskById(dataToSend)
       if (response.error) {
-        console.log('error')
+        // console.log('error')
       } else {
         setTaskData(response?.data)
       }
@@ -180,41 +180,7 @@ export default function ViewTask(props) {
             className="d-flex"
           >
             {' '}
-            <h6 className="pe-2">Ratings : </h6>
-            {task?.ratingComments?.length ? (
-              task?.ratingComments?.map((item, index) => {
-                const options = {
-                  timeZone: 'Asia/Kolkata',
-                  dateStyle: 'medium',
-                  timeStyle: 'medium',
-                }
-
-                const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
-
-                return (
-                  <div
-                    className="comment comment mb-0 mt-0 pt-0 w-100"
-                    key={index}
-                  >
-                    <div className="commentedBy pb-2">
-                      <UserIcon
-                        style={{ float: 'left' }}
-                        key={index}
-                        firstName={item?.commentedBy?.name}
-                      />
-                      {item?.commentedBy?.name}
-                    </div>
-                    <p
-                      dangerouslySetInnerHTML={{ __html: item?.comment }}
-                      className="comment-tex"
-                    ></p>
-                    <span className="date sub-text">{createdAt}</span>
-                  </div>
-                )
-              })
-            ) : (
-              <p>No Ratings!</p>
-            )}
+         
           </Col>
         </Row>
         <Col

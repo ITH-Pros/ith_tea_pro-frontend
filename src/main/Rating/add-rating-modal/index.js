@@ -8,11 +8,11 @@ import '../rating.css'
 import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
 import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
-import { Accordion, Button } from 'react-bootstrap'
+import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
 
 export default function RatingModalBody(props) {
-  const { setModalShow, data } = props
+  const { setModalShow, data, raitngForDay } = props
   const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6]
   let user = data?.user
   let date = data?.date
@@ -52,15 +52,12 @@ export default function RatingModalBody(props) {
   }, [data])
 
   useEffect(() => {
-    if (userTasks.length > 0 && (userDetails?.role!=="SUPER_ADMIN" && userDetails.role!=="ADMIN") ) {
+    if (userTasks.length > 0 && userDetails?.role !== 'SUPER_ADMIN' && userDetails.role !== 'ADMIN') {
       let isAnyElementNotVerified = userTasks?.some(element => {
         return element._id.section !== 'Misc' && !element.tasks.every(task => task.isVerified)
       })
-      console.log('inside if')
       setIsNotVerified(isAnyElementNotVerified)
     }
-    console.log('outside if')
-
   }, [userTasks])
 
   const handleRatingFormChange = event => {
@@ -88,7 +85,6 @@ export default function RatingModalBody(props) {
         year: selectedDate?.split('-')[0],
         userId: user._id,
       }
-      // console.log('handle submit...............', dataToSend)
       setLoading(true)
       try {
         const rating = await addRatingOnTask(dataToSend)
@@ -117,20 +113,16 @@ export default function RatingModalBody(props) {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    // console.log("==========", localTimeString);
     return localTimeString
   }
 
   function convertToUTCNight(dateString) {
-    // console.log(dateString, "------------------");
     let utcTime = new Date(dateString)
-
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
     let localTimeString = new Date(localTime.toISOString())
-    // console.log("==========", localTimeString);
     return localTimeString
   }
 
@@ -145,8 +137,6 @@ export default function RatingModalBody(props) {
         fromDate: convertToUTCDay(date),
         toDate: convertToUTCNight(date),
       }
-      // console.log(data,'get task list ..................')
-
       const tasks = await getProjectsTask(data)
       setLoading(false)
       if (tasks.error) {
@@ -154,7 +144,6 @@ export default function RatingModalBody(props) {
         setShowToaster(true)
       } else {
         let allTask = tasks?.data
-        // console.log(allTask)
         setUserTasks(allTask)
       }
     } catch (error) {
@@ -169,123 +158,134 @@ export default function RatingModalBody(props) {
     <>
       {userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
-          {!isNotVerified ? <Form
-            className="margin-form"
-            noValidate
-            validated={validated}
-            onSubmit={handleSubmit}
-          >
-            <Row className="mb-3">
-              <Col
-                as={Col}
-                md="12"
+          {!isNotVerified ? (
+            raitngForDay > 0 ? (
+              <div>
+              <h3>Rating: {raitngForDay}</h3>
+              </div>
+            ) : (
+              <Form
+                className="margin-form"
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
               >
-                <h3 className="userName">{user?.name}</h3>
-              </Col>
-
-              <Form.Group
-                as={Col}
-                md="6"
-                controlId="rating_date"
-              >
-                <Form.Label>Date</Form.Label>
-                <Form.Control
-                  required
-                  type="date"
-                  name="selectedDate"
-                  placeholder="Rating Date"
-                  // onChange={(e)=>console.log(e.target.value)}
-                  max={new Date().toISOString().split('T')[0]}
-                  value={ratingForm.selectedDate}
-                  // disabled={taskFromDashBoard ? true : false}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {ratingForm.selectedDate === '' && 'Date is required !!'}
-                  {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group
-                as={Col}
-                md="6"
-                controlId="validationCustom01"
-              >
-                <Form.Label>Rating</Form.Label>
-
-                {/* this would be a select box */}
-                <Form.Control
-                  required
-                  as="select"
-                  type="select"
-                  name="rating"
-                  onChange={handleRatingFormChange}
-                  value={ratingForm.rating}
-                >
-                  <option
-                    value=""
-                    disabled
+                <Row className="mb-3">
+                  <Col
+                    as={Col}
+                    md="12"
                   >
-                    Select Rating
-                  </option>
-                  {ratingValues.map(value => (
-                    <option
-                      key={value}
-                      value={value}
-                    >
-                      {value}
-                    </option>
-                  ))}
-                </Form.Control>
-                <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row>
-              {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
-                <Form.Group
-                  as={Col}
-                  md="12"
-                >
-                  <Form.Label>Completed Date</Form.Label>
-                  <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
-                </Form.Group>
-              )}
-            </Row>
+                    <h3 className="userName">{user?.name}</h3>
+                  </Col>
 
-            <Row className="desc">
-              <Form.Group>
-                <Form.Control
-                  required
-                  as="textarea"
-                  name="comment"
-                  placeholder="comment"
-                  value={ratingForm.comment}
-                  onChange={handleRatingFormChange}
-                />
-                <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
-              </Form.Group>
-              <Button
-                size="sm"
-                md="6"
-                type="submit"
-                className="text-center"
-                style={{ marginTop: '20px' }}
-                disabled={isNotVerified}
-              >
-                Submit
-              </Button>
-            </Row>
-          </Form>:<strong>Verify tasks to give rating</strong>}
+                  <Form.Group
+                    as={Col}
+                    md="6"
+                    controlId="rating_date"
+                  >
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control
+                      required
+                      type="date"
+                      name="selectedDate"
+                      placeholder="Rating Date"
+                      disabled="true"
+                      // onChange={(e)=>console.log(e.target.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      defaultValue={ratingForm.selectedDate}
+                      // disabled={taskFromDashBoard ? true : false}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {ratingForm.selectedDate === '' && 'Date is required !!'}
+                      {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group
+                    as={Col}
+                    md="6"
+                    controlId="validationCustom01"
+                  >
+                    <Form.Label>Rating</Form.Label>
+
+                    {/* this would be a select box */}
+                    <Form.Control
+                      required
+                      as="select"
+                      type="select"
+                      name="rating"
+                      onChange={handleRatingFormChange}
+                      value={ratingForm.rating}
+                    >
+                      <option
+                        value=""
+                        disabled
+                      >
+                        Select Rating
+                      </option>
+                      {ratingValues.map(value => (
+                        <option
+                          key={value}
+                          value={value}
+                        >
+                          {value}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+                <Row>
+                  {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
+                    <Form.Group
+                      as={Col}
+                      md="12"
+                    >
+                      <Form.Label>Completed Date</Form.Label>
+                      <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
+                    </Form.Group>
+                  )}
+                </Row>
+
+                <Row className="desc">
+                  <Form.Group>
+                    <Form.Control
+                      required
+                      as="textarea"
+                      name="comment"
+                      placeholder="comment"
+                      value={ratingForm.comment}
+                      onChange={handleRatingFormChange}
+                    />
+                    <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
+                  </Form.Group>
+                  <Button
+                    size="sm"
+                    md="6"
+                    type="submit"
+                    className="text-center"
+                    style={{ marginTop: '20px' }}
+                    disabled={isNotVerified}
+                  >
+                    Submit
+                  </Button>
+                </Row>
+              </Form>
+            )
+          ) : (
+            <strong>Verify tasks to give rating</strong>
+          )}
 
           <div style={{ marginTop: '30px' }}>
             <h5>Task List</h5>
             {userTasks.length > 0
               ? userTasks?.map((task, index) => {
                   return (
-                    <div>
+                    <div key={index}>
                       <br></br>
                       <p>
                         {' '}
-                        <strong className='fw-normal'>
+                        <strong className="fw-normal">
                           {task?._id?.projectId}
                           {' / '}
                           {task?._id?.section}
@@ -297,92 +297,135 @@ export default function RatingModalBody(props) {
                             <Accordion
                               defaultActiveKey={index}
                               flush
+                              key={i}
                             >
-                              <Accordion.Item eventKey={i + 1} className='mb-0'>
-                                <Accordion.Header  className='gap_status'>
-                                  <p   className='text-dark fw-normal'
-                                    href={'view-task/' + ele._id}
-                                    
-                                    rel="noreferrer"
+                              <Accordion.Item
+                                eventKey={i + 1}
+                                className="mb-0"
+                              >
+                                <Accordion.Header className="gap_status">
+                                  <span>
+                                    {ele?.status === 'NOT_STARTED' && (
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                      >
+                                        <i
+                                          className="fa fa-check-circle secondary"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
+                                      </OverlayTrigger>
+                                    )}
+                                    {ele?.status === 'ONGOING' && (
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                      >
+                                        <i
+                                          className="fa fa-check-circle warning"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
+                                      </OverlayTrigger>
+                                    )}
+                                    {ele?.status === 'COMPLETED' && (
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                      >
+                                        <i
+                                          className="fa fa-check-circle success"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
+                                      </OverlayTrigger>
+                                    )}
+                                    {ele?.status === 'ONHOLD' && (
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                      >
+                                        <i
+                                          className="fa fa-check-circle warning"
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
+                                      </OverlayTrigger>
+                                    )}
+                                  </span>
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>{ele?.title}</Tooltip>}
                                   >
-                                    {ele?.title}{' '}
-                                    
-                                  </p>{' '}
+                                    <p
+                                      className="text-dark fw-normal"
+                                      style={{ fontSize: '15px' }}
+                                      onClick={() => window.open('/view-task/' + ele._id, '_blank')}
+                                    >
+                                      {ele?.title}
+                                    </p>
+                                  </OverlayTrigger>
+
                                   {ele?.isReOpen && (
-                                    <i
-                                      className="fa fa-retweet red-flag"
-                                      aria-hidden="true"
-                                    ></i>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Re-opened</Tooltip>}
+                                    >
+                                      <i
+                                        className="fa fa-retweet red-flag"
+                                        aria-hidden="true"
+                                      ></i>
+                                    </OverlayTrigger>
                                   )}
                                   {ele?.isDelayTask && (
-                                    <i
-                                      className="fa fa-flag red-flag"
-                                      aria-hidden="true"
-                                    ></i>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Overdue</Tooltip>}
+                                    >
+                                      <i
+                                        className="fa fa-flag red-flag"
+                                        aria-hidden="true"
+                                      ></i>
+                                    </OverlayTrigger>
                                   )}
                                   {task?._id?.section !== 'Misc' &&
                                     (ele?.isVerified ? (
-                                      <i
-                                        title="Verified"
-                                        className="fa fa-check"
-                                        style={{ color: 'green',  }}
-                                        aria-hidden="true"
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>Verified</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-check"
+                                          style={{ color: 'green' }}
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
+                                      </OverlayTrigger>
                                     ) : (
-                                      <i
-                                        title="Not Verified"
-                                        className="fa fa-times"
-                                        style={{ color: 'red', }}
-                                        aria-hidden="true"
+                                      <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip>Not Verified</Tooltip>}
                                       >
-                                        {' '}
-                                      </i>
+                                        <i
+                                          className="fa fa-times"
+                                          style={{ color: 'red', fontSize: '15px' }}
+                                          aria-hidden="true"
+                                        >
+                                          {' '}
+                                        </i>
+                                      </OverlayTrigger>
                                     ))}
                                   <br></br>
-                                  <span > 
-                                    {ele?.status === 'NOT_STARTED' && (
-                                      <i
-                                        title={ele?.status}
-                                        className="fa fa-check-circle secondary"
-                                        aria-hidden="true"
-                                      >
-                                        {' '}
-                                      </i>
-                                    )}
-                                    {ele?.status === 'ONGOING' && (
-                                      <i
-                                        title={ele?.status}
-                                        className="fa fa-check-circle warning"
-                                        aria-hidden="true"
-                                      >
-                                        {' '}
-                                      </i>
-                                    )}
-                                    {ele?.status === 'COMPLETED' && (
-                                      <i
-                                        title={ele?.status}
-                                        className="fa fa-check-circle success"
-                                        aria-hidden="true"
-                                      >
-                                        {' '}
-                                      </i>
-                                    )}
-                                    {ele?.status === 'ONHOLD' && (
-                                      <i
-                                        title={ele?.status}
-                                        className="fa fa-check-circle warning"
-                                        aria-hidden="true"
-                                      >
-                                        {' '}
-                                      </i>
-                                    )}
-                                  </span>
                                 </Accordion.Header>
                                 <Accordion.Body>
                                   {ele?.isVerified && (
-                                    <Col >
+                                    <Col>
                                       {' '}
                                       <h6>
                                         <strong>Verification Comments</strong>
