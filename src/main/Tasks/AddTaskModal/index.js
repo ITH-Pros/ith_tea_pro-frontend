@@ -102,9 +102,9 @@ export default function AddTaskModal(props) {
 
   useEffect(() => {
     if (showAddTask) {
-      setShowAddTaskModal(true)
-      getProjectList()
       patchFormForAdd()
+      getProjectList()
+      setShowAddTaskModal(true)
     }
   }, [showAddTask])
 
@@ -119,6 +119,7 @@ export default function AddTaskModal(props) {
         projectId: selectedProjectFromTask._id,
         section: selectedProjectFromTask.section,
       })
+      
       
       getProjectByIdFunc(project[0]?._id)
     } else if (selectedTask) {
@@ -381,6 +382,8 @@ export default function AddTaskModal(props) {
       } else {
         setTaskFormValue({
           ...taskFormValue,
+          projectId: "",
+          section: "",
           title: "",
           description: "",
           assignedTo: "",
@@ -527,6 +530,8 @@ export default function AddTaskModal(props) {
     setUploadedFiles([]);
     uploadedAttachmentsArray([])
     setIsResetAttachment(!isResetAttachment) 
+    // reset all the props
+
     // setTimeout(() => {
     //   document.getElementById("handleresetbuttonid")?.click();
     // }, 500);
