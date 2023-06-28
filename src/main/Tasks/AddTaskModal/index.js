@@ -51,6 +51,7 @@ export default function AddTaskModal(props) {
   const [showMiscType, setShowMiscType] = useState(false)
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
+  const [isResetAttachment, setIsResetAttachment] = useState(false)
 
   const uploadedAttachmentsArray = uploadedFiles => {
     setUploadedFiles(uploadedFiles)
@@ -523,6 +524,9 @@ export default function AddTaskModal(props) {
         minutes: 0,
       },
     });
+    setUploadedFiles([]);
+    uploadedAttachmentsArray([])
+    setIsResetAttachment(!isResetAttachment) 
     // setTimeout(() => {
     //   document.getElementById("handleresetbuttonid")?.click();
     // }, 500);
@@ -899,7 +903,7 @@ export default function AddTaskModal(props) {
                 <AttachmentUploader
                   uploadedAttachmentsArray={uploadedAttachmentsArray}
                   taskAttachments={selectedTask?.attachments || []}
-                  setLoading={setLoading}
+                  isResetAttachment={isResetAttachment}
                 />
               </Row>
 
