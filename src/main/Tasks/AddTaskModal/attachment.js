@@ -3,17 +3,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { uploadProfileImage } from "../../../services/user/api";
+import Loader from "../../../components/Loader";
 
 const AttachmentUploader = (props) => {
   const { taskAttachments, uploadedAttachmentsArray } = props;
   const [files, setFiles] = useState(taskAttachments || []);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [loading, setLoading] = useState(false)
+
 
   useEffect(() => {
     uploadedAttachmentsArray(uploadedFiles);
   }, [uploadedFiles]);
 
   const handleFileSelect = (event) => {
+    setLoading(true)
     const newFiles = [...event.target.files];
     let newUrls = [];
     newFiles.forEach(async (file, index) => {
@@ -22,24 +26,30 @@ const AttachmentUploader = (props) => {
         formData.append("file", file);
         const response = await uploadProfileImage(formData);
         if (response.error) {
+          setLoading(false)
           // console.log("Error while Updating details");
           return;
         } else {
+          setLoading(false)
           newUrls.push(response?.url);
         }
         if (index === newFiles.length - 1) {
           setUploadedFiles([...files, ...newUrls]);
           setFiles([...files, ...newUrls]);
           uploadedAttachmentsArray([...taskAttachments, ...newUrls]);
+          setLoading(false)
         }
       } catch (error) {
         console.error(error);
+        setLoading(false)
       }
     });
   };
 
   return (
-    <div className="attachment-uploader col-md-4">
+
+    <>
+     <div className="attachment-uploader col-md-4">
       <label htmlFor="file-input">
         <div className="select-file">
           <span className="text">Select file</span>
@@ -59,6 +69,13 @@ const AttachmentUploader = (props) => {
         })}
       </div>
     </div>
+    {loading ? <Loader /> : null}
+
+    </>
+   
+
+    
+
   );
 };
 
