@@ -62,8 +62,9 @@ export default function ViewTask(props) {
     const remainingMinutes = minutes % 60
 
     return (
-      <div className="task-completion-time">
+      <div className="task-completion-time d-block">
         <label className="form-label">Task Completion Time : </label>{' '}
+        <br/>
         <div className="time-details">
           {days > 0 && <p>Days: {days}</p>}
           {hours > 0 && <p>Hours: {hours}</p>}
@@ -183,20 +184,23 @@ export default function ViewTask(props) {
          
           </Col>
         </Row>
-        <Col
+   <Row className='mb-3'>
+   <Col
           as={Col}
-          md="3"
-          className="d-flex"
+          
+          
         >
           <h6 className="pe-2">Attachments : </h6>
+          <Row >
           {task.attachments &&
             task.attachments.map((file, index) => {
               return (
+                
                 <Col
                   key={index}
-                  sm={12}
+                  sm={3}
                 >
-                  <div className="assignPopup">
+                  <div className="attchment">
                     <a
                       href={`${file}`}
                       target="_blank"
@@ -205,9 +209,12 @@ export default function ViewTask(props) {
                     </a>
                   </div>
                 </Col>
+               
               )
             })}
+            </Row>
         </Col>
+   </Row>
         {/* <Col className='d-flex'>
           <h6 className='pe-2'>Attachments : </h6>
           {task.attachments &&
