@@ -376,7 +376,8 @@ const FilterModal = (props) => {
           style={{ width: "600px" }}
           show={filterModalShow}
           onHide={() => {localStorage.removeItem('fromDate');localStorage.removeItem('toDate');
-          setFilterModalShow(false);}}
+                  clearFilterFormValue();
+                  setFilterModalShow(false);}}
           placement="end"
         >
           <Offcanvas.Header closeButton>
