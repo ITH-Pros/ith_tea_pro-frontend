@@ -159,7 +159,7 @@ export default function RatingModalBody(props) {
       {loading ? (''):(userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
           {!isNotVerified ? (
-            raitngForDay > 0 ? (
+            raitngForDay >= 0 ? (
               <div>
               <h3>Rating: {raitngForDay}</h3>
               </div>

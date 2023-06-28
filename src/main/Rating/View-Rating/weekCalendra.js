@@ -103,7 +103,7 @@ export default function MyCalendar() {
         const totalDays = getTotalDaysInMonth(selectedDate);
         
         for (let i = 1; i <= totalDays; i++) {
-          if (!userRatingObj[i]) {
+          if (!userRatingObj[i] && userRatingObj[i] !== 0) {
             userRatingObj[i] = userRatingObj[i - 1] || 0;
           }
           userRatingForGraph.push(userRatingObj[i]);
