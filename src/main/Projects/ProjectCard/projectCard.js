@@ -323,9 +323,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faFlag} />
-                  <span className="text-secondary">
+                  <p className="text-secondary">
                     {taskData?.overDueTasks || 0}%
-                  </span>
+                  </p>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -343,9 +343,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faTasks} />
-                  <span className="text-secondary">
+                  <p className="text-secondary">
                     {taskData?.COMPLETED || 0}%
-                  </span>
+                  </p>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -363,9 +363,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faCheck} />
-                  <span className="text-secondary">
+                  <p className="text-secondary">
                     {taskData?.ONGOING || 0}%
-                  </span>
+                  </p>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -385,9 +385,9 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faBarChart} />
-                  <span className="text-secondary">
+                  <p className="text-secondary">
                     {taskData?.totalTask || 0}
-                  </span>
+                  </p>
                 </Button>
               </OverlayTrigger>
             ))}
