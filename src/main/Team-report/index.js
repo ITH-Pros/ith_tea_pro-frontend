@@ -215,8 +215,8 @@ export default function TeamReport(props) {
         <div style={{ clear: 'both' }}></div>
         {selectedOption && (
           <Card
-            className="py-4 px-4"
-            style={{ borderRadius: '10px', border: '0px' }}
+            className="py-4 px-4 mb-4"
+            style={{ borderRadius: '10px', border: '0px', }}
           >
             <Row className="align-middle ">
               <Col
@@ -287,7 +287,7 @@ export default function TeamReport(props) {
                     disabled={selectedEvent === 'task'}
                     title={<span>Task {selectedEvent === 'task' && <span className="text-muted">({teamWorkList?.length})</span>}</span>}
                   >
-                    <div>
+                    <div className='table-responsive'>
                       <Table
                         responsive="md"
                         className="mb-0"
@@ -295,7 +295,7 @@ export default function TeamReport(props) {
                         <tbody>
                           {teamWorkList?.map((team, index) => [
                             <tr>
-                              <td style={{ width: '150px' }}>
+                              <td >
                                 <p className="text-truncate">
                                   <Link
                                     to={`/view-task/${team._id}`}
@@ -307,28 +307,28 @@ export default function TeamReport(props) {
                                   </Link>
                                 </p>
                               </td>
-                              <td style={{ width: '150px' }}>
+                              <td >
                                 <Badge bg="primary">Due : {team?.dueDate?.split('T')[0] || '--'}</Badge>
                               </td>
-                              <td style={{ width: '150px' }}>
+                              <td >
                                 <small className="text-muted">
                                   <b>Status :</b>
                                   {team?.status || '--'}
                                 </small>
                               </td>
-                              <td style={{ width: '150px' }}>
+                              <td >
                                 <small className="text-muted">
                                   <b>Lead :</b>
                                   {team?.lead[0]?.name || '--'}
                                 </small>
                               </td>
                               {team?.completedDate && (
-                                <td style={{ width: '150px' }}>
+                                <td >
                                   <Badge bg="success">Completed : {team?.completedDate?.split('T')[0] || '--'}</Badge>
                                 </td>
                               )}
                               {team?.isRated && (
-                                <td style={{ width: '150px' }}>
+                                <td >
                                   <small className="text-muted">
                                     <b>Rating :</b>
                                     {team?.rating || '--'}
@@ -356,7 +356,7 @@ export default function TeamReport(props) {
                         <tbody>
                           {teamWorkList?.map((team, index) => [
                             <tr>
-                              <td style={{ width: '150px' }}>
+                              <td style={{width:'150px'}} >
                                 <p className="text-truncate">
                                 <Link
                                     to={`/view-task/${team._id}`}
@@ -368,37 +368,41 @@ export default function TeamReport(props) {
                                   </Link>
                                 </p>
                               </td>
-                              <td style={{ width: '150px' }}>
+                              <td style={{width:'150px'}} >
                                 <Badge bg="primary">Due : {team?.dueDate?.split('T')[0] || '--'}</Badge>
                               </td>
-                              <td style={{ width: '150px' }}>
+                              <td style={{width:'150px'}} >
                                 <small className="text-muted">
                                   <b>Status :</b>
                                   {team?.status || '--'}
                                 </small>
                               </td>
-                              <td style={{ width: '150px' }}>
+                              <td style={{width:'150px'}} >
                                 <small className="text-muted">
                                   <b>Lead :</b>
                                   {team?.lead[0]?.name || '--'}
                                 </small>
                               </td>
-                              {team?.completedDate && (
-                                <td style={{ width: '150px' }}>
+                          
+                                <td style={{width:'150px'}} >
+                                {team?.completedDate && (
                                   <Badge bg="success">Completed : {team?.completedDate?.split('T')[0] || '--'}</Badge>
+                                  )}
                                 </td>
-                              )}
-                              {team?.isRated && (
-                                <td style={{ width: '150px' }}>
+                           
+                           
+                                <td style={{width:'150px'}} >
+                                {team?.isRated && (
                                   <small className="text-muted">
                                     <b>Rating :</b>
                                     {team?.rating || '--'}
                                   </small>
+                                      )}
                                 </td>
-                              )}
+                          
                             </tr>,
                           ])}
-                          <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div>
+                          <tr Col="6" className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</tr>
                         </tbody>
                       </Table>
                     </div>
@@ -409,7 +413,7 @@ export default function TeamReport(props) {
                       disabled={selectedEvent === 'pendingtask'}
                       title={<span>Pending Rating Tasks {selectedEvent === 'pendingtask' && <span className="text-muted">({teamWorkList?.length})</span>}</span>}
                     >
-                      <div>
+                      <div className='table-responsive'>
                         <Table
                           responsive="md"
                           className="mb-0"
@@ -417,7 +421,7 @@ export default function TeamReport(props) {
                           <tbody>
                             {teamWorkList?.map((team, index) => [
                               <tr>
-                                <td style={{ width: '150px' }}>
+                                <td >
                                   <p className="text-truncate">
                                   <Link
                                     to={`/view-task/${team._id}`}
@@ -429,28 +433,28 @@ export default function TeamReport(props) {
                                     </Link>
                                   </p>
                                 </td>
-                                <td style={{ width: '150px' }}>
+                                <td >
                                   <Badge bg="primary">Due : {team?.dueDate?.split('T')[0] || '--'}</Badge>
                                 </td>
-                                <td style={{ width: '150px' }}>
+                                <td >
                                   <small className="text-muted">
                                     <b>Status :</b>
                                     {team?.status || '--'}
                                   </small>
                                 </td>
-                                <td style={{ width: '150px' }}>
+                                <td >
                                   <small className="text-muted">
                                     <b>Lead :</b>
                                     {team?.lead[0]?.name || '--'}
                                   </small>
                                 </td>
                                 {team?.completedDate && (
-                                  <td style={{ width: '150px' }}>
+                                  <td >
                                     <Badge bg="success">Completed : {team?.completedDate?.split('T')[0] || '--'}</Badge>
                                   </td>
                                 )}
                                 {team?.isRated && (
-                                  <td style={{ width: '150px' }}>
+                                  <td >
                                     <small className="text-muted">
                                       <b>Rating :</b>
                                       {team?.rating || '--'}

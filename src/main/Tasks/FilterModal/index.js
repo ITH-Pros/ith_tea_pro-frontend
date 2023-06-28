@@ -66,9 +66,10 @@ const FilterModal = (props) => {
     control: (provided) => ({
       ...provided,
       boxShadow: "none",
-      height: "40px",
+      height: "45px",
       borderRadius: "5px",
       color: "#767474",
+      fontSize:'13px'
     }),
     placeholder: (provided) => ({
       ...provided,
@@ -86,6 +87,8 @@ const FilterModal = (props) => {
     valueContainer: (provided) => ({
       ...provided,
       padding: "0px 10px",
+      height:'45px',
+      overflowY: 'auto',
     }),
   };
 

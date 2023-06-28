@@ -398,7 +398,7 @@ const ProjectCard = ({
         <div>
           <div className="pull-left w-100">
             <label className="lableName">Team Members</label>
-            <div className="user-profile-pics">
+            <div className="user-profile-pics" style={{paddingLeft:'10px'}}>
               {accessibleBy
                 .concat(managedBy)
                 .slice(0, 13)

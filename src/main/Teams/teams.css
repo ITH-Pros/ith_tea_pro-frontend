@@ -433,7 +433,7 @@ button.modal-close-btn:hover {
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .custom-modal .checkmark {
@@ -474,7 +474,7 @@ button.modal-close-btn:hover {
 
 .custom-modal .manager-name {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 /* .custom-modal .modal-footer {
