@@ -311,3 +311,8 @@ p {
   color: #aaa;
 }
 
+.attchment{ width: 100%;     background: #f5f5f5;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px #a8a1a1 dashed;;}
+  .attchment a{ color: #404040;}

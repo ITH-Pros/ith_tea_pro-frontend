@@ -410,20 +410,24 @@ export default function ViewTaskModal(props) {
                   </Row>
               </Row>
               <Row className="mb-3">
-                <Form.Group as={Col} md="12">
+                <Form.Group as={Col}>
                   <Form.Label>Attachments</Form.Label>
+                  <Row>
                   {task.attachments &&
                     task.attachments.map((file, index) => {
                       return (
-                        <Col key={index} sm={12}>
-                          <div className="assignPopup">
-                            <a href={`${file}`} target="_blank">
+                         
+                        <Col key={index} sm={3}>
+                          <div className="attchment">
+                            <a href={`${file}`} target="_blank" className="text-truncate">
                               {"Attachment" + " " + (index + 1)}
                             </a>
                           </div>
                         </Col>
+                        
                       );
                     })}
+                    </Row>
                 </Form.Group>
               </Row>
             </Form>
