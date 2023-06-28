@@ -51,6 +51,7 @@ export default function AddTaskModal(props) {
   const [showMiscType, setShowMiscType] = useState(false)
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
+  const [isResetAttachment, setIsResetAttachment] = useState(false)
 
   const uploadedAttachmentsArray = uploadedFiles => {
     setUploadedFiles(uploadedFiles)
@@ -101,9 +102,9 @@ export default function AddTaskModal(props) {
 
   useEffect(() => {
     if (showAddTask) {
-      setShowAddTaskModal(true)
-      getProjectList()
       patchFormForAdd()
+      getProjectList()
+      setShowAddTaskModal(true)
     }
   }, [showAddTask])
 
@@ -118,6 +119,7 @@ export default function AddTaskModal(props) {
         projectId: selectedProjectFromTask._id,
         section: selectedProjectFromTask.section,
       })
+      
       
       getProjectByIdFunc(project[0]?._id)
     } else if (selectedTask) {
@@ -380,6 +382,8 @@ export default function AddTaskModal(props) {
       } else {
         setTaskFormValue({
           ...taskFormValue,
+          projectId: "",
+          section: "",
           title: "",
           description: "",
           assignedTo: "",
@@ -523,6 +527,11 @@ export default function AddTaskModal(props) {
         minutes: 0,
       },
     });
+    setUploadedFiles([]);
+    uploadedAttachmentsArray([])
+    setIsResetAttachment(!isResetAttachment) 
+    // reset all the props
+
     // setTimeout(() => {
     //   document.getElementById("handleresetbuttonid")?.click();
     // }, 500);
@@ -899,7 +908,7 @@ export default function AddTaskModal(props) {
                 <AttachmentUploader
                   uploadedAttachmentsArray={uploadedAttachmentsArray}
                   taskAttachments={selectedTask?.attachments || []}
-                  setLoading={setLoading}
+                  isResetAttachment={isResetAttachment}
                 />
               </Row>
 

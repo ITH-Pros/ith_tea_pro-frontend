@@ -562,7 +562,7 @@ const Tasks = () => {
                 </button>
               )}
 
-              {/* {projects?.length !== 0 && userDetails?.role !== 'CONTRIBUTOR' && !isArchive && selectedProjectId && (
+              {projects?.length !== 0 && userDetails?.role !== 'CONTRIBUTOR' && !isArchive && projectId && (
                 <button
                   className="addTaskBtn addSectionBtn"
                   onClick={() => {
@@ -575,7 +575,7 @@ const Tasks = () => {
                   ></i>{' '}
                   Add Section
                 </button>
-              )} */}
+              )}
               <button className="filter_btn">
                 <FilterModal
                   handleProjectId={selectedProjectId}
