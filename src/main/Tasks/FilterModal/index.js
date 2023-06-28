@@ -87,7 +87,7 @@ const FilterModal = (props) => {
     valueContainer: (provided) => ({
       ...provided,
       padding: "0px 10px",
-      height:'45px',
+      height:'40px',
       overflowY: 'auto',
     }),
   };
