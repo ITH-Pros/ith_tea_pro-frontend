@@ -337,7 +337,7 @@ export default function TeamReport(props) {
                               )}
                             </tr>,
                           ])}
-                          <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div>
+                          <tr Col="6" className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</tr>
                         </tbody>
                       </Table>
                     </div>
@@ -463,7 +463,7 @@ export default function TeamReport(props) {
                                 )}
                               </tr>,
                             ])}
-                            <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div>
+                            <tr Col="6" className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</tr>
                           </tbody>
                         </Table>
                       </div>
@@ -528,7 +528,7 @@ export default function TeamReport(props) {
                                 )}
                               </tr>,
                             ])}
-                            <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div>
+                            <tr Col="6" className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</tr>
                           </tbody>
                         </Table>
                       </div>
@@ -589,7 +589,7 @@ export default function TeamReport(props) {
                               )}
                             </tr>,
                           ])}
-                          <div className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</div>
+                          <tr Col="6" className="no_data_found"> {!teamWorkList?.length && <p>No Tasks Found</p>}</tr>
                         </tbody>
                       </Table>
                     </div>
