@@ -736,7 +736,7 @@ export default function Teams(props) {
                     </div>
                   </div>
 
-                  {userDetails.role === 'SUPER_ADMIN' && 'ADMIN' && user?.role !== 'ADMIN' && (
+                  {(userDetails.role === 'SUPER_ADMIN' || userDetails.role === 'ADMIN') && user?.role !== 'ADMIN' && (
                     <div className="btn">
                       <button
                         className="btn-glow margin-right btn-color"

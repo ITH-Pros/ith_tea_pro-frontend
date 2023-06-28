@@ -23,7 +23,6 @@ import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Loader from "../../../components/Loader";
 import Offcanvas from "react-bootstrap/Offcanvas";
-// import {useEffectOnce} from './useEffectOnce';
 
 export default function AddTaskModal(props) {
   const {
@@ -52,6 +51,7 @@ export default function AddTaskModal(props) {
   const [showMiscType, setShowMiscType] = useState(false)
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
+  const [isResetAttachment, setIsResetAttachment] = useState(false)
 
   const uploadedAttachmentsArray = uploadedFiles => {
     setUploadedFiles(uploadedFiles)
@@ -163,6 +163,9 @@ export default function AddTaskModal(props) {
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
       })
+      setHours(selectedTask.defaultTaskTime.hours)
+      setMinutes(selectedTask.defaultTaskTime.minutes)
+
     } else if (handleProjectId) {
       let project = projectList?.find(item => item?._id === handleProjectId)
       getLeadsListUsingProjectId(project?._id)
@@ -278,6 +281,7 @@ export default function AddTaskModal(props) {
   const onchangeSelectedProject = (e) => {
     let project = projectList.find((el) => el._id === e.target.value);
     setTaskFormValue({
+      ...taskFormValue,
       projectId: project._id,
     });
     getProjectByIdFunc(project?._id);
@@ -289,7 +293,8 @@ export default function AddTaskModal(props) {
     // console.log(e.target.value, "======================");
 
     let updateValue = { ...taskFormValue };
-    
+
+    updateValue[e.target.name] = e.target.value;
       if (e.target.name === "status" && !(e.target.value === "COMPLETED")) {
         updateValue["completedDate"] = null;
       }
@@ -305,22 +310,20 @@ export default function AddTaskModal(props) {
           (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
         updateValue["completedDate"] = patchDateValue;
       }
+      updateValue.defaultTaskTime.hours=hours;
+      updateValue.defaultTaskTime.minutes=minutes;
+  
     
-
-    setTaskFormValue(updateValue);
-    setTaskFormValue({
-      defaultTaskTime: {
-        hours: hours,
-        minutes: minutes,
-      },
-    });
     categoryList?.forEach((item) => {
       if (item._id === e.target.value && item.name === "Misc") {
         setShowMiscType(true);
       } else if (item._id === e.target.value && item.name !== "Misc") {
         setShowMiscType(false);
+       updateValue.miscType = ''
       }
     });
+    setTaskFormValue(updateValue);
+
   };
 
   const updateTaskDescriptionValue = (description) => {
@@ -521,6 +524,9 @@ export default function AddTaskModal(props) {
         minutes: 0,
       },
     });
+    setUploadedFiles([]);
+    uploadedAttachmentsArray([])
+    setIsResetAttachment(!isResetAttachment) 
     // setTimeout(() => {
     //   document.getElementById("handleresetbuttonid")?.click();
     // }, 500);
@@ -574,7 +580,7 @@ export default function AddTaskModal(props) {
       let dataToSend = {};
       projectId && (dataToSend["projectId"] = projectId);
       section && (dataToSend["section"] = section);
-      miscType && (dataToSend["miscType"] = miscType);
+      dataToSend["miscType"] = miscType;
       title && (dataToSend["title"] = title);
       description && (dataToSend["description"] = description);
       assignedTo && (dataToSend["assignedTo"] = assignedTo);
@@ -897,7 +903,7 @@ export default function AddTaskModal(props) {
                 <AttachmentUploader
                   uploadedAttachmentsArray={uploadedAttachmentsArray}
                   taskAttachments={selectedTask?.attachments || []}
-                  setLoading={setLoading}
+                  isResetAttachment={isResetAttachment}
                 />
               </Row>
 
@@ -1026,7 +1032,7 @@ export default function AddTaskModal(props) {
                   <Button
                     className="btn btn-primary"
                     type="button"
-                    onClick={resetFormValue}
+                    onClick={submitTask}
                   >
                     Create
                   </Button>

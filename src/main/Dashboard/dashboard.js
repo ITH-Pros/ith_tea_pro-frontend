@@ -961,7 +961,7 @@ export default function Dashboard(props) {
                   className="left-add"
                 >
                   <span>MY WORK</span>
-                  <i
+                  {/* <i
                     onClick={() => {
                       setSelectedTask()
                       setShowAddTask(true)
@@ -969,7 +969,7 @@ export default function Dashboard(props) {
                     }}
                     className="fa fa-plus-circle"
                     style={{ cursor: 'pointer' }}
-                  ></i>
+                  ></i> */}
                 </Col>
                 <Col
                   lg={6}
