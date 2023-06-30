@@ -101,11 +101,13 @@ const FilterModal = (props) => {
   }, [selectedFilterLead]);
 
   useEffect(() => {
+    if(filterModalShow){
     getLeadsList()
     getAllProjectsData();
     getAllCategoriesData();
     getAllUsersData();
     updateFromLocalStorage();
+    }
   }, []);
 
   useEffect(() => {
@@ -216,6 +218,10 @@ const FilterModal = (props) => {
   };
 
   const getAllProjectsData = async () => {
+
+    console.log("getAllProjectsData from task filter");
+
+
     setLoading(true);
 
     try {

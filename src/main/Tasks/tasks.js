@@ -80,11 +80,6 @@ const Tasks = () => {
     }
   }, [isArchive])
 
-  // useEffectOnce(() => {
-  //   // console.log('useEffectOnce has run!');
-  //   return () => {
-  //   };
-  // });
 
   const handleProgressBarHover = project => {
     const completedTasks = project.completedTasks || 0
@@ -994,59 +989,6 @@ const Tasks = () => {
           {projects && projects.length === 0 && <p> {isArchive ? 'No Task archived.' : ''} </p>}
         </Accordion>
 
-        {/* <div id="multi_accrodian">
-          <Accordion>
-            <AccordionItem>
-              <AccordionHeader>
-                <h3>Recru 2.0</h3>
-              </AccordionHeader>
-
-              <AccordionBody>
-                <div className="accordion-body">
-                  <AccordionItem>
-                    <AccordionHeader>
-                      <h3 className={`accordion-title`}>Ad-hoc</h3>
-                    </AccordionHeader>
-
-                    <AccordionBody>
-                      <div className="accordion-body">
-                        Lorem ipsum dolor sit amet.
-                      </div>
-                    </AccordionBody>
-                  </AccordionItem>
-                </div>
-              </AccordionBody>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionHeader>
-                <h3 className="">Title 2</h3>
-              </AccordionHeader>
-
-              <AccordionBody>
-                <div className="accordion-body">
-                  Lorem ipsum dolor sit amet.
-                </div>
-              </AccordionBody>
-            </AccordionItem>
-          </Accordion>
-        </div> */}
-
-        {/* <Modal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>
-              {" "}
-              {sectionEditMode ? "Update Section" : "Add section"}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-           
-          </Modal.Body>
-        </Modal> */}
 
         {/* ////// */}
         <Offcanvas

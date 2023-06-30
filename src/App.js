@@ -1,8 +1,9 @@
 import './App.css'
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Navbar from '../src/main/Navbar/navbar'
+import { ProSidebarProvider } from 'react-pro-sidebar'
 import Login from './auth/login'
+import Navbar from '../src/main/Navbar/navbar'
 import Dashboard from './main/Dashboard/dashboard'
 import Project from './main/Projects/'
 import Rating from './main/Rating/rating'
@@ -16,7 +17,6 @@ import ViewUser from './main/User/ViewUser'
 import AddProject from './main/Projects/AddProject'
 import AllProject from './main/Projects/AllProjects'
 import { CheckRole } from './components/checkRole'
-import { ProSidebarProvider } from 'react-pro-sidebar'
 import Header from './main/Header'
 import UserForm from './main/edit-profile'
 import PasswordForm from './setup-password'
@@ -27,36 +27,33 @@ import { useAuth } from './auth/AuthProvider'
 import ViewTask from './main/Rating/View-Rating/viewTask'
 import ProjectGrid from './main/Dashboard/projectGrid'
 import ViewUserTasks from './main/Rating/View-Rating/viewUserTasks'
-function App() {
+
+function Layout({ children }) {
   const { userDetails } = useAuth()
+  return (
+    <>
+      <Navbar />
+      <Header />
+      {children}
+    </>
+  )
+}
+
+function App() {
   return (
     <ProSidebarProvider>
       <Routes>
-        {
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-        }
-        {
-          <Route
-            path="/forgot-password"
-            element={<ForgotPassword />}
-          />
-        }
-
-        <Route
-          path="/set-password/:token"
-          element={<PasswordForm />}
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/set-password/:token" element={<PasswordForm />} />
 
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              <Navbar />
-              <Header />
-              <Dashboard showBtn={true} />
+              <Layout>
+                <Dashboard showBtn={true} />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -65,9 +62,9 @@ function App() {
           path="/grid"
           element={
             <ProtectedRoute>
-              <Navbar />
-              <Header />
-              <ProjectGrid showBtn={true} />
+              <Layout>
+                <ProjectGrid showBtn={true} />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -75,48 +72,44 @@ function App() {
         <Route
           path="/project"
           element={
-            <>
-              <ProtectedRoute>
-                <Navbar />
-                <Header />
-                <Project />{' '}
-              </ProtectedRoute>
-            </>
+            <ProtectedRoute>
+              <Layout>
+                <Project />
+              </Layout>
+            </ProtectedRoute>
           }
         >
           <Route
             path="add"
             element={
-              <>
+              <ProtectedRoute>
                 <CheckRole role={['SUPER_ADMIN', 'ADMIN']}>
                   <AddProject />
                 </CheckRole>
-              </>
+              </ProtectedRoute>
             }
           />
           <Route
             path="add/:projectId"
             element={
-              <>
+              <ProtectedRoute>
                 <CheckRole role={['SUPER_ADMIN', 'ADMIN']}>
                   <AddProject />
                 </CheckRole>
-              </>
+              </ProtectedRoute>
             }
           />
 
-          <Route
-            path="all"
-            element={<AllProject />}
-          />
+          <Route path="all" element={<AllProject />} />
         </Route>
+
         <Route
           path="/rating/"
           element={
             <ProtectedRoute>
-              <Navbar />
-              <Header />
-              <Rating />
+              <Layout>
+                <Rating />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -125,67 +118,48 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <Navbar />
-              <Header />
-              <UserForm />
+              <Layout>
+                <UserForm />
+              </Layout>
             </ProtectedRoute>
           }
         />
-        {
-          <Route
-            path="/profile/reset-password"
-            element={<ResetPassword />}
-          />
-        }
+
+        <Route
+          path="/profile/reset-password"
+          element={<ResetPassword />}
+        />
 
         <Route
           path="/team"
           element={
             <ProtectedRoute>
-              <Navbar />
-              <Header />
-              <Team />
+              <Layout>
+                <Team />
+              </Layout>
             </ProtectedRoute>
           }
         />
-
-        {/* <Route
-  path="/guest"
-  element={
-    userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN' ? (
-      <>
-        <ProtectedRoute>
-          <Navbar />
-          <Header />
-          <Guest />
-        </ProtectedRoute>
-      </>
-    ) : (
-      <Navigate to="/" replace />
-    )
-  }
-/> */}
 
         <Route
           path="/task"
           exact={true}
           element={
-            <>
-              <ProtectedRoute>
-                <Navbar />
-                <Header />
+            <ProtectedRoute>
+              <Layout>
                 <Task />
-              </ProtectedRoute>
-            </>
+              </Layout>
+            </ProtectedRoute>
           }
         />
+
         <Route
           path="/team-report"
           element={
             <ProtectedRoute>
-              <Navbar />
-              <Header />
-              <TeamReport />
+              <Layout>
+                <TeamReport />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -193,74 +167,59 @@ function App() {
         <Route
           path="/task/:projectId"
           element={
-            <>
-              <ProtectedRoute>
-                <Navbar />
-                <Header />
-
+            <ProtectedRoute>
+              <Layout>
                 <Task />
-              </ProtectedRoute>
-            </>
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/user"
           element={
-            <>
-              <ProtectedRoute>
-                <Navbar />
-                <Header />
+            <ProtectedRoute>
+              <Layout>
                 <User />
-              </ProtectedRoute>
-            </>
+              </Layout>
+            </ProtectedRoute>
           }
         >
           <Route
             path="add"
             element={
-              <>
+              <ProtectedRoute>
                 <CheckRole role={['SUPER_ADMIN', 'ADMIN']}>
                   <AddUser />
                 </CheckRole>
-              </>
+              </ProtectedRoute>
             }
           />
 
-          <Route
-            path="view/:userId"
-            element={<ViewUser />}
-          />
+          <Route path="view/:userId" element={<ViewUser />} />
         </Route>
 
         <Route
           path="/view-user-tasks/:userId"
           element={
-            <>
-              <ProtectedRoute>
-                <Navbar />
-                <Header />
+            <ProtectedRoute>
+              <Layout>
                 <ViewUserTasks />
-              </ProtectedRoute>
-            </>
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
-        <Route
-          path="*"
-          element={<NoMatch />}
-        />
+        <Route path="*" element={<NoMatch />} />
 
         <Route
           path="/view-task/:taskId"
           element={
-            <>
-              <ProtectedRoute>
-                <Navbar />
-                <Header />
+            <ProtectedRoute>
+              <Layout>
                 <ViewTask />
-              </ProtectedRoute>
-            </>
+              </Layout>
+            </ProtectedRoute>
           }
         />
       </Routes>

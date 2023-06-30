@@ -101,10 +101,16 @@ export default function AddProject(props) {
   }, [color]);
 
   useEffect(() => {
+    if(params){
     getAndSetAllProjects();
+    }
     getUsersList();
     getLeadsList();
   }, []);
+
+  useEffect(() => {
+  }, [params]);
+
 
   useEffect(() => {
     if (projectById) {
