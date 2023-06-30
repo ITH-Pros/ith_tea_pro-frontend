@@ -127,8 +127,8 @@ export default function AddTaskModal(props) {
       setCategoryList(project[0]?.sections);
       setTaskFormValue({
         ...taskFormValue,
-        projectId: selectedProjectFromTask._id,
-        section: selectedProjectFromTask.section,
+        projectId: selectedProjectFromTask?._id,
+        section: selectedProjectFromTask?.section,
       });
 
       if (selectedProjectFromTask?.sectionName === "Misc") {
@@ -200,8 +200,8 @@ export default function AddTaskModal(props) {
         status: selectedTask?.status,
         attachments: selectedTask?.attachments,
       });
-      setHours(selectedTask.defaultTaskTime.hours);
-      setMinutes(selectedTask.defaultTaskTime.minutes);
+      setHours(selectedTask?.defaultTaskTime?.hours);
+      setMinutes(selectedTask?.defaultTaskTime?.minutes);
     } else if (handleProjectId) {
       let project = projectList?.find((item) => item?._id === handleProjectId);
       getLeadsListUsingProjectId(project?._id);
@@ -320,7 +320,7 @@ export default function AddTaskModal(props) {
     let project = projectList.find((el) => el._id === e.target.value);
     setTaskFormValue({
       ...taskFormValue,
-      projectId: project._id,
+      projectId: project?._id,
     });
     getProjectByIdFunc(project?._id);
     getLeadsListUsingProjectId(project._id);
@@ -737,7 +737,7 @@ export default function AddTaskModal(props) {
                     as="select"
                     type="select"
                     onChange={onchangeSelectedProject}
-                    value={taskFormValue.projectId}
+                    value={taskFormValue?.projectId}
                     name="projectId"
                     disabled={
                       selectedTask || handleProjectId || selectedProjectFromTask
@@ -747,8 +747,8 @@ export default function AddTaskModal(props) {
                       Select Project
                     </option>
                     {projectList?.map((project, index) => (
-                      <option value={project._id} key={index}>
-                        {project.name}
+                      <option value={project?._id} key={index}>
+                        {project?.name}
                       </option>
                     ))}
                   </Form.Control>
@@ -766,15 +766,15 @@ export default function AddTaskModal(props) {
                     name="section"
                     placeholder="Select Section"
                     onChange={updateTaskFormValue}
-                    value={taskFormValue.section}
+                    value={taskFormValue?.section}
                   >
                     <option value="" selected disabled>
                       Select Section
                     </option>
 
                     {categoryList?.map((section, index) => (
-                      <option value={section._id} key={index}>
-                        {section.name}
+                      <option value={section?._id} key={index}>
+                        {section?.name}
                       </option>
                     ))}
                   </Form.Control>
@@ -797,7 +797,7 @@ export default function AddTaskModal(props) {
                       name="miscType"
                       placeholder="Select Misc Type"
                       onChange={updateTaskFormValue}
-                      value={taskFormValue.miscType}
+                      value={taskFormValue?.miscType}
                     >
                       <option selected value="" disabled>
                         Select Category
@@ -824,7 +824,7 @@ export default function AddTaskModal(props) {
                     as="select"
                     type="select"
                     onChange={onLeadChange}
-                    value={taskFormValue.leads}
+                    value={taskFormValue?.leads}
                     name="leadId"
                     disabled={
                       selectedTask && taskFormValue?.status === "COMPLETED"
@@ -832,8 +832,8 @@ export default function AddTaskModal(props) {
                   >
                     <option value="">Select Lead</option>
                     {leadLists?.map((project, index) => (
-                      <option value={project._id} key={index}>
-                        {project.name}
+                      <option value={project?._id} key={index}>
+                        {project?.name}
                       </option>
                     ))}
                   </Form.Control>
@@ -850,7 +850,7 @@ export default function AddTaskModal(props) {
                     required
                     type="text"
                     placeholder="Title"
-                    value={taskFormValue.title}
+                    value={taskFormValue?.title}
                     name="title"
                     onChange={updateTaskFormValue}
                   />
@@ -934,12 +934,12 @@ export default function AddTaskModal(props) {
                     type="select"
                     name="assignedTo"
                     onChange={updateTaskFormValue}
-                    value={taskFormValue.assignedTo}
+                    value={taskFormValue?.assignedTo}
                   >
                     <option value="">Select User</option>
                     {userList?.map((module, index) => (
-                      <option value={module._id} key={index}>
-                        {module.name}
+                      <option value={module?._id} key={index}>
+                        {module?.name}
                       </option>
                     ))}
                   </Form.Control>
@@ -954,7 +954,7 @@ export default function AddTaskModal(props) {
                       selectedTask && taskFormValue?.status === "COMPLETED"
                     }
                     name="dueDate"
-                    value={taskFormValue.dueDate}
+                    value={taskFormValue?.dueDate}
                     onChange={updateTaskFormValue}
                   />
                 </Form.Group>
@@ -967,7 +967,7 @@ export default function AddTaskModal(props) {
                     type="select"
                     name="priority"
                     onChange={updateTaskFormValue}
-                    value={taskFormValue.priority}
+                    value={taskFormValue?.priority}
                   >
                     <option value="" disabled>
                       Select Priority
@@ -988,8 +988,8 @@ export default function AddTaskModal(props) {
                     type="select"
                     name="status"
                     onChange={updateTaskFormValue}
-                    value={taskFormValue.status || statusList[0]}
-                    disabled={taskFormValue.status === "COMPLETED"}
+                    value={taskFormValue?.status || statusList[0]}
+                    disabled={taskFormValue?.status === "COMPLETED"}
                   >
                     <option value="" disabled>
                       Select Status
@@ -1013,8 +1013,8 @@ export default function AddTaskModal(props) {
                       placeholder="Completed date"
                       name="completedDate"
                       onChange={updateTaskFormValue}
-                      value={taskFormValue.completedDate}
-                      disabled={taskFormValue.status === "COMPLETED"}
+                      value={taskFormValue?.completedDate}
+                      disabled={taskFormValue?.status === "COMPLETED"}
                     />
                   </Form.Group>
                 )}
