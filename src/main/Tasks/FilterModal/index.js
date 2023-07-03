@@ -108,7 +108,7 @@ const FilterModal = (props) => {
     getAllUsersData();
     updateFromLocalStorage();
     }
-  }, []);
+  }, [filterModalShow]);
 
   useEffect(() => {
     return () => {

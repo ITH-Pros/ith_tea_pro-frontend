@@ -45,16 +45,19 @@ export default function Dashboard(props) {
   const [raitngForDay, setRatingForDay] = useState()
 
   useEffect(() => {
+    const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     // getAllRatingslist();
-    onInit();
-    if (userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") {
+    // onInit();
+    if (allowedRoles.includes(userDetails?.role)) {
       setTeamView(true);
     }
   }, []);
 
   useEffect(() => {
-    if (modalShow === false) onInit()
-  }, [modalShow])
+    if (modalShow === false && teamView){
+        onInit()
+      }
+  }, [modalShow , teamView])
 
   const isRatingAllowed = async function (user,date,month,year) {
     setLoading(true);
@@ -390,7 +393,9 @@ export default function Dashboard(props) {
         </div>
       ) : (
         <div>
-            <MyCalendar />
+        { !teamView && (
+          <MyCalendar />
+        )}
           </div>
       )}
     </div>
