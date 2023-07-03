@@ -40,6 +40,8 @@ export default function Teams(props) {
   const [managerList, setManagerList] = useState([])
   const [selectedManagers, setSelectedManagers] = useState([])
 
+
+
   const openAssignManagerModal = userId => {
     setSelectedManagers([])
     setManagerList([])
@@ -138,8 +140,8 @@ export default function Teams(props) {
 
   function onInit() {
     let options = {
-      currentPage: 1,
-      rowsPerPage: 10,
+      currentPage: pageDetails?.currentPage,
+      rowsPerPage: pageDetails?.rowsPerPage,
     }
     getAndSetAllUsers(options)
     getManagerList()
