@@ -304,7 +304,6 @@ export default function AddTaskModal(props) {
     if (isNaN(date.getTime())) {
       return "";
     }
-    // console.log(dateString, "-----------------------------------------------");
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -328,7 +327,6 @@ export default function AddTaskModal(props) {
   };
 
   const updateTaskFormValue = (e) => {
-    // console.log(e.target.value, "======================");
 
     let updateValue = { ...taskFormValue };
 
@@ -348,7 +346,9 @@ export default function AddTaskModal(props) {
         (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
       updateValue["completedDate"] = patchDateValue;
     }
+    if(hours>=0)
     updateValue.defaultTaskTime.hours = hours;
+    if(minutes>=0)
     updateValue.defaultTaskTime.minutes = minutes;
 
     categoryList?.forEach((item) => {
@@ -415,29 +415,12 @@ export default function AddTaskModal(props) {
         setShowToaster(true);
         return;
       } else {
-        setTaskFormValue({
-          ...taskFormValue,
-          projectId: "",
-          section: "",
-          title: "",
-          description: "",
-          assignedTo: "",
-          dueDate: "",
-          completedDate: "",
-          priority: "",
-          status: "",
-          attachments: [],
-          leads: "",
-          miscType: "",
-          defaultTaskTime: {
-            hours: null,
-            minutes: null,
-          },
-        });
         setValidated(false);
         setSelectedLeads("");
         setCategoryList([]);
-        localStorage.setItem("showTaskToaster", "Task Created Succesfully !!");
+        setToasterMessage("Task Created Succesfully !!");
+        setShowToaster(true)
+        resetFormValue()
 
         setTimeout(() => {
           setShowAddTaskModal(false);
@@ -538,12 +521,13 @@ export default function AddTaskModal(props) {
     resetFormValue();
     setCategoryList([]);
     setShowMiscType(false);
-
+    setHours("")
+    setMinutes("")
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
-    setHours(0);
-    setMinutes(0);
+    setHours("");
+    setMinutes("");
     setTaskFormValue({
       projectId: "",
       section: "",
@@ -602,6 +586,10 @@ export default function AddTaskModal(props) {
 
     setLoading(true);
     try {
+      if(hours>=0)
+      taskFormValue.defaultTaskTime.hours = hours;
+      if(minutes>=0)
+      taskFormValue.defaultTaskTime.minutes = minutes;
       let {
         projectId,
         section,
@@ -660,8 +648,8 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-
-        localStorage.setItem("showTaskToaster", "Task Updated Succesfully !!");
+        setToasterMessage("Task Updated Succesfully !!");
+        setShowToaster(true)
       }
     } catch (error) {
       // console.log(error);
@@ -701,7 +689,8 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        localStorage.setItem("showTaskToaster", "Task Deleted Succesfully !!");
+        setToasterMessage("Task Deleted Succesfully !!");
+        setShowToaster(true)
       }
     } catch (error) {
       // console.log(error);

@@ -57,6 +57,7 @@ export default function Dashboard(props) {
   const [verifyTaskId, setVerifyTaskId] = useState('')
   const [isReOpen, setIsReOpen] = useState(false)
   const [showUserGrid, setShowUserGrid] = useState(false)
+  const [verifyTeamMember, setVerifyTeamMember] = useState('')
 
   const verifyTaskNotAllowedRoles = ['CONTRIBUTOR', 'GUEST']
 
@@ -100,9 +101,13 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     setShowModalOnLogin(localStorage.getItem('profileCompleted') === 'false' ? true : false)
-
     onInit()
   }, [])
+
+  useEffect(()=>{
+    getPendingRating(verifyTeamMember)
+  },[verifyTeamMember])
+
 
   function onInit() {
     getAndSetAllProjects()
@@ -113,7 +118,7 @@ export default function Dashboard(props) {
       getMyWork()
     }
 
-    getPendingRating()
+    getPendingRating(verifyTeamMember)
 
     if (userDetails?.role !== 'CONTRIBUTOR') {
       getAndSetAllUsers()
@@ -1181,7 +1186,7 @@ export default function Dashboard(props) {
                   className="left-add varificationTask"
                 >
                   <span>TASK VERIFICATION</span>
-                  {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (
+                  {(userDetails?.role !== 'CONTRIBUTOR') && (
                     <Form.Group
                       controlId="formBasicEmail"
                       className="team-member-select mb-0 "
@@ -1190,8 +1195,9 @@ export default function Dashboard(props) {
                       <Form.Control
                         as="select"
                         onChange={event => {
-                          getPendingRating(event.target.value)
+                          setVerifyTeamMember(event.target.value)
                         }}
+                        value={verifyTeamMember}
                       >
                         <option value="">All</option>
                         {teamMembers && teamMembers.map(member => <option value={member?._id}>{member?.name}</option>)}

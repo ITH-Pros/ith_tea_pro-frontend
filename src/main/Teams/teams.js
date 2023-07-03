@@ -468,28 +468,18 @@ export default function Teams(props) {
             {name}{index !== managerNames.length - 1 ? ',' : '.'}{' '}
           </span>
         ))
-      ) : (
-
-
-
+      ) : ( user?.credentials && 
         <Button  variant="primary" size="sm" className="add_m">
-          
-    
            <span
         className="fa fa-user-plus"
         title="Assign Manager"
         aria-hidden="true"
-        
         onClick={() => {
           openAssignManagerModal(user._id)
         }}
       >
-      </span>
- 
+      </span> 
       </Button>
-    
-
-   
       )}
     </span>
   );
