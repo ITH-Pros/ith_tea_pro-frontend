@@ -690,6 +690,8 @@ export default function Dashboard(props) {
               </Col>
             ))}
 
+
+            {showAddTask && (  
             <AddTaskModal
               selectedProjectFromTask={selectedProject}
               selectedTask={selectedTask}
@@ -698,6 +700,8 @@ export default function Dashboard(props) {
               closeModal={closeModal}
               handleSubmitReopen={handleSubmit}
               />
+            )}
+
             <button
               className="expend"
               onClick={() => setShowAllProjects(!showAllProjects)}
@@ -1817,7 +1821,9 @@ export default function Dashboard(props) {
           <AddRatingModal />
         </Modal.Body>
       </Modal>
-      <ViewTaskModal
+
+      {showViewTask && (
+        <ViewTaskModal
         showViewTask={showViewTask}
         closeViewTaskModal={closeViewTaskModal}
         selectedTaskId={selectedTaskId}
@@ -1825,6 +1831,9 @@ export default function Dashboard(props) {
         setIsChange={setIsChange}
         isChange={isChange}
       />
+
+      )}
+   
       {/* <Modal
         className="profile-modal"
         show={showModalOnLogin}
