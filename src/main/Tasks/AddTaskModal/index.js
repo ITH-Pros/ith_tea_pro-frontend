@@ -88,7 +88,7 @@ export default function AddTaskModal(props) {
   const [selectedLeads, setSelectedLeads] = useState();
 
   useEffect(() => {
-      getProjectList();
+    getProjectList();
   }, []);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function AddTaskModal(props) {
 
   useEffect(() => {
     if (showAddTask) {
-      getProjectList(); 
+      getProjectList();
       patchFormForAdd();
       setShowAddTaskModal(true);
     }
@@ -117,7 +117,7 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-      console.log('selectedProjectFromTask', selectedProjectFromTask)
+      console.log("selectedProjectFromTask", selectedProjectFromTask);
       getProjectByIdFunc(selectedProjectFromTask._id);
       getLeadsListUsingProjectId(selectedProjectFromTask?._id);
       setTaskFormValue({
@@ -129,25 +129,24 @@ export default function AddTaskModal(props) {
       if (selectedProjectFromTask?.sectionName === "Misc") {
         setShowMiscType(true);
       } else {
-        setShowMiscType(false);  
-      }      
+        setShowMiscType(false);
+      }
     } else if (selectedTask) {
       console.log("project", projectList);
       getProjectByIdFunc(selectedTask?.projectId);
-
 
       // console.log("selectedTask", selectedTask);
       // let project = projectList?.filter(
       //   (item) => item?._id === selectedTask?.projectId
       // );
-      // console.log('project', project) 
+      // console.log('project', project)
       // setCategoryList(project[0]?.sections);
 
       getLeadsListUsingProjectId(selectedTask?.projectId);
       let dueDateData = new Date(selectedTask?.dueDate?.split("T")[0]);
       let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
-        completedDateData = 
+        completedDateData =
           completedDateData.getFullYear() +
           "-" +
           (completedDateData.getMonth() + 1 <= 9
@@ -289,7 +288,7 @@ export default function AddTaskModal(props) {
       setLoading(false);
       if (users.error) {
       } else {
-        setUserList(users?.data); 
+        setUserList(users?.data);
       }
     } catch (error) {
       setLoading(false);
@@ -330,7 +329,6 @@ export default function AddTaskModal(props) {
   };
 
   const updateTaskFormValue = (e) => {
-
     let updateValue = { ...taskFormValue };
 
     updateValue[e.target.name] = e.target.value;
@@ -349,10 +347,8 @@ export default function AddTaskModal(props) {
         (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
       updateValue["completedDate"] = patchDateValue;
     }
-    if(hours>=0)
-    updateValue.defaultTaskTime.hours = hours;
-    if(minutes>=0)
-    updateValue.defaultTaskTime.minutes = minutes;
+    if (hours >= 0) updateValue.defaultTaskTime.hours = hours;
+    if (minutes >= 0) updateValue.defaultTaskTime.minutes = minutes;
 
     categoryList?.forEach((item) => {
       if (item._id === e.target.value && item.name === "Misc") {
@@ -375,8 +371,10 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads
+      !taskFormValue.leads ||
+      (!hours && !minutes)
     ) {
+      console.log("returning");
       return;
     }
     setLoading(true);
@@ -421,8 +419,8 @@ export default function AddTaskModal(props) {
         setSelectedLeads("");
         setCategoryList([]);
         setToasterMessage("Task Created Succesfully !!");
-        setShowToaster(true)
-        resetFormValue()
+        setShowToaster(true);
+        resetFormValue();
 
         setTimeout(() => {
           setShowAddTaskModal(false);
@@ -443,8 +441,10 @@ export default function AddTaskModal(props) {
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
-      !taskFormValue.leads
+      !taskFormValue.leads ||
+      (!hours && !minutes)
     ) {
+      console.log("returning");
       return;
     }
     setLoading(true);
@@ -523,8 +523,8 @@ export default function AddTaskModal(props) {
     resetFormValue();
     setCategoryList([]);
     setShowMiscType(false);
-    setHours("")
-    setMinutes("")
+    setHours("");
+    setMinutes("");
     setShowAddTaskModal(false);
   };
   const resetFormValue = () => {
@@ -581,17 +581,16 @@ export default function AddTaskModal(props) {
       !taskFormValue.section ||
       !taskFormValue.title ||
       !taskFormValue.leads ||
-      !taskFormValue.defaultTaskTime
+      (!hours && !minutes)
     ) {
+      console.log("returning");
       return;
     }
 
     setLoading(true);
     try {
-      if(hours>=0)
-      taskFormValue.defaultTaskTime.hours = hours;
-      if(minutes>=0)
-      taskFormValue.defaultTaskTime.minutes = minutes;
+      if (hours >= 0) taskFormValue.defaultTaskTime.hours = hours;
+      if (minutes >= 0) taskFormValue.defaultTaskTime.minutes = minutes;
       let {
         projectId,
         section,
@@ -651,7 +650,7 @@ export default function AddTaskModal(props) {
         setShowAddTaskModal(false);
         getNewTasks(projectId);
         setToasterMessage("Task Updated Succesfully !!");
-        setShowToaster(true)
+        setShowToaster(true);
       }
     } catch (error) {
       // console.log(error);
@@ -692,7 +691,7 @@ export default function AddTaskModal(props) {
         setShowAddTaskModal(false);
         getNewTasks(projectId);
         setToasterMessage("Task Deleted Succesfully !!");
-        setShowToaster(true)
+        setShowToaster(true);
       }
     } catch (error) {
       // console.log(error);
@@ -763,7 +762,7 @@ export default function AddTaskModal(props) {
                       Select Section
                     </option>
 
-                   {  categoryList?.map((section, index) => (
+                    {categoryList?.map((section, index) => (
                       <option value={section?._id} key={index}>
                         {section?.name}
                       </option>
@@ -855,18 +854,16 @@ export default function AddTaskModal(props) {
                   <div className="d-flex flexWrap">
                     <Form.Control
                       className="timeWth"
-                      required
+                      required={!hours && !minutes}
                       type="number"
                       max="23"
                       min="0"
                       placeholder="Hours"
                       name="defaultTaskTime.hours" // Unique name for hours input
                       value={hours}
-                      // onChange={updateTaskFormValue}
                       onChange={(e) => {
                         const inputValue = e.target.value;
                         if (inputValue.length <= 2 && inputValue >= 0) {
-                          // Update the state value if the input is within the limit
                           setHours(inputValue);
                         }
                       }}
@@ -874,14 +871,13 @@ export default function AddTaskModal(props) {
                     <span className="mx-2 centerColon">:</span>
                     <Form.Control
                       className="timeWth"
-                      required
+                      required={!hours && !minutes}
                       type="number"
                       max="59"
                       min="0"
                       placeholder="Minutes"
                       name="defaultTaskTime.minutes" // Unique name for minutes input
                       value={minutes}
-                      // onChange={updateTaskFormValue}
                       onChange={(e) => {
                         const inputValue = e.target.value;
                         if (
@@ -889,13 +885,12 @@ export default function AddTaskModal(props) {
                           inputValue <= 59 &&
                           inputValue >= 0
                         ) {
-                          // Update the state value if the input is within the limit
                           setMinutes(inputValue);
                         }
                       }}
                     />
                     <Form.Control.Feedback type="invalid">
-                      Estimated time is required !!
+                      Estimated time is required!!
                     </Form.Control.Feedback>
                   </div>
                 </Form.Group>
