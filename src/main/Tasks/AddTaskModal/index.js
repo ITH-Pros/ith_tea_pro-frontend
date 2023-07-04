@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "./index.css";
 import Button from "react-bootstrap/Button";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -968,32 +969,38 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                 </Form.Group>
+    
                 <Form.Group as={Col} md="3" className="ps-0">
-                  <Form.Label>Status</Form.Label>
+  <Form.Label>Status</Form.Label>
 
-                  <Form.Control
-                    required
-                    as="select"
-                    type="select"
-                    name="status"
-                    onChange={updateTaskFormValue}
-                    value={taskFormValue?.status || statusList[0]}
-                    disabled={taskFormValue?.status === "COMPLETED"}
-                  >
-                    <option value="" disabled>
-                      Select Status
-                    </option>
-                    {statusList?.map((status, index) => (
-                      <option
-                        value={status}
-                        disabled={status === "COMPLETED" && !selectedTask}
-                        key={index}
-                      >
-                        {status}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
+  <OverlayTrigger
+    placement="top"
+    overlay={<Tooltip>Update task status after adding task.</Tooltip>}
+  >
+    <Form.Control
+      required
+      as="select"
+      type="select"
+      name="status"
+      onChange={updateTaskFormValue}
+      value={taskFormValue?.status || statusList[0]}
+      disabled={taskFormValue?.status === "COMPLETED"}
+    >
+      <option value="" disabled>
+        Select Status
+      </option>
+      {statusList?.map((status, index) => (
+        <option
+          value={status}
+          disabled={status !== "NOT_STARTED" && !selectedTask}
+          key={index}
+        >
+          {status}
+        </option>
+      ))}
+    </Form.Control>
+  </OverlayTrigger>
+</Form.Group>
                 {taskFormValue?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
