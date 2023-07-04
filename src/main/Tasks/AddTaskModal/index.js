@@ -319,7 +319,11 @@ export default function AddTaskModal(props) {
     setTaskFormValue({
       ...taskFormValue,
       projectId: project?._id,
+      section: "",
+      miscType: "",
     });
+    // fix misc type and set value to null
+    setShowMiscType(false);
     getProjectByIdFunc(project?._id);
     getLeadsListUsingProjectId(project._id);
     updateTaskFormValue(e);
