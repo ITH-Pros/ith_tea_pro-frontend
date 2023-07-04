@@ -173,7 +173,7 @@ export default function Dashboard(props) {
       placement="end"
     >
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >0 ? ('View Tasks') : ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
+        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >= 0 ? ('View Tasks') : ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body  >
       {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay} />: <TasksModalBody data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay}/>}
@@ -357,7 +357,7 @@ export default function Dashboard(props) {
                 className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
                 // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
                 onClick={() => {
-                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse); setRatingForDay(0)
+                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse);
                 }}
               >
                 {!weekendValue && '?'}
