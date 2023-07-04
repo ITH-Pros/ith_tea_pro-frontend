@@ -23,22 +23,24 @@ const CustomCalendar = (props) => {
     return utcTime;
   }
   function convertToUTCForDay(dateString) {
-    console.log("dateString", dateString.toUTCString());
-    let utcTime = new Date(dateString);
-    console.log("utcTime-------------" ,utcTime.toUTCString());
-    utcTime.setUTCHours(0, 0, 0, 0); // Set the UTC hours, minutes, seconds, and milliseconds
-    console.log("utcTime", utcTime);
+    const newDate = new Date(
+      dateString.getFullYear(),
+      dateString.getMonth(),
+      dateString.getDate() + 1
+    );
+    let utcTime = newDate.toISOString()?.split('T')[0]+ 'T00:00:00.000Z'
     return utcTime;
   }
-  
+
   function convertToUTCForNight(dateString) {
-    console.log("dateString", dateString);
-    let utcTime = new Date(dateString);
-    utcTime.setUTCHours(23, 59, 59, 999); // Set the UTC hours, minutes, seconds, and milliseconds
-    console.log("utcTime", utcTime);
+    const newDate = new Date(
+      dateString.getFullYear(),
+      dateString.getMonth(),
+      dateString.getDate() + 1
+    );
+    let utcTime = newDate.toISOString()?.split('T')[0]+ 'T23:59:59.999Z'
     return utcTime;
   }
-  
 
   function convertToUTCNight(dateString) {
     let utcTime = new Date(dateString);
@@ -47,10 +49,9 @@ const CustomCalendar = (props) => {
   }
 
   useEffect(() => {
-      const currentDateMinusOneDay = new Date(currentDate);
-      currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate()-1 );
-      setCurrentDateUTC(currentDateMinusOneDay.toDateString());
-    
+    const currentDateMinusOneDay = new Date(currentDate);
+    currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
+    setCurrentDateUTC(currentDateMinusOneDay.toDateString());
   }, [currentDate, currentView]);
 
   useEffect(() => {
