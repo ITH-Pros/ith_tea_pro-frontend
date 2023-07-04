@@ -23,6 +23,7 @@ import {
   getUnassignedUsers,
   removeUserFromProject,
 } from "../../../services/user/api";
+import Toaster from "../../../components/Toaster";
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -38,7 +39,7 @@ const customStyles = {
     margin: "0px",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    marginBottom:'15px',
+    marginBottom: "15px",
   }),
   placeholder: (provided) => ({
     ...provided,
@@ -75,7 +76,6 @@ const ProjectCard = ({
   handleArchiveModalShow,
   isArchive,
 }) => {
-
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [modalTitle, SetModalTitle] = useState("");
@@ -84,6 +84,9 @@ const ProjectCard = ({
   const [selectedRole, setSelectedRole] = useState(null);
   const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
   const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState("");
+  const [toaster, showToaster] = useState(false);
+  const setShowToaster = (param) => showToaster(param);
+  const [toasterMessage, setToasterMessage] = useState("");
 
   const assignTeamUsers = async () => {
     let dataToSend = {
@@ -108,6 +111,8 @@ const ProjectCard = ({
         setSelectedUnassignedUsers("");
         setListOfUnassignedUsers([]);
         setSelectedRole(null);
+        setToasterMessage("User assigned successfully");
+        setShowToaster(true);
       }
     } catch (error) {
       // console.log("Error while getting user details");
@@ -242,6 +247,7 @@ const ProjectCard = ({
   };
 
   return (
+    <>
     <div className="project-card" style={{ border: `3px solid ${background}` }}>
       {isArchive && <h6 className="archived">Archived</h6>}
       <div
@@ -306,8 +312,10 @@ const ProjectCard = ({
       </div>
 
       <div onClick={() => handleToRedirectTask()} className="project-details">
-        <h4  style={{cursor:'pointer'}}>{name}</h4>
-        <p   style={{cursor:'pointer'}} className="text-secondary">{description}</p>
+        <h4 style={{ cursor: "pointer" }}>{name}</h4>
+        <p style={{ cursor: "pointer" }} className="text-secondary">
+          {description}
+        </p>
       </div>
 
       <div className="project-stats row">
@@ -343,9 +351,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faTasks} />
-                  <p className="text-secondary">
-                    {taskData?.COMPLETED || 0}%
-                  </p>
+                  <p className="text-secondary">{taskData?.COMPLETED || 0}%</p>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -363,9 +369,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faCheck} />
-                  <p className="text-secondary">
-                    {taskData?.ONGOING || 0}%
-                  </p>
+                  <p className="text-secondary">{taskData?.ONGOING || 0}%</p>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -385,9 +389,7 @@ const ProjectCard = ({
               >
                 <Button className="tooltip-button br0">
                   <FontAwesomeIcon icon={faBarChart} />
-                  <p className="text-secondary">
-                    {taskData?.totalTask || 0}
-                  </p>
+                  <p className="text-secondary">{taskData?.totalTask || 0}</p>
                 </Button>
               </OverlayTrigger>
             ))}
@@ -398,7 +400,7 @@ const ProjectCard = ({
         <div>
           <div className="pull-left w-100">
             <label className="lableName">Team Members</label>
-            <div className="user-profile-pics" style={{paddingLeft:'10px'}}>
+            <div className="user-profile-pics" style={{ paddingLeft: "10px" }}>
               {accessibleBy
                 .concat(managedBy)
                 .slice(0, 13)
@@ -439,17 +441,24 @@ const ProjectCard = ({
                   </>
                 ))}
             </div>
-            {userDetails.role !== "CONTRIBUTOR" && !isArchive && userDetails.role !== "GUEST" && (
-  <div
-    style={{ position: "relative", float: "right" }}
-    onClick={() => {
-      onClickOfIcons(accessibleBy.concat(managedBy), "Assigned and Managed By");
-    }}
-  >
-    <i className="fa fa-user-plus add-user-icon" aria-hidden="true"></i>
-  </div>
-)}
-
+            {userDetails.role !== "CONTRIBUTOR" &&
+              !isArchive &&
+              userDetails.role !== "GUEST" && (
+                <div
+                  style={{ position: "relative", float: "right" }}
+                  onClick={() => {
+                    onClickOfIcons(
+                      accessibleBy.concat(managedBy),
+                      "Assigned and Managed By"
+                    );
+                  }}
+                >
+                  <i
+                    className="fa fa-user-plus add-user-icon"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+              )}
           </div>
         </div>
       </div>
@@ -494,7 +503,8 @@ const ProjectCard = ({
                 {showSelectBox && (
                   <>
                     <div className="select-rol-con">
-                      <select size="lg"
+                      <select
+                        size="lg"
                         className="form-control form-control-lg mt-2"
                         value={selectedRole}
                         onChange={handleRoleChange}
@@ -516,7 +526,7 @@ const ProjectCard = ({
                         />
                       )}
                       {selectedRole === "LEAD" && (
-                        <Select 
+                        <Select
                           styles={customStyles}
                           placeholder="Select Member"
                           options={leadOptions}
@@ -554,9 +564,9 @@ const ProjectCard = ({
                   </>
                 )}
               </div>
-              <div style={{clear:'both'}}></div>
+              <div style={{ clear: "both" }}></div>
 
-              <Row >
+              <Row>
                 {users.map((user, index) => {
                   return (
                     <Col key={index} sm={12}>
@@ -615,6 +625,16 @@ const ProjectCard = ({
         </Offcanvas>
       )}
     </div>
+
+    {toaster && (
+              <Toaster
+                message={toasterMessage}
+                show={toaster}
+                close={() => showToaster(false)}
+              />
+            )}
+
+    </>
   );
 };
 

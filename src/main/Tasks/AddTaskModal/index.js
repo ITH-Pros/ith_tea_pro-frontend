@@ -1056,17 +1056,18 @@ export default function AddTaskModal(props) {
                   )}
               </div>
             </Form>
-            {toaster && (
+           
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
+      {loading ? <Loader /> : null}
+      {toaster && (
               <Toaster
                 message={toasterMessage}
                 show={toaster}
                 close={() => showToaster(false)}
               />
             )}
-          </div>
-        </Offcanvas.Body>
-      </Offcanvas>
-      {loading ? <Loader /> : null}
     </>
   );
 }
