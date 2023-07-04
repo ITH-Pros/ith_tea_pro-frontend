@@ -8,7 +8,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import './dashboard.css'
 import Col from 'react-bootstrap/Col'
 import Loader from '../../components/Loader'
-import { editLogedInUserDetails, getAllUsers, reopenTaskById, verifyTaskById } from '../../services/user/api'
+import { editLogedInUserDetails, getAllUsers, reopenTaskById, verifyTaskById, getAllMyWorks, getAllPendingRating, getAllProjects, updateTaskStatusById, getOverDueTaskListData } from '../../services/user/api'
 import Toaster from '../../components/Toaster'
 import avtar from '../../assests/img/avtar.png'
 import leadAvatar from '../../assests/img/leadAvatar.jpeg'
@@ -18,15 +18,10 @@ import AddTaskModal from '../Tasks/AddTaskModal'
 import AddRatingModal from '../Rating/add-rating-modal'
 import UserForm from '../edit-profile'
 import { useAuth } from '../../auth/AuthProvider'
-import AddRating from '../Rating/add-rating'
 import ViewTaskModal from '../Tasks/view-task'
 import Offcanvas from 'react-bootstrap/Offcanvas'
-
-import { BsChevronDoubleLeft, BsChevronLeft, BsChevronDoubleRight, BsChevronRight, BsPersonAdd } from 'react-icons/bs'
-import { getAllMyWorks, getAllPendingRating, getAllProjects, getTeamWork, updateTaskStatusById, getOverDueTaskListData } from '../../services/user/api'
-import { Row, Container, Nav, Dropdown, Card, Button, Badge, Modal, Popover, Form } from 'react-bootstrap'
+import { Row, Container, Nav, Dropdown, Card, Button, Badge, Modal, Form } from 'react-bootstrap'
 import CustomCalendar from './custom-calender'
-import ResetPassword from '../../auth/resetPassword'
 import ProjectGrid from './projectGrid'
 
 export default function Dashboard(props) {
@@ -51,7 +46,6 @@ export default function Dashboard(props) {
   const setShowToaster = param => showToaster(param)
   const [isChange, setIsChange] = useState(undefined)
   const navigate = useNavigate()
-
   const [showModal, setShowModal] = useState(false)
   const [comment, setComment] = useState('')
   const [verifyTaskId, setVerifyTaskId] = useState('')
@@ -105,24 +99,25 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     setShowModalOnLogin(localStorage.getItem('profileCompleted') === 'false' ? true : false)
-
     onInit()
   }, [])
 
   function onInit() {
-    getAndSetAllProjects()
-    if (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') {
-      getOverDueTaskList()
-    }
-    if (userDetails?.role !== 'SUPER_ADMIN' || userDetails?.role !== 'ADMIN') {
-      getMyWork()
-    }
-
-    getPendingRating()
-
-    if (userDetails?.role !== 'CONTRIBUTOR') {
-      getAndSetAllUsers()
-    }
+    setLoading(true);
+    Promise.allSettled([
+      getMyWork(),
+      getOverDueTaskList(),
+      getAndSetAllUsers(),
+      getPendingRating(),
+      getAndSetAllProjects(),
+    ])
+    .then(results=>{
+      const rejectedPromises = results.filter(({status})=>status === 'rejected');
+      const errorMessages  = rejectedPromises.map(({reason})=>(reason))
+      console.log(errorMessages,'error')
+      console.log(rejectedPromises,'rejected')
+    })
+    setLoading(false)
   }
 
   const handleProfileModalClose = () => {
@@ -185,13 +180,15 @@ export default function Dashboard(props) {
   }
 
   const getMyWork = async function () {
+    if (userDetails?.role !== 'SUPER_ADMIN' || userDetails?.role !== 'ADMIN') {
+   
     let dataToSend = {
       currentDate: formDateNightTime(new Date()),
     }
-    setLoading(true)
+    // setLoading(true)
     try {
       const tasks = await getAllMyWorks(dataToSend)
-      setLoading(false)
+      // setLoading(false)
       if (tasks.error) {
         setToasterMessage(tasks?.message || 'Something Went Wrong While Fetching My Work Data')
         setShowToaster(true)
@@ -212,16 +209,22 @@ export default function Dashboard(props) {
         setMyWorkList(allTask)
       }
     } catch (error) {
-      setLoading(false)
+      // setLoading(false)
       return error.message
     }
   }
+  else{
+    return;
+  }
+}
 
   const getOverDueTaskList = async function () {
-    setLoading(true)
+    if (userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') {
+
+    // setLoading(true)
     try {
       const tasks = await getOverDueTaskListData()
-      setLoading(false)
+      // setLoading(false)
       if (tasks.error) {
         setToasterMessage(tasks?.error?.message || 'Something Went Wrong While Fetching Overdue Tasks Data')
         setShowToaster(true)
@@ -244,18 +247,24 @@ export default function Dashboard(props) {
         // console.log('object2', allTask)
       }
     } catch (error) {
-      setLoading(false)
+      // setLoading(false)
       return error.message
     }
   }
+  else{
+    return;
+  }
+}
 
   const getAndSetAllUsers = async function () {
+    if (userDetails?.role !== 'CONTRIBUTOR') {
+
     let options = {
       currentPage: 1,
       rowsPerPage: 50,
     }
 
-    setLoading(true)
+    // setLoading(true)
     try {
       let params = {
         limit: options?.rowsPerPage,
@@ -263,7 +272,7 @@ export default function Dashboard(props) {
       }
 
       const projects = await getAllUsers({ params })
-      setLoading(false)
+      // setLoading(false)
       if (projects.error) {
         setToasterMessage(projects?.message || 'Something Went Wrong')
         setShowToaster(true)
@@ -271,15 +280,19 @@ export default function Dashboard(props) {
         setTeamMembers(projects?.data?.users || [])
       }
     } catch (error) {
-      setLoading(false)
+      // setLoading(false)
       setToasterMessage(error?.error?.message || 'Something Went Wrong')
       setShowToaster(true)
       return error.message
     }
   }
+  else{
+    return;
+  }
+}
 
   const getPendingRating = async function (e) {
-    setLoading(true)
+    // setLoading(true)
     let dataToSend = {
       // filterByTeamMember : e
       memberId: e,
@@ -289,7 +302,7 @@ export default function Dashboard(props) {
 
     try {
       const tasks = await getAllPendingRating(dataToSend)
-      setLoading(false)
+      // setLoading(false)
       if (tasks.error) {
         setToasterMessage(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
         setShowToaster(true)
@@ -311,16 +324,16 @@ export default function Dashboard(props) {
         setPendingRatingList(allTask)
       }
     } catch (error) {
-      setLoading(false)
+      // setLoading(false)
       return error.message
     }
   }
 
   const getAndSetAllProjects = async function () {
-    setLoading(true)
+    // setLoading(true)
     try {
       const projects = await getAllProjects()
-      setLoading(false)
+      // setLoading(false)
       if (projects.error) {
         setToasterMessage(projects?.message || 'Something Went Wrong')
         setShowToaster(true)
@@ -330,7 +343,7 @@ export default function Dashboard(props) {
     } catch (error) {
       setToasterMessage(error?.error?.message || 'Something Went Wrong')
       setShowToaster(true)
-      setLoading(false)
+      // setLoading(false)
       return error.message
     }
   }
