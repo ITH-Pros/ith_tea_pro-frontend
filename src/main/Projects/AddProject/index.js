@@ -390,7 +390,7 @@ export default function AddProject(props) {
               value={managedby}
               required
             />
-            {showErrorForLead && (
+            {(showErrorForLead && !managedby.length) && (
               <p className="text-danger error">Lead is required !!</p>
             )}
           </Form.Group>

@@ -125,9 +125,9 @@ export default function History(props) {
                         <div className="details-card pb-0">
                           <div className="detail-item">
                             <span>Changed status from:</span>
-                            <p className={`previous-status ${item?.previous?.status.toLowerCase()}`}>{item?.previous?.status}</p>
+                            <p className={`previous-status ${item?.previous?.status?.toLowerCase()}`}>{item?.previous?.status}</p>
                             <span> to: </span>
-                            <p className={`new-status ${item?.new?.status.toLowerCase()}`}>{item?.new?.status}</p>
+                            <p className={`new-status ${item?.new?.status?.toLowerCase()}`}>{item?.new?.status}</p>
                           </div>
                         </div>
                       </div>
