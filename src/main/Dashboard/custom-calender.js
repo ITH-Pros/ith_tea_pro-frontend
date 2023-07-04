@@ -31,7 +31,7 @@ const CustomCalendar = (props) => {
 
   useEffect(() => {
       const currentDateMinusOneDay = new Date(currentDate);
-      currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
+      currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() );
       setCurrentDateUTC(currentDateMinusOneDay.toDateString());
     
   }, [currentDate, currentView]);

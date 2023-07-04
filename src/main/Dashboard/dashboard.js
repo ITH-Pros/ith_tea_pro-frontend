@@ -57,9 +57,13 @@ export default function Dashboard(props) {
   const [verifyTaskId, setVerifyTaskId] = useState('')
   const [isReOpen, setIsReOpen] = useState(false)
   const [showUserGrid, setShowUserGrid] = useState(false)
-  const [verifyTeamMember, setVerifyTeamMember] = useState('')
 
   const verifyTaskNotAllowedRoles = ['CONTRIBUTOR', 'GUEST']
+
+  const setToasterMessageToDashboard = (message) => {
+    setToasterMessage(message)
+    setShowToaster(true)
+  }
 
   const openVerifyModal = taskId => {
     setComment('')
@@ -101,13 +105,9 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     setShowModalOnLogin(localStorage.getItem('profileCompleted') === 'false' ? true : false)
+
     onInit()
   }, [])
-
-  useEffect(()=>{
-    getPendingRating(verifyTeamMember)
-  },[verifyTeamMember])
-
 
   function onInit() {
     getAndSetAllProjects()
@@ -118,7 +118,7 @@ export default function Dashboard(props) {
       getMyWork()
     }
 
-    getPendingRating(verifyTeamMember)
+    getPendingRating()
 
     if (userDetails?.role !== 'CONTRIBUTOR') {
       getAndSetAllUsers()
@@ -704,6 +704,8 @@ export default function Dashboard(props) {
               showAddTask={showAddTask}
               closeModal={closeModal}
               handleSubmitReopen={handleSubmit}
+
+              setToasterMessageToDashboard={setToasterMessageToDashboard}
               />
             )}
 
@@ -1190,7 +1192,7 @@ export default function Dashboard(props) {
                   className="left-add varificationTask"
                 >
                   <span>TASK VERIFICATION</span>
-                  {(userDetails?.role !== 'CONTRIBUTOR') && (
+                  {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (
                     <Form.Group
                       controlId="formBasicEmail"
                       className="team-member-select mb-0 "
@@ -1199,9 +1201,8 @@ export default function Dashboard(props) {
                       <Form.Control
                         as="select"
                         onChange={event => {
-                          setVerifyTeamMember(event.target.value)
+                          getPendingRating(event.target.value)
                         }}
-                        value={verifyTeamMember}
                       >
                         <option value="">All</option>
                         {teamMembers && teamMembers.map(member => <option value={member?._id}>{member?.name}</option>)}

@@ -40,7 +40,7 @@ export default function AddTaskModal(props) {
   const priorityList = CONSTANTS.priorityList;
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [categoryList, setCategoryList] = useState();
+  const [categoryList, setCategoryList] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [validated, setValidated] = useState(false);
@@ -110,21 +110,22 @@ export default function AddTaskModal(props) {
 
   useEffect(() => {
     if (showAddTask) {
+      getProjectList(); 
       patchFormForAdd();
-      getProjectList();
       setShowAddTaskModal(true);
     }
   }, [showAddTask]);
 
   const patchFormForAdd = () => {
-    console.log("selectedProjectFromTask", selectedProjectFromTask);
     if (selectedProjectFromTask) {
-      // console.log('selectedProjectFromTask', selectedProjectFromTask)
+    // console.log("selectedProjectFromTask", selectedProjectFromTask);
+
+      console.log('selectedProjectFromTask', selectedProjectFromTask)
       let project = projectList?.filter(
         (item) => item?._id === selectedProjectFromTask?._id
       );
-      getLeadsListUsingProjectId(project[0]?._id);
       setCategoryList(project[0]?.sections);
+      getLeadsListUsingProjectId(project[0]?._id);
       setTaskFormValue({
         ...taskFormValue,
         projectId: selectedProjectFromTask?._id,
@@ -134,22 +135,27 @@ export default function AddTaskModal(props) {
       if (selectedProjectFromTask?.sectionName === "Misc") {
         setShowMiscType(true);
       } else {
-        setShowMiscType(false);
+        setShowMiscType(false);  
       }
 
       getProjectByIdFunc(project[0]?._id);
     } else if (selectedTask) {
-      let project = projectList?.filter(
-        (item) => item?._id === selectedTask?.projectId
-      );
-      // console.log('project', project)
+      console.log("project", projectList);
+      getProjectByIdFunc(selectedTask?.projectId);
+
+
+      // console.log("selectedTask", selectedTask);
+      // let project = projectList?.filter(
+      //   (item) => item?._id === selectedTask?.projectId
+      // );
+      // console.log('project', project) 
+      // setCategoryList(project[0]?.sections);
 
       getLeadsListUsingProjectId(selectedTask?.projectId);
-      setCategoryList(project[0]?.sections);
       let dueDateData = new Date(selectedTask?.dueDate?.split("T")[0]);
       let completedDateData = new Date(selectedTask?.completedDate);
       if (selectedTask?.completedDate) {
-        completedDateData =
+        completedDateData = 
           completedDateData.getFullYear() +
           "-" +
           (completedDateData.getMonth() + 1 <= 9
@@ -181,7 +187,6 @@ export default function AddTaskModal(props) {
       } else {
         setShowMiscType(false);
       }
-
       setTaskFormValue({
         projectId: selectedTask?.projectId,
         section: selectedTask?.section,
@@ -291,7 +296,7 @@ export default function AddTaskModal(props) {
       setLoading(false);
       if (users.error) {
       } else {
-        setUserList(users?.data);
+        setUserList(users?.data); 
       }
     } catch (error) {
       setLoading(false);
@@ -316,6 +321,7 @@ export default function AddTaskModal(props) {
   }
 
   const onchangeSelectedProject = (e) => {
+    console.log(e.target.value, "====================");
     let project = projectList.find((el) => el._id === e.target.value);
     setTaskFormValue({
       ...taskFormValue,
@@ -376,7 +382,6 @@ export default function AddTaskModal(props) {
     ) {
       return;
     }
-
     setLoading(true);
     try {
       let {
@@ -761,7 +766,7 @@ export default function AddTaskModal(props) {
                       Select Section
                     </option>
 
-                    {categoryList?.map((section, index) => (
+                   {  categoryList?.map((section, index) => (
                       <option value={section?._id} key={index}>
                         {section?.name}
                       </option>
