@@ -942,7 +942,10 @@ export default function AddTaskModal(props) {
                     name="dueDate"
                     value={taskFormValue?.dueDate}
                     onChange={updateTaskFormValue}
+                    isInvalid={taskFormValue?.dueDate && (new Date().toISOString().split("T")[0]) > taskFormValue?.dueDate}
+                    required
                   />
+                  <Form.Control.Feedback type='invalid'>Date cannot be less than today!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
