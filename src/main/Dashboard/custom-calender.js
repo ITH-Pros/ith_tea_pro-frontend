@@ -22,6 +22,23 @@ const CustomCalendar = (props) => {
     utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
     return utcTime;
   }
+  function convertToUTCForDay(dateString) {
+    console.log("dateString", dateString.toUTCString());
+    let utcTime = new Date(dateString);
+    console.log("utcTime-------------" ,utcTime.toUTCString());
+    utcTime.setUTCHours(0, 0, 0, 0); // Set the UTC hours, minutes, seconds, and milliseconds
+    console.log("utcTime", utcTime);
+    return utcTime;
+  }
+  
+  function convertToUTCForNight(dateString) {
+    console.log("dateString", dateString);
+    let utcTime = new Date(dateString);
+    utcTime.setUTCHours(23, 59, 59, 999); // Set the UTC hours, minutes, seconds, and milliseconds
+    console.log("utcTime", utcTime);
+    return utcTime;
+  }
+  
 
   function convertToUTCNight(dateString) {
     let utcTime = new Date(dateString);
@@ -31,7 +48,7 @@ const CustomCalendar = (props) => {
 
   useEffect(() => {
       const currentDateMinusOneDay = new Date(currentDate);
-      currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() );
+      currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate()-1 );
       setCurrentDateUTC(currentDateMinusOneDay.toDateString());
     
   }, [currentDate, currentView]);
@@ -59,9 +76,10 @@ const CustomCalendar = (props) => {
         toDate: convertToUTCNight(weekEnd),
       };
     } else if (currentView === "Day") {
+      console.log("currentDate", currentDate);
       dataToSend = {
-        fromDate: convertToUTCDay(currentDate),
-        toDate: convertToUTCNight(currentDate),
+        fromDate: convertToUTCForDay(currentDate),
+        toDate: convertToUTCForNight(currentDate),
       };
     }
 
@@ -88,6 +106,7 @@ const CustomCalendar = (props) => {
       );
       setCurrentDate(newDate);
     } else if (currentView === "Day") {
+      console.log("currentDate", currentDate);
       const newDate = new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
@@ -160,7 +179,7 @@ const CustomCalendar = (props) => {
                 {weekEnd.toLocaleDateString()}
               </>
             ) : (
-              currentUTCDate
+              currentDate?.toLocaleDateString()
             )}
           </h4>
         </Col>

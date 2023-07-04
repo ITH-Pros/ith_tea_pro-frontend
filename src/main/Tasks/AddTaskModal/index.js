@@ -59,6 +59,7 @@ export default function AddTaskModal(props) {
 
   useEffect(() => {
     setCategoryList([]);
+    setLeadList([]);
     localStorage.removeItem("addTaskModal");
   }, [localStorage.getItem("addTaskModal")]);
 
@@ -87,9 +88,7 @@ export default function AddTaskModal(props) {
   const [selectedLeads, setSelectedLeads] = useState();
 
   useEffect(() => {
-
       getProjectList();
-    
   }, []);
 
   useEffect(() => {
@@ -118,14 +117,9 @@ export default function AddTaskModal(props) {
 
   const patchFormForAdd = () => {
     if (selectedProjectFromTask) {
-    // console.log("selectedProjectFromTask", selectedProjectFromTask);
-
       console.log('selectedProjectFromTask', selectedProjectFromTask)
-      let project = projectList?.filter(
-        (item) => item?._id === selectedProjectFromTask?._id
-      );
-      setCategoryList(project[0]?.sections);
-      getLeadsListUsingProjectId(project[0]?._id);
+      getProjectByIdFunc(selectedProjectFromTask._id);
+      getLeadsListUsingProjectId(selectedProjectFromTask?._id);
       setTaskFormValue({
         ...taskFormValue,
         projectId: selectedProjectFromTask?._id,
@@ -136,9 +130,7 @@ export default function AddTaskModal(props) {
         setShowMiscType(true);
       } else {
         setShowMiscType(false);  
-      }
-
-      getProjectByIdFunc(project[0]?._id);
+      }      
     } else if (selectedTask) {
       console.log("project", projectList);
       getProjectByIdFunc(selectedTask?.projectId);
@@ -208,6 +200,7 @@ export default function AddTaskModal(props) {
       setHours(selectedTask?.defaultTaskTime?.hours);
       setMinutes(selectedTask?.defaultTaskTime?.minutes);
     } else if (handleProjectId) {
+      // console.log("handleProjectId", handleProjectId);
       let project = projectList?.find((item) => item?._id === handleProjectId);
       getLeadsListUsingProjectId(project?._id);
       if (leadLists.length === 1) {
