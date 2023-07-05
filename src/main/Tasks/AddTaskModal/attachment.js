@@ -29,28 +29,31 @@ const AttachmentUploader = (props) => {
     const newFiles = [...event.target.files];
     let newUrls = [];
     for (const file of newFiles) {
+      console.log("File selected: " + file.name);
       if (isFileAlreadyUploaded(file)) {
-        setToaster(true);
+        console.log("File already uploaded: " + file.name);
         setToasterMessage("File already uploaded: " + file.name);
+        setToaster(true);
       } else {
         try {
           const formData = new FormData();
           formData.append("file", file);
           const response = await uploadProfileImage(formData);
           if (response.error) {
-            setToaster(true);
             setToasterMessage("Error while uploading file: " + file.name);
+            setToaster(true);
           } else {
             newUrls.push(response?.url);
           }
         } catch (error) {
           console.error(error);
-          setToaster(true);
           setToasterMessage("Error while uploading file: " + file.name);
+          setToaster(true);
           setLoading(false);
           return;
         }
       }
+      console.log("File uploaded: " + file.name);
     }
     setUploadedFiles([...uploadedFiles, ...newUrls]);
     setFiles([...files, ...newUrls]);
@@ -61,9 +64,11 @@ const AttachmentUploader = (props) => {
   const isFileAlreadyUploaded = (file) => {
     for (const uploadedFile of uploadedFiles) {
       if (file.name === uploadedFile.name && file.size === uploadedFile.size) {
+        console.log("File already uploaded: " + file.name);
         return true;
       }
     }
+    console.log("File not uploaded: " + file.name);
     return false;
   };
 

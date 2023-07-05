@@ -575,6 +575,7 @@ export default function Dashboard(props) {
   }
 
   return (
+    <>
     <div className="dashboard_camp  rightDashboard">
       <Container>
         <Row>
@@ -1937,7 +1938,11 @@ export default function Dashboard(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-      {loading ? <Loader /> : null}
+    
+    </div>
+
+
+    {loading ? <Loader /> : null}
       {toaster && (
         <Toaster
           message={toasterMessage}
@@ -1945,6 +1950,6 @@ export default function Dashboard(props) {
           close={() => showToaster(false)}
         />
       )}
-    </div>
+    </>
   )
 }

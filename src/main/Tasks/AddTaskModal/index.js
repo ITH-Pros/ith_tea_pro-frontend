@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "./index.css";
 import Button from "react-bootstrap/Button";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -943,10 +943,16 @@ export default function AddTaskModal(props) {
                     name="dueDate"
                     value={taskFormValue?.dueDate}
                     onChange={updateTaskFormValue}
-                    isInvalid={taskFormValue?.dueDate && (new Date().toISOString().split("T")[0]) > taskFormValue?.dueDate}
+                    isInvalid={
+                      taskFormValue?.dueDate &&
+                      new Date().toISOString().split("T")[0] >
+                        taskFormValue?.dueDate
+                    }
                     required
                   />
-                  <Form.Control.Feedback type='invalid'>Date cannot be less than today!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    Date cannot be less than today!
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
@@ -969,38 +975,40 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                 </Form.Group>
-    
-                <Form.Group as={Col} md="3" className="ps-0">
-  <Form.Label>Status</Form.Label>
 
-  <OverlayTrigger
-    placement="top"
-    overlay={<Tooltip>Update task status after adding task.</Tooltip>}
-  >
-    <Form.Control
-      required
-      as="select"
-      type="select"
-      name="status"
-      onChange={updateTaskFormValue}
-      value={taskFormValue?.status || statusList[0]}
-      disabled={taskFormValue?.status === "COMPLETED"}
-    >
-      <option value="" disabled>
-        Select Status
-      </option>
-      {statusList?.map((status, index) => (
-        <option
-          value={status}
-          disabled={status !== "NOT_STARTED" && !selectedTask}
-          key={index}
-        >
-          {status}
-        </option>
-      ))}
-    </Form.Control>
-  </OverlayTrigger>
-</Form.Group>
+                <Form.Group as={Col} md="3" className="ps-0">
+                  <Form.Label>Status</Form.Label>
+
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>Update task status after adding task.</Tooltip>
+                    }
+                  >
+                    <Form.Control
+                      required
+                      as="select"
+                      type="select"
+                      name="status"
+                      onChange={updateTaskFormValue}
+                      value={taskFormValue?.status || statusList[0]}
+                      disabled={taskFormValue?.status === "COMPLETED"}
+                    >
+                      <option value="" disabled>
+                        Select Status
+                      </option>
+                      {statusList?.map((status, index) => (
+                        <option
+                          value={status}
+                          disabled={status !== "NOT_STARTED" && !selectedTask}
+                          key={index}
+                        >
+                          {status}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </OverlayTrigger>
+                </Form.Group>
                 {taskFormValue?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
@@ -1063,18 +1071,17 @@ export default function AddTaskModal(props) {
                   )}
               </div>
             </Form>
-           
           </div>
         </Offcanvas.Body>
       </Offcanvas>
       {loading ? <Loader /> : null}
       {toaster && (
-              <Toaster
-                message={toasterMessage}
-                show={toaster}
-                close={() => showToaster(false)}
-              />
-            )}
+        <Toaster
+          message={toasterMessage}
+          show={toaster}
+          close={() => showToaster(false)}
+        />
+      )}
     </>
   );
 }
