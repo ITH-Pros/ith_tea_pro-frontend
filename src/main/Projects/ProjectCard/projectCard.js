@@ -23,7 +23,8 @@ import {
   getUnassignedUsers,
   removeUserFromProject,
 } from "../../../services/user/api";
-import Toaster from "../../../components/Toaster";
+
+import { toast } from "react-toastify";
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -111,8 +112,9 @@ const ProjectCard = ({
         setSelectedUnassignedUsers("");
         setListOfUnassignedUsers([]);
         setSelectedRole(null);
-        setToasterMessage("User assigned successfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("User assigned successfully");
+        // setShowToaster(true);
       }
     } catch (error) {
       // console.log("Error while getting user details");
@@ -625,14 +627,6 @@ const ProjectCard = ({
         </Offcanvas>
       )}
     </div>
-
-    {toaster && (
-              <Toaster
-                message={toasterMessage}
-                show={toaster}
-                close={() => showToaster(false)}
-              />
-            )}
 
     </>
   );

@@ -12,6 +12,7 @@ import './index.css'
 import History from '../../Tasks/view-task/history'
 import { Accordion } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function ViewUserTasks() {
   const [loading, setLoading] = useState(false)
@@ -28,8 +29,9 @@ export default function ViewUserTasks() {
     getAllTasksUsingUserId(formattedDate)
     }
   else{
-    setToasterMessage('User id does not match!')
-    setShowToaster(true)
+    toast.dismiss()
+      toast.info('User id does not match!')
+    // setShowToaster(true)
     }
   }, [])
 
@@ -66,15 +68,17 @@ export default function ViewUserTasks() {
       const tasks = await getProjectsTask(data)
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.error?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       } else {
         let allTask = tasks?.data
         setTaskData(allTask)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // setShowToaster(true)
       setLoading(false)
       return error.message
     }
@@ -352,18 +356,6 @@ export default function ViewUserTasks() {
       )}
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <ToastContainer
-          position="top-end"
-          className="p-3"
-        >
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        </ToastContainer>
-      )}
     </div>
   )
 }

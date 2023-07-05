@@ -14,8 +14,9 @@ import {
   updateTaskDetails,
 } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
 import { CONSTANTS } from "../../../constants";
+import { toast } from "react-toastify";
 
 function TaskModal(props) {
   const { selectedTaskObj, selectedProject, getAllTaskOfProject, category } =
@@ -542,16 +543,18 @@ function TaskModal(props) {
       };
       const taskRes = await getTaskDetailsByTaskId(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
         setSelectedTaskDetails(taskRes.data);
         !taskModalShow && setTaskModalShow(true);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -589,16 +592,18 @@ function TaskModal(props) {
 
       const taskRes = await updateTaskDetails(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -614,17 +619,20 @@ function TaskModal(props) {
       setLoading(false);
 
       if (comment.error) {
-        setToasterMessage(comment?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(comment?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
-        setToasterMessage("Comment added succesfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Comment added succesfully");
+        // setShowToaster(true);
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
     }
   };
@@ -639,18 +647,21 @@ function TaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage("Updated Succesfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Updated Succesfully");
+        // setShowToaster(true);
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -802,13 +813,7 @@ function TaskModal(props) {
       </Modal>
 
       {loading && <Loader />}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   );
 }

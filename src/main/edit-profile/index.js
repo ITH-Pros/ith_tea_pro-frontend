@@ -12,6 +12,7 @@ import ImageUpload from "./imageUpload";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import { useAuth } from "../../auth/AuthProvider";
+import { toast } from "react-toastify";
 
 function UserForm(props) {
   const { handleModalClose } = props;
@@ -127,7 +128,8 @@ function UserForm(props) {
         setLoading(false);
         showToaster(true);
         localStorage.setItem("selectedProfilePicture",profilePicture)
-        setToasterMessage("Profile updated successful");
+        toast.dismiss()
+      toast.info("Profile updated successful");
         setIsEditable(true);
         localStorage.removeItem("isEditProfile");
         handleModalClose();
@@ -315,13 +317,7 @@ function UserForm(props) {
             </div></>
       </form>
 
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
       {loading ? <Loader /> : null}
     </div>
   );

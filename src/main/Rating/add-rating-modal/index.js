@@ -10,6 +10,7 @@ import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
 import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
+import { toast } from 'react-toastify'
 
 export default function RatingModalBody(props) {
   const { setModalShow, data, raitngForDay } = props
@@ -90,17 +91,20 @@ export default function RatingModalBody(props) {
         const rating = await addRatingOnTask(dataToSend)
         setLoading(false)
         if (rating.error) {
-          setToasterMessage(rating?.message || 'Something Went Wrong')
-          setShowToaster(true)
+          toast.dismiss()
+      toast.info(rating?.message || 'Something Went Wrong')
+          // setShowToaster(true)
         } else {
-          setToasterMessage('Rating Added Succesfully')
-          setShowToaster(true)
+          toast.dismiss()
+      toast.info('Rating Added Succesfully')
+          // setShowToaster(true)
           setModalShow(false)
         }
       } catch (error) {
         setLoading(false)
-        setToasterMessage(error?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(error?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       }
     }
     localStorage.removeItem('userId')
@@ -140,15 +144,17 @@ export default function RatingModalBody(props) {
       const tasks = await getProjectsTask(data)
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.error?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       } else {
         let allTask = tasks?.data
         setUserTasks(allTask)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // setShowToaster(true)
       setLoading(false)
       return error.message
     }
@@ -475,13 +481,7 @@ export default function RatingModalBody(props) {
       ))}
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   )
 }

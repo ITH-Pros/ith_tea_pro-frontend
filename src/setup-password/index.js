@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./index.css";
 import Toaster from "../components/Toaster";
+import { toast } from "react-toastify";
 
 function PasswordForm() {
   const [password, setPassword] = useState("");
@@ -42,17 +43,20 @@ function PasswordForm() {
       const response = await verifyTokenApi(dataToSend);
       if (response.error) {
         showToaster(true);
-        setToasterMessage(response.message);
+        toast.dismiss()
+      toast.info(response.message);
         navigate("/login");
         return;
       } else {
         showToaster(true);
-        setToasterMessage(response.message);
+        toast.dismiss()
+      toast.info(response.message);
         setEmail(response?.data?.email);
       }
     } catch (error) {
       showToaster(true);
-      setToasterMessage(error.message);
+      toast.dismiss()
+      toast.info(error.message);
       navigate("/login");
       return error.message;
     }
@@ -135,13 +139,7 @@ function PasswordForm() {
         )}
       </form>
 
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </div>
   );
 }

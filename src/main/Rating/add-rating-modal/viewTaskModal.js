@@ -8,6 +8,7 @@ import Toaster from '../../../components/Toaster'
 import Loader from '../../../components/Loader'
 import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
+import { toast } from 'react-toastify'
 
 export default function TasksModalBody(props) {
   const { setModalShow, data, raitngForDay} = props
@@ -66,15 +67,17 @@ export default function TasksModalBody(props) {
       const tasks = await getProjectsTask(data)
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong1')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.error?.message || 'Something Went Wrong1')
+        // setShowToaster(true)
       } else {
         let allTask = tasks?.data
         setUserTasks(allTask)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong2')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong2')
+      // setShowToaster(true)
       setLoading(false)
       return error.message
     }
@@ -282,13 +285,7 @@ export default function TasksModalBody(props) {
       ):("No tasks Found!") }
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   )
 }

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "./EditRating.css";
-import Toaster from "../../../components/Toaster";
+
 import Loader from "../../../components/Loader";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import { Row, Col } from "react-bootstrap";
 import { updateTaskRating } from "../../../services/user/api";
+import { toast } from "react-toastify";
 
 export default function EditRating(props) {
   const {
@@ -48,17 +49,20 @@ export default function EditRating(props) {
     try {
       const rating = await updateTaskRating(dataToSend);
       if (rating.error) {
-        setToasterMessage(rating?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(rating?.message || "Something Went Wrong");
         showToaster(true);
       } else {
-        setToasterMessage("Rating Updated Successfully");
+        toast.dismiss()
+      toast.info("Rating Updated Successfully");
         showToaster(true);
         onClose();
         getTaskDetailsById(taskId?._id);
         setConfirmationAgain(false);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
       showToaster(true);
     }
 
@@ -181,16 +185,7 @@ export default function EditRating(props) {
       )}
       {/* 
   {loading ? <Loader /> : null}
-
-  {toaster && (
-    <ToastContainer position="top-end" className="p-3">
-      <Toaster
-        message={toasterMessage}
-        show={toaster}
-        close={() => showToaster(false)}
-      />
-    </ToastContainer>
-  )} */}
+*/}
     </div>
   );
 }

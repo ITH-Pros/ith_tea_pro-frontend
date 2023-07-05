@@ -27,6 +27,7 @@ import { useAuth } from './auth/AuthProvider'
 import ViewTask from './main/Rating/View-Rating/viewTask'
 import ProjectGrid from './main/Dashboard/projectGrid'
 import ViewUserTasks from './main/Rating/View-Rating/viewUserTasks'
+import { ToastContainer } from 'react-toastify'
 
 function Layout({ children }) {
   const { userDetails } = useAuth()
@@ -41,6 +42,8 @@ function Layout({ children }) {
 
 function App() {
   return (
+    <React.Fragment>
+      <ToastContainer autoClose={2000} />
     <ProSidebarProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -224,6 +227,7 @@ function App() {
         />
       </Routes>
     </ProSidebarProvider>
+    </React.Fragment>
   )
 }
 

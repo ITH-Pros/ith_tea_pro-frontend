@@ -10,10 +10,11 @@ import { getRatings, verifyManager } from "../../../services/user/api";
 import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../../../components/ratingBox";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
 import MyCalendar from "./weekCalendra";
 import RatingModalBody from "../add-rating-modal";
 import TasksModalBody from "../add-rating-modal/viewTaskModal";
+import { toast } from "react-toastify";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -76,8 +77,9 @@ export default function Dashboard(props) {
       };
       const response = await verifyManager(dataToSend);
       if (response.error) {
-        setToasterMessage(response.message);
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(response.message);
+        // setShowToaster(true);
         // console.log("error", response );
       } else {
         if (response?.data?.ratingAllowed === true) {
@@ -90,8 +92,9 @@ export default function Dashboard(props) {
           }))
           setModalShow(true)
         } else {
-          setToasterMessage('You are not allowed to give rating.')
-          setShowToaster(true)
+          toast.dismiss()
+      toast.info('You are not allowed to give rating.')
+          // setShowToaster(true)
         }
         // // console.log('error in verify manager')
       }
@@ -145,15 +148,17 @@ export default function Dashboard(props) {
       const rating = await getRatings(data);
       setLoading(false);
       if (rating.error) {
-        setToasterMessage(rating?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(rating?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         // // console.log(rating.data);
         setRatings([...rating.data]);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
     }
   }
@@ -382,13 +387,6 @@ export default function Dashboard(props) {
           </div>
 
           {loading ? <Loader /> : null}
-          {toaster && (
-            <Toaster
-              message={toasterMessage}
-              show={toaster}
-              close={() => showToaster(false)}
-            />
-          )}
           <div></div>
         </div>
       ) : (

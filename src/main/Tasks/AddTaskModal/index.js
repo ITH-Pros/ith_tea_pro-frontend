@@ -18,12 +18,13 @@ import {
   deleteTaskDetails,
   updateTaskStatusById,
 } from "../../../services/user/api";
-import Toaster from "../../../components/Toaster";
+
 import { CONSTANTS } from "../../../constants";
 import TextEditor from "./textEditor";
 import { useAuth } from "../../../auth/AuthProvider";
 import Loader from "../../../components/Loader";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { toast } from "react-toastify";
 
 export default function AddTaskModal(props) {
   const {
@@ -412,15 +413,17 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Error while creating Task");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Error while creating Task");
+        // setShowToaster(true);
         return;
       } else {
         setValidated(false);
         setSelectedLeads("");
         setCategoryList([]);
-        setToasterMessage("Task Created Succesfully !!");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Task Created Succesfully !!");
+        // setShowToaster(true);
         resetFormValue();
 
         setTimeout(() => {
@@ -484,12 +487,14 @@ export default function AddTaskModal(props) {
       const taskRes = await createTask(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Error while creating Task");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Error while creating Task");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage("Task Created Succesfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Task Created Succesfully");
+        // setShowToaster(true);
         resetFormValue();
         setValidated(false);
         setSelectedLeads("");
@@ -563,14 +568,16 @@ export default function AddTaskModal(props) {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        setToasterMessage(res?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(res?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         // console.log(res);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -626,8 +633,9 @@ export default function AddTaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Error while updating Task");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Error while updating Task");
+        // setShowToaster(true);
         return;
       } else {
         updateTaskStatus({
@@ -650,8 +658,9 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        setToasterMessage("Task Updated Succesfully !!");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Task Updated Succesfully !!");
+        // setShowToaster(true);
       }
     } catch (error) {
       // console.log(error);
@@ -670,8 +679,9 @@ export default function AddTaskModal(props) {
       const taskRes = await deleteTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Error while deleting Task");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Error while deleting Task");
+        // setShowToaster(true);
         return;
       } else {
         setSelectedLeads("");
@@ -691,8 +701,9 @@ export default function AddTaskModal(props) {
         setValidated(false);
         setShowAddTaskModal(false);
         getNewTasks(projectId);
-        setToasterMessage("Task Deleted Succesfully !!");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Task Deleted Succesfully !!");
+        // setShowToaster(true);
       }
     } catch (error) {
       // console.log(error);
@@ -943,10 +954,8 @@ export default function AddTaskModal(props) {
                     name="dueDate"
                     value={taskFormValue?.dueDate}
                     onChange={updateTaskFormValue}
-                    isInvalid={taskFormValue?.dueDate && (new Date().toISOString().split("T")[0]) > taskFormValue?.dueDate}
                     required
                   />
-                  <Form.Control.Feedback type='invalid'>Date cannot be less than today!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
@@ -1068,13 +1077,6 @@ export default function AddTaskModal(props) {
         </Offcanvas.Body>
       </Offcanvas>
       {loading ? <Loader /> : null}
-      {toaster && (
-              <Toaster
-                message={toasterMessage}
-                show={toaster}
-                close={() => showToaster(false)}
-              />
-            )}
     </>
   );
 }

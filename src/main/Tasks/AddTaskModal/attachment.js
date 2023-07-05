@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import { useRef } from 'react';
 import { uploadProfileImage } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
+import { toast } from "react-toastify";
 
 const AttachmentUploader = (props) => {
   const { taskAttachments, uploadedAttachmentsArray, isResetAttachment } = props;
@@ -31,7 +32,8 @@ const AttachmentUploader = (props) => {
     for (const file of newFiles) {
       if (isFileAlreadyUploaded(file)) {
         setToaster(true);
-        setToasterMessage("File already uploaded: " + file.name);
+        toast.dismiss()
+      toast.info("File already uploaded: " + file.name);
       } else {
         try {
           const formData = new FormData();
@@ -39,14 +41,16 @@ const AttachmentUploader = (props) => {
           const response = await uploadProfileImage(formData);
           if (response.error) {
             setToaster(true);
-            setToasterMessage("Error while uploading file: " + file.name);
+            toast.dismiss()
+      toast.info("Error while uploading file: " + file.name);
           } else {
             newUrls.push(response?.url);
           }
         } catch (error) {
           console.error(error);
           setToaster(true);
-          setToasterMessage("Error while uploading file: " + file.name);
+          toast.dismiss()
+      toast.info("Error while uploading file: " + file.name);
           setLoading(false);
           return;
         }
@@ -101,13 +105,6 @@ const AttachmentUploader = (props) => {
         </div>
       </div>
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => setToaster(false)}
-        />
-      )}
     </>
   );
 };

@@ -3,9 +3,10 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
 import { getUserDetailsByUserId } from "../../../services/user/api";
 import "./index.css";
+import { toast } from "react-toastify";
 
 export default function ViewUser(props) {
   const { userId } = useParams();
@@ -28,15 +29,17 @@ export default function ViewUser(props) {
       const userDetails = await getUserDetailsByUserId({ params });
       setLoading(false);
       if (userDetails.error) {
-        setToasterMessage(userDetails?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(userDetails?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
         setUserDetails(userDetails.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -99,8 +102,9 @@ export default function ViewUser(props) {
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     navigator.clipboard.writeText(userDetails?.email);
-                    setToasterMessage("Copied Succesfully");
-                    setShowToaster(true);
+                    toast.dismiss()
+      toast.info("Copied Succesfully");
+                    // setShowToaster(true);
                   }}
                 ></i>
                 <p>SKILLS</p>
@@ -130,8 +134,9 @@ export default function ViewUser(props) {
                             navigator.clipboard.writeText(
                               userDetails?.employeeId
                             );
-                            setToasterMessage("Copied Succesfully");
-                            setShowToaster(true);
+                            toast.dismiss()
+      toast.info("Copied Succesfully");
+                            // setShowToaster(true);
                           }}
                         ></i>
                       </p>
@@ -175,13 +180,7 @@ export default function ViewUser(props) {
           </div>
         </form>
       </div>
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
       {loading ? <Loader /> : null}
     </>
   );

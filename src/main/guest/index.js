@@ -21,6 +21,7 @@ import {
   getAllProjects,
   getGuestApi,
 } from "../../services/user/api";
+import { toast } from "react-toastify";
 
 export default function Guest({}) {
   const [pageDetails, setPageDetails] = useState({
@@ -73,14 +74,17 @@ export default function Guest({}) {
     try {
         const guest = await getGuestApi(dataToSend);
         if (guest.error) {
-            setToasterMessage(guest?.message || "Something Went Wrong");
+            toast.dismiss()
+      toast.info(guest?.message || "Something Went Wrong");
             showToaster(true);
         } else {
-               setToasterMessage(guest?.message || "Guest Updated Successfully");
+               toast.dismiss()
+      toast.info(guest?.message || "Guest Updated Successfully");
             showToaster(true);
         }
     } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
         showToaster(true);
     }
     setLoading(false);
@@ -125,10 +129,12 @@ export default function Guest({}) {
     try {
         const guest = await deleteGuestApi(dataToSend);
         if (guest.error) {
-            setToasterMessage(guest?.message || "Something Went Wrong");
+            toast.dismiss()
+      toast.info(guest?.message || "Something Went Wrong");
             showToaster(true);
         } else {
-            setToasterMessage("Guest Deleted Successfully");
+            toast.dismiss()
+      toast.info("Guest Deleted Successfully");
             showToaster(true);
             localStorage.getItem("setPageDetails");
             setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
@@ -138,7 +144,8 @@ export default function Guest({}) {
             setShowDeleteConfirmation(false);
         }
     } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
         showToaster(true);
     }
     setLoading(false);
@@ -157,11 +164,13 @@ export default function Guest({}) {
     try {
       const guest = await changeGuestStatus(dataToSend);
       if (guest.error) {
-        setToasterMessage(guest?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(guest?.message || "Something Went Wrong");
         showToaster(true);
         setLoading(false);
       } else {
-        setToasterMessage("Guest Updated Successfully");
+        toast.dismiss()
+      toast.info("Guest Updated Successfully");
         setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
         localStorage.removeItem("setPageDetails");
         showToaster(true);
@@ -170,7 +179,8 @@ export default function Guest({}) {
       }
     }
     catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
       showToaster(true);
       setLoading(false);
     }
@@ -258,18 +268,21 @@ export default function Guest({}) {
     try {
       const guest = await addGuestApi(dataToSend);
       if (guest.error) {
-        setToasterMessage(guest?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(guest?.message || "Something Went Wrong");
         showToaster(true);
       } else {
        
-        setToasterMessage("Guest Added Successfully");
+        toast.dismiss()
+      toast.info("Guest Added Successfully");
         showToaster(true);
         // onClose();
         getGuests(options);
         setShowAddEditModal(false);
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
       showToaster(true);
     }
     setLoading(false);
@@ -293,10 +306,12 @@ export default function Guest({}) {
     try {
       const guest = await editGuestApi(dataToSend);
       if (guest.error) {
-        setToasterMessage(guest?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(guest?.message || "Something Went Wrong");
         showToaster(true);
       } else {
-        setToasterMessage("Guest Updated Successfully");
+        toast.dismiss()
+      toast.info("Guest Updated Successfully");
         showToaster(true);
         setShowAddEditModal(false);
 
@@ -305,7 +320,8 @@ export default function Guest({}) {
         getGuests();
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
       showToaster(true);
     }
     setLoading(false);
@@ -320,7 +336,8 @@ export default function Guest({}) {
     try {
       const guest = await getGuestApi(params);
       if (guest.error) {
-        setToasterMessage(guest?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(guest?.message || "Something Went Wrong");
         showToaster(true);
       } else {
         setGuests(guest?.data?.users);
@@ -334,7 +351,8 @@ export default function Guest({}) {
         });
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
       showToaster(true);
     }
     setLoading(false);
@@ -351,7 +369,8 @@ export default function Guest({}) {
             setProjects(project?.data);
         }
     } catch (error) {
-        setToasterMessage(error?.message || "Something Went Wrong");
+        toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
         showToaster(true);
     }
     setLoading(false);
@@ -634,15 +653,6 @@ export default function Guest({}) {
         </Modal.Footer>
       </Modal>
       {loading ? <Loader /> : null}
-      {toaster && (
-        <ToastContainer position="top-end" className="p-3">
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        </ToastContainer>
-      )}
     </div>
   );
 }

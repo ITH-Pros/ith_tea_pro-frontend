@@ -3,6 +3,7 @@ import { createContext, useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
 import Toaster from "../components/Toaster";
+import { toast } from "react-toastify";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -32,8 +33,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setToasterMessage("Logged Out Successfully");
-    setShowToaster(true);
+    toast.dismiss()
+      toast.info("Logged Out Successfully");
+    // setShowToaster(true);
     setAccessToken(null);
     setUserDetails(null);
   };
@@ -53,13 +55,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={value}>
       {children}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </AuthContext.Provider>
   );
 };

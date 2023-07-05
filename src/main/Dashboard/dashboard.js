@@ -9,7 +9,7 @@ import './dashboard.css'
 import Col from 'react-bootstrap/Col'
 import Loader from '../../components/Loader'
 import { editLogedInUserDetails, getAllUsers, reopenTaskById, verifyTaskById, getAllMyWorks, getAllPendingRating, getAllProjects, updateTaskStatusById, getOverDueTaskListData } from '../../services/user/api'
-import Toaster from '../../components/Toaster'
+
 import avtar from '../../assests/img/avtar.png'
 import leadAvatar from '../../assests/img/leadAvatar.jpeg'
 import Avatar from 'react-avatar'
@@ -23,6 +23,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import { Row, Container, Nav, Dropdown, Card, Button, Badge, Modal, Form } from 'react-bootstrap'
 import CustomCalendar from './custom-calender'
 import ProjectGrid from './projectGrid'
+import { toast } from 'react-toastify'
 
 export default function Dashboard(props) {
   const [toasterMessage, setToasterMessage] = useState('')
@@ -55,8 +56,9 @@ export default function Dashboard(props) {
   const verifyTaskNotAllowedRoles = ['CONTRIBUTOR', 'GUEST']
 
   const setToasterMessageToDashboard = (message) => {
-    setToasterMessage(message)
-    setShowToaster(true)
+    toast.dismiss()
+      toast.info(message)
+    // setShowToaster(true)
   }
 
   const openVerifyModal = taskId => {
@@ -67,8 +69,9 @@ export default function Dashboard(props) {
 
   const handleVerifyTask = async () => {
     if (!comment) {
-      setToasterMessage('Please Enter Comments')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info('Please Enter Comments')
+      // // setShowToaster(true)
       return
     }
 
@@ -82,18 +85,21 @@ export default function Dashboard(props) {
       const tasks = await verifyTaskById(dataToSend)
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.message || 'Something Went Wrong While Updating Task Status')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.message || 'Something Went Wrong While Updating Task Status')
+        // setShowToaster(true)
       } else {
-        setToasterMessage('Task Verified Successfully')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info('Task Verified Successfully')
+        // setShowToaster(true)
         onInit()
         setShowModal(false)
       }
     } catch (error) {
       setLoading(false)
-      setToasterMessage(error?.message || 'Something Went Wrong While Updating Task Status')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.message || 'Something Went Wrong While Updating Task Status')
+      // setShowToaster(true)
     }
   }
 
@@ -147,21 +153,24 @@ export default function Dashboard(props) {
     //   const tasks = await updateTaskStatusById(dataToSend);
     //   setLoading(false);
     //   if (tasks.error) {
-    //     setToasterMessage(
+    //     toast.dismiss()
+      // toast.info(
     //       tasks?.message || "Something Went Wrong While Updating Task Status"
     //     );
-    //     setShowToaster(true);
+    //     // setShowToaster(true);
     //   } else {
-    //     setToasterMessage("Task Reopened Successfully");
-    //     setShowToaster(true);
+    //     toast.dismiss()
+      // toast.info("Task Reopened Successfully");
+    //     // setShowToaster(true);
     //     onInit();
     //   }
     // } catch (error) {
     //   setLoading(false);
-    //   setToasterMessage(
+    //   toast.dismiss()
+      // toast.info(
     //     error?.message || "Something Went Wrong While Updating Task Status"
     //   );
-    //   setShowToaster(true);
+    //   // setShowToaster(true);
     // }
   }
 
@@ -196,8 +205,9 @@ export default function Dashboard(props) {
       const tasks = await getAllMyWorks(dataToSend)
       // setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.message || 'Something Went Wrong While Fetching My Work Data')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.message || 'Something Went Wrong While Fetching My Work Data')
+        // setShowToaster(true)
       } else {
         let allTask = tasks?.data
         allTask?.map(item => {
@@ -232,8 +242,9 @@ export default function Dashboard(props) {
       const tasks = await getOverDueTaskListData()
       // setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong While Fetching Overdue Tasks Data')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.error?.message || 'Something Went Wrong While Fetching Overdue Tasks Data')
+        // setShowToaster(true)
       } else {
         let allTask = tasks?.data
         // console.log('object1', allTask)
@@ -280,15 +291,17 @@ export default function Dashboard(props) {
       const projects = await getAllUsers({ params })
       // setLoading(false)
       if (projects.error) {
-        setToasterMessage(projects?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(projects?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       } else {
         setTeamMembers(projects?.data?.users || [])
       }
     } catch (error) {
       // setLoading(false)
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // setShowToaster(true)
       return error.message
     }
   }
@@ -310,8 +323,9 @@ export default function Dashboard(props) {
       const tasks = await getAllPendingRating(dataToSend)
       // setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
+        // setShowToaster(true)
       } else {
         // console.log(tasks, 'tasks')
         let allTask = tasks?.data
@@ -341,21 +355,23 @@ export default function Dashboard(props) {
       const projects = await getAllProjects()
       // setLoading(false)
       if (projects.error) {
-        setToasterMessage(projects?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(projects?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       } else {
         setProjectListValue(projects.data)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // setShowToaster(true)
       // setLoading(false)
       return error.message
     }
   }
 
   const getNewTasks = data => {
-    closeModal()
+    // closeModal()
     getAndSetAllProjects()
   }
 
@@ -397,11 +413,13 @@ export default function Dashboard(props) {
     try {
       const res = await updateTaskStatusById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       } else {
-        setToasterMessage(res?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong')
+        // setShowToaster(true)
 
         onInit()
         if (userDetails?.role !== 'CONTRIBUTOR') {
@@ -410,8 +428,9 @@ export default function Dashboard(props) {
         }
       }
     } catch (error) {
-      setToasterMessage(error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.message || 'Something Went Wrong')
+      // setShowToaster(true)
       return error.message
     }
   }
@@ -423,14 +442,16 @@ export default function Dashboard(props) {
   //     setLoading(false);
 
   //     if (res.error) {
-  //       setToasterMessage(res?.message || "Something Went Wrong");
-  //       setShowToaster(true);
+  //       toast.dismiss()
+      // toast.info(res?.message || "Something Went Wrong");
+  //       // setShowToaster(true);
   //     } else {
   //       setTeamWorkList(res?.data);
   //     }
   //   } catch (error) {
-  //     setToasterMessage(error?.message || "Something Went Wrong");
-  //     setShowToaster(true);
+  //     toast.dismiss()
+      // toast.info(error?.message || "Something Went Wrong");
+  //     // setShowToaster(true);
   //     setLoading(false);
   //     return error.message;
   //   }
@@ -477,11 +498,13 @@ export default function Dashboard(props) {
 
       if (response.error) {
         showToaster(true)
-        setToasterMessage('Something Went Wrong While Skipping the Reminder')
+        toast.dismiss()
+      toast.info('Something Went Wrong While Skipping the Reminder')
         return
       } else {
         showToaster(true)
-        setToasterMessage('Profile Update Skipped Succesfully')
+        toast.dismiss()
+      toast.info('Profile Update Skipped Succesfully')
         handleProfileModalClose()
       }
     } catch (error) {
@@ -541,8 +564,9 @@ export default function Dashboard(props) {
 
     // ... Perform any additional actions upon submitting the new due date
     if (newDueDate === '') {
-      setToasterMessage('Please Select New Due Date')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info('Please Select New Due Date')
+      // setShowToaster(true)
       return
     }
 
@@ -554,11 +578,13 @@ export default function Dashboard(props) {
     try {
       const res = await reopenTaskById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong')
+        // setShowToaster(true)
       } else {
-        setToasterMessage(res?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong')
+        // setShowToaster(true)
         onInit()
         if (userDetails?.role !== 'CONTRIBUTOR') {
           // getTeamWorkList();
@@ -568,8 +594,9 @@ export default function Dashboard(props) {
         setIsReOpen(false)
       }
     } catch (error) {
-      setToasterMessage(error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.message || 'Something Went Wrong')
+      // setShowToaster(true)
       return error.message
     }
   }
@@ -1211,7 +1238,7 @@ export default function Dashboard(props) {
                   className="left-add varificationTask"
                 >
                   <span>TASK VERIFICATION</span>
-                  {(userDetails?.role !== 'CONTRIBUTOR') && (
+                  {(userDetails?.role === 'SUPER_ADMIN' || userDetails?.role === 'ADMIN') && (
                     <Form.Group
                       controlId="formBasicEmail"
                       className="team-member-select mb-0 "
@@ -1938,13 +1965,7 @@ export default function Dashboard(props) {
         </Modal.Footer>
       </Modal>
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </div>
   )
 }

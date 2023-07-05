@@ -12,6 +12,7 @@ import './index.css'
 import { useParams } from 'react-router-dom'
 import History from '../../Tasks/view-task/history'
 import { Accordion } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 export default function ViewTask(props) {
   const [loading, setLoading] = useState(false)
@@ -38,7 +39,8 @@ export default function ViewTask(props) {
         setTaskData(response?.data)
       }
     } catch (error) {
-      setToasterMessage(error)
+      toast.dismiss()
+      toast.info(error)
     }
     setLoading(false)
   }
@@ -334,18 +336,6 @@ export default function ViewTask(props) {
           </Accordion>
         </Row>
         {loading ? <Loader /> : null}
-        {toaster && (
-          <ToastContainer
-            position="top-end"
-            className="p-3"
-          >
-            <Toaster
-              message={toasterMessage}
-              show={toaster}
-              close={() => showToaster(false)}
-            />
-          </ToastContainer>
-        )}
       </div>
     </div>
   )

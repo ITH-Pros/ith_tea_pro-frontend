@@ -7,7 +7,7 @@ import { useAuth } from "../../../auth/AuthProvider";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Toaster from "../../../components/Toaster";
+
 import Loader from "../../../components/Loader";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import ToastContainer from "react-bootstrap/ToastContainer";
@@ -23,6 +23,7 @@ import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
 import History from "./history";
 import EditRating from "./editRating";
+import { toast } from "react-toastify";
 export default function ViewTaskModal(props) {
   const {
     closeViewTaskModal,
@@ -72,10 +73,12 @@ export default function ViewTaskModal(props) {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        setToasterMessage(res?.message);
+        toast.dismiss()
+      toast.info(res?.message);
         showToaster(true);
       } else {
-        setToasterMessage(res?.message);
+        toast.dismiss()
+      toast.info(res?.message);
         showToaster(true);
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
@@ -152,10 +155,12 @@ export default function ViewTaskModal(props) {
       let response = await addCommentOnTask(dataToSend);
       if (response.error) {
         showToaster(true);
-        setToasterMessage(response.message);
+        toast.dismiss()
+      toast.info(response.message);
       } else {
         showToaster(true);
-        setToasterMessage(response.message);
+        toast.dismiss()
+      toast.info(response.message);
         setText("");
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
@@ -213,10 +218,12 @@ export default function ViewTaskModal(props) {
       const rating = await addRatingOnTask(dataToSend);
       setLoading(false);
       if (rating.error) {
-        setToasterMessage(rating?.message);
+        toast.dismiss()
+      toast.info(rating?.message);
         showToaster(true);
       } else {
-        setToasterMessage("Rating Added Succesfully");
+        toast.dismiss()
+      toast.info("Rating Added Succesfully");
         showToaster(true);
         setIsRatingFormVisible(false);
         getTaskDetailsById(selectedTaskIdForRating);
@@ -600,15 +607,6 @@ export default function ViewTaskModal(props) {
       />
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <ToastContainer position="top-end" className="p-3">
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        </ToastContainer>
-      )}
     </>
   );
 }

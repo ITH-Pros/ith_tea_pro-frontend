@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { changePassword, forgotPassword, verifyOtp } from "../services/auth/api";
 import Toaster from "../components/Toaster";
 import Loader from '../components/Loader/index'
+import { toast } from "react-toastify";
 
 function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -62,12 +63,14 @@ function ForgotPassword() {
     setLoading(false);
 
       if (response.error) {
-        setToasterMessage(response?.message);
+        toast.dismiss()
+      toast.info(response?.message);
         showToaster(true);
         // console.log(response.error,'-----------------error')
       }
       else {
-        setToasterMessage(response?.message);
+        toast.dismiss()
+      toast.info(response?.message);
         showToaster(true);
         // navigate("/reset-password");
         setShowOtp(true);
@@ -76,7 +79,8 @@ function ForgotPassword() {
     catch (error) {
     setLoading(false);
 
-      setToasterMessage(error?.error?.message);
+      toast.dismiss()
+      toast.info(error?.error?.message);
       showToaster(true);
       // console.log(error,'-----------------error')
     }
@@ -97,12 +101,14 @@ function ForgotPassword() {
     setLoading(false);
 
       if (response.error) {
-        setToasterMessage(response?.message);
+        toast.dismiss()
+      toast.info(response?.message);
         showToaster(true);
         // console.log(response,'-----------------3error')
       }
       else {
-        setToasterMessage(response?.message);
+        toast.dismiss()
+      toast.info(response?.message);
         showToaster(true);
         // console.log(response,'-----------------3success')
         setOtpLogId(response.data.otpLogId);
@@ -136,12 +142,14 @@ function ForgotPassword() {
       const response = await changePassword(dataToSend);
       setLoading(false);
       if(response.error){
-        setToasterMessage(response?.message);
+        toast.dismiss()
+      toast.info(response?.message);
         showToaster(true);
         // console.log(response.error,'-----------------error')
       }
       else{
-        setToasterMessage(response?.message);
+        toast.dismiss()
+      toast.info(response?.message);
         showToaster(true);
         setTimeout(() => {
           localStorage.clear();
@@ -154,7 +162,8 @@ function ForgotPassword() {
     catch (error) {
       setLoading(false);
 
-      setToasterMessage(error?.error?.message);
+      toast.dismiss()
+      toast.info(error?.error?.message);
         showToaster(true);
       // console.log(error,'-----------------error')
     }
@@ -330,12 +339,7 @@ function ForgotPassword() {
           </div>
         </div>
       </div>
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />)}
+
       {loading ? <Loader /> : null}
       
     </div>

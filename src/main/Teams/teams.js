@@ -30,6 +30,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UserIcon from "../Projects/ProjectCard/profileImage";
 import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import ViewTeamList from "./team-list";
+import { toast } from "react-toastify";
 
 export default function Teams(props) {
   const { userDetails } = useAuth();
@@ -119,8 +120,9 @@ export default function Teams(props) {
 
   const assignManagers = async () => {
     if (selectedManagers.length === 0) {
-      setToasterMessage("Please select  manager");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info("Please select  manager");
+      // setShowToaster(true);
       return;
     }
 
@@ -135,11 +137,13 @@ export default function Teams(props) {
       const resp = await assignManagerTOUserByIds(data);
       if (resp.error) {
         // console.log(resp.error)
-        setToasterMessage(resp?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(resp?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
-        setToasterMessage(resp?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(resp?.message || "Something Went Wrong");
+        // setShowToaster(true);
         setAssignManagerModalShow(false);
         onInit();
       }
@@ -167,16 +171,18 @@ export default function Teams(props) {
       const userAnalytics = await getUserAnalytics();
       setLoading(false);
       if (userAnalytics.error) {
-        setToasterMessage(userAnalytics?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(userAnalytics?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
         setUserAnalytics(userAnalytics?.data);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -195,8 +201,9 @@ export default function Teams(props) {
       const projects = await getAllUsers({ params });
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         setUsersListValue(projects?.data?.users || []);
         let totalPages = Math.ceil(
@@ -211,8 +218,9 @@ export default function Teams(props) {
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -228,15 +236,17 @@ export default function Teams(props) {
       const projects = await getAllProjects();
       setLoading(false);
       if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
         setProjectListValue(projects.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -247,18 +257,20 @@ export default function Teams(props) {
       const userAssignedProjects = await getUserAssignedProjects(dataToSend);
       setLoading(false);
       if (userAssignedProjects.error) {
-        setToasterMessage(
+        toast.dismiss()
+      toast.info(
           userAssignedProjects?.message || "Something Went Wrong"
         );
-        setShowToaster(true);
+        // setShowToaster(true);
         return;
       } else {
         setUserAssignedProjects(userAssignedProjects.data);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
     setSelectedUserId(userId);
@@ -320,18 +332,21 @@ export default function Teams(props) {
       const assignRes = await assignUserToProjectByIds(dataToSend);
       setLoading(false);
       if (assignRes.error) {
-        setToasterMessage(assignRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(assignRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         setModalShow(false);
         return;
       } else {
         setProjectListValue(assignRes.data);
-        setToasterMessage(assignRes?.message);
+        toast.dismiss()
+      toast.info(assignRes?.message);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setModalShow(false);
       return error.message;
     }
@@ -347,19 +362,22 @@ export default function Teams(props) {
       const deleteUser = await deleteUserById(dataToSend);
       setLoading(false);
       if (deleteUser.error) {
-        setToasterMessage(deleteUser?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(deleteUser?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage("User Deleted Successfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("User Deleted Successfully");
+        // setShowToaster(true);
         getAndSetAllUsers(pageDetails);
         setConfirmModalShow(false);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -453,17 +471,20 @@ export default function Teams(props) {
       const resendLink = await resendActivationLinkApi(dataToSend);
       setLoading(false);
       if (resendLink.error) {
-        setToasterMessage(resendLink?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(resendLink?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage(resendLink?.message);
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(resendLink?.message);
+        // setShowToaster(true);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -812,13 +833,7 @@ export default function Teams(props) {
         )}
 
         {loading ? <Loader /> : null}
-        {toaster && (
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        )}
+
 
         <Modals
           modalShow={modalShow}

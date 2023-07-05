@@ -11,10 +11,11 @@ import "./index.css";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import { useAuth } from "../../../auth/AuthProvider";
-import Toaster from "../../../components/Toaster";
+
 import ProjectCard from "../ProjectCard/projectCard";
 import { Modal, Button, Row, Col } from "react-bootstrap";
 import { FaGem } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 
 export default function AllProject() {
@@ -83,16 +84,18 @@ export default function AllProject() {
       const projects = await getAllProjects(dataToSend);
       if (projects.error) {
         setLoading(false);
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         setProjectListValue(projects?.data);
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -101,14 +104,16 @@ export default function AllProject() {
     try {
       const projects = await getTaskStatusAnalytics();
       if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         setProjectTaskAnalytics(projects?.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -128,18 +133,21 @@ export default function AllProject() {
       setLoading(false);
 
       if (removeRes.error) {
-        setToasterMessage(removeRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(removeRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage(removeRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(removeRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         getAndSetAllProjects();
         setConfirmModalShow(false);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -170,23 +178,26 @@ export default function AllProject() {
       setLoading(false);
 
       if (removeRes.error) {
-        setToasterMessage(removeRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(removeRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
         return;
       } else {
-        setToasterMessage(removeRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(removeRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         getAndSetAllProjects();
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
       setConfirmModalShow(false);
       setIsArchiveModalShow(false);
-      setShowToaster(true);
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -273,13 +284,7 @@ export default function AllProject() {
         </div>
       </div>
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
 
       <Modal
         show={confirmModalShow}

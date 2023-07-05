@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Card } from "react-bootstrap";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
 import {
   addNewProject,
   getAllLeadsWithoutPagination,
@@ -19,6 +19,7 @@ import "react-color-palette/lib/css/styles.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const customStyles = {
   option: (provided) => ({
@@ -133,14 +134,16 @@ export default function AddProject(props) {
     try {
       const projects = await getAllProjects();
       if (projects.error) {
-        setToasterMessage(projects?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         setProjectListValue(projects.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       return error.message;
     }
   };
@@ -164,16 +167,19 @@ export default function AddProject(props) {
       const userRes = await updateProjectForm(updatedProjectFormValue);
       setLoading(false);
       if (userRes.error) {
-        setToasterMessage(userRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(userRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage("Success");
+        toast.dismiss()
+      toast.info("Success");
         navigate("/project/all");
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -186,14 +192,16 @@ export default function AddProject(props) {
       setLoading(false);
 
       if (user.error) {
-        setToasterMessage(user?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(user?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         setUserList(user.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -205,14 +213,16 @@ export default function AddProject(props) {
       setLoading(false);
 
       if (lead.error) {
-        setToasterMessage(lead?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(lead?.message || "Something Went Wrong");
+        // setShowToaster(true);
       } else {
         setLeadList(lead.data);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -252,16 +262,19 @@ export default function AddProject(props) {
       const userRes = await addNewProject(projectFormValue);
       setLoading(false);
       if (userRes.error) {
-        setToasterMessage(userRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(userRes?.message || "Something Went Wrong");
+        // setShowToaster(true);
         return;
       } else {
-        setToasterMessage("Success");
+        toast.dismiss()
+      toast.info("Success");
         navigate("/project/all");
       }
     } catch (error) {
-      setToasterMessage(error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
+      // setShowToaster(true);
       setLoading(false);
       return error.message;
     }
@@ -443,13 +456,7 @@ export default function AddProject(props) {
         </div>
         </Card>
       </Form>
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
       {loading ? <Loader /> : null}
     </div>
   );
