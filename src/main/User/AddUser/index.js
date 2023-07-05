@@ -15,9 +15,9 @@ export default function AddUser(props) {
 
   const [validated, setValidated] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
+  
+
+  
   const navigate = useNavigate();
   const rolesList = CONSTANTS.ROLES;
   const registerFromFields = { name: "", email: "", role: rolesList[0] };
@@ -50,12 +50,12 @@ export default function AddUser(props) {
       if (userRes.error) {
         toast.dismiss()
       toast.info(userRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         toast.dismiss()
       toast.info("Success");
-        // setShowToaster(true);
+        // set
         setRegisterFromValue(registerFromFields);
         setValidated(false);
         navigate("/team");
@@ -63,7 +63,7 @@ export default function AddUser(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }

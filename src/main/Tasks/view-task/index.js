@@ -34,8 +34,8 @@ export default function ViewTaskModal(props) {
     setIsChange,
   } = props;
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
+
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
   const { userDetails } = useAuth();
@@ -75,11 +75,11 @@ export default function ViewTaskModal(props) {
       if (res.error) {
         toast.dismiss()
       toast.info(res?.message);
-        showToaster(true);
+        
       } else {
         toast.dismiss()
       toast.info(res?.message);
-        showToaster(true);
+        
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -154,11 +154,11 @@ export default function ViewTaskModal(props) {
     try {
       let response = await addCommentOnTask(dataToSend);
       if (response.error) {
-        showToaster(true);
+        
         toast.dismiss()
       toast.info(response.message);
       } else {
-        showToaster(true);
+        
         toast.dismiss()
       toast.info(response.message);
         setText("");
@@ -220,11 +220,11 @@ export default function ViewTaskModal(props) {
       if (rating.error) {
         toast.dismiss()
       toast.info(rating?.message);
-        showToaster(true);
+        
       } else {
         toast.dismiss()
       toast.info("Rating Added Succesfully");
-        showToaster(true);
+        
         setIsRatingFormVisible(false);
         getTaskDetailsById(selectedTaskIdForRating);
         onInit();
@@ -593,8 +593,6 @@ export default function ViewTaskModal(props) {
             taskRating={task?.rating}
             onClose={() => setIsEditModal(false)}
             getTaskDetailsById={getTaskDetailsById}
-            showToaster={showToaster}
-            setToasterMessage={setToasterMessage}
             setLoading={setLoading}
           />
         </Modal.Body>

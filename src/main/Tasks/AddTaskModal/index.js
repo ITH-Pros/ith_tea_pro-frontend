@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "./index.css";
 import Button from "react-bootstrap/Button";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -84,9 +84,9 @@ export default function AddTaskModal(props) {
     },
   };
   const [taskFormValue, setTaskFormValue] = useState(taskFormFields);
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
   const [selectedLeads, setSelectedLeads] = useState();
 
   useEffect(() => {
@@ -415,7 +415,7 @@ export default function AddTaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Error while creating Task");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         setValidated(false);
@@ -423,7 +423,7 @@ export default function AddTaskModal(props) {
         setCategoryList([]);
         toast.dismiss()
       toast.info("Task Created Succesfully !!");
-        // setShowToaster(true);
+        // set
         resetFormValue();
 
         setTimeout(() => {
@@ -489,12 +489,12 @@ export default function AddTaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Error while creating Task");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         toast.dismiss()
       toast.info("Task Created Succesfully");
-        // setShowToaster(true);
+        // set
         resetFormValue();
         setValidated(false);
         setSelectedLeads("");
@@ -570,14 +570,14 @@ export default function AddTaskModal(props) {
       if (res.error) {
         toast.dismiss()
       toast.info(res?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         // console.log(res);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       return error.message;
     }
   };
@@ -609,7 +609,6 @@ export default function AddTaskModal(props) {
         priority,
         status,
         leads,
-        attachments,
         completedDate,
         miscType,
         defaultTaskTime,
@@ -635,13 +634,14 @@ export default function AddTaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Error while updating Task");
-        // setShowToaster(true);
+        // set
         return;
       } else {
+        if(selectedTask?.status !== dataToSend?.status){
         updateTaskStatus({
           status: dataToSend?.status,
           taskId: dataToSend?.taskId,
-        });
+        });}
         setSelectedLeads("");
         setTaskFormValue({
           ...taskFormValue,
@@ -659,8 +659,8 @@ export default function AddTaskModal(props) {
         setShowAddTaskModal(false);
         getNewTasks(projectId);
         toast.dismiss()
-      toast.info("Task Updated Succesfully !!");
-        // setShowToaster(true);
+        toast.info("Task Updated Succesfully !!");
+        closeModal()
       }
     } catch (error) {
       // console.log(error);
@@ -681,7 +681,7 @@ export default function AddTaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Error while deleting Task");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         setSelectedLeads("");
@@ -703,7 +703,7 @@ export default function AddTaskModal(props) {
         getNewTasks(projectId);
         toast.dismiss()
       toast.info("Task Deleted Succesfully !!");
-        // setShowToaster(true);
+        // set
       }
     } catch (error) {
       // console.log(error);
@@ -978,38 +978,40 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                 </Form.Group>
-    
-                <Form.Group as={Col} md="3" className="ps-0">
-  <Form.Label>Status</Form.Label>
 
-  <OverlayTrigger
-    placement="top"
-    overlay={<Tooltip>Update task status after adding task.</Tooltip>}
-  >
-    <Form.Control
-      required
-      as="select"
-      type="select"
-      name="status"
-      onChange={updateTaskFormValue}
-      value={taskFormValue?.status || statusList[0]}
-      disabled={taskFormValue?.status === "COMPLETED"}
-    >
-      <option value="" disabled>
-        Select Status
-      </option>
-      {statusList?.map((status, index) => (
-        <option
-          value={status}
-          disabled={status !== "NOT_STARTED" && !selectedTask}
-          key={index}
-        >
-          {status}
-        </option>
-      ))}
-    </Form.Control>
-  </OverlayTrigger>
-</Form.Group>
+                <Form.Group as={Col} md="3" className="ps-0">
+                  <Form.Label>Status</Form.Label>
+
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>Update task status after adding task.</Tooltip>
+                    }
+                  >
+                    <Form.Control
+                      required
+                      as="select"
+                      type="select"
+                      name="status"
+                      onChange={updateTaskFormValue}
+                      value={taskFormValue?.status || statusList[0]}
+                      disabled={taskFormValue?.status === "COMPLETED"}
+                    >
+                      <option value="" disabled>
+                        Select Status
+                      </option>
+                      {statusList?.map((status, index) => (
+                        <option
+                          value={status}
+                          disabled={status !== "NOT_STARTED" && !selectedTask}
+                          key={index}
+                        >
+                          {status}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </OverlayTrigger>
+                </Form.Group>
                 {taskFormValue?.status === "COMPLETED" && (
                   <Form.Group as={Col} md="4">
                     <Form.Label>Completed Date</Form.Label>
@@ -1072,7 +1074,6 @@ export default function AddTaskModal(props) {
                   )}
               </div>
             </Form>
-           
           </div>
         </Offcanvas.Body>
       </Offcanvas>

@@ -14,8 +14,6 @@ export default function EditRating(props) {
     taskComment,
     onClose,
     getTaskDetailsById,
-    showToaster,
-    setToasterMessage,
     setLoading
   } = props;
 
@@ -51,11 +49,11 @@ export default function EditRating(props) {
       if (rating.error) {
         toast.dismiss()
       toast.info(rating?.message || "Something Went Wrong");
-        showToaster(true);
+        
       } else {
         toast.dismiss()
       toast.info("Rating Updated Successfully");
-        showToaster(true);
+        
         onClose();
         getTaskDetailsById(taskId?._id);
         setConfirmationAgain(false);
@@ -63,7 +61,7 @@ export default function EditRating(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      showToaster(true);
+      
     }
 
     setLoading(false);

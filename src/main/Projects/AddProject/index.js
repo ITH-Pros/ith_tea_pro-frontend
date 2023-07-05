@@ -69,15 +69,15 @@ export default function AddProject(props) {
   const [showErrorForLead, setShowErrorForLead] = useState(false);
   const [validated, setValidated] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
+  
   const [userList, setUserList] = useState([]);
   const [leadList, setLeadList] = useState([]);
-  const [toaster, showToaster] = useState(false);
+
   const [assignedby, setAssignedByValue] = useState([]);
   const [managedby, setManagedByValue] = useState([]);
   const [projectList, setProjectListValue] = useState([]);
   const params = useParams();
-  const setShowToaster = (param) => showToaster(param);
+  
   const projectById = projectList.find(
     (project) => project._id === params.projectId
   );
@@ -136,14 +136,14 @@ export default function AddProject(props) {
       if (projects.error) {
         toast.dismiss()
       toast.info(projects?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         setProjectListValue(projects.data);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       return error.message;
     }
   };
@@ -169,7 +169,7 @@ export default function AddProject(props) {
       if (userRes.error) {
         toast.dismiss()
       toast.info(userRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         toast.dismiss()
@@ -179,7 +179,7 @@ export default function AddProject(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }
@@ -194,14 +194,14 @@ export default function AddProject(props) {
       if (user.error) {
         toast.dismiss()
       toast.info(user?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         setUserList(user.data);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }
@@ -215,14 +215,14 @@ export default function AddProject(props) {
       if (lead.error) {
         toast.dismiss()
       toast.info(lead?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         setLeadList(lead.data);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }
@@ -264,7 +264,7 @@ export default function AddProject(props) {
       if (userRes.error) {
         toast.dismiss()
       toast.info(userRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         toast.dismiss()
@@ -274,7 +274,7 @@ export default function AddProject(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }

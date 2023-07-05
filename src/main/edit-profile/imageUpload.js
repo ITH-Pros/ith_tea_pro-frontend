@@ -47,7 +47,6 @@ const ImageUpload = (props) => {
           setProfileImage(response.url);
           setLoading(false);
           showToasterBool();
-          showToasterMessage();
         }
       } catch (error) {
         // console.log("Error while Updating details");

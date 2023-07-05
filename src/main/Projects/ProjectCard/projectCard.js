@@ -85,9 +85,9 @@ const ProjectCard = ({
   const [selectedRole, setSelectedRole] = useState(null);
   const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
   const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
 
   const assignTeamUsers = async () => {
     let dataToSend = {
@@ -114,7 +114,7 @@ const ProjectCard = ({
         setSelectedRole(null);
         toast.dismiss()
       toast.info("User assigned successfully");
-        // setShowToaster(true);
+        // set
       }
     } catch (error) {
       // console.log("Error while getting user details");
@@ -234,6 +234,8 @@ const ProjectCard = ({
       const response = await removeUserFromProject(dataToSend);
       if (response.error) {
         // console.log("Error while getting user details");
+      toast.info(response.message);
+
         return;
       } else {
         getAndSetAllProjects();
@@ -241,10 +243,11 @@ const ProjectCard = ({
         setSelectedUser(null);
         setSelectedUserName(null);
         setModalShow(false);
+        toast.info('User removed successfully!')
       }
     } catch (error) {
       // console.log("Error while getting user details");
-      // return error.message;
+      toast.info(error.message);
     }
   };
 

@@ -48,17 +48,12 @@ const customStyles = {
 export default function TeamReport(props) {
   const [teamWorkList, setTeamWorkList] = useState([])
   const [userDetails, setUserDetails] = useState([])
-
   const [selectedOption, setSelectedOption] = useState(null)
-
   const [usersList, setUsersListValue] = useState([])
-  const [toaster, showToaster] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState('task')
   const [loading, setLoading] = useState(false)
   const [showTags, setShowTags] = useState(false)
 
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   useEffect(() => {
     // console.log('Team Report')
     getUserReport()
@@ -91,7 +86,7 @@ export default function TeamReport(props) {
       if (userDetails.error) {
         toast.dismiss()
       toast.info(userDetails?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
         return
       } else {
         setUserDetails(userDetails.data)
@@ -99,7 +94,7 @@ export default function TeamReport(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       setLoading(false)
       return error.message
     }
@@ -162,7 +157,7 @@ export default function TeamReport(props) {
       if (users.error) {
         toast.dismiss()
       toast.info(users?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         // console.log(users?.data?.users)
         setUsersListValue(users?.data?.users || [])
@@ -174,7 +169,7 @@ export default function TeamReport(props) {
       setLoading(false)
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }

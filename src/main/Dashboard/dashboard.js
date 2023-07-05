@@ -26,8 +26,6 @@ import ProjectGrid from './projectGrid'
 import { toast } from 'react-toastify'
 
 export default function Dashboard(props) {
-  const [toasterMessage, setToasterMessage] = useState('')
-  const [toaster, showToaster] = useState(false)
   const [loading, setLoading] = useState(false)
   const [projectList, setProjectListValue] = useState([])
   const [showAddTask, setShowAddTask] = useState(false)
@@ -44,7 +42,7 @@ export default function Dashboard(props) {
   const [showViewTask, setShowViewTask] = useState(false)
   const [selectedTaskId, setSelectedTaskId] = useState('')
   const { userDetails } = useAuth()
-  const setShowToaster = param => showToaster(param)
+  
   const [isChange, setIsChange] = useState(undefined)
   const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
@@ -58,7 +56,7 @@ export default function Dashboard(props) {
   const setToasterMessageToDashboard = (message) => {
     toast.dismiss()
       toast.info(message)
-    // setShowToaster(true)
+    // set
   }
 
   const openVerifyModal = taskId => {
@@ -71,7 +69,7 @@ export default function Dashboard(props) {
     if (!comment) {
       toast.dismiss()
       toast.info('Please Enter Comments')
-      // // setShowToaster(true)
+      // // set
       return
     }
 
@@ -87,11 +85,11 @@ export default function Dashboard(props) {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.message || 'Something Went Wrong While Updating Task Status')
-        // setShowToaster(true)
+        // set
       } else {
         toast.dismiss()
       toast.info('Task Verified Successfully')
-        // setShowToaster(true)
+        // set
         onInit()
         setShowModal(false)
       }
@@ -99,7 +97,7 @@ export default function Dashboard(props) {
       setLoading(false)
       toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong While Updating Task Status')
-      // setShowToaster(true)
+      // set
     }
   }
 
@@ -157,11 +155,11 @@ export default function Dashboard(props) {
       // toast.info(
     //       tasks?.message || "Something Went Wrong While Updating Task Status"
     //     );
-    //     // setShowToaster(true);
+    //     // set
     //   } else {
     //     toast.dismiss()
       // toast.info("Task Reopened Successfully");
-    //     // setShowToaster(true);
+    //     // set
     //     onInit();
     //   }
     // } catch (error) {
@@ -170,7 +168,7 @@ export default function Dashboard(props) {
       // toast.info(
     //     error?.message || "Something Went Wrong While Updating Task Status"
     //   );
-    //   // setShowToaster(true);
+    //   // set
     // }
   }
 
@@ -207,7 +205,7 @@ export default function Dashboard(props) {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.message || 'Something Went Wrong While Fetching My Work Data')
-        // setShowToaster(true)
+        // set
       } else {
         let allTask = tasks?.data
         allTask?.map(item => {
@@ -244,7 +242,7 @@ export default function Dashboard(props) {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.error?.message || 'Something Went Wrong While Fetching Overdue Tasks Data')
-        // setShowToaster(true)
+        // set
       } else {
         let allTask = tasks?.data
         // console.log('object1', allTask)
@@ -293,7 +291,7 @@ export default function Dashboard(props) {
       if (projects.error) {
         toast.dismiss()
       toast.info(projects?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         setTeamMembers(projects?.data?.users || [])
       }
@@ -301,7 +299,7 @@ export default function Dashboard(props) {
       // setLoading(false)
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }
@@ -325,7 +323,7 @@ export default function Dashboard(props) {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.message || 'Something Went Wrong while fetching Pending Ratings Data')
-        // setShowToaster(true)
+        // set
       } else {
         // console.log(tasks, 'tasks')
         let allTask = tasks?.data
@@ -357,14 +355,14 @@ export default function Dashboard(props) {
       if (projects.error) {
         toast.dismiss()
       toast.info(projects?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         setProjectListValue(projects.data)
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       // setLoading(false)
       return error.message
     }
@@ -415,11 +413,11 @@ export default function Dashboard(props) {
       if (res.error) {
         toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
 
         onInit()
         if (userDetails?.role !== 'CONTRIBUTOR') {
@@ -430,7 +428,7 @@ export default function Dashboard(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }
@@ -444,14 +442,14 @@ export default function Dashboard(props) {
   //     if (res.error) {
   //       toast.dismiss()
       // toast.info(res?.message || "Something Went Wrong");
-  //       // setShowToaster(true);
+  //       // set
   //     } else {
   //       setTeamWorkList(res?.data);
   //     }
   //   } catch (error) {
   //     toast.dismiss()
       // toast.info(error?.message || "Something Went Wrong");
-  //     // setShowToaster(true);
+  //     // set
   //     setLoading(false);
   //     return error.message;
   //   }
@@ -497,12 +495,12 @@ export default function Dashboard(props) {
       setLoading(false)
 
       if (response.error) {
-        showToaster(true)
+        
         toast.dismiss()
       toast.info('Something Went Wrong While Skipping the Reminder')
         return
       } else {
-        showToaster(true)
+        
         toast.dismiss()
       toast.info('Profile Update Skipped Succesfully')
         handleProfileModalClose()
@@ -566,7 +564,7 @@ export default function Dashboard(props) {
     if (newDueDate === '') {
       toast.dismiss()
       toast.info('Please Select New Due Date')
-      // setShowToaster(true)
+      // set
       return
     }
 
@@ -580,11 +578,11 @@ export default function Dashboard(props) {
       if (res.error) {
         toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
         onInit()
         if (userDetails?.role !== 'CONTRIBUTOR') {
           // getTeamWorkList();
@@ -596,7 +594,7 @@ export default function Dashboard(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }
@@ -987,6 +985,7 @@ export default function Dashboard(props) {
                                       setSelectedProject()
                                       setShowAddTask(true)
                                       setSelectedTask(task)
+                                      console.log(task,showAddTask)
                                     }}
                                   >
                                     <i

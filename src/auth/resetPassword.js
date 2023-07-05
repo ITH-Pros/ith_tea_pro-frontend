@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resetPassword } from "../services/auth/api";
-import Toaster from "../components/Toaster";
+
 import Loader from "../components/Loader/index";
 import { toast } from "react-toastify";
 
@@ -14,9 +14,9 @@ function ResetPassword(props) {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
+  
+
+  
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -64,14 +64,14 @@ function ResetPassword(props) {
       if (response.error) {
         toast.dismiss()
       toast.info(response?.message);
-        // setShowToaster(true);
+        // set
 
         // console.log(response?.message || "response.error");
       } else {
         // console.log(response?.message || "else");
         toast.dismiss()
       toast.info(response?.message);
-        // setShowToaster(true);
+        // set
         setTimeout(() => {
           localStorage.clear();
           navigate("/login");
@@ -85,7 +85,7 @@ function ResetPassword(props) {
       setLoading(false);
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong in reset password");
-      // setShowToaster(true);
+      // set
       // console.log(error?.error?.message || "error");
     }
   };

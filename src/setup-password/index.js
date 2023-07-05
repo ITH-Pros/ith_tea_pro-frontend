@@ -5,15 +5,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./index.css";
-import Toaster from "../components/Toaster";
+
 import { toast } from "react-toastify";
 
 function PasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
+
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState("");
   const params = useParams();
@@ -42,19 +42,19 @@ function PasswordForm() {
     try {
       const response = await verifyTokenApi(dataToSend);
       if (response.error) {
-        showToaster(true);
+        
         toast.dismiss()
       toast.info(response.message);
         navigate("/login");
         return;
       } else {
-        showToaster(true);
+        
         toast.dismiss()
       toast.info(response.message);
         setEmail(response?.data?.email);
       }
     } catch (error) {
-      showToaster(true);
+      
       toast.dismiss()
       toast.info(error.message);
       navigate("/login");

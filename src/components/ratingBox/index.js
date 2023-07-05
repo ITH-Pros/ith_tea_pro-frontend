@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { updateUserRating } from "../../services/user/api";
 import Modals from "../modal";
-import Toaster from "../Toaster";
+
 import Loader from "../Loader";
 import { toast } from "react-toastify";
 
@@ -11,9 +11,9 @@ const RatingBox = (props) => {
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
 
   const viewDayTask = () => {
         setTaskModalShow(true)
@@ -50,11 +50,11 @@ const RatingBox = (props) => {
           if (rating.error) {
             toast.dismiss()
       toast.info(rating?.message || "Something Went Wrong");
-            // setShowToaster(true);
+            // set
           } else {
             toast.dismiss()
       toast.info("Rating Updated Succesfully");
-            // setShowToaster(true);
+            // set
             setSelectedRating(newRating);
             setEditRatingEnabled(false);
             getAllRatings();
@@ -62,7 +62,7 @@ const RatingBox = (props) => {
         } catch (error) {
           toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-          // setShowToaster(true);
+          // set
           setLoading(false);
         }
       };

@@ -12,7 +12,6 @@ import {
 import Switch from "react-switch";
 import Select from "react-select";
 import Loader from "../../components/Loader";
-import Toaster from "../../components/Toaster";
 import {
   addGuestApi,
   changeGuestStatus,
@@ -37,8 +36,8 @@ export default function Guest({}) {
     // Add more guest objects as needed
   ]);
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
+
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showAddEditModal, setShowAddEditModal] = useState(false);
@@ -76,16 +75,16 @@ export default function Guest({}) {
         if (guest.error) {
             toast.dismiss()
       toast.info(guest?.message || "Something Went Wrong");
-            showToaster(true);
+            
         } else {
                toast.dismiss()
       toast.info(guest?.message || "Guest Updated Successfully");
-            showToaster(true);
+            
         }
     } catch (error) {
         toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-        showToaster(true);
+        
     }
     setLoading(false);
     }
@@ -131,11 +130,11 @@ export default function Guest({}) {
         if (guest.error) {
             toast.dismiss()
       toast.info(guest?.message || "Something Went Wrong");
-            showToaster(true);
+            
         } else {
             toast.dismiss()
       toast.info("Guest Deleted Successfully");
-            showToaster(true);
+            
             localStorage.getItem("setPageDetails");
             setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
             localStorage.removeItem("setPageDetails");
@@ -146,7 +145,7 @@ export default function Guest({}) {
     } catch (error) {
         toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-        showToaster(true);
+        
     }
     setLoading(false);
     
@@ -166,14 +165,14 @@ export default function Guest({}) {
       if (guest.error) {
         toast.dismiss()
       toast.info(guest?.message || "Something Went Wrong");
-        showToaster(true);
+        
         setLoading(false);
       } else {
         toast.dismiss()
       toast.info("Guest Updated Successfully");
         setPageDetails(JSON.parse(localStorage.getItem("setPageDetails")));
         localStorage.removeItem("setPageDetails");
-        showToaster(true);
+        
         getGuests(pageDetails);
         setLoading(false);
       }
@@ -181,7 +180,7 @@ export default function Guest({}) {
     catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      showToaster(true);
+      
       setLoading(false);
     }
 
@@ -270,12 +269,12 @@ export default function Guest({}) {
       if (guest.error) {
         toast.dismiss()
       toast.info(guest?.message || "Something Went Wrong");
-        showToaster(true);
+        
       } else {
        
         toast.dismiss()
       toast.info("Guest Added Successfully");
-        showToaster(true);
+        
         // onClose();
         getGuests(options);
         setShowAddEditModal(false);
@@ -283,7 +282,7 @@ export default function Guest({}) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      showToaster(true);
+      
     }
     setLoading(false);
   };
@@ -308,11 +307,11 @@ export default function Guest({}) {
       if (guest.error) {
         toast.dismiss()
       toast.info(guest?.message || "Something Went Wrong");
-        showToaster(true);
+        
       } else {
         toast.dismiss()
       toast.info("Guest Updated Successfully");
-        showToaster(true);
+        
         setShowAddEditModal(false);
 
 
@@ -322,7 +321,7 @@ export default function Guest({}) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      showToaster(true);
+      
     }
     setLoading(false);
   };
@@ -338,7 +337,7 @@ export default function Guest({}) {
       if (guest.error) {
         toast.dismiss()
       toast.info(guest?.message || "Something Went Wrong");
-        showToaster(true);
+        
       } else {
         setGuests(guest?.data?.users);
         let totalPages = Math.ceil(
@@ -353,7 +352,7 @@ export default function Guest({}) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      showToaster(true);
+      
     }
     setLoading(false);
   };
@@ -371,7 +370,7 @@ export default function Guest({}) {
     } catch (error) {
         toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-        showToaster(true);
+        
     }
     setLoading(false);
 }

@@ -24,11 +24,11 @@ export default function Dashboard(props) {
   const ratings = [2, 3, 4, 5, 4, 3, 2, 4, 5, 6];
 
   const [ratingsArray, setRatings] = useState([]);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
+
   const [loading, setLoading] = useState(false);
   const [teamView, setTeamView] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
+  
   const { userDetails } = useAuth();
   const [days, setDays] = useState(moment().daysInMonth());
   const [monthUse, setMonth] = useState(moment().format("MMMM"));
@@ -79,7 +79,7 @@ export default function Dashboard(props) {
       if (response.error) {
         toast.dismiss()
       toast.info(response.message);
-        // setShowToaster(true);
+        // set
         // console.log("error", response );
       } else {
         if (response?.data?.ratingAllowed === true) {
@@ -94,7 +94,7 @@ export default function Dashboard(props) {
         } else {
           toast.dismiss()
       toast.info('You are not allowed to give rating.')
-          // setShowToaster(true)
+          // set
         }
         // // console.log('error in verify manager')
       }
@@ -150,7 +150,7 @@ export default function Dashboard(props) {
       if (rating.error) {
         toast.dismiss()
       toast.info(rating?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         // // console.log(rating.data);
         setRatings([...rating.data]);
@@ -158,7 +158,7 @@ export default function Dashboard(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
     }
   }

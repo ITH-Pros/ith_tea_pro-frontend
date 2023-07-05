@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import { useState, useEffect } from 'react'
 import '../rating.css'
 import { getProjectsTask } from '../../../services/user/api'
-import Toaster from '../../../components/Toaster'
+
 import Loader from '../../../components/Loader'
 import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
@@ -17,9 +17,6 @@ export default function TasksModalBody(props) {
   let month = data?.month
   let year = data?.year
 
-  const [toaster, showToaster] = useState(false)
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [userTasks, setUserTasks] = useState('')
 
@@ -69,7 +66,7 @@ export default function TasksModalBody(props) {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.error?.message || 'Something Went Wrong1')
-        // setShowToaster(true)
+        // set
       } else {
         let allTask = tasks?.data
         setUserTasks(allTask)
@@ -77,7 +74,7 @@ export default function TasksModalBody(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong2')
-      // setShowToaster(true)
+      // set
       setLoading(false)
       return error.message
     }

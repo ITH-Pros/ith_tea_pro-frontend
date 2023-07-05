@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Toaster from '../../../components/Toaster'
+
 import Loader from '../../../components/Loader'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { taskById } from '../../../services/user/api'
@@ -16,8 +16,6 @@ import { toast } from 'react-toastify'
 
 export default function ViewTask(props) {
   const [loading, setLoading] = useState(false)
-  const [toasterMessage, setToasterMessage] = useState('')
-  const [toaster, showToaster] = useState(false)
   const [task, setTaskData] = useState({})
 
   const { taskId } = useParams()

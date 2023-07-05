@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Toaster from '../../../components/Toaster'
+
 import Loader from '../../../components/Loader'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { getProjectsTask } from '../../../services/user/api'
@@ -15,11 +15,9 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function ViewUserTasks() {
-  const [loading, setLoading] = useState(false)
-  const [toasterMessage, setToasterMessage] = useState('')
-  const [toaster, showToaster] = useState(false)
+  const [loading, setLoading] = useState(false)  
   const [userTasks, setTaskData] = useState({})
-  const setShowToaster = param => showToaster(param)
+  
   const data = JSON.parse(localStorage.getItem('view-user-tasks'));
   const {userId} = useParams();
 
@@ -31,7 +29,7 @@ export default function ViewUserTasks() {
   else{
     toast.dismiss()
       toast.info('User id does not match!')
-    // setShowToaster(true)
+    // set
     }
   }, [])
 
@@ -70,7 +68,7 @@ export default function ViewUserTasks() {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.error?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         let allTask = tasks?.data
         setTaskData(allTask)
@@ -78,7 +76,7 @@ export default function ViewUserTasks() {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       setLoading(false)
       return error.message
     }

@@ -13,9 +13,7 @@ const AttachmentUploader = (props) => {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState(taskAttachments || []);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [loading, setLoading] = useState(false)
-  const [toaster, setToaster] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
+  const [loading, setLoading] = useState(false)  
 
   useEffect(() => {
     uploadedAttachmentsArray(uploadedFiles); 
@@ -30,8 +28,8 @@ const AttachmentUploader = (props) => {
     const newFiles = [...event.target.files];
     let newUrls = [];
     for (const file of newFiles) {
+      console.log("File selected: " + file.name);
       if (isFileAlreadyUploaded(file)) {
-        setToaster(true);
         toast.dismiss()
       toast.info("File already uploaded: " + file.name);
       } else {
@@ -40,7 +38,6 @@ const AttachmentUploader = (props) => {
           formData.append("file", file);
           const response = await uploadProfileImage(formData);
           if (response.error) {
-            setToaster(true);
             toast.dismiss()
       toast.info("Error while uploading file: " + file.name);
           } else {
@@ -48,13 +45,13 @@ const AttachmentUploader = (props) => {
           }
         } catch (error) {
           console.error(error);
-          setToaster(true);
           toast.dismiss()
       toast.info("Error while uploading file: " + file.name);
           setLoading(false);
           return;
         }
       }
+      console.log("File uploaded: " + file.name);
     }
     setUploadedFiles([...uploadedFiles, ...newUrls]);
     setFiles([...files, ...newUrls]);
@@ -65,9 +62,11 @@ const AttachmentUploader = (props) => {
   const isFileAlreadyUploaded = (file) => {
     for (const uploadedFile of uploadedFiles) {
       if (file.name === uploadedFile.name && file.size === uploadedFile.size) {
+        console.log("File already uploaded: " + file.name);
         return true;
       }
     }
+    console.log("File not uploaded: " + file.name);
     return false;
   };
 

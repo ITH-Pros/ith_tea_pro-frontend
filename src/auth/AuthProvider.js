@@ -2,7 +2,6 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
-import Toaster from "../components/Toaster";
 import { toast } from "react-toastify";
 const AuthContext = createContext(null);
 
@@ -13,10 +12,10 @@ export const AuthProvider = ({ children }) => {
     "profileModalShow",
     false
   );
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
 
-  const setShowToaster = (param) => showToaster(param);
+
+  
   const navigate = useNavigate();
 
   const login = async (data) => {
@@ -35,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     toast.dismiss()
       toast.info("Logged Out Successfully");
-    // setShowToaster(true);
+    // set
     setAccessToken(null);
     setUserDetails(null);
   };

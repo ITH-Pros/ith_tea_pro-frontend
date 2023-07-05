@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword, forgotPassword, verifyOtp } from "../services/auth/api";
-import Toaster from "../components/Toaster";
+
 import Loader from '../components/Loader/index'
 import { toast } from "react-toastify";
 
@@ -13,8 +13,8 @@ function ForgotPassword() {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
+
   const [loading, setLoading] = useState(false);
 
   const [showOtp, setShowOtp] = useState(false);
@@ -65,13 +65,13 @@ function ForgotPassword() {
       if (response.error) {
         toast.dismiss()
       toast.info(response?.message);
-        showToaster(true);
+        
         // console.log(response.error,'-----------------error')
       }
       else {
         toast.dismiss()
       toast.info(response?.message);
-        showToaster(true);
+        
         // navigate("/reset-password");
         setShowOtp(true);
       }
@@ -81,7 +81,7 @@ function ForgotPassword() {
 
       toast.dismiss()
       toast.info(error?.error?.message);
-      showToaster(true);
+      
       // console.log(error,'-----------------error')
     }
   };
@@ -103,13 +103,13 @@ function ForgotPassword() {
       if (response.error) {
         toast.dismiss()
       toast.info(response?.message);
-        showToaster(true);
+        
         // console.log(response,'-----------------3error')
       }
       else {
         toast.dismiss()
       toast.info(response?.message);
-        showToaster(true);
+        
         // console.log(response,'-----------------3success')
         setOtpLogId(response.data.otpLogId);
         // navigate("/reset-password");
@@ -144,13 +144,13 @@ function ForgotPassword() {
       if(response.error){
         toast.dismiss()
       toast.info(response?.message);
-        showToaster(true);
+        
         // console.log(response.error,'-----------------error')
       }
       else{
         toast.dismiss()
       toast.info(response?.message);
-        showToaster(true);
+        
         setTimeout(() => {
           localStorage.clear();
         navigate("/login");
@@ -164,7 +164,7 @@ function ForgotPassword() {
 
       toast.dismiss()
       toast.info(error?.error?.message);
-        showToaster(true);
+        
       // console.log(error,'-----------------error')
     }
   };

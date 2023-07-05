@@ -21,9 +21,7 @@ import { toast } from 'react-toastify'
 
 const Tasks = () => {
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [toasterMessage, setToasterMessage] = useState('')
-  const [toaster, showToaster] = useState(false)
+  const [loading, setLoading] = useState(false)  
   const [selectedProject, setSelectedProject] = useState({})
   const [showAddTask, setShowAddTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState({})
@@ -32,7 +30,7 @@ const Tasks = () => {
   const [selectedProjectId, setSelectedProjectId] = useState('')
   const [selectedSectionId, setSelectedSectionId] = useState('')
   const [showViewTask, setShowViewTask] = useState(false)
-  const setShowToaster = param => showToaster(param)
+  
   const [selectedTaskId, setSelectedTaskId] = useState('')
   const [deleteSectionModal, setDeleteSectionModal] = useState(false)
   const [isArchive, setIsArchive] = useState(false)
@@ -48,7 +46,7 @@ const Tasks = () => {
       setTimeout(() => {
         toast.dismiss()
       toast.info(localStorage.getItem('showTaskToaster'))
-        // setShowToaster(true)
+        // set
         localStorage.removeItem('showTaskToaster')
       }, 500)
     }
@@ -104,7 +102,7 @@ const Tasks = () => {
       if (res.status === 200) {
         toast.dismiss()
       toast.info('Section deleted successfully')
-        // setShowToaster(true)
+        // set
         setDeleteSectionModal(false)
         closeModal()
         getTasksDataUsingProjectId()
@@ -118,7 +116,7 @@ const Tasks = () => {
       } else {
         toast.dismiss()
       toast.info(res?.message)
-        // setShowToaster(true)
+        // set
       }
     } catch (error) {
       // console.log('error in deleteSection', error)
@@ -135,7 +133,7 @@ const Tasks = () => {
       if (res.status === 200) {
         toast.dismiss()
       toast.info('Section archived successfully')
-        // setShowToaster(true)
+        // set
         setArchiveSectionModal(false)
         closeModal()
         getTasksDataUsingProjectId()
@@ -149,7 +147,7 @@ const Tasks = () => {
       } else {
         toast.dismiss()
       toast.info(res?.message)
-        // setShowToaster(true)
+        // set
       }
     } catch (error) {
       // console.log('error in archiveSection', error)
@@ -176,7 +174,7 @@ const Tasks = () => {
         toast.dismiss()
       toast.info('Section updated successfully')
         setSectionEditMode(false)
-        // setShowToaster(true)
+        // set
         setModalShow(false)
         closeModal()
         getTasksDataUsingProjectId()
@@ -190,7 +188,7 @@ const Tasks = () => {
       } else {
         toast.dismiss()
       toast.info(res?.message)
-        // setShowToaster(true)
+        // set
       }
     } catch (error) {
       // console.log('error in sectionUpdate', error)
@@ -222,17 +220,17 @@ const Tasks = () => {
       if (res.error) {
         toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong in update task status')
-        // setShowToaster(true)
+        // set
       } else {
         toast.dismiss()
       toast.info(res?.message || 'Response in update task status 1')
-        // setShowToaster(true)
+        // set
         getTasksDataUsingProjectId()
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong in update task status error')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }
@@ -259,11 +257,11 @@ const Tasks = () => {
         if (res.error) {
           toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong in add section')
-          // setShowToaster(true)
+          // set
         } else {
           toast.dismiss()
       toast.info(res?.message || 'Response in add section')
-          // setShowToaster(true)
+          // set
           setModalShow(false)
           closeModal()
           getTasksDataUsingProjectId()
@@ -279,7 +277,7 @@ const Tasks = () => {
       } catch (error) {
         toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong in add section error')
-        // setShowToaster(true)
+        // set
         setLoading(false)
         return error.message
       }
@@ -373,7 +371,7 @@ const Tasks = () => {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks.error.message);
-        // setShowToaster(true);
+        // set
       } else {
         let allTasks = tasks.data;
         allTasks.forEach((item) => {
@@ -406,7 +404,7 @@ const Tasks = () => {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong in get project task error')
-      // setShowToaster(true)
+      // set
       setLoading(false)
       // console.log(error.message)
     }
@@ -489,7 +487,7 @@ const Tasks = () => {
       if (res.error) {
         toast.dismiss()
       toast.info(res?.message || 'Something Went Wrong in download excel')
-        // setShowToaster(true)
+        // set
       } else {
         // console.log(res,'download excel') // Make sure the response contains the expected data
 
@@ -513,7 +511,7 @@ const Tasks = () => {
       setLoading(false)
       toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong in download excel error')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }

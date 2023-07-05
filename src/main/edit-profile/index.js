@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
-import Toaster from "../../components/Toaster";
 import {
   editLogedInUserDetails,
   getLogedInUserDetails,
@@ -18,8 +17,8 @@ function UserForm(props) {
   const { handleModalClose } = props;
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [toaster, showToaster] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [employeeId, setEmployeeId] = useState("");
@@ -126,7 +125,7 @@ function UserForm(props) {
         return;
       } else {
         setLoading(false);
-        showToaster(true);
+        
         localStorage.setItem("selectedProfilePicture",profilePicture)
         toast.dismiss()
       toast.info("Profile updated successful");

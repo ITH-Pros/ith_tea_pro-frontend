@@ -23,9 +23,9 @@ function TaskModal(props) {
     props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
   const [loading, setLoading] = useState(false);
   const [taskModalShow, setTaskModalShow] = useState(false);
   const [selectedTaskDetails, setSelectedTaskDetails] =
@@ -545,7 +545,7 @@ function TaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         setSelectedTaskDetails(taskRes.data);
@@ -554,7 +554,7 @@ function TaskModal(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       return error.message;
     }
   };
@@ -594,7 +594,7 @@ function TaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         getAllTaskOfProject();
@@ -603,7 +603,7 @@ function TaskModal(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       return error.message;
     }
   };
@@ -621,18 +621,18 @@ function TaskModal(props) {
       if (comment.error) {
         toast.dismiss()
       toast.info(comment?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         toast.dismiss()
       toast.info("Comment added succesfully");
-        // setShowToaster(true);
+        // set
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
     }
   };
@@ -649,19 +649,19 @@ function TaskModal(props) {
       if (taskRes.error) {
         toast.dismiss()
       toast.info(taskRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         toast.dismiss()
       toast.info("Updated Succesfully");
-        // setShowToaster(true);
+        // set
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }

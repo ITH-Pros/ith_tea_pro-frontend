@@ -20,9 +20,9 @@ import { toast } from "react-toastify";
 
 export default function AllProject() {
   const { userDetails } = useAuth();
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
   const [loading, setLoading] = useState(false);
   const [projectList, setProjectListValue] = useState([]);
   const [projectTaskAnalytics, setProjectTaskAnalytics] = useState("");
@@ -86,7 +86,7 @@ export default function AllProject() {
         setLoading(false);
         toast.dismiss()
       toast.info(projects?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         setProjectListValue(projects?.data);
         setLoading(false);
@@ -95,7 +95,7 @@ export default function AllProject() {
       setLoading(false);
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       return error.message;
     }
   };
@@ -106,14 +106,14 @@ export default function AllProject() {
       if (projects.error) {
         toast.dismiss()
       toast.info(projects?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
       } else {
         setProjectTaskAnalytics(projects?.data);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       return error.message;
     }
   };
@@ -135,19 +135,19 @@ export default function AllProject() {
       if (removeRes.error) {
         toast.dismiss()
       toast.info(removeRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         toast.dismiss()
       toast.info(removeRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         getAndSetAllProjects();
         setConfirmModalShow(false);
       }
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }
@@ -180,14 +180,14 @@ export default function AllProject() {
       if (removeRes.error) {
         toast.dismiss()
       toast.info(removeRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
         return;
       } else {
         toast.dismiss()
       toast.info(removeRes?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         getAndSetAllProjects();
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
@@ -197,7 +197,7 @@ export default function AllProject() {
       toast.info(error?.error?.message || "Something Went Wrong");
       setConfirmModalShow(false);
       setIsArchiveModalShow(false);
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }

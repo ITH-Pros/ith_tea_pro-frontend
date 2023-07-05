@@ -8,9 +8,6 @@ import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 
 export default function ProjectGrid() {
-  const [toaster, showToaster] = useState(false)
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [projectList, setProjectListValue] = useState([])
   const [freeUsersList, setFreeUsersList] = useState([])
@@ -28,7 +25,7 @@ export default function ProjectGrid() {
         setLoading(false)
         toast.dismiss()
       toast.info(users?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         setProjectListValue(users?.data)
         // setUsersList(names)
@@ -38,7 +35,7 @@ export default function ProjectGrid() {
       setLoading(false)
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }
@@ -51,7 +48,7 @@ export default function ProjectGrid() {
         setLoading(false)
         toast.dismiss()
       toast.info(users?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         let names = users?.data?.map(user => user.name)
         setFreeUsersList(names)
@@ -61,7 +58,7 @@ export default function ProjectGrid() {
       setLoading(false)
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       return error.message
     }
   }

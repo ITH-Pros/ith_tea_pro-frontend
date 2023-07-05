@@ -11,10 +11,10 @@ import { toast } from "react-toastify";
 export default function ViewUser(props) {
   const { userId } = useParams();
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
+  
   const [userDetails, setUserDetails] = useState({});
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
+
+  
 
   useEffect(() => {
     getUserDetails();
@@ -31,7 +31,7 @@ export default function ViewUser(props) {
       if (userDetails.error) {
         toast.dismiss()
       toast.info(userDetails?.message || "Something Went Wrong");
-        // setShowToaster(true);
+        // set
         return;
       } else {
         setUserDetails(userDetails.data);
@@ -39,7 +39,7 @@ export default function ViewUser(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || "Something Went Wrong");
-      // setShowToaster(true);
+      // set
       setLoading(false);
       return error.message;
     }
@@ -104,7 +104,7 @@ export default function ViewUser(props) {
                     navigator.clipboard.writeText(userDetails?.email);
                     toast.dismiss()
       toast.info("Copied Succesfully");
-                    // setShowToaster(true);
+                    // set
                   }}
                 ></i>
                 <p>SKILLS</p>
@@ -136,7 +136,7 @@ export default function ViewUser(props) {
                             );
                             toast.dismiss()
       toast.info("Copied Succesfully");
-                            // setShowToaster(true);
+                            // set
                           }}
                         ></i>
                       </p>

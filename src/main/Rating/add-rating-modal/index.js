@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row'
 import { useState, useEffect } from 'react'
 import '../rating.css'
 import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
-import Toaster from '../../../components/Toaster'
+
 import Loader from '../../../components/Loader'
 import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
@@ -29,9 +29,6 @@ export default function RatingModalBody(props) {
   }
 
   const [ratingForm, setRatingForm] = useState(ratingFormsFields)
-  const [toaster, showToaster] = useState(false)
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [validated, setValidated] = useState(false)
   const [userTasks, setUserTasks] = useState('')
@@ -93,18 +90,18 @@ export default function RatingModalBody(props) {
         if (rating.error) {
           toast.dismiss()
       toast.info(rating?.message || 'Something Went Wrong')
-          // setShowToaster(true)
+          // set
         } else {
           toast.dismiss()
       toast.info('Rating Added Succesfully')
-          // setShowToaster(true)
+          // set
           setModalShow(false)
         }
       } catch (error) {
         setLoading(false)
         toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       }
     }
     localStorage.removeItem('userId')
@@ -146,7 +143,7 @@ export default function RatingModalBody(props) {
       if (tasks.error) {
         toast.dismiss()
       toast.info(tasks?.error?.message || 'Something Went Wrong')
-        // setShowToaster(true)
+        // set
       } else {
         let allTask = tasks?.data
         setUserTasks(allTask)
@@ -154,7 +151,7 @@ export default function RatingModalBody(props) {
     } catch (error) {
       toast.dismiss()
       toast.info(error?.error?.message || 'Something Went Wrong')
-      // setShowToaster(true)
+      // set
       setLoading(false)
       return error.message
     }
