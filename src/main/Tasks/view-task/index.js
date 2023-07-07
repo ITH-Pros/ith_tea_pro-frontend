@@ -260,9 +260,9 @@ export default function ViewTaskModal(props) {
       <div className="task-completion-time d-block">
    <label className="form-label">Task Completion Time : </label>{' '}
       <div className="time-details">
-        {days > 0 && <p>Days: {days}</p>}
-        {hours > 0 && <p>Hours: {hours}</p>}
-        {remainingMinutes > 0 && <p>Minutes: {remainingMinutes}</p>}
+        {days > 0 && <p>{days} Days{" "} :</p>}
+        {hours > 0 && <p> {hours} Hours :</p>}
+        {remainingMinutes > 0 && <p>{remainingMinutes} Minutes</p>}
       </div>
     </div>
     
@@ -405,9 +405,9 @@ export default function ViewTaskModal(props) {
                       <Form.Group as={Col} md="3" className="estimated-time">
                   <Form.Label>Estimated Time :</Form.Label>{" "}
                   <div className="time">
-                    <p>{task?.defaultTaskTime?.hours} Hour</p>
+                    <p>{task?.defaultTaskTime?.hours || "00"} Hour</p>
                     <span>:</span>
-                    <p>{task?.defaultTaskTime?.minutes} Minute</p>
+                    <p>{task?.defaultTaskTime?.minutes || "00"} Minute</p>
                   </div>
                 </Form.Group>
 
