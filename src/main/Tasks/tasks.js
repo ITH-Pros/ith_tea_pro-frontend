@@ -799,7 +799,7 @@ const Tasks = () => {
                                         )}
                                         {task.status === 'ONHOLD' && (
                                           <i
-                                            className="fa fa-check-circle warning"
+                                            className="fa fa-check-circle primary"
                                             aria-hidden="true"
                                           ></i>
                                         )}
