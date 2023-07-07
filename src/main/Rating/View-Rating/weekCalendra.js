@@ -59,13 +59,18 @@ export default function MyCalendar() {
         rating.data?.[0]?.ratings?.forEach((element) => {
           userRatingObj[element.date] = element.rating;
         });
-
+        let userRatingForGraph = [];
         const totalDays = getTotalDaysInMonth(selectedDate);
-        let userRatingForGraph = Array.from({ length: totalDays }, (_, i) =>
-          userRatingObj[i + 1] !== undefined ? userRatingObj[i + 1] : 0
-        );
+
+        for (let i = 1; i <= totalDays; i++) {
+          if (!userRatingObj[i] && userRatingObj[i] !== 0) {
+            userRatingObj[i] = userRatingObj[i - 1] || 0;
+          }
+          userRatingForGraph.push(userRatingObj[i]);
+        }
 
         setUserRatingForGraph(userRatingForGraph);
+
         setLoading(false);
       }
     } catch (error) {

@@ -244,28 +244,31 @@ export default function ViewTaskModal(props) {
   };
 
   const [isEditModal, setIsEditModal] = useState(false);
-
   const MinutesToDaysHoursMinutes = (props) => {
     const minutes = props.minutes;
-    const days = Math.floor(minutes / 1440); // 24 hours * 60 minutes = 1440 minutes in a day
-    const hours = Math.floor((minutes % 1440) / 60);
+    const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-
+  
+    const formatNumber = (number) => {
+      return number.toString().padStart(2, '0');
+    };
+  
     return (
       <div className="task-completion-time d-block">
-        <label className="form-label">Task Completion Time : </label>{" "}
+        <label className="form-label">Task Completion Time: </label>{" "}
         <div className="time-details">
-          {(days > 0 || hours > 0 || remainingMinutes > 0) && (
+          {(hours > 0 || remainingMinutes > 0) && (
             <span>
-              {days > 0 && `${days}:`}
-              {hours > 0 && `${hours}:`}
-              {remainingMinutes}
+              {hours > 0 && `${formatNumber(hours)} : `}
+              {formatNumber(remainingMinutes)}
             </span>
           )}
         </div>
       </div>
     );
   };
+  
+  
 
   return (
     <>
