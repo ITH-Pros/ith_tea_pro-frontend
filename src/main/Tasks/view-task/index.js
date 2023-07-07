@@ -34,7 +34,6 @@ export default function ViewTaskModal(props) {
     setIsChange,
   } = props;
   const [loading, setLoading] = useState(false);
-  
 
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
@@ -73,13 +72,12 @@ export default function ViewTaskModal(props) {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        toast.dismiss()
-      toast.info(res?.message);
-        
+        toast.dismiss();
+        toast.info(res?.message);
       } else {
-        toast.dismiss()
-      toast.info(res?.message);
-        
+        toast.dismiss();
+        toast.info(res?.message);
+
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -154,13 +152,11 @@ export default function ViewTaskModal(props) {
     try {
       let response = await addCommentOnTask(dataToSend);
       if (response.error) {
-        
-        toast.dismiss()
-      toast.info(response.message);
+        toast.dismiss();
+        toast.info(response.message);
       } else {
-        
-        toast.dismiss()
-      toast.info(response.message);
+        toast.dismiss();
+        toast.info(response.message);
         setText("");
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
@@ -218,13 +214,12 @@ export default function ViewTaskModal(props) {
       const rating = await addRatingOnTask(dataToSend);
       setLoading(false);
       if (rating.error) {
-        toast.dismiss()
-      toast.info(rating?.message);
-        
+        toast.dismiss();
+        toast.info(rating?.message);
       } else {
-        toast.dismiss()
-      toast.info("Rating Added Succesfully");
-        
+        toast.dismiss();
+        toast.info("Rating Added Succesfully");
+
         setIsRatingFormVisible(false);
         getTaskDetailsById(selectedTaskIdForRating);
         onInit();
@@ -258,14 +253,17 @@ export default function ViewTaskModal(props) {
 
     return (
       <div className="task-completion-time d-block">
-   <label className="form-label">Task Completion Time : </label>{' '}
-      <div className="time-details">
-        {days > 0 && <p>{days} Days{" "} :</p>}
-        {hours > 0 && <p> {hours} Hours :</p>}
-        {remainingMinutes > 0 && <p>{remainingMinutes} Minutes</p>}
+        <label className="form-label">Task Completion Time : </label>{" "}
+        <div className="time-details">
+          {(days > 0 || hours > 0 || remainingMinutes > 0) && (
+            <span>
+              {days > 0 && `${days}:`}
+              {hours > 0 && `${hours}:`}
+              {remainingMinutes}
+            </span>
+          )}
+        </div>
       </div>
-    </div>
-    
     );
   };
 
@@ -295,9 +293,7 @@ export default function ViewTaskModal(props) {
                     justifyContent: "end",
                     justifyItems: "end",
                   }}
-                >
-                
-                </Row>
+                ></Row>
               )}
               <Row className="mb-3">
                 <Form.Group as={Col} md="4">
@@ -322,7 +318,6 @@ export default function ViewTaskModal(props) {
                   <p>{task?.title} </p>
                 </Form.Group>
                 {/* Estimated Time */}
-              
               </Row>
 
               <Row className="mb-3">
@@ -377,64 +372,54 @@ export default function ViewTaskModal(props) {
                   </select>
                 </Form.Group>
 
-                  <Row className="mb-3 mt-3">
-                    <>
+                <Row className="mb-3 mt-3">
+                  <>
                     {task?.status === "COMPLETED" && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Completed Date : </Form.Label>
                         <p>{formatDate(task?.completedDate) || "--"} </p>
                       </Form.Group>
-                )}
+                    )}
 
-
-                      {/* Task completion time  */}
+                    {/* Task completion time  */}
 
                     {task?.status === "COMPLETED" && (
-
-
                       <Form.Group as={Col} md="6">
                         {/* <Form.Label>Completed Date</Form.Label> */}
                         <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
                       </Form.Group>
-                )}
+                    )}
 
-
-
-
-
-                      <Form.Group as={Col} md="3" className="estimated-time">
-                  <Form.Label>Estimated Time :</Form.Label>{" "}
-                  <div className="time">
-                    <p>{task?.defaultTaskTime?.hours || "00"} Hour</p>
-                    <span>:</span>
-                    <p>{task?.defaultTaskTime?.minutes || "00"} Minute</p>
-                  </div>
-                </Form.Group>
-
-
-
-                    </>
-                  </Row>
+                    <Form.Group as={Col} md="3" className="estimated-time">
+                      <Form.Label>Estimated Time :</Form.Label>{" "}
+                      <div className="time">
+                        <span>{task?.defaultTaskTime?.hours || "00"} : {task?.defaultTaskTime?.minutes || "00"} </span>
+                      </div>
+                    </Form.Group>
+                  </>
+                </Row>
               </Row>
               <Row className="mb-3">
                 <Form.Group as={Col}>
                   <Form.Label>Attachments</Form.Label>
                   <Row>
-                  {task.attachments &&
-                    task.attachments.map((file, index) => {
-                      return (
-                         
-                        <Col key={index} sm={3}>
-                          <div className="attchment">
-                            <a href={`${file}`} target="_blank" className="text-truncate">
-                              {"Attachment" + " " + (index + 1)}
-                            </a>
-                          </div>
-                        </Col>
-                        
-                      );
-                    })}
-                    </Row>
+                    {task.attachments &&
+                      task.attachments.map((file, index) => {
+                        return (
+                          <Col key={index} sm={3}>
+                            <div className="attchment">
+                              <a
+                                href={`${file}`}
+                                target="_blank"
+                                className="text-truncate"
+                              >
+                                {"Attachment" + " " + (index + 1)}
+                              </a>
+                            </div>
+                          </Col>
+                        );
+                      })}
+                  </Row>
                 </Form.Group>
               </Row>
             </Form>
