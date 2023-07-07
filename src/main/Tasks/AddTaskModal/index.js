@@ -425,7 +425,7 @@ export default function AddTaskModal(props) {
       toast.info("Task Created Succesfully !!");
         // set
         resetFormValue();
-
+        closeModal()
         setTimeout(() => {
           setShowAddTaskModal(false);
         }, 500);
@@ -496,6 +496,7 @@ export default function AddTaskModal(props) {
       toast.info("Task Created Succesfully");
         // set
         resetFormValue();
+        closeModal()
         setValidated(false);
         setSelectedLeads("");
         setCategoryList([]);
