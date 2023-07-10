@@ -259,8 +259,12 @@ export default function ViewTaskModal(props) {
         <div className="time-details">
           {(hours > 0 || remainingMinutes > 0) && (
             <span>
-              {hours > 0 && `${formatNumber(hours)} : `}
-              {formatNumber(remainingMinutes)}
+              {hours > 0 && `${formatNumber(hours)} : `} {formatNumber(remainingMinutes)}
+            </span>
+          )}
+          {!(hours > 0 || remainingMinutes > 0) && (
+            <span>
+              {`00:00`}
             </span>
           )}
         </div>
@@ -399,6 +403,8 @@ export default function ViewTaskModal(props) {
                         <span>{task?.defaultTaskTime?.hours || "00"} : {task?.defaultTaskTime?.minutes || "00"} </span>
                       </div>
                     </Form.Group>
+
+                   
                   </>
                 </Row>
               </Row>

@@ -368,14 +368,19 @@ export default function AddTaskModal(props) {
   };
 
   const submitTask = async () => {
-    setValidated(true);
     if (
       !taskFormValue.projectId ||
       !taskFormValue.section ||
       !taskFormValue.title ||
       !taskFormValue.leads ||
-      (!hours && !minutes)
+      (!Number(hours) && !Number(minutes) )
     ) {
+      if(!Number(hours) && !Number(minutes)){
+        setMinutes("")
+        setHours("")
+      }
+    setValidated(true);
+
       console.log("returning");
       return;
     }
@@ -446,8 +451,14 @@ export default function AddTaskModal(props) {
       !taskFormValue.section ||
       !taskFormValue.title ||
       !taskFormValue.leads ||
-      (!hours && !minutes)
+      (!Number(hours) && !Number(minutes) )
     ) {
+      if(!Number(hours) && !Number(minutes)){
+        setMinutes("")
+        setHours("")
+      }
+    setValidated(true);
+
       console.log("returning");
       return;
     }

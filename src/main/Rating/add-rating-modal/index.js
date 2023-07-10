@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react'
 import Col from 'react-bootstrap/Col'
@@ -32,8 +33,12 @@ export default function RatingModalBody(props) {
   const [loading, setLoading] = useState(false)
   const [validated, setValidated] = useState(false)
   const [userTasks, setUserTasks] = useState('')
-  const [isNotVerified, setIsNotVerified] = useState(false)
+  const [isNotVerified, setIsNotVerified] = useState(false);
+  const [disableRatingButton, setRatingButtonDisable] = useState(false)
+
   const { userDetails } = useAuth()
+
+
 
   useEffect(() => {
     if (data !== undefined || data !== '' || data !== {}) {
@@ -57,6 +62,8 @@ export default function RatingModalBody(props) {
       setIsNotVerified(isAnyElementNotVerified)
     }
   }, [userTasks])
+
+
 
   const handleRatingFormChange = event => {
     const { name, value } = event.target
@@ -146,6 +153,16 @@ export default function RatingModalBody(props) {
         // set
       } else {
         let allTask = tasks?.data
+        allTask?.map((task, index) => {
+          task?.tasks?.map((ele, i) => {
+            console.log(ele)
+            if (!ele?.isVerified) {
+              setRatingButtonDisable(true);
+            }
+            
+          })
+         })
+        console.log(allTask,'----------------------------------------------------------llllllllllllll all task')
         setUserTasks(allTask)
       }
     } catch (error) {
@@ -253,14 +270,13 @@ export default function RatingModalBody(props) {
                 <Row className="desc">
                   <Form.Group>
                     <Form.Control
-                      required
+                      
                       as="textarea"
                       name="comment"
                       placeholder="comment"
                       value={ratingForm.comment}
                       onChange={handleRatingFormChange}
                     />
-                    <Form.Control.Feedback type="invalid">Comment is required!</Form.Control.Feedback>
                   </Form.Group>
                   <Button
                     size="sm"
@@ -268,7 +284,7 @@ export default function RatingModalBody(props) {
                     type="submit"
                     className="text-center"
                     style={{ marginTop: '20px' }}
-                    disabled={isNotVerified}
+                    disabled={isNotVerified && disableRatingButton}
                   >
                     Submit
                   </Button>
