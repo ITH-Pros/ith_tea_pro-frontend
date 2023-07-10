@@ -274,6 +274,18 @@ export default function ViewTaskModal(props) {
   
   
 
+  
+  // const createdAt = new Date(task?.createdAt);
+  // const elapsedMilliseconds = task?.timeTaken * 60 * 1000; // Convert minutes to milliseconds
+  
+  // const elapsedDate = new Date(createdAt.getTime() + elapsedMilliseconds);
+  // const elapsedHours = elapsedDate.getHours();
+  // const elapsedMinutes = elapsedDate.getMinutes();
+  
+  // const timeElapsed = `${elapsedHours.toString().padStart(2, '0')}:${elapsedMinutes.toString().padStart(2, '0')}`;
+  
+  // console.log("Time elapsed:", timeElapsed);
+  
   return (
     <>
       <Offcanvas
@@ -404,7 +416,13 @@ export default function ViewTaskModal(props) {
                       </div>
                     </Form.Group>
 
-                   
+                    {/* {task?.status === "ONGOING" && (
+                      <Form.Group as={Col} md="3">
+                        <Form.Label>Time Left : </Form.Label>
+                        <p> {{timeElapsed}} </p>
+                      </Form.Group>
+                    )} */}
+
                   </>
                 </Row>
               </Row>
