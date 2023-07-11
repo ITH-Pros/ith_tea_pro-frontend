@@ -274,27 +274,10 @@ export default function ViewTaskModal(props) {
   
   
 
-  
-  // const createdAt = new Date(task?.createdAt);
-  // const elapsedMilliseconds = task?.timeTaken * 60 * 1000; // Convert minutes to milliseconds
-  
-  // const elapsedDate = new Date(createdAt.getTime() + elapsedMilliseconds);
-  // const elapsedHours = elapsedDate.getHours();
-  // const elapsedMinutes = elapsedDate.getMinutes();
-  
-  // const timeElapsed = `${elapsedHours.toString().padStart(2, '0')}:${elapsedMinutes.toString().padStart(2, '0')}`;
-  
-  // console.log("Time elapsed:", timeElapsed);
 
-
-// Convert defaultTaskTime to minutes
 const defaultTaskTimeMinutes = parseInt(task?.defaultTaskTime?.hours||0) * 60 + parseInt(task?.defaultTaskTime?.minutes||0);
-
-// Calculate time left in minutes
 const timeLeftMinutes = (defaultTaskTimeMinutes||0) - (task?.timeTaken||0);
 
-
-// Convert time left back to hours and minutes
 const hoursLeft = Math.floor(timeLeftMinutes / 60);
 const minutesLeft = timeLeftMinutes % 60;
   console.log(hoursLeft,minutesLeft,'------------hoiurs and mins left')
@@ -431,7 +414,8 @@ const minutesLeft = timeLeftMinutes % 60;
                     {(task?.status === "ONHOLD" || task?.status === "ONGOING") && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Time Left : </Form.Label>
-                        <p> {hoursLeft || 0} hr {minutesLeft||0} mins </p>
+                       {(hoursLeft<0 || minutesLeft <0)&& ( <p>Time Exceed</p>)}
+                       {(hoursLeft>=0 && minutesLeft >=0)&& ( <p> {hoursLeft || 0} hr {minutesLeft||0} mins </p>)}
                       </Form.Group>
                     )}
 
