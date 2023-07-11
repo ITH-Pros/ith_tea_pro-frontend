@@ -105,6 +105,7 @@ export default function RatingModalBody(props) {
           setModalShow(false)
         }
       } catch (error) {
+        console.log(error , 'error')
         setLoading(false)
         toast.dismiss()
       toast.info(error?.message || 'Something Went Wrong')
