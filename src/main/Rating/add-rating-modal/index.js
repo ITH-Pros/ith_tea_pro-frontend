@@ -78,7 +78,7 @@ export default function RatingModalBody(props) {
     event.preventDefault()
     let { rating, comment, selectedDate } = ratingForm
 
-    if (!ratingForm.comment || !ratingForm.selectedDate || !ratingForm.rating || ratingForm.rating > 6 || ratingForm.rating < 0) {
+    if ( !ratingForm.selectedDate || !ratingForm.rating || ratingForm.rating > 6 || ratingForm.rating < 0) {
       return
     } else {
       // convert date in day month year format for backend
