@@ -259,7 +259,7 @@ export default function ViewTaskModal(props) {
         <div className="time-details">
           {(hours > 0 || remainingMinutes > 0) && (
             <span>
-              {hours > 0 && `${formatNumber(hours)} : `} {formatNumber(remainingMinutes)}
+              {`${formatNumber(hours)} : `} {formatNumber(remainingMinutes)}
             </span>
           )}
           {!(hours > 0 || remainingMinutes > 0) && (
