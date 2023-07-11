@@ -285,6 +285,17 @@ export default function ViewTaskModal(props) {
   // const timeElapsed = `${elapsedHours.toString().padStart(2, '0')}:${elapsedMinutes.toString().padStart(2, '0')}`;
   
   // console.log("Time elapsed:", timeElapsed);
+
+
+// Convert defaultTaskTime to minutes
+const defaultTaskTimeMinutes = parseInt(task?.defaultTaskTime.hours) * 60 + parseInt(task?.defaultTaskTime.minutes);
+
+// Calculate time left in minutes
+const timeLeftMinutes = defaultTaskTimeMinutes - task?.timeTaken;
+
+// Convert time left back to hours and minutes
+const hoursLeft = Math.floor(timeLeftMinutes / 60);
+const minutesLeft = timeLeftMinutes % 60;
   
   return (
     <>
@@ -416,12 +427,12 @@ export default function ViewTaskModal(props) {
                       </div>
                     </Form.Group>
 
-                    {/* {task?.status === "ONGOING" && (
+                    {task?.status === "ONHOLD" && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Time Left : </Form.Label>
-                        <p> {{timeElapsed}} </p>
+                        <p> {hoursLeft || 0} hr {minutesLeft||0} mins </p>
                       </Form.Group>
-                    )} */}
+                    )}
 
                   </>
                 </Row>
