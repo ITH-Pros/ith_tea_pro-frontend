@@ -20,15 +20,13 @@ var month = moment().month();
 let currentYear = moment().year();
 
 export default function Dashboard(props) {
-
   const ratings = [2, 3, 4, 5, 4, 3, 2, 4, 5, 6];
 
   const [ratingsArray, setRatings] = useState([]);
-  
 
   const [loading, setLoading] = useState(false);
   const [teamView, setTeamView] = useState(false);
-  
+
   const { userDetails } = useAuth();
   const [days, setDays] = useState(moment().daysInMonth());
   const [monthUse, setMonth] = useState(moment().format("MMMM"));
@@ -37,13 +35,13 @@ export default function Dashboard(props) {
   const [modalShow, setModalShow] = useState(false);
   let months = moment().year(Number)?._locale?._months;
   let years = [2022, 2023, 2024, 2025];
-  const [ratingData,setRatingData] = useState({
+  const [ratingData, setRatingData] = useState({
     user: {},
-    date: '',
-    month: '',
-    year: '',
+    date: "",
+    month: "",
+    year: "",
   });
-  const [raitngForDay, setRatingForDay] = useState()
+  const [raitngForDay, setRatingForDay] = useState();
 
   useEffect(() => {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
@@ -55,45 +53,46 @@ export default function Dashboard(props) {
   }, []);
 
   useEffect(() => {
-    if (modalShow === false && teamView){
-        onInit()
-      }
-  }, [modalShow , teamView])
+    if (modalShow === false && teamView) {
+      onInit();
+    }
+  }, [modalShow, teamView]);
 
-  const isRatingAllowed = async function (user,date,month,year) {
+  const isRatingAllowed = async function (user, date, month, year) {
     setLoading(true);
     // // console.log(user,date,month,year)
-    let setDate = date
-    let setMonth = month
-    if(date<10){
-     setDate = "0" +date
+    let setDate = date;
+    let setMonth = month;
+    if (date < 10) {
+      setDate = "0" + date;
     }
-    if(month<10){
-      setMonth = "0" + month
-     }
-    try {      
+    if (month < 10) {
+      setMonth = "0" + month;
+    }
+    try {
       const dataToSend = {
-        userId: user._id 
+        userId: user._id,
       };
       const response = await verifyManager(dataToSend);
       if (response.error) {
-        toast.dismiss()
-      toast.info(response.message);
+        toast.dismiss();
+        toast.info(response.message);
         // set
         // console.log("error", response );
       } else {
         if (response?.data?.ratingAllowed === true) {
-          setRatingData(prevRatingData => ({
+          setRatingForDay();
+          setRatingData((prevRatingData) => ({
             ...prevRatingData,
             user: user,
             date: date,
             month: month,
             year: year,
-          }))
-          setModalShow(true)
+          }));
+          setModalShow(true);
         } else {
-          toast.dismiss()
-      toast.info('You are not allowed to give rating.')
+          toast.dismiss();
+          toast.info("You are not allowed to give rating.");
           // set
         }
         // // console.log('error in verify manager')
@@ -148,42 +147,63 @@ export default function Dashboard(props) {
       const rating = await getRatings(data);
       setLoading(false);
       if (rating.error) {
-        toast.dismiss()
-      toast.info(rating?.message || "Something Went Wrong");
+        toast.dismiss();
+        toast.info(rating?.message || "Something Went Wrong");
         // set
       } else {
         // // console.log(rating.data);
         setRatings([...rating.data]);
       }
     } catch (error) {
-      toast.dismiss()
+      toast.dismiss();
       toast.info(error?.message || "Something Went Wrong");
       // set
       setLoading(false);
     }
   }
 
-  const hideModal = () =>{
-    setModalShow(false)
-    localStorage.removeItem('userId')
-  }
+  const hideModal = () => {
+    
+    setModalShow(false);
+    localStorage.removeItem("userId");
+    // setRatingForDay();
+  };
 
   return (
     <div>
-      <Offcanvas  
-      className="Offcanvas-modal"
-      style={{width:'500px'}}
-      show={modalShow}
-      onHide={() => hideModal()}
-      placement="end"
-    >
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title> {userDetails?.role !== 'CONTRIBUTOR' ? raitngForDay >= 0 ? ('View Tasks') : ( 'Add Rating' ): 'View Tasks'}</Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body  >
-      {userDetails?.role !== 'CONTRIBUTOR' ? <RatingModalBody  data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay} />: <TasksModalBody data={ratingData} setModalShow={setModalShow} raitngForDay={raitngForDay}/>}
-      </Offcanvas.Body>
-    </Offcanvas>
+      <Offcanvas
+        className="Offcanvas-modal"
+        style={{ width: "500px" }}
+        show={modalShow}
+        onHide={() => hideModal()}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>
+            {" "}
+            {userDetails?.role !== "CONTRIBUTOR"
+              ? raitngForDay >= 0
+                ? "View Tasks"
+                : "Add Rating"
+              : "View Tasks"}
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {userDetails?.role !== "CONTRIBUTOR" ? (
+            <RatingModalBody
+              data={ratingData}
+              setModalShow={setModalShow}
+              raitngForDay={raitngForDay}
+            />
+          ) : (
+            <TasksModalBody
+              data={ratingData}
+              setModalShow={setModalShow}
+              raitngForDay={raitngForDay}
+            />
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
       <div className="dashboard_camp">
         <Row>
           <Col lg={12}>
@@ -271,118 +291,169 @@ export default function Dashboard(props) {
               </h5>
             </div>
             <div className="tableFixHead">
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th style={{ width: "140px", position: "sticky", left: "0", backgroundColor: "#fff"  }}>Name</th>
-                  {/* <th>Day</th> */}
-                  {Array(days)
-  .fill(0)
-  .map((rating, index) => {
-    const date = new Date(yearUse, months.indexOf(monthUse), index + 1);
-    const dayOfWeek = date.getDay();
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const weekend = isWeekend(dayOfWeek);
-    const className = weekend ? "weekend" : "";
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th
+                      style={{
+                        width: "140px",
+                        position: "sticky",
+                        left: "0",
+                        backgroundColor: "#fff",
+                      }}
+                    >
+                      Name
+                    </th>
+                    {/* <th>Day</th> */}
+                    {Array(days)
+                      .fill(0)
+                      .map((rating, index) => {
+                        const date = new Date(
+                          yearUse,
+                          months.indexOf(monthUse),
+                          index + 1
+                        );
+                        const dayOfWeek = date.getDay();
+                        const dayNames = [
+                          "Sun",
+                          "Mon",
+                          "Tue",
+                          "Wed",
+                          "Thu",
+                          "Fri",
+                          "Sat",
+                        ];
+                        const weekend = isWeekend(dayOfWeek);
+                        const className = weekend ? "weekend" : "";
 
-    return (
-      <th key={index} className={className}>
-        <span>{index + 1 < 10 ? "0" : ""}{index + 1}</span>
-        <br></br>
-        <span>{dayNames[dayOfWeek]}</span>
-      </th>
-    );
-})}
-                  <th style={{ color: "green" }}>Average</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ratingsArray.map((user, index) => {
-                  return (
-                    <tr key={index}>
-                      <td
-                        className="user_names text-truncate "
-                        style={{ width: "130px", position: "sticky", left: "0" , backgroundColor: "#fff" , zIndex: "9" }}
-                      >
-                        {user.name}
-                      </td>
+                        return (
+                          <th key={index} className={className}>
+                            <span>
+                              {index + 1 < 10 ? "0" : ""}
+                              {index + 1}
+                            </span>
+                            <br></br>
+                            <span>{dayNames[dayOfWeek]}</span>
+                          </th>
+                        );
+                      })}
+                    <th style={{ color: "green" }}>Average</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ratingsArray.map((user, index) => {
+                    return (
+                      <tr key={index}>
+                      
+                        <td
+                          className="user_names text-truncate "
+                          style={{
+                            width: "130px",
+                            position: "sticky",
+                            left: "0",
+                            backgroundColor: "#fff",
+                            zIndex: "9",
+              
+                          }}
+                        >
+                          {user.name}
+                        </td>
 
-                      {Array(days)
-  .fill(0)
-  .map((day, index) => {
-    let ratingUserObj = user.ratings;
-    let ratingCommentObj = ratingUserObj?.find(
-      (el) => el.date - 1 === index
-    );
+                        {Array(days)
+                          .fill(0)
+                          .map((day, index) => {
+                            let ratingUserObj = user?.ratings;
+                            let ratingCommentObj = ratingUserObj?.find(
+                              (el) => el.date - 1 === index
+                            );
 
-    const date = new Date(
-      yearUse,
-      months.indexOf(monthUse),
-      index + 1
-    );
-    const dayOfWeek = date.getDay()
-    const weekendValue = dayOfWeek === 0 || dayOfWeek === 6;
-    if (ratingCommentObj) {
-      return (
-        <RatingBox
-          key={index}
-          index={index}
-          getAllRatings={getAllRatings}
-          ratingCommentObj={ratingCommentObj}
-          className={weekendValue ? "weekendBox" : ""}
-          month={months.indexOf(monthUse) + 1}
-          year={yearUse}
-          user={user}
-          setTaskModalShow={setModalShow}
-          setRatingData={setRatingData}
-          setRatingForDay = {setRatingForDay}
-        />
-      );
-    } else {
-      let dateToSend = `${yearUse}-${
-        months.indexOf(monthUse) + 1 <= 9
-          ? "0" + (months.indexOf(monthUse) + 1)
-          : months.indexOf(monthUse) + 1
-      }-${index + 1 <= 9 ? "0" + (index + 1) : index + 1}`;
-      return (
-        <td key={index}>
-          {userDetails?.role === 'CONTRIBUTOR' || new Date(dateToSend) > new Date() ? (
-            <span
-              style={{
-                padding: '2px 15px',
-              }}
-              className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
-            ></span>
-          ) : (
-            <>
-              <span
-                style={{
-                  padding: '2px 15px',
-                }}
-                className={weekendValue ? 'weekendBox input_dashboard' : 'input_dashboard'}
-                // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
-                onClick={() => {
-                  isRatingAllowed(user, index + 1, months.indexOf(monthUse) + 1, yearUse);
-                }}
-              >
-                {!weekendValue && '?'}
-              </span>
-            </>
-          )}
-        </td>
-      )
-    }
-  })}
-                      <td className="userAverage">
-                        {user.monthlyAverage
-                          ? Math.round(user.monthlyAverage * 100) / 100
-                          : "NA"}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                            const date = new Date(
+                              yearUse,
+                              months.indexOf(monthUse),
+                              index + 1
+                            );
+                            const dayOfWeek = date.getDay();
+                            const weekendValue =
+                              dayOfWeek === 0 || dayOfWeek === 6;
+                            if (ratingCommentObj) {
+                              return (
+                                <RatingBox
+                                  key={index}
+                                  index={index}
+                                  getAllRatings={getAllRatings}
+                                  ratingCommentObj={ratingCommentObj}
+                                  className={weekendValue ? "weekendBox" : ""}
+                                  month={months.indexOf(monthUse) + 1}
+                                  year={yearUse}
+                                  user={user}
+                                  setTaskModalShow={setModalShow}
+                                  setRatingData={setRatingData}
+                                  setRatingForDay={setRatingForDay}
+                                />
+                              );
+                            } else {
+                              let dateToSend = `${yearUse}-${
+                                months.indexOf(monthUse) + 1 <= 9
+                                  ? "0" + (months.indexOf(monthUse) + 1)
+                                  : months.indexOf(monthUse) + 1
+                              }-${
+                                index + 1 <= 9 ? "0" + (index + 1) : index + 1
+                              }`;
+                              return (
+                                <td  key={index}>
+                                  
+
+                                  {userDetails?.role === "CONTRIBUTOR" ||
+                                  new Date(dateToSend) > new Date() ? (
+                                    <span
+                                      style={{
+                                        padding: "2px 15px",
+                                      }}
+                                      className={
+                                        weekendValue
+                                          ? "weekendBox input_dashboard"
+                                          : "input_dashboard"
+                                      }
+                                    ></span>
+                                  ) : (
+                                    <>
+                                      <span
+                                        style={{
+                                          padding: "2px 15px",
+                                        }}
+                                        className={
+                                          weekendValue
+                                            ? "weekendBox input_dashboard"
+                                            : "input_dashboard"
+                                        }
+                                        // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
+                                        onClick={() => {
+                                          isRatingAllowed(
+                                            user,
+                                            index + 1,
+                                            months.indexOf(monthUse) + 1,
+                                            yearUse
+                                          );
+                                        }}
+                                      >
+                                        {!weekendValue && "?"}
+                                      </span>
+                                    </>
+                                  )}
+                                </td>
+                              );
+                            }
+                          })}
+                        <td className="userAverage">
+                          {user.monthlyAverage
+                            ? Math.round(user.monthlyAverage * 100) / 100
+                            : "NA"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             </div>
           </div>
 
@@ -390,11 +461,7 @@ export default function Dashboard(props) {
           <div></div>
         </div>
       ) : (
-        <div>
-        { !teamView && (
-          <MyCalendar />
-        )}
-          </div>
+        <div>{!teamView && <MyCalendar />}</div>
       )}
     </div>
   );
