@@ -65,6 +65,25 @@ const Tasks = () => {
     })
   }
 
+  // remove filter data from local storage when compenent leave
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('taskFilters')
+      localStorage.removeItem('selectedFilterTypes')
+      localStorage.removeItem('selectedLead')
+      localStorage.removeItem('fromDate')
+      localStorage.removeItem('toDate')
+      localStorage.removeItem('sortOrder')
+      localStorage.removeItem('sortType')
+      localStorage.removeItem('selectedFilter')
+      localStorage.removeItem('dueDate')
+      console.log('filterData removed')
+    }
+  }, [])
+
+
+
   useEffect(() => {
     getTasksDataUsingProjectId(projectId)
     let paramsData

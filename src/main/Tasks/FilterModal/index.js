@@ -19,9 +19,15 @@ import SortByDropdown from "./SortFilter";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
 const FilterModal = (props) => {
-  const { getTaskFilters, handleProjectId, isArchive , downloadExportData , projectId } = props;
+  const {
+    getTaskFilters,
+    handleProjectId,
+    isArchive,
+    downloadExportData,
+    projectId,
+  } = props;
 
-  console.log("projectId",projectId)
+  console.log("projectId", projectId);
 
   const { userDetails } = useAuth();
   const statusList = CONSTANTS.statusListObj;
@@ -59,11 +65,6 @@ const FilterModal = (props) => {
   const [categories, setCategories] = useState([]);
   const [usersList, setUsersList] = useState([]);
 
-
-
-
-
-
   const customStyles = {
     option: (provided) => ({
       ...provided,
@@ -76,7 +77,7 @@ const FilterModal = (props) => {
       height: "45px",
       borderRadius: "5px",
       color: "#767474",
-      fontSize:'13px'
+      fontSize: "13px",
     }),
     placeholder: (provided) => ({
       ...provided,
@@ -94,26 +95,29 @@ const FilterModal = (props) => {
     valueContainer: (provided) => ({
       ...provided,
       padding: "0px 10px",
-      height:'40px',
-      overflowY: 'auto',
+      height: "40px",
+      overflowY: "auto",
     }),
   };
 
   useEffect(() => {
-    if(selectedFilterLead){
+    if (selectedFilterLead) {
       // console.log(selectedFilterLead.map(obj => obj._id))
 
-      localStorage.setItem('selectedLead',JSON.stringify(selectedFilterLead.map(obj => obj._id)))
+      localStorage.setItem(
+        "selectedLead",
+        JSON.stringify(selectedFilterLead.map((obj) => obj._id))
+      );
     }
   }, [selectedFilterLead]);
 
   useEffect(() => {
-    if(filterModalShow){
-    getLeadsList()
-    getAllProjectsData();
-    getAllCategoriesData();
-    getAllUsersData();
-    updateFromLocalStorage();
+    if (filterModalShow) {
+      getLeadsList();
+      getAllProjectsData();
+      getAllCategoriesData();
+      getAllUsersData();
+      updateFromLocalStorage();
     }
   }, [filterModalShow]);
 
@@ -128,7 +132,6 @@ const FilterModal = (props) => {
   }, []);
 
   const handleFilterSelect = (fromDate, toDate) => {
-  
     // // console.log("fromDate----------------------------toDate", fromDate, toDate);
     localStorage.setItem(
       "dueDate",
@@ -215,19 +218,17 @@ const FilterModal = (props) => {
     localStorage.removeItem("sortType");
     localStorage.removeItem("sortOrder");
     localStorage.removeItem("selectedFilter");
-    localStorage.removeItem('fromDate')
-    localStorage.removeItem('filterClicked')
-    localStorage.removeItem('toDate')
-    localStorage.removeItem("selectedLead")
-    setselectedFilterLead([])
+    localStorage.removeItem("fromDate");
+    localStorage.removeItem("filterClicked");
+    localStorage.removeItem("toDate");
+    localStorage.removeItem("selectedLead");
+    setselectedFilterLead([]);
     setClearFilterBoolean(false);
     getTaskFilters();
   };
 
   const getAllProjectsData = async () => {
-
     console.log("getAllProjectsData from task filter");
-
 
     setLoading(true);
     try {
@@ -258,7 +259,7 @@ const FilterModal = (props) => {
 
       if (leads.error) {
       } else {
-        setleadsArray(leads?.data?.users||[]);
+        setleadsArray(leads?.data?.users || []);
       }
     } catch (error) {
       setLoading(false);
@@ -276,7 +277,7 @@ const FilterModal = (props) => {
       if (categories.error) {
       } else {
         categories.data = categories?.data?.map((item, i) => ({
-          name: item?.projectId?.name + '  (' +item?.name +')' ,
+          name: item?.projectId?.name + "  (" + item?.name + ")",
           _id: item?._id,
         }));
         setCategories(categories?.data);
@@ -296,6 +297,16 @@ const FilterModal = (props) => {
         // console.log(users?.error);
       } else {
         setUsersList(users.data?.users);
+
+        // if (handleProjectId) {
+        //   let selectedUser = localStorage.getItem("taskFilters")?.assignedTo;
+        //   if (selectedUser?.length > 0) {
+        //     let assignedToData = users.data?.users?.filter((item) =>
+        //       selectedUser?.includes(item._id)
+        //     );
+        //     setAssignedTo(assignedToData);
+        //   }
+        // }
       }
     } catch (error) {
       setLoading(false);
@@ -348,29 +359,28 @@ const FilterModal = (props) => {
           )}
         </Button>
 
-        {(userDetails?.role === "ADMIN" || userDetails?.role === "SUPER_ADMIN") && (
-
-          <Button
-          variant="light"
-          style={{ margin: "0px 5px" }}>
-          {!isArchive   && (
-            <span onClick={() => downloadExportData()}>
-              <i className="fa fa-file-excel-o" aria-hidden="true"></i> Export
-            </span>
-          )}
+        {(userDetails?.role === "ADMIN" ||
+          userDetails?.role === "SUPER_ADMIN") && (
+          <Button variant="light" style={{ margin: "0px 5px" }}>
+            {!isArchive && (
+              <span onClick={() => downloadExportData()}>
+                <i className="fa fa-file-excel-o" aria-hidden="true"></i> Export
+              </span>
+            )}
           </Button>
         )}
-          
-
-      
 
         {clearFilter && (
-          <Button onClick={() => {
-                  clearFilterFormValue();
-                  setClearFilterBoolean(false);
+          <Button
+            onClick={() => {
+              clearFilterFormValue();
+              setClearFilterBoolean(false);
 
-                  localStorage.removeItem("selectedFilterTypes");
-                }} variant="light" style={{ marginRight: "10px" }}>
+              localStorage.removeItem("selectedFilterTypes");
+            }}
+            variant="light"
+            style={{ marginRight: "10px" }}
+          >
             {clearFilter && (
               <i className="fa fa-times-circle" aria-hidden="true"></i>
             )}
@@ -395,9 +405,12 @@ const FilterModal = (props) => {
           className="Offcanvas-modal"
           style={{ width: "600px" }}
           show={filterModalShow}
-          onHide={() => {localStorage.removeItem('fromDate');localStorage.removeItem('toDate');
-                  clearFilterFormValue();
-                  setFilterModalShow(false);}}
+          onHide={() => {
+            localStorage.removeItem("fromDate");
+            localStorage.removeItem("toDate");
+            clearFilterFormValue();
+            setFilterModalShow(false);
+          }}
           placement="end"
         >
           <Offcanvas.Header closeButton>
@@ -432,11 +445,10 @@ const FilterModal = (props) => {
                   </Col>
                   <Col sm="9" className="filterFields">
                     <Select
-                    isMulti
+                      isMulti
                       styles={customStyles}
                       onChange={(e) => setselectedFilterLead(e)}
                       value={selectedFilterLead}
-                      
                       getOptionLabel={(options) => options["name"]}
                       getOptionValue={(options) => options["_id"]}
                       options={leadsArray}
@@ -539,7 +551,10 @@ const FilterModal = (props) => {
               </Form.Group>
               <Form.Group controlId="formDueDate">
                 <Row className="filterFields due-date">
-                  <FilterDropdown onFilterSelect={handleFilterSelect} clearFilterProp={clearFilter} />
+                  <FilterDropdown
+                    onFilterSelect={handleFilterSelect}
+                    clearFilterProp={clearFilter}
+                  />
                 </Row>
               </Form.Group>
               <Form.Group controlId="formDueDate">
@@ -555,7 +570,8 @@ const FilterModal = (props) => {
               </Form.Group>
             </Form>
 
-            <Button className="pull-right"
+            <Button
+              className="pull-right"
               variant="primary"
               onClick={closeModalAndgetAllTaskOfProject}
             >
@@ -564,8 +580,6 @@ const FilterModal = (props) => {
           </Offcanvas.Body>
         </Offcanvas>
       )}
-
-    
 
       {loading && <Loader />}
     </>
