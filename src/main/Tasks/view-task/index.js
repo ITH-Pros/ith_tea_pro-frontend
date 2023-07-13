@@ -24,6 +24,7 @@ import "./index.css";
 import History from "./history";
 import EditRating from "./editRating";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../../../components/spinner/spinner";
 export default function ViewTaskModal(props) {
   const {
     closeViewTaskModal,
@@ -45,6 +46,7 @@ export default function ViewTaskModal(props) {
   const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
   const [errorRating, setErrorRating] = useState(false);
   const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
+  const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 
   useEffect(() => {
     if (selectedTaskId) {
@@ -145,6 +147,7 @@ export default function ViewTaskModal(props) {
   };
 
   const addcomment = async () => {
+    setIsLoadingSpinner(true);
     let dataToSend = {
       taskId: selectedTaskId,
       comment: text,
@@ -152,6 +155,7 @@ export default function ViewTaskModal(props) {
     try {
       let response = await addCommentOnTask(dataToSend);
       if (response.error) {
+        setIsLoadingSpinner(false);
         toast.dismiss();
         toast.info(response.message);
       } else {
@@ -161,8 +165,10 @@ export default function ViewTaskModal(props) {
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
+        setIsLoadingSpinner(false);
       }
     } catch (error) {
+      setIsLoadingSpinner(false);
       // console.log(error);
     }
   };
@@ -220,13 +226,13 @@ export default function ViewTaskModal(props) {
         toast.dismiss();
         toast.info("Rating Added Succesfully");
 
-        setIsRatingFormVisible(false);
         getTaskDetailsById(selectedTaskIdForRating);
         onInit();
         if (userDetails?.role !== "CONTRIBUTOR") {
           // getTeamWorkList();
           setIsChange(!isChange);
         }
+        setIsRatingFormVisible(false);
       }
     } catch (error) {
       setLoading(false);
@@ -248,11 +254,11 @@ export default function ViewTaskModal(props) {
     const minutes = props.minutes;
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-  
+
     const formatNumber = (number) => {
-      return number.toString().padStart(2, '0');
+      return number.toString().padStart(2, "0");
     };
-  
+
     return (
       <div className="task-completion-time d-block">
         <label className="form-label">Task Completion Time: </label>{" "}
@@ -262,25 +268,21 @@ export default function ViewTaskModal(props) {
               {`${formatNumber(hours)} : `} {formatNumber(remainingMinutes)}
             </span>
           )}
-          {!(hours > 0 || remainingMinutes > 0) && (
-            <span>
-              {`00:00`}
-            </span>
-          )}
+          {!(hours > 0 || remainingMinutes > 0) && <span>{`00:00`}</span>}
         </div>
       </div>
     );
   };
-  
-  
 
+  const defaultTaskTimeMinutes =
+    parseInt(task?.defaultTaskTime?.hours || 0) * 60 +
+    parseInt(task?.defaultTaskTime?.minutes || 0);
+  const timeLeftMinutes =
+    (defaultTaskTimeMinutes || 0) - (task?.timeTaken || 0);
 
-const defaultTaskTimeMinutes = parseInt(task?.defaultTaskTime?.hours||0) * 60 + parseInt(task?.defaultTaskTime?.minutes||0);
-const timeLeftMinutes = (defaultTaskTimeMinutes||0) - (task?.timeTaken||0);
-
-const hoursLeft = Math.floor(timeLeftMinutes / 60);
-const minutesLeft = timeLeftMinutes % 60;
-  console.log(hoursLeft,minutesLeft,'------------hoiurs and mins left')
+  const hoursLeft = Math.floor(timeLeftMinutes / 60);
+  const minutesLeft = timeLeftMinutes % 60;
+  console.log(hoursLeft, minutesLeft, "------------hoiurs and mins left");
   return (
     <>
       <Offcanvas
@@ -407,18 +409,28 @@ const minutesLeft = timeLeftMinutes % 60;
                     <Form.Group as={Col} md="3" className="estimated-time">
                       <Form.Label>Estimated Time :</Form.Label>{" "}
                       <div className="time">
-                        <span>{task?.defaultTaskTime?.hours || "00"} : {task?.defaultTaskTime?.minutes || "00"} </span>
+                        <span>
+                          {task?.defaultTaskTime?.hours || "00"} :{" "}
+                          {task?.defaultTaskTime?.minutes || "00"}{" "}
+                        </span>
                       </div>
                     </Form.Group>
 
-                    {(task?.status === "ONHOLD" || task?.status === "ONGOING") && (
+                    {(task?.status === "ONHOLD" ||
+                      task?.status === "ONGOING") && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Time Left : </Form.Label>
-                       {(hoursLeft<0 || minutesLeft <0)&& ( <p>Time Exceed</p>)}
-                       {(hoursLeft>=0 && minutesLeft >=0)&& ( <p> {hoursLeft || 0} hr {minutesLeft||0} mins </p>)}
+                        {(hoursLeft < 0 || minutesLeft < 0) && (
+                          <p>Time Exceed</p>
+                        )}
+                        {hoursLeft >= 0 && minutesLeft >= 0 && (
+                          <p>
+                            {" "}
+                            {hoursLeft || 0} hr {minutesLeft || 0} mins{" "}
+                          </p>
+                        )}
                       </Form.Group>
                     )}
-
                   </>
                 </Row>
               </Row>
@@ -503,6 +515,8 @@ const minutesLeft = timeLeftMinutes % 60;
                     {!task?.comments?.length && (
                       <p className="text-muted">No Comments</p>
                     )}
+                    {isLoadingSpinner ? <LoadingSpinner /> : null}
+
                   </>
                 )}
 
@@ -520,29 +534,34 @@ const minutesLeft = timeLeftMinutes % 60;
                       ).toLocaleString("en-US", options);
 
                       return (
-                        <div
-                          className="comment comment mb-0 mt-0 pt-0"
-                          key={index}
-                        >
-                          <div className="commentedBy pb-2">
-                            <UserIcon
-                              style={{ float: "left" }}
-                              key={index}
-                              firstName={item?.commentedBy?.name}
-                            />
-                            {item?.commentedBy?.name}
+                        <>
+                          <div
+                            className="comment comment mb-0 mt-0 pt-0"
+                            key={index}
+                          >
+                            <div className="commentedBy pb-2">
+                              <UserIcon
+                                style={{ float: "left" }}
+                                key={index}
+                                firstName={item?.commentedBy?.name}
+                              />
+                              {item?.commentedBy?.name}
+                            </div>
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: item?.comment,
+                              }}
+                              className="comment-tex"
+                            ></p>
+                            <span className="date sub-text">{createdAt}</span>
                           </div>
-                          <p
-                            dangerouslySetInnerHTML={{ __html: item?.comment }}
-                            className="comment-tex"
-                          ></p>
-                          <span className="date sub-text">{createdAt}</span>
-                        </div>
+                        </>
                       );
                     })}
                     {!task?.ratingComments?.length && (
                       <p className="text-muted">No Rating Comments</p>
                     )}
+
                   </>
                 )}
 
@@ -556,32 +575,34 @@ const minutesLeft = timeLeftMinutes % 60;
             </div>
 
             {activeTab === "comments" && (
-              <div
-                className="container"
-                style={{ padding: "0", width: "100%" }}
-              >
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <TextEditor
-                      width="100%"
-                      placeholder="Enter text here"
-                      value={text}
-                      onChange={handleTextChange}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      float: "left",
-                      width: "100%",
-                      textAlign: "right",
-                    }}
-                  >
-                    <Button type="submit" className="btn btn-primary mb-2">
-                      Post
-                    </Button>
-                  </div>
-                </form>
-              </div>
+              <>
+                <div
+                  className="container"
+                  style={{ padding: "0", width: "100%" }}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <TextEditor
+                        width="100%"
+                        placeholder="Enter text here"
+                        value={text}
+                        onChange={handleTextChange}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        float: "left",
+                        width: "100%",
+                        textAlign: "right",
+                      }}
+                    >
+                      <Button type="submit" className="btn btn-primary mb-2">
+                        Post
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </>
             )}
           </div>
         </Offcanvas.Body>

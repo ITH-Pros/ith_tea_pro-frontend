@@ -21,6 +21,8 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 const FilterModal = (props) => {
   const { getTaskFilters, handleProjectId, isArchive , downloadExportData , projectId } = props;
 
+  console.log("projectId",projectId)
+
   const { userDetails } = useAuth();
   const statusList = CONSTANTS.statusListObj;
   const priorityList = CONSTANTS.priorityListObj;
@@ -56,6 +58,11 @@ const FilterModal = (props) => {
   const [projects, setProjects] = useState([]);
   const [categories, setCategories] = useState([]);
   const [usersList, setUsersList] = useState([]);
+
+
+
+
+
 
   const customStyles = {
     option: (provided) => ({
@@ -223,14 +230,19 @@ const FilterModal = (props) => {
 
 
     setLoading(true);
-
     try {
       const projects = await getAllProjects();
       setLoading(false);
-
       if (projects.error) {
       } else {
         setProjects(projects.data);
+        console.log("projects.data", projects.data);
+        if (handleProjectId) {
+          let selectedProject = projects.data.filter(
+            (item) => item._id === projectId
+          );
+          setProjectIds(selectedProject);
+        }
       }
     } catch (error) {
       setLoading(false);
@@ -292,7 +304,9 @@ const FilterModal = (props) => {
   };
 
   const onSelectData = (selectedItems, dataType) => {
+    console.log("selectedItems", selectedItems);
     let data = selectedItems?.map((item) => item?._id);
+    console.log("data", data);
     if (dataType === "projectIds") {
       setProjectIds(selectedItems);
     } else if (dataType === "assignedTo") {

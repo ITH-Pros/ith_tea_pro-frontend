@@ -416,6 +416,8 @@ const Tasks = () => {
     if (params?.projectId) {
       paramsData = params?.projectId
     }
+    console.log("-------")
+    console.log(paramsData)
     setLoading(true)
     try {
       let data = {
@@ -425,7 +427,7 @@ const Tasks = () => {
         data.isArchived = true
       }
       if (params?.projectId) {
-        data.projectId = paramsData?.projectId
+        data.projectId = paramsData
       }
       if (localStorage.getItem('selectedLead')) {
         // // console.log(JSON.parse(localStorage.getItem('selectedLead')))
@@ -441,7 +443,7 @@ const Tasks = () => {
         let selectedFilter = localStorage.getItem('selectedFilter')
         // // console.log(selectedFilter, 'selectedFilter')
         // // console.log(filterData)
-        if (filterData?.projectIds) {
+        if (filterData?.projectIds && filterData.projectIds.length > 0) {
           data.projectIds = JSON.stringify(filterData?.projectIds)
         }
         if (filterData?.createdBy) {
