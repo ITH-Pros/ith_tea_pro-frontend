@@ -329,7 +329,7 @@ const Tasks = () => {
         let filterData = JSON.parse(localStorage.getItem('taskFilters'));
         let selectedFilter = localStorage.getItem('selectedFilterTypes');
         console.log(filterData)
-        if (filterData?.projectIds) {
+        if (filterData?.projectIds && filterData.projectIds.length > 0) {
           data.projectIds = JSON.stringify(filterData.projectIds);
         }
         if (filterData?.createdBy) {

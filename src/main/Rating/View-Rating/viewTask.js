@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 import Loader from '../../../components/Loader'
-import ToastContainer from 'react-bootstrap/ToastContainer'
+// import ToastContainer from 'react-bootstrap/ToastContainer'
 import { taskById } from '../../../services/user/api'
 import UserIcon from '../../Projects/ProjectCard/profileImage'
 import './index.css'
