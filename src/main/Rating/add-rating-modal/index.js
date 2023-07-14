@@ -1,188 +1,213 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import { useState, useEffect } from 'react'
-import '../rating.css'
-import { addRatingOnTask, getProjectsTask } from '../../../services/user/api'
+import React from "react";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import { useState, useEffect } from "react";
+import "../rating.css";
+import "./index.css";
+import { addRatingOnTask, getProjectsTask } from "../../../services/user/api";
 
-import Loader from '../../../components/Loader'
-import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import { useAuth } from '../../../auth/AuthProvider'
-import { toast } from 'react-toastify'
+import Loader from "../../../components/Loader";
+import { Accordion, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useAuth } from "../../../auth/AuthProvider";
+import { toast } from "react-toastify";
 
 export default function RatingModalBody(props) {
-  const { setModalShow, data, raitngForDay } = props
-  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6]
-  let user = data?.user
-  let date = data?.date
-  let month = data?.month
-  let year = data?.year
+  const { setModalShow, data, raitngForDay } = props;
+  console.log("data", data);
+  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
+  let user = data?.user;
+  let date = data?.date;
+  let month = data?.month;
+  let year = data?.year;
   const ratingFormsFields = {
-    rating: '',
-    comment: '',
-    selectedDate: '',
-    selectedTask: '',
+    rating: "",
+    comment: "",
+    selectedDate: "",
+    selectedTask: "",
     userList: [],
     taskList: [],
-  }
+  };
 
-  const [ratingForm, setRatingForm] = useState(ratingFormsFields)
-  const [loading, setLoading] = useState(false)
-  const [validated, setValidated] = useState(false)
-  const [userTasks, setUserTasks] = useState('')
+  const [ratingForm, setRatingForm] = useState(ratingFormsFields);
+  const [loading, setLoading] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [userTasks, setUserTasks] = useState("");
   const [isNotVerified, setIsNotVerified] = useState(false);
-  const [disableRatingButton, setRatingButtonDisable] = useState(false)
+  const [disableRatingButton, setRatingButtonDisable] = useState(false);
 
-  const { userDetails } = useAuth()
-
-
+  const { userDetails } = useAuth();
 
   useEffect(() => {
-    if (data !== undefined || data !== '' || data !== {}) {
-      const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(date).padStart(2, '0')}`
-      setRatingForm(prevRatingData => ({
+    if (data !== undefined || data !== "" || data !== {}) {
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        date
+      ).padStart(2, "0")}`;
+      setRatingForm((prevRatingData) => ({
         ...prevRatingData,
         selectedDate: formattedDate,
-      }))
-      let id = [user._id]
-      id = JSON.stringify(id)
-      localStorage.setItem('userId', id)
-      getTasksDataUsingProjectId(formattedDate)
+      }));
+      let id = [user._id];
+      id = JSON.stringify(id);
+      localStorage.setItem("userId", id);
+      getTasksDataUsingProjectId(formattedDate);
     }
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
-    if (userTasks.length > 0 && userDetails?.role !== 'SUPER_ADMIN' && userDetails.role !== 'ADMIN') {
-      let isAnyElementNotVerified = userTasks?.some(element => {
-        return element._id.section !== 'Misc' && !element.tasks.every(task => task.isVerified)
-      })
-      setIsNotVerified(isAnyElementNotVerified)
+    if (
+      userTasks.length > 0 &&
+      userDetails?.role !== "SUPER_ADMIN" &&
+      userDetails.role !== "ADMIN"
+    ) {
+      let isAnyElementNotVerified = userTasks?.some((element) => {
+        return (
+          element._id.section !== "Misc" &&
+          !element.tasks.every((task) => task.isVerified)
+        );
+      });
+      setIsNotVerified(isAnyElementNotVerified);
     }
-  }, [userTasks])
+  }, [userTasks]);
 
-
-
-  const handleRatingFormChange = event => {
-    const { name, value } = event.target
+  const handleRatingFormChange = (event) => {
+    const { name, value } = event.target;
     setRatingForm({
       ...ratingForm,
       [name]: value,
-    })
+    });
+  };
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear().toString();
+    return `${day}-${month}-${year}`;
   }
 
-  const handleSubmit = async event => {
-    setValidated(true)
-    event.preventDefault()
-    let { rating, comment, selectedDate } = ratingForm
+  const handleSubmit = async (event) => {
+    setValidated(true);
+    event.preventDefault();
+    let { rating, comment, selectedDate } = ratingForm;
 
-    if ( !ratingForm.selectedDate || !ratingForm.rating || ratingForm.rating > 6 || ratingForm.rating < 0) {
-      return
+    if (
+      !ratingForm.selectedDate ||
+      !ratingForm.rating ||
+      ratingForm.rating > 6 ||
+      ratingForm.rating < 0
+    ) {
+      return;
     } else {
       // convert date in day month year format for backend
       let dataToSend = {
         rating: rating,
         comment: comment,
-        date: selectedDate?.split('-')[2],
-        month: selectedDate?.split('-')[1],
-        year: selectedDate?.split('-')[0],
+        date: selectedDate?.split("-")[2],
+        month: selectedDate?.split("-")[1],
+        year: selectedDate?.split("-")[0],
         userId: user._id,
-      }
-      setLoading(true)
+      };
+      setLoading(true);
       try {
-        const rating = await addRatingOnTask(dataToSend)
-        setLoading(false)
+        const rating = await addRatingOnTask(dataToSend);
+        setLoading(false);
         if (rating.error) {
-          toast.dismiss()
-      toast.info(rating?.message || 'Something Went Wrong')
+          toast.dismiss();
+          toast.info(rating?.message || "Something Went Wrong");
           // set
         } else {
-          toast.dismiss()
-      toast.info('Rating Added Succesfully')
+          toast.dismiss();
+          toast.info("Rating Added Succesfully");
           // set
-          setModalShow(false)
+          setModalShow(false);
         }
       } catch (error) {
-        console.log(error , 'error')
-        setLoading(false)
-        toast.dismiss()
-      toast.info(error?.message || 'Something Went Wrong')
+        console.log(error, "error");
+        setLoading(false);
+        toast.dismiss();
+        toast.info(error?.message || "Something Went Wrong");
         // set
       }
     }
-    localStorage.removeItem('userId')
-  }
+    localStorage.removeItem("userId");
+  };
 
   function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString)
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
-    let localTimeString = new Date(localTime.toISOString())
-    return localTimeString
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    return localTimeString;
   }
 
   function convertToUTCNight(dateString) {
-    let utcTime = new Date(dateString)
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
-    let localTimeString = new Date(localTime.toISOString())
-    return localTimeString
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    return localTimeString;
   }
 
-  const getTasksDataUsingProjectId = async date => {
-    let assignedTo = JSON.parse(localStorage.getItem('userId'))
-    assignedTo = JSON.stringify(assignedTo)
-    setLoading(true)
+  const getTasksDataUsingProjectId = async (date) => {
+    let assignedTo = JSON.parse(localStorage.getItem("userId"));
+    assignedTo = JSON.stringify(assignedTo);
+    setLoading(true);
     try {
       let data = {
-        groupBy: 'default', // for all tasks list (no grouping by project) send 'assignedTo' instaed of default
+        groupBy: "default",
+        taskFor:"Rating", // for all tasks list (no grouping by project) send 'assignedTo' instaed of default
         assignedTo: assignedTo,
         fromDate: convertToUTCDay(date),
         toDate: convertToUTCNight(date),
-      }
-      const tasks = await getProjectsTask(data)
-      setLoading(false)
+      };
+      const tasks = await getProjectsTask(data);
+      setLoading(false);
       if (tasks.error) {
-        toast.dismiss()
-      toast.info(tasks?.error?.message || 'Something Went Wrong')
+        toast.dismiss();
+        toast.info(tasks?.error?.message || "Something Went Wrong");
         // set
       } else {
-        let allTask = tasks?.data
+        let allTask = tasks?.data;
         allTask?.map((task, index) => {
           task?.tasks?.map((ele, i) => {
-            console.log(ele)
+            console.log(ele);
             if (!ele?.isVerified) {
               setRatingButtonDisable(true);
             }
-            
-          })
-         })
-        console.log(allTask,'----------------------------------------------------------llllllllllllll all task')
-        setUserTasks(allTask)
+          });
+        });
+        console.log(
+          allTask,
+          "----------------------------------------------------------llllllllllllll all task"
+        );
+        setUserTasks(allTask);
       }
     } catch (error) {
-      toast.dismiss()
-      toast.info(error?.error?.message || 'Something Went Wrong')
+      toast.dismiss();
+      toast.info(error?.error?.message || "Something Went Wrong");
       // set
-      setLoading(false)
-      return error.message
+      setLoading(false);
+      return error.message;
     }
-  }
+  };
 
   return (
     <>
-      {loading ? (''):(userTasks?.length > 0 ? (
+      {loading ? (
+        ""
+      ) : userTasks?.length > 0 ? (
         <div className="dv-50-rating ">
           {!isNotVerified ? (
             raitngForDay >= 0 ? (
               <div>
-              <h3>Rating: {raitngForDay}</h3>
+                <h3>Rating: {raitngForDay}</h3>
               </div>
             ) : (
               <Form
@@ -192,18 +217,11 @@ export default function RatingModalBody(props) {
                 onSubmit={handleSubmit}
               >
                 <Row className="mb-3">
-                  <Col
-                    as={Col}
-                    md="12"
-                  >
+                  <Col as={Col} md="12">
                     <h3 className="userName">{user?.name}</h3>
                   </Col>
 
-                  <Form.Group
-                    as={Col}
-                    md="6"
-                    controlId="rating_date"
-                  >
+                  <Form.Group as={Col} md="6" controlId="rating_date">
                     <Form.Label>Date</Form.Label>
                     <Form.Control
                       required
@@ -212,21 +230,19 @@ export default function RatingModalBody(props) {
                       placeholder="Rating Date"
                       disabled="true"
                       // onChange={(e)=>console.log(e.target.value)}
-                      max={new Date().toISOString().split('T')[0]}
+                      max={new Date().toISOString().split("T")[0]}
                       defaultValue={ratingForm.selectedDate}
-                      // disabled={taskFromDashBoard ? true : false}  
+                      // disabled={taskFromDashBoard ? true : false}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {ratingForm.selectedDate === '' && 'Date is required !!'}
-                      {ratingForm.selectedDate !== '' && new Date(ratingForm.selectedDate) > new Date() && 'Date cannot be greater than today !!'}
+                      {ratingForm.selectedDate === "" && "Date is required !!"}
+                      {ratingForm.selectedDate !== "" &&
+                        new Date(ratingForm.selectedDate) > new Date() &&
+                        "Date cannot be greater than today !!"}
                     </Form.Control.Feedback>
                   </Form.Group>
 
-                  <Form.Group
-                    as={Col}
-                    md="6"
-                    controlId="validationCustom01"
-                  >
+                  <Form.Group as={Col} md="6" controlId="validationCustom01">
                     <Form.Label>Rating</Form.Label>
 
                     {/* this would be a select box */}
@@ -238,32 +254,35 @@ export default function RatingModalBody(props) {
                       onChange={handleRatingFormChange}
                       value={ratingForm.rating}
                     >
-                      <option
-                        value=""
-                        disabled
-                      >
+                      <option value="" disabled>
                         Select Rating
                       </option>
-                      {ratingValues.map(value => (
-                        <option
-                          key={value}
-                          value={value}
-                        >
+                      {ratingValues.map((value) => (
+                        <option key={value} value={value}>
                           {value}
                         </option>
                       ))}
                     </Form.Control>
-                    <Form.Control.Feedback type="invalid">Rating is required, value must be in range [0,6] !!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">
+                      Rating is required, value must be in range [0,6] !!
+                    </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
                 <Row>
-                  {ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate && (
-                    <Form.Group
-                      as={Col}
-                      md="12"
-                    >
+                  {ratingForm?.taskList?.find(
+                    (task) => task._id === ratingForm.selectedTask
+                  )?.completedDate && (
+                    <Form.Group as={Col} md="12">
                       <Form.Label>Completed Date</Form.Label>
-                      <h5>{ratingForm?.taskList?.find(task => task._id === ratingForm.selectedTask)?.completedDate?.split('T')[0]}</h5>
+                      <h5>
+                        {
+                          ratingForm?.taskList
+                            ?.find(
+                              (task) => task._id === ratingForm.selectedTask
+                            )
+                            ?.completedDate?.split("T")[0]
+                        }
+                      </h5>
                     </Form.Group>
                   )}
                 </Row>
@@ -271,7 +290,6 @@ export default function RatingModalBody(props) {
                 <Row className="desc">
                   <Form.Group>
                     <Form.Control
-                      
                       as="textarea"
                       name="comment"
                       placeholder="comment"
@@ -284,7 +302,7 @@ export default function RatingModalBody(props) {
                     md="6"
                     type="submit"
                     className="text-center"
-                    style={{ marginTop: '20px' }}
+                    style={{ marginTop: "20px" }}
                     disabled={isNotVerified && disableRatingButton}
                   >
                     Submit
@@ -293,10 +311,19 @@ export default function RatingModalBody(props) {
               </Form>
             )
           ) : (
-            <strong>Verify tasks to give rating</strong>
+            <div className="rating-container">
+              <strong className="title">Verify tasks to give rating</strong>
+              <div className="details">
+                <label className="gap_status_label">Name: {user?.name}</label>{" "}
+                <br />
+                <label className="date_label">
+                  Date: {formatDate(ratingForm.selectedDate)}
+                </label>
+              </div>
+            </div>
           )}
 
-          <div style={{ marginTop: '30px' }}>
+          <div style={{ marginTop: "30px" }}>
             <h5>Task List</h5>
             {userTasks.length > 0
               ? userTasks?.map((task, index) => {
@@ -304,76 +331,77 @@ export default function RatingModalBody(props) {
                     <div key={index}>
                       <br></br>
                       <p>
-                        {' '}
+                        {" "}
                         <strong className="fw-normal">
                           {task?._id?.projectId}
-                          {' / '}
+                          {" / "}
                           {task?._id?.section}
                         </strong>
                       </p>
                       <div>
                         {task?.tasks?.map((ele, i) => {
                           return (
-                            <Accordion
-                              defaultActiveKey={index}
-                              flush
-                              key={i}
-                            >
-                              <Accordion.Item
-                                eventKey={i + 1}
-                                className="mb-0"
-                              >
+                            <Accordion defaultActiveKey={index} flush key={i}>
+                              <Accordion.Item eventKey={i + 1} className="mb-0">
                                 <Accordion.Header className="gap_status">
                                   <span>
-                                    {ele?.status === 'NOT_STARTED' && (
+                                    {ele?.status === "NOT_STARTED" && (
                                       <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                        overlay={
+                                          <Tooltip>{ele?.status}</Tooltip>
+                                        }
                                       >
                                         <i
                                           className="fa fa-check-circle secondary"
                                           aria-hidden="true"
                                         >
-                                          {' '}
+                                          {" "}
                                         </i>
                                       </OverlayTrigger>
                                     )}
-                                    {ele?.status === 'ONGOING' && (
+                                    {ele?.status === "ONGOING" && (
                                       <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                        overlay={
+                                          <Tooltip>{ele?.status}</Tooltip>
+                                        }
                                       >
                                         <i
                                           className="fa fa-check-circle warning"
                                           aria-hidden="true"
                                         >
-                                          {' '}
+                                          {" "}
                                         </i>
                                       </OverlayTrigger>
                                     )}
-                                    {ele?.status === 'COMPLETED' && (
+                                    {ele?.status === "COMPLETED" && (
                                       <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                        overlay={
+                                          <Tooltip>{ele?.status}</Tooltip>
+                                        }
                                       >
                                         <i
                                           className="fa fa-check-circle success"
                                           aria-hidden="true"
                                         >
-                                          {' '}
+                                          {" "}
                                         </i>
                                       </OverlayTrigger>
                                     )}
-                                    {ele?.status === 'ONHOLD' && (
+                                    {ele?.status === "ONHOLD" && (
                                       <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip>{ele?.status}</Tooltip>}
+                                        overlay={
+                                          <Tooltip>{ele?.status}</Tooltip>
+                                        }
                                       >
                                         <i
                                           className="fa fa-check-circle primary"
                                           aria-hidden="true"
                                         >
-                                          {' '}
+                                          {" "}
                                         </i>
                                       </OverlayTrigger>
                                     )}
@@ -384,8 +412,13 @@ export default function RatingModalBody(props) {
                                   >
                                     <p
                                       className="text-dark fw-normal"
-                                      style={{ fontSize: '15px' }}
-                                      onClick={() => window.open('/view-task/' + ele._id, '_blank')}
+                                      style={{ fontSize: "15px" }}
+                                      onClick={() =>
+                                        window.open(
+                                          "/view-task/" + ele._id,
+                                          "_blank"
+                                        )
+                                      }
                                     >
                                       {ele?.title}
                                     </p>
@@ -413,7 +446,7 @@ export default function RatingModalBody(props) {
                                       ></i>
                                     </OverlayTrigger>
                                   )}
-                                  {task?._id?.section !== 'Misc' &&
+                                  {task?._id?.section !== "Misc" &&
                                     (ele?.isVerified ? (
                                       <OverlayTrigger
                                         placement="top"
@@ -421,23 +454,28 @@ export default function RatingModalBody(props) {
                                       >
                                         <i
                                           className="fa fa-check"
-                                          style={{ color: 'green' }}
+                                          style={{ color: "green" }}
                                           aria-hidden="true"
                                         >
-                                          {' '}
+                                          {" "}
                                         </i>
                                       </OverlayTrigger>
                                     ) : (
                                       <OverlayTrigger
                                         placement="top"
-                                        overlay={<Tooltip>Not Verified</Tooltip>}
+                                        overlay={
+                                          <Tooltip>Not Verified</Tooltip>
+                                        }
                                       >
                                         <i
                                           className="fa fa-times"
-                                          style={{ color: 'red', fontSize: '15px' }}
+                                          style={{
+                                            color: "red",
+                                            fontSize: "15px",
+                                          }}
                                           aria-hidden="true"
                                         >
-                                          {' '}
+                                          {" "}
                                         </i>
                                       </OverlayTrigger>
                                     ))}
@@ -446,33 +484,43 @@ export default function RatingModalBody(props) {
                                 <Accordion.Body>
                                   {ele?.isVerified && (
                                     <Col>
-                                      {' '}
+                                      {" "}
                                       <h6>
                                         <strong>Verification Comments</strong>
                                       </h6>
                                       {ele?.verificationComments?.length ? (
-                                        ele?.verificationComments?.map((item, index) => {
-                                          const options = {
-                                            timeZone: 'Asia/Kolkata',
-                                            dateStyle: 'medium',
-                                            timeStyle: 'medium',
-                                          }
-                                          const createdAt = new Date(item?.createdAt).toLocaleString('en-US', options)
+                                        ele?.verificationComments?.map(
+                                          (item, index) => {
+                                            const options = {
+                                              timeZone: "Asia/Kolkata",
+                                              dateStyle: "medium",
+                                              timeStyle: "medium",
+                                            };
+                                            const createdAt = new Date(
+                                              item?.createdAt
+                                            ).toLocaleString("en-US", options);
 
-                                          return (
-                                            <div
-                                              className="comment mb-0 mt-0 pt-0 px-0"
-                                              key={index}
-                                            >
-                                              <div className="pb-2">{item?.commentedBy?.name}</div>
-                                              <p
-                                                dangerouslySetInnerHTML={{ __html: item?.comment }}
-                                                className="comment-tex"
-                                              ></p>
-                                              <span className="date sub-text">{createdAt}</span>
-                                            </div>
-                                          )
-                                        })
+                                            return (
+                                              <div
+                                                className="comment mb-0 mt-0 pt-0 px-0"
+                                                key={index}
+                                              >
+                                                <div className="pb-2">
+                                                  {item?.commentedBy?.name}
+                                                </div>
+                                                <p
+                                                  dangerouslySetInnerHTML={{
+                                                    __html: item?.comment,
+                                                  }}
+                                                  className="comment-tex"
+                                                ></p>
+                                                <span className="date sub-text">
+                                                  {createdAt}
+                                                </span>
+                                              </div>
+                                            );
+                                          }
+                                        )
                                       ) : (
                                         <p>No Comments!</p>
                                       )}
@@ -481,21 +529,22 @@ export default function RatingModalBody(props) {
                                 </Accordion.Body>
                               </Accordion.Item>
                             </Accordion>
-                          )
+                          );
                         })}
                       </div>
                     </div>
-                  )
+                  );
                 })
-              : 'No tasks found!'}
+              : "No tasks found!"}
           </div>
         </div>
       ) : (
-        <div style={{ marginTop: '30px' }}>No tasks available, cannot rate.</div>
-      ))}
+        <div style={{ marginTop: "30px" }}>
+          No tasks available, cannot rate.
+        </div>
+      )}
 
       {loading ? <Loader /> : null}
-
     </>
-  )
+  );
 }
