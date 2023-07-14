@@ -111,6 +111,9 @@ const FilterModal = (props) => {
     }
   }, [selectedFilterLead]);
 
+
+ 
+
   useEffect(() => {
     if (filterModalShow) {
       getLeadsList();
@@ -118,6 +121,7 @@ const FilterModal = (props) => {
       getAllCategoriesData();
       getAllUsersData();
       updateFromLocalStorage();
+      console.log("filterModalShow", filterModalShow);
     }
   }, [filterModalShow]);
 
@@ -128,6 +132,7 @@ const FilterModal = (props) => {
       localStorage.removeItem("sortOrder");
       localStorage.removeItem("sortType");
       localStorage.removeItem("selectedFilter");
+      localStorage.removeItem("selectedLead");
     };
   }, []);
 
@@ -218,6 +223,7 @@ const FilterModal = (props) => {
     localStorage.removeItem("sortType");
     localStorage.removeItem("sortOrder");
     localStorage.removeItem("selectedFilter");
+
     localStorage.removeItem("fromDate");
     localStorage.removeItem("filterClicked");
     localStorage.removeItem("toDate");
