@@ -7,7 +7,7 @@ import { useAuth } from "../../../auth/AuthProvider";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Toaster from "../../../components/Toaster";
+
 import Loader from "../../../components/Loader";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import ToastContainer from "react-bootstrap/ToastContainer";
@@ -23,6 +23,8 @@ import UserIcon from "../../Projects/ProjectCard/profileImage";
 import "./index.css";
 import History from "./history";
 import EditRating from "./editRating";
+import { toast } from "react-toastify";
+import LoadingSpinner from "../../../components/spinner/spinner";
 export default function ViewTaskModal(props) {
   const {
     closeViewTaskModal,
@@ -33,8 +35,7 @@ export default function ViewTaskModal(props) {
     setIsChange,
   } = props;
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
   const [task, setTaskData] = useState({});
   const { userDetails } = useAuth();
@@ -45,6 +46,7 @@ export default function ViewTaskModal(props) {
   const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
   const [errorRating, setErrorRating] = useState(false);
   const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
+  const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 
   useEffect(() => {
     if (selectedTaskId) {
@@ -72,11 +74,12 @@ export default function ViewTaskModal(props) {
     try {
       const res = await updateTaskStatusById(dataToSend);
       if (res.error) {
-        setToasterMessage(res?.message);
-        showToaster(true);
+        toast.dismiss();
+        toast.info(res?.message);
       } else {
-        setToasterMessage(res?.message);
-        showToaster(true);
+        toast.dismiss();
+        toast.info(res?.message);
+
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
@@ -144,6 +147,7 @@ export default function ViewTaskModal(props) {
   };
 
   const addcomment = async () => {
+    setIsLoadingSpinner(true);
     let dataToSend = {
       taskId: selectedTaskId,
       comment: text,
@@ -151,17 +155,20 @@ export default function ViewTaskModal(props) {
     try {
       let response = await addCommentOnTask(dataToSend);
       if (response.error) {
-        showToaster(true);
-        setToasterMessage(response.message);
+        setIsLoadingSpinner(false);
+        toast.dismiss();
+        toast.info(response.message);
       } else {
-        showToaster(true);
-        setToasterMessage(response.message);
+        toast.dismiss();
+        toast.info(response.message);
         setText("");
         if (selectedTaskId) {
           getTaskDetailsById(selectedTaskId);
         }
+        setIsLoadingSpinner(false);
       }
     } catch (error) {
+      setIsLoadingSpinner(false);
       // console.log(error);
     }
   };
@@ -213,18 +220,19 @@ export default function ViewTaskModal(props) {
       const rating = await addRatingOnTask(dataToSend);
       setLoading(false);
       if (rating.error) {
-        setToasterMessage(rating?.message);
-        showToaster(true);
+        toast.dismiss();
+        toast.info(rating?.message);
       } else {
-        setToasterMessage("Rating Added Succesfully");
-        showToaster(true);
-        setIsRatingFormVisible(false);
+        toast.dismiss();
+        toast.info("Rating Added Succesfully");
+
         getTaskDetailsById(selectedTaskIdForRating);
         onInit();
         if (userDetails?.role !== "CONTRIBUTOR") {
           // getTeamWorkList();
           setIsChange(!isChange);
         }
+        setIsRatingFormVisible(false);
       }
     } catch (error) {
       setLoading(false);
@@ -242,26 +250,39 @@ export default function ViewTaskModal(props) {
   };
 
   const [isEditModal, setIsEditModal] = useState(false);
-
   const MinutesToDaysHoursMinutes = (props) => {
     const minutes = props.minutes;
-    const days = Math.floor(minutes / 1440); // 24 hours * 60 minutes = 1440 minutes in a day
-    const hours = Math.floor((minutes % 1440) / 60);
+    const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
+
+    const formatNumber = (number) => {
+      return number.toString().padStart(2, "0");
+    };
 
     return (
       <div className="task-completion-time d-block">
-   <label className="form-label">Task Completion Time : </label>{' '}
-      <div className="time-details">
-        {days > 0 && <p>Days: {days}</p>}
-        {hours > 0 && <p>Hours: {hours}</p>}
-        {remainingMinutes > 0 && <p>Minutes: {remainingMinutes}</p>}
+        <label className="form-label">Task Completion Time: </label>{" "}
+        <div className="time-details">
+          {(hours > 0 || remainingMinutes > 0) && (
+            <span>
+              {`${formatNumber(hours)} : `} {formatNumber(remainingMinutes)}
+            </span>
+          )}
+          {!(hours > 0 || remainingMinutes > 0) && <span>{`00:00`}</span>}
+        </div>
       </div>
-    </div>
-    
     );
   };
 
+  const defaultTaskTimeMinutes =
+    parseInt(task?.defaultTaskTime?.hours || 0) * 60 +
+    parseInt(task?.defaultTaskTime?.minutes || 0);
+  const timeLeftMinutes =
+    (defaultTaskTimeMinutes || 0) - (task?.timeTaken || 0);
+
+  const hoursLeft = Math.floor(timeLeftMinutes / 60);
+  const minutesLeft = timeLeftMinutes % 60;
+  console.log(hoursLeft, minutesLeft, "------------hoiurs and mins left");
   return (
     <>
       <Offcanvas
@@ -288,9 +309,7 @@ export default function ViewTaskModal(props) {
                     justifyContent: "end",
                     justifyItems: "end",
                   }}
-                >
-                
-                </Row>
+                ></Row>
               )}
               <Row className="mb-3">
                 <Form.Group as={Col} md="4">
@@ -315,7 +334,6 @@ export default function ViewTaskModal(props) {
                   <p>{task?.title} </p>
                 </Form.Group>
                 {/* Estimated Time */}
-              
               </Row>
 
               <Row className="mb-3">
@@ -370,64 +388,73 @@ export default function ViewTaskModal(props) {
                   </select>
                 </Form.Group>
 
-                  <Row className="mb-3 mt-3">
-                    <>
+                <Row className="mb-3 mt-3">
+                  <>
                     {task?.status === "COMPLETED" && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Completed Date : </Form.Label>
                         <p>{formatDate(task?.completedDate) || "--"} </p>
                       </Form.Group>
-                )}
+                    )}
 
-
-                      {/* Task completion time  */}
+                    {/* Task completion time  */}
 
                     {task?.status === "COMPLETED" && (
-
-
                       <Form.Group as={Col} md="6">
                         {/* <Form.Label>Completed Date</Form.Label> */}
                         <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
                       </Form.Group>
-                )}
+                    )}
 
+                    <Form.Group as={Col} md="3" className="estimated-time">
+                      <Form.Label>Estimated Time :</Form.Label>{" "}
+                      <div className="time">
+                        <span>
+                          {task?.defaultTaskTime?.hours || "00"} :{" "}
+                          {task?.defaultTaskTime?.minutes || "00"}{" "}
+                        </span>
+                      </div>
+                    </Form.Group>
 
-
-
-
-                      <Form.Group as={Col} md="3" className="estimated-time">
-                  <Form.Label>Estimated Time :</Form.Label>{" "}
-                  <div className="time">
-                    <p>{task?.defaultTaskTime?.hours} Hour</p>
-                    <span>:</span>
-                    <p>{task?.defaultTaskTime?.minutes} Minute</p>
-                  </div>
-                </Form.Group>
-
-
-
-                    </>
-                  </Row>
+                    {(task?.status === "ONHOLD" ||
+                      task?.status === "ONGOING") && (
+                      <Form.Group as={Col} md="3">
+                        <Form.Label>Time Left : </Form.Label>
+                        {(hoursLeft < 0 || minutesLeft < 0) && (
+                          <p>Time Exceed</p>
+                        )}
+                        {hoursLeft >= 0 && minutesLeft >= 0 && (
+                          <p>
+                            {" "}
+                            {hoursLeft || 0} hr {minutesLeft || 0} mins{" "}
+                          </p>
+                        )}
+                      </Form.Group>
+                    )}
+                  </>
+                </Row>
               </Row>
               <Row className="mb-3">
                 <Form.Group as={Col}>
                   <Form.Label>Attachments</Form.Label>
                   <Row>
-                  {task.attachments &&
-                    task.attachments.map((file, index) => {
-                      return (
-                         
-                        <Col key={index} sm={3}>
-                          <div className="attchment">
-                            <a href={`${file}`} target="_blank" className="text-truncate">
-                              {"Attachment" + " " + (index + 1)}
-                            </a>
-                          </div>
-                        </Col>
-                        
-                      );
-                    })}
-                    </Row>
+                    {task.attachments &&
+                      task.attachments.map((file, index) => {
+                        return (
+                          <Col key={index} sm={3}>
+                            <div className="attchment">
+                              <a
+                                href={`${file}`}
+                                target="_blank"
+                                className="text-truncate"
+                              >
+                                {"Attachment" + " " + (index + 1)}
+                              </a>
+                            </div>
+                          </Col>
+                        );
+                      })}
+                  </Row>
                 </Form.Group>
               </Row>
             </Form>
@@ -488,6 +515,8 @@ export default function ViewTaskModal(props) {
                     {!task?.comments?.length && (
                       <p className="text-muted">No Comments</p>
                     )}
+                    {isLoadingSpinner ? <LoadingSpinner /> : null}
+
                   </>
                 )}
 
@@ -505,29 +534,34 @@ export default function ViewTaskModal(props) {
                       ).toLocaleString("en-US", options);
 
                       return (
-                        <div
-                          className="comment comment mb-0 mt-0 pt-0"
-                          key={index}
-                        >
-                          <div className="commentedBy pb-2">
-                            <UserIcon
-                              style={{ float: "left" }}
-                              key={index}
-                              firstName={item?.commentedBy?.name}
-                            />
-                            {item?.commentedBy?.name}
+                        <>
+                          <div
+                            className="comment comment mb-0 mt-0 pt-0"
+                            key={index}
+                          >
+                            <div className="commentedBy pb-2">
+                              <UserIcon
+                                style={{ float: "left" }}
+                                key={index}
+                                firstName={item?.commentedBy?.name}
+                              />
+                              {item?.commentedBy?.name}
+                            </div>
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: item?.comment,
+                              }}
+                              className="comment-tex"
+                            ></p>
+                            <span className="date sub-text">{createdAt}</span>
                           </div>
-                          <p
-                            dangerouslySetInnerHTML={{ __html: item?.comment }}
-                            className="comment-tex"
-                          ></p>
-                          <span className="date sub-text">{createdAt}</span>
-                        </div>
+                        </>
                       );
                     })}
                     {!task?.ratingComments?.length && (
                       <p className="text-muted">No Rating Comments</p>
                     )}
+
                   </>
                 )}
 
@@ -541,32 +575,34 @@ export default function ViewTaskModal(props) {
             </div>
 
             {activeTab === "comments" && (
-              <div
-                className="container"
-                style={{ padding: "0", width: "100%" }}
-              >
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <TextEditor
-                      width="100%"
-                      placeholder="Enter text here"
-                      value={text}
-                      onChange={handleTextChange}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      float: "left",
-                      width: "100%",
-                      textAlign: "right",
-                    }}
-                  >
-                    <Button type="submit" className="btn btn-primary mb-2">
-                      Post
-                    </Button>
-                  </div>
-                </form>
-              </div>
+              <>
+                <div
+                  className="container"
+                  style={{ padding: "0", width: "100%" }}
+                >
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                      <TextEditor
+                        width="100%"
+                        placeholder="Enter text here"
+                        value={text}
+                        onChange={handleTextChange}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        float: "left",
+                        width: "100%",
+                        textAlign: "right",
+                      }}
+                    >
+                      <Button type="submit" className="btn btn-primary mb-2">
+                        Post
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </>
             )}
           </div>
         </Offcanvas.Body>
@@ -586,8 +622,6 @@ export default function ViewTaskModal(props) {
             taskRating={task?.rating}
             onClose={() => setIsEditModal(false)}
             getTaskDetailsById={getTaskDetailsById}
-            showToaster={showToaster}
-            setToasterMessage={setToasterMessage}
             setLoading={setLoading}
           />
         </Modal.Body>
@@ -600,15 +634,6 @@ export default function ViewTaskModal(props) {
       />
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <ToastContainer position="top-end" className="p-3">
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        </ToastContainer>
-      )}
     </>
   );
 }

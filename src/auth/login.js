@@ -3,12 +3,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/auth/api";
 import "./login.css";
 import { useAuth } from "./AuthProvider";
-import Toaster from "../components/Toaster";
+
+import { toast } from "react-toastify";
 export default function Login() {
 
     const { login, accessToken } = useAuth();
-    const [toasterMessage, setToasterMessage] = useState("");
-    const [toaster, showToaster] = useState(false);
+    
+  
     const [loginFormValue, setLoginFormValue] = useState({
       email: "",
       password: "",
@@ -28,8 +29,9 @@ export default function Login() {
   useEffect(() => {
     let passwordReset = localStorage.getItem("passwordReset");
     if (passwordReset) {
-      showToaster(true);
-      setToasterMessage("Password set up successfully");
+      
+      toast.dismiss()
+      toast.info("Password set up successfully");
       localStorage.removeItem("passwordReset");
     }
   }, []);
@@ -54,16 +56,18 @@ export default function Login() {
   const handleLogin = async (event) => {
     event.preventDefault();
     if (!loginFormValue.email || !loginFormValue.password) {
-      showToaster(true);
-      setToasterMessage("Email & Password is required.");
+      
+      toast.dismiss()
+      toast.info("Email & Password is required.");
       return;
     }
     let dataToSend = loginFormValue;
     try {
       const userLogin = await loginUser(dataToSend);
       if (userLogin.error) {
-        showToaster(true);
-        setToasterMessage(
+        
+        toast.dismiss()
+      toast.info(
           userLogin?.message || "Please check login credential"
         );
       } else {
@@ -78,8 +82,9 @@ export default function Login() {
     
       }
     } catch (error) {
-      showToaster(true);
-      setToasterMessage(error?.message || "Please check login credential");
+      
+      toast.dismiss()
+      toast.info(error?.message || "Please check login credential");
     }
   };
 
@@ -148,13 +153,7 @@ export default function Login() {
           
       )}
 
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   );
 }

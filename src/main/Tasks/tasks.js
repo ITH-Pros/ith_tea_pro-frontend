@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx'
 import './tasks.css'
 import { addSectionApi, archiveSectionApi, deleteSectionApi, downloadExcel, getProjectsTask, updateSection, updateTaskStatusById } from '../../services/user/api'
 import Loader from '../../components/Loader'
-import Toaster from '../../components/Toaster'
+
 import FilterModal from './FilterModal'
 import AddTaskModal from './AddTaskModal'
 import { Accordion, ProgressBar, Dropdown, Badge, Modal, Button, OverlayTrigger, Tooltip, Row, Col } from 'react-bootstrap'
@@ -17,12 +17,11 @@ import ViewTaskModal from './view-task'
 import UserIcon from '../Projects/ProjectCard/profileImage'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Tasks = () => {
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [toasterMessage, setToasterMessage] = useState('')
-  const [toaster, showToaster] = useState(false)
+  const [loading, setLoading] = useState(false)  
   const [selectedProject, setSelectedProject] = useState({})
   const [showAddTask, setShowAddTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState({})
@@ -31,7 +30,7 @@ const Tasks = () => {
   const [selectedProjectId, setSelectedProjectId] = useState('')
   const [selectedSectionId, setSelectedSectionId] = useState('')
   const [showViewTask, setShowViewTask] = useState(false)
-  const setShowToaster = param => showToaster(param)
+  
   const [selectedTaskId, setSelectedTaskId] = useState('')
   const [deleteSectionModal, setDeleteSectionModal] = useState(false)
   const [isArchive, setIsArchive] = useState(false)
@@ -45,15 +44,16 @@ const Tasks = () => {
   useEffect(() => {
     if (localStorage.getItem('showTaskToaster')) {
       setTimeout(() => {
-        setToasterMessage(localStorage.getItem('showTaskToaster'))
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(localStorage.getItem('showTaskToaster'))
+        // set
         localStorage.removeItem('showTaskToaster')
       }, 500)
     }
   }, [localStorage.getItem('showTaskToaster')])
 
   const handleAddTaskFromSection = project => {
-    // // console.log('section', project)
+    console.log('section', project)
     setSelectedTask()
     localStorage.setItem('addTaskModal', true)
     setShowAddTask(true)
@@ -61,8 +61,28 @@ const Tasks = () => {
     setSelectedProject({
       _id: project?.projectId,
       section: project?.sectionId,
+      sectionName: project?._id.section,
     })
   }
+
+  // remove filter data from local storage when compenent leave
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('taskFilters')
+      localStorage.removeItem('selectedFilterTypes')
+      localStorage.removeItem('selectedLead')
+      localStorage.removeItem('fromDate')
+      localStorage.removeItem('toDate')
+      localStorage.removeItem('sortOrder')
+      localStorage.removeItem('sortType')
+      localStorage.removeItem('selectedFilter')
+      localStorage.removeItem('dueDate')
+      console.log('filterData removed')
+    }
+  }, [])
+
+
 
   useEffect(() => {
     getTasksDataUsingProjectId(projectId)
@@ -79,11 +99,6 @@ const Tasks = () => {
     }
   }, [isArchive])
 
-  // useEffectOnce(() => {
-  //   // console.log('useEffectOnce has run!');
-  //   return () => {
-  //   };
-  // });
 
   const handleProgressBarHover = project => {
     const completedTasks = project.completedTasks || 0
@@ -104,8 +119,9 @@ const Tasks = () => {
     try {
       const res = await deleteSectionApi(dataToSend)
       if (res.status === 200) {
-        setToasterMessage('Section deleted successfully')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info('Section deleted successfully')
+        // set
         setDeleteSectionModal(false)
         closeModal()
         getTasksDataUsingProjectId()
@@ -117,8 +133,9 @@ const Tasks = () => {
           setSelectedProjectId(paramsData?.projectId)
         }
       } else {
-        setToasterMessage(res?.message)
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message)
+        // set
       }
     } catch (error) {
       // console.log('error in deleteSection', error)
@@ -133,8 +150,9 @@ const Tasks = () => {
     try {
       const res = await archiveSectionApi(dataToSend)
       if (res.status === 200) {
-        setToasterMessage('Section archived successfully')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info('Section archived successfully')
+        // set
         setArchiveSectionModal(false)
         closeModal()
         getTasksDataUsingProjectId()
@@ -146,8 +164,9 @@ const Tasks = () => {
           setSelectedProjectId(paramsData?.projectId)
         }
       } else {
-        setToasterMessage(res?.message)
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message)
+        // set
       }
     } catch (error) {
       // console.log('error in archiveSection', error)
@@ -171,9 +190,10 @@ const Tasks = () => {
     try {
       const res = await updateSection(dataToSend)
       if (res.status === 200) {
-        setToasterMessage('Section updated successfully')
+        toast.dismiss()
+      toast.info('Section updated successfully')
         setSectionEditMode(false)
-        setShowToaster(true)
+        // set
         setModalShow(false)
         closeModal()
         getTasksDataUsingProjectId()
@@ -185,8 +205,9 @@ const Tasks = () => {
           setSelectedProjectId(paramsData?.projectId)
         }
       } else {
-        setToasterMessage(res?.message)
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message)
+        // set
       }
     } catch (error) {
       // console.log('error in sectionUpdate', error)
@@ -216,16 +237,19 @@ const Tasks = () => {
     try {
       const res = await updateTaskStatusById(dataToSend)
       if (res.error) {
-        setToasterMessage(res?.message || 'Something Went Wrong in update task status')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong in update task status')
+        // set
       } else {
-        setToasterMessage(res?.message || 'Response in update task status 1')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Response in update task status 1')
+        // set
         getTasksDataUsingProjectId()
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong in update task status error')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong in update task status error')
+      // set
       return error.message
     }
   }
@@ -250,11 +274,13 @@ const Tasks = () => {
         const res = await addSectionApi(dataToSend)
         setLoading(false)
         if (res.error) {
-          setToasterMessage(res?.message || 'Something Went Wrong in add section')
-          setShowToaster(true)
+          toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong in add section')
+          // set
         } else {
-          setToasterMessage(res?.message || 'Response in add section')
-          setShowToaster(true)
+          toast.dismiss()
+      toast.info(res?.message || 'Response in add section')
+          // set
           setModalShow(false)
           closeModal()
           getTasksDataUsingProjectId()
@@ -268,8 +294,9 @@ const Tasks = () => {
           // getProjectList();
         }
       } catch (error) {
-        setToasterMessage(error?.error?.message || 'Something Went Wrong in add section error')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong in add section error')
+        // set
         setLoading(false)
         return error.message
       }
@@ -321,7 +348,7 @@ const Tasks = () => {
         let filterData = JSON.parse(localStorage.getItem('taskFilters'));
         let selectedFilter = localStorage.getItem('selectedFilterTypes');
         console.log(filterData)
-        if (filterData?.projectIds) {
+        if (filterData?.projectIds && filterData.projectIds.length > 0) {
           data.projectIds = JSON.stringify(filterData.projectIds);
         }
         if (filterData?.createdBy) {
@@ -361,8 +388,9 @@ const Tasks = () => {
       setLoading(false);
   
       if (tasks.error) {
-        setToasterMessage(tasks.error.message);
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(tasks.error.message);
+        // set
       } else {
         let allTasks = tasks.data;
         allTasks.forEach((item) => {
@@ -393,8 +421,9 @@ const Tasks = () => {
         }
       }
     } catch (error) {
-      setToasterMessage(error?.message || 'Something Went Wrong in get project task error')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.message || 'Something Went Wrong in get project task error')
+      // set
       setLoading(false)
       // console.log(error.message)
     }
@@ -406,6 +435,8 @@ const Tasks = () => {
     if (params?.projectId) {
       paramsData = params?.projectId
     }
+    console.log("-------")
+    console.log(paramsData)
     setLoading(true)
     try {
       let data = {
@@ -415,7 +446,7 @@ const Tasks = () => {
         data.isArchived = true
       }
       if (params?.projectId) {
-        data.projectId = paramsData?.projectId
+        data.projectId = paramsData
       }
       if (localStorage.getItem('selectedLead')) {
         // // console.log(JSON.parse(localStorage.getItem('selectedLead')))
@@ -431,7 +462,7 @@ const Tasks = () => {
         let selectedFilter = localStorage.getItem('selectedFilter')
         // // console.log(selectedFilter, 'selectedFilter')
         // // console.log(filterData)
-        if (filterData?.projectIds) {
+        if (filterData?.projectIds && filterData.projectIds.length > 0) {
           data.projectIds = JSON.stringify(filterData?.projectIds)
         }
         if (filterData?.createdBy) {
@@ -475,8 +506,9 @@ const Tasks = () => {
       const res = await downloadExcel(data)
 
       if (res.error) {
-        setToasterMessage(res?.message || 'Something Went Wrong in download excel')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(res?.message || 'Something Went Wrong in download excel')
+        // set
       } else {
         // console.log(res,'download excel') // Make sure the response contains the expected data
 
@@ -498,8 +530,9 @@ const Tasks = () => {
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      setToasterMessage(error?.message || 'Something Went Wrong in download excel error')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.message || 'Something Went Wrong in download excel error')
+      // set
       return error.message
     }
   }
@@ -787,7 +820,7 @@ const Tasks = () => {
                                         )}
                                         {task.status === 'ONHOLD' && (
                                           <i
-                                            className="fa fa-check-circle warning"
+                                            className="fa fa-check-circle primary"
                                             aria-hidden="true"
                                           ></i>
                                         )}
@@ -890,11 +923,11 @@ const Tasks = () => {
                           </Col>
                           <Col
                             lg={2}
-                            className="align-items-center justify-content-start ps-0"
+                            className="align-items-center justify-content-start ps-0 d-flex"
                           >
                             {!task?.assignedTo?.profilePicture && task?.assignedTo?.name && (
                               <div className="nameTag">
-                                <UserIcon
+                                <UserIcon  style={{width:'25px'}}
                                   key={index}
                                   firstName={task?.assignedTo?.name || ''}
                                 />
@@ -907,8 +940,8 @@ const Tasks = () => {
                               >
                                 <img
                                   style={{
-                                    width: '20px',
-                                    height: '20px',
+                                    width: '25px',
+                                    height: '25px',
                                     borderRadius: '50%',
                                   }}
                                   src={`${task?.assignedTo?.profilePicture}`}
@@ -916,7 +949,7 @@ const Tasks = () => {
                                 ></img>
                               </div>
                             )}
-                            <span> {task?.assignedTo?.name}</span>
+                            <span  className="text-truncate d-block"> {task?.assignedTo?.name}</span>
                             {!task?.assignedTo?.name && <span> NOT ASSIGNED </span>}
                           </Col>
                           {/* for lead  */}
@@ -993,59 +1026,6 @@ const Tasks = () => {
           {projects && projects.length === 0 && <p> {isArchive ? 'No Task archived.' : ''} </p>}
         </Accordion>
 
-        {/* <div id="multi_accrodian">
-          <Accordion>
-            <AccordionItem>
-              <AccordionHeader>
-                <h3>Recru 2.0</h3>
-              </AccordionHeader>
-
-              <AccordionBody>
-                <div className="accordion-body">
-                  <AccordionItem>
-                    <AccordionHeader>
-                      <h3 className={`accordion-title`}>Ad-hoc</h3>
-                    </AccordionHeader>
-
-                    <AccordionBody>
-                      <div className="accordion-body">
-                        Lorem ipsum dolor sit amet.
-                      </div>
-                    </AccordionBody>
-                  </AccordionItem>
-                </div>
-              </AccordionBody>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionHeader>
-                <h3 className="">Title 2</h3>
-              </AccordionHeader>
-
-              <AccordionBody>
-                <div className="accordion-body">
-                  Lorem ipsum dolor sit amet.
-                </div>
-              </AccordionBody>
-            </AccordionItem>
-          </Accordion>
-        </div> */}
-
-        {/* <Modal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>
-              {" "}
-              {sectionEditMode ? "Update Section" : "Add section"}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-           
-          </Modal.Body>
-        </Modal> */}
 
         {/* ////// */}
         <Offcanvas
@@ -1154,13 +1134,7 @@ const Tasks = () => {
 
         {loading ? <Loader /> : null}
 
-        {toaster && (
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        )}
+
       </div>
     </>
   )

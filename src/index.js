@@ -8,6 +8,11 @@ import "bootstrap/dist/css/bootstrap.css";
 import { AuthProvider } from "./auth/AuthProvider";
 import "react-quill/dist/quill.snow.css";
 
+// Remove console logs 
+// console.log = console.warn = console.error = () => {};
+
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>

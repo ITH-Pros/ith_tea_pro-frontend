@@ -721,5 +721,59 @@ ul.weekdays {
 
  
 
-.tableFixHead tbody { display:block; max-height:450px; overflow-y:scroll; }
+.tableFixHead tbody { display:block; height:660px; overflow-y:scroll; width: 1925px; }
 .tableFixHead thead, table tbody tr { display:table; width:100%; table-layout:fixed; }
+
+
+ 
+/* .tableFixHead table tbody tr td:first-child {
+  position: absolute;
+  width: 100px;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+ 
+  display:table; width:100%; table-layout:fixed;
+
+  
+} */
+
+.table-fixed-column-outter {
+  position: relative;
+  margin: 2rem auto;
+  max-width: 100%;
+}
+
+.table-fixed-column-inner {
+  overflow-x: scroll;
+  overflow-y: visible;
+  margin-left: 100px;
+}
+.table-fixed-column-inner .table {
+  margin-bottom: 0.25rem;
+  border-color: #fff !important;
+}
+
+.tableFixHead .table.table-fixed-column {
+  table-layout: fixed;
+  width: 100%;
+}
+.tableFixHead .table th{ text-align: center; border: 0px !important;
+  margin: auto;
+  padding: 0 5px !important;
+  width: 60px !important;}
+  .tableFixHead .table td
+ {
+  text-align: center;
+  margin: auto;
+  padding: 0 5px !important;
+  width: 60px !important;
+  border: 0px !important;
+}
+
+ 
+.table tr td:first-child {
+  position: absolute;
+  left: 0;
+  width: 100px !important;
+}

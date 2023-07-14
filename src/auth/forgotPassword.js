@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword, forgotPassword, verifyOtp } from "../services/auth/api";
-import Toaster from "../components/Toaster";
+
 import Loader from '../components/Loader/index'
+import { toast } from "react-toastify";
 
 function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -12,8 +13,8 @@ function ForgotPassword() {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
+  
+
   const [loading, setLoading] = useState(false);
 
   const [showOtp, setShowOtp] = useState(false);
@@ -62,13 +63,15 @@ function ForgotPassword() {
     setLoading(false);
 
       if (response.error) {
-        setToasterMessage(response?.message);
-        showToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        
         // console.log(response.error,'-----------------error')
       }
       else {
-        setToasterMessage(response?.message);
-        showToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        
         // navigate("/reset-password");
         setShowOtp(true);
       }
@@ -76,8 +79,9 @@ function ForgotPassword() {
     catch (error) {
     setLoading(false);
 
-      setToasterMessage(error?.error?.message);
-      showToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message);
+      
       // console.log(error,'-----------------error')
     }
   };
@@ -97,13 +101,15 @@ function ForgotPassword() {
     setLoading(false);
 
       if (response.error) {
-        setToasterMessage(response?.message);
-        showToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        
         // console.log(response,'-----------------3error')
       }
       else {
-        setToasterMessage(response?.message);
-        showToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        
         // console.log(response,'-----------------3success')
         setOtpLogId(response.data.otpLogId);
         // navigate("/reset-password");
@@ -136,13 +142,15 @@ function ForgotPassword() {
       const response = await changePassword(dataToSend);
       setLoading(false);
       if(response.error){
-        setToasterMessage(response?.message);
-        showToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        
         // console.log(response.error,'-----------------error')
       }
       else{
-        setToasterMessage(response?.message);
-        showToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        
         setTimeout(() => {
           localStorage.clear();
         navigate("/login");
@@ -154,8 +162,9 @@ function ForgotPassword() {
     catch (error) {
       setLoading(false);
 
-      setToasterMessage(error?.error?.message);
-        showToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message);
+        
       // console.log(error,'-----------------error')
     }
   };
@@ -330,12 +339,7 @@ function ForgotPassword() {
           </div>
         </div>
       </div>
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />)}
+
       {loading ? <Loader /> : null}
       
     </div>

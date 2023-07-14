@@ -3,13 +3,11 @@ import { useEffect, useState } from 'react'
 import { getFreeUsers, getUsersByProject } from '../../services/user/api'
 import './dashboard.css'
 import Loader from '../../components/Loader'
-import Toaster from '../../components/Toaster'
+
 import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 export default function ProjectGrid() {
-  const [toaster, showToaster] = useState(false)
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [projectList, setProjectListValue] = useState([])
   const [freeUsersList, setFreeUsersList] = useState([])
@@ -25,8 +23,9 @@ export default function ProjectGrid() {
       const users = await getUsersByProject()
       if (users.error) {
         setLoading(false)
-        setToasterMessage(users?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(users?.message || 'Something Went Wrong')
+        // set
       } else {
         setProjectListValue(users?.data)
         // setUsersList(names)
@@ -34,8 +33,9 @@ export default function ProjectGrid() {
       }
     } catch (error) {
       setLoading(false)
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // set
       return error.message
     }
   }
@@ -46,8 +46,9 @@ export default function ProjectGrid() {
       const users = await getFreeUsers()
       if (users.error) {
         setLoading(false)
-        setToasterMessage(users?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(users?.message || 'Something Went Wrong')
+        // set
       } else {
         let names = users?.data?.map(user => user.name)
         setFreeUsersList(names)
@@ -55,8 +56,9 @@ export default function ProjectGrid() {
       }
     } catch (error) {
       setLoading(false)
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // set
       return error.message
     }
   }
@@ -130,13 +132,7 @@ export default function ProjectGrid() {
         </Row>
       </div>
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   )
 }

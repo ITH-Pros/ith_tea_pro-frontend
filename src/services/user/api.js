@@ -16,6 +16,10 @@ export async function getAllUsers(data) {
   return axiosInstance.get('/user/v1/all/pagination', data).then(res => res.data)
 }
 
+export async function fetchTeamList(data) {
+  return axiosInstance.get('/user/v1/all/manager/users', data).then(res => res.data)
+}
+
 export async function getAllUserWithoutPagination(data) {
   return axiosInstance.get('/user/v1/list', data).then(res => res.data)
 }

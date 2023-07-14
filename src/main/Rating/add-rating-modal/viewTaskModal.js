@@ -4,10 +4,11 @@ import Col from 'react-bootstrap/Col'
 import { useState, useEffect } from 'react'
 import '../rating.css'
 import { getProjectsTask } from '../../../services/user/api'
-import Toaster from '../../../components/Toaster'
+
 import Loader from '../../../components/Loader'
 import { Accordion, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useAuth } from '../../../auth/AuthProvider'
+import { toast } from 'react-toastify'
 
 export default function TasksModalBody(props) {
   const { setModalShow, data, raitngForDay} = props
@@ -16,9 +17,6 @@ export default function TasksModalBody(props) {
   let month = data?.month
   let year = data?.year
 
-  const [toaster, showToaster] = useState(false)
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [userTasks, setUserTasks] = useState('')
 
@@ -66,15 +64,17 @@ export default function TasksModalBody(props) {
       const tasks = await getProjectsTask(data)
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong1')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.error?.message || 'Something Went Wrong1')
+        // set
       } else {
         let allTask = tasks?.data
         setUserTasks(allTask)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong2')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong2')
+      // set
       setLoading(false)
       return error.message
     }
@@ -158,7 +158,7 @@ export default function TasksModalBody(props) {
                                       overlay={<Tooltip>{ele?.status}</Tooltip>}
                                     >
                                       <i
-                                        className="fa fa-check-circle warning"
+                                        className="fa fa-check-circle primary"
                                         aria-hidden="true"
                                       >
                                         {' '}
@@ -282,13 +282,7 @@ export default function TasksModalBody(props) {
       ):("No tasks Found!") }
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   )
 }

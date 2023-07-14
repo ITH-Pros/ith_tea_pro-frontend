@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Toaster from '../../../components/Toaster'
+
 import Loader from '../../../components/Loader'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import { getProjectsTask } from '../../../services/user/api'
@@ -12,13 +12,12 @@ import './index.css'
 import History from '../../Tasks/view-task/history'
 import { Accordion } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function ViewUserTasks() {
-  const [loading, setLoading] = useState(false)
-  const [toasterMessage, setToasterMessage] = useState('')
-  const [toaster, showToaster] = useState(false)
+  const [loading, setLoading] = useState(false)  
   const [userTasks, setTaskData] = useState({})
-  const setShowToaster = param => showToaster(param)
+  
   const data = JSON.parse(localStorage.getItem('view-user-tasks'));
   const {userId} = useParams();
 
@@ -28,8 +27,9 @@ export default function ViewUserTasks() {
     getAllTasksUsingUserId(formattedDate)
     }
   else{
-    setToasterMessage('User id does not match!')
-    setShowToaster(true)
+    toast.dismiss()
+      toast.info('User id does not match!')
+    // set
     }
   }, [])
 
@@ -66,15 +66,17 @@ export default function ViewUserTasks() {
       const tasks = await getProjectsTask(data)
       setLoading(false)
       if (tasks.error) {
-        setToasterMessage(tasks?.error?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(tasks?.error?.message || 'Something Went Wrong')
+        // set
       } else {
         let allTask = tasks?.data
         setTaskData(allTask)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // set
       setLoading(false)
       return error.message
     }
@@ -352,18 +354,6 @@ export default function ViewUserTasks() {
       )}
 
       {loading ? <Loader /> : null}
-      {toaster && (
-        <ToastContainer
-          position="top-end"
-          className="p-3"
-        >
-          <Toaster
-            message={toasterMessage}
-            show={toaster}
-            close={() => showToaster(false)}
-          />
-        </ToastContainer>
-      )}
     </div>
   )
 }

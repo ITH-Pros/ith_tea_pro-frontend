@@ -1,65 +1,75 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-import { BsChevronDoubleLeft, BsChevronDoubleRight , BsChevronDown } from "react-icons/bs";
+import {
+  BsChevronDoubleLeft,
+  BsChevronDoubleRight,
+  BsChevronDown,
+} from "react-icons/bs";
 import { getTeamWork } from "../../services/user/api";
 import { useAuth } from "../../auth/AuthProvider";
+import Loader from "../../components/Loader";
 
 const CustomCalendar = (props) => {
   const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentUTCDate, setCurrentDateUTC] = useState(new Date());
+  const [loading, setLoading] = useState(false);
   const { userDetails } = useAuth();
-  const { setTeamWorkList , isChange} = props;
+  const { setTeamWorkList, isChange } = props;
 
   function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0,0,0,0))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    // console.log("==========", localTimeString)
-    return localTimeString
+    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
+    return utcTime;
   }
-  
+  function convertToUTCForDay(dateString) {
+    const newDate = new Date(
+      dateString.getFullYear(),
+      dateString.getMonth(),
+      dateString.getDate() + 1
+    );
+    let utcTime = newDate.toISOString()?.split('T')[0]+ 'T00:00:00.000Z'
+    return utcTime;
+  }
+
+  function convertToUTCForNight(dateString) {
+    const newDate = new Date(
+      dateString.getFullYear(),
+      dateString.getMonth(),
+      dateString.getDate() + 1
+    );
+    let utcTime = newDate.toISOString()?.split('T')[0]+ 'T23:59:59.999Z'
+    return utcTime;
+  }
+
   function convertToUTCNight(dateString) {
-    // console.log(dateString,'------------------')
     let utcTime = new Date(dateString);
-    
-    utcTime = new Date(utcTime.setUTCHours(23,59,59,999))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes*60*1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    // console.log("==========", localTimeString)
-    return localTimeString
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
+    return utcTime;
   }
+
   useEffect(() => {
     const currentDateMinusOneDay = new Date(currentDate);
     currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
-    setCurrentDateUTC( currentDateMinusOneDay.toLocaleDateString());
-    
-    }, [currentDate ]);
-  
+    setCurrentDateUTC(currentDateMinusOneDay.toDateString());
+  }, [currentDate, currentView]);
+
   useEffect(() => {
+    if (userDetails?.role !== "CONTRIBUTOR") {
+      console.log("useEffect from custom-calender.js");
+      getTeamWorkList();
+    }
+  }, [currentDate, currentView]);
 
-    if (userDetails?.role !== "CONTRIBUTOR" ) {
-        getTeamWorkList();
-      }
-    }, [currentDate,currentView ]);
-
-    useEffect(() => {
-
-        if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined )  {
-            // console.log(isChange);
-            getTeamWorkList();
-          }
-        }, [isChange]);
-
+  useEffect(() => {
+    if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined) {
+      getTeamWorkList();
+    }
+  }, [isChange]);
 
   const getTeamWorkList = async () => {
-
-    let dataToSend = { };
+    setLoading(true);
+    let dataToSend = {};
 
     if (currentView === "Week") {
       dataToSend = {
@@ -67,90 +77,133 @@ const CustomCalendar = (props) => {
         toDate: convertToUTCNight(weekEnd),
       };
     } else if (currentView === "Day") {
-        dataToSend = {
-          fromDate: convertToUTCDay(currentDate),
-          toDate: convertToUTCNight(currentDate),
-        };
+      console.log("currentDate", currentDate);
+      dataToSend = {
+        fromDate: convertToUTCForDay(currentDate),
+        toDate: convertToUTCForNight(currentDate),
+      };
     }
-    // console.log("dataToSend", dataToSend);
+
     try {
       const res = await getTeamWork(dataToSend);
       if (res.error) {
-        // console.log("Error while getting team work list");
-
+        setLoading(false);
       } else {
         setTeamWorkList(res?.data);
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       return error.message;
     }
   };
 
   const handlePrev = () => {
     if (currentView === "Week") {
-      const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
+      const newDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() - 7
+      );
       setCurrentDate(newDate);
-      // console.log(`Previous week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     } else if (currentView === "Day") {
-      const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
+      console.log("currentDate", currentDate);
+      const newDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() - 1
+      );
       setCurrentDate(newDate);
-      // console.log(`Previous day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     }
   };
 
   const handleNext = () => {
     if (currentView === "Week") {
-      const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
+      const newDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() + 7
+      );
       setCurrentDate(newDate);
-      // console.log(`Next week clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     } else if (currentView === "Day") {
-      const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+      const newDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() + 1
+      );
       setCurrentDate(newDate);
-      // console.log(`Next day clicked: currentView=${currentView}, currentDate=${newDate.toLocaleDateString()}`);
     }
   };
 
   const handleViewChange = (view) => {
     setCurrentView(view);
-    // console.log(`View changed: currentView=${view}, currentDate=${currentDate.toLocaleDateString()}`);
   };
 
-  const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 1);
-  const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + (7 - currentDate.getDay()));
-
-  // console.log(`Week of ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`)
+  const weekStart = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() - currentDate.getDay() + 1
+  );
+  const weekEnd = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() + (7 - currentDate.getDay())
+  );
 
   return (
-    <Row id="agenda" className="align-items-center" >
-      <Col lg={4} className="px-0">
-        <Button variant="light" size="sm" className="left-btn" onClick={handlePrev}>
-          <BsChevronDoubleLeft /> Prev {currentView}
-        </Button>
-        <Button variant="light" size="sm" className="right-btn" onClick={handleNext}>
-          Next {currentView} <BsChevronDoubleRight />
-        </Button>
-      </Col>
-      <Col lg={4} className="text-center">
-        <h4>
-          {currentView === "Week"
-            ?<> <span> Week of </span> <br/>  {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}</>
-            :currentUTCDate}
-        </h4>
-      </Col>
-      <Col lg={4} className="text-end px-0">
-        <Dropdown>
-          <Dropdown.Toggle variant="light" size="sm" id="dropdown-basic">
-            {currentView} <BsChevronDown/>
-          </Dropdown.Toggle>
+    <>
+      <Row id="agenda" className="align-items-center">
+        <Col lg={4} className="px-0">
+          <Button
+            variant="light"
+            size="sm"
+            className="left-btn"
+            onClick={handlePrev}
+          >
+            <BsChevronDoubleLeft /> Prev {currentView}
+          </Button>
+          <Button
+            variant="light"
+            size="sm"
+            className="right-btn"
+            onClick={handleNext}
+          >
+            Next {currentView} <BsChevronDoubleRight />
+          </Button>
+        </Col>
+        <Col lg={4} className="text-center">
+          <h4>
+            {currentView === "Week" ? (
+              <>
+                {" "}
+                <span> Week of </span> <br /> {weekStart.toLocaleDateString()} -{" "}
+                {weekEnd.toLocaleDateString()}
+              </>
+            ) : (
+              currentDate?.toLocaleDateString()
+            )}
+          </h4>
+        </Col>
+        <Col lg={4} className="text-end px-0">
+          <Dropdown>
+            <Dropdown.Toggle variant="light" size="sm" id="dropdown-basic">
+              {currentView} <BsChevronDown />
+            </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                      <Dropdown.Item onClick={() => handleViewChange("Week")}>Week</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleViewChange("Day")}>Day</Dropdown.Item>
-                  </Dropdown.Menu>
-              </Dropdown>
-          </Col>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => handleViewChange("Week")}>
+                Week
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleViewChange("Day")}>
+                Day
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
       </Row>
-      
+
+      {loading ? <Loader /> : null}
+    </>
   );
 };
 

@@ -2,21 +2,22 @@ import React from "react";
 import { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
 import { CONSTANTS } from "../../../constants";
 import { addNewUserDetail } from "../../../services/user/api";
 import "./index.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 export default function AddUser(props) {
 
   const [validated, setValidated] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
+  
+
+  
   const navigate = useNavigate();
   const rolesList = CONSTANTS.ROLES;
   const registerFromFields = { name: "", email: "", role: rolesList[0] };
@@ -47,19 +48,22 @@ export default function AddUser(props) {
       const userRes = await addNewUserDetail(registerFromValue);
       setLoading(false);
       if (userRes.error) {
-        setToasterMessage(userRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(userRes?.message || "Something Went Wrong");
+        // set
         return;
       } else {
-        setToasterMessage("Success");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Success");
+        // set
         setRegisterFromValue(registerFromFields);
         setValidated(false);
         navigate("/team");
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
       setLoading(false);
       return error.message;
     }
@@ -139,13 +143,7 @@ export default function AddUser(props) {
           </Button>
         </div>
       </Form>
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
       {loading ? <Loader /> : null}
     </div>
   );

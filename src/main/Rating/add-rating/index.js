@@ -13,7 +13,7 @@ import {
   getRatingList,
   getTaskDetailsByProjectId,
 } from "../../../services/user/api";
-import Toaster from "../../../components/Toaster";
+
 import Loader from "../../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";

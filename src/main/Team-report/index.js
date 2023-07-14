@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import avtar from '../../assests/img/avtar.png'
 import './index.css'
-import Toaster from '../../components/Toaster'
+
 import Loader from '../../components/Loader'
 import { Link } from 'react-router-dom'
 import Select from 'react-select'
@@ -11,6 +11,7 @@ import { Row, Container, Nav, Dropdown, Card, Button, Badge, Tab, Tabs, Col, Tab
 import { getUserReportData, getAllUsersWithAdmin, getUserDetailsByUserId } from '../../services/user/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import RatingGraph from '../Rating/rating-graph/rating-graph'
+import { toast } from 'react-toastify'
 
 const customStyles = {
   option: provided => ({
@@ -47,17 +48,12 @@ const customStyles = {
 export default function TeamReport(props) {
   const [teamWorkList, setTeamWorkList] = useState([])
   const [userDetails, setUserDetails] = useState([])
-
   const [selectedOption, setSelectedOption] = useState(null)
-
   const [usersList, setUsersListValue] = useState([])
-  const [toaster, showToaster] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState('task')
   const [loading, setLoading] = useState(false)
   const [showTags, setShowTags] = useState(false)
 
-  const setShowToaster = param => showToaster(param)
-  const [toasterMessage, setToasterMessage] = useState('')
   useEffect(() => {
     // console.log('Team Report')
     getUserReport()
@@ -88,15 +84,17 @@ export default function TeamReport(props) {
       const userDetails = await getUserDetailsByUserId({ params })
       setLoading(false)
       if (userDetails.error) {
-        setToasterMessage(userDetails?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(userDetails?.message || 'Something Went Wrong')
+        // set
         return
       } else {
         setUserDetails(userDetails.data)
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // set
       setLoading(false)
       return error.message
     }
@@ -157,8 +155,9 @@ export default function TeamReport(props) {
       const users = await getAllUsersWithAdmin()
       setLoading(false)
       if (users.error) {
-        setToasterMessage(users?.message || 'Something Went Wrong')
-        setShowToaster(true)
+        toast.dismiss()
+      toast.info(users?.message || 'Something Went Wrong')
+        // set
       } else {
         // console.log(users?.data?.users)
         setUsersListValue(users?.data?.users || [])
@@ -168,8 +167,9 @@ export default function TeamReport(props) {
       }
     } catch (error) {
       setLoading(false)
-      setToasterMessage(error?.error?.message || 'Something Went Wrong')
-      setShowToaster(true)
+      toast.dismiss()
+      toast.info(error?.error?.message || 'Something Went Wrong')
+      // set
       return error.message
     }
   }
@@ -605,13 +605,7 @@ export default function TeamReport(props) {
         )}
       </div>
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </div>
   )
 }

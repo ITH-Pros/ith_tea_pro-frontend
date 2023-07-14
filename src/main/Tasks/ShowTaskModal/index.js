@@ -14,17 +14,18 @@ import {
   updateTaskDetails,
 } from "../../../services/user/api";
 import Loader from "../../../components/Loader";
-import Toaster from "../../../components/Toaster";
+
 import { CONSTANTS } from "../../../constants";
+import { toast } from "react-toastify";
 
 function TaskModal(props) {
   const { selectedTaskObj, selectedProject, getAllTaskOfProject, category } =
     props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
   const [loading, setLoading] = useState(false);
   const [taskModalShow, setTaskModalShow] = useState(false);
   const [selectedTaskDetails, setSelectedTaskDetails] =
@@ -542,16 +543,18 @@ function TaskModal(props) {
       };
       const taskRes = await getTaskDetailsByTaskId(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Something Went Wrong");
+        // set
         return;
       } else {
         setSelectedTaskDetails(taskRes.data);
         !taskModalShow && setTaskModalShow(true);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
       return error.message;
     }
   };
@@ -589,16 +592,18 @@ function TaskModal(props) {
 
       const taskRes = await updateTaskDetails(dataToSend);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Something Went Wrong");
+        // set
         return;
       } else {
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
       return error.message;
     }
   };
@@ -614,17 +619,20 @@ function TaskModal(props) {
       setLoading(false);
 
       if (comment.error) {
-        setToasterMessage(comment?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(comment?.message || "Something Went Wrong");
+        // set
       } else {
-        setToasterMessage("Comment added succesfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Comment added succesfully");
+        // set
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
       setLoading(false);
     }
   };
@@ -639,18 +647,21 @@ function TaskModal(props) {
       const taskRes = await updateTaskDetails(dataToSend);
       setLoading(false);
       if (taskRes.error) {
-        setToasterMessage(taskRes?.message || "Something Went Wrong");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(taskRes?.message || "Something Went Wrong");
+        // set
         return;
       } else {
-        setToasterMessage("Updated Succesfully");
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info("Updated Succesfully");
+        // set
         getAllTaskOfProject();
         getProjectsTaskDetails(selectedTaskDetails);
       }
     } catch (error) {
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
       setLoading(false);
       return error.message;
     }
@@ -802,13 +813,7 @@ function TaskModal(props) {
       </Modal>
 
       {loading && <Loader />}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   );
 }

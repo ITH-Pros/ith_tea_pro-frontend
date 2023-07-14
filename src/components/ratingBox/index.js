@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { updateUserRating } from "../../services/user/api";
 import Modals from "../modal";
-import Toaster from "../Toaster";
+
 import Loader from "../Loader";
+import { toast } from "react-toastify";
 
 
 const RatingBox = (props) => {
@@ -10,9 +11,9 @@ const RatingBox = (props) => {
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
-  const [toasterMessage, setToasterMessage] = useState("");
+
+  
+  
 
   const viewDayTask = () => {
         setTaskModalShow(true)
@@ -47,18 +48,21 @@ const RatingBox = (props) => {
           const rating = await updateUserRating(dataToSend);
           setLoading(false);
           if (rating.error) {
-            setToasterMessage(rating?.message || "Something Went Wrong");
-            setShowToaster(true);
+            toast.dismiss()
+      toast.info(rating?.message || "Something Went Wrong");
+            // set
           } else {
-            setToasterMessage("Rating Updated Succesfully");
-            setShowToaster(true);
+            toast.dismiss()
+      toast.info("Rating Updated Succesfully");
+            // set
             setSelectedRating(newRating);
             setEditRatingEnabled(false);
             getAllRatings();
           }
         } catch (error) {
-          setToasterMessage(error?.error?.message || "Something Went Wrong");
-          setShowToaster(true);
+          toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+          // set
           setLoading(false);
         }
       };
@@ -147,13 +151,7 @@ const RatingBox = (props) => {
         />
       )}
       {loading ? <Loader /> : null}
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
     </>
   )
 };

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { resetPassword } from "../services/auth/api";
-import Toaster from "../components/Toaster";
+
 import Loader from "../components/Loader/index";
+import { toast } from "react-toastify";
 
 function ResetPassword(props) {
   const { handleModalClose } = props;
@@ -13,9 +14,9 @@ function ResetPassword(props) {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [toaster, showToaster] = useState(false);
-  const setShowToaster = (param) => showToaster(param);
+  
+
+  
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -61,28 +62,30 @@ function ResetPassword(props) {
       setLoading(false);
 
       if (response.error) {
-        setToasterMessage(response?.message);
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        // set
+
         // console.log(response?.message || "response.error");
       } else {
         // console.log(response?.message || "else");
-
-        setToasterMessage(response?.message);
-        setShowToaster(true);
+        toast.dismiss()
+      toast.info(response?.message);
+        // set
         setTimeout(() => {
           localStorage.clear();
           navigate("/login");
-
           window.location.reload();
-        }, 1000);
+        }, 2000);
         // navigate("/profile");
 
         handleModalClose();
       }
     } catch (error) {
       setLoading(false);
-      setToasterMessage(error?.error?.message || "Something Went Wrong");
-      setShowToaster(true);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong in reset password");
+      // set
       // console.log(error?.error?.message || "error");
     }
   };
@@ -140,7 +143,7 @@ function ResetPassword(props) {
                       }}
                       name="showPassword"
                       className={
-                        showConfirmPassword ? "fa fa-eye" : " fa fa-eye-slash"
+                        showOldPassword ? "fa fa-eye" : " fa fa-eye-slash"
                       }
                     ></i>
                     {/* {showConfirmPassword ? "fa fa-eye" : "fa fa-eye-slash"}️ */}
@@ -173,7 +176,7 @@ function ResetPassword(props) {
                       }}
                       name="showPassword"
                       className={
-                        showConfirmPassword ? "fa fa-eye" : " fa fa-eye-slash"
+                        showNewPassword ? "fa fa-eye" : " fa fa-eye-slash"
                       }
                     ></i>
                     {/* {showConfirmPassword ? "fa fa-eye" : "fa fa-eye-slash"}️ */}
@@ -233,13 +236,7 @@ function ResetPassword(props) {
           </div>
         </div>
       </div>
-      {toaster && (
-        <Toaster
-          message={toasterMessage}
-          show={toaster}
-          close={() => showToaster(false)}
-        />
-      )}
+
       {loading ? <Loader /> : null}
     </div>
   );
