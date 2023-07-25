@@ -163,7 +163,6 @@ export default function Dashboard(props) {
   }
 
   const hideModal = () => {
-    
     setModalShow(false);
     localStorage.removeItem("userId");
     // setRatingForDay();
@@ -291,173 +290,169 @@ export default function Dashboard(props) {
               </h5>
             </div>
             <div class="table-fixed-column-outter">
-  <div class="table-fixed-column-inner">
-            <div className="tableFixHead">
-              <Table responsive className="table-fixed-column table-fixed-column table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th 
-                      style={{
-                        width: "100px",
-                        position: "sticky",
-                        left: "0",
-                        display:"none",
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                     
-                    </th>
-                    {/* <th>Day</th> */}
-                    {Array(days)
-                      .fill(0)
-                      .map((rating, index) => {
-                        const date = new Date(
-                          yearUse,
-                          months.indexOf(monthUse),
-                          index + 1
-                        );
-                        const dayOfWeek = date.getDay();
-                        const dayNames = [
-                          "Sun",
-                          "Mon",
-                          "Tue",
-                          "Wed",
-                          "Thu",
-                          "Fri",
-                          "Sat",
-                        ];
-                        const weekend = isWeekend(dayOfWeek);
-                        const className = weekend ? "weekend" : "";
-
-                        return (
-                          <th key={index} className={className}>
-                            <span>
-                              {index + 1 < 10 ? "0" : ""}
-                              {index + 1}
-                            </span>
-                            <br></br>
-                            <span>{dayNames[dayOfWeek]}</span>
-                          </th>
-                        );
-                      })}
-                    <th style={{ color: "green" }}>Average</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ratingsArray.map((user, index) => {
-                    return (
-                      <tr key={index}>
-                      
-                        <td
-                          className="user_names text-truncate "
-                       
-                        >
-                          {user.name}
-                        </td>
-
+              <div class="table-fixed-column-inner">
+                <div className="tableFixHead">
+                  <Table
+                    responsive
+                    className="table-fixed-column table-fixed-column table table-bordered table-striped"
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          style={{
+                            width: "100px",
+                            position: "sticky",
+                            left: "0",
+                            display: "none",
+                            backgroundColor: "#fff",
+                          }}
+                        ></th>
+                        {/* <th>Day</th> */}
                         {Array(days)
                           .fill(0)
-                          .map((day, index) => {
-                            let ratingUserObj = user?.ratings;
-                            let ratingCommentObj = ratingUserObj?.find(
-                              (el) => el.date - 1 === index
-                            );
-
+                          .map((rating, index) => {
                             const date = new Date(
                               yearUse,
                               months.indexOf(monthUse),
                               index + 1
                             );
                             const dayOfWeek = date.getDay();
-                            const weekendValue =
-                              dayOfWeek === 0 || dayOfWeek === 6;
-                            if (ratingCommentObj) {
-                              return (
-                                <RatingBox
-                                  key={index}
-                                  index={index}
-                                  getAllRatings={getAllRatings}
-                                  ratingCommentObj={ratingCommentObj}
-                                  className={weekendValue ? "weekendBox" : ""}
-                                  month={months.indexOf(monthUse) + 1}
-                                  year={yearUse}
-                                  user={user}
-                                  setTaskModalShow={setModalShow}
-                                  setRatingData={setRatingData}
-                                  setRatingForDay={setRatingForDay}
-                                />
-                              );
-                            } else {
-                              let dateToSend = `${yearUse}-${
-                                months.indexOf(monthUse) + 1 <= 9
-                                  ? "0" + (months.indexOf(monthUse) + 1)
-                                  : months.indexOf(monthUse) + 1
-                              }-${
-                                index + 1 <= 9 ? "0" + (index + 1) : index + 1
-                              }`;
-                              return (
-                                <td  key={index}>
-                                  
+                            const dayNames = [
+                              "Sun",
+                              "Mon",
+                              "Tue",
+                              "Wed",
+                              "Thu",
+                              "Fri",
+                              "Sat",
+                            ];
+                            const weekend = isWeekend(dayOfWeek);
+                            const className = weekend ? "weekend" : "";
 
-                                  {userDetails?.role === "CONTRIBUTOR" ||
-                                  new Date(dateToSend) > new Date() ? (
-                                    <span
-                                      style={{
-                                        padding: "2px 15px",
-                                      }}
-                                      className={
-                                        weekendValue
-                                          ? "weekendBox input_dashboard"
-                                          : "input_dashboard"
-                                      }
-                                    ></span>
-                                  ) : (
-                                    <>
-                                      <span
-                                        style={{
-                                          padding: "2px 15px",
-                                        }}
-                                        className={
-                                          weekendValue
-                                            ? "weekendBox input_dashboard"
-                                            : "input_dashboard"
-                                        }
-                                        // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
-                                        onClick={() => {
-                                          isRatingAllowed(
-                                            user,
-                                            index + 1,
-                                            months.indexOf(monthUse) + 1,
-                                            yearUse
-                                          );
-                                        }}
-                                      >
-                                        {!weekendValue && "?"}
-                                      </span>
-                                    </>
-                                  )}
-                                </td>
-                              );
-                            }
+                            return (
+                              <th key={index} className={className}>
+                                <span>
+                                  {index + 1 < 10 ? "0" : ""}
+                                  {index + 1}
+                                </span>
+                                <br></br>
+                                <span>{dayNames[dayOfWeek]}</span>
+                              </th>
+                            );
                           })}
-                        <td className="userAverage">
-                          {user.monthlyAverage
-                            ? Math.round(user.monthlyAverage * 100) / 100
-                            : "NA"}
-                        </td>
+                        <th style={{ color: "green" }}>Average</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </div>
-            </div>
-            </div>
-  
+                    </thead>
+                    <tbody>
+                      {ratingsArray.map((user, index) => {
+                        return (
+                          <tr key={index}>
+                            <td className="user_names text-truncate ">
+                              {user.name}
+                            </td>
 
+                            {Array(days)
+                              .fill(0)
+                              .map((day, index) => {
+                                let ratingUserObj = user?.ratings;
+                                let ratingCommentObj = ratingUserObj?.find(
+                                  (el) => el.date - 1 === index
+                                );
 
+                                const date = new Date(
+                                  yearUse,
+                                  months.indexOf(monthUse),
+                                  index + 1
+                                );
+                                const dayOfWeek = date.getDay();
+                                const weekendValue =
+                                  dayOfWeek === 0 || dayOfWeek === 6;
+                                if (ratingCommentObj) {
+                                  return (
+                                    <RatingBox
+                                      key={index}
+                                      index={index}
+                                      getAllRatings={getAllRatings}
+                                      ratingCommentObj={ratingCommentObj}
+                                      className={
+                                        weekendValue ? "weekendBox" : ""
+                                      }
+                                      month={months.indexOf(monthUse) + 1}
+                                      year={yearUse}
+                                      user={user}
+                                      setTaskModalShow={setModalShow}
+                                      setRatingData={setRatingData}
+                                      setRatingForDay={setRatingForDay}
+                                    />
+                                  );
+                                } else {
+                                  let dateToSend = `${yearUse}-${
+                                    months.indexOf(monthUse) + 1 <= 9
+                                      ? "0" + (months.indexOf(monthUse) + 1)
+                                      : months.indexOf(monthUse) + 1
+                                  }-${
+                                    index + 1 <= 9
+                                      ? "0" + (index + 1)
+                                      : index + 1
+                                  }`;
+                                  return (
+                                    <td key={index}>
+                                      {userDetails?.role === "CONTRIBUTOR" ||
+                                      new Date(dateToSend) > new Date() ? (
+                                        <span
+                                          style={{
+                                            padding: "2px 15px",
+                                          }}
+                                          className={
+                                            weekendValue
+                                              ? "weekendBox input_dashboard"
+                                              : "input_dashboard"
+                                          }
+                                        ></span>
+                                      ) : (
+                                        <>
+                                          <span
+                                            style={{
+                                              padding: "2px 15px",
+                                            }}
+                                            className={
+                                              weekendValue
+                                                ? "weekendBox input_dashboard"
+                                                : "input_dashboard"
+                                            }
+                                            // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
+                                            onClick={() => {
+                                              isRatingAllowed(
+                                                user,
+                                                index + 1,
+                                                months.indexOf(monthUse) + 1,
+                                                yearUse
+                                              );
+                                            }}
+                                          >
+                                            {!weekendValue && "?"}
+                                          </span>
+                                        </>
+                                      )}
+                                    </td>
+                                  );
+                                }
+                              })}
+                            <td className="userAverage">
+                              {user.monthlyAverage
+                                ? Math.round(user.monthlyAverage * 100) / 100
+                                : "NA"}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                </div>
+              </div>
+            </div>
           </div>
- 
+
           {loading ? <Loader /> : null}
           <div></div>
         </div>
