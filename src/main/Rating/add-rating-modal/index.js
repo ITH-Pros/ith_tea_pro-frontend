@@ -88,6 +88,70 @@ export default function RatingModalBody(props) {
     return `${day}-${month}-${year}`;
   }
 
+  const handleAbsent = async () => {
+    setValidated(true);
+    let dataToSend = {
+      rating: -1,
+      absent: true,
+      comment: "Absent on this day.",
+      date: ratingForm.selectedDate?.split("-")[2],
+      month: ratingForm.selectedDate?.split("-")[1],
+      year: ratingForm.selectedDate?.split("-")[0],
+      userId: user._id,
+    };
+    setLoading(true);
+    try {
+      const rating = await addRatingOnTask(dataToSend);
+      setLoading(false);
+      if (rating.error) {
+        toast.dismiss();
+        toast.info(rating?.message || "Something Went Wrong");
+      } else {
+        toast.dismiss();
+        toast.info("You marked as ABSENT.");
+        setModalShow(false);
+      }
+    } catch (error) {
+      console.log(error, "error");
+      setLoading(false);
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    }
+    localStorage.removeItem("userId");
+  };
+
+  // Function to handle "Mark as ZERO" button click
+  const handleZeroRating = async () => {
+    setValidated(true);
+    let dataToSend = {
+      rating: 0,
+      comment: "No tasks available for rating.",
+      date: ratingForm.selectedDate?.split("-")[2],
+      month: ratingForm.selectedDate?.split("-")[1],
+      year: ratingForm.selectedDate?.split("-")[0],
+      userId: user._id,
+    };
+    setLoading(true);
+    try {
+      const rating = await addRatingOnTask(dataToSend);
+      setLoading(false);
+      if (rating.error) {
+        toast.dismiss();
+        toast.info(rating?.message || "Something Went Wrong");
+      } else {
+        toast.dismiss();
+        toast.info("Rating Added Successfully as ZERO");
+        setModalShow(false);
+      }
+    } catch (error) {
+      console.log(error, "error");
+      setLoading(false);
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    }
+    localStorage.removeItem("userId");
+  };
+
   const handleSubmit = async (event) => {
     setValidated(true);
     event.preventDefault();
@@ -162,7 +226,7 @@ export default function RatingModalBody(props) {
     try {
       let data = {
         groupBy: "default",
-        taskFor:"Rating", // for all tasks list (no grouping by project) send 'assignedTo' instaed of default
+        taskFor: "Rating", // for all tasks list (no grouping by project) send 'assignedTo' instaed of default
         assignedTo: assignedTo,
         fromDate: convertToUTCDay(date),
         toDate: convertToUTCNight(date),
@@ -539,8 +603,32 @@ export default function RatingModalBody(props) {
           </div>
         </div>
       ) : (
-        <div style={{ marginTop: "30px" }}>
-          No tasks available, cannot rate.
+        // When there are no tasks available for rating
+        <div style={{ marginTop: "20px" }}>
+          <p>No tasks available, cannot rate.</p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "30px",
+            }}
+          >
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => handleAbsent()}
+              style={{ marginRight: "10px" }}
+            >
+              ABSENT
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => handleZeroRating()}
+            >
+              Mark as ZERO
+            </Button>
+          </div>
         </div>
       )}
 
