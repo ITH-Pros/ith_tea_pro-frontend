@@ -181,7 +181,7 @@ export default function Dashboard(props) {
           <Offcanvas.Title>
             {" "}
             {userDetails?.role !== "CONTRIBUTOR"
-              ? raitngForDay >= 0
+              ? raitngForDay >= -1
                 ? "View Tasks"
                 : "Add Rating"
               : "View Tasks"}

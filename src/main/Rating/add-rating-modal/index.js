@@ -604,31 +604,43 @@ export default function RatingModalBody(props) {
         </div>
       ) : (
         // When there are no tasks available for rating
-        <div style={{ marginTop: "20px" }}>
-          <p>No tasks available, cannot rate.</p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "30px",
-            }}
-          >
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={() => handleAbsent()}
-              style={{ marginRight: "10px" }}
-            >
-              ABSENT
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => handleZeroRating()}
-            >
-              Mark as ZERO
-            </Button>
-          </div>
+
+        <div>
+          {raitngForDay === 0 && <p>No tasks available for rating .</p>}
+          {raitngForDay === -1 && <p>You are marked absent.</p>}
+          {(raitngForDay === null ||
+            raitngForDay === "" ||
+            raitngForDay === undefined) && (
+            <div>
+              <div style={{ marginTop: "20px" }}>
+                <p>No tasks available, cannot rate.</p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "30px",
+                  }}
+                >
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleAbsent()}
+                    style={{ marginRight: "10px" }}
+                  >
+                    ABSENT
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handleZeroRating()}
+                  >
+                    Mark as ZERO
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

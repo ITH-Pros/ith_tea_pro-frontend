@@ -1,31 +1,36 @@
 import React, { useState } from "react";
 import { updateUserRating } from "../../services/user/api";
 import Modals from "../modal";
-
 import Loader from "../Loader";
 import { toast } from "react-toastify";
 
-
 const RatingBox = (props) => {
-  const { ratingCommentObj, index, getAllRatings, month, year,user, setTaskModalShow, setRatingData, setRatingForDay } = props;
+  const {
+    ratingCommentObj,
+    index,
+    getAllRatings,
+    month,
+    year,
+    user,
+    setTaskModalShow,
+    setRatingData,
+    setRatingForDay,
+  } = props;
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  
-  
-
   const viewDayTask = () => {
-        setTaskModalShow(true)
-        setRatingData(prevRatingData => ({
-          ...prevRatingData,
-          user: user,
-          date: index+1,
-          month: month,
-          year: year,
-        }))
-      setRatingForDay(ratingCommentObj?.rating)
-  }
+    setTaskModalShow(true);
+    setRatingData((prevRatingData) => ({
+      ...prevRatingData,
+      user: user,
+      date: index + 1,
+      month: month,
+      year: year,
+    }));
+    setRatingForDay(ratingCommentObj?.rating);
+  };
 
   const GetModalBody = () => {
     const RatingEditBox = () => {
@@ -126,16 +131,17 @@ const RatingBox = (props) => {
 
   return (
     <>
-      <td key={index}>
+       <td key={index}>
         <span
           style={{
-            cursor: 'pointer',
-            padding: '2px 15px',
+            cursor: "pointer",
+            padding: "2px 15px",
+            color: ratingCommentObj?.absent ? "darkred" : "inherit",
           }}
           className="input_dashboard"
-          onClick={()=>viewDayTask()}
+          onClick={() => viewDayTask()}
         >
-          {`${formatedRating(ratingCommentObj?.rating)}`}{' '}
+          {ratingCommentObj?.absent ? "A" : formatedRating(ratingCommentObj?.rating)}{' '}
         </span>
       </td>
       {modalShow && (
