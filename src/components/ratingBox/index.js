@@ -3,6 +3,9 @@ import { updateUserRating } from "../../services/user/api";
 import Modals from "../modal";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
+import { useAuth } from "../../auth/AuthProvider";
+
+
 
 const RatingBox = (props) => {
   const {
@@ -19,6 +22,8 @@ const RatingBox = (props) => {
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { userDetails } = useAuth();
+
 
   const viewDayTask = () => {
     setTaskModalShow(true);

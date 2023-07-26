@@ -345,11 +345,24 @@ export default function Dashboard(props) {
                     </thead>
                     <tbody>
                       {ratingsArray.map((user, index) => {
+                        const isCurrentUser = user._id === userDetails?.id;
+                        const isCurrentUserManager = user?.managerIds?.includes(
+                          userDetails?.id
+                        );
+                        console.log(isCurrentUserManager ,  user.name);
+
                         return (
-                          <tr key={index}>
-                            <td className="user_names text-truncate ">
-                              {user.name}
-                            </td>
+                          <tr
+                          key={index}
+                          className={`${isCurrentUser ? "highlighted-user" : ""} ${
+                            isCurrentUserManager ? "highlighted-manager" : ""
+                          }`}
+                        >
+                          <td
+                            className={`user_names text-truncate ${isCurrentUser ? "highlighted-user" : ""} ${isCurrentUserManager ? "highlighted-manager" : ""}`}
+                          >
+                            {user.name}
+                          </td>
 
                             {Array(days)
                               .fill(0)

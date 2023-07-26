@@ -9,7 +9,7 @@ import { AuthProvider } from "./auth/AuthProvider";
 import "react-quill/dist/quill.snow.css";
 
 // Remove console logs 
-console.log = console.warn = console.error = () => {};
+// console.log = console.warn = console.error = () => {};
 
 
 

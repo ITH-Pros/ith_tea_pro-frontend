@@ -777,3 +777,20 @@ ul.weekdays {
   left: 0;
   width: 100px !important;
 }
+
+.highlighted-user {
+  font-weight: bold; /* or any other style you want to apply */
+  color: #0870c1 !important;
+  /* color: #ae0b26; */
+}
+
+.highlighted-user-column {
+  color: #0870c1 !important;
+  background-color: #0870c1; /* or any other background color you want to apply */
+}
+
+.highlighted-manager {
+  font-weight: bold; /* or any other style you want to apply */
+  color: #ae0b26 !important;
+  /* color: #ae0b26; */
+}
