@@ -4,6 +4,7 @@ import Modals from "../modal";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
 import { useAuth } from "../../auth/AuthProvider";
+import "./index.css";
 
 
 
@@ -18,6 +19,8 @@ const RatingBox = (props) => {
     setTaskModalShow,
     setRatingData,
     setRatingForDay,
+    isCurrentUser,
+    isCurrentUserManager
   } = props;
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
@@ -136,7 +139,9 @@ const RatingBox = (props) => {
 
   return (
     <>
-       <td key={index}>
+       <td key={index}  className={`${isCurrentUser ? "highlighted-user" : ""} ${
+                            isCurrentUserManager ? "highlighted-manager" : ""
+                          }`}>
         <span
           style={{
             cursor: "pointer",

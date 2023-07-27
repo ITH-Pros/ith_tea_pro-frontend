@@ -396,6 +396,8 @@ export default function Dashboard(props) {
                                       setTaskModalShow={setModalShow}
                                       setRatingData={setRatingData}
                                       setRatingForDay={setRatingForDay}
+                                      isCurrentUserManager={isCurrentUserManager}
+                                      isCurrentUser={isCurrentUser}
                                     />
                                   );
                                 } else {
@@ -409,7 +411,9 @@ export default function Dashboard(props) {
                                       : index + 1
                                   }`;
                                   return (
-                                    <td key={index}>
+                                    <td  className={`${isCurrentUser ? "highlighted-user" : ""} ${
+                            isCurrentUserManager ? "highlighted-manager" : ""
+                          }`} key={index}>
                                       {userDetails?.role === "CONTRIBUTOR" ||
                                       new Date(dateToSend) > new Date() ? (
                                         <span
