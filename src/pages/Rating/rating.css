@@ -1,0 +1,138 @@
+.react-datepicker__input-container>input {
+  width: 100%;
+}
+
+.dv-50-rating {
+  width: 100%;
+  height: 100%;
+  height: 74vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.dv-40 {
+  width: 100%;
+  height: 100%;
+  float: right;
+}
+
+.toast-message {
+  border: 2px solid grey;
+  box-shadow: rgb(249 138 251 / 40%) -11px 19px 20px 8px;
+}
+.text-Editor{
+  height: 63px !important;
+    width: 500px;
+    height: 100px;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+    border-color: -moz-use-text-color #FFFFFF #FFFFFF -moz-use-text-color;
+    border-image: none;
+    border-radius: 6px 6px 6px 6px;
+    border-width: medium 1px 1px medium;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 12%) inset;
+    color: #555555;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 1em;
+    line-height: 1.4em;
+    padding: 5px 8px;
+}
+
+.bg-active {
+  background-image: linear-gradient(62deg, #8355ad 0%, #b86bff 100%);
+  box-shadow: -5px -5px 9px rgb(255 255 255 / 45%), 5px 5px 9px;
+}
+
+@keyframes swirl-in-fwd {
+  0% {
+    transform: rotate(-540deg) scale(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.swirl-in-fwd {
+  animation: swirl-in-fwd 0.3s ease-out both;
+}
+
+@keyframes swirl-out-bck {
+  0% {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(-540deg) scale(0);
+    opacity: 0;
+  }
+}
+
+.swirl-out-bck {
+  animation: swirl-out-bck 0.3s ease-in both;
+}
+
+
+ 
+
+.main-div-tab {
+  display: flex;
+  justify-content: center;
+  text-align: center !important;
+  margin-left: 20%;
+  width: 55%;
+  margin-top: 2% !important;
+
+}
+
+.main-rating-contianer {
+  padding: 25px;
+  border-radius: 10px;
+  margin-top: 2% !important;
+  background: #fff;
+  width: 100%;
+}
+
+.margin-class {
+  margin-right: 10px;
+}
+
+.margin-form {
+  padding: .35rem;
+}
+
+.submit {
+  border-radius: 6px;
+  width: 100px;
+  height: 38px;
+}
+
+.invalid-feedback,
+.valid-feedback {
+  font-size: 11px !important;
+}
+
+.desc {
+  margin-top: 10px;
+}
+
+.btn:disabled{
+  background-color:#555555 !important
+}
+.userName{
+  font-size: 20px;
+  text-transform: capitalize;
+  font-weight: 300;
+}
+
+@media screen and (max-width: 1300px) {
+  .dv-50-rating{
+    height: 80vh;
+  }
+}

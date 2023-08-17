@@ -1,0 +1,68 @@
+.calendars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.line-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+ 
+
+.my-offcanvas {
+  max-width: 600px;
+}
+
+.my-offcanvas-header {
+  background-color: #f8f9fa;
+  border-bottom: none;
+}
+
+.my-offcanvas-title {
+  color: #333;
+  font-weight: bold;
+}
+
+.my-offcanvas-body {
+  padding: 20px;
+}
+
+.rating-details {
+  margin-bottom: 20px;
+}
+
+.rating-details__date,
+.rating-details__rating {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.my-accordion-header {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.my-accordion-body {
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.task-rating {
+  margin-bottom: 10px;
+}
+
+.red-event {
+  background-color: red !important;
+  color: white;
+}
+
+
+#calender-ui { width: auto; margin-top: 25px;}
+#calender-ui .rbc-toolbar{ font-size: 12px !important;}
+#calender-ui .rbc-header{ font-size: 12px; padding: 5px;}

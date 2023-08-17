@@ -1,0 +1,10 @@
+td.highlighted-user {
+    background-color: #55b6f6 !important; /* Light gray background color */
+    font-weight: bold; /* Optionally, you can make the text bold */
+  }
+  
+  /* CSS for highlighting the full row for the current user's manager */
+  td.highlighted-manager {
+    background-color: #56c006 !important; /* Light blue background color */
+    font-weight: bold; /* Optionally, you can make the text bold */
+  }

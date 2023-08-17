@@ -1,0 +1,950 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext } from "react";
+import { useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+import {
+  getAllUsers,
+  getAllProjects,
+  getUserAssignedProjects,
+  resendActivationLinkApi,
+  getUserAnalytics,
+  assignUserToProjectByIds,
+  deleteUserById,
+  getAllManager,
+  assignManagerTOUserByIds,
+} from "@services/user/api";
+import "./teams.css";
+import Loader from "@components/Shared/Loader";
+import { Link } from "react-router-dom";
+import Modals from "@components/Shared/modal";
+// import { useAuth } from "../../auth/AuthProvider";
+import {
+  faGithub,
+  faLinkedin,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import UserIcon from "../../ProjectCard/profileImage";
+import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+import ViewTeamList from "@components/Team-list/team-list";
+import { toast } from "react-toastify";
+import UserIcon from "@components/ProfileImage/profileImage";
+import resend from "@assets/img/resend-icon.jpg"
+import { useAuth } from "../../utlis/AuthProvider";
+
+export default function Teams(props) {
+  const { userDetails } = useAuth();
+  const [userAnalytics, setUserAnalytics] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [usersList, setUsersListValue] = useState([]);
+  const [projectList, setProjectListValue] = useState([]);
+  const [userAssignedProjects, setUserAssignedProjects] = useState([]);
+
+  const [pageDetails, setPageDetails] = useState({
+    currentPage: 1,
+    rowsPerPage: 10,
+    totalPages: 1,
+  });
+
+  const [assignManagerModalShow, setAssignManagerModalShow] = useState(false);
+  
+  
+  const [confirmModalShow, setConfirmModalShow] = useState(false);
+  const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
+  const [managerList, setManagerList] = useState([]);
+  const [selectedManagers, setSelectedManagers] = useState([]);
+
+  const openAssignManagerModal = (userId) => {
+    setSelectedManagers([]);
+    setManagerList([]);
+
+    setUserId(userId);
+    // Fetch manager list
+    getManagerList(userId);
+
+    // Show the modal
+    setAssignManagerModalShow(true);
+  };
+
+  const getManagerList = async (userId) => {
+    setLoading(true);
+    console.log("userId", userId);
+
+    try {
+      const resp = await getAllManager();
+
+      if (resp.error) {
+        console.log(resp.error);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        const updatedManagerList = resp.data.filter(
+          (manager) => manager._id !== userId
+        );
+        console.log(updatedManagerList);
+        setManagerList(updatedManagerList);
+
+        usersList.forEach((user) => {
+          if (user?._id === userId) {
+            if (user?.managerIds?.length > 0) {
+              setSelectedManagers(user?.managerIds);
+            } else {
+              setSelectedManagers([]);
+            }
+            console.log("user.manager", user?.managerIds);
+          }
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const handleManagerSelection = (managerIds) => {
+    // Update the selected managers array based on the checkbox selection
+    const index = selectedManagers.indexOf(managerIds);
+    if (index > -1) {
+      // Manager already selected, remove from the array
+      setSelectedManagers((prevState) =>
+        prevState.filter((manager) => manager !== managerIds)
+      );
+    } else {
+      // Manager not selected, add to the array
+      setSelectedManagers((prevState) => [...prevState, managerIds]);
+    }
+  };
+
+  const assignManagers = async () => {
+    if (selectedManagers.length === 0) {
+      toast.dismiss()
+      toast.info("Please select  manager");
+      // set
+      return;
+    }
+
+    // Perform any necessary actions with the selected managers
+    // console.log('Selected Managers:', selectedManagers)
+
+    let data = {
+      managerIds: selectedManagers,
+      userId: userId,
+    };
+    try {
+      const resp = await assignManagerTOUserByIds(data);
+      if (resp.error) {
+        // console.log(resp.error)
+        toast.dismiss()
+      toast.info(resp?.message || "Something Went Wrong");
+        // set
+      } else {
+        toast.dismiss()
+      toast.info(resp?.message || "Something Went Wrong");
+        // set
+        setAssignManagerModalShow(false);
+        onInit();
+      }
+    } catch (error) {
+      // console.log(error)
+    }
+  };
+
+  useEffect(() => {
+    onInit();
+  }, []);
+
+  function onInit() {
+    let options = {
+      currentPage: pageDetails?.currentPage,
+      rowsPerPage: pageDetails?.rowsPerPage,
+    };
+    getAndSetAllUsers(options);
+    getManagerList();
+  }
+
+  const getUserAnalitics = async () => {
+    setLoading(true);
+    try {
+      const userAnalytics = await getUserAnalytics();
+      setLoading(false);
+      if (userAnalytics.error) {
+        toast.dismiss()
+      toast.info(userAnalytics?.message || "Something Went Wrong");
+        // set
+        return;
+      } else {
+        setUserAnalytics(userAnalytics?.data);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss()
+      toast.info(error?.message || "Something Went Wrong");
+      // set
+      return error.message;
+    }
+  };
+
+  const getAndSetAllUsers = async function (options) {
+    if (!options?.currentPage) {
+      return;
+    }
+    setLoading(true);
+    try {
+      let params = {
+        limit: options?.rowsPerPage,
+        currentPage: options?.currentPage,
+      };
+
+      const projects = await getAllUsers({ params });
+      setLoading(false);
+      if (projects.error) {
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // set
+      } else {
+        setUsersListValue(projects?.data?.users || []);
+        let totalPages = Math.ceil(
+          projects.data.totalCount / options?.rowsPerPage
+        );
+        setPageDetails({
+          currentPage: Math.min(options?.currentPage, totalPages),
+          rowsPerPage: options?.rowsPerPage,
+          totalPages,
+        });
+        getUserAnalitics();
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      return error.message;
+    }
+  };
+
+  // const handleSelectProject = (projectId) => {
+  //   setSelectedProjectId(projectId);
+  // };
+
+  const handleAddUserToProject = async function (userId) {
+    setSelectedProjectIds("");
+    setLoading(true);
+    try {
+      const projects = await getAllProjects();
+      setLoading(false);
+      if (projects.error) {
+        toast.dismiss()
+      toast.info(projects?.message || "Something Went Wrong");
+        // set
+        return;
+      } else {
+        setProjectListValue(projects.data);
+      }
+    } catch (error) {
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      setLoading(false);
+      return error.message;
+    }
+    try {
+      let dataToSend = {
+        params: { userId },
+      };
+      const userAssignedProjects = await getUserAssignedProjects(dataToSend);
+      setLoading(false);
+      if (userAssignedProjects.error) {
+        toast.dismiss()
+      toast.info(
+          userAssignedProjects?.message || "Something Went Wrong"
+        );
+        // set
+        return;
+      } else {
+        setUserAssignedProjects(userAssignedProjects.data);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      return error.message;
+    }
+    setSelectedUserId(userId);
+    setModalShow(true);
+  };
+
+  const [selectedProjectIds, setSelectedProjectIds] = useState([]);
+
+  // const handleSelectProject =(projectId) => {
+  //   if (selectedProjectIds.includes(projectId)) {
+  //     setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
+  //   } else {
+  //     setSelectedProjectIds([...selectedProjectIds, projectId]);
+  //   }
+  // }
+  const GetModalBody = () => {
+    return (
+      <>
+        {projectList &&
+          projectList.map((project, index) => {
+            const checkAlreadyAssigned = userAssignedProjects.find(
+              (ele) => ele._id === project._id
+            );
+            const isSelected = selectedProjectIds.includes(project._id);
+            return (
+              <div key={project._id} className="assignPro">
+                <input
+                  disabled={checkAlreadyAssigned}
+                  checked={checkAlreadyAssigned || isSelected}
+                  onChange={() => {
+                    if (isSelected) {
+                      setSelectedProjectIds(
+                        selectedProjectIds.filter((id) => id !== project._id)
+                      );
+                    } else {
+                      setSelectedProjectIds([
+                        ...selectedProjectIds,
+                        project._id,
+                      ]);
+                    }
+                  }}
+                  type="checkbox"
+                />
+                <span>{project.name}</span>
+              </div>
+            );
+          })}
+      </>
+    );
+  };
+
+  const handleAssignUserProjectSubmit = async () => {
+    setLoading(true);
+    try {
+      let dataToSend = {
+        projectIds: selectedProjectIds,
+        userId: selectedUserId,
+      };
+      const assignRes = await assignUserToProjectByIds(dataToSend);
+      setLoading(false);
+      if (assignRes.error) {
+        toast.dismiss()
+      toast.info(assignRes?.message || "Something Went Wrong");
+        // set
+        setModalShow(false);
+        return;
+      } else {
+        setProjectListValue(assignRes.data);
+        toast.dismiss()
+      toast.info(assignRes?.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      setModalShow(false);
+      return error.message;
+    }
+    setModalShow(false);
+  };
+
+  const handleDeleteUser = async () => {
+    setLoading(true);
+    try {
+      let dataToSend = {
+        userId: userId,
+      };
+      const deleteUser = await deleteUserById(dataToSend);
+      setLoading(false);
+      if (deleteUser.error) {
+        toast.dismiss()
+      toast.info(deleteUser?.message || "Something Went Wrong");
+        // set
+        return;
+      } else {
+        toast.dismiss()
+      toast.info("User Deleted Successfully");
+        // set
+        getAndSetAllUsers(pageDetails);
+        setConfirmModalShow(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      return error.message;
+    }
+  };
+
+  const CustomPagination = (props) => {
+    const { getAndSetAllUsers, setPageDetails, pageDetails } = props;
+
+    const numberOfRowsArray = [10, 20, 30, 40, 50];
+    const handleOnChange = (e) => {
+      let pageNumber = parseInt(e.target.value);
+      if (pageNumber < 1 || pageNumber > pageDetails.totalPages) {
+        return;
+      }
+      if (pageDetails.currentPage === pageNumber) {
+        return;
+      }
+      let dataToSave = { ...pageDetails, [e.target.name]: pageNumber };
+      setPageDetails(dataToSave);
+      getAndSetAllUsers(dataToSave);
+    };
+
+    const onChangeRowsPerPage = (e) => {
+      let dataToSave = {
+        ...pageDetails,
+        [e.target.name]: parseInt(e.target.value),
+        currentPage: 1,
+      };
+      setPageDetails(dataToSave);
+      getAndSetAllUsers(dataToSave);
+    };
+    const changePageNumber = (value) => {
+      if (
+        pageDetails.currentPage + value <= 0 ||
+        pageDetails.currentPage + value > pageDetails.totalPages
+      ) {
+        return;
+      }
+      let dataToSave = {
+        ...pageDetails,
+        currentPage: pageDetails.currentPage + value,
+      };
+      setPageDetails(dataToSave);
+      getAndSetAllUsers(dataToSave);
+    };
+
+    return (
+      <div className="pagination ">
+        <i
+          className="fa fa-angle-left pagination-arrow left-arrow"
+          aria-hidden="true"
+          onClick={() => changePageNumber(-1)}
+        ></i>
+        <input
+          className="pagination-input"
+          type="number"
+          value={pageDetails.currentPage}
+          name="currentPage"
+          onChange={(e) => handleOnChange(e)}
+        />
+        <span className="pagination-input">/</span>
+        <span className="pagination-input"> {pageDetails.totalPages}</span>
+        <i
+          className="fa fa-angle-right pagination-arrow right-arrow"
+          aria-hidden="true"
+          onClick={() => changePageNumber(1)}
+        ></i>
+        <span className="page-per-view"> Per Page View : </span>
+        <select
+          className="pagination-select"
+          onChange={onChangeRowsPerPage}
+          name="rowsPerPage"
+          value={pageDetails.rowsPerPage}
+        >
+          {numberOfRowsArray.map((ele) => {
+            return (
+              <option key={ele} value={ele}>
+                {ele}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  };
+  const resendActivationLink = async (userId) => {
+    setLoading(true);
+    try {
+      let dataToSend = {
+        userId: userId,
+      };
+      const resendLink = await resendActivationLinkApi(dataToSend);
+      setLoading(false);
+      if (resendLink.error) {
+        toast.dismiss()
+      toast.info(resendLink?.message || "Something Went Wrong");
+        // set
+        return;
+      } else {
+        toast.dismiss()
+      toast.info(resendLink?.message);
+        // set
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.dismiss()
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      return error.message;
+    }
+  };
+  const redirectToTeamReport = (user) => {
+    if (userDetails.role === "CONTRIBUTOR") {
+      return;
+    }
+    let data = {
+      label: user?.name,
+      value: user?._id,
+    };
+    // console.log(data)
+    localStorage.setItem("selectedOptions", JSON.stringify(data));
+    navigate("/team-report");
+  };
+
+  const AssignedManager = (user) => {
+    const filteredManagers = managerList.filter((manager) =>
+      user?.managerIds?.includes(manager._id)
+    );
+    const managerNames = filteredManagers.map((manager) => manager.name);
+
+    return (
+      <span>
+        {managerNames.length > 0 && <>M: </>}
+        {managerNames.length > 0
+          ? managerNames.map((name, index) => (
+              <span key={index}>
+                {name}
+                {index !== managerNames.length - 1 ? "," : "."}{" "}
+              </span>
+            ))
+          : user?.credentials && (
+              <Button variant="primary" size="sm" className="add_m">
+                <span
+                  className="fa fa-user-plus"
+                  title="Assign Manager"
+                  aria-hidden="true"
+                  onClick={() => {
+                    openAssignManagerModal(user._id);
+                  }}
+                ></span>
+              </Button>
+            )}
+      </span>
+    );
+  };
+
+  const [isTeamList, setIsTeamList] = useState(false);
+
+  const getTeamListForLogginUser = () => {
+    setIsTeamList(!isTeamList);
+    // getAndSetAllUsers(pageDetails);
+  };
+
+  return (
+    <>
+      <div className="rightDashboard" style={{ marginTop: "7%" }}>
+        <h1 className="h1-text">
+          <i className="fa fa-users" aria-hidden="true"></i>
+          Team Members
+          <div className="projects-button">
+
+          {userDetails.role === "LEAD" && (
+            
+            
+            <Button style={{ marginRight: "10px" , marginLeft: "5px" }} onClick={getTeamListForLogginUser}>
+              <span
+                className=""
+                aria-hidden="true"
+                style={{ marginRight: "10px" , marginLeft: "5px" }}
+              >
+                {" "}
+              </span>
+              Team List{" "}
+            </Button>
+          )}
+
+            {(userDetails.role === "SUPER_ADMIN" ||
+              userDetails.role === "ADMIN") && (
+              <Link
+                style={{ float: "right" }}
+                to={{
+                  pathname: "/user/add",
+                }}
+              >
+                <Button variant="primary" size="md">
+                  <span
+                    className="fa fa-user-plus"
+                    title="Add User"
+                    aria-hidden="true"
+                    style={{ marginRight: "5px" }}
+                  >
+                    {" "}
+                  </span>
+                  Add Team{" "}
+                </Button>
+              </Link>
+            )}
+          </div>
+        </h1>
+
+
+
+        {isTeamList && <ViewTeamList isTeamList={isTeamList} />}
+
+
+        <div className="container-team">
+          {usersList &&
+            usersList.map((user, index) => {
+              return (
+                <div key={user._id} className="box">
+                  <div className="top-bar"></div>
+                  <div className="top">
+                    <Link
+                      to={{
+                        pathname: "/user/view/" + user._id,
+                      }}
+                    ></Link>
+                  </div>
+
+                  {(userDetails.role === "SUPER_ADMIN" ||
+                    userDetails.role === "ADMIN") &&
+                    !user?.isDeleted && (
+                      <button className="project-btn-more dropdown ">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-more-vertical"
+                        >
+                          <circle cx="12" cy="12" r="1" />
+                          <circle cx="12" cy="5" r="1" />
+                          <circle cx="12" cy="19" r="1" />
+                        </svg>
+                        <div className="dropdown-content">
+                          <a
+                            onClick={() => {
+                              setConfirmModalShow(true);
+                              setUserId(user._id);
+                            }}
+                            icon="pi pi-check"
+                            label="Confirm"
+                            // onClick={() => {
+                            //   handleEdit();
+                            // }}
+                          >
+                            {" "}
+                            <i
+                              className="fa fa-pencil-square"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Delete user
+                          </a>
+                          {/* Assign manager  */}
+                          <a
+                            onClick={() => {
+                              openAssignManagerModal(user._id);
+                            }}
+                            icon="pi pi-check"
+                            label="Confirm"
+                            // onClick={() => {
+                            //   handleEdit();
+                            // }}
+                          >
+                            {" "}
+                            <i
+                              className="fa fa-pencil-square"
+                              aria-hidden="true"
+                            ></i>{" "}
+                            Assign Manager
+                          </a>
+                          {/* Assign manager  */}
+                        </div>
+                      </button>
+                    )}
+                  <div className="content">
+                    <>
+                      {!user?.credentials &&
+                        (userDetails?.role === "SUPER_ADMIN" ||
+                          userDetails?.role === "ADMIN") && (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip>Resend Password Setup Link</Tooltip>
+                            }
+                          >
+                            <div className="contents">
+                              <img
+                                onClick={() => resendActivationLink(user?._id)}
+                                src={resend}
+                                alt="resend"
+                                title="Resend Password Setup Link"
+                              ></img>
+                            </div>
+                          </OverlayTrigger>
+                        )}
+                      {!user?.profilePicture && (
+                        <UserIcon key={index} firstName={user.name} />
+                      )}
+                      {user?.profilePicture && (
+                        <div className="user-pic">
+                          <img
+                            style={{
+                              width: "45px",
+                              height: "45px",
+                              borderRadius: "50%",
+                            }}
+                            src={`${user?.profilePicture}`}
+                            alt="profile"
+                          ></img>
+                        </div>
+                      )}
+                    </>
+                    <div className="content-height">
+                      <span
+                        onClick={() => redirectToTeamReport(user)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <strong style={{ FontSize: "14px", color: "#673AB7" }}>
+                          {user.name} ({user.role})
+                        </strong>
+                        {user.designation && <p>{user?.designation}</p>}
+                        <p>{user.email}</p>
+                      </span>
+
+                      {user.employeeId && <p>{user?.employeeId} </p>}
+                      {userDetails?.role !== "CONTRIBUTOR" &&
+                        userAnalytics &&
+                        Array.isArray(userAnalytics) &&
+                        userAnalytics.find(
+                          (analytics) => analytics?._id === user?._id
+                        ) && (
+                          <div className="user-analytics">
+                            <>
+                              {(userDetails?.role === "SUPER_ADMIN" ||
+                                userDetails?.role === "ADMIN") &&
+                                AssignedManager(user)}
+                            </>
+                            <div className="user-analytics-item">
+                              <div className="user-analytics-item-value">
+                                Completed After Due Date:{" "}
+                                {userAnalytics
+                                  .find(
+                                    (analytics) => analytics?._id === user._id
+                                  )
+                                  .completedAfterDueDatePercentage.toFixed(2)}
+                                %
+                              </div>
+
+                              <div className="progress">
+                                <div
+                                  className="progress-bar"
+                                  role="progressbar"
+                                  style={{
+                                    width: `${userAnalytics
+                                      .find(
+                                        (analytics) =>
+                                          analytics?._id === user._id
+                                      )
+                                      .completedAfterDueDatePercentage.toFixed(
+                                        2
+                                      )}%`,
+                                  }}
+                                  aria-valuenow={userAnalytics
+                                    .find(
+                                      (analytics) => analytics?._id === user._id
+                                    )
+                                    .completedAfterDueDatePercentage.toFixed(2)}
+                                  aria-valuemin="0"
+                                  aria-valuemax="100"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                      <div className="team-socail">
+                        {user?.githubLink && (
+                          <a
+                            href={user?.githubLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faGithub} />
+                          </a>
+                        )}
+
+                        {user?.linkedInLink && (
+                          <a
+                            href={user?.linkedInLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faLinkedin} />
+                          </a>
+                        )}
+
+                        {user?.twitterLink && (
+                          <a
+                            href={user?.twitterLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FontAwesomeIcon icon={faTwitter} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {(userDetails.role === "SUPER_ADMIN" ||
+                    userDetails.role === "ADMIN") &&
+                    user?.role !== "ADMIN" && (
+                      <div className="btn">
+                        <button
+                          className="btn-glow margin-right btn-color"
+                          onClick={() => {
+                            handleAddUserToProject(user._id);
+                          }}
+                        >
+                          <i className="fa fa-check " aria-hidden="true"></i>{" "}
+                          Assign
+                        </button>
+                      </div>
+                    )}
+                </div>
+              );
+            })}
+        </div>
+
+        {usersList?.length ? (
+          <CustomPagination
+            getAndSetAllUsers={getAndSetAllUsers}
+            pageDetails={pageDetails}
+            setPageDetails={setPageDetails}
+          />
+        ) : (
+          <p className="alig-nodata">No User Found</p>
+        )}
+
+        {loading ? <Loader /> : null}
+
+
+        <Modals
+          modalShow={modalShow}
+          modalBody={<GetModalBody />}
+          heading="Assign Project"
+          onHide={() => setModalShow(false)}
+          submitBtnDisabled={!selectedProjectIds}
+          onClick={handleAssignUserProjectSubmit}
+        />
+
+
+{isTeamList && (
+
+      <ViewTeamList isTeamList={isTeamList} getTeamListForLogginUser={getTeamListForLogginUser} />
+    )}
+
+    
+
+
+        <Modal
+          centered
+          show={confirmModalShow}
+          onHide={() => {
+            setConfirmModalShow(false);
+          }}
+          animation={false}
+          className="confirmation-popup"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <div className="form-group py-3">
+              <p>Are you sure you want to delete this user ?</p>
+            </div>
+
+            <div className="row text-right">
+              <div className="col-md-12">
+                <Button
+                  onClick={() => {
+                    setConfirmModalShow(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="ms-2"
+                  onClick={() => handleDeleteUser()}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          centered
+          show={assignManagerModalShow}
+          onHide={() => {
+            setAssignManagerModalShow(false);
+          }}
+          animation={false}
+          dialogClassName="custom-modal"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Assign Manager</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="search-container">
+              <div className="manager-list-container">
+                {managerList.map((manager) => (
+                  <label key={manager._id} className="manager-label">
+                    <input
+                      type="checkbox"
+                      value={manager._id}
+                      checked={selectedManagers.includes(manager._id)}
+                      onChange={() => handleManagerSelection(manager._id)}
+                    />
+                    <span className="checkmark"></span>
+                    <span className="manager-name">{manager.name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                setAssignManagerModalShow(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                assignManagers();
+              }}
+            >
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    </>
+  );
+}

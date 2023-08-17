@@ -1,0 +1,182 @@
+.addUserFrom-edit {
+  margin: auto !important;
+  margin-left: 31% !important;
+  width: 50%;
+  margin-top: 125px !important;
+  margin-bottom: 25px !important;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  position: relative;
+  padding-top: 100px;
+}
+
+.profile-images {
+  position: absolute;
+  top: -45px;
+  right: 17px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 1rem !important;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 14px !important;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  height: 35px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4da6ff;
+}
+
+.submit-button {
+  display: inline-block;
+  padding:5px 10px;
+  font-size:14px !important;
+ 
+  color: #fff;
+  background-color: #4da6ff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.submit-button:hover,
+.submit-button:focus {
+  background-color: #0077cc;
+}
+
+.profil-ed .edit {
+  margin-left: 10px;
+  width: auto !important;
+}
+
+.image-upload {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.edit-detle {
+  position: relative;
+  height: 125px;
+  width: 125px;
+  margin: auto;
+}
+
+ 
+
+ 
+
+.image-upload label {
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0px;
+}
+
+.image-upload img {
+  width: 100%;
+  height: 125px;
+  /* object-fit: cover; */
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.image-upload input[type="file"] {
+  display: none;
+}
+
+.image-upload button {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.image-upload button:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.image-upload button img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.image-upload button span {
+  font-size: 24px;
+  font-weight: bold;
+  color: #999;
+}
+
+.image-upload button+button {
+  font-size: 16px;
+  color: #999;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.image-upload button+button:hover {
+  color: #333;
+}
+
+.image-upload button+button::before {
+  content: '\2715';
+  margin-right: 5px;
+}
+
+.image-upload button[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media screen and (min-width: 768px) {
+  .image-upload {
+    width: 125px;
+    margin: auto;
+    height: 125px;
+    background: #f9f1ff;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .image-upload {
+    width: 90%;
+    margin: 20px auto;
+  }
+}
+
+.upload-icon{ position: absolute; bottom: 3px; right: 0px;}
+.upload-icon .badge{ margin: 0px 3px ;}

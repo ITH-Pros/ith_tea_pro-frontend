@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "ES6",
+    "module": "commonjs",
+    "jsx": "react",
+    "noEmit": true,
+    "downlevelIteration": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@routes/*": ["./routes/*"],
+      "@pages/*": ["./pages/*"],
+      "@services/*": ["./services/*"],
+      "@assets/*": ["./assets/*"],
+      "@ReduxStore/*": ["./ReduxStore/*"],
+      "@api/*": ["./api/*"],
+      "@images/*": ["./assets/images/*"],
+      "@files/*": ["./assets/files/*"],
+      "@validators/*": ["./validators/*"],
+      "@constants/*": ["./constants/*"],
+      "@helpers/*": ["./helpers/*"],
+      "@context/*": ["./context/*"],
+      "@types/*": ["./types/*"],
+      "@roles/*": ["./rolesBasedAccessControl/*"],
+      "@utlis/*": ["./utlis/*"],
+      "@modals/*": ["./components/Modals/*"]
+    },
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules"]
+}

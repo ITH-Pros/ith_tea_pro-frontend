@@ -1,0 +1,132 @@
+.filter-task-tag {
+    line-height: 16px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    flex: 1 1;
+    text-align: center;
+    justify-content: center;
+    transition: color .3s linear;
+    margin: 1.5px 0;
+    color: #0f1b57;
+    padding: 5px;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-weight: 700;
+    opacity: .7;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.addTaskBtn {
+    background-color: #8355ad !important;
+    line-height: 16px;
+    white-space: nowrap;
+    transition: color .3s linear;
+    color: #fff !important;
+    border-color: #d1a2fb;
+    padding: 10px 12px;
+    border-radius: 5px;
+    border: 1px solid;
+     
+}
+
+#dialog-window .accordion-item {
+    background: transparent;
+}
+
+.filter-main-tag {
+    display: flex;
+    justify-content: center;
+}
+
+.filterWth {
+    width: 100%;
+}
+
+.form-control {
+    margin-bottom: 5px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    box-shadow: 0 -3px 3px rgb(0 0 0 / 10%);
+    background: #fff !important;
+    z-index: 1;
+    text-align: right;
+    border-top: none;
+    padding-right: 40px;
+  
+}
+
+.filterFields {
+    margin-bottom: 10px;
+}
+
+.filterFields {
+    align-items: center;
+    flex-wrap: nowrap !important;
+}
+
+.filterFields .col-form-label {
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.filterFields .form-control {
+    font-size: 15px;
+    width: 100%;
+}
+
+ 
+
+.filterModal.modal.show .modal-dialog {
+    border-radius: 4px;
+  
+   
+}
+
+.filterFields .react-datepicker-wrapper {
+    padding: 0;
+}
+
+.form-label {
+    font-size: 0.9rem !important;
+    font-weight: bold;
+}
+
+.due-date label {
+    /* width: 26%; */
+    font-weight: 100;
+}
+
+.due-date .form-control {
+    font-size: 14px;
+    float: right;
+    width: 74%;
+    margin-top: 14px;
+}
+
+.due-date select {
+    width:100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    height: 45px !important;
+    
+}
+

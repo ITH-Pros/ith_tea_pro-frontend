@@ -1,0 +1,15 @@
+.addUserFrom {
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.was-validated .form-control:valid,
+.form-control.is-valid {
+
+  background-position: right calc(0.375em + 20px) center !important;
+}

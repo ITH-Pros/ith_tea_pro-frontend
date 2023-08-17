@@ -1,0 +1,55 @@
+/* team-list.css */
+.container {
+    padding: 10px;
+  }
+  
+  .team-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .team-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .team-item:hover {
+    background-color: #eaeaea;
+  }
+  
+  .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 16px;
+  }
+  
+  .team-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .team-details h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .team-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #888;
+  }
+
+  .icon{
+    margin-left: 6px;
+  }
+  
