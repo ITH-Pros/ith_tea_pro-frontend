@@ -21,7 +21,7 @@ export default function Login() {
 
   const handleForgotClick = (e) => {
     e.preventDefault();
-    navigate("/forgot-password");
+    navigate("/login/forgot-password");
   };
 
   const showHidePassword = (values, setFieldValue) => {

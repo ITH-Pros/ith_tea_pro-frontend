@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ import { useMutation } from 'react-query';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-
+  const [showOtp, setShowOtp] = useState(false);
   const forgotPasswordMutation = useMutation(forgotPassword);
   const verifyOtpMutation = useMutation(verifyOtp);
   const changePasswordMutation = useMutation(changePassword);
