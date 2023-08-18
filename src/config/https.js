@@ -1,7 +1,6 @@
 import axios from "axios";
-import { baseURL } from "./index";
 export const axiosInstance = axios.create({
-  baseURL,
+  baseURL:import.meta.env.VITE_BASE_URL
 });
 
 axiosInstance.interceptors.request.use(
