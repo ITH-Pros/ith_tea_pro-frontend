@@ -1,7 +1,4 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./tasks.css";
 import {
   addSectionApi,
@@ -16,26 +13,14 @@ import Loader from "@components/Shared/Loader";
 
 import FilterModal from "@components/FilterModal/index";
 import AddTaskModal from "@components/AddTaskModal/index";
-import {
-  Accordion,
-  ProgressBar,
-  Dropdown,
-  Badge,
-  Modal,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-  Row,
-  Col,
-} from "react-bootstrap";
-import moment from "moment";
-// import { useAuth } from '../../auth/AuthProvider'
+import { Modal, Button, Row, Col } from "react-bootstrap";
 import ViewTaskModal from "@components/view-task/index";
-import UserIcon from "@components/ProfileImage/profileImage";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
+import TaskList from "@components/task-List/tasklist";
+import { useMutation } from "react-query";
 
 const Tasks = () => {
   const [projects, setProjects] = useState([]);
@@ -84,8 +69,6 @@ const Tasks = () => {
     });
   };
 
-  // remove filter data from local storage when compenent leave
-
   useEffect(() => {
     return () => {
       localStorage.removeItem("taskFilters");
@@ -128,12 +111,17 @@ const Tasks = () => {
     setDeleteSectionModal(true);
   };
 
-  const deleteSection = async () => {
+  /*  @delete section */
+
+  const deleteSection = () => {
     let dataToSend = {
       sectionId: selectedSectionId,
     };
-    try {
-      const res = await deleteSectionApi(dataToSend);
+    deleteMutation.mutate(dataToSend);
+  };
+
+  const deleteMutation = useMutation(deleteSectionApi, {
+    onSuccess: (res) => {
       if (res.status === 200) {
         toast.dismiss();
         toast.info("Section deleted successfully");
@@ -153,22 +141,27 @@ const Tasks = () => {
         toast.info(res?.message);
         // set
       }
-    } catch (error) {
-      // console.log('error in deleteSection', error)
-    }
-  };
+    },
+    onError: (error) => {
+      console.log("error in deleteSection", error);
+    },
+  });
+
+  /*  @archive section */
 
   const archiveSection = async () => {
     let dataToSend = {
       sectionId: selectedSectionId,
       isArchived: true,
     };
-    try {
-      const res = await archiveSectionApi(dataToSend);
+    archiveSectionMutation.mutate(dataToSend);
+  };
+
+  const archiveSectionMutation = useMutation(archiveSectionApi, {
+    onSuccess: (res) => {
       if (res.status === 200) {
         toast.dismiss();
         toast.info("Section archived successfully");
-        // set
         setArchiveSectionModal(false);
         closeModal();
         getTasksDataUsingProjectId();
@@ -182,12 +175,14 @@ const Tasks = () => {
       } else {
         toast.dismiss();
         toast.info(res?.message);
-        // set
       }
-    } catch (error) {
-      // console.log('error in archiveSection', error)
-    }
-  };
+    },
+    onError: (error) => {
+      console.log("error in archiveSection", error);
+    },
+  });
+
+  /* @update section */
 
   const editSection = (sectionId, projectId) => {
     setSelectedProjectId(sectionId?.projectId);
@@ -203,13 +198,15 @@ const Tasks = () => {
       projectId: selectedProjectId,
       sectionId: selectedSectionId,
     };
-    try {
-      const res = await updateSection(dataToSend);
+    updateSectionMutation.mutate(dataToSend);
+  };
+
+  const updateSectionMutation = useMutation(updateSection, {
+    onSuccess: (res) => {
       if (res.status === 200) {
-        toast.dismiss();
         toast.info("Section updated successfully");
+        toast.dismiss();
         setSectionEditMode(false);
-        // set
         setModalShow(false);
         closeModal();
         getTasksDataUsingProjectId();
@@ -221,14 +218,41 @@ const Tasks = () => {
           setSelectedProjectId(paramsData?.projectId);
         }
       } else {
+        toast.info(res?.message);
+        toast.dismiss();
+      }
+    },
+    onError: (error) => {
+      console.log("error in updateSection", error);
+    },
+  });
+
+  /* @update task status */
+
+  const handleStatusChange = (e, taskId, status) => {
+    const newStatus = status;
+    let dataToSend = {
+      taskId: taskId,
+      status: newStatus,
+    };
+    updateTaskStatusMutation.mutate(dataToSend);
+  };
+
+  const updateTaskStatusMutation = useMutation(updateTaskStatusById, {
+    onSuccess: (res) => {
+      if (res.status === 200) {
+        toast.dismiss();
+        toast.info("Task status updated successfully");
+        getTasksDataUsingProjectId();
+      } else {
         toast.dismiss();
         toast.info(res?.message);
-        // set
       }
-    } catch (error) {
-      // console.log('error in sectionUpdate', error)
-    }
-  };
+    },
+    onError: (error) => {
+      console.log("error in updateTaskStatusMutation", error);
+    },
+  });
 
   const handleViewDetails = (taskId) => {
     setSelectedTaskId(taskId);
@@ -240,91 +264,45 @@ const Tasks = () => {
     setSelectedTaskId(null);
   };
 
-  const handleStatusChange = (e, taskId, status) => {
-    const newStatus = status;
-    let dataToSend = {
-      taskId: taskId,
-      status: newStatus,
-    };
-    updateTaskStatus(dataToSend);
-  };
-
-  const updateTaskStatus = async (dataToSend) => {
-    try {
-      const res = await updateTaskStatusById(dataToSend);
-      if (res.error) {
-        toast.dismiss();
-        toast.info(
-          res?.message || "Something Went Wrong in update task status"
-        );
-        // set
-      } else {
-        toast.dismiss();
-        toast.info(res?.message || "Response in update task status 1");
-        // set
-        getTasksDataUsingProjectId();
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(
-        error?.error?.message ||
-          "Something Went Wrong in update task status error"
-      );
-      // set
-      return error.message;
-    }
-  };
-
   const showAddSectionModal = (isTrue) => {
     setSectionName("");
     setModalShow(isTrue);
   };
 
-  const addSection = async () => {
-    if (sectionEditMode) {
-      sectionUpdate();
-      return;
-    } else {
-      setLoading(true);
-      try {
-        let dataToSend = {
-          name: sectionName,
-          projectId: selectedProjectId,
-        };
+  /* @add section */
 
-        const res = await addSectionApi(dataToSend);
-        setLoading(false);
-        if (res.error) {
-          toast.dismiss();
-          toast.info(res?.message || "Something Went Wrong in add section");
-          // set
-        } else {
-          toast.dismiss();
-          toast.info(res?.message || "Response in add section");
-          // set
-          setModalShow(false);
-          closeModal();
-          getTasksDataUsingProjectId();
-          let paramsData;
-          if (params?.projectId) {
-            paramsData = params?.projectId;
-          }
-          if (paramsData?.projectId) {
-            setSelectedProjectId(paramsData?.projectId);
-          }
-          // getProjectList();
-        }
-      } catch (error) {
-        toast.dismiss();
-        toast.info(
-          error?.error?.message || "Something Went Wrong in add section error"
-        );
-        // set
-        setLoading(false);
-        return error.message;
-      }
-    }
+  const addSection = async () => {
+    let dataToSend = {
+      name: sectionName,
+      projectId: selectedProjectId,
+    };
+    addSectionMutation.mutate(dataToSend);
   };
+
+  const addSectionMutation = useMutation(addSectionApi, {
+    onSuccess: (res) => {
+      if (res.error) {
+        toast.dismiss();
+        toast.info(res?.message || "Something Went Wrong in add section");
+      } else {
+        toast.dismiss();
+        toast.info(res?.message || "Response in add section");
+        setModalShow(false);
+        closeModal();
+        getTasksDataUsingProjectId();
+        let paramsData;
+        if (params?.projectId) {
+          paramsData = params?.projectId;
+        }
+        if (paramsData?.projectId) {
+          setSelectedProjectId(paramsData?.projectId);
+        }
+      }
+    },
+    onError: (error) => {
+      console.log("error in addSection", error);
+    },
+  });
 
   function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
@@ -338,14 +316,12 @@ const Tasks = () => {
   }
 
   function convertToUTCNight(dateString) {
-    // // console.log(dateString, '------------------')
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    // // console.log('==========', localTimeString)
     return localTimeString;
   }
 
@@ -372,19 +348,29 @@ const Tasks = () => {
         let selectedFilter = localStorage.getItem("selectedFilterTypes");
         console.log(filterData);
         if (filterData?.projectIds && filterData.projectIds.length > 0) {
-          data.projectIds = JSON.stringify(filterData.projectIds.map((item) => item._id));
+          data.projectIds = JSON.stringify(
+            filterData.projectIds.map((item) => item._id)
+          );
         }
         if (filterData?.createdBy) {
-          data.createdBy = JSON.stringify(filterData.createdBy.map((item) => item._id));
+          data.createdBy = JSON.stringify(
+            filterData.createdBy.map((item) => item._id)
+          );
         }
-        if(filterData?.selectedLead && filterData.selectedLead.length > 0){
-          data.leads = JSON.stringify(filterData.selectedLead.map((item) => item._id));
+        if (filterData?.selectedLead && filterData.selectedLead.length > 0) {
+          data.leads = JSON.stringify(
+            filterData.selectedLead.map((item) => item._id)
+          );
         }
         if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
-          data.assignedTo = JSON.stringify(filterData.assignedTo.map((item) => item._id));
+          data.assignedTo = JSON.stringify(
+            filterData.assignedTo.map((item) => item._id)
+          );
         }
         if (filterData?.category && filterData.category.length > 0) {
-          data.sections = JSON.stringify(filterData.category.map((item) => item._id));
+          data.sections = JSON.stringify(
+            filterData.category.map((item) => item._id)
+          );
         }
         if (filterData?.priority) {
           data.priority = JSON.stringify(filterData.priority);
@@ -484,8 +470,6 @@ const Tasks = () => {
     if (params?.projectId) {
       paramsData = params?.projectId;
     }
-    console.log("-------");
-    console.log(paramsData);
     setLoading(true);
     try {
       let data = {
@@ -498,7 +482,6 @@ const Tasks = () => {
         data.projectId = paramsData;
       }
       if (localStorage.getItem("selectedLead")) {
-        // // console.log(JSON.parse(localStorage.getItem('selectedLead')))
         let leadsToSend = localStorage.getItem("selectedLead");
         let leads = JSON.parse(localStorage.getItem("selectedLead"));
         if (leads?.length) {
@@ -509,8 +492,6 @@ const Tasks = () => {
       if (localStorage.getItem("taskFilters")) {
         let filterData = JSON.parse(localStorage.getItem("taskFilters"));
         let selectedFilter = localStorage.getItem("selectedFilter");
-        // // console.log(selectedFilter, 'selectedFilter')
-        // // console.log(filterData)
         if (filterData?.projectIds && filterData.projectIds.length > 0) {
           data.projectIds = JSON.stringify(filterData?.projectIds);
         }
@@ -569,10 +550,7 @@ const Tasks = () => {
       if (res.error) {
         toast.dismiss();
         toast.info(res?.message || "Something Went Wrong in download excel");
-        // set
       } else {
-        // console.log(res,'download excel') // Make sure the response contains the expected data
-
         const blob = new Blob([res], {
           type: ".xlsx",
         });
@@ -693,474 +671,23 @@ const Tasks = () => {
           getTasksDataUsingProjectId={getTasksDataUsingProjectId}
         />
 
-        <Accordion alwaysOpen="true">
-          {/* {!projects?.length && params?.projectId && !isArchive && userDetails?.role !== 'CONTRIBUTOR' && (
-            <div className="add-section-center">
-              <Button
-                variant="primary"
-                onClick={() => {
-                  showAddSectionModal(true)
-                }}
-              >
-                <i className="fa fa-plus-circle"> </i> Add Section
-              </Button>
-            </div>
-          )} */}
-          {!projects?.length && !selectedProjectId && (
-            <p className="alig-nodata" style={{ textAlign: "center" }}>
-              No Tasks Found
-            </p>
-          )}
-
-          {projects.map((project, index) => (
-            // check if tasks array has data
-            <Accordion.Item key={index} eventKey={index}>
-              {project?._id?.projectId && project?._id?.section && (
-                <Accordion.Header>
-                  {project?._id?.projectId} / {project?._id?.section}
-                </Accordion.Header>
-              )}
-
-              <div className="d-flex rightTags">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip>
-                      {taskInfo && (
-                        <div>
-                          <div>Completed Tasks: {taskInfo.completedTasks}</div>
-                          <div>Pending Tasks: {taskInfo.pendingTasks}</div>
-                        </div>
-                      )}
-                    </Tooltip>
-                  }
-                >
-                  <div
-                    onMouseEnter={() => handleProgressBarHover(project)}
-                    onMouseLeave={() => setTaskInfo(null)}
-                  >
-                    {parseFloat(
-                      (Number(project?.completedTasks || 0) /
-                        Number(project?.totalTasks || 1)) *
-                        100
-                    ).toFixed(2) + " % "}
-                    <ProgressBar>
-                      <ProgressBar
-                        variant="success"
-                        now={
-                          100 *
-                          (Number(project?.completedTasks || 0) /
-                            Number(project?.totalTasks || 1))
-                        }
-                        key={1}
-                      />
-                    </ProgressBar>
-                  </div>
-                </OverlayTrigger>
-                <div>
-                  <Dropdown>
-                    <Dropdown.Toggle id="dropdown-basic" className="action_btn">
-                      <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      {!isArchive && (
-                        <Dropdown.Item
-                          onClick={() => {
-                            handleAddTaskFromSection(project);
-                          }}
-                        >
-                          <i
-                            className="fa fa-plus-circle"
-                            aria-hidden="true"
-                          ></i>{" "}
-                          Add Tasks
-                        </Dropdown.Item>
-                      )}
-
-                      {(userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") && (
-                        <>
-                          {!isArchive && (
-                            <Dropdown.Item
-                              onClick={() =>
-                                editSection({
-                                  section: project?._id?.section,
-                                  projectId: project?.projectId,
-                                  _id: project?.sectionId,
-                                })
-                              }
-                            >
-                              <i
-                                className="fa fa-pencil-square"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Edit Section
-                            </Dropdown.Item>
-                          )}
-                          {!isArchive && (
-                            <Dropdown.Item>
-                              <i
-                                className="fa fa-files-o"
-                                aria-hidden="true"
-                              ></i>{" "}
-                              Copy/Move
-                            </Dropdown.Item>
-                          )}
-                          <Dropdown.Item
-                            disabled={project?.tasks?.length > 0}
-                            onClick={() =>
-                              deleteConFirmation({
-                                _id: project?.sectionId,
-                              })
-                            }
-                          >
-                            <i className="fa fa-trash" aria-hidden="true"></i>{" "}
-                            Delete Section
-                          </Dropdown.Item>
-                        </>
-                      )}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-              <Accordion.Body>
-                <ul className="mb-0">
-                  {project?.tasks?.map((task) => (
-                    <li key={task?._id} className="share-wrapper-ui">
-                      <div className="clickLabelArea">
-                        <Row className="align-items-center justify-content-start">
-                          <Col lg={4} className="align-items-center">
-                            <Row>
-                              <Col lg={1}>
-                                <div>
-                                  {(userDetails.id === task?.assignedTo?._id ||
-                                    (userDetails.role === "LEAD" &&
-                                      (userDetails.id ===
-                                        task?.assignedTo?._id ||
-                                        task?.lead?.includes(userDetails.id) ||
-                                        userDetails.id ===
-                                          task?.createdBy?._id)) ||
-                                    userDetails.role === "SUPER_ADMIN" ||
-                                    userDetails.role === "ADMIN") && (
-                                    <Dropdown>
-                                      <Dropdown.Toggle
-                                        variant="success"
-                                        id="dropdown-basic"
-                                      >
-                                        {task.status === "NOT_STARTED" && (
-                                          <i
-                                            className="fa fa-check-circle secondary"
-                                            aria-hidden="true"
-                                          ></i>
-                                        )}
-                                        {task.status === "ONGOING" && (
-                                          <i
-                                            className="fa fa-check-circle warning"
-                                            aria-hidden="true"
-                                          ></i>
-                                        )}
-                                        {task.status === "COMPLETED" && (
-                                          <i
-                                            className="fa fa-check-circle success"
-                                            aria-hidden="true"
-                                          ></i>
-                                        )}
-                                        {task.status === "ONHOLD" && (
-                                          <i
-                                            className="fa fa-check-circle primary"
-                                            aria-hidden="true"
-                                          ></i>
-                                        )}
-                                      </Dropdown.Toggle>
-
-                                      {task.status !== "COMPLETED" && (
-                                        <Dropdown.Menu>
-                                          <Dropdown.Item
-                                            onClick={(event) =>
-                                              handleStatusChange(
-                                                event,
-                                                task?._id,
-                                                "NOT_STARTED"
-                                              )
-                                            }
-                                          >
-                                            <i
-                                              className="fa fa-check-circle secondary  "
-                                              aria-hidden="true"
-                                            ></i>{" "}
-                                            Not Started
-                                          </Dropdown.Item>
-                                          <Dropdown.Item
-                                            onClick={(event) =>
-                                              handleStatusChange(
-                                                event,
-                                                task?._id,
-                                                "ONGOING"
-                                              )
-                                            }
-                                          >
-                                            <i
-                                              className="fa fa-check-circle warning"
-                                              aria-hidden="true"
-                                            ></i>{" "}
-                                            Ongoing
-                                          </Dropdown.Item>
-                                          <Dropdown.Item
-                                            onClick={(event) =>
-                                              handleStatusChange(
-                                                event,
-                                                task?._id,
-                                                "COMPLETED"
-                                              )
-                                            }
-                                          >
-                                            <i
-                                              className="fa fa-check-circle success"
-                                              aria-hidden="true"
-                                            ></i>{" "}
-                                            Completed
-                                          </Dropdown.Item>
-                                          <Dropdown.Item
-                                            onClick={(event) =>
-                                              handleStatusChange(
-                                                event,
-                                                task?._id,
-                                                "ONHOLD"
-                                              )
-                                            }
-                                          >
-                                            <i
-                                              className="fa fa-check-circle primary"
-                                              aria-hidden="true"
-                                            ></i>{" "}
-                                            On Hold
-                                          </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                      )}
-                                    </Dropdown>
-                                  )}
-                                </div>
-                              </Col>
-                              <Col lg={8}>
-                                <p
-                                  className={
-                                    task?.status === "COMPLETED"
-                                      ? "line-strics"
-                                      : ""
-                                  }
-                                  // onClick={() => handleViewDetails(task?._id)}
-                                >
-                                  <p
-                                    onClick={() => handleViewDetails(task?._id)}
-                                    className="text-truncate"
-                                  >
-                                    {task?.title}
-                                  </p>
-                                </p>
-                              </Col>
-                              <Col
-                                lg={3}
-                                className="d-flex align-items-center "
-                              >
-                                {task?.isReOpen && (
-                                  <div className="text-danger">
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>Re-opened</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-retweet"
-                                        aria-hidden="true"
-                                      ></i>
-                                    </OverlayTrigger>
-                                  </div>
-                                )}
-                                {task?.isDelayTask && (
-                                  <div
-                                    className="text-danger"
-                                    style={{ marginLeft: "10px" }}
-                                  >
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={<Tooltip>Overdue</Tooltip>}
-                                    >
-                                      <i
-                                        className="fa fa-flag"
-                                        aria-hidden="true"
-                                      ></i>
-                                    </OverlayTrigger>
-                                  </div>
-                                )}
-                              </Col>
-                            </Row>
-                          </Col>
-
-                          <Col lg={3}>
-                            {task?.status === "NOT_STARTED" && (
-                              <Badge bg="secondary">NOT STARTED</Badge>
-                            )}
-                            {task?.status === "ONGOING" && (
-                              <Badge bg="warning">ONGOING</Badge>
-                            )}
-                            {task?.status === "COMPLETED" && (
-                              <Badge bg="success">
-                                completed{" "}
-                                {moment(
-                                  task?.completedDate?.split("T")[0]
-                                ).format("MMM DD,YYYY")}
-                              </Badge>
-                            )}
-                            {task?.status === "ONHOLD" && (
-                              <Badge bg="primary">ON HOLD</Badge>
-                            )}
-                            {task?.priority === "LOW" && (
-                              <Badge bg="primary">LOW</Badge>
-                            )}
-                            {task?.priority === "REPEATED" && (
-                              <Badge bg="warning">REPEATED</Badge>
-                            )}
-                            {task?.priority === "MEDIUM" && (
-                              <Badge bg="warning">MEDIUM</Badge>
-                            )}
-                            {task?.priority === "HIGH" && (
-                              <Badge bg="danger">HIGH</Badge>
-                            )}
-                          </Col>
-                          <Col
-                            lg={2}
-                            className="align-items-center justify-content-start ps-0 d-flex"
-                          >
-                            {!task?.assignedTo?.profilePicture &&
-                              task?.assignedTo?.name && (
-                                <div className="nameTag">
-                                  <UserIcon
-                                    style={{ width: "25px" }}
-                                    key={index}
-                                    firstName={task?.assignedTo?.name || ""}
-                                  />
-                                </div>
-                              )}
-                            {task?.assignedTo?.profilePicture && (
-                              <div
-                                className="nameTag"
-                                style={{ display: "contents" }}
-                              >
-                                <img
-                                  style={{
-                                    width: "25px",
-                                    height: "25px",
-                                    borderRadius: "50%",
-                                  }}
-                                  src={`${task?.assignedTo?.profilePicture}`}
-                                  alt="profile"
-                                ></img>
-                              </div>
-                            )}
-                            <span className="text-truncate d-block">
-                              {" "}
-                              {task?.assignedTo?.name}
-                            </span>
-                            {!task?.assignedTo?.name && (
-                              <span> NOT ASSIGNED </span>
-                            )}
-                          </Col>
-                          {/* for lead  */}
-
-                          <Col
-                            lg={2}
-                            className="align-items-center justify-content-start"
-                          >
-                            {!task?.lead[0]?.profilePicture &&
-                              task?.lead[0]?.name && (
-                                <div className="nameTag">
-                                  <UserIcon
-                                    key={index}
-                                    firstName={task?.lead[0]?.name || ""}
-                                  />
-                                </div>
-                              )}
-                            {task?.lead[0]?.profilePicture && (
-                              <div
-                                className="nameTag"
-                                style={{ display: "contents" }}
-                              >
-                                <img
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    borderRadius: "50%",
-                                  }}
-                                  src={`${task?.lead[0]?.profilePicture}`}
-                                  alt="profile"
-                                ></img>
-                              </div>
-                            )}
-                            <span> {task?.lead[0]?.name}</span>
-                            {!task?.lead[0]?.name && (
-                              <span> NOT ASSIGNED </span>
-                            )}
-                          </Col>
-
-                          <Col lg={1}>
-                            {task?.dueDate && (
-                              <Badge
-                                bg={
-                                  new Date(task?.dueDate) < new Date() &&
-                                  !(task?.status === "COMPLETED")
-                                    ? "danger"
-                                    : "primary"
-                                }
-                              >
-                                Due{" "}
-                                {moment(task?.dueDate?.split("T")[0]).format(
-                                  "MMM DD,YYYY"
-                                )}
-                              </Badge>
-                              // onClick={() => handleViewDetails(task?._id)}
-                            )}
-                          </Col>
-                        </Row>
-                      </div>
-                      {(userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN") &&
-                        !isArchive && (
-                          <a
-                            style={{
-                              float: "right",
-                              color: "#6c757d",
-                              cursor: "pointer",
-                              marginRight: "10px",
-                              position: "relative",
-                              top: "10px",
-                            }}
-                            onClick={() => {
-                              setSelectedProject();
-                              setShowAddTask(true);
-                              setSelectedTask(task);
-                            }}
-                          >
-                            <i
-                              className="fa fa-pencil-square-o"
-                              aria-hidden="true"
-                            >Edit</i>
-                          </a>
-                        )}
-                    </li>
-                  ))}
-                </ul>
-              </Accordion.Body>
-            </Accordion.Item>
-          ))}
-          {projects && projects.length === 0 && (
-            <p> {isArchive ? "No Task archived." : ""} </p>
-          )}
-        </Accordion>
+        <TaskList
+          projects={projects}
+          selectedProjectId={selectedProjectId}
+          isArchive={isArchive}
+          userDetails={userDetails}
+          taskInfo={taskInfo}
+          handleProgressBarHover={handleProgressBarHover}
+          setTaskInfo={setTaskInfo}
+          handleAddTaskFromSection={handleAddTaskFromSection}
+          editSection={editSection}
+          deleteConFirmation={deleteConFirmation}
+          handleViewDetails={handleViewDetails}
+          handleStatusChange={handleStatusChange}
+          setSelectedProject={setSelectedProject}
+          setShowAddTask={setShowAddTask}
+          setSelectedTask={setSelectedTask}
+        />
 
         {/* ////// */}
         <Offcanvas
