@@ -21,7 +21,7 @@ export default function Login() {
 
   const handleForgotClick = (e) => {
     e.preventDefault();
-    navigate("/forgot-password");
+    navigate("/login/forgot-password");
   };
 
   const showHidePassword = (values, setFieldValue) => {
@@ -30,7 +30,7 @@ export default function Login() {
 
   const loginMutation = useMutation(loginUser, {
     onSuccess: (data) => {
-      if (data.error) {
+      if (data?.error) {
         toast.dismiss();
         toast.info(data?.message || 'Please check login credentials');
       } else {

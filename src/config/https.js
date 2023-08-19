@@ -1,7 +1,6 @@
 import axios from "axios";
-import { baseURL } from "./index";
 export const axiosInstance = axios.create({
-  baseURL,
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use(
@@ -25,23 +24,19 @@ axiosInstance.interceptors.response.use(
     return res;
   },
   async function (error) {
-
     // // console.log(error,'-----------------------------RES')
 
     if (error.response) {
-      if (error.response.status === 403 ) {
+      if (error.response.status === 403) {
         localStorage.clear();
-        window.location.href='/login'
-
-          window.location.reload();
-        
+        window.location.href = "/login";
+        window.location.reload();
       }
-      if (error.response.status === 401 ) {
+      if (error.response.status === 401) {
         localStorage.clear();
-        window.location.href='/login'
+        window.location.href = "/login";
 
-          window.location.reload();
-        
+        window.location.reload();
       }
     }
     return error.response;
