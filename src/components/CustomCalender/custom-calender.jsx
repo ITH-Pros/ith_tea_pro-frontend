@@ -9,6 +9,7 @@ import { getTeamWork } from "@services/user/api";
 // import { useAuth } from "../../auth/AuthProvider";
 import Loader from "../Shared/Loader";
 import { useAuth } from "../../utlis/AuthProvider";
+import { useQuery } from "react-query";
 
 const CustomCalendar = (props) => {
   const [currentView, setCurrentView] = useState("Week");
@@ -55,21 +56,20 @@ const CustomCalendar = (props) => {
     setCurrentDateUTC(currentDateMinusOneDay.toDateString());
   }, [currentDate, currentView]);
 
-  useEffect(() => {
-    if (userDetails?.role !== "CONTRIBUTOR") {
-      console.log("useEffect from custom-calender.js");
-      getTeamWorkList();
-    }
-  }, [currentDate, currentView]);
+  // useEffect(() => {
+  //   if (userDetails?.role !== "CONTRIBUTOR") {
+  //     console.log("useEffect from custom-calender.js");
+  //     refetch();
+  //   }
+  // }, [currentDate, currentView]);
 
   useEffect(() => {
     if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined) {
-      getTeamWorkList();
+      refetch();
     }
   }, [isChange]);
 
-  const getTeamWorkList = async () => {
-    setLoading(true);
+  const fetchTeamWork = async () => {
     let dataToSend = {};
 
     if (currentView === "Week") {
@@ -78,26 +78,25 @@ const CustomCalendar = (props) => {
         toDate: convertToUTCNight(weekEnd),
       };
     } else if (currentView === "Day") {
-      console.log("currentDate", currentDate);
       dataToSend = {
         fromDate: convertToUTCForDay(currentDate),
         toDate: convertToUTCForNight(currentDate),
       };
     }
 
-    try {
-      const res = await getTeamWork(dataToSend);
-      if (res.error) {
-        setLoading(false);
-      } else {
-        setTeamWorkList(res?.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
+    const res = await getTeamWork(dataToSend);
+    if (res.error) {
+      throw new Error(res.error);
     }
+    return res.data;
   };
+
+  const { data, error, isLoading, refetch } = useQuery(['teamWork' ,currentDate , currentView ], fetchTeamWork, {
+    enabled: userDetails?.role !== "CONTRIBUTOR",
+    onSuccess: data => {
+      setTeamWorkList(data);
+    }
+  });
 
   const handlePrev = () => {
     if (currentView === "Week") {

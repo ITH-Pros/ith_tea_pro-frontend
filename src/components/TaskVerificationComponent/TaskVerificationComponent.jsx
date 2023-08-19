@@ -1,12 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Col, Row, Tooltip, OverlayTrigger, Badge, Dropdown, Form, Button } from 'react-bootstrap';
 import moment from 'moment';
 import leadAvatar from "@assets/img/leadAvatar.jpeg";
 import avtar from "@assets/img/avtar.png";
+import { getAllPendingRating, getAllUsers } from '@services/user/api';
+import { useQuery } from 'react-query';
 
 
 
-const TaskVerificationComponent = ({ pendingRatingList, userDetails, handleViewDetails, openVerifyModal, verifyTaskNotAllowedRoles , teamMembers }) => {
+const TaskVerificationComponent = ({ userDetails, handleViewDetails, openVerifyModal, verifyTaskNotAllowedRoles  }) => {
+
+  let params = {
+    limit: 50,
+    currentPage: 1,
+  };
+
+  const { data: teamMembers } = useQuery(
+    ["getAllUsers"],
+    () => getAllUsers({params}), 
+    {
+      enabled: userDetails?.role !== "CONTRIBUTOR",
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        console.log("data", data);
+        return data?.data?.users;
+      },
+    }
+  );
+  
+  const [verifyTeamMember, setVerifyTeamMember] = useState("");
+  const getFormattedDate = (date) => {
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  }
+
+
+  const { data: pendingRatingList, error, isLoading } = useQuery(
+    ["getAllPendingRating", verifyTeamMember],
+    () => {
+      const payload = {};
+      if (verifyTeamMember) {
+        payload.memberId = verifyTeamMember;
+      }
+      return getAllPendingRating(payload);
+    },
+    {
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        if (data.error) {
+          toast.dismiss();
+          toast.info(
+            data?.message || "Something Went Wrong while fetching Pending Ratings Data"
+          );
+          return [];
+        }
+
+        let allTask = data?.data?.tasks || [];
+        const today = getFormattedDate(new Date());
+
+        allTask.forEach((item) => {
+          let dateMonth = item?.dueDate?.split("T")[0];
+          if (dateMonth === today) {
+            item.dueToday = true;
+          } else if (new Date().getTime() > new Date(item?.dueDate).getTime()) {
+            item.dueToday = true;
+          } else {
+            item.dueToday = false;
+          }
+        });
+        return data?.data;
+      },
+    }
+  );
+
+
+  
+ 
   return (
     <Col lg={6} style={{ paddingRight: '0px' }}>
       <Row>
@@ -46,6 +114,8 @@ const TaskVerificationComponent = ({ pendingRatingList, userDetails, handleViewD
                     {pendingRatingList && pendingRatingList?.length === 0 && (
                       <p>No task found.</p>
                     )}
+                    {isLoading && <p>Loading...</p>}
+
                     {pendingRatingList &&
                       pendingRatingList?.length > 0 &&
                       pendingRatingList?.map((task) => (
