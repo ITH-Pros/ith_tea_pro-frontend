@@ -296,8 +296,8 @@ const ProjectCard = ({
           onClick={handleMenuIconClick}
           onBlur={handleMenuIconClick}
         >
-          {(userDetails.role === "SUPER_ADMIN" ||
-            userDetails.role === "ADMIN") && (
+          {(userDetails?.role === "SUPER_ADMIN" ||
+            userDetails?.role === "ADMIN") && (
             <button className="project-btn-more dropdown ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -489,9 +489,9 @@ const ProjectCard = ({
                     </>
                   ))}
               </div>
-              {userDetails.role !== "CONTRIBUTOR" &&
+              {userDetails?.role !== "CONTRIBUTOR" &&
                 !isArchive &&
-                userDetails.role !== "GUEST" && (
+                userDetails?.role !== "GUEST" && (
                   <div
                     style={{ position: "relative", float: "right" }}
                     onClick={() => {
@@ -530,10 +530,10 @@ const ProjectCard = ({
             <Offcanvas.Body className="pt-0">
               <div>
                 <Col sm={12}>
-                  {userDetails.role !== "CONTRIBUTOR" &&
+                  {userDetails?.role !== "CONTRIBUTOR" &&
                     !isArchive &&
                     modalTitle !== "Team Members" &&
-                    userDetails.role !== "LEAD" && (
+                    userDetails?.role !== "LEAD" && (
                       <div onClick={assignTeamUser} className="assignPopup">
                         <UserIcon
                           style={{ width: "20px" }}
@@ -648,8 +648,8 @@ const ProjectCard = ({
                             <p className="userEmail">{user?.email}</p>
                           </div>
 
-                          {(userDetails.role === "SUPER_ADMIN" ||
-                            userDetails.role === "ADMIN") && (
+                          {(userDetails?.role === "SUPER_ADMIN" ||
+                            userDetails?.role === "ADMIN") && (
                             <CiCircleRemove
                               onClick={() =>
                                 handleConfirmation(user._id, user.name)

@@ -491,7 +491,7 @@ export default function Teams(props) {
     }
   };
   const redirectToTeamReport = (user) => {
-    if (userDetails.role === "CONTRIBUTOR") {
+    if (userDetails?.role === "CONTRIBUTOR") {
       return;
     }
     let data = {
@@ -550,7 +550,7 @@ export default function Teams(props) {
           Team Members
           <div className="projects-button">
 
-          {userDetails.role === "LEAD" && (
+          {userDetails?.role === "LEAD" && (
             
             
             <Button style={{ marginRight: "10px" , marginLeft: "5px" }} onClick={getTeamListForLogginUser}>
@@ -565,8 +565,8 @@ export default function Teams(props) {
             </Button>
           )}
 
-            {(userDetails.role === "SUPER_ADMIN" ||
-              userDetails.role === "ADMIN") && (
+            {(userDetails?.role === "SUPER_ADMIN" ||
+              userDetails?.role === "ADMIN") && (
               <Link
                 style={{ float: "right" }}
                 to={{
@@ -608,8 +608,8 @@ export default function Teams(props) {
                     ></Link>
                   </div>
 
-                  {(userDetails.role === "SUPER_ADMIN" ||
-                    userDetails.role === "ADMIN") &&
+                  {(userDetails?.role === "SUPER_ADMIN" ||
+                    userDetails?.role === "ADMIN") &&
                     !user?.isDeleted && (
                       <button className="project-btn-more dropdown ">
                         <svg
@@ -804,8 +804,8 @@ export default function Teams(props) {
                     </div>
                   </div>
 
-                  {(userDetails.role === "SUPER_ADMIN" ||
-                    userDetails.role === "ADMIN") &&
+                  {(userDetails?.role === "SUPER_ADMIN" ||
+                    userDetails?.role === "ADMIN") &&
                     user?.role !== "ADMIN" && (
                       <div className="btn">
                         <button

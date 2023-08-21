@@ -5,46 +5,205 @@ export default function defineRulesFor(role) {
 
   switch (role) {
     case "SUPER_ADMIN":
-      can(["read", "write", "update", "delete"], "dashboard");
-      can(["read", "write", "update", "delete"], "project");
-      can(["read", "write", "update", "delete", "status"], "task");
+      can(
+        [
+          "analytics",
+          "projectgrid",
+          "projectlist",
+          "overdiewwork",
+          "mywork",
+          "teamwork",
+          "taskverification",
+        ],
+        "dashboard"
+      );
+      can(
+        [
+          "write",
+          "update",
+          "delete",
+          "archivelist",
+          "archiveproject",
+          "addteam",
+          "removeteam",
+        ],
+        "project"
+      );
+      can(
+        [
+          "edit",
+          "addsection",
+          "editsection",
+          "copymove",
+          "deletesection",
+          "changestatus",
+        ],
+        "task"
+      );
       can(["read", "write", "update", "delete"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
-
       break;
 
     case "ADMIN":
-      can(["read", "write", "update", "delete"], "dashboard");
-      can(["read", "write", "update", "delete"], "project");
-      can(["read", "write", "update", "delete","status"], "task");
+      can(
+        [
+          "analytics",
+          "projectgrid",
+          "projectlist",
+          "overdiewwork",
+          "mywork",
+          "teamwork",
+          "taskverification",
+        ],
+        "dashboard"
+      );
+      can(
+        [
+          "write",
+          "update",
+          "delete",
+          "archivelist",
+          "archiveproject",
+          "addteam",
+          "removeteam",
+        ],
+        "project"
+      );
+      can(
+        [
+          "edit",
+          "addsection",
+          "editsection",
+          "copymove",
+          "deletesection",
+          "changestatus",
+        ],
+        "task"
+      );
       can(["read", "write", "update", "delete"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
 
     case "LEAD":
-      can(["read", "write", "update", "delete"], "dashboard");
-      can(["read", "write", "update", "delete"], "project");
-      can(["read", "write", "update", "delete", "status"], "task");
+      can(
+        [
+          "analytics",
+          "projectgrid",
+          "projectlist",
+          "overdiewwork",
+          "mywork",
+          "teamwork",
+          "taskverification",
+        ],
+        "dashboard"
+      );
+      can(
+        [
+          "write",
+          "update",
+          "delete",
+          "archivelist",
+          "archiveproject",
+          "addteam",
+          "removeteam",
+        ],
+        "project"
+      );
+      can(
+        [
+          "edit",
+          "addsection",
+          "editsection",
+          "copymove",
+          "deletesection",
+          "changestatus",
+        ],
+        "task"
+      );
       can(["read", "write", "update", "delete"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
 
     case "CONTRIBUTOR":
-      can(["read", "write", "update", "delete"], "dashboard");
-      can(["read", "write", "update", "delete"], "project");
-      can(["read", "write", "update", "delete", "status"], "task");
+      can(
+        [
+          "analytics",
+          "projectgrid",
+          "projectlist",
+          "overdiewwork",
+          "mywork",
+          "teamwork",
+          "taskverification",
+        ],
+        "dashboard"
+      );
+      can(
+        [
+          "write",
+          "update",
+          "delete",
+          "archivelist",
+          "archiveproject",
+          "addteam",
+          "removeteam",
+        ],
+        "project"
+      );
+      can(
+        [
+          "edit",
+          "addsection",
+          "editsection",
+          "copymove",
+          "deletesection",
+          "changestatus",
+        ],
+        "task"
+      );
       can(["read", "write", "update", "delete"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
 
     case "GUEST":
-      can(["read", "write", "update", "delete"], "dashboard");
-      can(["read", "write", "update", "delete"], "project");
-      can(["read", "write", "update", "delete", "status"], "task");
+      can(
+        [
+          "analytics",
+          "projectgrid",
+          "projectlist",
+          "overdiewwork",
+          "mywork",
+          "teamwork",
+          "taskverification",
+        ],
+        "dashboard"
+      );
+      can(
+        [
+          "write",
+          "update",
+          "delete",
+          "archivelist",
+          "archiveproject",
+          "addteam",
+          "removeteam",
+        ],
+        "project"
+      );
+      can(
+        [
+          "edit",
+          "addsection",
+          "editsection",
+          "copymove",
+          "deletesection",
+          "changestatus",
+        ],
+        "task"
+      );
       can(["read", "write", "update", "delete"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");

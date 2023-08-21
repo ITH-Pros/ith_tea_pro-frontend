@@ -354,7 +354,7 @@ export default function Dashboard(props) {
           userDetails?.role === "ADMIN") &&
           showUserGrid && <ProjectGrid />}
 
-        {userDetails.role !== "GUEST" && (
+        {userDetails?.role !== "GUEST" && (
           <>
             <ProjectList
               openAddtask={openAddtask}

@@ -32,10 +32,10 @@ const PrivateRoute = ({ children }) => {
 
 export const CheckRole = ({ children, role }) => {
   const { userDetails } = useAuth();
-  if (Array.isArray(role) && !role.includes(userDetails.role)) {
+  if (Array.isArray(role) && !role.includes(userDetails?.role)) {
     return <Navigate to="/" />;
   }
-  if (!Array.isArray(role) && userDetails.role !== role) {
+  if (!Array.isArray(role) && userDetails?.role !== role) {
     return <Navigate to="/" />;
   }
   return children;
