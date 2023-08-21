@@ -3,14 +3,11 @@
 import React, { useState, useEffect } from 'react'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-
 import Loader from '@components/Shared/Loader'
-// import ToastContainer from 'react-bootstrap/ToastContainer'
 import { taskById } from '@services/user/api'
 import UserIcon from '@components/ProfileImage/profileImage'
 import './index.css'
 import { useParams } from 'react-router-dom'
-// import History from '@pages/Tasks/view-task/history'
 import { Accordion } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 

@@ -296,10 +296,6 @@ export default function RatingModalBody(props) {
             }
           });
         });
-        console.log(
-          allTask,
-          "----------------------------------------------------------llllllllllllll all task"
-        );
         setUserTasks(allTask);
       }
     } catch (error) {
