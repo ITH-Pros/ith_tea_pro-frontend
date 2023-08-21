@@ -88,11 +88,11 @@ const CustomCalendar = (props) => {
     if (res.error) {
       throw new Error(res.error);
     }
-    return res.data;
+    return res?.data;
   };
 
-  const { data, error, isLoading, refetch } = useQuery(['teamWork' ,currentDate , currentView ], fetchTeamWork, {
-    enabled: userDetails?.role !== "CONTRIBUTOR",
+  const { data, error, isLoading, refetch } = useQuery(['teamWork' ,currentDate , currentView , isChange ], fetchTeamWork, {
+    enabled: userDetails?.role !== "CONTRIBUTOR" ,
     onSuccess: data => {
       setTeamWorkList(data);
     }

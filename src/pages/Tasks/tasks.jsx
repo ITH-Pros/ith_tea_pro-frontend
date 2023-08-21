@@ -9,7 +9,6 @@ import {
   updateSection,
   updateTaskStatusById,
 } from "@services/user/api";
-import Loader from "@components/Shared/Loader";
 
 import FilterModal from "@components/FilterModal/index";
 import AddTaskModal from "@components/AddTaskModal/index";
@@ -20,11 +19,9 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import TaskList from "@components/task-List/tasklist";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 const Tasks = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState({});
   const [selectedSection, setSelectedSection] = useState({});
   const [showAddTask, setShowAddTask] = useState(false);
@@ -34,7 +31,7 @@ const Tasks = () => {
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [selectedSectionId, setSelectedSectionId] = useState("");
   const [showViewTask, setShowViewTask] = useState(false);
-
+  const [projects, setProjects] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
@@ -80,12 +77,11 @@ const Tasks = () => {
       localStorage.removeItem("sortType");
       localStorage.removeItem("selectedFilter");
       localStorage.removeItem("dueDate");
-      console.log("filterData removed");
     };
   }, []);
 
   useEffect(() => {
-    getTasksDataUsingProjectId(projectId);
+    fetchTasks(projectId);
     let paramsData;
     if (params?.projectId) {
       paramsData = params?.projectId;
@@ -128,7 +124,7 @@ const Tasks = () => {
         // set
         setDeleteSectionModal(false);
         closeModal();
-        getTasksDataUsingProjectId();
+        fetchTasks();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -164,7 +160,7 @@ const Tasks = () => {
         toast.info("Section archived successfully");
         setArchiveSectionModal(false);
         closeModal();
-        getTasksDataUsingProjectId();
+        fetchTasks();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -190,6 +186,7 @@ const Tasks = () => {
     setSelectedSectionId(sectionId?._id);
     setModalShow(true);
     setSectionEditMode(true);
+    sectionUpdate();
   };
 
   const sectionUpdate = async () => {
@@ -209,7 +206,7 @@ const Tasks = () => {
         setSectionEditMode(false);
         setModalShow(false);
         closeModal();
-        getTasksDataUsingProjectId();
+        fetchTasks();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -243,7 +240,7 @@ const Tasks = () => {
       if (res.status === 200) {
         toast.dismiss();
         toast.info("Task status updated successfully");
-        getTasksDataUsingProjectId();
+        fetchTasks();
       } else {
         toast.dismiss();
         toast.info(res?.message);
@@ -289,7 +286,7 @@ const Tasks = () => {
         toast.info(res?.message || "Response in add section");
         setModalShow(false);
         closeModal();
-        getTasksDataUsingProjectId();
+        fetchTasks();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -304,119 +301,96 @@ const Tasks = () => {
     },
   });
 
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    // // console.log('==========', localTimeString)
-    return localTimeString;
-  }
 
-  function convertToUTCNight(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    return localTimeString;
-  }
-
-  const getTasksDataUsingProjectId = async () => {
-    try {
-      let paramsData = projectId || null;
-      setLoading(true);
-
-      let data = {
-        groupBy: "default",
-        isArchived: isArchive || false,
-        projectId: paramsData,
-      };
-
-      if (localStorage.getItem("selectedLead")) {
-        let leads = JSON.parse(localStorage.getItem("selectedLead"));
-        if (leads && leads.length > 0) {
-          data.leads = JSON.stringify(leads);
-        }
+  /*  @fecth tasks */
+  const fetchTasks = async () => {
+    let paramsData = projectId || null;
+    let data = {
+      groupBy: "default",
+      isArchived: isArchive || false,
+      projectId: paramsData,
+    };
+    if (localStorage.getItem("selectedLead")) {
+      let leads = JSON.parse(localStorage.getItem("selectedLead"));
+      if (leads && leads.length > 0) {
+        data.leads = JSON.stringify(leads);
       }
-
-      if (localStorage.getItem("taskFilters")) {
-        let filterData = JSON.parse(localStorage.getItem("taskFilters"));
-        let selectedFilter = localStorage.getItem("selectedFilterTypes");
-        console.log(filterData);
-        if (filterData?.projectIds && filterData.projectIds.length > 0) {
-          data.projectIds = JSON.stringify(
-            filterData.projectIds.map((item) => item._id)
-          );
-        }
-        if (filterData?.createdBy) {
-          data.createdBy = JSON.stringify(
-            filterData.createdBy.map((item) => item._id)
-          );
-        }
-        if (filterData?.selectedLead && filterData.selectedLead.length > 0) {
-          data.leads = JSON.stringify(
-            filterData.selectedLead.map((item) => item._id)
-          );
-        }
-        if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
-          data.assignedTo = JSON.stringify(
-            filterData.assignedTo.map((item) => item._id)
-          );
-        }
-        if (filterData?.category && filterData.category.length > 0) {
-          data.sections = JSON.stringify(
-            filterData.category.map((item) => item._id)
-          );
-        }
-        if (filterData?.priority) {
-          data.priority = JSON.stringify(filterData.priority);
-        }
-        if (filterData?.status) {
-          data.status = JSON.stringify(filterData.status);
-        }
-        if (filterData?.sortType) {
-          data.sortType = JSON.stringify(filterData.sortType);
-        }
-        if (filterData?.sortOrder) {
-          data.sortOrder = JSON.stringify(filterData.sortOrder);
-        }
-        if (
-          filterData?.fromDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          data.fromDate = convertToUTCDay(filterData.fromDate);
-        }
-        if (
-          filterData?.toDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          data.toDate = convertToUTCNight(filterData.toDate);
-        }
-        if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-          data.fromDate = convertToUTCDay(filterData.fromDate);
-          data.toDate = convertToUTCNight(filterData.toDate);
-        }
+    }
+    if (localStorage.getItem("taskFilters")) {
+      let filterData = JSON.parse(localStorage.getItem("taskFilters"));
+      let selectedFilter = localStorage.getItem("selectedFilterTypes");
+      console.log(filterData);
+      if (filterData?.projectIds && filterData.projectIds.length > 0) {
+        data.projectIds = JSON.stringify(
+          filterData.projectIds.map((item) => item._id)
+        );
       }
+      if (filterData?.createdBy) {
+        data.createdBy = JSON.stringify(
+          filterData.createdBy.map((item) => item._id)
+        );
+      }
+      if (filterData?.selectedLead && filterData.selectedLead.length > 0) {
+        data.leads = JSON.stringify(
+          filterData.selectedLead.map((item) => item._id)
+        );
+      }
+      if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
+        data.assignedTo = JSON.stringify(
+          filterData.assignedTo.map((item) => item._id)
+        );
+      }
+      if (filterData?.category && filterData.category.length > 0) {
+        data.sections = JSON.stringify(
+          filterData.category.map((item) => item._id)
+        );
+      }
+      if (filterData?.priority) {
+        data.priority = JSON.stringify(filterData.priority);
+      }
+      if (filterData?.status) {
+        data.status = JSON.stringify(filterData.status);
+      }
+      if (filterData?.sortType) {
+        data.sortType = JSON.stringify(filterData.sortType);
+      }
+      if (filterData?.sortOrder) {
+        data.sortOrder = JSON.stringify(filterData.sortOrder);
+      }
+      if (
+        filterData?.fromDate &&
+        selectedFilter &&
+        selectedFilter !== "null" &&
+        selectedFilter !== "Today" &&
+        selectedFilter !== "Tomorrow"
+      ) {
+        data.fromDate = convertToUTCDay(filterData.fromDate);
+      }
+      if (
+        filterData?.toDate &&
+        selectedFilter &&
+        selectedFilter !== "null" &&
+        selectedFilter !== "Today" &&
+        selectedFilter !== "Tomorrow"
+      ) {
+        data.toDate = convertToUTCNight(filterData.toDate);
+      }
+      if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
+        data.fromDate = convertToUTCDay(filterData.fromDate);
+        data.toDate = convertToUTCNight(filterData.toDate);
+      }
+    }
+    taskMutation.mutate(data);
+  };
 
-      const tasks = await getProjectsTask(data);
-      setLoading(false);
-
-      if (tasks.error) {
+  const taskMutation = useMutation(getProjectsTask, {
+    onSuccess: (data) => {
+      if (data?.error) {
         toast.dismiss();
-        toast.info(tasks.error.message);
-        // set
+        toast.info(data?.message);
       } else {
-        let allTasks = tasks.data;
+        let paramsData = projectId || null;
+        let allTasks = data?.data;
         allTasks.forEach((item) => {
           item.tasks.forEach((task) => {
             if (task.dueDate) {
@@ -448,108 +422,108 @@ const Tasks = () => {
             }
           });
         });
-
+        console.log(allTasks);
         setProjects(allTasks);
         if (paramsData) {
           setSelectedProjectId(paramsData);
         }
       }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(
-        error?.message || "Something Went Wrong in get project task error"
-      );
-      // set
-      setLoading(false);
-      // console.log(error.message)
-    }
-  };
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
-  const exportTasks = async () => {
+  const { isLoading } = taskMutation;
+
+  /*  @downloadExportData */
+
+  const downloadExportData = () => {
     let paramsData;
     if (params?.projectId) {
       paramsData = params?.projectId;
     }
-    setLoading(true);
-    try {
-      let data = {
-        groupBy: "default",
-      };
-      if (isArchive) {
-        data.isArchived = true;
+    let data = {
+      groupBy: "default",
+    };
+    if (isArchive) {
+      data.isArchived = true;
+    }
+    if (params?.projectId) {
+      data.projectId = paramsData;
+    }
+    if (localStorage.getItem("selectedLead")) {
+      let leadsToSend = localStorage.getItem("selectedLead");
+      let leads = JSON.parse(localStorage.getItem("selectedLead"));
+      if (leads?.length) {
+        data.leads = leadsToSend;
       }
-      if (params?.projectId) {
-        data.projectId = paramsData;
+    }
+
+    if (localStorage.getItem("taskFilters")) {
+      let filterData = JSON.parse(localStorage.getItem("taskFilters"));
+      let selectedFilter = localStorage.getItem("selectedFilter");
+      if (filterData?.projectIds && filterData.projectIds.length > 0) {
+        data.projectIds = JSON.stringify(filterData?.projectIds);
       }
-      if (localStorage.getItem("selectedLead")) {
-        let leadsToSend = localStorage.getItem("selectedLead");
-        let leads = JSON.parse(localStorage.getItem("selectedLead"));
-        if (leads?.length) {
-          data.leads = leadsToSend;
-        }
+      if (filterData?.createdBy) {
+        data.createdBy = JSON.stringify(filterData?.createdBy);
       }
-
-      if (localStorage.getItem("taskFilters")) {
-        let filterData = JSON.parse(localStorage.getItem("taskFilters"));
-        let selectedFilter = localStorage.getItem("selectedFilter");
-        if (filterData?.projectIds && filterData.projectIds.length > 0) {
-          data.projectIds = JSON.stringify(filterData?.projectIds);
-        }
-        if (filterData?.createdBy) {
-          data.createdBy = JSON.stringify(filterData?.createdBy);
-        }
-        if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
-          data.assignedTo = JSON.stringify(filterData?.assignedTo);
-        }
-        if (filterData?.category?.length) {
-          data.sections = JSON.stringify(filterData?.category);
-        }
-        if (filterData?.priority) {
-          data.priority = JSON.stringify(filterData?.priority);
-        }
-        if (filterData?.status) {
-          data.status = JSON.stringify(filterData?.status);
-        }
-        if (filterData?.sortType) {
-          data.sortType = filterData?.sortType;
-        }
-        if (filterData?.sortOrder) {
-          data.sortOrder = filterData?.sortOrder;
-        }
-        if (
-          filterData?.fromDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          // // console.log(selectedFilter, '----------------')
-
-          data.fromDate = convertToUTCDay(filterData?.fromDate);
-        }
-        if (
-          filterData?.toDate &&
-          selectedFilter &&
-          selectedFilter !== "null" &&
-          selectedFilter !== "Today" &&
-          selectedFilter !== "Tomorrow"
-        ) {
-          // // console.log(selectedFilter, '----------------')
-
-          data.toDate = convertToUTCNight(filterData?.toDate);
-        }
-        if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-          // // console.log(selectedFilter, '----------------')
-
-          data.fromDate = convertToUTCDay(filterData?.fromDate);
-          data.toDate = convertToUTCNight(filterData?.toDate);
-        }
+      if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
+        data.assignedTo = JSON.stringify(filterData?.assignedTo);
       }
-      const res = await downloadExcel(data);
+      if (filterData?.category?.length) {
+        data.sections = JSON.stringify(filterData?.category);
+      }
+      if (filterData?.priority) {
+        data.priority = JSON.stringify(filterData?.priority);
+      }
+      if (filterData?.status) {
+        data.status = JSON.stringify(filterData?.status);
+      }
+      if (filterData?.sortType) {
+        data.sortType = filterData?.sortType;
+      }
+      if (filterData?.sortOrder) {
+        data.sortOrder = filterData?.sortOrder;
+      }
+      if (
+        filterData?.fromDate &&
+        selectedFilter &&
+        selectedFilter !== "null" &&
+        selectedFilter !== "Today" &&
+        selectedFilter !== "Tomorrow"
+      ) {
+        // // console.log(selectedFilter, '----------------')
 
-      if (res.error) {
+        data.fromDate = convertToUTCDay(filterData?.fromDate);
+      }
+      if (
+        filterData?.toDate &&
+        selectedFilter &&
+        selectedFilter !== "null" &&
+        selectedFilter !== "Today" &&
+        selectedFilter !== "Tomorrow"
+      ) {
+        // // console.log(selectedFilter, '----------------')
+
+        data.toDate = convertToUTCNight(filterData?.toDate);
+      }
+      if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
+        // // console.log(selectedFilter, '----------------')
+
+        data.fromDate = convertToUTCDay(filterData?.fromDate);
+        data.toDate = convertToUTCNight(filterData?.toDate);
+      }
+    }
+    exportDataMutation.mutate(data);
+  };
+
+  const exportDataMutation = useMutation(downloadExcel, {
+    onSuccess: (data) => {
+      if (data?.error) {
         toast.dismiss();
-        toast.info(res?.message || "Something Went Wrong in download excel");
+        toast.info(data?.message || "Something Went Wrong in download excel");
       } else {
         const blob = new Blob([res], {
           type: ".xlsx",
@@ -566,29 +540,22 @@ const Tasks = () => {
 
         link.remove();
       }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+    },
+    onError: (error) => {
       toast.dismiss();
       toast.info(
         error?.message || "Something Went Wrong in download excel error"
       );
-      // set
-      return error.message;
-    }
-  };
-
-  const downloadExportData = () => {
-    exportTasks();
-  };
+    },
+  });
 
   const getNewTasks = (id) => {
     closeModal();
-    getTasksDataUsingProjectId();
+    fetchTasks();
   };
 
   const getTaskFilters = () => {
-    getTasksDataUsingProjectId();
+    fetchTasks();
   };
 
   const closeModal = () => {
@@ -596,6 +563,27 @@ const Tasks = () => {
     setSelectedProject();
     setSelectedTask();
   };
+
+  function convertToUTCDay(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    // // console.log('==========', localTimeString)
+    return localTimeString;
+  }
+
+  function convertToUTCNight(dateString) {
+    let utcTime = new Date(dateString);
+    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
+    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
+    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
+    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
+    let localTimeString = new Date(localTime.toISOString());
+    return localTimeString;
+  }
 
   return (
     <>
@@ -610,7 +598,7 @@ const Tasks = () => {
           <Col lg={6}>
             <div className="text-end">
               {!isArchive && (
-                <button
+                <Button
                   className="addTaskBtn"
                   style={{
                     float: "right",
@@ -624,7 +612,7 @@ const Tasks = () => {
                 >
                   <i className="fa fa-plus-circle" aria-hidden="true"></i> Add
                   Task
-                </button>
+                </Button>
               )}
 
               {projects?.length !== 0 &&
@@ -648,31 +636,37 @@ const Tasks = () => {
                   isArchive={isArchive}
                   downloadExportData={downloadExportData}
                   projectId={params?.projectId}
+                  projects={projects}
                 />
               </button>
             </div>
           </Col>
         </Row>
 
-        <AddTaskModal
-          selectedProjectFromTask={selectedProject?._id}
-          selectedTask={selectedTask}
-          getNewTasks={getNewTasks}
-          showAddTask={showAddTask}
-          closeModal={closeModal}
-          handleProjectId={selectedProjectId}
-          selectedSection={selectedSection}
-        />
-
-        <ViewTaskModal
-          showViewTask={showViewTask}
-          closeViewTaskModal={closeViewTaskModal}
-          selectedTaskId={selectedTaskId}
-          getTasksDataUsingProjectId={getTasksDataUsingProjectId}
-        />
+        {showAddTask && (
+          <AddTaskModal
+            selectedProjectFromTask={selectedProject?._id}
+            selectedTask={selectedTask}
+            getNewTasks={getNewTasks}
+            showAddTask={showAddTask}
+            closeModal={closeModal}
+            handleProjectId={selectedProjectId}
+            selectedSection={selectedSection}
+            projectList={projects}
+          />
+        )}
+        {showViewTask && (
+          <ViewTaskModal
+            showViewTask={showViewTask}
+            closeViewTaskModal={closeViewTaskModal}
+            selectedTaskId={selectedTaskId}
+            getTasksDataUsingProjectId={fetchTasks}
+          />
+        )}
 
         <TaskList
           projects={projects}
+          isLoading={isLoading}
           selectedProjectId={selectedProjectId}
           isArchive={isArchive}
           userDetails={userDetails}
@@ -689,7 +683,6 @@ const Tasks = () => {
           setSelectedTask={setSelectedTask}
         />
 
-        {/* ////// */}
         <Offcanvas
           className="Offcanvas-modal"
           style={{ height: "100vh" }}
@@ -736,7 +729,6 @@ const Tasks = () => {
             </div>
           </Offcanvas.Body>
         </Offcanvas>
-        {/* /// */}
 
         <Modal
           className="confirmation-popup"
@@ -797,8 +789,6 @@ const Tasks = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-
-        {loading ? <Loader /> : null}
       </div>
     </>
   );

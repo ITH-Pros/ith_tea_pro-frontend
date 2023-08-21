@@ -283,7 +283,6 @@ export default function ViewTaskModal(props) {
 
   const hoursLeft = Math.floor(timeLeftMinutes / 60);
   const minutesLeft = timeLeftMinutes % 60;
-  console.log(hoursLeft, minutesLeft, "------------hoiurs and mins left");
   return (
     <>
       <Offcanvas
@@ -517,7 +516,6 @@ export default function ViewTaskModal(props) {
                       <p className="text-muted">No Comments</p>
                     )}
                     {isLoadingSpinner ? <LoadingSpinner /> : null}
-
                   </>
                 )}
 
@@ -562,7 +560,6 @@ export default function ViewTaskModal(props) {
                     {!task?.ratingComments?.length && (
                       <p className="text-muted">No Rating Comments</p>
                     )}
-
                   </>
                 )}
 

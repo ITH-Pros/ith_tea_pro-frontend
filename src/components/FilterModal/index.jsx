@@ -13,6 +13,7 @@ import {
   getAllLeads,
   getAllUsersWithoutPagination,
 } from "@services/user/api";
+import { useQuery } from "react-query";
 
 const FilterModal = (props) => {
   const {
@@ -27,10 +28,6 @@ const FilterModal = (props) => {
   const [clearFilter, setClearFilterBoolean] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filterModalShow, setFilterModalShow] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [leadsArray, setleadsArray] = useState([]);
-  const [usersList, setUsersList] = useState([]);
-  const [categories, setCategories] = useState([]);
   const priorityList = CONSTANTS.priorityList.map((priority) => ({
     value: priority,
     label: priority,
@@ -55,7 +52,6 @@ const FilterModal = (props) => {
       toDate: "",
     },
     onSubmit: (values) => {
-      // Transform the values as needed and update local storage
       localStorage.setItem("taskFilters", JSON.stringify(values));
       getTaskFilters();
       setFilterModalShow(false);
@@ -68,62 +64,99 @@ const FilterModal = (props) => {
     },
   });
 
-  // Function to handle specific actions like loading data
-  const getAllProjectsData = async () => {
-    setLoading(true);
-    try {
-      const projects = await getAllProjects();
-      setLoading(false);
-      if (!projects.error) setProjects(projects.data);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-  // Similar functions for other data fetching
-  const getAllCategoriesData = async () => {
-    setLoading(true);
-    try {
-      const categories = await getAllCategories();
-      console.log(categories);
-      setLoading(false);
-      if (!categories.error) setCategories(categories.data);
-    } catch (error) {
-      setLoading(false);
-    }
-};
+  /*
+  @all projects data
+  */
 
-
-
-  const getAllUsersData = async () => {
-    setLoading(true);
-    try {
-      const users = await getAllUsersWithoutPagination();
-      setLoading(false);
-      if (!users.error) setUsersList(users?.data?.users);
-    } catch (error) {
-      setLoading(false);
-    }
+  const fetchProjectList = async () => {
+    const projects = await getAllProjects();
+    return projects?.data;
   };
 
-  const getLeadsList = async () => {
-    setLoading(true);
-    try {
-      const leads = await getAllLeads();
-      setLoading(false);
-      if (!leads.error) setleadsArray(leads.data?.users);
-    } catch (error) {
-      setLoading(false);
+  const { data: projects } = useQuery(
+    ["projectList" , filterModalShow],
+    fetchProjectList,
+    {
+      enabled: filterModalShow,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data;
+      },
     }
+  );
+
+  /*
+  @all categories data
+  */
+
+  const fetchCategories = async () => {
+    const categories = await getAllCategories();
+    return categories?.data;
   };
+
+  const { data: categories } = useQuery(
+    "categories",
+    fetchCategories,
+    {
+      enabled: filterModalShow,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data;
+      },
+    }
+  );
+
+  /*
+@all users data
+*/
+
+ const fetchUsers = async () => {
+    const users = await getAllUsersWithoutPagination();
+    return users?.data?.users;
+  };
+
+  const { data: usersList } = useQuery(
+    "users",
+    fetchUsers,
+    {
+      enabled: filterModalShow,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data;
+      },
+    }
+  );
+
+  /*
+  @all leads data
+  */
+
+  const fetchLeads = async () => {
+    const leads = await getAllLeads();
+    return leads?.data?.users;
+  };
+
+  const { data: leadsArray } = useQuery(
+    "leads",
+    fetchLeads,
+    {
+      enabled: filterModalShow,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data;
+      },
+    }
+  );
+
 
   useEffect(() => {
-    getAllProjectsData();
-    getAllUsersData();
-    getLeadsList();
-    getAllCategoriesData();
+    if(filterModalShow){
+    fetchProjectList();
+    fetchUsers();
+    fetchLeads();
+    fetchCategories();
+    }
   }, [filterModalShow]);
-  
-
 
   const setProjectAndOpenModal = () => {
     setFilterModalShow(true);
@@ -239,7 +272,9 @@ const FilterModal = (props) => {
                 <Col sm="9" className="filterFields">
                   <Select
                     styles={customStyles}
-                    onChange={(e) => { formik.setFieldValue("selectedLead", e)}}
+                    onChange={(e) => {
+                      formik.setFieldValue("selectedLead", e);
+                    }}
                     value={formik.values.selectedLead}
                     isMulti
                     getOptionLabel={(options) => options["name"]}

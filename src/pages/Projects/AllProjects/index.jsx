@@ -17,25 +17,21 @@ import { Modal, Button, Row, Col } from "react-bootstrap";
 import { FaGem } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../utlis/AuthProvider";
-
+import { useMutation, useQuery } from "react-query";
 
 export default function AllProject() {
   const { userDetails } = useAuth();
-
-  
-  
   const [loading, setLoading] = useState(false);
   const [projectList, setProjectListValue] = useState([]);
-  const [projectTaskAnalytics, setProjectTaskAnalytics] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedProject, setSelectedProject] = useState({
     name: null,
     _id: null,
   });
-
+  const navigate = useNavigate();
   const [confirmModalShow, setConfirmModalShow] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
-
+  const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
 
   const handleIsArchive = () => {
@@ -53,119 +49,134 @@ export default function AllProject() {
   };
 
   const handleToRedirectTask = (project) => {
-    let data={
-       projectId: project._id,
-        isArchive: isArchive,
-    }
-    if (userDetails?.role !== "GUEST"){
-      localStorage.setItem('project_details',JSON.stringify(data))
-    navigate(
-      `/task/${project._id}`
-    );
+    let data = {
+      projectId: project._id,
+      isArchive: isArchive,
+    };
+    if (userDetails?.role !== "GUEST") {
+      localStorage.setItem("project_details", JSON.stringify(data));
+      navigate(`/task/${project._id}`);
     }
   };
 
-  const navigate = useNavigate();
+  const handleArchiveModalShow = (project) => {
+    setSelectedProject(project);
+    setConfirmModalShow(true);
+    setIsArchiveModalShow(true);
+  };
 
   useEffect(() => {
-    getAndsetTaskStatusAnalytics();
-  }, []);
-
-  useEffect(() => {
-    getAndSetAllProjects();
+    fetchAllProjects();
   }, [isArchive]);
 
-  const getAndSetAllProjects = async function () {
+  /*
+   * @desc: This function is used to get all projects
+   * @param: isArchive
+   * @return: all projects
+   * */
+
+  const fetchAllProjects = async () => {
     let dataToSend = {};
     if (isArchive) {
       dataToSend.isArchived = true;
     }
-    try {
-      setLoading(true);
-      const projects = await getAllProjects(dataToSend);
-      if (projects.error) {
-        setLoading(false);
-        toast.dismiss()
-      toast.info(projects?.message || "Something Went Wrong");
-        // set
-      } else {
-        setProjectListValue(projects?.data);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      return error.message;
-    }
+    projectMutation.mutate(dataToSend);
   };
 
-  const getAndsetTaskStatusAnalytics = async () => {
-    try {
-      const projects = await getTaskStatusAnalytics();
-      if (projects.error) {
-        toast.dismiss()
-      toast.info(projects?.message || "Something Went Wrong");
+  const projectMutation = useMutation(getAllProjects, {
+    onSuccess: (data) => {
+      if (data?.error) {
+        setLoading(false);
+        toast.dismiss();
+        toast.info(data?.message || "Something Went Wrong");
         // set
       } else {
-        setProjectTaskAnalytics(projects?.data);
+        setProjectListValue(data?.data);
+        setLoading(false);
       }
-    } catch (error) {
-      toast.dismiss()
+    },
+    onError: (error) => {
+      setLoading(false);
+      toast.dismiss();
       toast.info(error?.error?.message || "Something Went Wrong");
-      // set
       return error.message;
+    },
+  });
+
+  const {isLoading } = projectMutation;
+
+  /*
+   * @desc: This function is used to get all projects analytics
+   */
+
+  const { data: projectTaskAnalytics } = useQuery(
+    "projectTaskAnalytics",
+    getTaskStatusAnalytics,
+    {
+      select: (data) => {
+        if (data?.error) {
+          toast.dismiss();
+          toast.info(data?.message || "Something Went Wrong");
+          // set
+        } else {
+          return data?.data;
+        }
+      },
+      onError: (error) => {
+        toast.dismiss();
+        toast.info(error?.message || "Something Went Wrong");
+        return error.message;
+      },
     }
-  };
+  );
+
 
   const confirmation = (project) => {
     setSelectedProject(project);
     setConfirmModalShow(true);
   };
 
+  /*
+    * @desc: This function is used to delete project
+    * @param: projectId
+    * @return: delete project
+    * */
+
+
   const deleteProject = async () => {
-    setLoading(true);
-    try {
       let dataToSend = {
         projectId: selectedProject._id,
       };
-      const removeRes = await deleteProjectById(dataToSend);
-      setLoading(false);
+      deleteMutation.mutate(dataToSend);
+  };
 
-      if (removeRes.error) {
-        toast.dismiss()
-      toast.info(removeRes?.message || "Something Went Wrong");
-        // set
+  const deleteMutation = useMutation(deleteProjectById , {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.dismiss();
+        toast.info(data?.message || "Something Went Wrong");
         return;
       } else {
-        toast.dismiss()
-      toast.info(removeRes?.message || "Something Went Wrong");
-        // set
-        getAndSetAllProjects();
+        toast.dismiss();
+        toast.info(data?.message || "Something Went Wrong");
+        fetchAllProjects();
         setConfirmModalShow(false);
       }
-    } catch (error) {
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      setLoading(false);
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
       return error.message;
-    }
-  };
+    },
+  });
 
-  const [isArchiveModalShow, setIsArchiveModalShow] = useState(false);
-
-  const handleArchiveModalShow = (project) => {
-    // // console.log("project", project);
-    setSelectedProject(project);
-    setConfirmModalShow(true);
-    setIsArchiveModalShow(true);
-  };
+  /*
+    * @desc: This function is used to archive project
+    * @param: projectId
+    * @return: archive project
+    * */
 
   const archiveProject = async () => {
-    setLoading(true);
-    try {
       let dataToSend = {
         projectId: selectedProject._id,
       };
@@ -174,35 +185,34 @@ export default function AllProject() {
       } else {
         dataToSend.isArchived = true;
       }
+      archiveProjectMutation.mutate(dataToSend)
+  };
 
-      const removeRes = await archiveProjectById(dataToSend);
-      setLoading(false);
-
-      if (removeRes.error) {
-        toast.dismiss()
-      toast.info(removeRes?.message || "Something Went Wrong");
-        // set
+  const archiveProjectMutation = useMutation(archiveProjectById, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.dismiss();
+        toast.info(data?.message || "Something Went Wrong");
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
         return;
       } else {
-        toast.dismiss()
-      toast.info(removeRes?.message || "Something Went Wrong");
-        // set
-        getAndSetAllProjects();
+        toast.dismiss();
+        toast.info(data?.message || "Something Went Wrong");
+        fetchAllProjects();
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
       }
-    } catch (error) {
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
       setConfirmModalShow(false);
       setIsArchiveModalShow(false);
-      // set
-      setLoading(false);
       return error.message;
-    }
-  };
+    },
+  });
+
 
   return (
     <>
@@ -222,12 +232,11 @@ export default function AllProject() {
                 userDetails.role === "ADMIN") &&
                 !isArchive && (
                   <Link to="/project/add" style={{ marginRight: "10px" }}>
-  <button className="btn btn-primary">
-    <i className="fa fa-plus-circle" aria-hidden="true"></i>
-    &nbsp; Add Project
-  </button>
-</Link>
-
+                    <button className="btn btn-primary">
+                      <i className="fa fa-plus-circle" aria-hidden="true"></i>
+                      &nbsp; Add Project
+                    </button>
+                  </Link>
                 )}
               {(userDetails.role === "ADMIN" ||
                 userDetails.role === "SUPER_ADMIN") && (
@@ -258,7 +267,7 @@ export default function AllProject() {
                     taskData={projectTaskAnalytics?.[element._id]}
                     handleCategories={() => handleCategorie(element)}
                     handleToRedirectTask={() => handleToRedirectTask(element)}
-                    getAndSetAllProjects={() => getAndSetAllProjects()}
+                    getAndSetAllProjects={() => fetchAllProjects()}
                     handleArchiveModalShow={() =>
                       handleArchiveModalShow(element)
                     }
@@ -267,15 +276,20 @@ export default function AllProject() {
                 </div>
               );
             })}
-          {!projectList?.length && (
-            <div >
-            <p className="alig-nodata">No Project Found</p>
+          {!projectList?.length &&  !isLoading && (
+            <div>
+              <p className="alig-nodata">No Project Found</p>
             </div>
           )}
+          {isLoading && (
+            <div>
+              <p className="alig-nodata">Loading...</p>
+            </div>
+          )
+            }
         </div>
       </div>
       {loading ? <Loader /> : null}
-
 
       <Modal
         show={confirmModalShow}
@@ -312,7 +326,6 @@ export default function AllProject() {
             )}
             {isArchiveModalShow && (
               <Button
-              
                 className="btn btn-danger btn-sm "
                 onClick={() => archiveProject()}
               >
@@ -320,7 +333,7 @@ export default function AllProject() {
               </Button>
             )}
             <Button
-               style={{marginLeft:'10px'}}
+              style={{ marginLeft: "10px" }}
               className="btn btn-light btn-sm"
               onClick={() => {
                 setConfirmModalShow(false);

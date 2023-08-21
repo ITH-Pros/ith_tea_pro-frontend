@@ -32,7 +32,7 @@ export default function ViewTask(props) {
     try {
       let response = await taskById(dataToSend)
       if (response.error) {
-        // console.log('error')
+        console.log('error')
       } else {
         setTaskData(response?.data)
       }
