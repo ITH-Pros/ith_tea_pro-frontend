@@ -301,7 +301,6 @@ const Tasks = () => {
     },
   });
 
-
   /*  @fecth tasks */
   const fetchTasks = async () => {
     let paramsData = projectId || null;

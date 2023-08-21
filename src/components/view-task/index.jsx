@@ -294,12 +294,12 @@ export default function ViewTaskModal(props) {
                       task?.status === "COMPLETED" ||
                       !(
                         userDetails.id === task?.assignedTo?._id ||
-                        (userDetails.role === "LEAD" &&
+                        (userDetails?.role === "LEAD" &&
                           (userDetails.id === task?.assignedTo?._id ||
                             task?.lead?.includes(userDetails.id) ||
                             userDetails.id === task?.createdBy?._id)) ||
-                        userDetails.role === "SUPER_ADMIN" ||
-                        userDetails.role === "ADMIN"
+                        userDetails?.role === "SUPER_ADMIN" ||
+                        userDetails?.role === "ADMIN"
                       )
                     }
                   >

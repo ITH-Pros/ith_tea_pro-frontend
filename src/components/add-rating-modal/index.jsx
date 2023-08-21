@@ -109,7 +109,7 @@ export default function RatingModalBody(props) {
     if (
       userTasks.length > 0 &&
       userDetails?.role !== "SUPER_ADMIN" &&
-      userDetails.role !== "ADMIN"
+      userDetails?.role !== "ADMIN"
     ) {
       let isAnyElementNotVerified = userTasks?.some((element) => {
         return (

@@ -109,8 +109,8 @@ const TaskList = ({
                     </Dropdown.Item>
                   )}
 
-                  {(userDetails.role === "SUPER_ADMIN" ||
-                    userDetails.role === "ADMIN") && (
+                  {(userDetails?.role === "SUPER_ADMIN" ||
+                    userDetails?.role === "ADMIN") && (
                     <>
                       {!isArchive && (
                         <Dropdown.Item
@@ -163,12 +163,12 @@ const TaskList = ({
                           <Col lg={1}>
                             <div>
                               {(userDetails.id === task?.assignedTo?._id ||
-                                (userDetails.role === "LEAD" &&
+                                (userDetails?.role === "LEAD" &&
                                   (userDetails.id === task?.assignedTo?._id ||
                                     task?.lead?.includes(userDetails.id) ||
                                     userDetails.id === task?.createdBy?._id)) ||
-                                userDetails.role === "SUPER_ADMIN" ||
-                                userDetails.role === "ADMIN") && (
+                                userDetails?.role === "SUPER_ADMIN" ||
+                                userDetails?.role === "ADMIN") && (
                                 <Dropdown>
                                   <Dropdown.Toggle
                                     variant="success"
@@ -442,12 +442,12 @@ const TaskList = ({
                     </Row>
                   </div>
                   {(userDetails.id === task?.assignedTo?._id ||
-                    (userDetails.role === "LEAD" &&
+                    (userDetails?.role === "LEAD" &&
                       (userDetails.id === task?.assignedTo?._id ||
                         task?.lead?.includes(userDetails.id) ||
                         userDetails.id === task?.createdBy?._id)) ||
-                    userDetails.role === "SUPER_ADMIN" ||
-                    userDetails.role === "ADMIN") &&
+                    userDetails?.role === "SUPER_ADMIN" ||
+                    userDetails?.role === "ADMIN") &&
                     !isArchive && (
                       <a
                         style={{

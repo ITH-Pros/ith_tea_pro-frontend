@@ -91,12 +91,12 @@ const OverdueWorkComponent = ({
                   className="d-flex justify-content-start list_task w-100 mx-0"
                 >
                   <Col lg={4} className="middle">
-                    {((userDetails.role === "LEAD" &&
+                    {((userDetails?.role === "LEAD" &&
                       (userDetails.id === task?.assignedTo?._id ||
                         task?.lead?.includes(userDetails.id) ||
                         userDetails.id === task?.createdBy?._id)) ||
-                      userDetails.role === "SUPER_ADMIN" ||
-                      userDetails.role === "ADMIN") && (
+                      userDetails?.role === "SUPER_ADMIN" ||
+                      userDetails?.role === "ADMIN") && (
                       <Dropdown>
                         <Dropdown.Toggle
                           variant="success"
@@ -285,12 +285,12 @@ const OverdueWorkComponent = ({
                     </small>
                   </Col>
                   <Col lg={1} id="dropdown_action" className="text-end middle">
-                    {((userDetails.role === "LEAD" &&
+                    {((userDetails?.role === "LEAD" &&
                       (userDetails.id === task?.assignedTo?._id ||
                         task?.lead?.includes(userDetails.id) ||
                         userDetails.id === task?.createdBy?._id)) ||
-                      userDetails.role === "SUPER_ADMIN" ||
-                      userDetails.role === "ADMIN") && (
+                      userDetails?.role === "SUPER_ADMIN" ||
+                      userDetails?.role === "ADMIN") && (
                       <Dropdown>
                         <Dropdown.Toggle variant="defult" id="dropdown-basic">
                           <i className="fa fa-ellipsis-v"></i>

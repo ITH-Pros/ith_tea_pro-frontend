@@ -10,7 +10,6 @@ import { getRatings, verifyManager } from "@services/user/api";
 // import { useAuth } from "../../../auth/AuthProvider";
 import RatingBox from "../ratingBox";
 import Loader from "../Shared/Loader";
-
 import MyCalendar from "./weekCalendra";
 import RatingModalBody from "../add-rating-modal/index.jsx";
 import TasksModalBody from "../add-rating-modal/viewTaskModal";

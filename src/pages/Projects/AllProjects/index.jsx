@@ -228,8 +228,8 @@ export default function AllProject() {
           </Col>
           <Col lg={6}>
             <div className="text-end">
-              {(userDetails.role === "SUPER_ADMIN" ||
-                userDetails.role === "ADMIN") &&
+              {(userDetails?.role === "SUPER_ADMIN" ||
+                userDetails?.role === "ADMIN") &&
                 !isArchive && (
                   <Link to="/project/add" style={{ marginRight: "10px" }}>
                     <button className="btn btn-primary">
@@ -238,8 +238,8 @@ export default function AllProject() {
                     </button>
                   </Link>
                 )}
-              {(userDetails.role === "ADMIN" ||
-                userDetails.role === "SUPER_ADMIN") && (
+              {(userDetails?.role === "ADMIN" ||
+                userDetails?.role === "SUPER_ADMIN") && (
                 <button className="btn btn-primary" onClick={handleIsArchive}>
                   {" "}
                   {isArchive ? "Active Projects" : "Archive List"}
