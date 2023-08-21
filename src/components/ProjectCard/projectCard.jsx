@@ -26,6 +26,7 @@ import {
 
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
+import { useMutation } from "react-query";
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -87,60 +88,91 @@ const ProjectCard = ({
   const [listOfUnassignedUsers, setListOfUnassignedUsers] = useState([]);
   const [selectedUnassignedUsers, setSelectedUnassignedUsers] = useState("");
 
-  
-  
+  /*
+   * This function is used to add user from project
+   * @param {string} userId
+   * @param {string} projectId
+   * @param {string} role
+   * @returns {string} error message
+   * */
 
   const assignTeamUsers = async () => {
     let dataToSend = {
       projectId: element._id,
       userIds: selectedUnassignedUsers,
     };
-    try {
-      let response;
-      if (selectedRole === "LEAD") {
-        response = await assignProjectLead(dataToSend);
-      } else {
-        response = await assignTeamAPI(dataToSend);
-      }
-      if (response.error) {
-        return;
-      } else {
-        setModalShow(false);
-        setSelectedUnassignedUsers("");
-        setShowSelectBox(false);
-        getAndSetAllProjects();
-        setSelectedRole(null);
-        setSelectedUnassignedUsers("");
-        setListOfUnassignedUsers([]);
-        setSelectedRole(null);
-        toast.dismiss()
-      toast.info("User assigned successfully");
-        // set
-      }
-    } catch (error) {
-      // console.log("Error while getting user details");
-      return error.message;
+
+    if (selectedRole === "LEAD") {
+      assignLeadMutation.mutate(dataToSend);
+    } else {
+      assignTeamMutation.mutate(dataToSend);
     }
   };
+
+  const assignLeadMutation = useMutation(assignProjectLead, {
+    onSuccess: (data) => {
+      toast.success(data?.message);
+      resetAllTheStates();
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+      resetAllTheStates();
+    },
+  });
+
+  const assignTeamMutation = useMutation(assignTeamAPI, {
+    onSuccess: (data) => {
+      toast.success(data?.message);
+      resetAllTheStates();
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+      resetAllTheStates();
+    },
+  });
+
+  /*
+    @reset all the states
+    */
+
+  const resetAllTheStates = () => {
+    setModalShow(false);
+    setSelectedUnassignedUsers("");
+    setShowSelectBox(false);
+    getAndSetAllProjects();
+    setSelectedRole(null);
+    setSelectedUnassignedUsers("");
+    setListOfUnassignedUsers([]);
+    setSelectedRole(null);
+  };
+
+  /*
+   * This function is used to get Unassigned user listfrom project
+   * @param {string} userId
+   * @param {string} projectId
+   * @returns unassigned user list
+   * */
 
   const getListOfUnassignedUsers = async (role) => {
     let dataToSend = {
       projectId: element._id,
       role: role,
     };
-    try {
-      const response = await getUnassignedUsers(dataToSend);
-      if (response.error) {
-        // console.log("Error while getting user details");
-        return;
-      } else {
-        setListOfUnassignedUsers(response?.data);
-      }
-    } catch (error) {
-      // console.log("Error while getting user details");
-      return error.message;
-    }
+    unAssignedUerListMutation.mutate(dataToSend);
   };
+
+  const unAssignedUerListMutation = useMutation(getUnassignedUsers, {
+    onSuccess: (data) => {
+      setListOfUnassignedUsers(data?.data);
+    },
+    onError: (error) => {
+      toast.error(error?.message);
+    },
+  });
+
+  /*
+   *logics
+   * */
 
   function assignTeamUser() {
     setShowSelectBox(!showSelectBox);
@@ -235,7 +267,7 @@ const ProjectCard = ({
       const response = await removeUserFromProject(dataToSend);
       if (response.error) {
         // console.log("Error while getting user details");
-      toast.info(response.message);
+        toast.info(response.message);
 
         return;
       } else {
@@ -244,7 +276,7 @@ const ProjectCard = ({
         setSelectedUser(null);
         setSelectedUserName(null);
         setModalShow(false);
-        toast.info('User removed successfully!')
+        toast.info("User removed successfully!");
       }
     } catch (error) {
       // console.log("Error while getting user details");
@@ -254,384 +286,393 @@ const ProjectCard = ({
 
   return (
     <>
-    <div className="project-card" style={{ border: `3px solid ${background}` }}>
-      {isArchive && <h6 className="archived">Archived</h6>}
       <div
-        className="menu-icon"
-        onClick={handleMenuIconClick}
-        onBlur={handleMenuIconClick}
+        className="project-card"
+        style={{ border: `3px solid ${background}` }}
       >
-        {(userDetails.role === "SUPER_ADMIN" ||
-          userDetails.role === "ADMIN") && (
-          <button className="project-btn-more dropdown ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-more-vertical"
-            >
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="12" cy="5" r="1" />
-              <circle cx="12" cy="19" r="1" />
-            </svg>
-            <div className="dropdown-content">
-              {!isArchive && (
+        {isArchive && <h6 className="archived">Archived</h6>}
+        <div
+          className="menu-icon"
+          onClick={handleMenuIconClick}
+          onBlur={handleMenuIconClick}
+        >
+          {(userDetails.role === "SUPER_ADMIN" ||
+            userDetails.role === "ADMIN") && (
+            <button className="project-btn-more dropdown ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-more-vertical"
+              >
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="19" r="1" />
+              </svg>
+              <div className="dropdown-content">
+                {!isArchive && (
+                  <a
+                    onClick={() => {
+                      handleEdit();
+                    }}
+                  >
+                    {" "}
+                    <i
+                      className="fa fa-pencil-square"
+                      aria-hidden="true"
+                    ></i>{" "}
+                    Edit Project
+                  </a>
+                )}
                 <a
+                  href="#1"
                   onClick={() => {
-                    handleEdit();
+                    handleArchiveModalShow();
                   }}
                 >
-                  {" "}
-                  <i
-                    className="fa fa-pencil-square"
-                    aria-hidden="true"
-                  ></i>{" "}
-                  Edit Project
+                  <i className="fa fa-archive" aria-hidden="true"></i>{" "}
+                  {!isArchive ? "Archive" : "Unarchive"}
                 </a>
-              )}
-              <a
-                href="#1"
-                onClick={() => {
-                  handleArchiveModalShow();
-                }}
-              >
-                <i className="fa fa-archive" aria-hidden="true"></i>{" "}
-                {!isArchive ? "Archive" : "Unarchive"}
-              </a>
-              <a
-                href="#1"
-                onClick={() => {
-                  handleDelete();
-                }}
-              >
-                <i className="fa fa-trash" aria-hidden="true"></i> Delete
-              </a>
-            </div>
-          </button>
-        )}
-      </div>
-
-      <div onClick={() => handleToRedirectTask()} className="project-details">
-        <h4 style={{ cursor: "pointer" }}>{name}</h4>
-        <p style={{ cursor: "pointer" }} className="text-secondary">
-          {description}
-        </p>
-      </div>
-
-      <div className="project-stats row">
-        <div className="stat col-3">
-          <>
-            {["top"].map((placement, index) => (
-              <OverlayTrigger
-                key={index}
-                placement={placement}
-                overlay={
-                  <Tooltip id={`tooltip-${placement}`}>Overdue Tasks</Tooltip>
-                }
-              >
-                <Button className="tooltip-button br0">
-                  <FontAwesomeIcon icon={faFlag} />
-                  <p className="text-secondary">
-                    {taskData?.overDueTasks || 0}%
-                  </p>
-                </Button>
-              </OverlayTrigger>
-            ))}
-          </>
-        </div>
-        <div className="stat col-3 px-0">
-          <>
-            {["top"].map((placement, index) => (
-              <OverlayTrigger
-                key={index + 1}
-                placement={placement}
-                overlay={
-                  <Tooltip id={`tooltip-${placement}`}>Completed tasks</Tooltip>
-                }
-              >
-                <Button className="tooltip-button br0">
-                  <FontAwesomeIcon icon={faTasks} />
-                  <p className="text-secondary">{taskData?.COMPLETED || 0}%</p>
-                </Button>
-              </OverlayTrigger>
-            ))}
-          </>
-        </div>
-        <div className="stat col-3">
-          <>
-            {["top"].map((placement, index) => (
-              <OverlayTrigger
-                key={index + 2}
-                placement={placement}
-                overlay={
-                  <Tooltip id={`tooltip-${placement}`}>Ongoing tasks</Tooltip>
-                }
-              >
-                <Button className="tooltip-button br0">
-                  <FontAwesomeIcon icon={faCheck} />
-                  <p className="text-secondary">{taskData?.ONGOING || 0}%</p>
-                </Button>
-              </OverlayTrigger>
-            ))}
-          </>
-        </div>
-        <div className="stat col-3">
-          <>
-            {["top"].map((placement, index) => (
-              <OverlayTrigger
-                key={index + 3}
-                placement={placement}
-                overlay={
-                  <Tooltip id={`tooltip-${placement}`}>
-                    Total number of tasks
-                  </Tooltip>
-                }
-              >
-                <Button className="tooltip-button br0">
-                  <FontAwesomeIcon icon={faBarChart} />
-                  <p className="text-secondary">{taskData?.totalTask || 0}</p>
-                </Button>
-              </OverlayTrigger>
-            ))}
-          </>
-        </div>
-      </div>
-      <div>
-        <div>
-          <div className="pull-left w-100">
-            <label className="lableName">Team Members</label>
-            <div className="user-profile-pics" style={{ paddingLeft: "10px" }}>
-              {accessibleBy
-                .concat(managedBy)
-                .slice(0, 13)
-                .map((user, index) => (
-                  <>
-                    {!user?.profilePicture && index < 3 && (
-                      <UserIcon key={index} firstName={user.name} />
-                    )}
-                    {index > 2 && index === 3 && (
-                      <span
-                        onClick={() => {
-                          onClickOfIcons(
-                            accessibleBy.concat(managedBy),
-                            "Team Members"
-                          );
-                        }}
-                      >
-                        <UserIcon
-                          key={index}
-                          firstName={"..."}
-                          className="team_icon"
-                        />
-                      </span>
-                    )}
-                    {user?.profilePicture && index < 3 && (
-                      <div key={index} className="user_pic_card">
-                        <img
-                          style={{
-                            width: "30px",
-                            height: "30px",
-                            borderRadius: "50%",
-                          }}
-                          src={`${user?.profilePicture}`}
-                          alt="profile"
-                        ></img>
-                      </div>
-                    )}
-                  </>
-                ))}
-            </div>
-            {userDetails.role !== "CONTRIBUTOR" &&
-              !isArchive &&
-              userDetails.role !== "GUEST" && (
-                <div
-                  style={{ position: "relative", float: "right" }}
+                <a
+                  href="#1"
                   onClick={() => {
-                    onClickOfIcons(
-                      accessibleBy.concat(managedBy),
-                      "Assigned and Managed By"
-                    );
+                    handleDelete();
                   }}
                 >
-                  <i
-                    className="fa fa-user-plus add-user-icon"
-                    aria-hidden="true"
-                  ></i>
-                </div>
-              )}
+                  <i className="fa fa-trash" aria-hidden="true"></i> Delete
+                </a>
+              </div>
+            </button>
+          )}
+        </div>
+
+        <div onClick={() => handleToRedirectTask()} className="project-details">
+          <h4 style={{ cursor: "pointer" }}>{name}</h4>
+          <p style={{ cursor: "pointer" }} className="text-secondary">
+            {description}
+          </p>
+        </div>
+
+        <div className="project-stats row">
+          <div className="stat col-3">
+            <>
+              {["top"].map((placement, index) => (
+                <OverlayTrigger
+                  key={index}
+                  placement={placement}
+                  overlay={
+                    <Tooltip id={`tooltip-${placement}`}>Overdue Tasks</Tooltip>
+                  }
+                >
+                  <Button className="tooltip-button br0">
+                    <FontAwesomeIcon icon={faFlag} />
+                    <p className="text-secondary">
+                      {taskData?.overDueTasks || 0}%
+                    </p>
+                  </Button>
+                </OverlayTrigger>
+              ))}
+            </>
+          </div>
+          <div className="stat col-3 px-0">
+            <>
+              {["top"].map((placement, index) => (
+                <OverlayTrigger
+                  key={index + 1}
+                  placement={placement}
+                  overlay={
+                    <Tooltip id={`tooltip-${placement}`}>
+                      Completed tasks
+                    </Tooltip>
+                  }
+                >
+                  <Button className="tooltip-button br0">
+                    <FontAwesomeIcon icon={faTasks} />
+                    <p className="text-secondary">
+                      {taskData?.COMPLETED || 0}%
+                    </p>
+                  </Button>
+                </OverlayTrigger>
+              ))}
+            </>
+          </div>
+          <div className="stat col-3">
+            <>
+              {["top"].map((placement, index) => (
+                <OverlayTrigger
+                  key={index + 2}
+                  placement={placement}
+                  overlay={
+                    <Tooltip id={`tooltip-${placement}`}>Ongoing tasks</Tooltip>
+                  }
+                >
+                  <Button className="tooltip-button br0">
+                    <FontAwesomeIcon icon={faCheck} />
+                    <p className="text-secondary">{taskData?.ONGOING || 0}%</p>
+                  </Button>
+                </OverlayTrigger>
+              ))}
+            </>
+          </div>
+          <div className="stat col-3">
+            <>
+              {["top"].map((placement, index) => (
+                <OverlayTrigger
+                  key={index + 3}
+                  placement={placement}
+                  overlay={
+                    <Tooltip id={`tooltip-${placement}`}>
+                      Total number of tasks
+                    </Tooltip>
+                  }
+                >
+                  <Button className="tooltip-button br0">
+                    <FontAwesomeIcon icon={faBarChart} />
+                    <p className="text-secondary">{taskData?.totalTask || 0}</p>
+                  </Button>
+                </OverlayTrigger>
+              ))}
+            </>
           </div>
         </div>
-      </div>
-      {modalshow && (
-        <Offcanvas
-          className="Offcanvas-modal"
-          style={{ width: "500px" }}
-          show={modalshow}
-          placement="end"
-          onHide={() => {
-            setModalShow(false);
-            setShowSelectBox(false);
-            setSelectedUnassignedUsers("");
-            setListOfUnassignedUsers([]);
-            setSelectedRole(null);
-          }}
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body className="pt-0">
-            <div>
-              <Col sm={12}>
-                {userDetails.role !== "CONTRIBUTOR" &&
-                  !isArchive &&
-                  modalTitle !== "Team Members" &&
-                  userDetails.role !== "LEAD" && (
-                    <div onClick={assignTeamUser} className="assignPopup">
-                      <UserIcon
-                        style={{ width: "20px" }}
-                        firstName={"+"}
-                        className="plus_icon"
-                      />
-                      <p className="ms-2 mb-0" style={{ cursor: "pointer" }}>
-                        {" "}
-                        {"Add Team"}
-                      </p>
-                    </div>
-                  )}
-              </Col>
-              <div>
-                {showSelectBox && (
-                  <>
-                    <div className="select-rol-con">
-                      <select
-                        size="lg"
-                        className="form-control form-control-lg mt-2"
-                        value={selectedRole}
-                        onChange={handleRoleChange}
-                      >
-                        <option value="">Select a role</option>
-                        <option value="CONTRIBUTOR">CONTRIBUTOR</option>
-                        <option value="LEAD">LEAD</option>
-                        <option value="GUEST">GUEST</option>
-                      </select>
-                      {selectedRole === "CONTRIBUTOR" && (
-                        <Select
-                          styles={customStyles}
-                          options={contributorOptions}
-                          value={contributorOptions.filter((option) =>
-                            selectedUnassignedUsers.includes(option.value)
-                          )}
-                          isMulti
-                          onChange={handleContributorsChange}
-                        />
+        <div>
+          <div>
+            <div className="pull-left w-100">
+              <label className="lableName">Team Members</label>
+              <div
+                className="user-profile-pics"
+                style={{ paddingLeft: "10px" }}
+              >
+                {accessibleBy
+                  .concat(managedBy)
+                  .slice(0, 13)
+                  .map((user, index) => (
+                    <>
+                      {!user?.profilePicture && index < 3 && (
+                        <UserIcon key={index} firstName={user.name} />
                       )}
-                      {selectedRole === "LEAD" && (
-                        <Select
-                          styles={customStyles}
-                          placeholder="Select Member"
-                          options={leadOptions}
-                          value={leadOptions.filter((option) =>
-                            selectedUnassignedUsers.includes(option.value)
-                          )}
-                          isMulti
-                          onChange={handleLeadsChange}
-                        />
-                      )}
-                      {selectedRole === "GUEST" && (
-                        <Select
-                          styles={customStyles}
-                          placeholder="Select Member"
-                          options={guestOptions}
-                          value={guestOptions.filter((option) =>
-                            selectedUnassignedUsers.includes(option.value)
-                          )}
-                          isMulti
-                          onChange={handleGuestsChange}
-                        />
-                      )}
-                    </div>
-                    {selectedUnassignedUsers && (
-                      <div className="mb-3 pull-right">
-                        <Button
-                          variant="success"
-                          size="sm"
-                          onClick={assignTeamUsers}
+                      {index > 2 && index === 3 && (
+                        <span
+                          onClick={() => {
+                            onClickOfIcons(
+                              accessibleBy.concat(managedBy),
+                              "Team Members"
+                            );
+                          }}
                         >
-                          Assign
-                        </Button>
+                          <UserIcon
+                            key={index}
+                            firstName={"..."}
+                            className="team_icon"
+                          />
+                        </span>
+                      )}
+                      {user?.profilePicture && index < 3 && (
+                        <div key={index} className="user_pic_card">
+                          <img
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              borderRadius: "50%",
+                            }}
+                            src={`${user?.profilePicture}`}
+                            alt="profile"
+                          ></img>
+                        </div>
+                      )}
+                    </>
+                  ))}
+              </div>
+              {userDetails.role !== "CONTRIBUTOR" &&
+                !isArchive &&
+                userDetails.role !== "GUEST" && (
+                  <div
+                    style={{ position: "relative", float: "right" }}
+                    onClick={() => {
+                      onClickOfIcons(
+                        accessibleBy.concat(managedBy),
+                        "Assigned and Managed By"
+                      );
+                    }}
+                  >
+                    <i
+                      className="fa fa-user-plus add-user-icon"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                )}
+            </div>
+          </div>
+        </div>
+        {modalshow && (
+          <Offcanvas
+            className="Offcanvas-modal"
+            style={{ width: "500px" }}
+            show={modalshow}
+            placement="end"
+            onHide={() => {
+              setModalShow(false);
+              setShowSelectBox(false);
+              setSelectedUnassignedUsers("");
+              setListOfUnassignedUsers([]);
+              setSelectedRole(null);
+            }}
+          >
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title> {modalTitle}</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body className="pt-0">
+              <div>
+                <Col sm={12}>
+                  {userDetails.role !== "CONTRIBUTOR" &&
+                    !isArchive &&
+                    modalTitle !== "Team Members" &&
+                    userDetails.role !== "LEAD" && (
+                      <div onClick={assignTeamUser} className="assignPopup">
+                        <UserIcon
+                          style={{ width: "20px" }}
+                          firstName={"+"}
+                          className="plus_icon"
+                        />
+                        <p className="ms-2 mb-0" style={{ cursor: "pointer" }}>
+                          {" "}
+                          {"Add Team"}
+                        </p>
                       </div>
                     )}
-                  </>
-                )}
-              </div>
-              <div style={{ clear: "both" }}></div>
-
-              <Row>
-                {users.map((user, index) => {
-                  return (
-                    <Col key={index} sm={12}>
-                      <div className="assignPopup ">
-                        <>
-                          {!user?.profilePicture && (
-                            <UserIcon
-                              key={index}
-                              firstName={user.name}
-                              className="list_user"
-                            />
-                          )}
-                          {user?.profilePicture && (
-                            <div className="user_pic_card">
-                              <img
-                                style={{
-                                  width: "30px",
-                                  height: "30px",
-                                  borderRadius: "50%",
-                                }}
-                                src={`${user?.profilePicture}`}
-                                alt="profile"
-                              ></img>
-                            </div>
-                          )}
-                        </>
-                        <div className="ms-2">
-                          <p className="mb-0">
-                            {user?.name} ({user?.role})
-                          </p>
-                          <p className="userEmail">{user?.email}</p>
-                        </div>
-
-                        {(userDetails.role === "SUPER_ADMIN" ||
-                          userDetails.role === "ADMIN") && (
-                          <CiCircleRemove
-                            onClick={() =>
-                              handleConfirmation(user._id, user.name)
-                            }
-                            style={{ cursor: "pointer" }}
-                            className="delete_icon"
+                </Col>
+                <div>
+                  {showSelectBox && (
+                    <>
+                      <div className="select-rol-con">
+                        <select
+                          size="lg"
+                          className="form-control form-control-lg mt-2"
+                          value={selectedRole}
+                          onChange={handleRoleChange}
+                        >
+                          <option value="">Select a role</option>
+                          <option value="CONTRIBUTOR">CONTRIBUTOR</option>
+                          <option value="LEAD">LEAD</option>
+                          <option value="GUEST">GUEST</option>
+                        </select>
+                        {selectedRole === "CONTRIBUTOR" && (
+                          <Select
+                            styles={customStyles}
+                            options={contributorOptions}
+                            value={contributorOptions.filter((option) =>
+                              selectedUnassignedUsers.includes(option.value)
+                            )}
+                            isMulti
+                            onChange={handleContributorsChange}
+                          />
+                        )}
+                        {selectedRole === "LEAD" && (
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Member"
+                            options={leadOptions}
+                            value={leadOptions.filter((option) =>
+                              selectedUnassignedUsers.includes(option.value)
+                            )}
+                            isMulti
+                            onChange={handleLeadsChange}
+                          />
+                        )}
+                        {selectedRole === "GUEST" && (
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Member"
+                            options={guestOptions}
+                            value={guestOptions.filter((option) =>
+                              selectedUnassignedUsers.includes(option.value)
+                            )}
+                            isMulti
+                            onChange={handleGuestsChange}
                           />
                         )}
                       </div>
-                    </Col>
-                  );
-                })}
-              </Row>
-            </div>
-            <ConfirmationPopup
-              show={showConfirmation}
-              onCancel={() => setShowConfirmation(false)}
-              onConfirm={removeUser}
-            />
-          </Offcanvas.Body>
-        </Offcanvas>
-      )}
-    </div>
+                      {selectedUnassignedUsers && (
+                        <div className="mb-3 pull-right">
+                          <Button
+                            variant="success"
+                            size="sm"
+                            onClick={assignTeamUsers}
+                          >
+                            Assign
+                          </Button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+                <div style={{ clear: "both" }}></div>
 
+                <Row>
+                  {users.map((user, index) => {
+                    return (
+                      <Col key={index} sm={12}>
+                        <div className="assignPopup ">
+                          <>
+                            {!user?.profilePicture && (
+                              <UserIcon
+                                key={index}
+                                firstName={user.name}
+                                className="list_user"
+                              />
+                            )}
+                            {user?.profilePicture && (
+                              <div className="user_pic_card">
+                                <img
+                                  style={{
+                                    width: "30px",
+                                    height: "30px",
+                                    borderRadius: "50%",
+                                  }}
+                                  src={`${user?.profilePicture}`}
+                                  alt="profile"
+                                ></img>
+                              </div>
+                            )}
+                          </>
+                          <div className="ms-2">
+                            <p className="mb-0">
+                              {user?.name} ({user?.role})
+                            </p>
+                            <p className="userEmail">{user?.email}</p>
+                          </div>
+
+                          {(userDetails.role === "SUPER_ADMIN" ||
+                            userDetails.role === "ADMIN") && (
+                            <CiCircleRemove
+                              onClick={() =>
+                                handleConfirmation(user._id, user.name)
+                              }
+                              style={{ cursor: "pointer" }}
+                              className="delete_icon"
+                            />
+                          )}
+                        </div>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </div>
+              <ConfirmationPopup
+                show={showConfirmation}
+                onCancel={() => setShowConfirmation(false)}
+                onConfirm={removeUser}
+              />
+            </Offcanvas.Body>
+          </Offcanvas>
+        )}
+      </div>
     </>
   );
 };

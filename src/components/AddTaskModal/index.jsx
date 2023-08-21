@@ -29,6 +29,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { toast } from "react-toastify";
 import { CONSTANTS } from "../../constants";
 import { useAuth } from "../../utlis/AuthProvider";
+import { useMutation, useQuery } from "react-query";
 
 const validationSchema = Yup.object({
   projectId: Yup.string().required("Project is required !!"),
@@ -62,20 +63,19 @@ export default function AddTaskModal(props) {
     closeModal,
     selectedTask,
     handleProjectId,
-    selectedSection
+    selectedSection,
   } = props;
-  console.log(selectedTask , "selectedTask");
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
   const [loading, setLoading] = useState(false);
-  const [categoryList, setCategoryList] = useState([]);
-  const [projectList, setProjectList] = useState([]);
-  const [userList, setUserList] = useState([]);
-  const [leadLists, setLeadList] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isAnotherTask, setIsAnotherTask] = useState(false);
   const { userDetails } = useAuth();
   const miscTypeArray = CONSTANTS.MISCTYPE;
   const [isResetAttachment, setIsResetAttachment] = useState(false);
+  const [categoryList, setCategoryList] = useState([]);
+  const [leadLists, setLeadLists] = useState([]);
+  const [userList, setUserList] = useState([]);
 
   const uploadedAttachmentsArray = (uploadedFiles) => {
     setUploadedFiles(uploadedFiles);
@@ -106,8 +106,7 @@ export default function AddTaskModal(props) {
     },
   });
 
-  const handleSubmit = (values) => {
-    console.log(values , "values");
+  const handleSubmit = (values, params) => {
     let {
       projectId,
       section,
@@ -136,12 +135,16 @@ export default function AddTaskModal(props) {
     selectedTask && (dataToSend["taskId"] = selectedTask?._id);
     uploadedFiles && (dataToSend["attachments"] = uploadedFiles);
     defaultTaskTime && (dataToSend["defaultTaskTime"] = defaultTaskTime);
-    status === "Completed" && completedDate && (dataToSend["completedDate"] = formDateNightTime(completedDate));
+    status === "Completed" &&
+      completedDate &&
+      (dataToSend["completedDate"] = formDateNightTime(completedDate));
     console.log(dataToSend, "dataToSend");
     if (selectedTask) {
-      updateTask(dataToSend);
+      updateTaskMutation.mutate(dataToSend);
+      return;
     } else {
-      addTask(dataToSend);
+      addTaskMutation.mutate(dataToSend);
+      return;
     }
   };
 
@@ -149,100 +152,163 @@ export default function AddTaskModal(props) {
     formik.resetForm();
     setUploadedFiles([]);
     setIsResetAttachment(true);
-    // also we have to reset all the list as well 
-    setCategoryList([]);
-    setProjectList([]);
-    setUserList([]);
-    setLeadList([]);
-    // close the modal
     closeModal();
   };
 
-  const getProjectList = async () => {
-    console.log("getAllProjects form add task");
+  /*
 
-    setLoading(true);
-    try {
-      const projects = await getAllProjects();
-      setLoading(false);
-      if (projects.error) {
-        return;
-      } else {
-        setProjectList(projects?.data);
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
+  @get project list
+
+  */
+
+  const fetchProjectList = async () => {
+    const projects = await getAllProjects();
+    return projects?.data;
   };
 
-  const getCategories = async (id) => {
+  const { data: projectList, isLoading } = useQuery(
+    ["projectList", showAddTask],
+    fetchProjectList,
+    {
+      enabled: showAddTask,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data;
+      },
+    }
+  );
+
+  /*
+  @get category list
+  */
+
+  const fetchCategoryList = async (projectId) => {
     let dataToSend = {
-      projectId: id,
+      projectId: projectId,
     };
-    setLoading(true);
-    try {
-      const categories = await getCategoriesProjectById(dataToSend);
-      setLoading(false);
-      if (categories.error) {
-        return;
-      } else {
-        setCategoryList(categories?.data);
-        if(selectedTask){
-          formik.setFieldValue("section", selectedTask?.section);        
-        }
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
+    categoriesListMutation.mutate(dataToSend);
   };
 
-  const getLeads = async (id) => {
+  const categoriesListMutation = useMutation(getCategoriesProjectById, {
+    onSuccess: (data) => {
+      setCategoryList(data?.data);
+      if (selectedTask) {
+        formik.setFieldValue("section", selectedTask?.section);
+      }
+    },
+  });
+
+  const { isLoading: isLoadingCategory } = categoriesListMutation;
+
+  /*
+  @get lead list
+  */
+
+  const fetchLeadList = async (projectId) => {
     let dataToSend = {
-      projectId: id,
+      projectId: projectId,
     };
-    setLoading(true);
-    try {
-      const leads = await getLeadsUsingProjectId(dataToSend);
-      setLoading(false);
-      if (leads.error) {
-        return;
-      } else {
-        setLeadList(leads?.data);
-        if(selectedTask){
-          formik.setFieldValue("leads", selectedTask?.lead[0]?._id);
-        }
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
+    leadListMutation.mutate(dataToSend);
   };
 
-  const getUsers = async (id ,lead) => {
+  const leadListMutation = useMutation(getLeadsUsingProjectId, {
+    onSuccess: (data) => {
+      setLeadLists(data?.data);
+      if (selectedTask) {
+        formik.setFieldValue("leads", selectedTask?.lead[0]?._id);
+      }
+    },
+  });
+
+  const { isLoading: isLoadingLead } = leadListMutation;
+
+  /*
+  @get user list
+  */
+
+  const fetchUserList = async (projectId, lead) => {
     let dataToSend = {
-      projectId: id,
+      projectId: projectId,
     };
     if (lead) {
       dataToSend.selectedLeadRole = "ADMIN";
     }
-    setLoading(true);
-    try {
-      const users = await getUserUsingProjectId(dataToSend);
-      setLoading(false);
-      if (users.error) {
+    userListMutation.mutate(dataToSend);
+  };
+
+  const userListMutation = useMutation(getUserUsingProjectId, {
+    onSuccess: (data) => {
+      setUserList(data?.data);
+      if (selectedTask) {
+        formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
+      }
+    },
+  });
+
+  const { isLoading: isLoadingUser } = userListMutation;
+
+  /*  @addTask */
+  const addTaskMutation = useMutation(createTask, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.error(data?.message);
         return;
       } else {
-        setUserList(users?.data);
-        if(selectedTask){
-          formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
+        resetModalData();
+        toast.dismiss();
+        toast.success(data?.message);
+        if(!isAnotherTask){
+          closeModal();
+          return;
         }
+        setIsAnotherTask(false);
       }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
+    },
+  });
+
+  /*  @updateTask */
+  const updateTaskMutation = useMutation(updateTaskDetails, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.dismiss();
+        toast.error(data?.message);
+        return;
+      } else {
+        resetModalData();
+        getNewTasks();
+        closeModal();
+        toast.success(data?.message);
+        toast.dismiss();
+      }
+    },
+  });
+
+  /*  @deleteTask */
+  const deleteTaskMutation = useMutation(deleteTaskDetails, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.dismiss();
+        toast.error(data?.message);
+        return;
+      } else {
+        resetModalData();
+        getNewTasks();
+        closeModal();
+        toast.success(data?.message);
+        toast.dismiss();
+      }
+    },
+  });
+
+  const deleteTask = async () => {
+    let dataToSend = {
+      taskId: selectedTask?._id,
+    };
+    deleteTaskMutation.mutate(dataToSend);
+  };
+
+  const updateTaskDescriptionValue = (value) => {
+    formik.setFieldValue("description", value);
   };
 
   function formDateNightTime(dateString) {
@@ -256,87 +322,8 @@ export default function AddTaskModal(props) {
     const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
     const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
     let localTimeString = new Date(localTime.toISOString());
-    // console.log("==========", localTimeString);
-    // console.log(localTimeString);
     return localTimeString;
   }
-
-  // addTask
-  const addTask = async (dataToSend) => {
-    console.log("add task");
-    try {
-      const task = await createTask(dataToSend);
-      if (task.error) {
-        toast.error(task?.message);
-        return;
-      } else {
-        resetModalData();
-        closeModal();
-        toast.success(task?.message);
-        toast.dismiss();
-      }
-    }
-    catch (error) {
-      return error.message;
-    }
-  };
-
-  // submitTaskAnother
-  const submitTaskAnother = async (values) => {
-    console.log("submit task another");
-  };
-
-  // updateTask 
-  const updateTask = async (dataToSend) => {
-    console.log("update task" , dataToSend);
-    try {
-      const task = await updateTaskDetails(dataToSend);
-      if (task.error) {
-        toast.error(task?.message);
-        return;
-      } else {
-        resetModalData();
-        getNewTasks();
-        closeModal();
-        toast.success(task?.message);
-        toast.dismiss();
-      }
-    }
-    catch (error) {
-      return error.message;
-    }
-    
-  };
-
-  // Delete task
-  const deleteTask = async () => {
-    let dataToSend = {
-      taskId: selectedTask?._id,
-    };
-    try {
-      const task = await deleteTaskDetails(dataToSend);
-      if (task.error) {
-        toast.error(task?.message);
-        return;
-      } else {
-        resetModalData();
-        closeModal();
-        toast.success(task?.message);
-        toast.dismiss();
-      }
-    }
-    catch (error) {
-      return error.message;
-    }
-  };
-
-  const updateTaskDescriptionValue = (value) => {
-    formik.setFieldValue("description", value);
-  }
-
-  useEffect(() => {
-    getProjectList();
-  }, [showAddTask]);
 
   useEffect(() => {
     // if values of project id is changed then get categories, leads and users
@@ -344,17 +331,20 @@ export default function AddTaskModal(props) {
       formik.setFieldValue("leads", "");
       formik.setFieldValue("assignedTo", "");
       formik.setFieldValue("section", "");
-      getCategories(formik.values.projectId);
-      getLeads(formik.values.projectId);
+      fetchCategoryList(formik.values.projectId);
+      fetchLeadList(formik.values.projectId);
     }
   }, [formik.values.projectId]);
 
   useEffect(() => {
     // if values of project id is changed then get categories, leads and users
-    if (formik.values.projectId && formik.values.leads || selectedTask && formik.values.projectId) {
-      getUsers(formik.values.projectId, formik.values.leads);
+    if (
+      (formik.values.projectId && formik.values.leads) ||
+      (selectedTask && formik.values.projectId)
+    ) {
+      fetchUserList(formik.values.projectId, formik.values.leads);
     }
-  } , [formik.values.leads || selectedTask && formik.values.projectId])
+  }, [formik.values.leads || (selectedTask && formik.values.projectId)]);
 
   // if selectedProjectFromTask is true then we have to set the project id
   useEffect(() => {
@@ -379,37 +369,43 @@ export default function AddTaskModal(props) {
       formik.setFieldValue("description", selectedTask?.description);
       formik.setFieldValue("miscType", selectedTask?.miscType);
       formik.setFieldValue("title", selectedTask.title);
-      formik.setFieldValue("defaultTaskTime.hours", selectedTask?.defaultTaskTime?.hours);
-      formik.setFieldValue("defaultTaskTime.minutes", selectedTask?.defaultTaskTime?.minutes);
+      formik.setFieldValue(
+        "defaultTaskTime.hours",
+        selectedTask?.defaultTaskTime?.hours
+      );
+      formik.setFieldValue(
+        "defaultTaskTime.minutes",
+        selectedTask?.defaultTaskTime?.minutes
+      );
       let dueDateData = new Date(selectedTask?.dueDate?.split("T")[0]);
       dueDateData =
-      dueDateData.getFullYear() +
-      "-" +
-      (dueDateData.getMonth() + 1 <= 9
-        ? "0" + (dueDateData.getMonth() + 1)
-        : dueDateData.getMonth() + 1) +
-      "-" +
-      (dueDateData.getDate() <= 9
-        ? "0" + dueDateData.getDate()
-        : dueDateData.getDate());
+        dueDateData.getFullYear() +
+        "-" +
+        (dueDateData.getMonth() + 1 <= 9
+          ? "0" + (dueDateData.getMonth() + 1)
+          : dueDateData.getMonth() + 1) +
+        "-" +
+        (dueDateData.getDate() <= 9
+          ? "0" + dueDateData.getDate()
+          : dueDateData.getDate());
       formik.setFieldValue("dueDate", dueDateData);
       let completedDate = new Date(selectedTask?.completedDate?.split("T")[0]);
       completedDate =
-      completedDate.getFullYear() +
-      "-" +
-      (completedDate.getMonth() + 1 <= 9
-        ? "0" + (completedDate.getMonth() + 1)
-        : completedDate.getMonth() + 1) +
-      "-" +
-      (completedDate.getDate() <= 9
-        ? "0" + completedDate.getDate()
-        : completedDate.getDate());
+        completedDate.getFullYear() +
+        "-" +
+        (completedDate.getMonth() + 1 <= 9
+          ? "0" + (completedDate.getMonth() + 1)
+          : completedDate.getMonth() + 1) +
+        "-" +
+        (completedDate.getDate() <= 9
+          ? "0" + completedDate.getDate()
+          : completedDate.getDate());
       formik.setFieldValue("completedDate", completedDate);
       formik.setFieldValue("priority", selectedTask?.priority);
       formik.setFieldValue("status", selectedTask?.status);
     }
   }, [selectedTask]);
-  
+
   return (
     <>
       <Offcanvas
@@ -438,10 +434,10 @@ export default function AddTaskModal(props) {
                     onBlur={formik.handleBlur}
                     value={formik.values.projectId}
                     disabled={
-                      selectedTask || handleProjectId || selectedProjectFromTask 
+                      selectedTask || handleProjectId || selectedProjectFromTask
                     }
                   >
-                    <option value="" disabled>
+                    <option selected value="" disabled>
                       Select Project
                     </option>
                     {projectList?.map((project, index) => (
@@ -451,7 +447,9 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                   {formik.touched.projectId && formik.errors.projectId ? (
-                    <div className="text-danger pull-right">{formik.errors.projectId}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.projectId}
+                    </div>
                   ) : null}
                 </Form.Group>
                 <Form.Group as={Col} md="6">
@@ -464,8 +462,8 @@ export default function AddTaskModal(props) {
                     onBlur={formik.handleBlur}
                     value={formik.values.section}
                   >
-                    <option value="" disabled>
-                      Select Section
+                    <option selected value="" disabled>
+                      {isLoadingCategory ? "Loading..." : "Select Section"}
                     </option>
                     {categoryList?.map((section, index) => (
                       <option value={section?._id} key={index}>
@@ -474,7 +472,9 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                   {formik.touched.section && formik.errors.section ? (
-                    <div className="text-danger pull-right">{formik.errors.section}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.section}
+                    </div>
                   ) : null}
                 </Form.Group>
 
@@ -524,7 +524,10 @@ export default function AddTaskModal(props) {
                       selectedTask && formik.values.status === "COMPLETED"
                     }
                   >
-                    <option value="">Select Lead</option>
+                    <option value="">
+                      {" "}
+                      {isLoadingLead ? "Loading..." : "Select Lead"}
+                    </option>
                     {leadLists?.map((project, index) => (
                       <option value={project?._id} key={index}>
                         {project?.name}
@@ -532,7 +535,9 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                   {formik.touched.leads && formik.errors.leads ? (
-                    <div className="text-danger pull-right">{formik.errors.leads}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.leads}
+                    </div>
                   ) : null}
                 </Form.Group>
               </Row>
@@ -550,7 +555,9 @@ export default function AddTaskModal(props) {
                     value={formik.values.title}
                   />
                   {formik.touched.title && formik.errors.title ? (
-                    <div className="text-danger pull-right">{formik.errors.title}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.title}
+                    </div>
                   ) : null}
                 </Form.Group>
                 <Form.Group as={Col} md="5">
@@ -580,7 +587,8 @@ export default function AddTaskModal(props) {
                       value={formik.values.defaultTaskTime.minutes}
                     />
                   </div>
-                  {formik.errors.defaultTaskTime && formik.touched.defaultTaskTime ? (
+                  {formik.errors.defaultTaskTime &&
+                  formik.touched.defaultTaskTime ? (
                     <div className="text-danger pull-right">
                       {formik.errors.defaultTaskTime}
                     </div>
@@ -614,7 +622,7 @@ export default function AddTaskModal(props) {
                     onBlur={formik.handleBlur}
                     value={formik.values.assignedTo}
                   >
-                    <option value="">Select User</option>
+                    <option value="">{isLoadingUser?"Loading...":"Select User"}</option>
                     {userList?.map((module, index) => (
                       <option value={module?._id} key={index}>
                         {module?.name}
@@ -642,7 +650,9 @@ export default function AddTaskModal(props) {
                     value={formik.values.dueDate}
                   />
                   {formik.touched.dueDate && formik.errors.dueDate ? (
-                    <div className="text-danger pull-right">{formik.errors.dueDate}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.dueDate}
+                    </div>
                   ) : null}
                 </Form.Group>
 
@@ -665,7 +675,9 @@ export default function AddTaskModal(props) {
                     ))}
                   </Form.Control>
                   {formik.touched.priority && formik.errors.priority ? (
-                    <div className="text-danger pull-right">{formik.errors.priority}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.priority}
+                    </div>
                   ) : null}
                 </Form.Group>
 
@@ -700,7 +712,9 @@ export default function AddTaskModal(props) {
                     </Form.Control>
                   </OverlayTrigger>
                   {formik.touched.status && formik.errors.status ? (
-                    <div className="text-danger pull-right">{formik.errors.status}</div>
+                    <div className="text-danger pull-right">
+                      {formik.errors.status}
+                    </div>
                   ) : null}
                 </Form.Group>
 
@@ -765,7 +779,7 @@ export default function AddTaskModal(props) {
                       className="btn btn-primary"
                       style={{ marginLeft: "10px" }}
                       type="button"
-                      onClick={submitTaskAnother}
+                      onClick={() => {formik.handleSubmit; setAddAnother(true)}}
                     >
                       Create And Add Another
                     </Button>

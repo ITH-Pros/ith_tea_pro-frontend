@@ -11,8 +11,7 @@ import {
 } from "react-bootstrap";
 import moment from "moment";
 import UserIcon from "@components/ProfileImage/profileImage";
-import { useQuery } from "react-query";
-import { getProjectsTask } from "@services/user/api";
+import "../../pages/Tasks/tasks.css";
 
 const TaskList = ({
   projects,
@@ -30,17 +29,24 @@ const TaskList = ({
   setSelectedProject,
   setShowAddTask,
   setSelectedTask,
+  isLoading,
 }) => {
-
   return (
     <Accordion alwaysOpen="true">
-      {!projects?.length && !selectedProjectId && (
+      {!projects?.length && !selectedProjectId && !isLoading && (
         <p className="alig-nodata" style={{ textAlign: "center" }}>
           No Tasks Found
         </p>
       )}
+      {isLoading && (
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
 
-      {projects.map((project, index) => (
+      {projects?.map((project, index) => (
         // check if tasks array has data
         <Accordion.Item key={index} eventKey={index}>
           {project?._id?.projectId && project?._id?.section && (
