@@ -40,7 +40,7 @@ export default function defineRulesFor(role) {
         ],
         "task"
       );
-      can(["read", "write", "update", "delete"], "rating");
+      can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
@@ -81,7 +81,7 @@ export default function defineRulesFor(role) {
         ],
         "task"
       );
-      can(["read", "write", "update", "delete"], "rating");
+      can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
@@ -122,7 +122,7 @@ export default function defineRulesFor(role) {
         ],
         "task"
       );
-      can(["read", "write", "update", "delete"], "rating");
+      can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
@@ -163,7 +163,7 @@ export default function defineRulesFor(role) {
         ],
         "task"
       );
-      can(["read", "write", "update", "delete"], "rating");
+      can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
       break;
@@ -204,7 +204,7 @@ export default function defineRulesFor(role) {
         ],
         "task"
       );
-      can(["read", "write", "update", "delete"], "rating");
+      can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
       can(["read", "write", "update", "delete"], "team-report");
   }
