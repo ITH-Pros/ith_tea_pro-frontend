@@ -154,7 +154,7 @@ const PrivateRoutes = () => {
           exact={true}
           element={
             <PrivateRoute>
-              <Tasks/>
+              <Tasks />
             </PrivateRoute>
           }
         />
@@ -163,7 +163,9 @@ const PrivateRoutes = () => {
           path="/team-report"
           element={
             <PrivateRoute>
-              <TeamReport/>
+              <CheckRole role={["SUPER_ADMIN", "ADMIN"]}>
+                <TeamReport />
+              </CheckRole>
             </PrivateRoute>
           }
         />
@@ -172,7 +174,7 @@ const PrivateRoutes = () => {
           path="/task/:projectId"
           element={
             <PrivateRoute>
-               <Tasks/>
+              <Tasks />
             </PrivateRoute>
           }
         />
@@ -181,7 +183,7 @@ const PrivateRoutes = () => {
           path="/user"
           element={
             <PrivateRoute>
-              <User/>
+              <User />
             </PrivateRoute>
           }
         >
@@ -190,7 +192,7 @@ const PrivateRoutes = () => {
             element={
               <PrivateRoute>
                 <CheckRole role={["SUPER_ADMIN", "ADMIN"]}>
-                   <AddUser/>
+                  <AddUser />
                 </CheckRole>
               </PrivateRoute>
             }
