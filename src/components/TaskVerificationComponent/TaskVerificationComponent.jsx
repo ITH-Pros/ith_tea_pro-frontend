@@ -8,7 +8,7 @@ import { useQuery } from 'react-query';
 
 
 
-const TaskVerificationComponent = ({ userDetails, handleViewDetails, openVerifyModal, verifyTaskNotAllowedRoles  }) => {
+const TaskVerificationComponent = ({ userDetails, handleViewDetails, openVerifyModal, verifyTaskNotAllowedRoles   }) => {
 
   let params = {
     limit: 50,
@@ -22,7 +22,6 @@ const TaskVerificationComponent = ({ userDetails, handleViewDetails, openVerifyM
       enabled: userDetails?.role !== "CONTRIBUTOR",
       refetchOnWindowFocus: false,
       select: (data) => {
-        console.log("data", data);
         return data?.data?.users;
       },
     }

@@ -93,6 +93,7 @@ const CustomCalendar = (props) => {
 
   const { data, error, isLoading, refetch } = useQuery(['teamWork' ,currentDate , currentView , isChange ], fetchTeamWork, {
     enabled: userDetails?.role !== "CONTRIBUTOR" ,
+    refetchOnWindowFocus: false,
     onSuccess: data => {
       setTeamWorkList(data);
     }

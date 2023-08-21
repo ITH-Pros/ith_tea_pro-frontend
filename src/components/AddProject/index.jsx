@@ -18,6 +18,7 @@ import {
 } from "@services/user/api";
 import { toast } from "react-toastify";
 import "./index.css";
+import { useMutation, useQuery } from "react-query";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -30,17 +31,20 @@ const validationSchema = Yup.object({
 });
 
 export default function AddProject(props) {
-  // ...Same state, effects, and functions as before
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [userList, setUserList] = useState([]);
-  const [leadList, setLeadList] = useState([]);
-  const [projectList, setProjectListValue] = useState([]);
   const params = useParams();
-  const projectById = projectList.find(
-    (project) => project._id === params.projectId
+  const { data: projectById } = useQuery(
+    ["projectById", params.projectId],
+    async () => {
+      const { data } = await getAllProjects();
+      return data.find((project) => project._id === params.projectId);
+    }
   );
-  const [color, setColor] = useColor("hex", projectById?.colorCode || "#ADD8E6");
+
+  const [color, setColor] = useColor(
+    "hex",
+    projectById?.colorCode || "#ADD8E6"
+  );
   // Formik initialization
   const formik = useFormik({
     initialValues: {
@@ -54,32 +58,32 @@ export default function AddProject(props) {
     onSubmit: (values) => handleFormSubmit(values),
   });
 
+  /*
+    @This function is used to handle form submit
+    @Params: values
+    @Returns: NONE
+  */
+
   const handleFormSubmit = async (values) => {
-    setLoading(true);
-    try {
-      // Prepare the data for submission
-      const formData = {
-        name: values.name,
-        description: values.description,
-        managedBy: values.selectedManagers,
-        accessibleBy: values.selectAccessibleBy,
-        colorCode: values.colorCode,
-      };
+    const formData = {
+      name: values.name,
+      description: values.description,
+      managedBy: values.selectedManagers,
+      accessibleBy: values.selectAccessibleBy,
+      colorCode: values.colorCode,
+    };
+    if (params.projectId) {
+      updateProjectMutation.mutate({
+        ...formData,
+        projectId: params.projectId,
+      });
+    } else {
+      addProjectMutation.mutate(formData);
+    }
+  };
 
-      let response;
-      if (params.projectId) {
-        // Update existing project
-        response = await updateProjectForm({
-          ...formData,
-          projectId: params.projectId,
-        });
-      } else {
-        // Create new project
-        response = await addNewProject(formData);
-      }
-
-      setLoading(false);
-
+  const addProjectMutation = useMutation(addNewProject, {
+    onSuccess: (response) => {
       if (response.error) {
         toast.dismiss();
         toast.info(response?.message || "Something Went Wrong");
@@ -88,81 +92,81 @@ export default function AddProject(props) {
         toast.info("Success");
         navigate("/project/all");
       }
-    } catch (error) {
+    },
+    onError: (error) => {
       toast.dismiss();
       toast.info(error?.message || "Something Went Wrong");
-      setLoading(false);
-    }
-  };
+    },
+  });
+
+  const updateProjectMutation = useMutation(updateProjectForm, {
+    onSuccess: (response) => {
+      if (response.error) {
+        toast.dismiss();
+        toast.info(response?.message || "Something Went Wrong");
+      } else {
+        toast.dismiss();
+        toast.info("Success");
+        navigate("/project/all");
+      }
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    },
+  });
 
   const handleCancel = () => {
     navigate("/project/all"); // Redirects the user to the "/project/all" route
   };
 
-  const getAndSetAllProjects = async function () {
-    // Implementation of fetching all projects
-    try {
-      const projects = await getAllProjects();
-      if (projects.error) {
-        toast.dismiss();
-        toast.info(projects?.message || "Something Went Wrong");
-        // set
-      } else {
-        setProjectListValue(projects.data);
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      return error.message;
-    }
+  /*
+    This function is used to fetch all projects*/
+
+  const getAndSetAllProjects = async () => {
+    const projects = await getAllProjects();
+    return projects?.data;
   };
+
+  /*
+      @ This function is used to fetch all users
+      @ return {Array} users
+    */
 
   const getUsersList = async function () {
-    // Implementation of fetching all users
-    setLoading(true);
-    try {
-      const user = await getAllUserWithoutPagination();
-      setLoading(false);
-
-      if (user.error) {
-        toast.dismiss();
-        toast.info(user?.message || "Something Went Wrong");
-        // set
-      } else {
-        setUserList(user.data);
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      setLoading(false);
-      return error.message;
-    }
+    const user = await getAllUserWithoutPagination();
+    return user?.data;
   };
+
+  const { data: userList, isLoading: isUserListLoading } = useQuery(
+    "allUsers",
+    getUsersList,
+    {
+      refetchOnWindowFocus: false,
+      select: (data) => data,
+    }
+  );
+
+  /*
+    @ This function is used to fetch all leads
+    @ return {Array} leads
+    */
 
   const getLeadsList = async function () {
-    // Implementation of fetching all leads
-    setLoading(true);
-    try {
-      const lead = await getAllLeadsWithoutPagination();
-      setLoading(false);
-
-      if (lead.error) {
-        toast.dismiss();
-        toast.info(lead?.message || "Something Went Wrong");
-        // set
-      } else {
-        setLeadList(lead.data);
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      setLoading(false);
-      return error.message;
-    }
+    const lead = await getAllLeadsWithoutPagination();
+    return lead?.data;
   };
+
+  const { data: leadList, isLoading: isLeadListLoading } = useQuery(
+    "allLeads",
+    getLeadsList,
+    {
+      refetchOnWindowFocus: false,
+      select: (data) => data,
+    }
+  );
+
+  console.log("leadList", leadList);
 
   // Fetch data when component mounts
   useEffect(() => {
@@ -188,7 +192,6 @@ export default function AddProject(props) {
   useEffect(() => {
     formik.setFieldValue("colorCode", color?.hex);
   }, [color]);
-  
 
   return (
     <div
@@ -254,8 +257,9 @@ export default function AddProject(props) {
                 }
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
+                isLoading={isLeadListLoading}
                 options={leadList}
-                value={leadList.filter((lead) =>
+                value={leadList?.filter((lead) =>
                   formik.values.selectedManagers.includes(lead._id)
                 )}
                 required
@@ -280,7 +284,8 @@ export default function AddProject(props) {
                 getOptionLabel={(options) => options["name"]}
                 getOptionValue={(options) => options["_id"]}
                 options={userList}
-                value={userList.filter((user) =>
+                isLoading={isUserListLoading}
+                value={userList?.filter((user) =>
                   formik.values.selectAccessibleBy.includes(user._id)
                 )}
                 required
@@ -291,7 +296,6 @@ export default function AddProject(props) {
                     {formik.errors.selectAccessibleBy}
                   </p>
                 )}
-               
             </BootstrapForm.Group>
           </Row>
 
@@ -318,20 +322,19 @@ export default function AddProject(props) {
             </BootstrapForm.Group>
           </Row>
 
-<Row className="mb-3">
-  <BootstrapForm.Group as={Col}>
-    <BootstrapForm.Label>Project Color</BootstrapForm.Label>
-    <ColorPicker
-      width={356}
-      height={100}
-      color={color}
-      onChange={setColor}
-      hideHSV
-      dark
-    />
-  </BootstrapForm.Group>
-</Row>
-
+          <Row className="mb-3">
+            <BootstrapForm.Group as={Col}>
+              <BootstrapForm.Label>Project Color</BootstrapForm.Label>
+              <ColorPicker
+                width={356}
+                height={100}
+                color={color}
+                onChange={setColor}
+                hideHSV
+                dark
+              />
+            </BootstrapForm.Group>
+          </Row>
 
           {/* ...Rest of the form code, replacing onChange and value with formik.handleChange, formik.handleBlur, and formik.values as needed */}
         </Card>
@@ -344,9 +347,7 @@ export default function AddProject(props) {
             Cancel
           </Button>
         </div>
-        
       </BootstrapForm>
-      {loading ? <Loader /> : null}
     </div>
   );
 }

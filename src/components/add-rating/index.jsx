@@ -18,14 +18,13 @@ import Loader from "@components/Shared/Loader";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 // import { useAuth } from "../../../auth/AuthProvider";
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import Offcanvas from "react-bootstrap/Offcanvas";
 import { Textarea } from "@nextui-org/react";
 import { CheckLg } from "react-bootstrap-icons";
 import RatingModalBody from "@pages/Rating/add-rating-modal";
 
-
 export default function AddRating(props) {
-  const [modalShow, setModalShow] = useState(false); 
+  const [modalShow, setModalShow] = useState(false);
 
   return (
     <>
@@ -41,9 +40,9 @@ export default function AddRating(props) {
           <RatingModalBody />
         </Modal.Body>
       </Modal> */}
-      <Offcanvas  
+      <Offcanvas
         className="Offcanvas-modal"
-        style={{width:'500px'}}
+        style={{ width: "500px" }}
         show={modalShow}
         onHide={() => setModalShow(false)}
         placement="end"
@@ -51,17 +50,21 @@ export default function AddRating(props) {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title> Add Rating</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body  >
-        <RatingModalBody />
+        <Offcanvas.Body>
+          <RatingModalBody />
         </Offcanvas.Body>
       </Offcanvas>
 
-      {!modalShow &&  <Button variant="primary"
-                              size="sm"
-                               style={{fontSize:'10px'}} onClick={() => setModalShow(true)}>Add Rating</Button>}
-
-
-
+      {!modalShow && (
+        <Button
+          variant="primary"
+          size="sm"
+          style={{ fontSize: "10px" }}
+          onClick={() => setModalShow(true)}
+        >
+          Add Rating
+        </Button>
+      )}
     </>
   );
 }
