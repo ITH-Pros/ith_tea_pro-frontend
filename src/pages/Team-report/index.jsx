@@ -110,6 +110,7 @@ export default function TeamReport(props) {
 
   const {data:userDetails , isLoading:isLoadingUserDetails} = useQuery(['userDetails' , selectedOption , selectedEvent] ,() => getUserDetailsByUserId({ params: { userId: selectedOption.value } }) , {
     enabled: !!selectedOption && !!selectedEvent,
+    refetchOnWindowFocus: false,
     select: (data) => data.data,
   })
 

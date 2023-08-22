@@ -3,7 +3,6 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
 import { getRatingsByUser } from "@services/user/api";
-import Loader from "../Shared/Loader/index";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { Row, Col } from "react-bootstrap";
@@ -237,7 +236,7 @@ export default function RatingGraph(props) {
 
     return (
       <div>
-        <Line data={lineChartData} options={lineChartOptions}  />
+       <Line onLoadStart={isUserRatingLoading} data={lineChartData} options={lineChartOptions}  />
       </div>
     );
   };
@@ -299,7 +298,6 @@ export default function RatingGraph(props) {
         </Col>
       </Row>
       <LineGraph />
-      <div className="">{loading ? <Loader /> : null}</div>
     </>
   );
 }
