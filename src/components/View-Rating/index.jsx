@@ -141,18 +141,20 @@ export default function Dashboard(props) {
   };
 
   async function getAllRatings(data) {
-
-      if (!data) {
-        data = {
-          month: months.indexOf(monthUse) + 1,
-          year: yearUse,
-        };
-      }
-      
+    if (!data) {
+      data = {
+        month: months.indexOf(monthUse) + 1,
+        year: yearUse,
+      };
+    }
   }
 
-  const { data: ratingsArray, isLoading, refetch } = useQuery(
-    ['getAllRatings', months.indexOf(monthUse) + 1, yearUse],
+  const {
+    data: ratingsArray,
+    isLoading,
+    refetch,
+  } = useQuery(
+    ["getAllRatings", months.indexOf(monthUse) + 1, yearUse],
     async () => {
       const data = {
         month: months.indexOf(monthUse) + 1,
@@ -160,14 +162,12 @@ export default function Dashboard(props) {
       };
       const rating = await getRatings(data);
       if (rating.error) {
-        throw new Error(rating?.message || 'Something Went Wrong');
+        throw new Error(rating?.message || "Something Went Wrong");
       } else {
         return rating.data;
       }
     }
   );
-
-
 
   const hideModal = () => {
     setModalShow(false);

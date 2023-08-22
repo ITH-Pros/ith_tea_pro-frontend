@@ -360,6 +360,7 @@ export default function Dashboard(props) {
               openAddtask={openAddtask}
               handleToRedirectTask={handleToRedirectTask}
               showAllProjects={showAllProjects}
+              setShowAllProjects={() => setShowAllProjects(!showAllProjects)}
             />
             {showAddTask && (
               <AddTaskModal
@@ -371,17 +372,6 @@ export default function Dashboard(props) {
                 setToasterMessageToDashboard={setToasterMessageToDashboard}
               />
             )}
-
-            <button
-              className="expend"
-              onClick={() => setShowAllProjects(!showAllProjects)}
-            >
-              {showAllProjects ? (
-                <i className="fas fa-expand"></i>
-              ) : (
-                <i className="fas fa-expand-alt"></i>
-              )}
-            </button>
           </>
         )}
 

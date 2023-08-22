@@ -280,6 +280,7 @@ export default function RatingModalBody(props) {
         fromDate: convertToUTCDay(date),
         toDate: convertToUTCNight(date),
       };
+      console.log(" I am here")
       const tasks = await getProjectsTask(data);
       setLoading(false);
       if (tasks.error) {
