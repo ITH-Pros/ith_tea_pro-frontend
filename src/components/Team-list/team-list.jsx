@@ -4,29 +4,21 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { FaUser } from "react-icons/fa";
 import "./team-list.css";
 import UserIcon from "../ProfileImage/profileImage";
+import { useQuery } from "react-query";
 // import UserIcon from "../Projects/ProjectCard/profileImage";
 
 
 export default function ViewTeamList(props) {
   const { isTeamList, getTeamListForLogginUser } = props;
-  const [teamList, setTeamList] = useState([]);
+  // const [teamList, setTeamList] = useState([]);
 
-  useEffect(() => {
-    getTeamList();
-  }, []);
 
-  const getTeamList = async () => {
-    try {
-      const response = await fetchTeamList();
-      if (response.error) {
-        return;
-      } else {
-        setTeamList(response?.data?.users);
-      }
-    } catch (error) {
-      return error.message;
-    }
-  };
+  const { data: teamList } = useQuery("teamList" , fetchTeamList, {
+    refetchOnWindowFocus: false,
+    enabled: isTeamList,
+    select: (data) => data?.data?.users,
+  });
+    
 
   return (
     <Offcanvas

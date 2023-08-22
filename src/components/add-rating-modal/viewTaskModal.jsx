@@ -65,7 +65,7 @@ export default function TasksModalBody(props) {
       setLoading(false)
       if (tasks.error) {
         toast.dismiss()
-      toast.info(tasks?.error?.message || 'Something Went Wrong1')
+      toast.info(tasks?.message || 'Something Went Wrong1')
         // set
       } else {
         let allTask = tasks?.data

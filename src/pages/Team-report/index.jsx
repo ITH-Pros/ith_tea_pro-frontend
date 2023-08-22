@@ -32,6 +32,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RatingGraph from "@components/rating-graph/rating-graph";
 import { toast } from "react-toastify";
+import { useQuery } from "react-query";
 
 const customStyles = {
   option: (provided) => ({
@@ -100,7 +101,6 @@ const UserAnalyticsGraph = ({ selectedProject, estimatedTimeData, completionTime
 };
 
 export default function TeamReport(props) {
-  const [teamWorkList, setTeamWorkList] = useState([]);
   const [userDetails, setUserDetails] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [usersList, setUsersListValue] = useState([]);
@@ -109,11 +109,6 @@ export default function TeamReport(props) {
   const [showTags, setShowTags] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null); // New state variable for selected project
 
-  useEffect(() => {
-    // console.log('Team Report');
-    getUserReport();
-    getAllMembers();
-  }, []);
 
   useEffect(() => {
     if (userDetails?.role === "CONTRIBUTOR") {
@@ -164,70 +159,52 @@ export default function TeamReport(props) {
     return localTimeString;
   }
 
-  const getUserReport = async (id, type) => {
-    setLoading(true);
-
-    if (!id || !type) {
+  const getUserReport =  () => {
+    if (!selectedOption?.value || !selectedEvent) {
       return;
     }
     let dataToSend = {
-      userId: id,
+      userId: selectedOption?.value,
     };
-    if (type) {
-      if (type === "task") {
+    if (selectedEvent) {
+      if (selectedEvent === "task") {
         dataToSend.todayTasks = true;
         dataToSend.currentDate = convertToUTCDay(new Date());
-      } else if (type === "overduetask") {
+      } else if (selectedEvent === "overduetask") {
         dataToSend.overDueTasks = true;
-      } else if (type === "pendingtask") {
+      } else if (selectedEvent === "pendingtask") {
         dataToSend.pendingRatingTasks = true;
-      } else if (type === "delaytask") {
+      } else if (selectedEvent === "delaytask") {
         dataToSend.isDelayRated = true;
       } else {
         dataToSend.adhocTasks = true;
       }
     }
-    try {
-      const res = await getUserReportData(dataToSend);
-      setLoading(false);
-
-      if (res.error) {
-        // console.log('Error while getting team work list');
-      } else {
-        setTeamWorkList(res?.data);
-      }
-    } catch (error) {
-      setLoading(false);
-      return error.message;
-    }
+    return dataToSend;
   };
 
-  const getAllMembers = async function () {
-    setLoading(true);
-    try {
-      const users = await getAllUsersWithAdmin();
-      setLoading(false);
-      if (users.error) {
-        toast.dismiss();
-        toast.info(users?.message || "Something Went Wrong");
-      } else {
-        setUsersListValue(users?.data?.users || []);
+const {data:teamWorkList} = useQuery(['userReport' , selectedOption , selectedEvent] ,() => getUserReportData(getUserReport()) , {
+   refetchOnWindowFocus: false,
+    enabled: !!selectedOption && !!selectedEvent,
+    select: (data) => {
+      return data?.data;
+    }
+  })
+
+  const { isLoading:isUsersLoading } = useQuery('userList' , () => getAllUsersWithAdmin() , {
+    refetchOnWindowFocus: false,
+    enabled: true,
+    onSuccess: (data) => {
+      setUsersListValue(data?.data?.users || []);
         if (localStorage.getItem("selectedOptions")) {
           setSelectedOption(
             JSON.parse(localStorage.getItem("selectedOptions"))
           );
         }
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      return error.message;
     }
-  };
+  })
 
   const handleTabSelect = (eventKey) => {
-    setTeamWorkList([]);
     setSelectedEvent(eventKey);
   };
 
@@ -263,6 +240,8 @@ export default function TeamReport(props) {
                   onChange={handleSelectChange}
                   options={usersList}
                   placeholder="Select Member"
+                  loadingMessage={() => "Loading..."}
+                  isLoading={isUsersLoading}
                 />
               </Col>
             </Row>

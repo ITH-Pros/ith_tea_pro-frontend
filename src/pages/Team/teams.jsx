@@ -27,20 +27,25 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import UserIcon from "../../ProjectCard/profileImage";
-import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  OverlayTrigger,
+  Spinner,
+  Tooltip,
+} from "react-bootstrap";
 import ViewTeamList from "@components/Team-list/team-list";
 import { toast } from "react-toastify";
 import UserIcon from "@components/ProfileImage/profileImage";
-import resend from "@assets/img/resend-icon.jpg"
+import resend from "@assets/img/resend-icon.jpg";
 import { useAuth } from "../../utlis/AuthProvider";
+import { useMutation, useQuery } from "react-query";
 
 export default function Teams(props) {
   const { userDetails } = useAuth();
-  const [userAnalytics, setUserAnalytics] = useState({});
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [usersList, setUsersListValue] = useState([]);
   const [projectList, setProjectListValue] = useState([]);
   const [userAssignedProjects, setUserAssignedProjects] = useState([]);
 
@@ -51,8 +56,6 @@ export default function Teams(props) {
   });
 
   const [assignManagerModalShow, setAssignManagerModalShow] = useState(false);
-  
-  
   const [confirmModalShow, setConfirmModalShow] = useState(false);
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
@@ -62,49 +65,75 @@ export default function Teams(props) {
   const openAssignManagerModal = (userId) => {
     setSelectedManagers([]);
     setManagerList([]);
-
     setUserId(userId);
-    // Fetch manager list
-    getManagerList(userId);
-
-    // Show the modal
     setAssignManagerModalShow(true);
   };
 
-  const getManagerList = async (userId) => {
-    setLoading(true);
-    console.log("userId", userId);
+    /* ************* Get All Users ************* */
 
-    try {
-      const resp = await getAllManager();
+    const getAndSetAllUsers = async function () {
+      if (!pageDetails?.currentPage) {
+        return;
+      }
+        let params = {
+          limit: pageDetails?.rowsPerPage,
+          currentPage: pageDetails?.currentPage,
+        };
+        const projects = await getAllUsers({ params });
+        if (projects.error) {
+          throw new Error(projects.error);
+        }
+        return projects?.data;
+    };
 
-      if (resp.error) {
-        console.log(resp.error);
-        setLoading(false);
-      } else {
-        setLoading(false);
-        const updatedManagerList = resp.data.filter(
+  const {
+    data: usersList,
+    error: usersError,
+    isLoading: isUsersLoading,
+    refetch: refetchUsers
+  } = useQuery(["allUsersList"], getAndSetAllUsers , {
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      let totalPages = Math.ceil(
+        data?.totalCount / pageDetails?.rowsPerPage
+      );
+      console.log("totalPages", data);
+      setPageDetails({
+        currentPage: Math.min(pageDetails?.currentPage, totalPages),
+        rowsPerPage: pageDetails?.rowsPerPage,
+        totalPages,
+      });
+    }
+  });
+
+  /* *************  Get All manager *************** 
+  /* @ param: options
+  /* Desc: Get all managers and set the managerList state
+  /* ******************************************* */
+
+  const { isLoading: isManagerLoading } = useQuery(
+    ["managerList" , userId],
+    () => getAllManager(),
+    {
+      refetchOnWindowFocus: false,
+      enabled:assignManagerModalShow,
+      onSuccess: (data) => {
+        const updatedManagerList = data.data.filter(
           (manager) => manager._id !== userId
         );
-        console.log(updatedManagerList);
         setManagerList(updatedManagerList);
-
-        usersList.forEach((user) => {
+        usersList?.users?.forEach((user) => {
           if (user?._id === userId) {
             if (user?.managerIds?.length > 0) {
               setSelectedManagers(user?.managerIds);
             } else {
               setSelectedManagers([]);
             }
-            console.log("user.manager", user?.managerIds);
           }
         });
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
+      },
     }
-  };
+  );
 
   const handleManagerSelection = (managerIds) => {
     // Update the selected managers array based on the checkbox selection
@@ -120,174 +149,80 @@ export default function Teams(props) {
     }
   };
 
+  /* ************* Assign Manager to User ************* */
+
   const assignManagers = async () => {
     if (selectedManagers.length === 0) {
-      toast.dismiss()
+      toast.dismiss();
       toast.info("Please select  manager");
-      // set
       return;
-    }
-
-    // Perform any necessary actions with the selected managers
-    // console.log('Selected Managers:', selectedManagers)
-
-    let data = {
-      managerIds: selectedManagers,
-      userId: userId,
-    };
-    try {
-      const resp = await assignManagerTOUserByIds(data);
-      if (resp.error) {
-        // console.log(resp.error)
-        toast.dismiss()
-      toast.info(resp?.message || "Something Went Wrong");
-        // set
-      } else {
-        toast.dismiss()
-      toast.info(resp?.message || "Something Went Wrong");
-        // set
-        setAssignManagerModalShow(false);
-        onInit();
-      }
-    } catch (error) {
-      // console.log(error)
-    }
-  };
-
-  useEffect(() => {
-    onInit();
-  }, []);
-
-  function onInit() {
-    let options = {
-      currentPage: pageDetails?.currentPage,
-      rowsPerPage: pageDetails?.rowsPerPage,
-    };
-    getAndSetAllUsers(options);
-    getManagerList();
-  }
-
-  const getUserAnalitics = async () => {
-    setLoading(true);
-    try {
-      const userAnalytics = await getUserAnalytics();
-      setLoading(false);
-      if (userAnalytics.error) {
-        toast.dismiss()
-      toast.info(userAnalytics?.message || "Something Went Wrong");
-        // set
-        return;
-      } else {
-        setUserAnalytics(userAnalytics?.data);
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss()
-      toast.info(error?.message || "Something Went Wrong");
-      // set
-      return error.message;
-    }
-  };
-
-  const getAndSetAllUsers = async function (options) {
-    if (!options?.currentPage) {
-      return;
-    }
-    setLoading(true);
-    try {
-      let params = {
-        limit: options?.rowsPerPage,
-        currentPage: options?.currentPage,
+    } else if (selectedManagers.length > 1) {
+      let data = {
+        managerIds: selectedManagers,
+        userId: userId,
       };
-
-      const projects = await getAllUsers({ params });
-      setLoading(false);
-      if (projects.error) {
-        toast.dismiss()
-      toast.info(projects?.message || "Something Went Wrong");
-        // set
-      } else {
-        setUsersListValue(projects?.data?.users || []);
-        let totalPages = Math.ceil(
-          projects.data.totalCount / options?.rowsPerPage
-        );
-        setPageDetails({
-          currentPage: Math.min(options?.currentPage, totalPages),
-          rowsPerPage: options?.rowsPerPage,
-          totalPages,
-        });
-        getUserAnalitics();
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      return error.message;
+      assignManagersMutation.mutate(data);
     }
   };
 
-  // const handleSelectProject = (projectId) => {
-  //   setSelectedProjectId(projectId);
-  // };
+  const assignManagersMutation = useMutation(assignManagerTOUserByIds, {
+    onSuccess: (data) => {
+      toast.dismiss();
+      toast.info(data?.message || "Something Went Wrong");
+      setAssignManagerModalShow(false);
+      onInit();
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    },
+  });
+
+  const { isLoading: isAssigningManager } = assignManagersMutation;
+
+
+
+  /* ************* Get All Users analytics ************* */
+
+  const { data: userAnalytics , isLoading:isLoadingUserAnalytics } = useQuery(
+    ["userAnalytics", usersList],
+    () => getUserAnalytics(),
+    {
+      refetchOnWindowFocus: false,
+      enabled: usersList?.users?.length > 0,
+      select: (data) => {
+        return data?.data;
+      },
+    }
+  );
+
+  /* ************* handle add-user to project ************* */
 
   const handleAddUserToProject = async function (userId) {
     setSelectedProjectIds("");
     setLoading(true);
-    try {
-      const projects = await getAllProjects();
-      setLoading(false);
-      if (projects.error) {
-        toast.dismiss()
-      toast.info(projects?.message || "Something Went Wrong");
-        // set
-        return;
-      } else {
-        setProjectListValue(projects.data);
-      }
-    } catch (error) {
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      setLoading(false);
-      return error.message;
-    }
-    try {
-      let dataToSend = {
-        params: { userId },
-      };
-      const userAssignedProjects = await getUserAssignedProjects(dataToSend);
-      setLoading(false);
-      if (userAssignedProjects.error) {
-        toast.dismiss()
-      toast.info(
-          userAssignedProjects?.message || "Something Went Wrong"
-        );
-        // set
-        return;
-      } else {
-        setUserAssignedProjects(userAssignedProjects.data);
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      return error.message;
-    }
+    refetchProjectList();
+    let dataToSend = {
+      params: { userId },
+    };
+    assignedUserToProjectMutation.mutate(dataToSend);
     setSelectedUserId(userId);
     setModalShow(true);
   };
 
+  const refetchProjectList = useQuery(getAllProjects, {
+    refetchOnWindowFocus: false,
+    select: (data) => setProjectListValue(data?.data),
+  });
+
+  const assignedUserToProjectMutation = useMutation(getUserAssignedProjects, {
+    select: (data) => {
+      setUserAssignedProjects(userAssignedProjects.data);
+    },
+  });
+
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
 
-  // const handleSelectProject =(projectId) => {
-  //   if (selectedProjectIds.includes(projectId)) {
-  //     setSelectedProjectIds(selectedProjectIds.filter(id => id !== projectId));
-  //   } else {
-  //     setSelectedProjectIds([...selectedProjectIds, projectId]);
-  //   }
-  // }
   const GetModalBody = () => {
     return (
       <>
@@ -324,68 +259,74 @@ export default function Teams(props) {
     );
   };
 
-  const handleAssignUserProjectSubmit = async () => {
-    setLoading(true);
-    try {
-      let dataToSend = {
-        projectIds: selectedProjectIds,
-        userId: selectedUserId,
-      };
-      const assignRes = await assignUserToProjectByIds(dataToSend);
-      setLoading(false);
-      if (assignRes.error) {
-        toast.dismiss()
-      toast.info(assignRes?.message || "Something Went Wrong");
+  /* *
+   *  Handle Assign User To Project
+   * */
+
+  const assignUserToProjectMutation = useMutation(assignUserToProjectByIds, {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.dismiss();
+        toast.info(data?.message || "Something Went Wrong");
         // set
         setModalShow(false);
         return;
       } else {
-        setProjectListValue(assignRes.data);
-        toast.dismiss()
-      toast.info(assignRes?.message);
+        setProjectListValue(data.data);
+        toast.dismiss();
+        toast.info(data?.message);
       }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
       // set
       setModalShow(false);
       return error.message;
-    }
-    setModalShow(false);
+    },
+  });
+
+  const handleAssignUserProjectSubmit = async () => {
+    let dataToSend = {
+      projectIds: selectedProjectIds,
+      userId: selectedUserId,
+    };
+    assignUserToProjectMutation.mutate(dataToSend);
   };
+
+  // const { isLoading: assignUserLoading } = assignUserToProjectMutation;
+
+  /* *
+   *  Delete User
+   * */
+
+  const deleteUserMutation = useMutation(deleteUserById, {
+    onSuccess: (data) => {
+      toast.dismiss();
+      toast.info("User Deleted Successfully");
+      setConfirmModalShow(false);
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    },
+  });
 
   const handleDeleteUser = async () => {
-    setLoading(true);
-    try {
-      let dataToSend = {
-        userId: userId,
-      };
-      const deleteUser = await deleteUserById(dataToSend);
-      setLoading(false);
-      if (deleteUser.error) {
-        toast.dismiss()
-      toast.info(deleteUser?.message || "Something Went Wrong");
-        // set
-        return;
-      } else {
-        toast.dismiss()
-      toast.info("User Deleted Successfully");
-        // set
-        getAndSetAllUsers(pageDetails);
-        setConfirmModalShow(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      return error.message;
-    }
+    let dataToSend = {
+      userId: userId,
+    };
+    deleteUserMutation.mutate(dataToSend);
   };
 
+  const { isLoading: isDeleting } = deleteUserMutation;
+
+  /* *
+   *  Pagination
+   * */
+
   const CustomPagination = (props) => {
-    const { getAndSetAllUsers, setPageDetails, pageDetails } = props;
+    const { setPageDetails, pageDetails , refetchUsers } = props;
 
     const numberOfRowsArray = [10, 20, 30, 40, 50];
     const handleOnChange = (e) => {
@@ -398,7 +339,7 @@ export default function Teams(props) {
       }
       let dataToSave = { ...pageDetails, [e.target.name]: pageNumber };
       setPageDetails(dataToSave);
-      getAndSetAllUsers(dataToSave);
+      refetchUsers()
     };
 
     const onChangeRowsPerPage = (e) => {
@@ -408,8 +349,9 @@ export default function Teams(props) {
         currentPage: 1,
       };
       setPageDetails(dataToSave);
-      getAndSetAllUsers(dataToSave);
+      refetchUsers()
     };
+
     const changePageNumber = (value) => {
       if (
         pageDetails.currentPage + value <= 0 ||
@@ -422,7 +364,7 @@ export default function Teams(props) {
         currentPage: pageDetails.currentPage + value,
       };
       setPageDetails(dataToSave);
-      getAndSetAllUsers(dataToSave);
+      refetchUsers()
     };
 
     return (
@@ -473,18 +415,18 @@ export default function Teams(props) {
       const resendLink = await resendActivationLinkApi(dataToSend);
       setLoading(false);
       if (resendLink.error) {
-        toast.dismiss()
-      toast.info(resendLink?.message || "Something Went Wrong");
+        toast.dismiss();
+        toast.info(resendLink?.message || "Something Went Wrong");
         // set
         return;
       } else {
-        toast.dismiss()
-      toast.info(resendLink?.message);
+        toast.dismiss();
+        toast.info(resendLink?.message);
         // set
       }
     } catch (error) {
       setLoading(false);
-      toast.dismiss()
+      toast.dismiss();
       toast.info(error?.error?.message || "Something Went Wrong");
       // set
       return error.message;
@@ -523,7 +465,7 @@ export default function Teams(props) {
               <Button variant="primary" size="sm" className="add_m">
                 <span
                   className="fa fa-user-plus"
-                  title="Assign Manager"
+                  title="Assign Managers"
                   aria-hidden="true"
                   onClick={() => {
                     openAssignManagerModal(user._id);
@@ -539,7 +481,6 @@ export default function Teams(props) {
 
   const getTeamListForLogginUser = () => {
     setIsTeamList(!isTeamList);
-    // getAndSetAllUsers(pageDetails);
   };
 
   return (
@@ -549,21 +490,21 @@ export default function Teams(props) {
           <i className="fa fa-users" aria-hidden="true"></i>
           Team Members
           <div className="projects-button">
-
-          {userDetails?.role === "LEAD" && (
-            
-            
-            <Button style={{ marginRight: "10px" , marginLeft: "5px" }} onClick={getTeamListForLogginUser}>
-              <span
-                className=""
-                aria-hidden="true"
-                style={{ marginRight: "10px" , marginLeft: "5px" }}
+            {userDetails?.role === "LEAD" && (
+              <Button
+                style={{ marginRight: "10px", marginLeft: "5px" }}
+                onClick={getTeamListForLogginUser}
               >
-                {" "}
-              </span>
-              Team List{" "}
-            </Button>
-          )}
+                <span
+                  className=""
+                  aria-hidden="true"
+                  style={{ marginRight: "10px", marginLeft: "5px" }}
+                >
+                  {" "}
+                </span>
+                Team List{" "}
+              </Button>
+            )}
 
             {(userDetails?.role === "SUPER_ADMIN" ||
               userDetails?.role === "ADMIN") && (
@@ -589,14 +530,11 @@ export default function Teams(props) {
           </div>
         </h1>
 
-
-
         {isTeamList && <ViewTeamList isTeamList={isTeamList} />}
 
-
         <div className="container-team">
-          {usersList &&
-            usersList.map((user, index) => {
+          {usersList?.users &&
+            usersList?.users?.map((user, index) => {
               return (
                 <div key={user._id} className="box">
                   <div className="top-bar"></div>
@@ -654,9 +592,6 @@ export default function Teams(props) {
                             }}
                             icon="pi pi-check"
                             label="Confirm"
-                            // onClick={() => {
-                            //   handleEdit();
-                            // }}
                           >
                             {" "}
                             <i
@@ -728,9 +663,7 @@ export default function Teams(props) {
                         ) && (
                           <div className="user-analytics">
                             <>
-                              {(userDetails?.role === "SUPER_ADMIN" ||
-                                userDetails?.role === "ADMIN") &&
-                                AssignedManager(user)}
+                              {(userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") && usersList?.users?.length > 0 && AssignedManager(user)}
                             </>
                             <div className="user-analytics-item">
                               <div className="user-analytics-item-value">
@@ -740,6 +673,9 @@ export default function Teams(props) {
                                     (analytics) => analytics?._id === user._id
                                   )
                                   .completedAfterDueDatePercentage.toFixed(2)}
+                                  {isLoadingUserAnalytics && 
+                                    <i>loading...</i>
+                                  }
                                 %
                               </div>
 
@@ -824,18 +760,17 @@ export default function Teams(props) {
             })}
         </div>
 
-        {usersList?.length ? (
+        {usersList?.users?.length ? (
           <CustomPagination
-            getAndSetAllUsers={getAndSetAllUsers}
             pageDetails={pageDetails}
             setPageDetails={setPageDetails}
+            refetchUsers={refetchUsers}
           />
         ) : (
-          <p className="alig-nodata">No User Found</p>
+          <p className="alig-nodata">{isUsersLoading ? "Loading...":"No User Found"}</p>
         )}
 
         {loading ? <Loader /> : null}
-
 
         <Modals
           modalShow={modalShow}
@@ -846,14 +781,12 @@ export default function Teams(props) {
           onClick={handleAssignUserProjectSubmit}
         />
 
-
-{isTeamList && (
-
-      <ViewTeamList isTeamList={isTeamList} getTeamListForLogginUser={getTeamListForLogginUser} />
-    )}
-
-    
-
+        {isTeamList && (
+          <ViewTeamList
+            isTeamList={isTeamList}
+            getTeamListForLogginUser={getTeamListForLogginUser}
+          />
+        )}
 
         <Modal
           centered
@@ -887,6 +820,7 @@ export default function Teams(props) {
                   onClick={() => handleDeleteUser()}
                 >
                   Delete
+                  {isDeleting ? <Spinner animation="border" size="sm" /> : null}
                 </Button>
               </div>
             </div>
@@ -940,7 +874,10 @@ export default function Teams(props) {
                 assignManagers();
               }}
             >
-              Confirm
+              Confirm{" "}
+              {isAssigningManager ? (
+                <Spinner animation="border" size="sm" />
+              ) : null}
             </Button>
           </Modal.Footer>
         </Modal>
