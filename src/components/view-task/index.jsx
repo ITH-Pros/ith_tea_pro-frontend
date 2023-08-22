@@ -26,6 +26,7 @@ import EditRating from "./editRating";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../Shared/Spinner/spinner";
 import { useAuth } from "../../utlis/AuthProvider";
+import { useMutation, useQuery } from "react-query";
 export default function ViewTaskModal(props) {
   const {
     closeViewTaskModal,
@@ -36,24 +37,82 @@ export default function ViewTaskModal(props) {
     setIsChange,
   } = props;
   const [loading, setLoading] = useState(false);
-
   const [showViewTaskModal, setShowViewTaskModal] = useState(false);
-  const [task, setTaskData] = useState({});
   const { userDetails } = useAuth();
   const [text, setText] = useState("");
   const [activeTab, setActiveTab] = useState("comments");
-  const [rating, setRating] = useState(0);
-  const [isRatingFormVisible, setIsRatingFormVisible] = useState(false);
-  const [selectedTaskIdForRating, setSelectedTaskIdForRating] = useState(null);
-  const [errorRating, setErrorRating] = useState(false);
-  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
   const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 
-  useEffect(() => {
-    if (selectedTaskId) {
-      getTaskDetailsById(selectedTaskId);
+  const {
+    isLoading,
+    error,
+    data: task,
+    refetch: refetchTaskDetails,
+  } = useQuery(
+    ["task", selectedTaskId],
+    async () => {
+      const response = await taskById({ taskId: selectedTaskId });
+      if (response.error) {
+        throw new Error(response.message);
+      }
+      setShowViewTaskModal(true);
+      return response?.data;
+    },
+    {
+      refetchOnWindowFocus: false,
     }
-  }, [selectedTaskId]);
+  );
+
+  // Mutation for updating task status
+  const mutationUpdateTask = useMutation(async (newStatus) => {
+    const res = await updateTaskStatusById({
+      taskId: selectedTaskId,
+      status: newStatus,
+    });
+    if (res.error) {
+      throw new Error(res.message);
+    }
+    return res;
+  });
+
+  // Mutation for adding comments
+  const mutationAddComment = useMutation(async (comment) => {
+    const res = await addCommentOnTask({ taskId: selectedTaskId, comment });
+    if (res.error) {
+      throw new Error(res.message);
+    }
+    return res;
+  });
+
+  const handleStatusChange = (e) => {
+    const newStatus = e.target.value;
+    mutationUpdateTask.mutate(newStatus, {
+      onSuccess: () => {
+        getTasksDataUsingProjectId();
+        setShowConfirmation(false);
+        onInit();
+      },
+      onError: (error) => {
+        toast.dismiss();
+        toast.error(error.message);
+      },
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutationAddComment.mutate(text, {
+      onSuccess: () => {
+        setText("");
+        getTasksDataUsingProjectId();
+        onInit();
+      },
+      onError: (error) => {
+        toast.dismiss();
+        toast.error(error.message);
+      },
+    });
+  };
 
   const handleTextChange = (content) => {
     setText(content);
@@ -72,48 +131,17 @@ export default function ViewTaskModal(props) {
   }
 
   const updateTaskStatus = async (dataToSend) => {
-    try {
-      const res = await updateTaskStatusById(dataToSend);
-      if (res.error) {
-        toast.dismiss();
-        toast.info(res?.message);
-      } else {
-        toast.dismiss();
-        toast.info(res?.message);
-
-        if (selectedTaskId) {
-          getTaskDetailsById(selectedTaskId);
-        }
+    mutationUpdateTask.mutate(dataToSend, {
+      onSuccess: () => {
         getTasksDataUsingProjectId();
         setShowConfirmation(false);
         onInit();
-        // console.log("isChange", isChange);
-        // setIsChange(!isChange)
-      }
-    } catch (error) {
-      return error.message;
-    }
-  };
-
-  const handleStatusChange = (e, taskId) => {
-    const newStatus = e.target.value;
-    let dataToSend = {
-      taskId: taskId,
-      status: newStatus,
-    };
-    // if (newStatus === 'COMPLETED') {
-    //   // confirm('Are you sure you want to complete the task.')
-
-    //   handleConfirmation(dataToSend)
-
-    // } else {
-    updateTaskStatus(dataToSend);
-    // }
-  };
-
-  const handleConfirmation = (dataToSend) => {
-    setDataToSendForTaskStatus(dataToSend);
-    setShowConfirmation(true);
+      },
+      onError: (error) => {
+        toast.dismiss();
+        toast.error(error.message);
+      },
+    });
   };
 
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -140,114 +168,8 @@ export default function ViewTaskModal(props) {
     );
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setText(null);
-    setText(null);
-    addcomment();
-  };
-
-  const addcomment = async () => {
-    setIsLoadingSpinner(true);
-    let dataToSend = {
-      taskId: selectedTaskId,
-      comment: text,
-    };
-    try {
-      let response = await addCommentOnTask(dataToSend);
-      if (response.error) {
-        setIsLoadingSpinner(false);
-        toast.dismiss();
-        toast.info(response.message);
-      } else {
-        toast.dismiss();
-        toast.info(response.message);
-        setText("");
-        if (selectedTaskId) {
-          getTaskDetailsById(selectedTaskId);
-        }
-        setIsLoadingSpinner(false);
-      }
-    } catch (error) {
-      setIsLoadingSpinner(false);
-      // console.log(error);
-    }
-  };
-
-  const getTaskDetailsById = async (id) => {
-    let dataToSend = {
-      taskId: id,
-    };
-    try {
-      let response = await taskById(dataToSend);
-      if (response.status === 200) {
-        setTaskData(response?.data);
-        // console.log(response?.data, "response?.data");
-        // // console.log(response?.data);
-        setShowViewTaskModal(true);
-        setActiveTab("comments");
-        setIsRatingFormVisible(false);
-        setErrorRating(false);
-        setRating(0);
-        setIsChange(!isChange);
-        onInit();
-      }
-    } catch (error) {
-      // console.log(error);
-    }
-  };
-
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
-  };
-
-  const handleAddRating = (task) => {
-    // Reset Rating
-    // setRating('');
-
-    setErrorRating(false);
-
-    setSelectedTaskIdForRating(task._id);
-    setIsRatingFormVisible(true);
-  };
-
-  const addRating = async () => {
-    let dataToSend = {
-      taskId: selectedTaskIdForRating,
-      rating: rating,
-    };
-    setLoading(true);
-    try {
-      const rating = await addRatingOnTask(dataToSend);
-      setLoading(false);
-      if (rating.error) {
-        toast.dismiss();
-        toast.info(rating?.message);
-      } else {
-        toast.dismiss();
-        toast.info("Rating Added Succesfully");
-
-        getTaskDetailsById(selectedTaskIdForRating);
-        onInit();
-        if (userDetails?.role !== "CONTRIBUTOR") {
-          // getTeamWorkList();
-          setIsChange(!isChange);
-        }
-        setIsRatingFormVisible(false);
-      }
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
-  const handleRating = (rating) => {
-    if (rating > 0 && rating <= 6) {
-      setRating(rating);
-      setErrorRating(false);
-    } else {
-      setErrorRating(true);
-      return false;
-    }
   };
 
   const [isEditModal, setIsEditModal] = useState(false);
@@ -366,10 +288,10 @@ export default function ViewTaskModal(props) {
                   <Form.Label>Status</Form.Label>
                   <select
                     className="form-control form-control-lg"
-                    defaultValue={task.status}
+                    defaultValue={task?.status}
                     onChange={(event) => handleStatusChange(event, task?._id)}
                     disabled={
-                      task.status === "COMPLETED" ||
+                      task?.status === "COMPLETED" ||
                       !(
                         userDetails.id === task?.assignedTo?._id ||
                         (userDetails?.role === "LEAD" &&
@@ -438,8 +360,8 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col}>
                   <Form.Label>Attachments</Form.Label>
                   <Row>
-                    {task.attachments &&
-                      task.attachments.map((file, index) => {
+                    {task?.attachments &&
+                      task?.attachments.map((file, index) => {
                         return (
                           <Col key={index} sm={3}>
                             <div className="attchment">
@@ -619,7 +541,7 @@ export default function ViewTaskModal(props) {
             taskId={task}
             taskRating={task?.rating}
             onClose={() => setIsEditModal(false)}
-            getTaskDetailsById={getTaskDetailsById}
+            getTaskDetailsById={refetchTaskDetails}
             setLoading={setLoading}
           />
         </Modal.Body>

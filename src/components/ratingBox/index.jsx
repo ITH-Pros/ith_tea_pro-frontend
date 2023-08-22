@@ -6,8 +6,6 @@ import { toast } from "react-toastify";
 // import { useAuth } from "../../auth/AuthProvider";
 import "./index.css";
 
-
-
 const RatingBox = (props) => {
   const {
     ratingCommentObj,
@@ -20,12 +18,11 @@ const RatingBox = (props) => {
     setRatingData,
     setRatingForDay,
     isCurrentUser,
-    isCurrentUserManager
+    isCurrentUserManager,
   } = props;
   const [selectedRating, setSelectedRating] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const viewDayTask = () => {
     setTaskModalShow(true);
@@ -60,26 +57,26 @@ const RatingBox = (props) => {
           const rating = await updateUserRating(dataToSend);
           setLoading(false);
           if (rating.error) {
-            toast.dismiss()
-      toast.info(rating?.message || "Something Went Wrong");
+            toast.dismiss();
+            toast.info(rating?.message || "Something Went Wrong");
             // set
           } else {
-            toast.dismiss()
-      toast.info("Rating Updated Succesfully");
+            toast.dismiss();
+            toast.info("Rating Updated Succesfully");
             // set
             setSelectedRating(newRating);
             setEditRatingEnabled(false);
             getAllRatings();
           }
         } catch (error) {
-          toast.dismiss()
-      toast.info(error?.error?.message || "Something Went Wrong");
+          toast.dismiss();
+          toast.info(error?.error?.message || "Something Went Wrong");
           // set
           setLoading(false);
         }
       };
       return editRatingEnabled ? (
-        <div >
+        <div>
           <input
             type="number"
             value={newRating}
@@ -138,9 +135,12 @@ const RatingBox = (props) => {
 
   return (
     <>
-       <td key={index}  className={`${isCurrentUser ? "highlighted-user" : ""} ${
-                            isCurrentUserManager ? "highlighted-manager" : ""
-                          }`}>
+      <td
+        key={index}
+        className={`${isCurrentUser ? "highlighted-user" : ""} ${
+          isCurrentUserManager ? "highlighted-manager" : ""
+        }`}
+      >
         <span
           style={{
             cursor: "pointer",
@@ -150,7 +150,9 @@ const RatingBox = (props) => {
           className="input_dashboard"
           onClick={() => viewDayTask()}
         >
-          {ratingCommentObj?.absent ? "A" : formatedRating(ratingCommentObj?.rating)}{' '}
+          {ratingCommentObj?.absent
+            ? "A"
+            : formatedRating(ratingCommentObj?.rating)}{" "}
         </span>
       </td>
       {modalShow && (
@@ -166,8 +168,7 @@ const RatingBox = (props) => {
         />
       )}
       {loading ? <Loader /> : null}
-
     </>
-  )
+  );
 };
 export default RatingBox;

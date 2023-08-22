@@ -15,23 +15,18 @@ import RatingModalBody from "../add-rating-modal/index.jsx";
 import TasksModalBody from "../add-rating-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
+import { useMutation, useQuery } from "react-query";
 
 var month = moment().month();
 let currentYear = moment().year();
 
 export default function Dashboard(props) {
-  const ratings = [2, 3, 4, 5, 4, 3, 2, 4, 5, 6];
-
-  const [ratingsArray, setRatings] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const [teamView, setTeamView] = useState(false);
-
   const { userDetails } = useAuth();
   const [days, setDays] = useState(moment().daysInMonth());
   const [monthUse, setMonth] = useState(moment().format("MMMM"));
   const [yearUse, setYear] = useState(currentYear);
-  // const [isWeekendChecked, setIsWeekendChecked] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   let months = moment().year(Number)?._locale?._months;
   let years = [2022, 2023, 2024, 2025];
@@ -45,8 +40,6 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
-    // getAllRatingslist();
-    // onInit();
     if (allowedRoles.includes(userDetails?.role)) {
       setTeamView(true);
     }
@@ -59,8 +52,6 @@ export default function Dashboard(props) {
   }, [modalShow, teamView]);
 
   const isRatingAllowed = async function (user, date, month, year) {
-    setLoading(true);
-    // // console.log(user,date,month,year)
     let setDate = date;
     let setMonth = month;
     if (date < 10) {
@@ -69,39 +60,53 @@ export default function Dashboard(props) {
     if (month < 10) {
       setMonth = "0" + month;
     }
-    try {
-      const dataToSend = {
-        userId: user._id,
-      };
+    const dataToSend = {
+      userId: user._id,
+    };
+    verifyManagerMutation.mutate(dataToSend);
+  };
+
+  const verifyManagerMutation = useMutation(
+    async (dataToSend) => {
       const response = await verifyManager(dataToSend);
       if (response.error) {
-        toast.dismiss();
-        toast.info(response.message);
-        // set
-        // console.log("error", response );
+        throw new Error(response.message);
       } else {
-        if (response?.data?.ratingAllowed === true) {
-          setRatingForDay();
-          setRatingData((prevRatingData) => ({
-            ...prevRatingData,
-            user: user,
-            date: date,
-            month: month,
-            year: year,
-          }));
+        return response.data;
+      }
+    },
+    {
+      onError: (error) => {
+        toast.dismiss();
+        toast.info(error?.message || "Something Went Wrong");
+      },
+      onSuccess: (data) => {
+        if (data?.ratingAllowed === true) {
           setModalShow(true);
         } else {
-          toast.dismiss();
-          toast.info("You are not allowed to give rating.");
-          // set
+          if (response.error) {
+            toast.dismiss();
+            toast.info(response.message);
+          } else {
+            if (response?.data?.ratingAllowed === true) {
+              setRatingForDay();
+              setRatingData((prevRatingData) => ({
+                ...prevRatingData,
+                user: user,
+                date: date,
+                month: month,
+                year: year,
+              }));
+              setModalShow(true);
+            } else {
+              toast.dismiss();
+              toast.info("You are not allowed to give rating.");
+            }
+          }
         }
-        // // console.log('error in verify manager')
-      }
-    } catch (error) {
-      // console.log("error", error);
+      },
     }
-    setLoading(false);
-  };
+  );
 
   const isWeekend = (dayOfWeek) => {
     return dayOfWeek === 0 || dayOfWeek === 6;
@@ -136,31 +141,33 @@ export default function Dashboard(props) {
   };
 
   async function getAllRatings(data) {
-    setLoading(true);
-    try {
+
       if (!data) {
         data = {
           month: months.indexOf(monthUse) + 1,
           year: yearUse,
         };
       }
-      const rating = await getRatings(data);
-      setLoading(false);
-      if (rating.error) {
-        toast.dismiss();
-        toast.info(rating?.message || "Something Went Wrong");
-        // set
-      } else {
-        // // console.log(rating.data);
-        setRatings([...rating.data]);
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(error?.message || "Something Went Wrong");
-      // set
-      setLoading(false);
-    }
+      
   }
+
+  const { data: ratingsArray, isLoading, refetch } = useQuery(
+    ['getAllRatings', months.indexOf(monthUse) + 1, yearUse],
+    async () => {
+      const data = {
+        month: months.indexOf(monthUse) + 1,
+        year: yearUse,
+      };
+      const rating = await getRatings(data);
+      if (rating.error) {
+        throw new Error(rating?.message || 'Something Went Wrong');
+      } else {
+        return rating.data;
+      }
+    }
+  );
+
+
 
   const hideModal = () => {
     setModalShow(false);
@@ -339,25 +346,33 @@ export default function Dashboard(props) {
                       </tr>
                     </thead>
                     <tbody>
-                      {ratingsArray.map((user, index) => {
+                      {ratingsArray?.map((user, index) => {
                         const isCurrentUser = user._id === userDetails?.id;
                         const isCurrentUserManager = user?.managerIds?.includes(
                           userDetails?.id
                         );
-                        console.log(isCurrentUserManager ,  user.name);
+                        console.log(isCurrentUserManager, user.name);
 
                         return (
                           <tr
-                          key={index}
-                          className={`${isCurrentUser ? "highlighted-user" : ""} ${
-                            isCurrentUserManager ? "highlighted-manager" : ""
-                          }`}
-                        >
-                          <td
-                            className={`user_names text-truncate ${isCurrentUser ? "highlighted-user" : ""} ${isCurrentUserManager ? "highlighted-manager" : ""}`}
+                            key={index}
+                            className={`${
+                              isCurrentUser ? "highlighted-user" : ""
+                            } ${
+                              isCurrentUserManager ? "highlighted-manager" : ""
+                            }`}
                           >
-                            {user.name}
-                          </td>
+                            <td
+                              className={`user_names text-truncate ${
+                                isCurrentUser ? "highlighted-user" : ""
+                              } ${
+                                isCurrentUserManager
+                                  ? "highlighted-manager"
+                                  : ""
+                              }`}
+                            >
+                              {user.name}
+                            </td>
 
                             {Array(days)
                               .fill(0)
@@ -391,7 +406,9 @@ export default function Dashboard(props) {
                                       setTaskModalShow={setModalShow}
                                       setRatingData={setRatingData}
                                       setRatingForDay={setRatingForDay}
-                                      isCurrentUserManager={isCurrentUserManager}
+                                      isCurrentUserManager={
+                                        isCurrentUserManager
+                                      }
                                       isCurrentUser={isCurrentUser}
                                     />
                                   );
@@ -406,9 +423,16 @@ export default function Dashboard(props) {
                                       : index + 1
                                   }`;
                                   return (
-                                    <td  className={`${isCurrentUser ? "highlighted-user" : ""} ${
-                            isCurrentUserManager ? "highlighted-manager" : ""
-                          }`} key={index}>
+                                    <td
+                                      className={`${
+                                        isCurrentUser ? "highlighted-user" : ""
+                                      } ${
+                                        isCurrentUserManager
+                                          ? "highlighted-manager"
+                                          : ""
+                                      }`}
+                                      key={index}
+                                    >
                                       {userDetails?.role === "CONTRIBUTOR" ||
                                       new Date(dateToSend) > new Date() ? (
                                         <span

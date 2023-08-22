@@ -356,25 +356,25 @@ export async function getAllManager(data) {
 }
 
 export async function assignManagerTOUserByIds(data) {
-  return axiosInstance.patch('user/v1/assign/manager', data).then(res => res.data)
+  return axiosInstance.patch('user/v1/assign/manager', data).then(res => res?.data)
 }
 
 export async function verifyTaskById(data) {
-  return axiosInstance.patch('task/v1/verify', data).then(res => res.data)
+  return axiosInstance.patch('task/v1/verify', data).then(res => res?.data)
 }
 
 export async function getRatingList(data) {
-  return axiosInstance.get('/v1/list/for/rating', { params: data }).then(res => res.data)
+  return axiosInstance.get('/v1/list/for/rating', { params: data }).then(res => res?.data)
 }
 
 export async function verifyManager(data) {
-  return axiosInstance.get('user/v1/verify/manager', { params: data }).then(res => res.data)
+  return axiosInstance.get('user/v1/verify/manager', { params: data }).then(res => res?.data)
 }
 
 export async function getUsersByProject() {
-  return axiosInstance.get('task/v1/get/today/taskCreatedUsers').then(res => res.data)
+  return axiosInstance.get('task/v1/get/today/taskCreatedUsers').then(res => res?.data)
 }
 
 export async function getFreeUsers() {
-  return axiosInstance.get('task/v1/get/today/freeUsers').then(res => res.data)
+  return axiosInstance.get('task/v1/get/today/freeUsers').then(res => res?.data)
 }
