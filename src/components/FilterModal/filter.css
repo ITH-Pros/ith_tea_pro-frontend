@@ -22,18 +22,6 @@
     text-align: right;
 }
 
-.addTaskBtn {
-    background-color: #8355ad !important;
-    line-height: 16px;
-    white-space: nowrap;
-    transition: color .3s linear;
-    color: #fff !important;
-    border-color: #d1a2fb;
-    padding: 10px 12px;
-    border-radius: 5px;
-    border: 1px solid;
-     
-}
 
 #dialog-window .accordion-item {
     background: transparent;
