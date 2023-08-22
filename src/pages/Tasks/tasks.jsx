@@ -31,7 +31,7 @@ const Tasks = () => {
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [selectedSectionId, setSelectedSectionId] = useState("");
   const [showViewTask, setShowViewTask] = useState(false);
-  const [projects, setProjects] = useState([]);
+  // const [projects, setProjects] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
@@ -81,7 +81,7 @@ const Tasks = () => {
   }, []);
 
   useEffect(() => {
-    fetchTasks(projectId);
+    // fetchTasks(projectId);
     let paramsData;
     if (params?.projectId) {
       paramsData = params?.projectId;
@@ -124,7 +124,7 @@ const Tasks = () => {
         // set
         setDeleteSectionModal(false);
         closeModal();
-        fetchTasks();
+        getAllTasksForListing();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -160,7 +160,7 @@ const Tasks = () => {
         toast.info("Section archived successfully");
         setArchiveSectionModal(false);
         closeModal();
-        fetchTasks();
+        getAllTasksForListing();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -206,7 +206,7 @@ const Tasks = () => {
         setSectionEditMode(false);
         setModalShow(false);
         closeModal();
-        fetchTasks();
+        getAllTasksForListing();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -240,7 +240,7 @@ const Tasks = () => {
       if (res.status === 200) {
         toast.dismiss();
         toast.info("Task status updated successfully");
-        fetchTasks();
+        getAllTasksForListing();
       } else {
         toast.dismiss();
         toast.info(res?.message);
@@ -286,7 +286,7 @@ const Tasks = () => {
         toast.info(res?.message || "Response in add section");
         setModalShow(false);
         closeModal();
-        fetchTasks();
+        getAllTasksForListing();
         let paramsData;
         if (params?.projectId) {
           paramsData = params?.projectId;
@@ -302,7 +302,7 @@ const Tasks = () => {
   });
 
   /*  @fecth tasks */
-  const fetchTasks = async () => {
+  const fetchTasks = () => {
     let paramsData = projectId || null;
     let data = {
       groupBy: "default",
@@ -379,16 +379,20 @@ const Tasks = () => {
         data.toDate = convertToUTCNight(filterData.toDate);
       }
     }
-    taskMutation.mutate(data);
+    return data;
+    // taskMutation.mutate(data);
   };
 
-  const taskMutation = useMutation(getProjectsTask, {
-    onSuccess: (data) => {
+  const {
+    data: projects,
+    refetch: getAllTasksForListing,
+    isLoading,
+  } = useQuery(["getAllTasks"], () => getProjectsTask(fetchTasks()), {
+    select: (data) => {
       if (data?.error) {
         toast.dismiss();
         toast.info(data?.message);
       } else {
-        let paramsData = projectId || null;
         let allTasks = data?.data;
         allTasks.forEach((item) => {
           item.tasks.forEach((task) => {
@@ -421,24 +425,76 @@ const Tasks = () => {
             }
           });
         });
-        console.log(allTasks);
-        setProjects(allTasks);
-        if (paramsData) {
-          setSelectedProjectId(paramsData);
-        }
+
+        return allTasks;
       }
     },
-    onError: (error) => {
-      console.log(error);
+    onSuccess: () => {
+      let paramsData = projectId || null;
+      if (paramsData) {
+        setSelectedProjectId(paramsData);
+      }
     },
   });
 
-  const { isLoading } = taskMutation;
+  // const taskMutation = useMutation(getProjectsTask, {
+  //   onSuccess: (data) => {
+  //     if (data?.error) {
+  //       toast.dismiss();
+  //       toast.info(data?.message);
+  //     } else {
+  //       let paramsData = projectId || null;
+  //       let allTasks = data?.data;
+  //       allTasks.forEach((item) => {
+  //         item.tasks.forEach((task) => {
+  //           if (task.dueDate) {
+  //             let today = new Date().toISOString().split("T")[0];
+
+  //             if (
+  //               task.dueDate.split("T")[0] === today ||
+  //               new Date(task.dueDate).getTime() < new Date().getTime()
+  //             ) {
+  //               task.dueToday = true;
+  //             } else {
+  //               task.dueToday = false;
+  //             }
+
+  //             if (
+  //               task.completedDate &&
+  //               new Date(task.completedDate).getTime() >
+  //                 new Date(task.dueDate).getTime()
+  //             ) {
+  //               task.dueToday = true;
+  //             }
+
+  //             if (
+  //               task.completedDate &&
+  //               task.completedDate.split("T")[0] === task.dueDate.split("T")[0]
+  //             ) {
+  //               task.dueToday = false;
+  //             }
+  //           }
+  //         });
+  //       });
+  //       console.log(allTasks);
+  //       setProjects(allTasks);
+  //       if (paramsData) {
+  //         setSelectedProjectId(paramsData);
+  //       }
+  //     }
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
+
+  // const { isLoading } = taskMutation;
 
   /*  @downloadExportData */
 
   const downloadExportData = () => {
     let paramsData;
+    console.log(params?.projectId);
     if (params?.projectId) {
       paramsData = params?.projectId;
     }
@@ -550,11 +606,11 @@ const Tasks = () => {
 
   const getNewTasks = (id) => {
     closeModal();
-    fetchTasks();
+    getAllTasksForListing();
   };
 
   const getTaskFilters = () => {
-    fetchTasks();
+    getAllTasksForListing();
   };
 
   const closeModal = () => {
@@ -659,7 +715,7 @@ const Tasks = () => {
             showViewTask={showViewTask}
             closeViewTaskModal={closeViewTaskModal}
             selectedTaskId={selectedTaskId}
-            getTasksDataUsingProjectId={fetchTasks}
+            getTasksDataUsingProjectId={() => getAllTasksForListing()}
           />
         )}
 

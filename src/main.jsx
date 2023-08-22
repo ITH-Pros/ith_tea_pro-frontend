@@ -6,9 +6,9 @@ import "./index.css";
 import "react-quill/dist/quill.snow.css";
 import { AuthProvider } from "./utlis/AuthProvider.jsx";
 import { BrowserRouter } from "react-router-dom";
-
+import { ReactQueryDevtools } from "react-query/devtools";
 // React Query imports
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from "react-query";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -21,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <App />
         </AuthProvider>
       </BrowserRouter>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>
 );

@@ -101,13 +101,17 @@ const UserAnalyticsGraph = ({ selectedProject, estimatedTimeData, completionTime
 };
 
 export default function TeamReport(props) {
-  const [userDetails, setUserDetails] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [usersList, setUsersListValue] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState("task");
   const [loading, setLoading] = useState(false);
   const [showTags, setShowTags] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null); // New state variable for selected project
+
+  const {data:userDetails , isLoading:isLoadingUserDetails} = useQuery(['userDetails' , selectedOption , selectedEvent] ,() => getUserDetailsByUserId({ params: { userId: selectedOption.value } }) , {
+    enabled: !!selectedOption && !!selectedEvent,
+    select: (data) => data.data,
+  })
 
 
   useEffect(() => {
@@ -118,36 +122,6 @@ export default function TeamReport(props) {
     }
   }, [userDetails]);
 
-  useEffect(() => {
-    if (selectedOption) {
-      getUserDetails(selectedOption.value);
-
-      getUserReport(selectedOption?.value, selectedEvent);
-    }
-  }, [selectedOption, selectedEvent]);
-
-  const getUserDetails = async (id) => {
-    setLoading(true);
-    try {
-      let params = {
-        userId: id,
-      };
-      const userDetails = await getUserDetailsByUserId({ params });
-      setLoading(false);
-      if (userDetails.error) {
-        toast.dismiss();
-        toast.info(userDetails?.message || "Something Went Wrong");
-        return;
-      } else {
-        setUserDetails(userDetails.data);
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      setLoading(false);
-      return error.message;
-    }
-  };
 
   function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
@@ -210,7 +184,7 @@ const {data:teamWorkList} = useQuery(['userReport' , selectedOption , selectedEv
 
   const handleSelectChange = (selectedOption) => {
     localStorage.setItem("selectedOptions", JSON.stringify(selectedOption));
-    getUserDetails(selectedOption.value);
+    // getUserDetails(selectedOption.value);
     setSelectedOption(selectedOption);
   };
 

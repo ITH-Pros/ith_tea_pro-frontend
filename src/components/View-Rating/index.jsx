@@ -22,7 +22,7 @@ let currentYear = moment().year();
 
 export default function Dashboard(props) {
   const [loading, setLoading] = useState(false);
-  const [teamView, setTeamView] = useState(false);
+  const [teamView, setTeamView] = useState(undefined);
   const { userDetails } = useAuth();
   const [days, setDays] = useState(moment().daysInMonth());
   const [monthUse, setMonth] = useState(moment().format("MMMM"));
@@ -42,6 +42,9 @@ export default function Dashboard(props) {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     if (allowedRoles.includes(userDetails?.role)) {
       setTeamView(true);
+    }
+    else {
+      setTeamView(false)
     }
   }, []);
 
@@ -141,18 +144,20 @@ export default function Dashboard(props) {
   };
 
   async function getAllRatings(data) {
-
-      if (!data) {
-        data = {
-          month: months.indexOf(monthUse) + 1,
-          year: yearUse,
-        };
-      }
-      
+    if (!data) {
+      data = {
+        month: months.indexOf(monthUse) + 1,
+        year: yearUse,
+      };
+    }
   }
 
-  const { data: ratingsArray, isLoading, refetch } = useQuery(
-    ['getAllRatings', months.indexOf(monthUse) + 1, yearUse],
+  const {
+    data: ratingsArray,
+    isLoading,
+    refetch,
+  } = useQuery(
+    ["getAllRatings", months.indexOf(monthUse) + 1, yearUse],
     async () => {
       const data = {
         month: months.indexOf(monthUse) + 1,
@@ -160,14 +165,12 @@ export default function Dashboard(props) {
       };
       const rating = await getRatings(data);
       if (rating.error) {
-        throw new Error(rating?.message || 'Something Went Wrong');
+        throw new Error(rating?.message || "Something Went Wrong");
       } else {
         return rating.data;
       }
     }
   );
-
-
 
   const hideModal = () => {
     setModalShow(false);
@@ -493,7 +496,7 @@ export default function Dashboard(props) {
           <div></div>
         </div>
       ) : (
-        <div>{!teamView && <MyCalendar />}</div>
+        <div>{teamView !== undefined && <MyCalendar />}</div>
       )}
     </div>
   );

@@ -42,7 +42,7 @@ export default function defineRulesFor(role) {
       );
       can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
-      can(["read", "write", "update", "delete"], "team-report");
+      can(["read"], "team-report");
       break;
 
     case "ADMIN":
@@ -83,7 +83,7 @@ export default function defineRulesFor(role) {
       );
       can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
-      can(["read", "write", "update", "delete"], "team-report");
+      can(["read"], "team-report");
       break;
 
     case "LEAD":
@@ -124,7 +124,7 @@ export default function defineRulesFor(role) {
       );
       can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
-      can(["read", "write", "update", "delete"], "team-report");
+      can(["read"], "team-report");
       break;
 
     case "CONTRIBUTOR":
@@ -165,7 +165,7 @@ export default function defineRulesFor(role) {
       );
       can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
-      can(["read", "write", "update", "delete"], "team-report");
+      can(["read"], "team-report");
       break;
 
     case "GUEST":
@@ -206,7 +206,7 @@ export default function defineRulesFor(role) {
       );
       can(["fillrating", "viewtaskpnmodal", "viewratingonmodal"], "rating");
       can(["read", "write", "update", "delete"], "team");
-      can(["read", "write", "update", "delete"], "team-report");
+      can(["read"], "team-report");
   }
 
   return rules;

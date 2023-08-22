@@ -7,7 +7,12 @@ import Avatar from "react-avatar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-const ProjectList = ({ openAddtask , handleToRedirectTask , showAllProjects}) => {
+const ProjectList = ({
+  openAddtask,
+  handleToRedirectTask,
+  showAllProjects,
+  setShowAllProjects,
+}) => {
   const {
     data: projectList,
     isLoading,
@@ -78,7 +83,13 @@ const ProjectList = ({ openAddtask , handleToRedirectTask , showAllProjects}) =>
           </Col>
         ))}
 
-     
+      <button className="expend" onClick={()=>setShowAllProjects()}>
+        {showAllProjects ? (
+          <i className="fas fa-expand"></i>
+        ) : (
+          <i className="fas fa-expand-alt"></i>
+        )}
+      </button>
     </Row>
   );
 };
