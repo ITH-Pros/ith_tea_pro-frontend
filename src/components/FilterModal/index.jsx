@@ -7,6 +7,7 @@ import { CONSTANTS, CUSTOMSTYLES } from "../../constants/index";
 import Loader from "../Shared/Loader/index";
 import FilterDropdown from "./FilterDropdown";
 import SortByDropdown from "./SortFilter";
+import './filter.css';
 import {
   getAllCategories,
   getAllProjects,
@@ -58,6 +59,7 @@ const FilterModal = (props) => {
       setClearFilterBoolean(true);
     },
     onReset: (values) => {
+      // reset form
       localStorage.removeItem("taskFilters");
       setClearFilterBoolean(false);
       getTaskFilters();
@@ -76,13 +78,16 @@ const FilterModal = (props) => {
 
   const { data: projects } = useQuery(
     ["projectList" , filterModalShow],
-    fetchProjectList,
+    getAllProjects,
     {
       enabled: filterModalShow,
       refetchOnWindowFocus: false,
       select: (data) => {
-        return data;
+        return data.data;
       },
+      onSuccess: (data) => {
+        console.log("calling form filter modal");
+      }
     }
   );
 
@@ -96,7 +101,7 @@ const FilterModal = (props) => {
   };
 
   const { data: categories } = useQuery(
-    "categories",
+    ["categories", filterModalShow],
     fetchCategories,
     {
       enabled: filterModalShow,
@@ -117,7 +122,7 @@ const FilterModal = (props) => {
   };
 
   const { data: usersList } = useQuery(
-    "users",
+    ["users", filterModalShow],
     fetchUsers,
     {
       enabled: filterModalShow,
@@ -138,7 +143,7 @@ const FilterModal = (props) => {
   };
 
   const { data: leadsArray } = useQuery(
-    "leads",
+   [ "leads", filterModalShow ],
     fetchLeads,
     {
       enabled: filterModalShow,
@@ -149,16 +154,6 @@ const FilterModal = (props) => {
     }
   );
 
-
-  useEffect(() => {
-    if(filterModalShow){
-    fetchProjectList();
-    fetchUsers();
-    fetchLeads();
-    fetchCategories();
-    }
-  }, [filterModalShow]);
-
   const setProjectAndOpenModal = () => {
     setFilterModalShow(true);
   };
@@ -166,6 +161,7 @@ const FilterModal = (props) => {
   const clearFilterFormValue = () => {
     formik.resetForm();
     setFilterModalShow(false);
+
   };
 
   const handleFilterSelect = (fromDate, toDate) => {
@@ -247,9 +243,9 @@ const FilterModal = (props) => {
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>Task Filter</Offcanvas.Title>
           </Offcanvas.Header>
-          <Offcanvas.Body>
+          <Offcanvas.Body id="task_filter_ui">
             <Form noValidate onSubmit={formik.handleSubmit}>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Project</Form.Label>
                 </Col>
@@ -266,7 +262,7 @@ const FilterModal = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Lead</Form.Label>
                 </Col>
@@ -284,7 +280,7 @@ const FilterModal = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Created By</Form.Label>
                 </Col>
@@ -300,7 +296,7 @@ const FilterModal = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Assigned To</Form.Label>
                 </Col>
@@ -316,7 +312,7 @@ const FilterModal = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Category</Form.Label>
                 </Col>
@@ -332,7 +328,7 @@ const FilterModal = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Priority</Form.Label>
                 </Col>
@@ -348,7 +344,7 @@ const FilterModal = (props) => {
                   />
                 </Col>
               </Row>
-              <Row>
+              <Row className="mb-3">
                 <Col sm="3">
                   <Form.Label>Status</Form.Label>
                 </Col>
@@ -379,9 +375,14 @@ const FilterModal = (props) => {
                   onFilterSortOrderSelect={handleFilterSortOrderSelect}
                 />
               </Row>
-              <Button className="pull-right" variant="primary" type="submit">
+              <Row>
+                <Col lg={12} className="text-right">
+                <Button className="pull-right" variant="primary" type="submit">
                 Apply Filter
               </Button>
+                </Col>
+              </Row>
+             
             </Form>
           </Offcanvas.Body>
         </Offcanvas>

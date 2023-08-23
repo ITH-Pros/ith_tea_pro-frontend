@@ -51,6 +51,8 @@ select {
   appearance: auto !important;
   font-size: 14px !important;
   height: 40px !important;
+  width: 100%;
+  border-radius: 5px;
 }
 
 .modal-title {

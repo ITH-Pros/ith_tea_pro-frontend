@@ -21,7 +21,7 @@ const OverdueWorkComponent = ({
   handleStatusChange,
   isRefetch,
 }) => {
-  const { isError, data:overdueWorkList , isLoading } = useQuery(
+  const { isError, data:overdueWorkList , isLoading , isFetching } = useQuery(
     ["getOverDueTaskListData" , isRefetch],
     async () => await getOverDueTaskListData(),
     {
@@ -82,6 +82,9 @@ const OverdueWorkComponent = ({
             )}
             {isLoading &&  (
               <p className="text-center">Loading...</p>
+            )}
+            {isFetching && !isLoading &&  (
+              <p className="text-center">Retching List...</p>
             )}
             {overdueWorkList &&
               overdueWorkList?.length > 0 &&

@@ -39,7 +39,7 @@ input {
   border: 1px solid #ccc;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  height: 35px;
+
 }
 
 input:focus {

@@ -80,7 +80,7 @@ export default function Dashboard(props) {
 
   useEffect(() => {
     if (showModal) {
-      formik.resetForm(); // Reset form values when the modal is opened
+      formik.resetForm(); 
     }
   }, [showModal]);
 
@@ -127,7 +127,6 @@ export default function Dashboard(props) {
 
   function onInit() {
     setIsRefetch(!isRefetch);
-    setLoading(true);
     Promise.allSettled([]).then((results) => {
       const rejectedPromises = results.filter(
         ({ status }) => status === "rejected"
@@ -150,10 +149,6 @@ export default function Dashboard(props) {
 
   const handleShowAllProjects = () => {
     navigate("/project/all");
-  };
-
-  const getNewTasks = (data) => {
-    getAndSetAllProjects();
   };
 
   const closeModal = () => {
@@ -366,7 +361,6 @@ export default function Dashboard(props) {
               <AddTaskModal
                 selectedProjectFromTask={selectedProject?._id}
                 selectedTask={selectedTask}
-                getNewTasks={getNewTasks}
                 showAddTask={showAddTask}
                 closeModal={closeModal}
                 setToasterMessageToDashboard={setToasterMessageToDashboard}
