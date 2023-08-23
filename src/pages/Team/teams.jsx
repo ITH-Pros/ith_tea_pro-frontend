@@ -48,7 +48,7 @@ export default function Teams(props) {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [projectList, setProjectListValue] = useState([]);
   const [userAssignedProjects, setUserAssignedProjects] = useState([]);
-
+  const [selectedProjectIds, setSelectedProjectIds] = useState([]);
   const [pageDetails, setPageDetails] = useState({
     currentPage: 1,
     rowsPerPage: 10,
@@ -200,8 +200,7 @@ export default function Teams(props) {
 
   const handleAddUserToProject = async function (userId) {
     setSelectedProjectIds("");
-    setLoading(true);
-    refetchProjectList();
+    // refetchProjectList();
     let dataToSend = {
       params: { userId },
     };
@@ -210,18 +209,18 @@ export default function Teams(props) {
     setModalShow(true);
   };
 
-  const refetchProjectList = useQuery(getAllProjects, {
+  const {isLoading:projectLoading} = useQuery( ["allProjects" , modalShow],()=> getAllProjects(), {
     refetchOnWindowFocus: false,
-    select: (data) => setProjectListValue(data?.data),
+    enabled: modalShow,
+    onSuccess:(data) => setProjectListValue(data?.data),
   });
 
   const assignedUserToProjectMutation = useMutation(getUserAssignedProjects, {
-    select: (data) => {
-      setUserAssignedProjects(userAssignedProjects.data);
+    onSuccess: (data) => {
+      setUserAssignedProjects(data?.data);
     },
   });
 
-  const [selectedProjectIds, setSelectedProjectIds] = useState([]);
 
   const GetModalBody = () => {
     return (
@@ -252,6 +251,9 @@ export default function Teams(props) {
                   type="checkbox"
                 />
                 <span>{project.name}</span>
+                {projectLoading && (
+                  <Spinner animation="border" variant="primary" />
+                  )}
               </div>
             );
           })}
@@ -272,7 +274,8 @@ export default function Teams(props) {
         setModalShow(false);
         return;
       } else {
-        setProjectListValue(data.data);
+        setProjectListValue(data);
+        setModalShow(false);
         toast.dismiss();
         toast.info(data?.message);
       }
@@ -777,6 +780,7 @@ export default function Teams(props) {
           modalBody={<GetModalBody />}
           heading="Assign Project"
           onHide={() => setModalShow(false)}
+          loading={projectLoading}
           submitBtnDisabled={!selectedProjectIds}
           onClick={handleAssignUserProjectSubmit}
         />

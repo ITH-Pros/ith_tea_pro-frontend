@@ -1,4 +1,5 @@
 import React from "react";
+import { Spinner } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
@@ -14,6 +15,7 @@ const Modals = (props) => {
     keyboardProp,
     size,
     btnContent,
+    loading,
   } = props;
   return (
     // <Modal
@@ -47,7 +49,7 @@ const Modals = (props) => {
       className="Offcanvas-modal"
       style={{ width: "500px" }}
       onHide={onHide}
-      show={modalShow}
+      show={modalShow && !loading }
       placement="end"
     >
       <Offcanvas.Header closeButton>
@@ -61,7 +63,7 @@ const Modals = (props) => {
           className="btn btn-primary mt-3 pull-right"
           onClick={onClick}
         >
-          {btnContent || "Submit"}
+          {btnContent || "Submit"} {loading && <Spinner animation="border" />}
         </button>
       </Offcanvas.Body>
     </Offcanvas>

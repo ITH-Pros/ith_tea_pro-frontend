@@ -13,19 +13,12 @@ import logo from "@assets/img/logo.png"
 import "./index.css";
 import { getLogedInUserDetails } from "@services/user/api";
 import { Text } from "@nextui-org/react";
+import { useQuery } from "react-query";
 
 function Header() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [profilePicture, setProfilePicture] = useState(false);
-
-
-
-  useEffect(() => {
-  
-    getUserDetails();
-    
-  }, []);
 
   useEffect(() => {
     setProfilePicture(localStorage.getItem('selectedProfilePicture'))
@@ -40,23 +33,18 @@ function Header() {
     localStorage.setItem("isEditProfile", "true");
   };
 
-  const getUserDetails = async () => {
-    try {
-      const response = await getLogedInUserDetails();
-      if (response.error) {
-        // console.log("Error while getting user details");
-        return;
-      } else {
-        setUserName(response?.data.name);
-        if (response.data.profilePicture) {
-          setProfilePicture(response.data.profilePicture);
+  const { isLoading: isFetching } = useQuery(
+    "userDetails", getLogedInUserDetails , {
+      enabled:true,
+      refetchOnWindowFocus: false,
+      onSuccess: (data) => {
+        setUserName(data?.data?.name);
+        if (data.data.profilePicture) {
+          setProfilePicture(data.data.profilePicture);
         }
-      }
-    } catch (error) {
-      // console.log("Error while getting user details");
-      return error.message;
+      },
     }
-  };
+  );
 
   return (
     <Navbar bg="light" variant="light" fixed="top">

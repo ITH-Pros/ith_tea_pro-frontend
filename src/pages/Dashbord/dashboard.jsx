@@ -539,7 +539,7 @@ export default function Dashboard(props) {
         <Offcanvas.Body
           style={{ height: "78vh", overflowY: "scroll", overflowX: "hidden" }}
         >
-          <UserForm handleModalClose={handleProfileModalClose} />
+          <UserForm handleModalClose={handleProfileModalClose} showModalOnLogin={showModalOnLogin} />
         </Offcanvas.Body>
       </Offcanvas>
       {/* verify */}
