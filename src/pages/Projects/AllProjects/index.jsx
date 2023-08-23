@@ -22,7 +22,7 @@ import { useMutation, useQuery } from "react-query";
 export default function AllProject() {
   const { userDetails } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [projectList, setProjectListValue] = useState([]);
+  // const [projectList, setProjectListValue] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedProject, setSelectedProject] = useState({
     name: null,
@@ -35,7 +35,7 @@ export default function AllProject() {
   const [categoriesModalShow, setCategoriesModalShow] = useState(false);
 
   const handleIsArchive = () => {
-    setProjectListValue([]);
+    // setProjectListValue([]);
     setIsArchive(!isArchive);
   };
 
@@ -65,45 +65,36 @@ export default function AllProject() {
     setIsArchiveModalShow(true);
   };
 
-  useEffect(() => {
-    fetchAllProjects();
-  }, [isArchive]);
-
   /*
    * @desc: This function is used to get all projects
    * @param: isArchive
    * @return: all projects
    * */
 
-  const fetchAllProjects = async () => {
+  const fetchAllProjects =  () => {
     let dataToSend = {};
     if (isArchive) {
       dataToSend.isArchived = true;
     }
-    projectMutation.mutate(dataToSend);
+    return dataToSend;
   };
 
-  const projectMutation = useMutation(getAllProjects, {
-    onSuccess: (data) => {
-      if (data?.error) {
-        setLoading(false);
+  const {isLoading , data:projectList } = useQuery(
+    ["projectListData" , isArchive , confirmModalShow , isArchiveModalShow],
+   ()=> getAllProjects(fetchAllProjects()),
+    {
+      enabled: true,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data?.data;
+      },
+      onError: (error) => {
         toast.dismiss();
-        toast.info(data?.message || "Something Went Wrong");
-        // set
-      } else {
-        setProjectListValue(data?.data);
-        setLoading(false);
-      }
-    },
-    onError: (error) => {
-      setLoading(false);
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      return error.message;
-    },
-  });
-
-  const {isLoading } = projectMutation;
+        toast.info(error?.message || "Something Went Wrong");
+        return error.message;
+      },
+    }
+  );
 
   /*
    * @desc: This function is used to get all projects analytics
@@ -113,6 +104,8 @@ export default function AllProject() {
     "projectTaskAnalytics",
     getTaskStatusAnalytics,
     {
+      enabled: true,
+      refetchOnWindowFocus: false,
       select: (data) => {
         if (data?.error) {
           toast.dismiss();
@@ -159,7 +152,6 @@ export default function AllProject() {
       } else {
         toast.dismiss();
         toast.info(data?.message || "Something Went Wrong");
-        fetchAllProjects();
         setConfirmModalShow(false);
       }
     },
@@ -199,7 +191,6 @@ export default function AllProject() {
       } else {
         toast.dismiss();
         toast.info(data?.message || "Something Went Wrong");
-        fetchAllProjects();
         setConfirmModalShow(false);
         setIsArchiveModalShow(false);
       }
@@ -267,7 +258,7 @@ export default function AllProject() {
                     taskData={projectTaskAnalytics?.[element._id]}
                     handleCategories={() => handleCategorie(element)}
                     handleToRedirectTask={() => handleToRedirectTask(element)}
-                    getAndSetAllProjects={() => fetchAllProjects()}
+                    // getAndSetAllProjects={() => fetchAllProjects()}
                     handleArchiveModalShow={() =>
                       handleArchiveModalShow(element)
                     }

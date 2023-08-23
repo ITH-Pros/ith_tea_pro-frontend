@@ -75,7 +75,7 @@ const ProjectCard = ({
   background,
   taskData,
   handleToRedirectTask,
-  getAndSetAllProjects,
+  // getAndSetAllProjects,
   handleArchiveModalShow,
   isArchive,
 }) => {
@@ -139,7 +139,7 @@ const ProjectCard = ({
     setModalShow(false);
     setSelectedUnassignedUsers("");
     setShowSelectBox(false);
-    getAndSetAllProjects();
+    // getAndSetAllProjects();
     setSelectedRole(null);
     setSelectedUnassignedUsers("");
     setListOfUnassignedUsers([]);
@@ -271,7 +271,7 @@ const ProjectCard = ({
 
         return;
       } else {
-        getAndSetAllProjects();
+        // getAndSetAllProjects();
         setShowConfirmation(false);
         setSelectedUser(null);
         setSelectedUserName(null);
