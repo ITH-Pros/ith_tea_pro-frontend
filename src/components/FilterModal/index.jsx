@@ -55,10 +55,11 @@ const FilterModal = (props) => {
       localStorage.setItem("taskFilters", JSON.stringify(values));
       getTaskFilters();
       setFilterModalShow(false);
+      setClearFilterBoolean(true);
     },
     onReset: (values) => {
       localStorage.removeItem("taskFilters");
-      setClearFilterBoolean(true);
+      setClearFilterBoolean(false);
       getTaskFilters();
       setFilterModalShow(false);
     },
