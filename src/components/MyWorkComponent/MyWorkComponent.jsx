@@ -41,7 +41,7 @@ const MyWorkComponent = ({
     currentDate: formDateNightTime(new Date()),
   };
 
-  const { data: myWorkList, isLoading } = useQuery(
+  const { data: myWorkList, isLoading , isFetching } = useQuery(
     ["getMyWorkList" , isRefetch],
     () => getAllMyWorks(dataToSend),
     {
@@ -101,11 +101,11 @@ const MyWorkComponent = ({
                 </Row>
               ))}
             {isLoading && (
-              <Row>
-                <Col lg="12">
-                  <p>Loading...</p>
-                </Col>
-              </Row>
+              <p className="text-center">Loading...</p>
+            )}
+
+            {isFetching && !isLoading &&  (
+              <p className="text-center">Retching List...</p>
             )}
 
             {myWorkList &&

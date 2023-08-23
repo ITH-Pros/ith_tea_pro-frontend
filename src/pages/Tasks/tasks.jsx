@@ -388,6 +388,8 @@ const Tasks = () => {
     refetch: getAllTasksForListing,
     isLoading,
   } = useQuery(["getAllTasks"], () => getProjectsTask(fetchTasks()), {
+    enabled: true,
+    refetchOnWindowFocus: false,
     select: (data) => {
       if (data?.error) {
         toast.dismiss();

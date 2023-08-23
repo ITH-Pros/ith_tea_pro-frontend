@@ -13,6 +13,7 @@ export function getUserDetailsByUserId(data) {
 }
 
 export async function getAllUsers(data) {
+  console.log(data)
   return axiosInstance.get('/user/v1/all/pagination', data).then(res => res.data)
 }
 

@@ -58,6 +58,7 @@ const FilterModal = (props) => {
       setFilterModalShow(false);
     },
     onReset: (values) => {
+      // reset form
       localStorage.removeItem("taskFilters");
       setClearFilterBoolean(true);
       getTaskFilters();
@@ -76,13 +77,16 @@ const FilterModal = (props) => {
 
   const { data: projects } = useQuery(
     ["projectList" , filterModalShow],
-    fetchProjectList,
+    getAllProjects,
     {
       enabled: filterModalShow,
       refetchOnWindowFocus: false,
       select: (data) => {
-        return data;
+        return data.data;
       },
+      onSuccess: (data) => {
+        console.log("calling form filter modal");
+      }
     }
   );
 
@@ -96,7 +100,7 @@ const FilterModal = (props) => {
   };
 
   const { data: categories } = useQuery(
-    "categories",
+    ["categories", filterModalShow],
     fetchCategories,
     {
       enabled: filterModalShow,
@@ -117,7 +121,7 @@ const FilterModal = (props) => {
   };
 
   const { data: usersList } = useQuery(
-    "users",
+    ["users", filterModalShow],
     fetchUsers,
     {
       enabled: filterModalShow,
@@ -138,7 +142,7 @@ const FilterModal = (props) => {
   };
 
   const { data: leadsArray } = useQuery(
-    "leads",
+   [ "leads", filterModalShow ],
     fetchLeads,
     {
       enabled: filterModalShow,
@@ -149,16 +153,6 @@ const FilterModal = (props) => {
     }
   );
 
-
-  useEffect(() => {
-    if(filterModalShow){
-    fetchProjectList();
-    fetchUsers();
-    fetchLeads();
-    fetchCategories();
-    }
-  }, [filterModalShow]);
-
   const setProjectAndOpenModal = () => {
     setFilterModalShow(true);
   };
@@ -166,6 +160,7 @@ const FilterModal = (props) => {
   const clearFilterFormValue = () => {
     formik.resetForm();
     setFilterModalShow(false);
+
   };
 
   const handleFilterSelect = (fromDate, toDate) => {

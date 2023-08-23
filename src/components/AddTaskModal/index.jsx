@@ -58,7 +58,6 @@ const validationSchema = Yup.object({
 export default function AddTaskModal(props) {
   const {
     selectedProjectFromTask,
-    getNewTasks,
     showAddTask,
     closeModal,
     selectedTask,
@@ -173,8 +172,12 @@ export default function AddTaskModal(props) {
       enabled: showAddTask,
       refetchOnWindowFocus: false,
       select: (data) => {
+        console.log("calling form add-task modal")
         return data;
       },
+      onSuccess: (data) => {
+        console.log("calling form add-task modal");
+      }
     }
   );
 
@@ -275,7 +278,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         resetModalData();
-        getNewTasks();
         closeModal();
         toast.success(data?.message);
         toast.dismiss();
@@ -292,7 +294,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         resetModalData();
-        getNewTasks();
         closeModal();
         toast.success(data?.message);
         toast.dismiss();
