@@ -58,7 +58,6 @@ const validationSchema = Yup.object({
 export default function AddTaskModal(props) {
   const {
     selectedProjectFromTask,
-    getNewTasks,
     showAddTask,
     closeModal,
     selectedTask,
@@ -279,7 +278,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         resetModalData();
-        getNewTasks();
         closeModal();
         toast.success(data?.message);
         toast.dismiss();
@@ -296,7 +294,6 @@ export default function AddTaskModal(props) {
         return;
       } else {
         resetModalData();
-        getNewTasks();
         closeModal();
         toast.success(data?.message);
         toast.dismiss();
