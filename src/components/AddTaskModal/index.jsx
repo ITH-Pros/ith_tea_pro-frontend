@@ -173,8 +173,12 @@ export default function AddTaskModal(props) {
       enabled: showAddTask,
       refetchOnWindowFocus: false,
       select: (data) => {
+        console.log("calling form add-task modal")
         return data;
       },
+      onSuccess: (data) => {
+        console.log("calling form add-task modal");
+      }
     }
   );
 
