@@ -335,11 +335,7 @@ export default function AddProject(props) {
               />
             </BootstrapForm.Group>
           </Row>
-
-          {/* ...Rest of the form code, replacing onChange and value with formik.handleChange, formik.handleBlur, and formik.values as needed */}
-        </Card>
-
-        <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-end">
           <Button variant="outline-primary" className="mr-3" type="submit">
             {projectById ? "Update" : "Submit"}
           </Button>
@@ -347,6 +343,10 @@ export default function AddProject(props) {
             Cancel
           </Button>
         </div>
+          {/* ...Rest of the form code, replacing onChange and value with formik.handleChange, formik.handleBlur, and formik.values as needed */}
+        </Card>
+
+  
       </BootstrapForm>
     </div>
   );
