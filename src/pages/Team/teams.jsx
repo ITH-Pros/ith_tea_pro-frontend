@@ -1,8 +1,5 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from "react";
-import { useEffect, useState } from "react";
-
+import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getAllUsers,
@@ -19,14 +16,12 @@ import "./teams.css";
 import Loader from "@components/Shared/Loader";
 import { Link } from "react-router-dom";
 import Modals from "@components/Shared/modal";
-// import { useAuth } from "../../auth/AuthProvider";
 import {
   faGithub,
   faLinkedin,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import UserIcon from "../../ProjectCard/profileImage";
 import {
   Button,
   Modal,
@@ -41,7 +36,7 @@ import resend from "@assets/img/resend-icon.jpg";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 
-export default function Teams(props) {
+export default function Teams() {
   const { userDetails } = useAuth();
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -54,7 +49,6 @@ export default function Teams(props) {
     rowsPerPage: 10,
     totalPages: 1,
   });
-
   const [assignManagerModalShow, setAssignManagerModalShow] = useState(false);
   const [confirmModalShow, setConfirmModalShow] = useState(false);
   const [userId, setUserId] = useState("");
@@ -69,42 +63,39 @@ export default function Teams(props) {
     setAssignManagerModalShow(true);
   };
 
-    /* ************* Get All Users ************* */
-
-    const getAndSetAllUsers = async function () {
-      if (!pageDetails?.currentPage) {
-        return;
-      }
-        let params = {
-          limit: pageDetails?.rowsPerPage,
-          currentPage: pageDetails?.currentPage,
-        };
-        const projects = await getAllUsers({ params });
-        if (projects.error) {
-          throw new Error(projects.error);
-        }
-        return projects?.data;
-    };
+  /* ************* Get All Users ************* */
 
   const {
     data: usersList,
     error: usersError,
     isLoading: isUsersLoading,
-    refetch: refetchUsers
-  } = useQuery(["allUsersList"], getAndSetAllUsers , {
-    refetchOnWindowFocus: false,
-    onSuccess: (data) => {
-      let totalPages = Math.ceil(
-        data?.totalCount / pageDetails?.rowsPerPage
-      );
-      console.log("totalPages", data);
-      setPageDetails({
-        currentPage: Math.min(pageDetails?.currentPage, totalPages),
-        rowsPerPage: pageDetails?.rowsPerPage,
-        totalPages,
-      });
+    refetch: refetchUsers,
+  } = useQuery(
+    ["allUsersList", pageDetails.currentPage, pageDetails.rowsPerPage],
+    () =>
+      getAllUsers({
+        params: {
+          limit: pageDetails?.rowsPerPage,
+          currentPage: pageDetails?.currentPage,
+        },
+      }),
+    {
+      refetchOnWindowFocus: false,
+      select: (data) => data.data,
+      onSuccess: (data) => {
+        let totalPages = Math.ceil(data?.totalCount / pageDetails?.rowsPerPage);
+        console.log("totalPages", data);
+        setPageDetails({
+          currentPage: Math.min(pageDetails?.currentPage, totalPages),
+          rowsPerPage: pageDetails?.rowsPerPage,
+          totalPages,
+        });
+      },
+      onError: (err) => {
+        throw new Error(err);
+      },
     }
-  });
+  );
 
   /* *************  Get All manager *************** 
   /* @ param: options
@@ -112,11 +103,11 @@ export default function Teams(props) {
   /* ******************************************* */
 
   const { isLoading: isManagerLoading } = useQuery(
-    ["managerList" , userId],
+    ["managerList", userId],
     () => getAllManager(),
     {
       refetchOnWindowFocus: false,
-      enabled:assignManagerModalShow,
+      enabled: assignManagerModalShow,
       onSuccess: (data) => {
         const updatedManagerList = data.data.filter(
           (manager) => manager._id !== userId
@@ -180,11 +171,9 @@ export default function Teams(props) {
 
   const { isLoading: isAssigningManager } = assignManagersMutation;
 
-
-
   /* ************* Get All Users analytics ************* */
 
-  const { data: userAnalytics , isLoading:isLoadingUserAnalytics } = useQuery(
+  const { data: userAnalytics, isLoading: isLoadingUserAnalytics } = useQuery(
     ["userAnalytics", usersList],
     () => getUserAnalytics(),
     {
@@ -209,18 +198,21 @@ export default function Teams(props) {
     setModalShow(true);
   };
 
-  const {isLoading:projectLoading} = useQuery( ["allProjects" , modalShow],()=> getAllProjects(), {
-    refetchOnWindowFocus: false,
-    enabled: modalShow,
-    onSuccess:(data) => setProjectListValue(data?.data),
-  });
+  const { isLoading: projectLoading } = useQuery(
+    ["allProjects", modalShow],
+    () => getAllProjects(),
+    {
+      refetchOnWindowFocus: false,
+      enabled: modalShow,
+      onSuccess: (data) => setProjectListValue(data?.data),
+    }
+  );
 
   const assignedUserToProjectMutation = useMutation(getUserAssignedProjects, {
     onSuccess: (data) => {
       setUserAssignedProjects(data?.data);
     },
   });
-
 
   const GetModalBody = () => {
     return (
@@ -253,7 +245,7 @@ export default function Teams(props) {
                 <span>{project.name}</span>
                 {projectLoading && (
                   <Spinner animation="border" variant="primary" />
-                  )}
+                )}
               </div>
             );
           })}
@@ -329,7 +321,7 @@ export default function Teams(props) {
    * */
 
   const CustomPagination = (props) => {
-    const { setPageDetails, pageDetails , refetchUsers } = props;
+    const { setPageDetails, pageDetails } = props;
 
     const numberOfRowsArray = [10, 20, 30, 40, 50];
     const handleOnChange = (e) => {
@@ -342,7 +334,6 @@ export default function Teams(props) {
       }
       let dataToSave = { ...pageDetails, [e.target.name]: pageNumber };
       setPageDetails(dataToSave);
-      refetchUsers()
     };
 
     const onChangeRowsPerPage = (e) => {
@@ -352,7 +343,6 @@ export default function Teams(props) {
         currentPage: 1,
       };
       setPageDetails(dataToSave);
-      refetchUsers()
     };
 
     const changePageNumber = (value) => {
@@ -367,7 +357,6 @@ export default function Teams(props) {
         currentPage: pageDetails.currentPage + value,
       };
       setPageDetails(dataToSave);
-      refetchUsers()
     };
 
     return (
@@ -666,7 +655,10 @@ export default function Teams(props) {
                         ) && (
                           <div className="user-analytics">
                             <>
-                              {(userDetails?.role === "SUPER_ADMIN" || userDetails?.role === "ADMIN") && usersList?.users?.length > 0 && AssignedManager(user)}
+                              {(userDetails?.role === "SUPER_ADMIN" ||
+                                userDetails?.role === "ADMIN") &&
+                                usersList?.users?.length > 0 &&
+                                AssignedManager(user)}
                             </>
                             <div className="user-analytics-item">
                               <div className="user-analytics-item-value">
@@ -676,10 +668,7 @@ export default function Teams(props) {
                                     (analytics) => analytics?._id === user._id
                                   )
                                   .completedAfterDueDatePercentage.toFixed(2)}
-                                  {isLoadingUserAnalytics && 
-                                    <i>loading...</i>
-                                  }
-                                %
+                                {isLoadingUserAnalytics && <i>loading...</i>}%
                               </div>
 
                               <div className="progress">
@@ -767,10 +756,11 @@ export default function Teams(props) {
           <CustomPagination
             pageDetails={pageDetails}
             setPageDetails={setPageDetails}
-            refetchUsers={refetchUsers}
           />
         ) : (
-          <p className="alig-nodata">{isUsersLoading ? "Loading...":"No User Found"}</p>
+          <p className="alig-nodata">
+            {isUsersLoading ? "Loading..." : "No User Found"}
+          </p>
         )}
 
         {loading ? <Loader /> : null}
