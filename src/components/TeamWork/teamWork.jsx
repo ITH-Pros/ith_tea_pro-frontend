@@ -23,7 +23,8 @@ const Teamwork = ({
   openReopenTaskModal,
 }) => {
   const [teamWorkList, setTeamWorkList] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   function formatDate(date) {
     const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     const dayBefore = new Date(date);
@@ -50,9 +51,7 @@ const Teamwork = ({
               {userDetails?.role !== "GUEST" && (
                 <i
                   onClick={() => {
-                    setSelectedTask();
                     setShowAddTask(true);
-                    setSelectedProject();
                   }}
                   className="fa fa-plus-circle"
                   style={{ cursor: "pointer" }}
@@ -74,6 +73,9 @@ const Teamwork = ({
                 <CustomCalendar
                   setTeamWorkList={setTeamWorkList}
                   isChange={isChange}
+                  setIsLoading= {setIsLoading}
+                  setIsFetching={setIsFetching}
+
                 />
                 <div
                   className="mt-3"
@@ -89,9 +91,17 @@ const Teamwork = ({
                         teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
                       }
                     >
-                      {teamWorkList && teamWorkList?.length === 0 && (
-                        <p>No task found.</p>
-                      )}
+                      {isFetching && !isLoading &&(
+                        <div className="text-left refresh w-100">
+                        Refreshing list...
+                        </div>
+                        )}
+                        {isLoading && (
+                        <div className="text-center w-100">
+                        Loading...
+                        </div>
+                        )}
+
                       {teamWorkList &&
                         teamWorkList?.length > 0 &&
                         teamWorkList?.map((task, taskIndex) => (
@@ -371,9 +381,8 @@ const Teamwork = ({
                                       <Dropdown.Menu>
                                         <Dropdown.Item
                                           onClick={() => {
-                                            setSelectedProject();
-                                            setShowAddTask(true);
                                             setSelectedTask(task);
+                                            setShowAddTask(true);
                                           }}
                                         >
                                           Edit
@@ -398,6 +407,10 @@ const Teamwork = ({
                             </Col>
                           </>
                         ))}
+                        {teamWorkList && !isLoading && !isFetching && teamWorkList?.length === 0 && (
+                        <p>No task found.</p>
+                      )}
+                     
                     </Row>
                   </div>
                 </div>

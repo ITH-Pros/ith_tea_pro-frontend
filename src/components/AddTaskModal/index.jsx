@@ -66,15 +66,13 @@ export default function AddTaskModal(props) {
   } = props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
-  const [loading, setLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isAnotherTask, setIsAnotherTask] = useState(false);
-  const { userDetails } = useAuth();
   const miscTypeArray = CONSTANTS.MISCTYPE;
   const [isResetAttachment, setIsResetAttachment] = useState(false);
-  const [categoryList, setCategoryList] = useState([]);
-  const [leadLists, setLeadLists] = useState([]);
-  const [userList, setUserList] = useState([]);
+  // const [categoryList, setCategoryList] = useState([]);
+  // const [leadLists, setLeadLists] = useState([]);
+  // const [userList, setUserList] = useState([]);
 
   const uploadedAttachmentsArray = (uploadedFiles) => {
     setUploadedFiles(uploadedFiles);
@@ -161,24 +159,15 @@ export default function AddTaskModal(props) {
 
   */
 
-  const fetchProjectList = async () => {
-    const projects = await getAllProjects();
-    return projects?.data;
-  };
-
   const { data: projectList, isLoading } = useQuery(
     ["projectList", showAddTask],
-    fetchProjectList,
+   () => getAllProjects(),
     {
       enabled: showAddTask,
       refetchOnWindowFocus: false,
       select: (data) => {
-        console.log("calling form add-task modal")
-        return data;
+        return data?.data;
       },
-      onSuccess: (data) => {
-        console.log("calling form add-task modal");
-      }
     }
   );
 
@@ -186,70 +175,100 @@ export default function AddTaskModal(props) {
   @get category list
   */
 
-  const fetchCategoryList = async (projectId) => {
-    let dataToSend = {
-      projectId: projectId,
-    };
-    categoriesListMutation.mutate(dataToSend);
-  };
+  // const fetchCategoryList = async (projectId) => {
+  //   let dataToSend = {
+  //     projectId: projectId,
+  //   };
+  //   categoriesListMutation.mutate(dataToSend);
+  // };
 
-  const categoriesListMutation = useMutation(getCategoriesProjectById, {
-    onSuccess: (data) => {
-      setCategoryList(data?.data);
-      if (selectedTask) {
-        formik.setFieldValue("section", selectedTask?.section);
-      }
-    },
-  });
+  // const categoriesListMutation = useMutation(getCategoriesProjectById, {
+  //   onSuccess: (data) => {
+  //     setCategoryList(data?.data);
+  //     if (selectedTask) {
+  //       formik.setFieldValue("section", selectedTask?.section);
+  //     }
+  //   },
+  // });
 
-  const { isLoading: isLoadingCategory } = categoriesListMutation;
+  const { data: categoryList, isLoading: isLoadingCategory } = useQuery(
+    ["categoryList", formik.values.projectId],
+  ()=>  getCategoriesProjectById({ projectId: formik.values.projectId }),
+    {
+      enabled: !!formik.values.projectId,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data?.data;
+      },
+    }
+  );
 
   /*
   @get lead list
   */
 
-  const fetchLeadList = async (projectId) => {
-    let dataToSend = {
-      projectId: projectId,
-    };
-    leadListMutation.mutate(dataToSend);
-  };
+  // const fetchLeadList = async (projectId) => {
+  //   let dataToSend = {
+  //     projectId: projectId,
+  //   };
+  //   leadListMutation.mutate(dataToSend);
+  // };
 
-  const leadListMutation = useMutation(getLeadsUsingProjectId, {
-    onSuccess: (data) => {
-      setLeadLists(data?.data);
-      if (selectedTask) {
-        formik.setFieldValue("leads", selectedTask?.lead[0]?._id);
-      }
-    },
-  });
+  // const leadListMutation = useMutation(getLeadsUsingProjectId, {
+  //   onSuccess: (data) => {
+  //     setLeadLists(data?.data);
+  //     if (selectedTask) {
+  //       formik.setFieldValue("leads", selectedTask?.lead[0]?._id);
+  //     }
+  //   },
+  // });
 
-  const { isLoading: isLoadingLead } = leadListMutation;
+  const { isLoading: isLoadingLead, data: leadLists } = useQuery(
+    ["leadLists", formik.values.projectId],
+   ()=> getLeadsUsingProjectId({ projectId: formik.values.projectId }),
+    {
+      enabled: !!formik.values.projectId,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data?.data;
+      },
+    }
+  );
 
   /*
   @get user list
   */
 
-  const fetchUserList = async (projectId, lead) => {
-    let dataToSend = {
-      projectId: projectId,
-    };
-    if (lead) {
-      dataToSend.selectedLeadRole = "ADMIN";
+  // const fetchUserList = async () => {
+  //   let dataToSend = {
+  //     projectId: formik.values.projectId,
+  //   };
+  //   if (lead) {
+  //     dataToSend.selectedLeadRole = formik.values.leads;
+  //   }
+  //   return dataToSend;
+  // };
+
+  // const userListMutation = useMutation(getUserUsingProjectId, {
+  //   onSuccess: (data) => {
+  //     setUserList(data?.data);
+  //     if (selectedTask) {
+  //       formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
+  //     }
+  //   },
+  // });
+
+  const { isLoading: isLoadingUser , data:userList } = useQuery(
+    ["userList", formik.values.projectId , formik.values.leads],
+  () => getUserUsingProjectId({ projectId: formik.values.projectId , selectedLeadRole: formik.values.leads }),
+    {
+      enabled: !!formik.values.projectId && !!formik.values.leads,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return data?.data;
+      },
     }
-    userListMutation.mutate(dataToSend);
-  };
-
-  const userListMutation = useMutation(getUserUsingProjectId, {
-    onSuccess: (data) => {
-      setUserList(data?.data);
-      if (selectedTask) {
-        formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
-      }
-    },
-  });
-
-  const { isLoading: isLoadingUser } = userListMutation;
+  );
 
   /*  @addTask */
   const addTaskMutation = useMutation(createTask, {
@@ -261,7 +280,7 @@ export default function AddTaskModal(props) {
         resetModalData();
         toast.dismiss();
         toast.success(data?.message);
-        if(!isAnotherTask){
+        if (!isAnotherTask) {
           closeModal();
           return;
         }
@@ -327,26 +346,26 @@ export default function AddTaskModal(props) {
     return localTimeString;
   }
 
-  useEffect(() => {
-    // if values of project id is changed then get categories, leads and users
-    if (formik.values.projectId) {
-      formik.setFieldValue("leads", "");
-      formik.setFieldValue("assignedTo", "");
-      formik.setFieldValue("section", "");
-      fetchCategoryList(formik.values.projectId);
-      fetchLeadList(formik.values.projectId);
-    }
-  }, [formik.values.projectId]);
+  // useEffect(() => {
+  //   // if values of project id is changed then get categories, leads and users
+  //   if (formik.values.projectId) {
+  //     formik.setFieldValue("leads", "");
+  //     formik.setFieldValue("assignedTo", "");
+  //     formik.setFieldValue("section", "");
+  //     fetchCategoryList(formik.values.projectId);
+  //     fetchLeadList(formik.values.projectId);
+  //   }
+  // }, [formik.values.projectId]);
 
-  useEffect(() => {
-    // if values of project id is changed then get categories, leads and users
-    if (
-      (formik.values.projectId && formik.values.leads) ||
-      (selectedTask && formik.values.projectId)
-    ) {
-      fetchUserList(formik.values.projectId, formik.values.leads);
-    }
-  }, [formik.values.leads || (selectedTask && formik.values.projectId)]);
+  // useEffect(() => {
+  //   // if values of project id is changed then get categories, leads and users
+  //   if (
+  //     (formik.values.projectId && formik.values.leads) ||
+  //     (selectedTask && formik.values.projectId)
+  //   ) {
+  //     fetchUserList(formik.values.projectId, formik.values.leads);
+  //   }
+  // }, [formik.values.leads || (selectedTask && formik.values.projectId)]);
 
   // if selectedProjectFromTask is true then we have to set the project id
   useEffect(() => {
@@ -365,9 +384,12 @@ export default function AddTaskModal(props) {
 
   // if selectedTask then we have to set the values
   useEffect(() => {
+    console.log(selectedTask, "selectedTask");
     if (selectedTask) {
       formik.setFieldValue("projectId", selectedTask?.projectId);
-      formik.setFieldValue("section", selectedTask?.section?._id);
+      formik.setFieldValue("section", selectedTask?.section);
+      formik.setFieldValue("leads", selectedTask?.lead[0]._id || selectedTask?.lead[0] );
+      formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
       formik.setFieldValue("description", selectedTask?.description);
       formik.setFieldValue("miscType", selectedTask?.miscType);
       formik.setFieldValue("title", selectedTask.title);
@@ -624,7 +646,9 @@ export default function AddTaskModal(props) {
                     onBlur={formik.handleBlur}
                     value={formik.values.assignedTo}
                   >
-                    <option value="">{isLoadingUser?"Loading...":"Select User"}</option>
+                    <option value="">
+                      {isLoadingUser ? "Loading..." : "Select User"}
+                    </option>
                     {userList?.map((module, index) => (
                       <option value={module?._id} key={index}>
                         {module?.name}
@@ -781,7 +805,10 @@ export default function AddTaskModal(props) {
                       className="btn btn-primary"
                       style={{ marginLeft: "10px" }}
                       type="button"
-                      onClick={() => {formik.handleSubmit; setAddAnother(true)}}
+                      onClick={() => {
+                        formik.handleSubmit;
+                        setAddAnother(true);
+                      }}
                     >
                       Create And Add Another
                     </Button>
@@ -791,7 +818,6 @@ export default function AddTaskModal(props) {
           </div>
         </Offcanvas.Body>
       </Offcanvas>
-      {loading ? <Loader /> : null}
     </>
   );
 }

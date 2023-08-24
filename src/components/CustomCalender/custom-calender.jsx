@@ -12,12 +12,52 @@ import { useAuth } from "../../utlis/AuthProvider";
 import { useQuery } from "react-query";
 
 const CustomCalendar = (props) => {
+  const { setTeamWorkList, isChange , setIsLoading , setIsFetching } = props;
   const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentUTCDate, setCurrentDateUTC] = useState(new Date());
-  const [loading, setLoading] = useState(false);
   const { userDetails } = useAuth();
-  const { setTeamWorkList, isChange } = props;
+
+  const weekStart = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() - currentDate.getDay() + 1
+  );
+  const weekEnd = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() + (7 - currentDate.getDay())
+  );
+
+  const fetchTeamWork = async () => {
+    let dataToSend = {};
+
+    if (currentView === "Week") {
+      dataToSend = {
+        fromDate: convertToUTCDay(weekStart),
+        toDate: convertToUTCNight(weekEnd),
+      };
+    } else if (currentView === "Day") {
+      dataToSend = {
+        fromDate: convertToUTCForDay(currentDate),
+        toDate: convertToUTCForNight(currentDate),
+      };
+    }
+
+    const res = await getTeamWork(dataToSend);
+    if (res.error) {
+      throw new Error(res.error);
+    }
+    return res?.data;
+  };
+
+  const { data, error, isLoading, refetch , isFetching } = useQuery(['teamWork' ,currentDate , currentView , isChange ], fetchTeamWork, {
+    enabled: userDetails?.role !== "CONTRIBUTOR" || isChange !== undefined,
+    refetchOnWindowFocus: false,
+    onSuccess: data => {
+      setTeamWorkList(data);
+    }
+  });
 
   function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
@@ -48,56 +88,7 @@ const CustomCalendar = (props) => {
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     return utcTime;
-  }
-
-  useEffect(() => {
-    const currentDateMinusOneDay = new Date(currentDate);
-    currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
-    setCurrentDateUTC(currentDateMinusOneDay.toDateString());
-  }, [currentDate, currentView]);
-
-  // useEffect(() => {
-  //   if (userDetails?.role !== "CONTRIBUTOR") {
-  //     console.log("useEffect from custom-calender.js");
-  //     refetch();
-  //   }
-  // }, [currentDate, currentView]);
-
-  useEffect(() => {
-    if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined) {
-      refetch();
-    }
-  }, [isChange]);
-
-  const fetchTeamWork = async () => {
-    let dataToSend = {};
-
-    if (currentView === "Week") {
-      dataToSend = {
-        fromDate: convertToUTCDay(weekStart),
-        toDate: convertToUTCNight(weekEnd),
-      };
-    } else if (currentView === "Day") {
-      dataToSend = {
-        fromDate: convertToUTCForDay(currentDate),
-        toDate: convertToUTCForNight(currentDate),
-      };
-    }
-
-    const res = await getTeamWork(dataToSend);
-    if (res.error) {
-      throw new Error(res.error);
-    }
-    return res?.data;
-  };
-
-  const { data, error, isLoading, refetch } = useQuery(['teamWork' ,currentDate , currentView , isChange ], fetchTeamWork, {
-    enabled: userDetails?.role !== "CONTRIBUTOR" || isChange !== undefined,
-    refetchOnWindowFocus: false,
-    onSuccess: data => {
-      setTeamWorkList(data);
-    }
-  });
+  } 
 
   const handlePrev = () => {
     if (currentView === "Week") {
@@ -140,16 +131,24 @@ const CustomCalendar = (props) => {
     setCurrentView(view);
   };
 
-  const weekStart = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    currentDate.getDate() - currentDate.getDay() + 1
-  );
-  const weekEnd = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    currentDate.getDate() + (7 - currentDate.getDay())
-  );
+  useEffect(() => {
+    const currentDateMinusOneDay = new Date(currentDate);
+    currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate() - 1);
+    setCurrentDateUTC(currentDateMinusOneDay.toDateString());
+  }, [currentDate, currentView]);
+
+
+  useEffect(() => {
+    if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined) {
+      refetch();
+    }
+  }, [isChange]);
+
+
+  useEffect(() => {
+    isLoading ? setIsLoading(true) : setIsLoading(false);
+    isFetching ? setIsFetching(true) : setIsFetching(false);
+  }, [isLoading, isFetching]);
 
   return (
     <>
@@ -202,8 +201,6 @@ const CustomCalendar = (props) => {
           </Dropdown>
         </Col>
       </Row>
-
-      {loading ? <Loader /> : null}
     </>
   );
 };

@@ -378,6 +378,9 @@ export default function Dashboard(props) {
               handleStatusChange={handleStatusChange}
               daysSince={daysSince}
               isRefetch={isRefetch}
+              setSelectedProject={setSelectedProject}
+              setShowAddTask={setShowAddTask}
+              setSelectedTask={setSelectedTask}
             />
           )}
 

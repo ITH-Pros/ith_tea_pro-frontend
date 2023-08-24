@@ -38,6 +38,9 @@ export default function AddProject(props) {
     async () => {
       const { data } = await getAllProjects();
       return data.find((project) => project._id === params.projectId);
+    },{
+      refetchOnWindowFocus: false,
+      enabled: params.projectId !== undefined,
     }
   );
 
@@ -68,8 +71,8 @@ export default function AddProject(props) {
     const formData = {
       name: values.name,
       description: values.description,
-      managedBy: values.selectedManagers,
-      accessibleBy: values.selectAccessibleBy,
+      selectedManagers: values.selectedManagers,
+      selectAccessibleBy: values.selectAccessibleBy,
       colorCode: values.colorCode,
     };
     if (params.projectId) {
@@ -99,6 +102,8 @@ export default function AddProject(props) {
     },
   });
 
+  const { isLoading: addingProjectLoading } = addProjectMutation;
+
   const updateProjectMutation = useMutation(updateProjectForm, {
     onSuccess: (response) => {
       if (response.error) {
@@ -116,16 +121,10 @@ export default function AddProject(props) {
     },
   });
 
+  const { isLoading: updatingProjectLoading } = updateProjectMutation;
+
   const handleCancel = () => {
     navigate("/project/all"); // Redirects the user to the "/project/all" route
-  };
-
-  /*
-    This function is used to fetch all projects*/
-
-  const getAndSetAllProjects = async () => {
-    const projects = await getAllProjects();
-    return projects?.data;
   };
 
   /*
@@ -133,17 +132,13 @@ export default function AddProject(props) {
       @ return {Array} users
     */
 
-  const getUsersList = async function () {
-    const user = await getAllUserWithoutPagination();
-    return user?.data;
-  };
-
   const { data: userList, isLoading: isUserListLoading } = useQuery(
     "allUsers",
-    getUsersList,
+    getAllUserWithoutPagination,
     {
       refetchOnWindowFocus: false,
-      select: (data) => data,
+      enabled: true,
+      select: (data) => data?.data,
     }
   );
 
@@ -152,29 +147,16 @@ export default function AddProject(props) {
     @ return {Array} leads
     */
 
-  const getLeadsList = async function () {
-    const lead = await getAllLeadsWithoutPagination();
-    return lead?.data;
-  };
 
   const { data: leadList, isLoading: isLeadListLoading } = useQuery(
     "allLeads",
-    getLeadsList,
+    getAllLeadsWithoutPagination,
     {
       refetchOnWindowFocus: false,
-      select: (data) => data,
+      enabled: true,
+      select: (data) => data?.data,
     }
   );
-
-  console.log("leadList", leadList);
-
-  // Fetch data when component mounts
-  useEffect(() => {
-    getAndSetAllProjects();
-    getUsersList();
-    getLeadsList();
-  }, []);
-
   // Populate form fields if editing
   useEffect(() => {
     if (projectById) {
@@ -336,17 +318,18 @@ export default function AddProject(props) {
             </BootstrapForm.Group>
           </Row>
           <div className="d-flex justify-content-end">
-          <Button variant="outline-primary" className="mr-3" type="submit">
-            {projectById ? "Update" : "Submit"}
-          </Button>
-          <Button variant="outline-danger" onClick={handleCancel}>
-            Cancel
-          </Button>
-        </div>
+            <Button disabled={addingProjectLoading || updatingProjectLoading} variant="outline-primary" className="mr-3" type="submit">
+              { updatingProjectLoading ? "Updating..."
+                :addingProjectLoading ? "Creating..."
+                : projectById ? "Update" : "Submit"}
+            </Button>
+
+            <Button variant="outline-danger" onClick={handleCancel}>
+              Cancel
+            </Button>
+          </div>
           {/* ...Rest of the form code, replacing onChange and value with formik.handleChange, formik.handleBlur, and formik.values as needed */}
         </Card>
-
-  
       </BootstrapForm>
     </div>
   );
