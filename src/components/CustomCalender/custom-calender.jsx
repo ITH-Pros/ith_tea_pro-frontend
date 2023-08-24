@@ -12,7 +12,7 @@ import { useAuth } from "../../utlis/AuthProvider";
 import { useQuery } from "react-query";
 
 const CustomCalendar = (props) => {
-  const { setTeamWorkList, isChange , setIsLoading , setIsFetching } = props;
+  const { setTeamWorkList, isChange , setIsLoading , setIsFetching , isRefetch } = props;
   const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentUTCDate, setCurrentDateUTC] = useState(new Date());
@@ -51,7 +51,7 @@ const CustomCalendar = (props) => {
     return res?.data;
   };
 
-  const { data, error, isLoading, refetch , isFetching } = useQuery(['teamWork' ,currentDate , currentView , isChange ], fetchTeamWork, {
+  const { data, error, isLoading, refetch , isFetching } = useQuery(['teamWork' ,currentDate , currentView , isChange , isRefetch ], fetchTeamWork, {
     enabled: userDetails?.role !== "CONTRIBUTOR" || isChange !== undefined,
     refetchOnWindowFocus: false,
     onSuccess: data => {

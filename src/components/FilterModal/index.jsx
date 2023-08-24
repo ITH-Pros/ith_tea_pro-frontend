@@ -71,14 +71,9 @@ const FilterModal = (props) => {
   @all projects data
   */
 
-  const fetchProjectList = async () => {
-    const projects = await getAllProjects();
-    return projects?.data;
-  };
-
   const { data: projects } = useQuery(
     ["projectList" , filterModalShow],
-    getAllProjects,
+   ()=> getAllProjects(),
     {
       enabled: filterModalShow,
       refetchOnWindowFocus: false,
