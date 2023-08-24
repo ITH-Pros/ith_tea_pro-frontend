@@ -47,7 +47,9 @@ export default function ProjectGrid() {
             )}
             {isProjectFetching && (
               <div>
-                <p className="alig-nodata">Refreshing list...</p>
+              <div className="text-left refresh">
+           Refreshing List....
+        </div>
               </div>
             )}
               {projectList &&

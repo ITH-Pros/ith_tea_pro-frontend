@@ -51,9 +51,7 @@ const Teamwork = ({
               {userDetails?.role !== "GUEST" && (
                 <i
                   onClick={() => {
-                    setSelectedTask();
                     setShowAddTask(true);
-                    setSelectedProject();
                   }}
                   className="fa fa-plus-circle"
                   style={{ cursor: "pointer" }}
@@ -94,7 +92,7 @@ const Teamwork = ({
                       }
                     >
                       {isFetching && !isLoading &&(
-                        <div className="text-center w-100">
+                        <div className="text-left refresh w-100">
                         Refreshing list...
                         </div>
                         )}
@@ -383,9 +381,8 @@ const Teamwork = ({
                                       <Dropdown.Menu>
                                         <Dropdown.Item
                                           onClick={() => {
-                                            setSelectedProject();
-                                            setShowAddTask(true);
                                             setSelectedTask(task);
+                                            setShowAddTask(true);
                                           }}
                                         >
                                           Edit

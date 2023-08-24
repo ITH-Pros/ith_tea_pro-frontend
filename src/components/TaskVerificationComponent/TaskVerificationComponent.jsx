@@ -21,7 +21,7 @@ const TaskVerificationComponent = ({
   handleViewDetails,
   openVerifyModal,
   verifyTaskNotAllowedRoles,
-  isRefetch
+  isRefetch,
 }) => {
   let params = {
     limit: 50,
@@ -53,7 +53,7 @@ const TaskVerificationComponent = ({
     isLoading,
     isFetching,
   } = useQuery(
-    ["getAllPendingRating", verifyTeamMember , isRefetch],
+    ["getAllPendingRating", verifyTeamMember, isRefetch],
     () => {
       const payload = {};
       if (verifyTeamMember) {
@@ -131,7 +131,7 @@ const TaskVerificationComponent = ({
             {isLoading && <p className="text-center">Loading...</p>}
 
             {isFetching && !isLoading && (
-              <p className="text-center">Retching List...</p>
+              <div className="text-left refresh">Refreshing List....</div>
             )}
 
             {pendingRatingList &&

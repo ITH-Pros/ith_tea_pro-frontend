@@ -20,6 +20,8 @@ const OverdueWorkComponent = ({
   handleViewDetails,
   handleStatusChange,
   isRefetch,
+  setShowAddTask,
+  setSelectedTask,
 }) => {
   const { isError, data:overdueWorkList , isLoading , isFetching } = useQuery(
     ["getOverDueTaskListData" , isRefetch],
@@ -81,7 +83,9 @@ const OverdueWorkComponent = ({
               <p className="text-center">Loading...</p>
             )}
             {isFetching && !isLoading &&  (
-              <p className="text-center">Refreshing list...</p>
+              <div className="text-left refresh">
+           Refreshing List....
+        </div>
             )}
             {overdueWorkList && overdueWorkList?.length === 0 && (
               <p className="text-center">No task found.</p>
@@ -302,10 +306,8 @@ const OverdueWorkComponent = ({
                         <Dropdown.Menu>
                           <Dropdown.Item
                             onClick={() => {
-                              setSelectedProject();
                               setShowAddTask(true);
                               setSelectedTask(task);
-                              console.log(task, showAddTask);
                             }}
                           >
                             <i

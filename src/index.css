@@ -95,3 +95,8 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.refresh{
+  padding: 10px 20px;
+    color: #8355ad;
+}

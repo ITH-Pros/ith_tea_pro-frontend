@@ -324,7 +324,7 @@ const Tasks = () => {
           filterData.projectIds.map((item) => item._id)
         );
       }
-      if (filterData?.createdBy) {
+      if (filterData?.createdBy && filterData?.createdBy?.length >0) {
         data.createdBy = JSON.stringify(
           filterData.createdBy.map((item) => item._id)
         );
@@ -344,10 +344,10 @@ const Tasks = () => {
           filterData.category.map((item) => item._id)
         );
       }
-      if (filterData?.priority) {
+      if (filterData?.priority && filterData.priority?.length >0) {
         data.priority = JSON.stringify(filterData.priority);
       }
-      if (filterData?.status) {
+      if (filterData?.status && filterData.status?.length > 0) {
         data.status = JSON.stringify(filterData.status);
       }
       if (filterData?.sortType) {
@@ -387,6 +387,7 @@ const Tasks = () => {
     data: projects,
     refetch: getAllTasksForListing,
     isLoading,
+    isFetching,
   } = useQuery(["getAllTasks"], () => getProjectsTask(fetchTasks()), {
     enabled: true,
     refetchOnWindowFocus: false,
@@ -438,59 +439,6 @@ const Tasks = () => {
       }
     },
   });
-
-  // const taskMutation = useMutation(getProjectsTask, {
-  //   onSuccess: (data) => {
-  //     if (data?.error) {
-  //       toast.dismiss();
-  //       toast.info(data?.message);
-  //     } else {
-  //       let paramsData = projectId || null;
-  //       let allTasks = data?.data;
-  //       allTasks.forEach((item) => {
-  //         item.tasks.forEach((task) => {
-  //           if (task.dueDate) {
-  //             let today = new Date().toISOString().split("T")[0];
-
-  //             if (
-  //               task.dueDate.split("T")[0] === today ||
-  //               new Date(task.dueDate).getTime() < new Date().getTime()
-  //             ) {
-  //               task.dueToday = true;
-  //             } else {
-  //               task.dueToday = false;
-  //             }
-
-  //             if (
-  //               task.completedDate &&
-  //               new Date(task.completedDate).getTime() >
-  //                 new Date(task.dueDate).getTime()
-  //             ) {
-  //               task.dueToday = true;
-  //             }
-
-  //             if (
-  //               task.completedDate &&
-  //               task.completedDate.split("T")[0] === task.dueDate.split("T")[0]
-  //             ) {
-  //               task.dueToday = false;
-  //             }
-  //           }
-  //         });
-  //       });
-  //       console.log(allTasks);
-  //       setProjects(allTasks);
-  //       if (paramsData) {
-  //         setSelectedProjectId(paramsData);
-  //       }
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //   },
-  // });
-
-  // const { isLoading } = taskMutation;
 
   /*  @downloadExportData */
 
@@ -723,6 +671,7 @@ const Tasks = () => {
 
         <TaskList
           projects={projects}
+          isFetching={isFetching}
           isLoading={isLoading}
           selectedProjectId={selectedProjectId}
           isArchive={isArchive}

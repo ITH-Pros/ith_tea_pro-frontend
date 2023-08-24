@@ -242,9 +242,9 @@ export default function AllProject() {
 
         <div className="project-boxes jsGridView">
           {isFetching && !isLoading && (
-            <div>
-              <p >Refreshing list...</p>
-            </div>
+            <div className="text-left refresh">
+           Refreshing List....
+        </div>
           )}
           {projectList &&
             projectList.map((element, projectIndex) => {

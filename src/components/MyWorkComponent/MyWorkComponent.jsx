@@ -97,7 +97,9 @@ const MyWorkComponent = ({
             )}
 
             {isFetching && !isLoading &&  (
-              <p className="text-center">Refreshing list...</p>
+              <div className="text-left refresh">
+           Refreshing List....
+        </div>
             )}
             {!myWorkList ||
               (myWorkList?.length === 0 && (
