@@ -8,7 +8,6 @@ import { useState, useEffect } from "react";
 import "@pages/Rating/rating.css";
 import "./index.css";
 import { addRatingOnTask, getProjectsTask } from "@services/user/api";
-
 import Loader from "../Shared/Loader";
 import { Accordion, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 // import { useAuth } from "../../../auth/AuthProvider";
@@ -129,6 +128,7 @@ export default function RatingModalBody(props) {
       [name]: value,
     });
   };
+  
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -272,7 +272,7 @@ export default function RatingModalBody(props) {
   const getTasksDataUsingProjectId = async (date) => {
     let assignedTo = JSON.parse(localStorage.getItem("userId"));
     assignedTo = JSON.stringify(assignedTo);
-    setLoading(true);
+    // setLoading(true);
     try {
       let data = {
         groupBy: "default",
@@ -283,7 +283,7 @@ export default function RatingModalBody(props) {
       };
       console.log(" I am here")
       const tasks = await getProjectsTask(data);
-      setLoading(false);
+      // setLoading(false);
       if (tasks.error) {
         toast.dismiss();
         toast.info(tasks?.error?.message || "Something Went Wrong");
@@ -304,7 +304,7 @@ export default function RatingModalBody(props) {
       toast.dismiss();
       toast.info(error?.error?.message || "Something Went Wrong");
       // set
-      setLoading(false);
+      // setLoading(false);
       return error.message;
     }
   };

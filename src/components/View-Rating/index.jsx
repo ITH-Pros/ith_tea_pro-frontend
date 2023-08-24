@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import "./index.css";
@@ -16,6 +16,7 @@ import TasksModalBody from "../add-rating-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+import LoadingSpinner from "@components/Shared/Spinner/spinner";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -55,7 +56,7 @@ export default function Dashboard(props) {
   }, [modalShow, teamView]);
 
   useEffect(() => {
-    console.log("box details changed")
+    console.log("box details changed", boxDetails);
     if (boxDetails?.user?._id) {
       const dataToSend = {
         userId: boxDetails?.user._id,
@@ -71,14 +72,12 @@ export default function Dashboard(props) {
       toast.info(error?.message || "Something Went Wrong");
     },
     onSuccess: (data) => {
-      console.log("boxDetails", boxDetails);
       if (data.error) {
         toast.dismiss();
         toast.info(data?.error?.message);
       } else {
         if (data?.data?.ratingAllowed === true) {
           setRatingForDay();
-          console.log("new user", boxDetails.user);
           setRatingData({
             user: boxDetails.user,
             date: boxDetails.date,
@@ -152,6 +151,9 @@ export default function Dashboard(props) {
       } else {
         return rating.data;
       }
+    },
+    {
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -159,6 +161,33 @@ export default function Dashboard(props) {
     setModalShow(false);
     localStorage.removeItem("userId");
     // setRatingForDay();
+  };
+
+  const handleTableClick = (event) => {
+    let isFilled = event.target?.dataset?.filled;
+    const clickedElement = event.target;
+    const childData = clickedElement.dataset;
+
+    if (!isFilled) {
+      if (childData.user) {
+        setBoxDetails({
+          user: JSON.parse(childData.user),
+          date: childData.date,
+          month: childData.month,
+          year: childData.year,
+        });
+      }
+    } else {
+      setModalShow(true);
+      setRatingData((prevRatingData) => ({
+        ...prevRatingData,
+        user: JSON.parse(childData.user),
+        date: childData.date,
+        month: childData.month,
+        year: childData.year,
+      }));
+      setRatingForDay(childData?.rcomment);
+    }
   };
 
   return (
@@ -331,13 +360,13 @@ export default function Dashboard(props) {
                         <th style={{ color: "green" }}>Average</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody onClick={(e) => handleTableClick(e)}>
                       {ratingsArray?.map((user, index) => {
                         const isCurrentUser = user._id === userDetails?.id;
                         const isCurrentUserManager = user?.managerIds?.includes(
                           userDetails?.id
                         );
-                        console.log(isCurrentUserManager, user.name);
+                        console.log(isCurrentUserManager, user);
 
                         return (
                           <tr
@@ -442,21 +471,12 @@ export default function Dashboard(props) {
                                                 ? "weekendBox input_dashboard"
                                                 : "input_dashboard second"
                                             }
-                                            // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
-                                            onClick={() => {
-                                              // alert(JSON.stringify(user),
-                                              //   index + 1,
-                                              //   months.indexOf(monthUse) + 1,
-                                              //   yearUse)
-                                              //   return
-                                              setBoxDetails({
-                                                user: user,
-                                                date: index + 1,
-                                                month:
-                                                  months.indexOf(monthUse) + 1,
-                                                year: yearUse,
-                                              });
-                                            }}
+                                            data-user={JSON.stringify(user)}
+                                            data-date={index + 1}
+                                            data-month={
+                                              months.indexOf(monthUse) + 1
+                                            }
+                                            data-year={yearUse}
                                           >
                                             {!weekendValue && "?"}
                                           </span>
@@ -476,6 +496,19 @@ export default function Dashboard(props) {
                       })}
                     </tbody>
                   </Table>
+                  {(isLoading || verifyManagerMutation.isLoading) && (
+                    <div
+                      className="text-center"
+                      style={{ position: "relative", top: -500, left: -50 }}
+                    >
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

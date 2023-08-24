@@ -24,17 +24,17 @@ const RatingBox = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const viewDayTask = () => {
-    setTaskModalShow(true);
-    setRatingData((prevRatingData) => ({
-      ...prevRatingData,
-      user: user,
-      date: index + 1,
-      month: month,
-      year: year,
-    }));
-    setRatingForDay(ratingCommentObj?.rating);
-  };
+  // const viewDayTask = () => {
+  //   setTaskModalShow(true);
+  //   setRatingData((prevRatingData) => ({
+  //     ...prevRatingData,
+  //     user: user,
+  //     date: index + 1,
+  //     month: month,
+  //     year: year,
+  //   }));
+  //   setRatingForDay(ratingCommentObj?.rating);
+  // };
 
   const GetModalBody = () => {
     const RatingEditBox = () => {
@@ -148,7 +148,12 @@ const RatingBox = (props) => {
             color: ratingCommentObj?.absent ? "darkred" : "inherit",
           }}
           className="input_dashboard"
-          onClick={() => viewDayTask()}
+          data-filled="1"
+          data-user={JSON.stringify(user)}
+          data-date={index + 1}
+          data-month={month}
+          data-year={year}
+          data-rcomment={ratingCommentObj?.rating}
         >
           {ratingCommentObj?.absent
             ? "A"
