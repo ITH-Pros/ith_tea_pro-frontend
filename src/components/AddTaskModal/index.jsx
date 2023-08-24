@@ -117,6 +117,7 @@ export default function AddTaskModal(props) {
 
 
   const handleSubmit = (values, params) => {
+    console.log("called")
     let {
       projectId,
       section,

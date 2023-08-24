@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import "./index.css";
@@ -16,6 +16,7 @@ import TasksModalBody from "../add-rating-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+import LoadingSpinner from "@components/Shared/Spinner/spinner";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -36,15 +37,15 @@ export default function Dashboard(props) {
     month: "",
     year: "",
   });
+  const [boxDetails, setBoxDetails] = useState(null);
   const [raitngForDay, setRatingForDay] = useState();
 
   useEffect(() => {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     if (allowedRoles.includes(userDetails?.role)) {
       setTeamView(true);
-    }
-    else {
-      setTeamView(false)
+    } else {
+      setTeamView(false);
     }
   }, []);
 
@@ -54,62 +55,43 @@ export default function Dashboard(props) {
     }
   }, [modalShow, teamView]);
 
-  const isRatingAllowed = async function (user, date, month, year) {
-    let setDate = date;
-    let setMonth = month;
-    if (date < 10) {
-      setDate = "0" + date;
-    }
-    if (month < 10) {
-      setMonth = "0" + month;
-    }
-    const dataToSend = {
-      userId: user._id,
-    };
-    verifyManagerMutation.mutate(dataToSend);
-  };
+  useEffect(() => {
+    console.log("box details changed", boxDetails);
+    if (boxDetails?.user?._id) {
+      const dataToSend = {
+        userId: boxDetails?.user._id,
+      };
 
-  const verifyManagerMutation = useMutation(
-    async (dataToSend) => {
-      const response = await verifyManager(dataToSend);
-      if (response.error) {
-        throw new Error(response.message);
-      } else {
-        return response.data;
-      }
+      verifyManagerMutation.mutate(dataToSend);
+    }
+  }, [boxDetails]);
+
+  const verifyManagerMutation = useMutation((data) => verifyManager(data), {
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
     },
-    {
-      onError: (error) => {
+    onSuccess: (data) => {
+      if (data.error) {
         toast.dismiss();
-        toast.info(error?.message || "Something Went Wrong");
-      },
-      onSuccess: (data) => {
-        if (data?.ratingAllowed === true) {
+        toast.info(data?.error?.message);
+      } else {
+        if (data?.data?.ratingAllowed === true) {
+          setRatingForDay();
+          setRatingData({
+            user: boxDetails.user,
+            date: boxDetails.date,
+            month: boxDetails.month,
+            year: boxDetails.year,
+          });
           setModalShow(true);
         } else {
-          if (response.error) {
-            toast.dismiss();
-            toast.info(response.message);
-          } else {
-            if (response?.data?.ratingAllowed === true) {
-              setRatingForDay();
-              setRatingData((prevRatingData) => ({
-                ...prevRatingData,
-                user: user,
-                date: date,
-                month: month,
-                year: year,
-              }));
-              setModalShow(true);
-            } else {
-              toast.dismiss();
-              toast.info("You are not allowed to give rating.");
-            }
-          }
+          toast.dismiss();
+          toast.info("You are not allowed to give rating.");
         }
-      },
-    }
-  );
+      }
+    },
+  });
 
   const isWeekend = (dayOfWeek) => {
     return dayOfWeek === 0 || dayOfWeek === 6;
@@ -169,6 +151,9 @@ export default function Dashboard(props) {
       } else {
         return rating.data;
       }
+    },
+    {
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -176,6 +161,33 @@ export default function Dashboard(props) {
     setModalShow(false);
     localStorage.removeItem("userId");
     // setRatingForDay();
+  };
+
+  const handleTableClick = (event) => {
+    let isFilled = event.target?.dataset?.filled;
+    const clickedElement = event.target;
+    const childData = clickedElement.dataset;
+
+    if (!isFilled) {
+      if (childData.user) {
+        setBoxDetails({
+          user: JSON.parse(childData.user),
+          date: childData.date,
+          month: childData.month,
+          year: childData.year,
+        });
+      }
+    } else {
+      setModalShow(true);
+      setRatingData((prevRatingData) => ({
+        ...prevRatingData,
+        user: JSON.parse(childData.user),
+        date: childData.date,
+        month: childData.month,
+        year: childData.year,
+      }));
+      setRatingForDay(childData?.rcomment);
+    }
   };
 
   return (
@@ -348,13 +360,13 @@ export default function Dashboard(props) {
                         <th style={{ color: "green" }}>Average</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody onClick={(e) => handleTableClick(e)}>
                       {ratingsArray?.map((user, index) => {
                         const isCurrentUser = user._id === userDetails?.id;
                         const isCurrentUserManager = user?.managerIds?.includes(
                           userDetails?.id
                         );
-                        console.log(isCurrentUserManager, user.name);
+                        console.log(isCurrentUserManager, user);
 
                         return (
                           <tr
@@ -445,7 +457,7 @@ export default function Dashboard(props) {
                                           className={
                                             weekendValue
                                               ? "weekendBox input_dashboard"
-                                              : "input_dashboard"
+                                              : "input_dashboard first"
                                           }
                                         ></span>
                                       ) : (
@@ -457,17 +469,14 @@ export default function Dashboard(props) {
                                             className={
                                               weekendValue
                                                 ? "weekendBox input_dashboard"
-                                                : "input_dashboard"
+                                                : "input_dashboard second"
                                             }
-                                            // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
-                                            onClick={() => {
-                                              isRatingAllowed(
-                                                user,
-                                                index + 1,
-                                                months.indexOf(monthUse) + 1,
-                                                yearUse
-                                              );
-                                            }}
+                                            data-user={JSON.stringify(user)}
+                                            data-date={index + 1}
+                                            data-month={
+                                              months.indexOf(monthUse) + 1
+                                            }
+                                            data-year={yearUse}
                                           >
                                             {!weekendValue && "?"}
                                           </span>
@@ -487,6 +496,19 @@ export default function Dashboard(props) {
                       })}
                     </tbody>
                   </Table>
+                  {(isLoading || verifyManagerMutation.isLoading) && (
+                    <div
+                      className="text-center"
+                      style={{ position: "relative", top: -500, left: -50 }}
+                    >
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
