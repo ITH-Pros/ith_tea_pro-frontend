@@ -55,6 +55,7 @@ export default function Dashboard(props) {
   }, [modalShow, teamView]);
 
   useEffect(() => {
+    console.log("box details changed")
     if (boxDetails?.user?._id) {
       const dataToSend = {
         userId: boxDetails?.user._id,
@@ -64,47 +65,34 @@ export default function Dashboard(props) {
     }
   }, [boxDetails]);
 
-  const verifyManagerMutation = useMutation(
-    async (dataToSend) => {
-      const response = await verifyManager(dataToSend);
-      if (response.error) {
-        throw new Error(response.message);
-      } else {
-        return response.data;
-      }
+  const verifyManagerMutation = useMutation((data) => verifyManager(data), {
+    onError: (error) => {
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
     },
-    {
-      onError: (error) => {
+    onSuccess: (data) => {
+      console.log("boxDetails", boxDetails);
+      if (data.error) {
         toast.dismiss();
-        toast.info(error?.message || "Something Went Wrong");
-      },
-      onSuccess: (data) => {
-        if (data?.ratingAllowed === true) {
+        toast.info(data?.error?.message);
+      } else {
+        if (data?.data?.ratingAllowed === true) {
+          setRatingForDay();
+          console.log("new user", boxDetails.user);
+          setRatingData({
+            user: boxDetails.user,
+            date: boxDetails.date,
+            month: boxDetails.month,
+            year: boxDetails.year,
+          });
           setModalShow(true);
         } else {
-          if (response.error) {
-            toast.dismiss();
-            toast.info(response.message);
-          } else {
-            if (response?.data?.ratingAllowed === true) {
-              setRatingForDay();
-              setRatingData((prevRatingData) => ({
-                ...prevRatingData,
-                user: boxDetails.user,
-                date: boxDetails.date,
-                month: boxDetails.month,
-                year: boxDetails.year,
-              }));
-              setModalShow(true);
-            } else {
-              toast.dismiss();
-              toast.info("You are not allowed to give rating.");
-            }
-          }
+          toast.dismiss();
+          toast.info("You are not allowed to give rating.");
         }
-      },
-    }
-  );
+      }
+    },
+  });
 
   const isWeekend = (dayOfWeek) => {
     return dayOfWeek === 0 || dayOfWeek === 6;

@@ -90,7 +90,8 @@ export default function RatingModalBody(props) {
 
 
   useEffect(() => {
-    if (data !== undefined || data !== "" || data !== {}) {
+    if (data !== undefined && data !== "" && Object.keys(data).length) {
+      console.log("input data",data);
       const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
         date
       ).padStart(2, "0")}`;
