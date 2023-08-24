@@ -36,15 +36,15 @@ export default function Dashboard(props) {
     month: "",
     year: "",
   });
+  const [boxDetails, setBoxDetails] = useState(null);
   const [raitngForDay, setRatingForDay] = useState();
 
   useEffect(() => {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     if (allowedRoles.includes(userDetails?.role)) {
       setTeamView(true);
-    }
-    else {
-      setTeamView(false)
+    } else {
+      setTeamView(false);
     }
   }, []);
 
@@ -54,20 +54,15 @@ export default function Dashboard(props) {
     }
   }, [modalShow, teamView]);
 
-  const isRatingAllowed = async function (user, date, month, year) {
-    let setDate = date;
-    let setMonth = month;
-    if (date < 10) {
-      setDate = "0" + date;
+  useEffect(() => {
+    if (boxDetails?.user?._id) {
+      const dataToSend = {
+        userId: boxDetails?.user._id,
+      };
+
+      verifyManagerMutation.mutate(dataToSend);
     }
-    if (month < 10) {
-      setMonth = "0" + month;
-    }
-    const dataToSend = {
-      userId: user._id,
-    };
-    verifyManagerMutation.mutate(dataToSend);
-  };
+  }, [boxDetails]);
 
   const verifyManagerMutation = useMutation(
     async (dataToSend) => {
@@ -95,10 +90,10 @@ export default function Dashboard(props) {
               setRatingForDay();
               setRatingData((prevRatingData) => ({
                 ...prevRatingData,
-                user: user,
-                date: date,
-                month: month,
-                year: year,
+                user: boxDetails.user,
+                date: boxDetails.date,
+                month: boxDetails.month,
+                year: boxDetails.year,
               }));
               setModalShow(true);
             } else {
@@ -445,7 +440,7 @@ export default function Dashboard(props) {
                                           className={
                                             weekendValue
                                               ? "weekendBox input_dashboard"
-                                              : "input_dashboard"
+                                              : "input_dashboard first"
                                           }
                                         ></span>
                                       ) : (
@@ -457,16 +452,22 @@ export default function Dashboard(props) {
                                             className={
                                               weekendValue
                                                 ? "weekendBox input_dashboard"
-                                                : "input_dashboard"
+                                                : "input_dashboard second"
                                             }
                                             // onClick={()=>{// console.log(user,'index',index+1,monthUse,yearUse);}}
                                             onClick={() => {
-                                              isRatingAllowed(
-                                                user,
-                                                index + 1,
-                                                months.indexOf(monthUse) + 1,
-                                                yearUse
-                                              );
+                                              // alert(JSON.stringify(user),
+                                              //   index + 1,
+                                              //   months.indexOf(monthUse) + 1,
+                                              //   yearUse)
+                                              //   return
+                                              setBoxDetails({
+                                                user: user,
+                                                date: index + 1,
+                                                month:
+                                                  months.indexOf(monthUse) + 1,
+                                                year: yearUse,
+                                              });
                                             }}
                                           >
                                             {!weekendValue && "?"}
