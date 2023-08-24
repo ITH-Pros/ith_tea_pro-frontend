@@ -23,7 +23,6 @@ import { useAuth } from "../../utlis/AuthProvider";
 // Custom PrivateRoute component to check for authentication
 const PrivateRoute = ({ children }) => {
   const { userDetails } = useAuth();
-  console.log(userDetails);
   if (!Object.keys(userDetails || {}).length) {
     return <Navigate to="/login" />;
   }

@@ -79,7 +79,7 @@ export default function AllProject() {
     return dataToSend;
   };
 
-  const {isLoading , data:projectList } = useQuery(
+  const {isLoading , data:projectList , isFetching } = useQuery(
     ["projectListData" , isArchive , confirmModalShow , isArchiveModalShow],
    ()=> getAllProjects(fetchAllProjects()),
     {
@@ -241,6 +241,11 @@ export default function AllProject() {
         </Row>
 
         <div className="project-boxes jsGridView">
+          {isFetching && !isLoading && (
+            <div>
+              <p >Refreshing list...</p>
+            </div>
+          )}
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
@@ -267,7 +272,7 @@ export default function AllProject() {
                 </div>
               );
             })}
-          {!projectList?.length &&  !isLoading && (
+          {!projectList?.length &&  !isLoading && !isFetching && (
             <div>
               <p className="alig-nodata">No Project Found</p>
             </div>

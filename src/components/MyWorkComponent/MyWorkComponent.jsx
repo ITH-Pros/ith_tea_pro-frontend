@@ -92,6 +92,13 @@ const MyWorkComponent = ({
             id="card-task"
             className={myWorkList?.length === 0 ? "alig-nodata" : "px-3"}
           >
+            {isLoading && (
+              <p className="text-center">Loading...</p>
+            )}
+
+            {isFetching && !isLoading &&  (
+              <p className="text-center">Refreshing list...</p>
+            )}
             {!myWorkList ||
               (myWorkList?.length === 0 && (
                 <Row>
@@ -100,13 +107,6 @@ const MyWorkComponent = ({
                   </Col>
                 </Row>
               ))}
-            {isLoading && (
-              <p className="text-center">Loading...</p>
-            )}
-
-            {isFetching && !isLoading &&  (
-              <p className="text-center">Retching List...</p>
-            )}
 
             {myWorkList &&
               myWorkList?.length > 0 &&

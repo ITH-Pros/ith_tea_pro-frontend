@@ -77,15 +77,15 @@ const OverdueWorkComponent = ({
             id="card-task"
             className={!overdueWorkList?.length ? "alig-nodata" : "px-3"}
           >
-            {overdueWorkList && overdueWorkList?.length === 0 && (
-              <p className="text-center">No task found.</p>
-            )}
             {isLoading &&  (
               <p className="text-center">Loading...</p>
             )}
             {isFetching && !isLoading &&  (
-              <p className="text-center">Retching List...</p>
+              <p className="text-center">Refreshing list...</p>
             )}
+            {overdueWorkList && overdueWorkList?.length === 0 && (
+              <p className="text-center">No task found.</p>
+            )}         
             {overdueWorkList &&
               overdueWorkList?.length > 0 &&
               overdueWorkList?.map((task) => (
