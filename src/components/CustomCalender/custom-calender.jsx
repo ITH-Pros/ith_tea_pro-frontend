@@ -12,7 +12,8 @@ import { useAuth } from "../../utlis/AuthProvider";
 import { useQuery } from "react-query";
 
 const CustomCalendar = (props) => {
-  const { setTeamWorkList, isChange , setIsLoading , setIsFetching , isRefetch } = props;
+  const { setTeamWorkList, isChange, setIsLoading, setIsFetching, isRefetch } =
+    props;
   const [currentView, setCurrentView] = useState("Week");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentUTCDate, setCurrentDateUTC] = useState(new Date());
@@ -34,13 +35,13 @@ const CustomCalendar = (props) => {
 
     if (currentView === "Week") {
       dataToSend = {
-        fromDate: convertToUTCDay(weekStart),
-        toDate: convertToUTCNight(weekEnd),
+        fromDate: convertToUTCDayCalendar(weekStart),
+        toDate: convertToUTCNightCalendar(weekEnd),
       };
     } else if (currentView === "Day") {
       dataToSend = {
-        fromDate: convertToUTCForDay(currentDate),
-        toDate: convertToUTCForNight(currentDate),
+        fromDate: convertToUTCForDayCalendar(currentDate),
+        toDate: convertToUTCForNightCalendar(currentDate),
       };
     }
 
@@ -51,44 +52,17 @@ const CustomCalendar = (props) => {
     return res?.data;
   };
 
-  const { data, error, isLoading, refetch , isFetching } = useQuery(['teamWork' ,currentDate , currentView , isChange , isRefetch ], fetchTeamWork, {
-    enabled: userDetails?.role !== "CONTRIBUTOR" || isChange !== undefined,
-    refetchOnWindowFocus: false,
-    onSuccess: data => {
-      setTeamWorkList(data);
+  const { data, error, isLoading, refetch, isFetching } = useQuery(
+    ["teamWork", currentDate, currentView, isChange, isRefetch],
+    fetchTeamWork,
+    {
+      enabled: userDetails?.role !== "CONTRIBUTOR" || isChange !== undefined,
+      refetchOnWindowFocus: false,
+      onSuccess: (data) => {
+        setTeamWorkList(data);
+      },
     }
-  });
-
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    return utcTime;
-  }
-  function convertToUTCForDay(dateString) {
-    const newDate = new Date(
-      dateString.getFullYear(),
-      dateString.getMonth(),
-      dateString.getDate() + 1
-    );
-    let utcTime = newDate.toISOString()?.split("T")[0] + "T00:00:00.000Z";
-    return utcTime;
-  }
-
-  function convertToUTCForNight(dateString) {
-    const newDate = new Date(
-      dateString.getFullYear(),
-      dateString.getMonth(),
-      dateString.getDate() + 1
-    );
-    let utcTime = newDate.toISOString()?.split("T")[0] + "T23:59:59.999Z";
-    return utcTime;
-  }
-
-  function convertToUTCNight(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
-    return utcTime;
-  } 
+  );
 
   const handlePrev = () => {
     if (currentView === "Week") {
@@ -137,13 +111,11 @@ const CustomCalendar = (props) => {
     setCurrentDateUTC(currentDateMinusOneDay.toDateString());
   }, [currentDate, currentView]);
 
-
   useEffect(() => {
     if (userDetails?.role !== "CONTRIBUTOR" && isChange !== undefined) {
       refetch();
     }
   }, [isChange]);
-
 
   useEffect(() => {
     isLoading ? setIsLoading(true) : setIsLoading(false);

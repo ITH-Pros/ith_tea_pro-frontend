@@ -26,21 +26,6 @@ const Teamwork = ({
   const [teamWorkList, setTeamWorkList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  function formatDate(date) {
-    const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    const dayBefore = new Date(date);
-    dayBefore.setDate(dayBefore.getDate());
-    const dayOfWeek = days[dayBefore.getDay()];
-    const dayOfMonth = dayBefore.getDate();
-
-    return (
-      <span>
-        <p>
-          {dayOfWeek} - <span>{dayOfMonth}</span>
-        </p>
-      </span>
-    );
-  }
 
   return (
     <Container>
@@ -74,10 +59,9 @@ const Teamwork = ({
                 <CustomCalendar
                   setTeamWorkList={setTeamWorkList}
                   isChange={isChange}
-                  setIsLoading= {setIsLoading}
+                  setIsLoading={setIsLoading}
                   setIsFetching={setIsFetching}
                   isRefetch={isRefetch}
-
                 />
                 <div
                   className="mt-3"
@@ -93,16 +77,14 @@ const Teamwork = ({
                         teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
                       }
                     >
-                      {isFetching && !isLoading &&(
+                      {isFetching && !isLoading && (
                         <div className="text-left refresh w-100">
-                        Refreshing list...
+                          Refreshing list...
                         </div>
-                        )}
-                        {isLoading && (
-                        <div className="text-center w-100">
-                        Loading...
-                        </div>
-                        )}
+                      )}
+                      {isLoading && (
+                        <div className="text-center w-100">Loading...</div>
+                      )}
 
                       {teamWorkList &&
                         teamWorkList?.length > 0 &&
@@ -115,7 +97,7 @@ const Teamwork = ({
                                 lg={1}
                                 className="border-top day v-align completed_task"
                               >
-                                {formatDate(task.dueDate)}
+                                {formatDateToTeam(task.dueDate)}
                               </Col>
                             ) : (
                               <Col lg={1} className="v-align "></Col>
@@ -409,10 +391,10 @@ const Teamwork = ({
                             </Col>
                           </>
                         ))}
-                        {teamWorkList && !isLoading && !isFetching && teamWorkList?.length === 0 && (
-                        <p>No task found.</p>
-                      )}
-                     
+                      {teamWorkList &&
+                        !isLoading &&
+                        !isFetching &&
+                        teamWorkList?.length === 0 && <p>No task found.</p>}
                     </Row>
                   </div>
                 </div>

@@ -31,25 +31,7 @@ export default function ViewUserTasks() {
     }
   }, [])
 
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString)
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
-    let localTimeString = new Date(localTime.toISOString())
-    return localTimeString
-  }
 
-  function convertToUTCNight(dateString) {
-    let utcTime = new Date(dateString)
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999))
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset()
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs)
-    let localTimeString = new Date(localTime.toISOString())
-    return localTimeString
-  }
 
   const getAllTasksUsingUserId = async date => {
     let assignedTo = JSON.stringify(data?.id)
@@ -80,17 +62,6 @@ export default function ViewUserTasks() {
     }
   }
 
-  function formatDate(dateString) {
-    const date = new Date(dateString)
-    const day = date.getUTCDate().toString().padStart(2, '0')
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0')
-    const year = date.getUTCFullYear()
-    if (day && month && year) {
-      return `${day}/${month}/${year}`
-    } else {
-      return '--'
-    }
-  }
 
   const MinutesToDaysHoursMinutes = props => {
     const minutes = props.minutes
@@ -148,7 +119,7 @@ export default function ViewUserTasks() {
               className="d-flex"
             >
               <h6 className="pe-2">Due Date : </h6>
-              <p style={{ fontSize: '13px', marginBottom: '0' }}>{task?.dueDate ? formatDate(task?.dueDate) : '--'} </p>
+              <p style={{ fontSize: '13px', marginBottom: '0' }}>{task?.dueDate ? formatDateToRating(task?.dueDate) : '--'} </p>
             </Col>
 
             <Col
@@ -176,7 +147,7 @@ export default function ViewUserTasks() {
               className="d-flex"
             >
               <h6 className="pe-2">Completed Date : </h6>
-              <p>{formatDate(task?.completedDate) || '--'} </p>
+              <p>{formatDateToRating(task?.completedDate) || '--'} </p>
             </Col>
 
             <Col

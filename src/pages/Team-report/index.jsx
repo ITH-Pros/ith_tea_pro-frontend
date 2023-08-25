@@ -124,16 +124,6 @@ export default function TeamReport(props) {
   }, [userDetails]);
 
 
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    return localTimeString;
-  }
-
   const getUserReport =  () => {
     if (!selectedOption?.value || !selectedEvent) {
       return;

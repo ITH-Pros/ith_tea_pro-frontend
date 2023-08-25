@@ -27,17 +27,6 @@ export default function ViewTask(props) {
     return response.data;
   });
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = date.getUTCDate().toString().padStart(2, "0");
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-    const year = date.getUTCFullYear();
-    if (day && month && year) {
-      return `${day}/${month}/${year}`;
-    } else {
-      return "--";
-    }
-  }
 
   const MinutesToDaysHoursMinutes = (props) => {
     const minutes = props.minutes;
@@ -99,7 +88,7 @@ export default function ViewTask(props) {
           <Col as={Col} md="3" className="d-flex">
             <h6 className="pe-2">Due Date : </h6>
             <p style={{ fontSize: "13px", marginBottom: "0" }}>
-              {task?.dueDate ? formatDate(task?.dueDate) : "--"}{" "}
+              {task?.dueDate ? formatDateToRating(task?.dueDate) : "--"}{" "}
             </p>
           </Col>
 
@@ -116,7 +105,7 @@ export default function ViewTask(props) {
         <Row className="mb-3 mt-3">
           <Col as={Col} md="3" className="d-flex">
             <h6 className="pe-2">Completed Date : </h6>
-            <p>{formatDate(task?.completedDate) || "--"} </p>
+            <p>{formatDateToRating(task?.completedDate) || "--"} </p>
           </Col>
 
           <Col as={Col} md="3">
