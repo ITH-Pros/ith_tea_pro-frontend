@@ -179,15 +179,14 @@ export default function Dashboard(props) {
   const updateTaskStatusApi = useMutation(updateTaskStatusById, {
     onSuccess: (data) => {
       if (data.error) {
+        toast.dismiss();
         toast.info(
           data?.message || "Something Went Wrong While Updating Task Status"
         );
       } else {
-        toast.info("Task Status Updated Successfully");
-        onInit();
-        if (userDetails?.role !== "CONTRIBUTOR") {
-          setIsChange(!isChange);
-        }
+        toast.dismiss();
+        toast.success("Task Status Updated Successfully");
+        onInit();   
       }
     },
     onError: (error) => {

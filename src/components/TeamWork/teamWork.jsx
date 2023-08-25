@@ -17,6 +17,7 @@ const Teamwork = ({
   setSelectedTask,
   setShowAddTask,
   setSelectedProject,
+  isRefetch,
   isChange,
   handleStatusChange,
   handleViewDetails,
@@ -75,6 +76,7 @@ const Teamwork = ({
                   isChange={isChange}
                   setIsLoading= {setIsLoading}
                   setIsFetching={setIsFetching}
+                  isRefetch={isRefetch}
 
                 />
                 <div

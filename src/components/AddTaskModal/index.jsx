@@ -100,8 +100,21 @@ export default function AddTaskModal(props) {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       handleSubmit(values);
-    },
+    }
   });
+
+  useEffect(() => {
+    categoryList?.map((section) => {
+      if (section._id === formik.values.section) {
+        if (section.name === "Misc") {
+          formik.setFieldValue("showMiscType", true);
+        } else {
+          formik.setFieldValue("showMiscType", false);
+        }
+      }
+    });
+  }, [formik.values.section && categoryList]);
+
 
   const handleSubmit = (values, params) => {
     console.log("called")
@@ -165,14 +178,14 @@ export default function AddTaskModal(props) {
       refetchOnWindowFocus: false,
       select: (data) => {
         return data?.data;
-      },
+      }
     }
   );
 
   /*
   @get category list
   */
-  const { data: categoryList, isLoading: isLoadingCategory } = useQuery(
+  const { data: categoryList, isLoading: isLoadingCategory , isFetching:isFetchingCategory } = useQuery(
     ["categoryList", formik.values.projectId],
   ()=>  getCategoriesProjectById({ projectId: formik.values.projectId }),
     {
@@ -188,7 +201,7 @@ export default function AddTaskModal(props) {
   @get lead list
   */
 
-  const { isLoading: isLoadingLead, data: leadLists } = useQuery(
+  const { isLoading: isLoadingLead, data: leadLists , isFetching:isFetchingLead } = useQuery(
     ["leadLists", formik.values.projectId],
    ()=> getLeadsUsingProjectId({ projectId: formik.values.projectId }),
     {
@@ -261,8 +274,8 @@ export default function AddTaskModal(props) {
       } else {
         resetModalData();
         closeModal();
-        toast.success(data?.message);
         toast.dismiss();
+        toast.success(data?.message);
       }
     },
   });
@@ -308,7 +321,6 @@ export default function AddTaskModal(props) {
 
   // if selectedTask then we have to set the values
   useEffect(() => {
-    console.log(selectedTask, "selectedTask");
     if (selectedTask) {
       formik.setFieldValue("projectId", selectedTask?.projectId);
       formik.setFieldValue("section", selectedTask?.section);
@@ -411,7 +423,7 @@ export default function AddTaskModal(props) {
                     value={formik.values.section}
                   >
                     <option selected value="" disabled>
-                      {isLoadingCategory ? "Loading..." : "Select Section"}
+                      {isLoadingCategory || isFetchingCategory ? "Loading..." || "Refreshing..." : "Select Section"}
                     </option>
                     {categoryList?.map((section, index) => (
                       <option value={section?._id} key={index}>
@@ -474,7 +486,7 @@ export default function AddTaskModal(props) {
                   >
                     <option value="">
                       {" "}
-                      {isLoadingLead ? "Loading..." : "Select Lead"}
+                      {isLoadingLead || isFetchingLead ? "Loading..."||"Refreshing..." : "Select Lead"}
                     </option>
                     {leadLists?.map((project, index) => (
                       <option value={project?._id} key={index}>
@@ -533,6 +545,7 @@ export default function AddTaskModal(props) {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.defaultTaskTime.minutes}
+                      onWheel={(e) => e.preventDefault()}
                     />
                   </div>
                   {formik.errors.defaultTaskTime &&
