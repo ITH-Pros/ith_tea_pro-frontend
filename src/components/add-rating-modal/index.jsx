@@ -56,7 +56,7 @@ export default function RatingModalBody(props) {
    * @description useEffect hook - executes on component load - gets tasks for user
    */
   useEffect(() => {
-    if (data !== undefined && data !== "" && Object.keys(data).length) {
+    if (!!data && Object.keys(data).length) {
       const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
         date
       ).padStart(2, "0")}`;
@@ -132,72 +132,10 @@ export default function RatingModalBody(props) {
     },
   });
 
-  const handleAbsent = async () => {
-    setValidated(true);
-    let dataToSend = {
-      rating: -1,
-      absent: true,
-      comment: "Absent on this day.",
-      date: ratingForm.selectedDate?.split("-")[2],
-      month: ratingForm.selectedDate?.split("-")[1],
-      year: ratingForm.selectedDate?.split("-")[0],
-      userId: user._id,
-    };
-    setLoading(true);
-    try {
-      const rating = await addRatingOnTask(dataToSend);
-      setLoading(false);
-      if (rating.error) {
-        toast.dismiss();
-        toast.info(rating?.message || "Something Went Wrong");
-      } else {
-        toast.dismiss();
-        toast.info("You marked as ABSENT.");
-        setModalShow(false);
-      }
-    } catch (error) {
-      console.log(error, "error");
-      setLoading(false);
-      toast.dismiss();
-      toast.info(error?.message || "Something Went Wrong");
-    }
-    localStorage.removeItem("userId");
-  };
-
-  // Function to handle "Mark as ZERO" button click
-  const handleZeroRating = async () => {
-    setValidated(true);
-    let dataToSend = {
-      rating: 0,
-      comment: "No tasks available for rating.",
-      date: ratingForm.selectedDate?.split("-")[2],
-      month: ratingForm.selectedDate?.split("-")[1],
-      year: ratingForm.selectedDate?.split("-")[0],
-      userId: user._id,
-    };
-    setLoading(true);
-    try {
-      const rating = await addRatingOnTask(dataToSend);
-      setLoading(false);
-      if (rating.error) {
-        toast.dismiss();
-        toast.info(rating?.message || "Something Went Wrong");
-      } else {
-        toast.dismiss();
-        toast.info("Rating Added Successfully as ZERO");
-        setModalShow(false);
-      }
-    } catch (error) {
-      console.log(error, "error");
-      setLoading(false);
-      toast.dismiss();
-      toast.info(error?.message || "Something Went Wrong");
-    }
-    localStorage.removeItem("userId");
-  };
-
-
-
+  /**
+   * @description gets uses's tasks
+   * @param {*} date
+   */
   const getTasksDataUsingProjectId = async (date) => {
     let assignedTo = JSON.parse(localStorage.getItem("userId"));
     assignedTo = JSON.stringify(assignedTo);
@@ -236,6 +174,75 @@ export default function RatingModalBody(props) {
       // setLoading(false);
       return error.message;
     }
+  };
+
+  /**
+   * @description handles mark as absent
+   */
+  const handleAbsent = async () => {
+    setValidated(true);
+    let dataToSend = {
+      rating: -1,
+      absent: true,
+      comment: "Absent on this day.",
+      date: ratingForm.selectedDate?.split("-")[2],
+      month: ratingForm.selectedDate?.split("-")[1],
+      year: ratingForm.selectedDate?.split("-")[0],
+      userId: user._id,
+    };
+    setLoading(true);
+    try {
+      const rating = await addRatingOnTask(dataToSend);
+      setLoading(false);
+      if (rating.error) {
+        toast.dismiss();
+        toast.info(rating?.message || "Something Went Wrong");
+      } else {
+        toast.dismiss();
+        toast.info("You marked as ABSENT.");
+        setModalShow(false);
+      }
+    } catch (error) {
+      console.log(error, "error");
+      setLoading(false);
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    }
+    localStorage.removeItem("userId");
+  };
+
+  /**
+   * @description handles mark as zero- rating
+   */
+  const handleZeroRating = async () => {
+    setValidated(true);
+    let dataToSend = {
+      rating: 0,
+      comment: "No tasks available for rating.",
+      date: ratingForm.selectedDate?.split("-")[2],
+      month: ratingForm.selectedDate?.split("-")[1],
+      year: ratingForm.selectedDate?.split("-")[0],
+      userId: user._id,
+    };
+    setLoading(true);
+    try {
+      const rating = await addRatingOnTask(dataToSend);
+      setLoading(false);
+      if (rating.error) {
+        toast.dismiss();
+        toast.info(rating?.message || "Something Went Wrong");
+      } else {
+        toast.dismiss();
+        toast.info("Rating Added Successfully as ZERO");
+        setModalShow(false);
+      }
+    } catch (error) {
+      console.log(error, "error");
+      setLoading(false);
+      toast.dismiss();
+      toast.info(error?.message || "Something Went Wrong");
+    }
+    localStorage.removeItem("userId");
   };
 
   return (

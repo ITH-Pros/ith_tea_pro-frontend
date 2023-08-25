@@ -1,21 +1,20 @@
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getRatings } from "@services/user/api";
 import Loader from "../Shared/Loader";
 import { Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import "./weekCalender.css";
-import  { enUS } from "date-fns/locale"
+import { enUS } from "date-fns/locale";
 import { useAuth } from "../../utlis/AuthProvider";
-// import { useAuth } from "../../../auth/AuthProvider";
 
 Chart.register(...registerables);
 
 const locales = {
-  "en-US": enUS
+  "en-US": enUS,
 };
 
 const localizer = dateFnsLocalizer({
@@ -27,12 +26,17 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function MyCalendar() {
+  const { userDetails } = useAuth();
+
+  // state variables
   const [myRatings, setMyRatings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [userRatingForGraph, setUserRatingForGraph] = useState([]);
-  const { userDetails } = useAuth();
 
+  /**
+   * @description useEffect hook - executes on component load
+   */
   useEffect(() => {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     if (!allowedRoles.includes(userDetails?.role)) {
@@ -41,8 +45,10 @@ export default function MyCalendar() {
     }
   }, [selectedDate]);
 
+  /**
+   * @description gets user ratings
+   */
   async function getUserRatings() {
-    console.log("getUserRatings form weekCalendra.js");
     setLoading(true);
     try {
       const dataToSend = {
@@ -72,7 +78,6 @@ export default function MyCalendar() {
         }
 
         setUserRatingForGraph(userRatingForGraph);
-
         setLoading(false);
       }
     } catch (error) {
@@ -80,83 +85,42 @@ export default function MyCalendar() {
     }
   }
 
-  function getTotalDaysInMonth(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    return new Date(year, month, 0).getDate();
-  }
-
+  /**
+   * @description gets all ratings
+   * @param rating
+   */
   async function getAllRatings(rating) {
-        let dataToSet = [];
-        const currentDate = new Date();
-        const firstDateOfMonth = new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          1
-        );
+    let dataToSet = [];
+    const ratingData = rating?.data?.[0]?.ratings;
 
-        for (
-          let i = firstDateOfMonth;
-          i <= currentDate;
-          i.setDate(i.getDate() + 1)
-        ) {
-          const isToday =
-            i.getDate() === currentDate.getDate() &&
-            i.getMonth() === currentDate.getMonth() &&
-            i.getFullYear() === currentDate.getFullYear();
-        }
+    if (ratingData) {
+      const ratingEvents = ratingData.map((item, index) => ({
+        id: index,
+        title: `${item.rating?.toFixed(2)}`,
+        start: new Date(item.year, item.month - 1, item.date),
+        end: new Date(item.year, item.month - 1, item.date),
+      }));
+      dataToSet = [...dataToSet, ...ratingEvents];
+    }
 
-        const ratingData = rating?.data?.[0]?.ratings;
-
-        if (ratingData) {
-          const ratingEvents = ratingData.map((item, index) => ({
-            id: index,
-            title: `${item.rating?.toFixed(2)}`,
-            start: new Date(item.year, item.month - 1, item.date),
-            end: new Date(item.year, item.month - 1, item.date),
-          }));
-          dataToSet = [...dataToSet, ...ratingEvents];
-        }
-
-        setMyRatings(dataToSet);
+    setMyRatings(dataToSet);
   }
 
+  /**
+   * @description handles date change
+   * @param event
+   */
   const handleDateChange = (event) => {
     setSelectedDate(event);
   };
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    const currentDate = new Date();
-    if (event.title === "A" && event.start < currentDate) {
-      return {
-        className: "red-event",
-      };
-    }
-    return {};
-  };
-
-  const getDatesForXAxis = () => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
-
-    if (
-      selectedDate.getFullYear() === currentYear &&
-      selectedDate.getMonth() === currentMonth
-    ) {
-      const totalDays = currentDate.getDate();
-      return Array.from({ length: totalDays }, (_, i) => i + 1);
-    }
-
-    return Array.from(
-      { length: getTotalDaysInMonth(selectedDate) },
-      (_, i) => i + 1
-    );
-  };
-
+  /**
+   * @description Linegraph component
+   * @returns JSX
+   */
   const LineGraph = () => {
     const lineChartData = {
-      labels: getDatesForXAxis(),
+      labels: getDatesForXAxis(selectedDate),
       datasets: [
         {
           label: "Rating",
@@ -192,8 +156,6 @@ export default function MyCalendar() {
       </div>
     );
   };
-
- 
 
   return (
     <>

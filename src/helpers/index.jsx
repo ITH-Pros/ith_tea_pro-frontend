@@ -111,3 +111,58 @@
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     return utcTime;
   } 
+
+
+  const MinutesToDaysHoursMinutes = (props) => {
+    const minutes = props.minutes;
+    const days = Math.floor(minutes / 1440); // 24 hours * 60 minutes = 1440 minutes in a day
+    const hours = Math.floor((minutes % 1440) / 60);
+    const remainingMinutes = minutes % 60;
+
+    return (
+      <div className="task-completion-time d-block">
+        <label className="form-label">Task Completion Time : </label> <br />
+        <div className="time-details">
+          {days > 0 && <p>Days: {days}</p>}
+          {hours > 0 && <p>Hours: {hours}</p>}
+          {remainingMinutes > 0 && <p>Minutes: {remainingMinutes}</p>}
+        </div>
+      </div>
+    );
+  };
+
+  function getTotalDaysInMonth(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return new Date(year, month, 0).getDate();
+  }
+
+
+  function eventStyleGetter(event) {
+    const currentDate = new Date();
+    if (event.title === "A" && event.start < currentDate) {
+      return {
+        className: "red-event",
+      };
+    }
+    return {};
+  };
+
+  const getDatesForXAxis = (selectedDate) => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+
+    if (
+      selectedDate.getFullYear() === currentYear &&
+      selectedDate.getMonth() === currentMonth
+    ) {
+      const totalDays = currentDate.getDate();
+      return Array.from({ length: totalDays }, (_, i) => i + 1);
+    }
+
+    return Array.from(
+      { length: getTotalDaysInMonth(selectedDate) },
+      (_, i) => i + 1
+    );
+  };

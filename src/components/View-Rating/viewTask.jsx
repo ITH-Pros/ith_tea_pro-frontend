@@ -1,50 +1,30 @@
-/* eslint-disable no-useless-concat */
-/* eslint-disable react/jsx-no-target-blank */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-// import ToastContainer from 'react-bootstrap/ToastContainer'
 import { taskById } from "@services/user/api";
 import UserIcon from "../ProfileImage/profileImage";
 import "./index.css";
 import { useParams } from "react-router-dom";
-// import History from '../../Tasks/view-task/history'
 import { Accordion } from "react-bootstrap";
-import { toast } from "react-toastify";
 import { useQuery } from "react-query";
-import { on } from "events";
-import { Skeleton } from "antd";
 
-export default function ViewTask(props) {
+export default function ViewTask() {
   const { taskId } = useParams();
 
-
-  const { isLoading, error, data:task } = useQuery(['task', taskId], async () => {
+  /**
+   * @description useQuery hook gets- taks by id
+   */
+  const {
+    isLoading,
+    error,
+    data: task,
+  } = useQuery(["task", taskId], async () => {
     const response = await taskById({ taskId });
     if (response.error) {
-      throw new Error(response?.message || 'Something went wrong');
+      throw new Error(response?.message || "Something went wrong");
     }
     return response.data;
   });
-
-
-  const MinutesToDaysHoursMinutes = (props) => {
-    const minutes = props.minutes;
-    const days = Math.floor(minutes / 1440); // 24 hours * 60 minutes = 1440 minutes in a day
-    const hours = Math.floor((minutes % 1440) / 60);
-    const remainingMinutes = minutes % 60;
-
-    return (
-      <div className="task-completion-time d-block">
-        <label className="form-label">Task Completion Time : </label> <br />
-        <div className="time-details">
-          {days > 0 && <p>Days: {days}</p>}
-          {hours > 0 && <p>Hours: {hours}</p>}
-          {remainingMinutes > 0 && <p>Minutes: {remainingMinutes}</p>}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="addUserFrom rightDashboard" style={{ marginTop: "7%" }}>
@@ -240,7 +220,6 @@ export default function ViewTask(props) {
             <Accordion.Body>{/* <History taskId={taskId} /> */}</Accordion.Body>
           </Accordion>
         </Row>
-        
       </div>
     </div>
   );
