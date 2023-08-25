@@ -775,9 +775,10 @@ ul.weekdays {
 
  
 .table tr td:first-child {
-  position: absolute;
+  /* position: absolute; */
   left: 0;
   width: 100px !important;
+  height: 50px;
 }
 
 

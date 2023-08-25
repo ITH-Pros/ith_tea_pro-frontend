@@ -50,12 +50,6 @@ export default function Dashboard(props) {
   }, []);
 
   useEffect(() => {
-    if (modalShow === false && teamView) {
-      onInit();
-    }
-  }, [modalShow, teamView]);
-
-  useEffect(() => {
     console.log("box details changed", boxDetails);
     if (boxDetails?.user?._id) {
       const dataToSend = {
@@ -97,63 +91,29 @@ export default function Dashboard(props) {
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
 
-  function onInit() {
-    let dataToSend = {
-      month: months.indexOf(monthUse) + 1,
-      year: yearUse,
-    };
-    getAllRatings(dataToSend);
-  }
-
   const onchangeMonth = (e) => {
     setMonth(e.target.value);
-    let dataToSend = {
-      month: months.indexOf(e.target.value) + 1,
-      year: yearUse,
-    };
     let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
     setDays(monthDays.getDate());
-    getAllRatings(dataToSend);
   };
 
   const onChangeYear = (e) => {
     setYear(e.target.value);
-    let dataToSend = {
-      month: months.indexOf(monthUse) + 1,
-      year: e.target.value,
-    };
-    getAllRatings(dataToSend);
   };
-
-  async function getAllRatings(data) {
-    if (!data) {
-      data = {
-        month: months.indexOf(monthUse) + 1,
-        year: yearUse,
-      };
-    }
-  }
 
   const {
     data: ratingsArray,
     isLoading,
-    refetch,
+    refetch: getAllRatings,
   } = useQuery(
-    ["getAllRatings", months.indexOf(monthUse) + 1, yearUse],
-    async () => {
-      const data = {
-        month: months.indexOf(monthUse) + 1,
-        year: yearUse,
-      };
-      const rating = await getRatings(data);
-      if (rating.error) {
-        throw new Error(rating?.message || "Something Went Wrong");
-      } else {
-        return rating.data;
-      }
-    },
+    ["getAllRatings", monthUse, yearUse],
+    () => getRatings({ month: months.indexOf(monthUse) + 1, year: yearUse }),
     {
       refetchOnWindowFocus: false,
+      select: (data) => data.data,
+      onError: (err) => {
+        throw new Error(err?.message || "Something Went Wrong");
+      },
     }
   );
 
@@ -213,13 +173,23 @@ export default function Dashboard(props) {
           {userDetails?.role !== "CONTRIBUTOR" ? (
             <RatingModalBody
               data={ratingData}
-              setModalShow={setModalShow}
+              setModalShow={(data) => {
+                setModalShow(data);
+                if (data === false && teamView) {
+                  getAllRatings();
+                }
+              }}
               raitngForDay={raitngForDay}
             />
           ) : (
             <TasksModalBody
               data={ratingData}
-              setModalShow={setModalShow}
+              setModalShow={(data) => {
+                setModalShow(data);
+                if (data === false && teamView) {
+                  getAllRatings();
+                }
+              }}
               raitngForDay={raitngForDay}
             />
           )}
