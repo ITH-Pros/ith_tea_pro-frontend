@@ -6,12 +6,13 @@ import { useState, useEffect } from "react";
 import "@pages/Rating/rating.css";
 import "./index.css";
 import { addRatingOnTask, getProjectsTask } from "@services/user/api";
-import Loader from "../Shared/Loader";
+import Loader from "@components/Shared/Loader";
 import { Accordion, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useAuth } from "../../utlis/AuthProvider";
+import { useAuth } from "@utlis/AuthProvider";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { formatDate } from "@helpers/index";
 
 const validationSchema = Yup.object({
   rating: Yup.number()
@@ -22,6 +23,8 @@ const validationSchema = Yup.object({
 });
 
 export default function RatingModalBody(props) {
+  const { setModalShow, data, raitngForDay } = props;
+
   /* constants starts */
 
   const { userDetails } = useAuth();
@@ -42,7 +45,6 @@ export default function RatingModalBody(props) {
   /* constants ends */
 
   /* state variables starts */
-  const { setModalShow, data, raitngForDay } = props;
   const [ratingForm, setRatingForm] = useState(ratingFormsFields);
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);

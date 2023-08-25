@@ -3,13 +3,13 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
 import { getRatings } from "@services/user/api";
-import Loader from "../Shared/Loader";
+import Loader from "../../Shared/Loader";
 import { Row, Col } from "react-bootstrap";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import "./weekCalender.css";
 import { enUS } from "date-fns/locale";
-import { useAuth } from "../../utlis/AuthProvider";
+import { useAuth } from "../../../utlis/AuthProvider";
 
 Chart.register(...registerables);
 

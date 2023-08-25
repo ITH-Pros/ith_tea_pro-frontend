@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Loader from "../Shared/Loader/index";
-import "./index.css";
+import Loader from "@components/Shared/Loader/index";
+import "@components/Rating/index.css";
 import { Accordion } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getProjectsTask } from "@services/user/api";
-import UserIcon from "../ProfileImage/profileImage";
-import History from "../view-task/history";
+import UserIcon from "@components/ProfileImage/profileImage";
+import History from "@components/view-task/history";
+import { formatDateToRating } from "@helpers/index";
 
 export default function ViewUserTasks() {
   const data = JSON.parse(localStorage.getItem("view-user-tasks"));
@@ -30,7 +31,6 @@ export default function ViewUserTasks() {
     } else {
       toast.dismiss();
       toast.info("User id does not match!");
-      // set
     }
   }, []);
 

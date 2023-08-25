@@ -3,7 +3,7 @@
    * @param {*} dateString
    * @returns formatted date
    */
-  function formatDate(dateString) {
+  export function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -16,7 +16,7 @@
    * @param {*} dateString
    * @returns UTC converted date
    */
-  function convertToUTCDay(dateString) {
+  export function convertToUTCDay(dateString) {
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -32,7 +32,7 @@
    * @returns UTC converted date
    */
 
-  function convertToUTCNight(dateString) {
+  export function convertToUTCNight(dateString) {
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
@@ -42,7 +42,7 @@
     return localTimeString;
   }
 
-  function formatDateToTeam(date) {
+  export function formatDateToTeam(date) {
     const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     const dayBefore = new Date(date);
     dayBefore.setDate(dayBefore.getDate());
@@ -58,7 +58,7 @@
     );
   }
 
-  function formatDateToRating(dateString) {
+  export function formatDateToRating(dateString) {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, "0");
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
@@ -71,7 +71,7 @@
   }
 
 
-  function formatDateToProfile(date) {
+  export function formatDateToProfile(date) {
     const d = new Date(date);
     let month = "" + (d.getMonth() + 1);
     let day = "" + d.getDate();
@@ -81,12 +81,13 @@
     return [year, month, day].join("-");
   }
 
-  function convertToUTCDayCalendar(dateString) {
+  export function convertToUTCDayCalendar(dateString) {
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
     return utcTime;
   }
-  function convertToUTCForDayCalendar(dateString) {
+
+  export function convertToUTCForDayCalendar(dateString) {
     const newDate = new Date(
       dateString.getFullYear(),
       dateString.getMonth(),
@@ -96,7 +97,7 @@
     return utcTime;
   }
 
-  function convertToUTCForNightCalendar(dateString) {
+  export  function convertToUTCForNightCalendar(dateString) {
     const newDate = new Date(
       dateString.getFullYear(),
       dateString.getMonth(),
@@ -106,14 +107,14 @@
     return utcTime;
   }
 
-  function convertToUTCNightCalendar(dateString) {
+  export function convertToUTCNightCalendar(dateString) {
     let utcTime = new Date(dateString);
     utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
     return utcTime;
   } 
 
 
-  const MinutesToDaysHoursMinutes = (props) => {
+  export  const MinutesToDaysHoursMinutes = (props) => {
     const minutes = props.minutes;
     const days = Math.floor(minutes / 1440); // 24 hours * 60 minutes = 1440 minutes in a day
     const hours = Math.floor((minutes % 1440) / 60);
@@ -131,14 +132,14 @@
     );
   };
 
-  function getTotalDaysInMonth(date) {
+  export function getTotalDaysInMonth(date) {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     return new Date(year, month, 0).getDate();
   }
 
 
-  function eventStyleGetter(event) {
+  export function eventStyleGetter(event) {
     const currentDate = new Date();
     if (event.title === "A" && event.start < currentDate) {
       return {
@@ -148,7 +149,7 @@
     return {};
   };
 
-  const getDatesForXAxis = (selectedDate) => {
+  export const getDatesForXAxis = (selectedDate) => {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth();

@@ -30,7 +30,7 @@ import {
   getUserDetailsByUserId,
 } from "@services/user/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import RatingGraph from "@components/rating-graph/rating-graph";
+import RatingGraph from "@components/Rating/rating-graph/rating-graph";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 

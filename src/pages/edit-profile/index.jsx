@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQuery } from "react-query";
+import { formatDateToProfile } from "@helpers/index";
 
 function UserForm(props) {
   const { handleModalClose, showModalOnLogin } = props;

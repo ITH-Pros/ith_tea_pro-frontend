@@ -3,7 +3,7 @@ import Col from "react-bootstrap/Col";
 import { useState, useEffect } from "react";
 import "@pages/Rating/rating.css";
 import { getProjectsTask } from "@services/user/api";
-import Loader from "../Shared/Loader";
+import Loader from "../../Shared/Loader";
 import { Accordion, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
 

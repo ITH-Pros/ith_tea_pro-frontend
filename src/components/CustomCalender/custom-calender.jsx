@@ -6,10 +6,14 @@ import {
   BsChevronDown,
 } from "react-icons/bs";
 import { getTeamWork } from "@services/user/api";
-// import { useAuth } from "../../auth/AuthProvider";
-import Loader from "../Shared/Loader";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useQuery } from "react-query";
+import {
+  convertToUTCDayCalendar,
+  convertToUTCNightCalendar,
+  convertToUTCForDayCalendar,
+  convertToUTCForNightCalendar,
+} from "@helpers/index";
 
 const CustomCalendar = (props) => {
   const { setTeamWorkList, isChange, setIsLoading, setIsFetching, isRefetch } =

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { updateUserRating } from "@services/user/api";
-import Modals from "../Shared/modal";
-import Loader from "../Shared/Loader";
+import Modals from "@components/Shared/modal";
+import Loader from "@components/Shared/Loader";
 import { toast } from "react-toastify";
 // import { useAuth } from "../../auth/AuthProvider";
 import "./index.css";
