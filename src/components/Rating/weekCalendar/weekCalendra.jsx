@@ -28,7 +28,6 @@ const localizer = dateFnsLocalizer({
 
 export default function MyCalendar() {
   const { userDetails } = useAuth();
-
   // state variables
   const [myRatings, setMyRatings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -77,6 +76,7 @@ export default function MyCalendar() {
           }
           userRatingForGraph.push(userRatingObj[i]);
         }
+        
 
         setUserRatingForGraph(userRatingForGraph);
         setLoading(false);
@@ -97,10 +97,10 @@ export default function MyCalendar() {
     if (ratingData) {
       const ratingEvents = ratingData.map((item, index) => ({
         id: index,
-        title: `${item.rating?.toFixed(2)}`,
+        title: item.rating === -1 ? 'A' : `${item.rating?.toFixed(2)}`,
         start: new Date(item.year, item.month - 1, item.date),
         end: new Date(item.year, item.month - 1, item.date),
-      }));
+      }));      
       dataToSet = [...dataToSet, ...ratingEvents];
     }
 
@@ -113,6 +113,17 @@ export default function MyCalendar() {
    */
   const handleDateChange = (event) => {
     setSelectedDate(event);
+  };
+
+
+   function eventStyleGetter(event) {
+    const currentDate = new Date();
+    if (event.title === "A" && event.start < currentDate) {
+      return {
+        className: "red-event",
+      };
+    }
+    return {};
   };
 
   /**

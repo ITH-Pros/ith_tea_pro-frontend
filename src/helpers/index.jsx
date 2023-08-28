@@ -139,15 +139,6 @@
   }
 
 
-  export function eventStyleGetter(event) {
-    const currentDate = new Date();
-    if (event.title === "A" && event.start < currentDate) {
-      return {
-        className: "red-event",
-      };
-    }
-    return {};
-  };
 
   export const getDatesForXAxis = (selectedDate) => {
     const currentDate = new Date();

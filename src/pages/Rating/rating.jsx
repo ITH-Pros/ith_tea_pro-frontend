@@ -9,7 +9,7 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import ViewRatings from "@components/Rating";
+
 import { useLocation } from "react-router-dom";
 import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
 import {
@@ -24,7 +24,7 @@ import {
   Popover,
   Col,
 } from "react-bootstrap";
-import ViewRatingsTable from "@components/ViewRatingsTable";
+import ViewRating from "@components/Rating";
 
 export default function Rating(props) {
   const location = useLocation();
@@ -56,7 +56,7 @@ export default function Rating(props) {
   const renderCurrentView = () => {
     return (
       <div>
-        <ViewRatings showBtn={false} />
+        <ViewRating showBtn={false} />
       </div>
     );
   };
@@ -65,7 +65,18 @@ export default function Rating(props) {
 
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
-       <ViewRatingsTable />
+        <Row>
+          <Col lg={6}>
+            <h1 className="h1-text">
+              <i>
+                <FaRegLaughWink />
+              </i>
+              Team Rating
+            </h1>
+          </Col>
+        </Row>
+
+        <div className="main-rating-contianer">{renderCurrentView()}</div>
       </div>
     </>
   );

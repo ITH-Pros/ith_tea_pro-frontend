@@ -7,7 +7,7 @@ import { CONSTANTS, CUSTOMSTYLES } from "../../constants/index";
 import Loader from "../Shared/Loader/index";
 import FilterDropdown from "./FilterDropdown";
 import SortByDropdown from "./SortFilter";
-import './filter.css';
+import "./filter.css";
 import {
   getAllCategories,
   getAllProjects,
@@ -72,8 +72,8 @@ const FilterModal = (props) => {
   */
 
   const { data: projects } = useQuery(
-    ["projectList" , filterModalShow],
-   ()=> getAllProjects(),
+    ["projectList", filterModalShow],
+    () => getAllProjects(),
     {
       enabled: filterModalShow,
       refetchOnWindowFocus: false,
@@ -82,10 +82,19 @@ const FilterModal = (props) => {
       },
       onSuccess: (data) => {
         console.log("calling form filter modal");
-      }
+      },
     }
   );
 
+  useEffect(() => {
+    if (handleProjectId) {
+      projects?.map((project) => {
+        if (project._id === handleProjectId) {
+          formik.setFieldValue("projectIds", project);
+        }
+      });
+    }
+  }, [handleProjectId, projects]);
   /*
   @all categories data
   */
@@ -111,22 +120,18 @@ const FilterModal = (props) => {
 @all users data
 */
 
- const fetchUsers = async () => {
+  const fetchUsers = async () => {
     const users = await getAllUsersWithoutPagination();
     return users?.data?.users;
   };
 
-  const { data: usersList } = useQuery(
-    ["users", filterModalShow],
-    fetchUsers,
-    {
-      enabled: filterModalShow,
-      refetchOnWindowFocus: false,
-      select: (data) => {
-        return data;
-      },
-    }
-  );
+  const { data: usersList } = useQuery(["users", filterModalShow], fetchUsers, {
+    enabled: filterModalShow,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      return data;
+    },
+  });
 
   /*
   @all leads data
@@ -138,7 +143,7 @@ const FilterModal = (props) => {
   };
 
   const { data: leadsArray } = useQuery(
-   [ "leads", filterModalShow ],
+    ["leads", filterModalShow],
     fetchLeads,
     {
       enabled: filterModalShow,
@@ -156,7 +161,6 @@ const FilterModal = (props) => {
   const clearFilterFormValue = () => {
     formik.resetForm();
     setFilterModalShow(false);
-
   };
 
   const handleFilterSelect = (fromDate, toDate) => {
@@ -232,7 +236,7 @@ const FilterModal = (props) => {
           className="Offcanvas-modal"
           style={{ width: "600px" }}
           show={filterModalShow}
-          onHide={clearFilterFormValue}
+          onHide={formik.handleReset}
           placement="end"
         >
           <Offcanvas.Header closeButton>
@@ -372,12 +376,15 @@ const FilterModal = (props) => {
               </Row>
               <Row>
                 <Col lg={12} className="text-right">
-                <Button className="pull-right" variant="primary" type="submit">
-                Apply Filter
-              </Button>
+                  <Button
+                    className="pull-right"
+                    variant="primary"
+                    type="submit"
+                  >
+                    Apply Filter
+                  </Button>
                 </Col>
               </Row>
-             
             </Form>
           </Offcanvas.Body>
         </Offcanvas>
