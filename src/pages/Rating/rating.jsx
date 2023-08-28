@@ -24,6 +24,7 @@ import {
   Popover,
   Col,
 } from "react-bootstrap";
+import ViewRatingsTable from "@components/ViewRatingsTable";
 
 export default function Rating(props) {
   const location = useLocation();
@@ -64,18 +65,7 @@ export default function Rating(props) {
 
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
-        <Row>
-          <Col lg={6}>
-            <h1 className="h1-text">
-              <i>
-                <FaRegLaughWink />
-              </i>
-              Team Rating
-            </h1>
-          </Col>
-        </Row>
-
-        <div className="main-rating-contianer">{renderCurrentView()}</div>
+       <ViewRatingsTable />
       </div>
     </>
   );

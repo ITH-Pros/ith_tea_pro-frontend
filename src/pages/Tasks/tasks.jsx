@@ -445,7 +445,6 @@ const Tasks = () => {
 
   const downloadExportData = () => {
     let paramsData;
-    console.log(params?.projectId);
     if (params?.projectId) {
       paramsData = params?.projectId;
     }
@@ -531,7 +530,7 @@ const Tasks = () => {
         toast.dismiss();
         toast.info(data?.message || "Something Went Wrong in download excel");
       } else {
-        const blob = new Blob([res], {
+        const blob = new Blob([data], {
           type: ".xlsx",
         });
 
