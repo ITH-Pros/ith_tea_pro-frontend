@@ -74,7 +74,10 @@ export default function MyCalendar() {
           if (!userRatingObj[i] && userRatingObj[i] !== 0) {
             userRatingObj[i] = userRatingObj[i - 1] || 0;
           }
-          userRatingForGraph.push(userRatingObj[i]);
+          if(userRatingObj[i] === -1){
+            userRatingObj[i] = userRatingObj[i - 1] || 0;
+          }
+          userRatingForGraph.push(userRatingObj[i] );
         }
         
 
