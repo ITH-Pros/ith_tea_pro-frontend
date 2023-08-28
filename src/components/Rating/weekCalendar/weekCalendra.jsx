@@ -10,6 +10,7 @@ import { Chart, registerables } from "chart.js";
 import "./weekCalender.css";
 import { enUS } from "date-fns/locale";
 import { useAuth } from "../../../utlis/AuthProvider";
+import { getDatesForXAxis, getTotalDaysInMonth } from "@helpers/index";
 
 Chart.register(...registerables);
 

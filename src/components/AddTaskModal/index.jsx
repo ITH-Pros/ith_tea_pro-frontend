@@ -55,7 +55,6 @@ const validationSchema = Yup.object({
   dueDate: Yup.string().required("Due date is required"),
 });
 
-
 export default function AddTaskModal(props) {
   const {
     selectedProjectFromTask,
@@ -74,6 +73,7 @@ export default function AddTaskModal(props) {
   // const [categoryList, setCategoryList] = useState([]);
   // const [leadLists, setLeadLists] = useState([]);
   // const [userList, setUserList] = useState([]);
+  const [selectedSectionName, setSelectedSectionName] = useState(null);
 
   const uploadedAttachmentsArray = (uploadedFiles) => {
     setUploadedFiles(uploadedFiles);
@@ -99,14 +99,20 @@ export default function AddTaskModal(props) {
       showMiscType: false,
     },
     validationSchema: validationSchema,
+    validate: (values) => {
+      let errors = {};
+      if (selectedSectionName === 'Misc' && !values.miscType) {
+        errors.miscType = 'Misc Type is required !!';
+      }
+      return errors;
+    },
     onSubmit: (values) => {
       handleSubmit(values);
-    }
+    },
   });
 
-
   const handleSubmit = (values, params) => {
-    console.log("called")
+    console.log("called");
     let {
       projectId,
       section,
@@ -161,22 +167,26 @@ export default function AddTaskModal(props) {
 
   const { data: projectList, isLoading } = useQuery(
     ["projectList", showAddTask],
-   () => getAllProjects(),
+    () => getAllProjects(),
     {
       enabled: showAddTask,
       refetchOnWindowFocus: false,
       select: (data) => {
         return data?.data;
-      }
+      },
     }
   );
 
   /*
   @get category list
   */
-  const { data: categoryList, isLoading: isLoadingCategory , isFetching:isFetchingCategory } = useQuery(
+  const {
+    data: categoryList,
+    isLoading: isLoadingCategory,
+    isFetching: isFetchingCategory,
+  } = useQuery(
     ["categoryList", formik.values.projectId],
-  ()=>  getCategoriesProjectById({ projectId: formik.values.projectId }),
+    () => getCategoriesProjectById({ projectId: formik.values.projectId }),
     {
       enabled: !!formik.values.projectId,
       refetchOnWindowFocus: false,
@@ -190,9 +200,13 @@ export default function AddTaskModal(props) {
   @get lead list
   */
 
-  const { isLoading: isLoadingLead, data: leadLists , isFetching:isFetchingLead } = useQuery(
+  const {
+    isLoading: isLoadingLead,
+    data: leadLists,
+    isFetching: isFetchingLead,
+  } = useQuery(
     ["leadLists", formik.values.projectId],
-   ()=> getLeadsUsingProjectId({ projectId: formik.values.projectId }),
+    () => getLeadsUsingProjectId({ projectId: formik.values.projectId }),
     {
       enabled: !!formik.values.projectId,
       refetchOnWindowFocus: false,
@@ -206,9 +220,13 @@ export default function AddTaskModal(props) {
   @get user list
   */
 
-  const { isLoading: isLoadingUser , data:userList } = useQuery(
-    ["userList", formik.values.projectId , formik.values.leads],
-  () => getUserUsingProjectId({ projectId: formik.values.projectId , selectedLeadRole: formik.values.leads }),
+  const { isLoading: isLoadingUser, data: userList } = useQuery(
+    ["userList", formik.values.projectId, formik.values.leads],
+    () =>
+      getUserUsingProjectId({
+        projectId: formik.values.projectId,
+        selectedLeadRole: formik.values.leads,
+      }),
     {
       enabled: !!formik.values.projectId && !!formik.values.leads,
       refetchOnWindowFocus: false,
@@ -295,6 +313,14 @@ export default function AddTaskModal(props) {
   }
 
   useEffect(() => {
+    const section = categoryList?.find(
+      (section) => section._id === formik.values.section
+    );
+    setSelectedSectionName(section?.name || null);
+    formik.setFieldValue('miscType', '', false);
+  }, [formik.values.section, categoryList]);
+
+  useEffect(() => {
     if (selectedProjectFromTask) {
       formik.setFieldValue("projectId", selectedProjectFromTask);
     }
@@ -313,7 +339,10 @@ export default function AddTaskModal(props) {
     if (selectedTask) {
       formik.setFieldValue("projectId", selectedTask?.projectId);
       formik.setFieldValue("section", selectedTask?.section);
-      formik.setFieldValue("leads", selectedTask?.lead[0]._id || selectedTask?.lead[0] );
+      formik.setFieldValue(
+        "leads",
+        selectedTask?.lead[0]._id || selectedTask?.lead[0]
+      );
       formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
       formik.setFieldValue("description", selectedTask?.description);
       formik.setFieldValue("miscType", selectedTask?.miscType);
@@ -354,6 +383,7 @@ export default function AddTaskModal(props) {
       formik.setFieldValue("status", selectedTask?.status);
     }
   }, [selectedTask]);
+  
 
   return (
     <>
@@ -412,7 +442,9 @@ export default function AddTaskModal(props) {
                     value={formik.values.section}
                   >
                     <option selected value="" disabled>
-                      {isLoadingCategory || isFetchingCategory ? "Loading..." || "Refreshing..." : "Select Section"}
+                      {isLoadingCategory || isFetchingCategory
+                        ? "Loading..." || "Refreshing..."
+                        : "Select Section"}
                     </option>
                     {categoryList?.map((section, index) => (
                       <option value={section?._id} key={index}>
@@ -431,7 +463,7 @@ export default function AddTaskModal(props) {
 
                 {/* if taskFormValue.section ==="" */}
 
-                {formik.values.showMiscType && (
+                {selectedSectionName === "Misc" && (
                   <Form.Group as={Col} md="6">
                     <Form.Label>Misc Type</Form.Label>
                     <Form.Control
@@ -475,7 +507,9 @@ export default function AddTaskModal(props) {
                   >
                     <option value="">
                       {" "}
-                      {isLoadingLead || isFetchingLead ? "Loading..."||"Refreshing..." : "Select Lead"}
+                      {isLoadingLead || isFetchingLead
+                        ? "Loading..." || "Refreshing..."
+                        : "Select Lead"}
                     </option>
                     {leadLists?.map((project, index) => (
                       <option value={project?._id} key={index}>

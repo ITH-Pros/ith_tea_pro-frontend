@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { getProjectsTask } from "@services/user/api";
 import UserIcon from "@components/ProfileImage/profileImage";
 import History from "@components/view-task/history";
-import { formatDateToRating } from "@helpers/index";
+import { convertToUTCDay, convertToUTCNight, formatDateToRating } from "@helpers/index";
 
 export default function ViewUserTasks() {
   const data = JSON.parse(localStorage.getItem("view-user-tasks"));
