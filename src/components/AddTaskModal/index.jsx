@@ -335,7 +335,7 @@ export default function AddTaskModal(props) {
   useEffect(() => {
     if (selectedSection) {
       formik.setFieldValue("projectId", selectedSection._id);
-      formik.setFieldValue("section", selectedSection.sectionId);
+      formik.setFieldValue("section", selectedSection.section);
     }
   }, [selectedSection]);
 

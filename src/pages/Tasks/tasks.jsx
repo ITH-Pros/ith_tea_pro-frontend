@@ -57,7 +57,7 @@ const Tasks = () => {
   const handleAddTaskFromSection = (project) => {
     console.log("section", project);
     setSelectedTask();
-    localStorage.setItem("addTaskModal", true);
+    // localStorage.setItem("addTaskModal", true);
     setShowAddTask(true);
 
     setSelectedSection({
@@ -589,7 +589,7 @@ const Tasks = () => {
                   onClick={() => {
                     setSelectedTask();
                     setSelectedProject();
-                    localStorage.setItem("addTaskModal", true);
+                    // localStorage.setItem("addTaskModal", true);
                     setShowAddTask(true);
                   }}
                 >
