@@ -317,7 +317,6 @@ export default function AddTaskModal(props) {
       (section) => section._id === formik.values.section
     );
     setSelectedSectionName(section?.name || null);
-    // formik.setFieldValue('miscType', '', false);
   }, [formik.values.section, categoryList]);
 
   useEffect(() => {

@@ -429,7 +429,6 @@ const Tasks = () => {
             }
           });
         });
-
         return allTasks;
       }
     },

@@ -511,7 +511,7 @@ export default function Dashboard(props) {
           showViewTask={showViewTask}
           closeViewTaskModal={closeViewTaskModal}
           selectedTaskId={selectedTaskId}
-          onInit={onInit}
+          getTasksDataUsingProjectId={onInit}
           setIsChange={setIsChange}
           isChange={isChange}
         />

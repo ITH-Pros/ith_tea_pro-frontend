@@ -9,7 +9,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Loader from "../Shared/Loader";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import ToastContainer from "react-bootstrap/ToastContainer";
 import Modal from "react-bootstrap/Modal";
 
 import {
@@ -32,7 +31,6 @@ export default function ViewTaskModal(props) {
     closeViewTaskModal,
     selectedTaskId,
     getTasksDataUsingProjectId,
-    onInit,
     isChange,
     setIsChange,
   } = props;
@@ -42,6 +40,8 @@ export default function ViewTaskModal(props) {
   const [text, setText] = useState("");
   const [activeTab, setActiveTab] = useState("comments");
   const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
+  const [isAddCommentButtonEnabled, setIsAddCommentButtonEnabled] = useState(false);
+
 
   const {
     isLoading,
@@ -53,8 +53,10 @@ export default function ViewTaskModal(props) {
     async () => {
       const response = await taskById({ taskId: selectedTaskId });
       if (response.error) {
+        setIsLoadingSpinner(false);
         throw new Error(response.message);
       }
+      setIsLoadingSpinner(false);
       setShowViewTaskModal(true);
       return response?.data;
     },
@@ -77,10 +79,12 @@ export default function ViewTaskModal(props) {
 
   // Mutation for adding comments
   const mutationAddComment = useMutation(async (comment) => {
+    setIsLoadingSpinner(true);
     const res = await addCommentOnTask({ taskId: selectedTaskId, comment });
     if (res.error) {
       throw new Error(res.message);
     }
+    refetchTaskDetails();
     return res;
   });
 
@@ -90,7 +94,7 @@ export default function ViewTaskModal(props) {
       onSuccess: () => {
         getTasksDataUsingProjectId();
         setShowConfirmation(false);
-        onInit();
+        // onInit();
       },
       onError: (error) => {
         toast.dismiss();
@@ -104,8 +108,7 @@ export default function ViewTaskModal(props) {
     mutationAddComment.mutate(text, {
       onSuccess: () => {
         setText("");
-        getTasksDataUsingProjectId();
-        onInit();
+        // onInit();
       },
       onError: (error) => {
         toast.dismiss();
@@ -116,15 +119,23 @@ export default function ViewTaskModal(props) {
 
   const handleTextChange = (content) => {
     setText(content);
+    // setIsAddCommentButtonEnabled(content.trim().length > 0);
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setIsAddCommentButtonEnabled(text.trim().length > 0);
+    }, 200); // checking every 200ms
+    return () => clearInterval(intervalId);
+  }, [text]);
+  
 
   const updateTaskStatus = async (dataToSend) => {
     mutationUpdateTask.mutate(dataToSend, {
       onSuccess: () => {
         getTasksDataUsingProjectId();
         setShowConfirmation(false);
-        onInit();
+        // onInit();
       },
       onError: (error) => {
         toast.dismiss();
@@ -304,7 +315,9 @@ export default function ViewTaskModal(props) {
                     {task?.status === "COMPLETED" && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Completed Date : </Form.Label>
-                        <p>{formatDateToRating(task?.completedDate) || "--"} </p>
+                        <p>
+                          {formatDateToRating(task?.completedDate) || "--"}{" "}
+                        </p>
                       </Form.Group>
                     )}
 
@@ -492,6 +505,7 @@ export default function ViewTaskModal(props) {
                   <form onSubmit={handleSubmit}>
                     <div className="form-group">
                       <TextEditor
+                      onBlur={() => setIsAddCommentButtonEnabled(text.trim().length > 0)}
                         width="100%"
                         placeholder="Enter text here"
                         value={text}
@@ -505,7 +519,11 @@ export default function ViewTaskModal(props) {
                         textAlign: "right",
                       }}
                     >
-                      <Button type="submit" className="btn btn-primary mb-2">
+                      <Button
+                        disabled={!isAddCommentButtonEnabled}
+                        type="submit"
+                        className="btn btn-primary mb-2"
+                      >
                         Post
                       </Button>
                     </div>
