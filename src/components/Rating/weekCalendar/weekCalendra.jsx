@@ -26,7 +26,7 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-export default function MyCalendar() {
+export default function MyCalendar(props) {
   const { userDetails } = useAuth();
   // state variables
   const [myRatings, setMyRatings] = useState([]);
@@ -44,6 +44,10 @@ export default function MyCalendar() {
       getUserRatings();
     }
   }, [selectedDate]);
+
+  
+
+
 
   /**
    * @description gets user ratings
@@ -88,6 +92,8 @@ export default function MyCalendar() {
       setLoading(false);
     }
   }
+
+  
 
   /**
    * @description gets all ratings

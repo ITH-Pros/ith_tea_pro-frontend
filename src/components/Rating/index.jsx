@@ -53,6 +53,13 @@ export default function ViewRating() {
     }
   }, []);
 
+  useEffect(() => {
+    if (teamView === false) {
+      setMonth(moment().format("MMMM"));
+      setYear(moment().year());
+    }
+  }, [teamView]);
+
   /**
    * @description useEffect hook - executes on component load
    *              verifies that logged in user has permission to assign rating
@@ -92,6 +99,8 @@ export default function ViewRating() {
       },
     }
   );
+
+
 
   /**
    * @description React Query Mutation -used for verifying manager has access for rating or not
