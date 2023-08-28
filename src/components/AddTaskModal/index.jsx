@@ -317,8 +317,14 @@ export default function AddTaskModal(props) {
       (section) => section._id === formik.values.section
     );
     setSelectedSectionName(section?.name || null);
-    formik.setFieldValue('miscType', '', false);
+    // formik.setFieldValue('miscType', '', false);
   }, [formik.values.section, categoryList]);
+
+  useEffect(() => {
+    if(selectedSectionName !== 'Misc'){
+      formik.setFieldValue('miscType', '', false);
+    }
+  }, [selectedSectionName]);
 
   useEffect(() => {
     if (selectedProjectFromTask) {
@@ -336,6 +342,7 @@ export default function AddTaskModal(props) {
 
   // if selectedTask then we have to set the values
   useEffect(() => {
+    console.log(selectedTask, "selectedTask");
     if (selectedTask) {
       formik.setFieldValue("projectId", selectedTask?.projectId);
       formik.setFieldValue("section", selectedTask?.section);
@@ -345,7 +352,7 @@ export default function AddTaskModal(props) {
       );
       formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
       formik.setFieldValue("description", selectedTask?.description);
-      formik.setFieldValue("miscType", selectedTask?.miscType);
+      formik.setFieldValue("miscType", selectedTask?.miscType) ;
       formik.setFieldValue("title", selectedTask.title);
       formik.setFieldValue(
         "defaultTaskTime.hours",
