@@ -48,12 +48,13 @@ const validationSchema = Yup.object({
       "Estimated time is required!!",
       (value) => value.hours || value.minutes
     ),
-  miscType: Yup.string().when("showMiscType", {
-    is: true,
-    then: Yup.string().required("Misc Type is required !!"),
+  miscType: Yup.string().when("section", {
+    is: (section) => section === "Misc",
+    then: Yup.string().required("Miscellaneous type is required !!"),
   }),
   dueDate: Yup.string().required("Due date is required"),
 });
+
 
 export default function AddTaskModal(props) {
   const {
@@ -102,18 +103,6 @@ export default function AddTaskModal(props) {
       handleSubmit(values);
     }
   });
-
-  useEffect(() => {
-    categoryList?.map((section) => {
-      if (section._id === formik.values.section) {
-        if (section.name === "Misc") {
-          formik.setFieldValue("showMiscType", true);
-        } else {
-          formik.setFieldValue("showMiscType", false);
-        }
-      }
-    });
-  }, [formik.values.section && categoryList]);
 
 
   const handleSubmit = (values, params) => {
