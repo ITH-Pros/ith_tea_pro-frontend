@@ -6,13 +6,16 @@ import Loader from "@components/Shared/Loader/index";
 import { toast } from "react-toastify";
 import logo from "@assets/img/logo.png"
 import { useMutation } from 'react-query';
+import { useNavigate } from "react-router-dom";
 
-const ResetPassword = ({ handleModalClose }) => {
+const ResetPassword = ({  }) => {
   const initialValues = {
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   };
+
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required("Old Password is required"),
@@ -41,20 +44,17 @@ const ResetPassword = ({ handleModalClose }) => {
       } else {
         toast.info(data.message);
         localStorage.clear();
-        handleModalClose();
-        // Uncomment the following if you want to navigate after resetting
-        // setTimeout(() => {
-        //   navigate("/login");
-        //   window.location.reload();
-        // }, 2000);
+          window.location.reload();
       }
     },
     onError: (error) => {
       toast.info(
-        error?.error?.message || "Something Went Wrong in reset password"
+        error?.message || "Something Went Wrong in reset password"
       );
     }
   });
+
+  const { isLoading: isSubmitting } = resetPasswordMutation;
 
   const togglePasswordVisibility = (fieldName) => {
     formik.setFieldValue(fieldName, !formik.values[fieldName]);
@@ -108,18 +108,14 @@ const ResetPassword = ({ handleModalClose }) => {
                 <div className="password-field">
                   <input
                     placeholder="New Password"
-                    type={formik.values.showNewPassword ? "text" : "password"}
+                    type={"password"}
                     id="newPassword"
                     {...formik.getFieldProps("newPassword")}
                   />
-                  <button
-                    type="button"
-                    className="eye-button"
-                    onClick={() => togglePasswordVisibility("showNewPassword")}
-                  >
-                    {/* Your icon code */}
-                  </button>
                   </div>
+                  {formik.touched.newPassword && formik.errors.newPassword && (
+                  <p className="error-msg">{formik.errors.newPassword}</p>
+                )}
               </div>
               <div className="field">
                 {/* Confirm Password field similar to above */}
@@ -128,32 +124,22 @@ const ResetPassword = ({ handleModalClose }) => {
                   <input
                     placeholder="Confirm Password"
                     type={
-                      formik.values.showConfirmPassword ? "text" : "password"
+                      "password"
                     }
                     id="confirmPassword"
                     {...formik.getFieldProps("confirmPassword")}
                   />
-                  <button
-                    type="button"
-                    className="eye-button"
-                    onClick={() =>
-                      togglePasswordVisibility("showConfirmPassword")
-                    }
-                  >
-                    {/* Your icon code */}
-                  </button>
                   </div>
-                {formik.values.newPassword !==
-                  formik.values.confirmPassword && (
-                  <p className="error-msg">Passwords do not match</p>
+                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                  <p className="error-msg">{formik.errors.confirmPassword}</p>
                 )}
               </div>
               <button
                 className="loginButton"
                 type="submit"
-                disabled={formik.isSubmitting}
+                disabled={isSubmitting}
               >
-                Submit
+               {isSubmitting? 'Please wait...' : 'Submit'}
               </button>
               <button
                 onClick={backToLogin}
@@ -165,8 +151,6 @@ const ResetPassword = ({ handleModalClose }) => {
           </div>
         </div>
       </div>
-
-      {formik.isSubmitting && <Loader />}
     </div>
   );
 };
