@@ -15,9 +15,10 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQuery } from "react-query";
+import { formatDateToProfile } from "@helpers/index";
 
 function UserForm(props) {
-  const { handleModalClose , showModalOnLogin } = props;
+  const { handleModalClose, showModalOnLogin } = props;
   const [loading, setLoading] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const [profilePicture, setProfileImage] = useState("");
@@ -62,7 +63,7 @@ function UserForm(props) {
       setIsEditable(true);
       localStorage.removeItem("isEditProfile");
       document.getElementById("headerbuttontoupdateprofile")?.click();
-      if(showModalOnLogin){
+      if (showModalOnLogin) {
         handleModalClose();
       }
     },
@@ -73,7 +74,7 @@ function UserForm(props) {
     },
   });
 
-  const { isLoading:isUpdateing } = formMutation;
+  const { isLoading: isUpdateing } = formMutation;
 
   const formik = useFormik({
     initialValues: {
@@ -100,8 +101,10 @@ function UserForm(props) {
   }, []);
 
   const { isLoading: isFetching } = useQuery(
-    "userDetails", getLogedInUserDetails , {
-      enabled:true,
+    "userDetails",
+    getLogedInUserDetails,
+    {
+      enabled: true,
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
         const patchedValues = patchValues(data.data);
@@ -121,18 +124,8 @@ function UserForm(props) {
     github: currentUser?.githubLink || "",
     twitter: currentUser?.twitterLink || "",
     linkedin: currentUser?.linkedInLink || "",
-    dob: currentUser?.dob ? formatDate(currentUser?.dob) : "",
+    dob: currentUser?.dob ? formatDateToProfile(currentUser?.dob) : "",
   });
-
-  function formatDate(date) {
-    const d = new Date(date);
-    let month = "" + (d.getMonth() + 1);
-    let day = "" + d.getDate();
-    const year = d.getFullYear();
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-    return [year, month, day].join("-");
-  }
 
   const handleEditClick = (event) => {
     event.preventDefault();
@@ -148,7 +141,7 @@ function UserForm(props) {
       <form className="row" onSubmit={formik.handleSubmit}>
         <div className="profile-images">
           <div className="edit-detle">
-            <ImageUpload 
+            <ImageUpload
               setProfileImage={setProfileImage}
               selectedProfilePic={profilePicture}
               isEditable={!isEditable}
@@ -157,7 +150,12 @@ function UserForm(props) {
         </div>
         <div className="form-group col-12 text-center profil-ed">
           {!isEditable ? (
-            <Button disabled={isUpdateing} variant="primary" size="sm" type="submit">
+            <Button
+              disabled={isUpdateing}
+              variant="primary"
+              size="sm"
+              type="submit"
+            >
               {isUpdateing ? "Updating..." : "Update"}
             </Button>
           ) : (

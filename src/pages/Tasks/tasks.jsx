@@ -324,7 +324,7 @@ const Tasks = () => {
           filterData.projectIds.map((item) => item._id)
         );
       }
-      if (filterData?.createdBy && filterData?.createdBy?.length >0) {
+      if (filterData?.createdBy && filterData?.createdBy?.length > 0) {
         data.createdBy = JSON.stringify(
           filterData.createdBy.map((item) => item._id)
         );
@@ -344,7 +344,7 @@ const Tasks = () => {
           filterData.category.map((item) => item._id)
         );
       }
-      if (filterData?.priority && filterData.priority?.length >0) {
+      if (filterData?.priority && filterData.priority?.length > 0) {
         data.priority = JSON.stringify(filterData.priority);
       }
       if (filterData?.status && filterData.status?.length > 0) {
@@ -444,7 +444,6 @@ const Tasks = () => {
 
   const downloadExportData = () => {
     let paramsData;
-    console.log(params?.projectId);
     if (params?.projectId) {
       paramsData = params?.projectId;
     }
@@ -530,7 +529,7 @@ const Tasks = () => {
         toast.dismiss();
         toast.info(data?.message || "Something Went Wrong in download excel");
       } else {
-        const blob = new Blob([res], {
+        const blob = new Blob([data], {
           type: ".xlsx",
         });
 
@@ -568,27 +567,6 @@ const Tasks = () => {
     setSelectedProject();
     setSelectedTask();
   };
-
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    // // console.log('==========', localTimeString)
-    return localTimeString;
-  }
-
-  function convertToUTCNight(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    return localTimeString;
-  }
 
   return (
     <>

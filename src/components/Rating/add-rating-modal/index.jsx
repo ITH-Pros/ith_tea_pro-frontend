@@ -1,6 +1,4 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from "react";
+import React from "react";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -8,13 +6,13 @@ import { useState, useEffect } from "react";
 import "@pages/Rating/rating.css";
 import "./index.css";
 import { addRatingOnTask, getProjectsTask } from "@services/user/api";
-import Loader from "../Shared/Loader";
+import Loader from "@components/Shared/Loader";
 import { Accordion, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-// import { useAuth } from "../../../auth/AuthProvider";
 import { toast } from "react-toastify";
-import { useAuth } from "../../utlis/AuthProvider";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useAuth } from "@utlis/AuthProvider";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { formatDate } from "@helpers/index";
 
 const validationSchema = Yup.object({
   rating: Yup.number()
@@ -26,8 +24,10 @@ const validationSchema = Yup.object({
 
 export default function RatingModalBody(props) {
   const { setModalShow, data, raitngForDay } = props;
-  console.log("data", data);
-  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
+
+  /* constants starts */
+
+  const { userDetails } = useAuth();
   let user = data?.user;
   let date = data?.date;
   let month = data?.month;
@@ -40,7 +40,11 @@ export default function RatingModalBody(props) {
     userList: [],
     taskList: [],
   };
+  const ratingValues = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6];
 
+  /* constants ends */
+
+  /* state variables starts */
   const [ratingForm, setRatingForm] = useState(ratingFormsFields);
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -48,12 +52,56 @@ export default function RatingModalBody(props) {
   const [isNotVerified, setIsNotVerified] = useState(false);
   const [disableRatingButton, setRatingButtonDisable] = useState(false);
 
-  const { userDetails } = useAuth();
+  /* state variables ends */
 
+  /**
+   * @description useEffect hook - executes on component load - gets tasks for user
+   */
+  useEffect(() => {
+    if (!!data && Object.keys(data).length) {
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        date
+      ).padStart(2, "0")}`;
+      setRatingForm((prevRatingData) => ({
+        ...prevRatingData,
+        selectedDate: formattedDate,
+      }));
+      let id = [user._id];
+      id = JSON.stringify(id);
+      localStorage.setItem("userId", id);
+      getTasksDataUsingProjectId(formattedDate);
+    }
+  }, [data]);
+
+  /**
+   * @description useEffect hook - executes on component load - checks if all tasks are verified
+   */
+  useEffect(() => {
+    if (
+      userTasks.length > 0 &&
+      userDetails?.role !== "SUPER_ADMIN" &&
+      userDetails?.role !== "ADMIN"
+    ) {
+      let isAnyElementNotVerified = userTasks?.some((element) => {
+        return (
+          element._id.section !== "Misc" &&
+          !element.tasks.every((task) => task.isVerified)
+        );
+      });
+      setIsNotVerified(isAnyElementNotVerified);
+    }
+  }, [userTasks]);
+
+  /**
+   * @description formik instance created by useFormik hook to hanlde add rating on task
+   * @hookparams - object => @param initialValues - form initail values
+   *                          @param validationSchema - validation schema of form fields
+   *                          @param onSubmit - hanldes form submition
+   */
   const formik = useFormik({
     initialValues: {
-      rating: '',
-      comment: '',
+      rating: "",
+      comment: "",
       selectedDate: ratingForm.selectedDate,
     },
     validationSchema: validationSchema,
@@ -83,61 +131,56 @@ export default function RatingModalBody(props) {
         toast.info(error);
       }
       setLoading(false);
-    }
+    },
   });
 
-
-
-  useEffect(() => {
-    if (data !== undefined && data !== "" && Object.keys(data).length) {
-      console.log("input data",data);
-      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-        date
-      ).padStart(2, "0")}`;
-      setRatingForm((prevRatingData) => ({
-        ...prevRatingData,
-        selectedDate: formattedDate,
-      }));
-      let id = [user._id];
-      id = JSON.stringify(id);
-      localStorage.setItem("userId", id);
-      getTasksDataUsingProjectId(formattedDate);
+  /**
+   * @description gets uses's tasks
+   * @param {*} date
+   */
+  const getTasksDataUsingProjectId = async (date) => {
+    let assignedTo = JSON.parse(localStorage.getItem("userId"));
+    assignedTo = JSON.stringify(assignedTo);
+    // setLoading(true);
+    try {
+      let data = {
+        groupBy: "default",
+        taskFor: "Rating", // for all tasks list (no grouping by project) send 'assignedTo' instaed of default
+        assignedTo: assignedTo,
+        fromDate: convertToUTCDay(date),
+        toDate: convertToUTCNight(date),
+      };
+      console.log(" I am here");
+      const tasks = await getProjectsTask(data);
+      // setLoading(false);
+      if (tasks.error) {
+        toast.dismiss();
+        toast.info(tasks?.error?.message || "Something Went Wrong");
+        // set
+      } else {
+        let allTask = tasks?.data;
+        allTask?.map((task, index) => {
+          task?.tasks?.map((ele, i) => {
+            console.log(ele);
+            if (!ele?.isVerified) {
+              setRatingButtonDisable(true);
+            }
+          });
+        });
+        setUserTasks(allTask);
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.info(error?.error?.message || "Something Went Wrong");
+      // set
+      // setLoading(false);
+      return error.message;
     }
-  }, [data]);
-
-  useEffect(() => {
-    if (
-      userTasks.length > 0 &&
-      userDetails?.role !== "SUPER_ADMIN" &&
-      userDetails?.role !== "ADMIN"
-    ) {
-      let isAnyElementNotVerified = userTasks?.some((element) => {
-        return (
-          element._id.section !== "Misc" &&
-          !element.tasks.every((task) => task.isVerified)
-        );
-      });
-      setIsNotVerified(isAnyElementNotVerified);
-    }
-  }, [userTasks]);
-
-  const handleRatingFormChange = (event) => {
-    const { name, value } = event.target;
-    setRatingForm({
-      ...ratingForm,
-      [name]: value,
-    });
   };
-  
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString();
-    return `${day}-${month}-${year}`;
-  }
-
+  /**
+   * @description handles mark as absent
+   */
   const handleAbsent = async () => {
     setValidated(true);
     let dataToSend = {
@@ -170,7 +213,9 @@ export default function RatingModalBody(props) {
     localStorage.removeItem("userId");
   };
 
-  // Function to handle "Mark as ZERO" button click
+  /**
+   * @description handles mark as zero- rating
+   */
   const handleZeroRating = async () => {
     setValidated(true);
     let dataToSend = {
@@ -202,113 +247,6 @@ export default function RatingModalBody(props) {
     localStorage.removeItem("userId");
   };
 
-  // const handleSubmit = async (event) => {
-  //   setValidated(true);
-  //   event.preventDefault();
-  //   let { rating, comment, selectedDate } = ratingForm;
-
-  //   if (
-  //     !ratingForm.selectedDate ||
-  //     !ratingForm.rating ||
-  //     ratingForm.rating > 6 ||
-  //     ratingForm.rating < 0
-  //   ) {
-  //     return;
-  //   } else {
-  //     // convert date in day month year format for backend
-  //     let dataToSend = {
-  //       rating: rating,
-  //       comment: comment,
-  //       date: selectedDate?.split("-")[2],
-  //       month: selectedDate?.split("-")[1],
-  //       year: selectedDate?.split("-")[0],
-  //       userId: user._id,
-  //     };
-  //     setLoading(true);
-  //     try {
-  //       const rating = await addRatingOnTask(dataToSend);
-  //       setLoading(false);
-  //       if (rating.error) {
-  //         toast.dismiss();
-  //         toast.info(rating?.message || "Something Went Wrong");
-  //         // set
-  //       } else {
-  //         toast.dismiss();
-  //         toast.info("Rating Added Succesfully");
-  //         // set
-  //         setModalShow(false);
-  //       }
-  //     } catch (error) {
-  //       console.log(error, "error");
-  //       setLoading(false);
-  //       toast.dismiss();
-  //       toast.info(error?.message || "Something Went Wrong");
-  //       // set
-  //     }
-  //   }
-  //   localStorage.removeItem("userId");
-  // };
-
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    return localTimeString;
-  }
-
-  function convertToUTCNight(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(23, 59, 59, 999));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    return localTimeString;
-  }
-
-  const getTasksDataUsingProjectId = async (date) => {
-    let assignedTo = JSON.parse(localStorage.getItem("userId"));
-    assignedTo = JSON.stringify(assignedTo);
-    // setLoading(true);
-    try {
-      let data = {
-        groupBy: "default",
-        taskFor: "Rating", // for all tasks list (no grouping by project) send 'assignedTo' instaed of default
-        assignedTo: assignedTo,
-        fromDate: convertToUTCDay(date),
-        toDate: convertToUTCNight(date),
-      };
-      console.log(" I am here")
-      const tasks = await getProjectsTask(data);
-      // setLoading(false);
-      if (tasks.error) {
-        toast.dismiss();
-        toast.info(tasks?.error?.message || "Something Went Wrong");
-        // set
-      } else {
-        let allTask = tasks?.data;
-        allTask?.map((task, index) => {
-          task?.tasks?.map((ele, i) => {
-            console.log(ele);
-            if (!ele?.isVerified) {
-              setRatingButtonDisable(true);
-            }
-          });
-        });
-        setUserTasks(allTask);
-      }
-    } catch (error) {
-      toast.dismiss();
-      toast.info(error?.error?.message || "Something Went Wrong");
-      // set
-      // setLoading(false);
-      return error.message;
-    }
-  };
-
   return (
     <>
       {loading ? (
@@ -322,76 +260,76 @@ export default function RatingModalBody(props) {
               </div>
             ) : (
               <Form onSubmit={formik.handleSubmit} className="margin-form">
-          <Row className="mb-3">
-            <Col as={Col} md="12">
-              <h3 className="userName">{user?.name}</h3>
-            </Col>
+                <Row className="mb-3">
+                  <Col as={Col} md="12">
+                    <h3 className="userName">{user?.name}</h3>
+                  </Col>
 
-            <Form.Group as={Col} md="6">
-            <Form.Label>Date</Form.Label>
-              <Form.Control
-                required
-                type="date"
-                name="selectedDate"
-                disabled="true"
-                max={new Date().toISOString().split('T')[0]}
-                defaultValue={ratingForm.selectedDate}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.selectedDate && formik.errors.selectedDate ? (
-                <div className="error">{formik.errors.selectedDate}</div>
-              ) : null}
-            </Form.Group>
+                  <Form.Group as={Col} md="6">
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control
+                      required
+                      type="date"
+                      name="selectedDate"
+                      disabled="true"
+                      max={new Date().toISOString().split("T")[0]}
+                      defaultValue={ratingForm.selectedDate}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.selectedDate &&
+                    formik.errors.selectedDate ? (
+                      <div className="error">{formik.errors.selectedDate}</div>
+                    ) : null}
+                  </Form.Group>
 
-            <Form.Group as={Col} md="6">
-              <Form.Label>Rating</Form.Label>
-              <select
-                required
-                as="select"
-                name="rating"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.rating}
-              >
-                <option value="" disabled>
-                  Select Rating
-                </option>
-                {ratingValues.map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-              {formik.touched.rating && formik.errors.rating ? (
-                <div className="error">{formik.errors.rating}</div>
-              ) : null}
-            </Form.Group>
-          </Row>
+                  <Form.Group as={Col} md="6">
+                    <Form.Label>Rating</Form.Label>
+                    <select
+                      required
+                      as="select"
+                      name="rating"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.rating}
+                    >
+                      <option value="" disabled>
+                        Select Rating
+                      </option>
+                      {ratingValues.map((value) => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select>
+                    {formik.touched.rating && formik.errors.rating ? (
+                      <div className="error">{formik.errors.rating}</div>
+                    ) : null}
+                  </Form.Group>
+                </Row>
 
-          {/* Other form fields ... */}
+                {/* Other form fields ... */}
 
-
-          <Row className="desc">
-            <Col>
-              <textarea
-                name="comment"
-                placeholder="comment"
-                value={formik.values.comment}
-                onChange={formik.handleChange}
-              />
-            </Col>
-            <Button
-              size="sm"
-              md="6"
-              type="submit"
-              className="text-center"
-              style={{ marginTop: '20px' }}
-            >
-              Submit
-            </Button>
-          </Row>
-        </Form>
+                <Row className="desc">
+                  <Col>
+                    <textarea
+                      name="comment"
+                      placeholder="comment"
+                      value={formik.values.comment}
+                      onChange={formik.handleChange}
+                    />
+                  </Col>
+                  <Button
+                    size="sm"
+                    md="6"
+                    type="submit"
+                    className="text-center"
+                    style={{ marginTop: "20px" }}
+                  >
+                    Submit
+                  </Button>
+                </Row>
+              </Form>
             )
           ) : (
             <div className="rating-container">

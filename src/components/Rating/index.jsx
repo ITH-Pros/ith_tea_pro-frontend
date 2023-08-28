@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useContext } from "react";
+import React from "react";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import "./index.css";
@@ -7,22 +6,21 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Offcanvas, Row, Table } from "react-bootstrap";
 import { getRatings, verifyManager } from "@services/user/api";
-// import { useAuth } from "../../../auth/AuthProvider";
-import RatingBox from "../ratingBox";
+import RatingBox from "./ratingBox";
 import Loader from "../Shared/Loader";
-import MyCalendar from "./weekCalendra";
-import RatingModalBody from "../add-rating-modal/index.jsx";
-import TasksModalBody from "../add-rating-modal/viewTaskModal";
+import MyCalendar from "./weekCalendar/weekCalendra";
+import RatingModalBody from "./add-rating-modal/index.jsx";
+import TasksModalBody from "./view-task-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
-import LoadingSpinner from "@components/Shared/Spinner/spinner";
 
 var month = moment().month();
 let currentYear = moment().year();
 
-export default function Dashboard(props) {
-  const [loading, setLoading] = useState(false);
+export default function ViewRating() {
+  /* state variables start */
+
   const [teamView, setTeamView] = useState(undefined);
   const { userDetails } = useAuth();
   const [days, setDays] = useState(moment().daysInMonth());
@@ -40,6 +38,12 @@ export default function Dashboard(props) {
   const [boxDetails, setBoxDetails] = useState(null);
   const [raitngForDay, setRatingForDay] = useState();
 
+  /* state variables end */
+
+  /**
+   * @description useEffect hook - executes on component load - checks if team view should open
+   * @todo needs to be optimised
+   */
   useEffect(() => {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     if (allowedRoles.includes(userDetails?.role)) {
@@ -49,14 +53,13 @@ export default function Dashboard(props) {
     }
   }, []);
 
-  useEffect(() => {
-    if (modalShow === false && teamView) {
-      onInit();
-    }
-  }, [modalShow, teamView]);
+  /**
+   * @description useEffect hook - executes on component load
+   *              verifies that logged in user has permission to assign rating
+   * @dependency boxDetails - hook executes again when boxDetails changes
+   */
 
   useEffect(() => {
-    console.log("box details changed", boxDetails);
     if (boxDetails?.user?._id) {
       const dataToSend = {
         userId: boxDetails?.user._id,
@@ -66,6 +69,33 @@ export default function Dashboard(props) {
     }
   }, [boxDetails]);
 
+  /**
+   * @description React Query hook -Executes instantly
+   * @statemanagement manages state internally by react hooks
+   * @constant data data return from api
+   * @constant isLoading Boolean that shows api state
+   * @constant refetch refetch function -if needed to call manually
+   */
+
+  const {
+    data: ratingsArray,
+    isLoading,
+    refetch: getAllRatings,
+  } = useQuery(
+    ["getAllRatings", monthUse, yearUse],
+    () => getRatings({ month: months.indexOf(monthUse) + 1, year: yearUse }),
+    {
+      refetchOnWindowFocus: false,
+      select: (data) => data.data,
+      onError: (err) => {
+        throw new Error(err?.message || "Something Went Wrong");
+      },
+    }
+  );
+
+  /**
+   * @description React Query Mutation -used for verifying manager has access for rating or not
+   */
   const verifyManagerMutation = useMutation((data) => verifyManager(data), {
     onError: (error) => {
       toast.dismiss();
@@ -93,75 +123,11 @@ export default function Dashboard(props) {
     },
   });
 
-  const isWeekend = (dayOfWeek) => {
-    return dayOfWeek === 0 || dayOfWeek === 6;
-  };
-
-  function onInit() {
-    let dataToSend = {
-      month: months.indexOf(monthUse) + 1,
-      year: yearUse,
-    };
-    getAllRatings(dataToSend);
-  }
-
-  const onchangeMonth = (e) => {
-    setMonth(e.target.value);
-    let dataToSend = {
-      month: months.indexOf(e.target.value) + 1,
-      year: yearUse,
-    };
-    let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
-    setDays(monthDays.getDate());
-    getAllRatings(dataToSend);
-  };
-
-  const onChangeYear = (e) => {
-    setYear(e.target.value);
-    let dataToSend = {
-      month: months.indexOf(monthUse) + 1,
-      year: e.target.value,
-    };
-    getAllRatings(dataToSend);
-  };
-
-  async function getAllRatings(data) {
-    if (!data) {
-      data = {
-        month: months.indexOf(monthUse) + 1,
-        year: yearUse,
-      };
-    }
-  }
-
-  const {
-    data: ratingsArray,
-    isLoading,
-    refetch,
-  } = useQuery(
-    ["getAllRatings", months.indexOf(monthUse) + 1, yearUse],
-    async () => {
-      const data = {
-        month: months.indexOf(monthUse) + 1,
-        year: yearUse,
-      };
-      const rating = await getRatings(data);
-      if (rating.error) {
-        throw new Error(rating?.message || "Something Went Wrong");
-      } else {
-        return rating.data;
-      }
-    },
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  const hideModal = () => {
-    setModalShow(false);
-    localStorage.removeItem("userId");
-    // setRatingForDay();
-  };
+  /**
+   * @description handles the click event on rating table body
+   *             -created by @vijay to handle all click events on cell from one place
+   * @param event -Click event
+   */
 
   const handleTableClick = (event) => {
     let isFilled = event.target?.dataset?.filled;
@@ -190,6 +156,44 @@ export default function Dashboard(props) {
     }
   };
 
+  /**
+   * @description checks if day is weekend day or not
+   * @param dayOfWeek - day number of week
+   * @returns Bollean- true or false
+   */
+  const isWeekend = (dayOfWeek) => {
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  };
+
+  /**
+   * @description executes on month change in dropdown
+   * @param e change event
+   */
+  const onchangeMonth = (e) => {
+    setMonth(e.target.value);
+    let monthDays = new Date(yearUse, months.indexOf(e.target.value) + 1, 0);
+    setDays(monthDays.getDate());
+  };
+
+  /**
+   * @description executes on change year
+   * @param e change event
+   */
+  const onChangeYear = (e) => {
+    setYear(e.target.value);
+  };
+
+  /**
+   * @description hides add rating modal
+   */
+  const hideModal = () => {
+    setModalShow(false);
+    localStorage.removeItem("userId");
+    // setRatingForDay();
+  };
+
+
+
   return (
     <div>
       <Offcanvas
@@ -213,13 +217,23 @@ export default function Dashboard(props) {
           {userDetails?.role !== "CONTRIBUTOR" ? (
             <RatingModalBody
               data={ratingData}
-              setModalShow={setModalShow}
+              setModalShow={(data) => {
+                setModalShow(data);
+                if (data === false && teamView) {
+                  getAllRatings();
+                }
+              }}
               raitngForDay={raitngForDay}
             />
           ) : (
             <TasksModalBody
               data={ratingData}
-              setModalShow={setModalShow}
+              setModalShow={(data) => {
+                setModalShow(data);
+                if (data === false && teamView) {
+                  getAllRatings();
+                }
+              }}
               raitngForDay={raitngForDay}
             />
           )}
@@ -366,7 +380,6 @@ export default function Dashboard(props) {
                         const isCurrentUserManager = user?.managerIds?.includes(
                           userDetails?.id
                         );
-                        console.log(isCurrentUserManager, user);
 
                         return (
                           <tr
@@ -514,7 +527,6 @@ export default function Dashboard(props) {
             </div>
           </div>
 
-          {loading ? <Loader /> : null}
           <div></div>
         </div>
       ) : (

@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 import LoadingSpinner from "../Shared/Spinner/spinner";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+import { formatDateToRating } from "@helpers/index";
 export default function ViewTaskModal(props) {
   const {
     closeViewTaskModal,
@@ -118,17 +119,6 @@ export default function ViewTaskModal(props) {
     setText(content);
   };
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = date.getUTCDate().toString().padStart(2, "0");
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-    const year = date.getUTCFullYear();
-    if (day && month && year) {
-      return `${day}/${month}/${year}`;
-    } else {
-      return "--";
-    }
-  }
 
   const updateTaskStatus = async (dataToSend) => {
     mutationUpdateTask.mutate(dataToSend, {
@@ -276,7 +266,7 @@ export default function ViewTaskModal(props) {
                 <Form.Group as={Col} md="3" className="px-1">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {task?.dueDate ? formatDate(task?.dueDate) : "--"}{" "}
+                    {task?.dueDate ? formatDateToRating(task?.dueDate) : "--"}{" "}
                   </p>
                 </Form.Group>
 
@@ -315,7 +305,7 @@ export default function ViewTaskModal(props) {
                     {task?.status === "COMPLETED" && (
                       <Form.Group as={Col} md="3">
                         <Form.Label>Completed Date : </Form.Label>
-                        <p>{formatDate(task?.completedDate) || "--"} </p>
+                        <p>{formatDateToRating(task?.completedDate) || "--"} </p>
                       </Form.Group>
                     )}
 

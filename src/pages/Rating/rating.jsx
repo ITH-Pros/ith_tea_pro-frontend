@@ -9,7 +9,7 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "animate.css/animate.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import ViewRatings from "@components/View-Rating";
+import ViewRatings from "@components/Rating";
 import { useLocation } from "react-router-dom";
 import { FaUser, FaHome, FaGem, FaList, FaRegLaughWink } from "react-icons/fa";
 import {

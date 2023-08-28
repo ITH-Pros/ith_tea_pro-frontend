@@ -30,7 +30,7 @@ import {
   getUserDetailsByUserId,
 } from "@services/user/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import RatingGraph from "@components/rating-graph/rating-graph";
+import RatingGraph from "@components/Rating/rating-graph/rating-graph";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 
@@ -123,16 +123,6 @@ export default function TeamReport(props) {
     }
   }, [userDetails]);
 
-
-  function convertToUTCDay(dateString) {
-    let utcTime = new Date(dateString);
-    utcTime = new Date(utcTime.setUTCHours(0, 0, 0, 0));
-    const timeZoneOffsetMinutes = new Date().getTimezoneOffset();
-    const timeZoneOffsetMs = timeZoneOffsetMinutes * 60 * 1000;
-    const localTime = new Date(utcTime.getTime() + timeZoneOffsetMs);
-    let localTimeString = new Date(localTime.toISOString());
-    return localTimeString;
-  }
 
   const getUserReport =  () => {
     if (!selectedOption?.value || !selectedEvent) {

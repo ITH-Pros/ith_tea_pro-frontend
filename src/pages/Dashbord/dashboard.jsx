@@ -13,7 +13,7 @@ import {
 } from "@services/user/api";
 import { useNavigate } from "react-router-dom";
 import AddTaskModal from "@components/AddTaskModal";
-import AddRatingModal from "@components/add-rating-modal";
+import AddRatingModal from "@components/Rating/add-rating-modal/index";
 import UserForm from "../edit-profile";
 import ViewTaskModal from "@components/view-task";
 import Offcanvas from "react-bootstrap/Offcanvas";

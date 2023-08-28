@@ -15,7 +15,7 @@ import Tasks from "@pages/Tasks/tasks";
 import TeamReport from "@pages/Team-report";
 import User from "@pages/User";
 import AddUser from "@pages/User/AddUser";
-import ViewUserTasks from "@components/View-Rating/viewUserTasks";
+import ViewUserTasks from "@pages/Rating/viewUserTasks";
 import ViewTask from "@pages/Rating/View-Rating/viewTask";
 import Project from "../../pages/Projects";
 import { useAuth } from "../../utlis/AuthProvider";
