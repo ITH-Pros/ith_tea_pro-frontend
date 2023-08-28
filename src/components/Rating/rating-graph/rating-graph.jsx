@@ -8,6 +8,7 @@ import { Chart, registerables } from "chart.js";
 import { Row, Col } from "react-bootstrap";
 import { enUS } from "date-fns/locale";
 import { useQuery } from "react-query";
+import { getTotalDaysInMonth } from "@helpers/index";
 
 Chart.register(...registerables);
 
@@ -147,16 +148,7 @@ export default function RatingGraph(props) {
     }
   };
 
-  function getTotalDaysInMonth(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Months are zero-based, so add 1
 
-    const totalDays = new Date(year, month, 0).getDate();
-    console.log(totalDays);
-
-    return totalDays;
-  }
 
   const daysInMonth = (date) => {
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);

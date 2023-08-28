@@ -33,6 +33,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import RatingGraph from "@components/Rating/rating-graph/rating-graph";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
+import { convertToUTCDay } from "@helpers/index";
 
 const customStyles = {
   option: (provided) => ({
