@@ -419,7 +419,7 @@ export default function AddTaskModal(props) {
                     onBlur={formik.handleBlur}
                     value={formik.values.projectId}
                     disabled={
-                      selectedTask || handleProjectId || selectedProjectFromTask
+                      selectedTask  || selectedProjectFromTask
                     }
                   >
                     <option selected value="" disabled>
