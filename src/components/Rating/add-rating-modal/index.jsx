@@ -563,8 +563,8 @@ export default function RatingModalBody(props) {
         // When there are no tasks available for rating
 
         <div>
-          {raitngForDay === 0 && <p>No tasks available for rating .</p>}
-          {raitngForDay === -1 && <p>You are marked absent.</p>}
+          {raitngForDay == 0 && <p>No tasks available for rating .</p>}
+          {raitngForDay == -1 && <p>You are marked absent.</p>}
           {(raitngForDay === null ||
             raitngForDay === "" ||
             raitngForDay === undefined) && (

@@ -215,11 +215,7 @@ export default function ViewRating() {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             {" "}
-            {userDetails?.role !== "CONTRIBUTOR"
-              ? raitngForDay >= -1
-                ? "View Tasks"
-                : "Add Rating"
-              : "View Tasks"}
+            {userDetails?.role !== "CONTRIBUTOR" ? (raitngForDay >= -1 ? "View Tasks"  : "Add Rating"): "View Tasks"}
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
