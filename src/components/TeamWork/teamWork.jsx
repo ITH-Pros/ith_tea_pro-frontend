@@ -35,15 +35,6 @@ const Teamwork = ({
           <Row>
             <Col lg={6} className="left-add">
               <span>Team Work</span>
-              {userDetails?.role !== "GUEST" && (
-                <i
-                  onClick={() => {
-                    setShowAddTask(true);
-                  }}
-                  className="fa fa-plus-circle"
-                  style={{ cursor: "pointer" }}
-                ></i>
-              )}
             </Col>
             <Col lg={6} className="right-filter"></Col>
           </Row>

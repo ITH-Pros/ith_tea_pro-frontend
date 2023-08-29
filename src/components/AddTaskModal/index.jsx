@@ -345,18 +345,12 @@ export default function AddTaskModal(props) {
     if (selectedTask) {
       formik.setFieldValue("projectId", selectedTask?.projectId);
       formik.setFieldValue("section", selectedTask?.section);
-      formik.setFieldValue(
-        "leads",
-        selectedTask?.lead[0]._id || selectedTask?.lead[0]
-      );
+      formik.setFieldValue("leads", selectedTask?.lead[0]?._id || selectedTask?.lead[0]);
       formik.setFieldValue("assignedTo", selectedTask?.assignedTo?._id);
       formik.setFieldValue("description", selectedTask?.description);
       formik.setFieldValue("miscType", selectedTask?.miscType) ;
-      formik.setFieldValue("title", selectedTask.title);
-      formik.setFieldValue(
-        "defaultTaskTime.hours",
-        selectedTask?.defaultTaskTime?.hours
-      );
+      formik.setFieldValue("title", selectedTask?.title);
+      formik.setFieldValue("defaultTaskTime.hours",selectedTask?.defaultTaskTime?.hours );
       formik.setFieldValue(
         "defaultTaskTime.minutes",
         selectedTask?.defaultTaskTime?.minutes
@@ -431,7 +425,7 @@ export default function AddTaskModal(props) {
                       </option>
                     ))}
                   </Form.Control>
-                  {formik.touched.projectId && formik.errors.projectId ? (
+                  {formik?.touched?.projectId && formik?.errors?.projectId ? (
                     <div className="text-danger pull-right">
                       {formik.errors.projectId}
                     </div>
