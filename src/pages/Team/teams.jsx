@@ -424,17 +424,18 @@ export default function Teams() {
       return error.message;
     }
   };
+  const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
   const redirectToTeamReport = (user) => {
-    if (userDetails?.role === "CONTRIBUTOR") {
-      return;
+    if (allowedRoles.includes(userDetails?.role)) {
+      let data = {
+        label: user?.name,
+        value: user?._id,
+      };
+      // console.log(data)
+      localStorage.setItem("selectedOptions", JSON.stringify(data));
+      navigate("/team-report");
     }
-    let data = {
-      label: user?.name,
-      value: user?._id,
-    };
-    // console.log(data)
-    localStorage.setItem("selectedOptions", JSON.stringify(data));
-    navigate("/team-report");
+    return;
   };
 
   const AssignedManager = (user) => {
@@ -836,16 +837,16 @@ export default function Teams() {
           <Modal.Body>
             <div className="search-container">
               <div className="manager-list-container">
-                {managerList.map((manager) => (
-                  <label key={manager._id} className="manager-label">
+                {managerList?.map((manager) => (
+                  <label key={manager?._id} className="manager-label">
                     <input
                       type="checkbox"
                       value={manager._id}
-                      checked={selectedManagers.includes(manager._id)}
-                      onChange={() => handleManagerSelection(manager._id)}
+                      checked={selectedManagers.includes(manager?._id)}
+                      onChange={() => handleManagerSelection(manager?._id)}
                     />
                     <span className="checkmark"></span>
-                    <span className="manager-name">{manager.name}</span>
+                    <span className="manager-name">{manager?.name}</span>
                   </label>
                 ))}
               </div>
