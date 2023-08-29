@@ -123,7 +123,7 @@ export default function AddUser(props) {
           </Button>
         </div>
       </Form>
-      {formik.isSubmitting ? <Loader /> : null}
+      {mutation.isLoading ? <Loader /> : null}
     </div>
   );
 }

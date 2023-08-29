@@ -102,7 +102,7 @@ const MyWorkComponent = ({
         </div>
             )}
             {!myWorkList ||
-              (myWorkList?.length === 0 && (
+              (myWorkList?.length === 0 && !isFetching && !isLoading && (
                 <Row>
                   <Col lg="12">
                     <p>No task found.</p>

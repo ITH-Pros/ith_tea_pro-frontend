@@ -5,20 +5,18 @@ import { FaUser } from "react-icons/fa";
 import "./team-list.css";
 import UserIcon from "../ProfileImage/profileImage";
 import { useQuery } from "react-query";
+import { Spinner } from "react-bootstrap";
 // import UserIcon from "../Projects/ProjectCard/profileImage";
-
 
 export default function ViewTeamList(props) {
   const { isTeamList, getTeamListForLogginUser } = props;
   // const [teamList, setTeamList] = useState([]);
 
-
-  const { data: teamList } = useQuery("teamList" , fetchTeamList, {
+  const { data: teamList, isLoading } = useQuery("teamList", fetchTeamList, {
     refetchOnWindowFocus: false,
     enabled: isTeamList,
     select: (data) => data?.data?.users,
   });
-    
 
   return (
     <Offcanvas
@@ -32,15 +30,21 @@ export default function ViewTeamList(props) {
         <Offcanvas.Title>Team List</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
+        {isLoading && <Spinner className="text-center" animation="border" variant="primary" />}
+
         <div className="container">
           <ul className="team-list">
-            {teamList.map((team , index) => (
+            {teamList?.map((team, index) => (
               <li key={team?.id} className="team-item">
                 {team?.profilePicture ? (
-                  <img src={team?.profilePicture} alt="Profile" className="profile-image" />
+                  <img
+                    src={team?.profilePicture}
+                    alt="Profile"
+                    className="profile-image"
+                  />
                 ) : (
                   <div className="icon profile-image">
-                  <UserIcon key={index}  firstName={team?.name} />
+                    <UserIcon key={index} firstName={team?.name} />
                   </div>
                 )}
                 <div className="team-details">
