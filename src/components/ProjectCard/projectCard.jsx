@@ -560,7 +560,7 @@ const ProjectCard = ({
                           <option value="">Select a role</option>
                           <option value="CONTRIBUTOR">CONTRIBUTOR</option>
                           <option value="LEAD">LEAD</option>
-                          <option value="GUEST">GUEST</option>
+                          {/* <option value="GUEST">GUEST</option> */}
                         </select>
                         {selectedRole === "CONTRIBUTOR" && (
                           <Select
@@ -601,6 +601,8 @@ const ProjectCard = ({
                       {selectedUnassignedUsers && (
                         <div className="mb-3 pull-right">
                           <Button
+                          disabled={selectedUnassignedUsers?.length === 0}
+
                             variant="success"
                             size="sm"
                             onClick={assignTeamUsers}
