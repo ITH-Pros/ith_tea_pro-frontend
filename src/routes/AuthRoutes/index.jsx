@@ -15,6 +15,7 @@ const LoginRoutes = () => {
         <Route element={<ForgotPassword />} path="forgot-password" />
         <Route element={<ResetPassword />} path="otp" />
         <Route element={<PasswordForm />} path="newpassword" />
+        {/* <Route path="/set-password/:token" element={<PasswordForm />} /> */}
       </Route>
     </Routes>
   );
