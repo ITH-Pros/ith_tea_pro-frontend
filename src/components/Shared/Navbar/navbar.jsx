@@ -10,6 +10,8 @@ import { useAuth } from "../../../utlis/AuthProvider.jsx";
 export default function Navbar() {
   const { userDetails ,accessToken } = useAuth();
 
+  const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
+
   const navLinkStyles = ({ isActive }) => {
     return {
       fontWeight: isActive ? "bold" : "normal",
@@ -67,7 +69,7 @@ export default function Navbar() {
                 >
                   <MenuItem icon={<FaUsers />}> Team </MenuItem>
                 </NavLink>
-                {userDetails?.role !== 'CONTRIBUTOR' && (
+                {allowedRoles.includes(userDetails?.role) && (
                   <NavLink
                     to="/team-report"
                     style={navLinkStyles}
