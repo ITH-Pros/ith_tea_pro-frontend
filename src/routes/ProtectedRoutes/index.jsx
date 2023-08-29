@@ -207,8 +207,6 @@ const PrivateRoutes = () => {
           }
         />
 
-        <Route path="*" element={<h1>No match</h1>} />
-
         <Route
           path="/view-task/:taskId"
           element={
@@ -217,6 +215,7 @@ const PrivateRoutes = () => {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<h1>No match</h1>} />
       </Routes>
     </Layout>
   );

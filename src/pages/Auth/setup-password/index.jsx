@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 import "./index.css";
 import { toast } from "react-toastify";
+import { useMutation, useQuery } from "react-query";
 
 const PasswordSchema = Yup.object().shape({
   password: Yup.string()
@@ -25,6 +26,7 @@ function PasswordForm() {
     ["verifyToken", token],
     () => verifyTokenApi({ token }),
     {
+      refetchOnWindowFocus: false,
       onSuccess: (data) => {
         if (!data.error) {
           toast.info(data.message);
@@ -58,21 +60,21 @@ function PasswordForm() {
     if (isVerifyTokenError) {
       navigate("/login");
     }
-  }, [isVerifyTokenError, navigate]);
+  }, [isVerifyTokenError]);
 
   return (
     <div className="set-password">
-    <Formik
-      initialValues={{
-        password: "",
-        confirmPassword: "",
-        email: verifyTokenData?.data?.email || "",
-      }}
-      validationSchema={PasswordSchema}
-      onSubmit={handleSubmit}
-      enableReinitialize
-    >
-      {({ values, handleChange }) => (
+      <Formik
+        initialValues={{
+          password: "",
+          confirmPassword: "",
+          email: verifyTokenData?.data?.email || "",
+        }}
+        validationSchema={PasswordSchema}
+        onSubmit={handleSubmit}
+        // enableReinitialize
+      >
+        {({ values, handleChange }) => (
           <Form className="password-form">
             <h4>Set Password</h4>
             <div className="hed-pass">
