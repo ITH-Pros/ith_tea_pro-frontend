@@ -78,6 +78,7 @@ const ProjectCard = ({
   // getAndSetAllProjects,
   handleArchiveModalShow,
   isArchive,
+  refetchProjectList
 }) => {
   const [modalshow, setModalShow] = useState(false);
   const [users, setUsers] = useState([]);
@@ -111,6 +112,7 @@ const ProjectCard = ({
 
   const assignLeadMutation = useMutation(assignProjectLead, {
     onSuccess: (data) => {
+      refetchProjectList();
       toast.success(data?.message);
       resetAllTheStates();
     },
@@ -122,6 +124,7 @@ const ProjectCard = ({
 
   const assignTeamMutation = useMutation(assignTeamAPI, {
     onSuccess: (data) => {
+      refetchProjectList();
       toast.success(data?.message);
       resetAllTheStates();
     },
@@ -272,6 +275,7 @@ const ProjectCard = ({
         return;
       } else {
         // getAndSetAllProjects();
+        refetchProjectList();
         setShowConfirmation(false);
         setSelectedUser(null);
         setSelectedUserName(null);

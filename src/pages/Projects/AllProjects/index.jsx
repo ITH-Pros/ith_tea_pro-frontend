@@ -268,6 +268,8 @@ export default function AllProject() {
                       handleArchiveModalShow(element)
                     }
                     isArchive={isArchive}
+                    refetchProjectList={refetchProjectList}
+
                   />
                 </div>
               );
