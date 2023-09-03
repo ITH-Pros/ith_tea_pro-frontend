@@ -181,13 +181,13 @@ const Tasks = () => {
 
   /* @update section */
 
-  const editSection = (sectionId, projectId) => {
+  const editSection = (sectionId) => {
     setSelectedProjectId(sectionId?.projectId);
     setSectionName(sectionId?.section);
     setSelectedSectionId(sectionId?._id);
     setModalShow(true);
     setSectionEditMode(true);
-    sectionUpdate();
+    // sectionUpdate();
   };
 
   const sectionUpdate = async () => {
@@ -270,11 +270,15 @@ const Tasks = () => {
   /* @add section */
 
   const addSection = async () => {
-    let dataToSend = {
-      name: sectionName,
-      projectId: selectedProjectId,
-    };
-    addSectionMutation.mutate(dataToSend);
+    if (!sectionEditMode) {
+      let dataToSend = {
+        name: sectionName,
+        projectId: selectedProjectId,
+      };
+      addSectionMutation.mutate(dataToSend);
+    } else {
+      sectionUpdate();
+    }
   };
 
   const addSectionMutation = useMutation(addSectionApi, {
