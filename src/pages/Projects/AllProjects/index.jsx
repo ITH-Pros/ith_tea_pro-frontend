@@ -110,7 +110,6 @@ export default function AllProject() {
         if (data?.error) {
           toast.dismiss();
           toast.info(data?.message || "Something Went Wrong");
-          // set
         } else {
           return data?.data;
         }
@@ -134,7 +133,6 @@ export default function AllProject() {
     * @param: projectId
     * @return: delete project
     * */
-
 
   const deleteProject = async () => {
       let dataToSend = {

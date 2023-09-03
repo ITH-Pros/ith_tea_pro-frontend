@@ -318,15 +318,13 @@ const ProjectCard = ({
               <div className="dropdown-content">
                 {!isArchive && (
                   <a
+                  href="#1"
                     onClick={() => {
                       handleEdit();
                     }}
                   >
                     {" "}
-                    <i
-                      className="fa fa-pencil-square"
-                      aria-hidden="true"
-                    ></i>{" "}
+                    <i class="fa fa-pencil" aria-hidden="true"></i>{" "}
                     Edit Project
                   </a>
                 )}

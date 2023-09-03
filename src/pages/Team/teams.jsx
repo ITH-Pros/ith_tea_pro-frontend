@@ -158,11 +158,12 @@ export default function Teams() {
 
   const assignManagersMutation = useMutation(assignManagerTOUserByIds, {
     onSuccess: (data) => {
+      refetchUsersList();
+      refetchUsers();
       toast.dismiss();
       toast.info(data?.message || "Something Went Wrong");
       setAssignManagerModalShow(false);
-      onInit();
-    },
+        },
     onError: (error) => {
       toast.dismiss();
       toast.info(error?.message || "Something Went Wrong");
@@ -173,7 +174,7 @@ export default function Teams() {
 
   /* ************* Get All Users analytics ************* */
 
-  const { data: userAnalytics, isLoading: isLoadingUserAnalytics } = useQuery(
+  const { data: userAnalytics, isLoading: isLoadingUserAnalytics , refetch:refetchUsersList } = useQuery(
     ["userAnalytics", usersList],
     () => getUserAnalytics(),
     {
