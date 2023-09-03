@@ -79,8 +79,8 @@ export default function AllProject() {
     return dataToSend;
   };
 
-  const {isLoading , data:projectList , isFetching } = useQuery(
-    ["projectListData" , isArchive , confirmModalShow , isArchiveModalShow],
+  const {isLoading , data:projectList , isFetching , refetch:refetchProjectList} = useQuery(
+    ["projectListData" , isArchive  ],
    ()=> getAllProjects(fetchAllProjects()),
     {
       enabled: true,
@@ -150,6 +150,7 @@ export default function AllProject() {
         toast.info(data?.message || "Something Went Wrong");
         return;
       } else {
+        refetchProjectList();
         toast.dismiss();
         toast.info(data?.message || "Something Went Wrong");
         setConfirmModalShow(false);
@@ -189,6 +190,7 @@ export default function AllProject() {
         setIsArchiveModalShow(false);
         return;
       } else {
+        refetchProjectList();
         toast.dismiss();
         toast.info(data?.message || "Something Went Wrong");
         setConfirmModalShow(false);
