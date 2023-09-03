@@ -738,10 +738,10 @@ const Tasks = () => {
               variant="secondary"
               onClick={() => setDeleteSectionModal(false)}
             >
-              Close
+              Cancel
             </Button>
             <Button variant="primary" onClick={() => deleteSection()}>
-              Save Changes
+              Delete
             </Button>
           </Modal.Footer>
         </Modal>
