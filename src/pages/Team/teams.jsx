@@ -219,31 +219,31 @@ export default function Teams() {
     return (
       <>
         {projectList &&
-          projectList.map((project, index) => {
-            const checkAlreadyAssigned = userAssignedProjects.find(
-              (ele) => ele._id === project._id
+          projectList?.map((project, index) => {
+            const checkAlreadyAssigned = userAssignedProjects?.find(
+              (ele) => ele?._id === project?._id
             );
-            const isSelected = selectedProjectIds.includes(project._id);
+            const isSelected = selectedProjectIds?.includes(project?._id);
             return (
-              <div key={project._id} className="assignPro">
+              <div key={project?._id} className="assignPro">
                 <input
                   disabled={checkAlreadyAssigned}
                   checked={checkAlreadyAssigned || isSelected}
                   onChange={() => {
                     if (isSelected) {
                       setSelectedProjectIds(
-                        selectedProjectIds.filter((id) => id !== project._id)
+                        selectedProjectIds?.filter((id) => id !== project?._id)
                       );
                     } else {
                       setSelectedProjectIds([
                         ...selectedProjectIds,
-                        project._id,
+                        project?._id,
                       ]);
                     }
                   }}
                   type="checkbox"
                 />
-                <span>{project.name}</span>
+                <span>{project?.name}</span>
                 {projectLoading && (
                   <Spinner animation="border" variant="primary" />
                 )}
@@ -283,6 +283,12 @@ export default function Teams() {
   });
 
   const handleAssignUserProjectSubmit = async () => {
+    if (selectedProjectIds.length === 0) {
+      toast.dismiss();
+      toast.info("Please select project");
+      return;
+    }
+
     let dataToSend = {
       projectIds: selectedProjectIds,
       userId: selectedUserId,

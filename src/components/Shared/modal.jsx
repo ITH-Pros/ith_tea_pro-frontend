@@ -59,7 +59,6 @@ const Modals = (props) => {
         {modalBody}
 
         <button
-          disabled={submitBtnDisabled}
           className="btn btn-primary mt-3 pull-right"
           onClick={onClick}
         >
