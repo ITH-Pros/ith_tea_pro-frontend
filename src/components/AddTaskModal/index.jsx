@@ -70,6 +70,7 @@ export default function AddTaskModal(props) {
   const [isAnotherTask, setIsAnotherTask] = useState(false);
   const miscTypeArray = CONSTANTS.MISCTYPE;
   const [isResetAttachment, setIsResetAttachment] = useState(false);
+  // const [isAddAnother, setAddAnother] = useState(false);
   // const [categoryList, setCategoryList] = useState([]);
   // const [leadLists, setLeadLists] = useState([]);
   // const [userList, setUserList] = useState([]);
@@ -767,7 +768,7 @@ export default function AddTaskModal(props) {
                       type="button"
                       onClick={() => {
                         formik.handleSubmit;
-                        setAddAnother(true);
+                        // setIsAnotherTask(true);
                       }}
                     >
                       Create And Add Another
