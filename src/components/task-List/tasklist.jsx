@@ -130,14 +130,14 @@ const TaskList = ({
                           Edit Section
                         </Dropdown.Item>
                       )}
-                      {!isArchive && (
+                      {/* {!isArchive && (
                         <Dropdown.Item>
                           <i className="fa fa-files-o" aria-hidden="true"></i>{" "}
                           Copy/Move
                         </Dropdown.Item>
-                      )}
+                      )} */}
                       <Dropdown.Item
-                        disabled={project?.tasks?.length > 0}
+                        // disabled={project?.tasks?.length > 0}
                         onClick={() =>
                           deleteConFirmation({
                             _id: project?.sectionId,

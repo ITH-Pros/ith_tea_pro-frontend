@@ -350,10 +350,10 @@ const Tasks = () => {
         );
       }
       if (filterData?.priority && filterData.priority?.length > 0) {
-        data.priority = JSON.stringify(filterData.priority);
+        data.priority = JSON.stringify(filterData?.priority?.value);
       }
       if (filterData?.status && filterData.status?.length > 0) {
-        data.status = JSON.stringify(filterData.status);
+        data.status = JSON.stringify(filterData?.status?.value);
       }
       if (filterData?.sortType) {
         data.sortType = JSON.stringify(filterData.sortType);
