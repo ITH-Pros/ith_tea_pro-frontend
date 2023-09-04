@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import Dashboard from "@pages/Dashbord/dashboard";
 import ProjectGrid from "@components/FreeResource/projectGrid";
 import AllProject from "@pages/Projects/AllProjects";
 import AddProject from "@components/AddProject";
-// import { CheckRole } from "./components/checkRole";
 import Rating from "@pages/Rating/rating";
 import UserForm from "@pages/edit-profile";
-import ResetPassword from "@pages/Auth/ResetPassword/resetPassword";
 import Navbar from "@components/Shared/Navbar/navbar";
 import Header from "@components/Shared/Header";
 import Teams from "@pages/Team/teams";
@@ -18,27 +16,7 @@ import AddUser from "@pages/User/AddUser";
 import ViewUserTasks from "@pages/Rating/viewUserTasks";
 import ViewTask from "@pages/Rating/View-Rating/viewTask";
 import Project from "../../pages/Projects";
-import { useAuth } from "../../utlis/AuthProvider";
-
-// Custom PrivateRoute component to check for authentication
-const PrivateRoute = ({ children }) => {
-  const { userDetails } = useAuth();
-  if (!Object.keys(userDetails || {}).length) {
-    return <Navigate to="/login" />;
-  }
-  return children;
-};
-
-export const CheckRole = ({ children, role }) => {
-  const { userDetails } = useAuth();
-  if (Array.isArray(role) && !role.includes(userDetails?.role)) {
-    return <Navigate to="/" />;
-  }
-  if (!Array.isArray(role) && userDetails?.role !== role) {
-    return <Navigate to="/" />;
-  }
-  return children;
-};
+import { CheckRole, PrivateRoute } from "@helpers/index";
 
 function Layout({ children }) {
   return (
@@ -126,15 +104,6 @@ const PrivateRoutes = () => {
           element={
             <PrivateRoute>
               <UserForm />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/profile/reset-password"
-          element={
-            <PrivateRoute>
-              <ResetPassword />
             </PrivateRoute>
           }
         />
