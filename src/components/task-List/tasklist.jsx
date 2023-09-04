@@ -12,7 +12,7 @@ import {
 import moment from "moment";
 import UserIcon from "@components/ProfileImage/profileImage";
 import "../../pages/Tasks/tasks.css";
-
+import { BsPencilSquare } from "react-icons/bs";
 const TaskList = ({
   projects,
   selectedProjectId,
@@ -465,9 +465,9 @@ const TaskList = ({
                           setSelectedTask(task);
                         }}
                       >
-                        <i className="fa fa-pencil-square-o" aria-hidden="true">
-                          Edit
-                        </i>
+                        <BsPencilSquare/>
+                         
+                         
                       </a>
                     )}
                 </li>

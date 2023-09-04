@@ -98,9 +98,9 @@
 
 .due-date .form-control {
     font-size: 14px;
-    float: right;
-    width: 74%;
-    margin-top: 14px;
+ 
+    width: 100%;
+ 
 }
 
 .due-date select {

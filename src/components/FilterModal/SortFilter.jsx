@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Col,Row } from "react-bootstrap";
+ 
 
 function SortByDropdown(props) {
   const [sortBy, setSortBy] = useState(" ");
@@ -57,7 +58,7 @@ function SortByDropdown(props) {
         </Col>
       </Row>
 
-      <Row>
+      <Row className="mt-3">
         <Col sm="3">
 
       <label htmlFor="sort-order" style={{fontSize:"0.9rem !important",fontWeight: "bold"}}>Sort order:</label>

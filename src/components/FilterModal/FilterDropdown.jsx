@@ -3,7 +3,7 @@ import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import DatePicker from "react-datepicker";
 import { Container, Row, Form, Modal, Col, Button } from "react-bootstrap";
-
+import "react-datepicker/dist/react-datepicker.css";
 function FilterDropdown(props) {
   const [selectedFilter, setSelectedFilter] = useState("");
   const [fromDate, setFromDate] = useState(
@@ -59,14 +59,17 @@ function FilterDropdown(props) {
 
   const renderDatePickers = () => {
     return (
-      <div className="d-flex justify-content-between">
-        <Form.Group controlId="formDateUpdated">
-          <Row className="filterFields">
-            <Col sm="3">
+      <div className="mt-4">
+      
+          <Row className="d-flex " >
+            <Col sm="3"  className="align-item-center">
               <Form.Label>From</Form.Label>
             </Col>
             <Col sm="9">
-              <DatePicker
+              <Row>
+                <Col lg={5} className="filterFields">
+                <Form.Group controlId="formDateUpdated">
+                <DatePicker
                 selected={fromDate || new Date()}
                 onChange={(date) => {
                   setFromDate(new Date(date));
@@ -76,16 +79,15 @@ function FilterDropdown(props) {
                 maxDate={toDate || new Date()}
                 // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
               />
-            </Col>
-          </Row>
-        </Form.Group>
+              </Form.Group>
+                </Col>
+                <Col lg={2} className="d-flex align-item-center"> To</Col>
 
-        <Form.Group controlId="formDateCompleted">
-          <Row className="filterFields">
-            <Col sm="3">
-              <Form.Label>To</Form.Label>
-            </Col>
-            <Col sm="9">
+                <Col lg={5} className="filterFields">
+                <Form.Group controlId="formDateCompleted">
+        
+         
+           
               <DatePicker
                 selected={toDate || new Date()}
                 onChange={(date) => {
@@ -97,9 +99,17 @@ function FilterDropdown(props) {
                 placeholderText="To Date"
                 // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
               />
+       
+        </Form.Group>
+                </Col>
+
+              </Row>
+          
             </Col>
           </Row>
-        </Form.Group>
+   
+
+  
       </div>
     );
   };
