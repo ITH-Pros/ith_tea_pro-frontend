@@ -30,26 +30,20 @@ const TaskList = ({
   setShowAddTask,
   setSelectedTask,
   isLoading,
-  isFetching
+  isFetching,
 }) => {
   return (
     <Accordion alwaysOpen="true">
-      {!projects?.length && !selectedProjectId  && !isLoading && (
+      {!projects?.length && !selectedProjectId && !isLoading && (
         <p className="alig-nodata" style={{ textAlign: "center" }}>
           No Tasks Found
         </p>
       )}
-      {isLoading && (
+      {(isLoading || isFetching) && (
         <div className="text-center">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-        </div>
-      )}
-
-      {isFetching && !isLoading && (
-        <div className="text-left refresh">
-           Refreshing List....
         </div>
       )}
 

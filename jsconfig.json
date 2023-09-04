@@ -24,7 +24,9 @@
       "@types/*": ["./types/*"],
       "@roles/*": ["./rolesBasedAccessControl/*"],
       "@utlis/*": ["./utlis/*"],
-      "@modals/*": ["./components/Modals/*"]
+      "@modals/*": ["./components/Modals/*"],
+      "@/*": ["./components/Modals/*"]
+
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
