@@ -21,7 +21,7 @@ const MyWorkComponent = ({
   setSelectedProject,
   setShowAddTask,
   setSelectedTask,
-  isRefetch
+  isRefetch,
 }) => {
   function formDateNightTime(dateString) {
     const date = new Date(dateString);
@@ -41,41 +41,38 @@ const MyWorkComponent = ({
     currentDate: formDateNightTime(new Date()),
   };
 
-  const { data: myWorkList, isLoading , isFetching } = useQuery(
-    ["getMyWorkList" , isRefetch],
-    () => getAllMyWorks(dataToSend),
-    {
-      refetchOnWindowFocus: false,
-      select: (data) => {
-        if (data?.data?.length > 0) {
-          let allTask = data?.data;
-          allTask?.map((item) => {
-            let dateMonth = item?.dueDate?.split("T")[0];
-            let today = new Date();
-            today =
-              today.getFullYear() +
-              "-" +
-              (today.getMonth() + 1 <= 9
-                ? "0" + (today.getMonth() + 1)
-                : today.getMonth() + 1) +
-              "-" +
-              (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
-            if (dateMonth === today) {
-              item.dueToday = true;
-            } else if (
-              new Date().getTime() > new Date(item?.dueDate).getTime()
-            ) {
-              item.dueToday = true;
-            } else {
-              item.dueToday = false;
-            }
-          });
-        }
-        return data?.data;
-      },
-    }
-  );
-
+  const {
+    data: myWorkList,
+    isLoading,
+    isFetching,
+  } = useQuery(["getMyWorkList", isRefetch], () => getAllMyWorks(dataToSend), {
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      if (data?.data?.length > 0) {
+        let allTask = data?.data;
+        allTask?.map((item) => {
+          let dateMonth = item?.dueDate?.split("T")[0];
+          let today = new Date();
+          today =
+            today.getFullYear() +
+            "-" +
+            (today.getMonth() + 1 <= 9
+              ? "0" + (today.getMonth() + 1)
+              : today.getMonth() + 1) +
+            "-" +
+            (today.getDate() <= 9 ? "0" + today.getDate() : today.getDate());
+          if (dateMonth === today) {
+            item.dueToday = true;
+          } else if (new Date().getTime() > new Date(item?.dueDate).getTime()) {
+            item.dueToday = true;
+          } else {
+            item.dueToday = false;
+          }
+        });
+      }
+      return data?.data;
+    },
+  });
 
   return (
     <Col lg={6} style={{ paddingLeft: "0px" }}>
@@ -92,14 +89,12 @@ const MyWorkComponent = ({
             id="card-task"
             className={myWorkList?.length === 0 ? "alig-nodata" : "px-3"}
           >
-            {isLoading && (
-              <p className="text-center">Loading...</p>
-            )}
-
-            {isFetching && !isLoading &&  (
-              <div className="text-left refresh">
-           Refreshing List....
-        </div>
+            {(isLoading || isFetching) && (
+              <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
             )}
             {!myWorkList ||
               (myWorkList?.length === 0 && !isFetching && !isLoading && (
@@ -113,7 +108,10 @@ const MyWorkComponent = ({
             {myWorkList &&
               myWorkList?.length > 0 &&
               myWorkList?.map((task) => (
-                <Row key={task?._id} className="d-flex justify-content-start list_task w-100 mx-0">
+                <Row
+                  key={task?._id}
+                  className="d-flex justify-content-start list_task w-100 mx-0"
+                >
                   {task?.isReOpen && (
                     <div className="red-flag">
                       <OverlayTrigger
@@ -274,27 +272,27 @@ const MyWorkComponent = ({
                     </small>
                   </Col>
                   <Col lg={1} id="dropdown_action" className="text-end middle">
-                      <Dropdown>
-                        <Dropdown.Toggle variant="defult" id="dropdown-basic">
-                          <i className="fa fa-ellipsis-v"></i>
-                        </Dropdown.Toggle>
+                    <Dropdown>
+                      <Dropdown.Toggle variant="defult" id="dropdown-basic">
+                        <i className="fa fa-ellipsis-v"></i>
+                      </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            onClick={() => {
-                              setSelectedProject();
-                              setShowAddTask(true);
-                              setSelectedTask(task);
-                            }}
-                          >
-                            <i
-                              className="fa fa-pencil-square"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Edit Task
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedProject();
+                            setShowAddTask(true);
+                            setSelectedTask(task);
+                          }}
+                        >
+                          <i
+                            className="fa fa-pencil-square"
+                            aria-hidden="true"
+                          ></i>{" "}
+                          Edit Task
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </Col>
                 </Row>
               ))}

@@ -40,18 +40,16 @@ export default function ProjectGrid() {
         <Row>
           <Col md="9">
             <Row>
-            {isProjectLoading && (
-              <div>
-                <p className="alig-nodata">Loading...</p>
-              </div>
-            )}
-            {isProjectFetching && (
-              <div>
-              <div className="text-left refresh">
-           Refreshing List....
-        </div>
-              </div>
-            )}
+              {isProjectLoading && (
+                <div>
+                  <p className="alig-nodata">Loading...</p>
+                </div>
+              )}
+              {isProjectFetching && (
+                <div>
+                  <div className="text-left refresh">Refreshing List....</div>
+                </div>
+              )}
               {projectList &&
                 projectList.map((element, projectIndex) => {
                   return (
@@ -88,11 +86,13 @@ export default function ProjectGrid() {
                   );
                 })}
             </Row>
-            {!projectList?.length && !isProjectLoading && !isProjectFetching && (
-              <div>
-                <p className="alig-nodata">No Project Found</p>
-              </div>
-            )}
+            {!projectList?.length &&
+              !isProjectLoading &&
+              !isProjectFetching && (
+                <div>
+                  <p className="alig-nodata">No Project Found</p>
+                </div>
+              )}
           </Col>
           <Col md="3" className="py-2">
             <div className="free-users">

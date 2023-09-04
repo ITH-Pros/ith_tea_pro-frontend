@@ -23,8 +23,13 @@ const OverdueWorkComponent = ({
   setShowAddTask,
   setSelectedTask,
 }) => {
-  const { isError, data:overdueWorkList , isLoading , isFetching } = useQuery(
-    ["getOverDueTaskListData" , isRefetch],
+  const {
+    isError,
+    data: overdueWorkList,
+    isLoading,
+    isFetching,
+  } = useQuery(
+    ["getOverDueTaskListData", isRefetch],
     async () => await getOverDueTaskListData(),
     {
       refetchOnWindowFocus: false,
@@ -59,11 +64,9 @@ const OverdueWorkComponent = ({
           });
         }
         return data?.data;
-      }
+      },
     }
   );
-
-
 
   return (
     <Col lg={6} style={{ paddingLeft: "0px" }}>
@@ -79,17 +82,16 @@ const OverdueWorkComponent = ({
             id="card-task"
             className={!overdueWorkList?.length ? "alig-nodata" : "px-3"}
           >
-            {isLoading &&  (
-              <p className="text-center">Loading...</p>
-            )}
-            {isFetching && !isLoading &&  (
-              <div className="text-left refresh">
-           Refreshing List....
-        </div>
+            {(isLoading || isFetching) && (
+              <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
             )}
             {overdueWorkList && overdueWorkList?.length === 0 && (
               <p className="text-center">No task found.</p>
-            )}         
+            )}
             {overdueWorkList &&
               overdueWorkList?.length > 0 &&
               overdueWorkList?.map((task) => (

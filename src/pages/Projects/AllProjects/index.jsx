@@ -71,7 +71,7 @@ export default function AllProject() {
    * @return: all projects
    * */
 
-  const fetchAllProjects =  () => {
+  const fetchAllProjects = () => {
     let dataToSend = {};
     if (isArchive) {
       dataToSend.isArchived = true;
@@ -79,9 +79,14 @@ export default function AllProject() {
     return dataToSend;
   };
 
-  const {isLoading , data:projectList , isFetching , refetch:refetchProjectList} = useQuery(
-    ["projectListData" , isArchive  ],
-   ()=> getAllProjects(fetchAllProjects()),
+  const {
+    isLoading,
+    data: projectList,
+    isFetching,
+    refetch: refetchProjectList,
+  } = useQuery(
+    ["projectListData", isArchive],
+    () => getAllProjects(fetchAllProjects()),
     {
       enabled: true,
       refetchOnWindowFocus: false,
@@ -122,26 +127,25 @@ export default function AllProject() {
     }
   );
 
-
   const confirmation = (project) => {
     setSelectedProject(project);
     setConfirmModalShow(true);
   };
 
   /*
-    * @desc: This function is used to delete project
-    * @param: projectId
-    * @return: delete project
-    * */
+   * @desc: This function is used to delete project
+   * @param: projectId
+   * @return: delete project
+   * */
 
   const deleteProject = async () => {
-      let dataToSend = {
-        projectId: selectedProject._id,
-      };
-      deleteMutation.mutate(dataToSend);
+    let dataToSend = {
+      projectId: selectedProject._id,
+    };
+    deleteMutation.mutate(dataToSend);
   };
 
-  const deleteMutation = useMutation(deleteProjectById , {
+  const deleteMutation = useMutation(deleteProjectById, {
     onSuccess: (data) => {
       if (data.error) {
         toast.dismiss();
@@ -162,21 +166,21 @@ export default function AllProject() {
   });
 
   /*
-    * @desc: This function is used to archive project
-    * @param: projectId
-    * @return: archive project
-    * */
+   * @desc: This function is used to archive project
+   * @param: projectId
+   * @return: archive project
+   * */
 
   const archiveProject = async () => {
-      let dataToSend = {
-        projectId: selectedProject._id,
-      };
-      if (selectedProject.isArchived) {
-        dataToSend.isArchived = false;
-      } else {
-        dataToSend.isArchived = true;
-      }
-      archiveProjectMutation.mutate(dataToSend)
+    let dataToSend = {
+      projectId: selectedProject._id,
+    };
+    if (selectedProject.isArchived) {
+      dataToSend.isArchived = false;
+    } else {
+      dataToSend.isArchived = true;
+    }
+    archiveProjectMutation.mutate(dataToSend);
   };
 
   const archiveProjectMutation = useMutation(archiveProjectById, {
@@ -203,7 +207,6 @@ export default function AllProject() {
       return error.message;
     },
   });
-
 
   return (
     <>
@@ -241,10 +244,12 @@ export default function AllProject() {
         </Row>
 
         <div className="project-boxes jsGridView">
-          {isFetching && !isLoading && (
-            <div className="text-left refresh">
-           Refreshing List....
-        </div>
+          {(isLoading || isFetching) && (
+            <div className="text-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
           )}
           {projectList &&
             projectList.map((element, projectIndex) => {
@@ -269,22 +274,15 @@ export default function AllProject() {
                     }
                     isArchive={isArchive}
                     refetchProjectList={refetchProjectList}
-
                   />
                 </div>
               );
             })}
-          {!projectList?.length &&  !isLoading && !isFetching && (
+          {!projectList?.length && !isLoading && !isFetching && (
             <div>
               <p className="alig-nodata">No Project Found</p>
             </div>
           )}
-          {isLoading && (
-            <div>
-              <p className="alig-nodata">Loading...</p>
-            </div>
-          )
-            }
         </div>
       </div>
       {loading ? <Loader /> : null}

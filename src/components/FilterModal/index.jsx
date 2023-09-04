@@ -321,7 +321,9 @@ const FilterModal = (props) => {
                     onChange={(e) => formik.setFieldValue("category", e)}
                     value={formik.values.category}
                     isMulti
-                    getOptionLabel={(options) => `${options?.projectId?.name} (${options?.name})`}
+                    getOptionLabel={(options) =>
+                      `${options?.projectId?.name} (${options?.name})`
+                    }
                     getOptionValue={(options) => options["_id"]}
                     options={categories}
                   />

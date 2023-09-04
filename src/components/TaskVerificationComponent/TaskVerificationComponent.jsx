@@ -125,13 +125,16 @@ const TaskVerificationComponent = ({
             id="card-task"
             className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-3"}
           >
+            {(isLoading || isFetching) && (
+              <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            )}
+
             {pendingRatingList && pendingRatingList?.length === 0 && (
               <p>No task found.</p>
-            )}
-            {isLoading && <p className="text-center">Loading...</p>}
-
-            {isFetching && !isLoading && (
-              <div className="text-left refresh">Refreshing List....</div>
             )}
 
             {pendingRatingList &&

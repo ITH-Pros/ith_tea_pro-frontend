@@ -69,13 +69,15 @@ const Teamwork = ({
                         teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
                       }
                     >
-                      {isFetching && !isLoading && (
-                        <div className="text-left refresh w-100">
-                          Refreshing list...
+                      {(isLoading || isFetching) && (
+                        <div className="text-center">
+                          <div
+                            className="spinner-border text-primary"
+                            role="status"
+                          >
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
                         </div>
-                      )}
-                      {isLoading && (
-                        <div className="text-center w-100">Loading...</div>
                       )}
 
                       {teamWorkList &&
