@@ -171,10 +171,12 @@ const FilterModal = (props) => {
   };
 
   const handleFilterSortOrderSelect = (sortOrder) => {
-    localStorage.setItem("sortOrder", sortOrder);
+    formik.setFieldValue("sortOrder", sortOrder);
+    // localStorage.setItem("sortOrder", sortOrder);
   };
   const handleFilterSortSelect = (sortType) => {
-    localStorage.setItem("sortType", sortType);
+    formik.setFieldValue("sortType", sortType);
+    // localStorage.setItem("sortType", sortType);
   };
 
   return (
