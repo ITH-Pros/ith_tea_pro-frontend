@@ -9,10 +9,11 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+ 
 import moment from "moment";
 import UserIcon from "@components/ProfileImage/profileImage";
 import "../../pages/Tasks/tasks.css";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsPencilSquare, BsArrowsMove, BsJournalPlus, BsFillTrash3Fill } from "react-icons/bs";
 const TaskList = ({
   projects,
   selectedProjectId,
@@ -105,7 +106,7 @@ const TaskList = ({
                         handleAddTaskFromSection(project);
                       }}
                     >
-                      <i className="fa fa-plus-circle" aria-hidden="true"></i>{" "}
+                      <BsJournalPlus/>{" "}
                       Add Tasks
                     </Dropdown.Item>
                   )}
@@ -123,16 +124,13 @@ const TaskList = ({
                             })
                           }
                         >
-                          <i
-                            className="fa fa-pencil-square"
-                            aria-hidden="true"
-                          ></i>{" "}
+                           <BsPencilSquare/>{" "}
                           Edit Section
                         </Dropdown.Item>
                       )}
                       {/* {!isArchive && (
                         <Dropdown.Item>
-                          <i className="fa fa-files-o" aria-hidden="true"></i>{" "}
+                          <BsArrowsMove/>{" "}
                           Copy/Move
                         </Dropdown.Item>
                       )} */}
@@ -144,8 +142,8 @@ const TaskList = ({
                           })
                         }
                       >
-                        <i className="fa fa-trash" aria-hidden="true"></i>{" "}
-                        Delete Section
+                        <BsFillTrash3Fill/>{" "}
+                            Delete Section
                       </Dropdown.Item>
                     </>
                   )}

@@ -4,11 +4,11 @@ import * as Yup from "yup";
 import { resetPassword } from "@services/auth/api";
 import Loader from "@components/Shared/Loader/index";
 import { toast } from "react-toastify";
-import logo from "@assets/img/logo.png"
-import { useMutation } from 'react-query';
+import logo from "@assets/img/logo.png";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
-const ResetPassword = ({  }) => {
+const ResetPassword = ({}) => {
   const initialValues = {
     oldPassword: "",
     newPassword: "",
@@ -44,14 +44,12 @@ const ResetPassword = ({  }) => {
       } else {
         toast.info(data.message);
         localStorage.clear();
-          window.location.reload();
+        window.location.reload();
       }
     },
     onError: (error) => {
-      toast.info(
-        error?.message || "Something Went Wrong in reset password"
-      );
-    }
+      toast.info(error?.message || "Something Went Wrong in reset password");
+    },
   });
 
   const { isLoading: isSubmitting } = resetPasswordMutation;
@@ -76,7 +74,7 @@ const ResetPassword = ({  }) => {
           <a href="https://pro.ith.tech/login">
             <img src={logo} alt="logo" />
           </a>
-          <div className="text mb-0">Tea Pro</div>
+          <div className="text mb-0 mt-3">Tea Pro</div>
           <div>
             <h4 className="text-center mt-2">Reset Password</h4>
             <form onSubmit={formik.handleSubmit}>
@@ -112,8 +110,8 @@ const ResetPassword = ({  }) => {
                     id="newPassword"
                     {...formik.getFieldProps("newPassword")}
                   />
-                  </div>
-                  {formik.touched.newPassword && formik.errors.newPassword && (
+                </div>
+                {formik.touched.newPassword && formik.errors.newPassword && (
                   <p className="error-msg">{formik.errors.newPassword}</p>
                 )}
               </div>
@@ -123,23 +121,22 @@ const ResetPassword = ({  }) => {
                 <div className="password-field">
                   <input
                     placeholder="Confirm Password"
-                    type={
-                      "password"
-                    }
+                    type={"password"}
                     id="confirmPassword"
                     {...formik.getFieldProps("confirmPassword")}
                   />
-                  </div>
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                  <p className="error-msg">{formik.errors.confirmPassword}</p>
-                )}
+                </div>
+                {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword && (
+                    <p className="error-msg">{formik.errors.confirmPassword}</p>
+                  )}
               </div>
               <button
                 className="loginButton"
                 type="submit"
                 disabled={isSubmitting}
               >
-               {isSubmitting? 'Please wait...' : 'Submit'}
+                {isSubmitting ? "Please wait..." : "Submit"}
               </button>
               <button
                 onClick={backToLogin}

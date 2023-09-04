@@ -64,7 +64,7 @@ export default function Rating(props) {
     // onClick={() => setModalShow(true)
 
     <>
-      <div className="rightDashboard" style={{ marginTop: "7%" }}>
+      <div className="rightDashboard" style={{ marginTop: "4%" }}>
         {/* <Row>
           <Col lg={6}>
             <h1 className="h1-text">
