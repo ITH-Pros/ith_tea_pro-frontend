@@ -182,6 +182,7 @@ const ProjectCard = ({
   }
 
   function handleRoleChange(event) {
+    setSelectedUnassignedUsers("");
     setSelectedRole(event.target.value);
     getListOfUnassignedUsers(event.target.value);
   }
