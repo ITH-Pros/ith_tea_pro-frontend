@@ -296,7 +296,7 @@ export default function Dashboard(props) {
 
   return (
     <div className="dashboard_camp  rightDashboard">
-      <Container>
+      <Container fluid>
         <Row>
           <Col lg={6} className="px-0">
             {props.showBtn && (

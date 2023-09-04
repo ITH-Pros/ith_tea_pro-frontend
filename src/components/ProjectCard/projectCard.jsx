@@ -10,6 +10,7 @@ import React from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { BsPencilSquare, BsArrowsMove, BsJournalPlus, BsFillTrash3Fill } from "react-icons/bs";
 
 import {
   faTasks,
@@ -328,7 +329,7 @@ const ProjectCard = ({
                     }}
                   >
                     {" "}
-                    <i class="fa fa-pencil" aria-hidden="true"></i>{" "}
+                    <BsPencilSquare/>{" "}
                     Edit Project
                   </a>
                 )}

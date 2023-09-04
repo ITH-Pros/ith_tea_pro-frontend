@@ -29,7 +29,7 @@ const Teamwork = ({
   const [isFetching, setIsFetching] = useState(false);
 
   return (
-    <Container>
+    <Container fluid>
       <Row className="mt-3">
         <Col lg={12} style={{ paddingLeft: "0px" }}>
           <Row>

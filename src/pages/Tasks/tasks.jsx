@@ -724,7 +724,7 @@ const Tasks = () => {
           <Modal.Header closeButton>
             <Modal.Title>Delete Section</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="body_ui">
+          <Modal.Body  style={{height:'auto'}}>
             Are you sure you want to delete this section
           </Modal.Body>
           <Modal.Footer
