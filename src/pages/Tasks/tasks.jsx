@@ -587,9 +587,7 @@ const Tasks = () => {
               {!isArchive && (
                 <Button
                   className="addTaskBtn"
-                  style={{
-                    float: "right",
-                  }}
+                 style={{marginRight:'5px'}}
                   onClick={() => {
                     setSelectedTask();
                     setSelectedProject();
@@ -607,7 +605,7 @@ const Tasks = () => {
                 !isArchive &&
                 projectId && (
                   <button
-                    className="addTaskBtn addSectionBtn"
+                    className="addTaskBtn addSectionBtn mb-2"
                     onClick={() => {
                       showAddSectionModal(true);
                     }}

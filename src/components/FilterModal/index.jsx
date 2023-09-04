@@ -209,7 +209,7 @@ const FilterModal = (props) => {
               localStorage.removeItem("selectedFilterTypes");
             }}
             variant="light"
-            style={{ marginRight: "10px" }}
+            
           >
             {clearFilter && (
               <i className="fa fa-times-circle" aria-hidden="true"></i>

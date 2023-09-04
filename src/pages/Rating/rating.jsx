@@ -65,7 +65,7 @@ export default function Rating(props) {
 
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
-        <Row>
+        {/* <Row>
           <Col lg={6}>
             <h1 className="h1-text">
               <i>
@@ -74,7 +74,7 @@ export default function Rating(props) {
               Team Rating
             </h1>
           </Col>
-        </Row>
+        </Row> */}
 
         <div className="main-rating-contianer">{renderCurrentView()}</div>
       </div>
