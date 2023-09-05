@@ -409,7 +409,7 @@ const Tasks = () => {
     refetch: getAllTasksForListing,
     isLoading,
     isFetching,
-  } = useQuery(["getAllTasks"], () => getProjectsTask(fetchTasks()), {
+  } = useQuery(["getAllTasks" , showAddTask], () => getProjectsTask(fetchTasks()), {
     enabled: true,
     refetchOnWindowFocus: false,
     select: (data) => {
