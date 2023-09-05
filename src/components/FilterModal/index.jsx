@@ -203,9 +203,13 @@ const FilterModal = (props) => {
     <>
       <div>
         {/* Buttons and other UI elements */}
-        <Button variant="light" style={{ margin: "0px 5px" }}>
+        <Button
+          variant="light"
+          style={{ margin: "0px 5px" }}
+          onClick={setProjectAndOpenModal}
+        >
           {!isArchive && (
-            <span onClick={setProjectAndOpenModal}>
+            <span>
               <i className="fa fa-filter" aria-hidden="true"></i> Filter
             </span>
           )}
@@ -213,9 +217,13 @@ const FilterModal = (props) => {
 
         {(userDetails?.role === "ADMIN" ||
           userDetails?.role === "SUPER_ADMIN") && (
-          <Button variant="light" style={{ margin: "0px 5px" }}>
+          <Button
+            variant="light"
+            style={{ margin: "0px 5px" }}
+            onClick={() => downloadExportData()}
+          >
             {!isArchive && (
-              <span onClick={() => downloadExportData()}>
+              <span>
                 <i className="fa fa-file-excel-o" aria-hidden="true"></i> Export
               </span>
             )}
