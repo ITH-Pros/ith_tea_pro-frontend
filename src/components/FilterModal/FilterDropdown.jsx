@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import DatePicker from "react-datepicker";
-import { Container, Row, Form, Modal, Col, Button } from "react-bootstrap";
+import { Row, Form, Col } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
+
 function FilterDropdown(props) {
   const [selectedFilter, setSelectedFilter] = useState("");
   const [fromDate, setFromDate] = useState(
@@ -18,14 +18,14 @@ function FilterDropdown(props) {
       localStorage.setItem("fromDate", fromDate);
     }
   }, [fromDate]);
+
   useEffect(() => {
     if (toDate) {
       localStorage.setItem("toDate", toDate);
     }
   }, [toDate]);
+
   useEffect(() => {
-    // console.log(fromDate,'-------------------------from date')
-    // console.log(toDate,'-------------------------to date')
     if (fromDate && toDate) {
       props.onFilterSelect(fromDate, toDate);
     }
@@ -60,56 +60,49 @@ function FilterDropdown(props) {
   const renderDatePickers = () => {
     return (
       <div className="mt-4">
-      
-          <Row className="d-flex " >
-            <Col sm="3"  className="align-item-center">
-              <Form.Label>From</Form.Label>
-            </Col>
-            <Col sm="9">
-              <Row>
-                <Col lg={5} className="filterFields">
+        <Row className="d-flex ">
+          <Col sm="3" className="align-item-center">
+            <Form.Label>From</Form.Label>
+          </Col>
+          <Col sm="9">
+            <Row>
+              <Col lg={5} className="filterFields">
                 <Form.Group controlId="formDateUpdated">
-                <DatePicker
-                selected={fromDate || new Date()}
-                onChange={(date) => {
-                  setFromDate(new Date(date));
-                }}
-                className="form-control"
-                placeholderText="From Date"
-                maxDate={toDate || new Date()}
-                // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
-              />
-              </Form.Group>
-                </Col>
-                <Col lg={2} className="d-flex align-item-center"> To</Col>
+                  <DatePicker
+                    selected={fromDate || new Date()}
+                    onChange={(date) => {
+                      setFromDate(new Date(date));
+                    }}
+                    className="form-control"
+                    placeholderText="From Date"
+                    maxDate={toDate || new Date()}
+                    // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
+                  />
+                </Form.Group>
+              </Col>
+              <Col lg={2} className="d-flex align-item-center">
+                {" "}
+                To
+              </Col>
 
-                <Col lg={5} className="filterFields">
+              <Col lg={5} className="filterFields">
                 <Form.Group controlId="formDateCompleted">
-        
-         
-           
-              <DatePicker
-                selected={toDate || new Date()}
-                onChange={(date) => {
-                  localStorage.setItem("toDate", date);
-                  setToDate(new Date(date));
-                }}
-                className="form-control"
-                minDate={fromDate}
-                placeholderText="To Date"
-                // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
-              />
-       
-        </Form.Group>
-                </Col>
-
-              </Row>
-          
-            </Col>
-          </Row>
-   
-
-  
+                  <DatePicker
+                    selected={toDate || new Date()}
+                    onChange={(date) => {
+                      localStorage.setItem("toDate", date);
+                      setToDate(new Date(date));
+                    }}
+                    className="form-control"
+                    minDate={fromDate}
+                    placeholderText="To Date"
+                    // disabled={props.clearFilterProp && localStorage.getItem('filterClicked')}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </div>
     );
   };

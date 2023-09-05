@@ -32,7 +32,7 @@ const Tasks = () => {
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [selectedSectionId, setSelectedSectionId] = useState("");
   const [showViewTask, setShowViewTask] = useState(false);
-  // const [projects, setProjects] = useState([]);
+  const [filterApplied, setFilterApplied] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const [deleteSectionModal, setDeleteSectionModal] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
@@ -71,7 +71,6 @@ const Tasks = () => {
     return () => {
       localStorage.removeItem("taskFilters");
       localStorage.removeItem("selectedFilterTypes");
-      localStorage.removeItem("selectedLead");
       localStorage.removeItem("fromDate");
       localStorage.removeItem("toDate");
       localStorage.removeItem("sortOrder");
@@ -82,7 +81,6 @@ const Tasks = () => {
   }, []);
 
   useEffect(() => {
-    // fetchTasks(projectId);
     let paramsData;
     if (params?.projectId) {
       paramsData = params?.projectId;
@@ -314,74 +312,92 @@ const Tasks = () => {
       isArchived: isArchive || false,
       projectId: paramsData,
     };
-    if (localStorage.getItem("selectedLead")) {
-      let leads = JSON.parse(localStorage.getItem("selectedLead"));
-      if (leads && leads.length > 0) {
-        data.leads = JSON.stringify(leads);
-      }
-    }
-    if (localStorage.getItem("taskFilters")) {
+
+    if (
+      localStorage.getItem("taskFilters") ||
+      localStorage.getItem("selectedFilter")
+    ) {
+      setFilterApplied(true);
       let filterData = JSON.parse(localStorage.getItem("taskFilters"));
-      let selectedFilter = localStorage.getItem("selectedFilterTypes");
-      console.log(filterData);
+      let selectedFilter = localStorage.getItem("selectedFilter");
+      if (selectedFilter) {
+        let fromDate = localStorage.getItem("fromDate");
+        let toDate = localStorage.getItem("toDate");
+        if (
+          fromDate &&
+          selectedFilter &&
+          selectedFilter !== "null" &&
+          selectedFilter !== "Today" &&
+          selectedFilter !== "Tomorrow"
+        ) {
+          data.fromDate = convertToUTCDay(fromDate);
+        }
+
+        if (
+          toDate &&
+          selectedFilter &&
+          selectedFilter !== "null" &&
+          selectedFilter !== "Today" &&
+          selectedFilter !== "Tomorrow"
+        ) {
+          data.toDate = convertToUTCNight(toDate);
+        }
+
+        if (
+          selectedFilter === "Today" ||
+          selectedFilter === "Tomorrow" ||
+          selectedFilter === "Next 7 days" ||
+          selectedFilter === "Next 30 days"
+        ) {
+          data.fromDate = convertToUTCDay(fromDate);
+          data.toDate = convertToUTCNight(toDate);
+        }
+      }
+
       if (filterData?.projectIds && filterData.projectIds.length > 0) {
         data.projectIds = JSON.stringify(
           filterData.projectIds.map((item) => item._id)
         );
       }
+
       if (filterData?.createdBy && filterData?.createdBy?.length > 0) {
         data.createdBy = JSON.stringify(
           filterData.createdBy.map((item) => item._id)
         );
       }
+
       if (filterData?.selectedLead && filterData.selectedLead.length > 0) {
         data.leads = JSON.stringify(
           filterData.selectedLead.map((item) => item._id)
         );
       }
+
       if (filterData?.assignedTo && filterData.assignedTo.length > 0) {
         data.assignedTo = JSON.stringify(
           filterData.assignedTo.map((item) => item._id)
         );
       }
+
       if (filterData?.category && filterData.category.length > 0) {
         data.sections = JSON.stringify(
           filterData.category.map((item) => item._id)
         );
       }
+
       if (filterData?.priority && filterData.priority?.length > 0) {
         data.priority = JSON.stringify(filterData?.priority?.value);
       }
+
       if (filterData?.status && filterData.status?.length > 0) {
         data.status = JSON.stringify(filterData?.status?.value);
       }
+
       if (filterData?.sortType) {
         data.sortType = JSON.stringify(filterData.sortType);
       }
+
       if (filterData?.sortOrder) {
         data.sortOrder = JSON.stringify(filterData.sortOrder);
-      }
-      if (
-        filterData?.fromDate &&
-        selectedFilter &&
-        selectedFilter !== "null" &&
-        selectedFilter !== "Today" &&
-        selectedFilter !== "Tomorrow"
-      ) {
-        data.fromDate = convertToUTCDay(filterData.fromDate);
-      }
-      if (
-        filterData?.toDate &&
-        selectedFilter &&
-        selectedFilter !== "null" &&
-        selectedFilter !== "Today" &&
-        selectedFilter !== "Tomorrow"
-      ) {
-        data.toDate = convertToUTCNight(filterData.toDate);
-      }
-      if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-        data.fromDate = convertToUTCDay(filterData.fromDate);
-        data.toDate = convertToUTCNight(filterData.toDate);
       }
     }
     return data;
@@ -460,23 +476,59 @@ const Tasks = () => {
     if (params?.projectId) {
       data.projectId = paramsData;
     }
-    if (localStorage.getItem("selectedLead")) {
-      let leadsToSend = localStorage.getItem("selectedLead");
-      let leads = JSON.parse(localStorage.getItem("selectedLead"));
-      if (leads?.length) {
-        data.leads = leadsToSend;
-      }
-    }
 
-    if (localStorage.getItem("taskFilters")) {
+    if (
+      localStorage.getItem("taskFilters") ||
+      localStorage.getItem("selectedFilter")
+    ) {
       let filterData = JSON.parse(localStorage.getItem("taskFilters"));
       let selectedFilter = localStorage.getItem("selectedFilter");
+      if (selectedFilter) {
+        let fromDate = localStorage.getItem("fromDate");
+        let toDate = localStorage.getItem("toDate");
+        if (
+          fromDate &&
+          selectedFilter &&
+          selectedFilter !== "null" &&
+          selectedFilter !== "Today" &&
+          selectedFilter !== "Tomorrow"
+        ) {
+          data.fromDate = convertToUTCDay(fromDate);
+        }
+
+        if (
+          toDate &&
+          selectedFilter &&
+          selectedFilter !== "null" &&
+          selectedFilter !== "Today" &&
+          selectedFilter !== "Tomorrow"
+        ) {
+          data.toDate = convertToUTCNight(toDate);
+        }
+
+        if (
+          selectedFilter === "Today" ||
+          selectedFilter === "Tomorrow" ||
+          selectedFilter === "Next 7 days" ||
+          selectedFilter === "Next 30 days"
+        ) {
+          data.fromDate = convertToUTCDay(fromDate);
+          data.toDate = convertToUTCNight(toDate);
+        }
+      }
       if (filterData?.projectIds && filterData.projectIds.length > 0) {
         data.projectIds = JSON.stringify(filterData?.projectIds);
       }
       if (filterData?.createdBy) {
         data.createdBy = JSON.stringify(filterData?.createdBy);
       }
+
+      if (filterData?.selectedLead && filterData.selectedLead.length > 0) {
+        data.leads = JSON.stringify(
+          filterData.selectedLead.map((item) => item._id)
+        );
+      }
+
       if (filterData?.assignedTo && filterData?.assignedTo.length > 0) {
         data.assignedTo = JSON.stringify(filterData?.assignedTo);
       }
@@ -494,34 +546,6 @@ const Tasks = () => {
       }
       if (filterData?.sortOrder) {
         data.sortOrder = filterData?.sortOrder;
-      }
-      if (
-        filterData?.fromDate &&
-        selectedFilter &&
-        selectedFilter !== "null" &&
-        selectedFilter !== "Today" &&
-        selectedFilter !== "Tomorrow"
-      ) {
-        // // console.log(selectedFilter, '----------------')
-
-        data.fromDate = convertToUTCDay(filterData?.fromDate);
-      }
-      if (
-        filterData?.toDate &&
-        selectedFilter &&
-        selectedFilter !== "null" &&
-        selectedFilter !== "Today" &&
-        selectedFilter !== "Tomorrow"
-      ) {
-        // // console.log(selectedFilter, '----------------')
-
-        data.toDate = convertToUTCNight(filterData?.toDate);
-      }
-      if (selectedFilter === "Today" || selectedFilter === "Tomorrow") {
-        // // console.log(selectedFilter, '----------------')
-
-        data.fromDate = convertToUTCDay(filterData?.fromDate);
-        data.toDate = convertToUTCNight(filterData?.toDate);
       }
     }
     exportDataMutation.mutate(data);
@@ -563,7 +587,12 @@ const Tasks = () => {
   };
 
   const getTaskFilters = () => {
-    getAllTasksForListing();
+    if (
+      localStorage.getItem("taskFilters") ||
+      localStorage.getItem("selectedFilter")
+    ) {
+      getAllTasksForListing();
+    }
   };
 
   const closeModal = () => {
@@ -587,7 +616,7 @@ const Tasks = () => {
               {!isArchive && (
                 <Button
                   className="addTaskBtn"
-                 style={{marginRight:'5px'}}
+                  style={{ marginRight: "5px" }}
                   onClick={() => {
                     setSelectedTask();
                     setSelectedProject();
@@ -616,8 +645,11 @@ const Tasks = () => {
                 )}
               <button className="filter_btn">
                 <FilterModal
+                  filterApplied={filterApplied}
+                  setFilterApplied={setFilterApplied}
                   handleProjectId={selectedProjectId}
                   getTaskFilters={getTaskFilters}
+                  removeTaskFilters={getAllTasksForListing}
                   isArchive={isArchive}
                   downloadExportData={downloadExportData}
                   projectId={params?.projectId}
@@ -724,7 +756,7 @@ const Tasks = () => {
           <Modal.Header closeButton>
             <Modal.Title>Delete Section</Modal.Title>
           </Modal.Header>
-          <Modal.Body  style={{height:'auto'}}>
+          <Modal.Body style={{ height: "auto" }}>
             Are you sure you want to delete this section
           </Modal.Body>
           <Modal.Footer
