@@ -40,16 +40,16 @@ export default function ProjectGrid() {
         <Row>
           <Col md="9">
             <Row>
-              {isProjectLoading && (
-                <div>
-                  <p className="alig-nodata">Loading...</p>
+
+              {(isProjectLoading || isProjectFetching) && (
+              <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
                 </div>
-              )}
-              {isProjectFetching && (
-                <div>
-                  <div className="text-left refresh">Refreshing List....</div>
-                </div>
-              )}
+              </div>
+            )}
+
+
               {projectList &&
                 projectList.map((element, projectIndex) => {
                   return (
@@ -104,8 +104,10 @@ export default function ProjectGrid() {
                   </div>
                 )}
                 {isUsersFetching && !isUsersLoading && (
-                  <div>
-                    <p>Refreshing list...</p>
+                  <div className="text-center">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
                   </div>
                 )}
                 {freeUsersList?.length > 0 ? (
