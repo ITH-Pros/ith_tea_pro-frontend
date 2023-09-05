@@ -267,7 +267,7 @@ export default function Teams() {
         setModalShow(false);
         return;
       } else {
-        setProjectListValue(data);
+        // setProjectListValue(data);
         setModalShow(false);
         toast.dismiss();
         toast.info(data?.message);
