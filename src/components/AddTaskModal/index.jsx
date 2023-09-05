@@ -63,6 +63,7 @@ export default function AddTaskModal(props) {
     selectedTask,
     handleProjectId,
     selectedSection,
+    getNewTasks,
   } = props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
@@ -242,6 +243,7 @@ export default function AddTaskModal(props) {
         toast.error(data?.message);
         return;
       } else {
+        getNewTasks()
         formik.resetForm();
         setUploadedFiles([]);
         setIsResetAttachment(true);
@@ -276,10 +278,12 @@ export default function AddTaskModal(props) {
         toast.error(data?.message);
         return;
       } else {
+        getNewTasks()
         resetModalData();
         closeModal();
         toast.dismiss();
         toast.success(data?.message);
+
       }
     },
   });
