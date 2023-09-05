@@ -63,6 +63,7 @@ export default function AddTaskModal(props) {
     selectedTask,
     handleProjectId,
     selectedSection,
+    getNewTasks,
   } = props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
@@ -75,6 +76,7 @@ export default function AddTaskModal(props) {
   // const [leadLists, setLeadLists] = useState([]);
   // const [userList, setUserList] = useState([]);
   const [selectedSectionName, setSelectedSectionName] = useState(null);
+
 
   const uploadedAttachmentsArray = (uploadedFiles) => {
     setUploadedFiles(uploadedFiles);
@@ -156,9 +158,6 @@ export default function AddTaskModal(props) {
   };
 
   const resetModalData = () => {
-    formik.resetForm();
-    setUploadedFiles([]);
-    setIsResetAttachment(true);
     closeModal();
   };
 
@@ -244,17 +243,32 @@ export default function AddTaskModal(props) {
         toast.error(data?.message);
         return;
       } else {
-        resetModalData();
+        getNewTasks()
+        formik.resetForm();
+        setUploadedFiles([]);
+        setIsResetAttachment(true);
         toast.dismiss();
         toast.success(data?.message);
-        if (!isAnotherTask) {
-          closeModal();
-          return;
-        }
-        setIsAnotherTask(false);
+        // if (!isAnotherTask) {
+        //   closeModal();
+        //   return;
+        // }
+        // setIsAnotherTask(false);
       }
     },
   });
+
+  useEffect(() => {
+    if (addTaskMutation.isSuccess) {
+      if (!isAnotherTask) {
+        closeModal();
+        return;
+      }
+      setIsAnotherTask(false);
+    }
+  }, [addTaskMutation.isSuccess]);
+
+
 
   /*  @updateTask */
   const updateTaskMutation = useMutation(updateTaskDetails, {
@@ -264,10 +278,12 @@ export default function AddTaskModal(props) {
         toast.error(data?.message);
         return;
       } else {
+        getNewTasks()
         resetModalData();
         closeModal();
         toast.dismiss();
         toast.success(data?.message);
+
       }
     },
   });
@@ -767,8 +783,8 @@ export default function AddTaskModal(props) {
                       style={{ marginLeft: "10px" }}
                       type="button"
                       onClick={() => {
-                        formik.handleSubmit;
-                        // setIsAnotherTask(true);
+                        formik.handleSubmit()
+                        setIsAnotherTask(true);
                       }}
                     >
                       Create And Add Another
