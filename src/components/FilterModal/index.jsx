@@ -19,14 +19,15 @@ import { useQuery } from "react-query";
 const FilterModal = (props) => {
   const {
     getTaskFilters,
+    removeTaskFilters,
     handleProjectId,
     isArchive,
     downloadExportData,
-    projectId,
+    filterApplied,
+    setFilterApplied,
   } = props;
   const { userDetails } = useAuth();
   const customStyles = CUSTOMSTYLES;
-  const [clearFilter, setClearFilterBoolean] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filterModalShow, setFilterModalShow] = useState(false);
   const priorityList = CONSTANTS.priorityList.map((priority) => ({
@@ -53,17 +54,38 @@ const FilterModal = (props) => {
       toDate: "",
     },
     onSubmit: (values) => {
-      localStorage.setItem("taskFilters", JSON.stringify(values));
+      if (
+        values.sortOrder ||
+        values.sortType ||
+        values?.fromDate ||
+        values?.toDate ||
+        values?.createdBy?.length ||
+        values?.selectedLead?.length ||
+        values?.assignedTo?.length ||
+        values?.category?.length ||
+        values?.priority?.length ||
+        values?.status?.length ||
+        values?.projectIds?.length
+      ) {
+        localStorage.setItem("taskFilters", JSON.stringify(values));
+        setFilterModalShow(false);
+      } else if (localStorage.getItem("selectedFilter")) {
+        setFilterModalShow(false);
+      } else {
+        localStorage.removeItem("taskFilters");
+      }
+
       getTaskFilters();
-      setFilterModalShow(false);
-      setClearFilterBoolean(true);
     },
     onReset: (values) => {
       // reset form
       localStorage.removeItem("taskFilters");
-      setClearFilterBoolean(false);
-      getTaskFilters();
+      localStorage.removeItem("selectedFilter");
+      localStorage.removeItem("fromDate");
+      localStorage.removeItem("toDate");
+      removeTaskFilters();
       setFilterModalShow(false);
+      setFilterApplied(false);
     },
   });
 
@@ -160,7 +182,6 @@ const FilterModal = (props) => {
 
   const clearFilterFormValue = () => {
     formik.resetForm();
-    setFilterModalShow(false);
   };
 
   const handleFilterSelect = (fromDate, toDate) => {
@@ -202,33 +223,25 @@ const FilterModal = (props) => {
           </Button>
         )}
 
-        {clearFilter && (
+        {filterApplied && (
           <Button
             onClick={() => {
               clearFilterFormValue();
-              setClearFilterBoolean(false);
-
               localStorage.removeItem("selectedFilterTypes");
             }}
             variant="light"
-            
           >
-            {clearFilter && (
-              <i className="fa fa-times-circle" aria-hidden="true"></i>
-            )}
-            {clearFilter && (
-              <span
-                style={{ marginLeft: "5px" }}
-                onClick={() => {
-                  clearFilterFormValue();
-                  setClearFilterBoolean(false);
+            <i className="fa fa-times-circle" aria-hidden="true"></i>
 
-                  localStorage.removeItem("selectedFilterTypes");
-                }}
-              >
-                Clear Filter
-              </span>
-            )}
+            <span
+              style={{ marginLeft: "5px" }}
+              onClick={() => {
+                clearFilterFormValue();
+                localStorage.removeItem("selectedFilterTypes");
+              }}
+            >
+              Clear Filter
+            </span>
           </Button>
         )}
         {/* ... */}
@@ -238,7 +251,12 @@ const FilterModal = (props) => {
           className="Offcanvas-modal"
           style={{ width: "600px" }}
           show={filterModalShow}
-          onHide={formik.handleReset}
+          onHide={() => {
+            if (!filterApplied) {
+              formik.handleReset();
+            }
+            setFilterModalShow(false);
+          }}
           placement="end"
         >
           <Offcanvas.Header closeButton>
@@ -366,7 +384,7 @@ const FilterModal = (props) => {
               <Row className="filterFields due-date">
                 <FilterDropdown
                   onFilterSelect={handleFilterSelect}
-                  clearFilterProp={clearFilter}
+                  clearFilterProp={filterApplied}
                 />
               </Row>
               <Row
