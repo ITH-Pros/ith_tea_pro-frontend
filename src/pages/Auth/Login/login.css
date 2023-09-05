@@ -46,7 +46,7 @@
 }
 
 .bg-box .bg1 {
-  background-image: url("../../public/img/bg-1.png");
+  background-image: url("../../../../public/img/bg-1.png");
   background-color: #d9d8d8;
   background-position: -50px 50px;
   animation: fadeinBottom 1s both;
@@ -54,7 +54,7 @@
 }
 
 .bg-box .bg2 {
-  background-image: url("../../public/img/image_processing.gif");
+  background-image: url("../../../../public/img/image_processing.gif");
   background-color: #ededee;
   background-position: center;
   animation: fadeinTop 1s 0.3s both;
