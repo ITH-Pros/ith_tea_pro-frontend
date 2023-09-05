@@ -43,8 +43,8 @@ const ResetPassword = ({}) => {
         toast.info(data.message);
       } else {
         toast.info(data.message);
-        // localStorage.clear();
-        // window.location.reload();
+        localStorage.clear();
+        window.location.reload();
       }
     },
     onError: (error) => {
