@@ -81,8 +81,7 @@ const FilterModal = (props) => {
       // reset form
       localStorage.removeItem("taskFilters");
       localStorage.removeItem("selectedFilter");
-      localStorage.removeItem("fromDate");
-      localStorage.removeItem("toDate");
+      localStorage.removeItem("dueDate");
       removeTaskFilters();
       setFilterModalShow(false);
       setFilterApplied(false);
