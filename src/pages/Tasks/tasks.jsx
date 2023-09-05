@@ -485,8 +485,9 @@ const Tasks = () => {
       let filterData = JSON.parse(localStorage.getItem("taskFilters"));
       let selectedFilter = localStorage.getItem("selectedFilter");
       if (selectedFilter) {
-        let fromDate = localStorage.getItem("fromDate");
-        let toDate = localStorage.getItem("toDate");
+        let dueDate =  JSON.parse(localStorage.getItem("dueDate"));
+        let fromDate = dueDate.fromDate;
+        let toDate = dueDate.toDate;
         if (
           fromDate &&
           selectedFilter &&
