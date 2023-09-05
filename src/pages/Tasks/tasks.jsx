@@ -591,7 +591,6 @@ const Tasks = () => {
                   onClick={() => {
                     setSelectedTask();
                     setSelectedProject();
-                    // localStorage.setItem("addTaskModal", true);
                     setShowAddTask(true);
                   }}
                 >
