@@ -163,7 +163,7 @@ export default function Teams() {
       toast.dismiss();
       toast.info(data?.message || "Something Went Wrong");
       setAssignManagerModalShow(false);
-        },
+    },
     onError: (error) => {
       toast.dismiss();
       toast.info(error?.message || "Something Went Wrong");
@@ -174,17 +174,17 @@ export default function Teams() {
 
   /* ************* Get All Users analytics ************* */
 
-  const { data: userAnalytics, isLoading: isLoadingUserAnalytics , refetch:refetchUsersList } = useQuery(
-    ["userAnalytics", usersList],
-    () => getUserAnalytics(),
-    {
-      refetchOnWindowFocus: false,
-      enabled: usersList?.users?.length > 0,
-      select: (data) => {
-        return data?.data;
-      },
-    }
-  );
+  const {
+    data: userAnalytics,
+    isLoading: isLoadingUserAnalytics,
+    refetch: refetchUsersList,
+  } = useQuery(["userAnalytics", usersList], () => getUserAnalytics(), {
+    refetchOnWindowFocus: false,
+    enabled: usersList?.users?.length > 0,
+    select: (data) => {
+      return data?.data;
+    },
+  });
 
   /* ************* handle add-user to project ************* */
 
@@ -304,6 +304,7 @@ export default function Teams() {
 
   const deleteUserMutation = useMutation(deleteUserById, {
     onSuccess: (data) => {
+      refetchUsers();
       toast.dismiss();
       toast.info("User Deleted Successfully");
       setConfirmModalShow(false);
@@ -665,7 +666,7 @@ export default function Teams() {
                             <>
                               {(userDetails?.role === "SUPER_ADMIN" ||
                                 userDetails?.role === "ADMIN") &&
-                                usersList?.users?.length > 0 &&
+                                usersList?.users?.length > 0 && !user?.isDeleted &&
                                 AssignedManager(user)}
                             </>
                             <div className="user-analytics-item">
@@ -742,7 +743,7 @@ export default function Teams() {
 
                   {(userDetails?.role === "SUPER_ADMIN" ||
                     userDetails?.role === "ADMIN") &&
-                    user?.role !== "ADMIN" && (
+                    !user?.isDeleted && (
                       <div className="btn">
                         <button
                           className="btn-glow margin-right btn-color"
@@ -755,6 +756,11 @@ export default function Teams() {
                         </button>
                       </div>
                     )}
+                  {user.isDeleted && (
+                    <div className="info text-center">
+                      <p className="text-danger">User Deleted</p>
+                    </div>
+                  )}
                 </div>
               );
             })}
