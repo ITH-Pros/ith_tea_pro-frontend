@@ -258,6 +258,8 @@ export default function AddTaskModal(props) {
     },
   });
 
+  const {isLoading: isAddingTask} = addTaskMutation;
+
   useEffect(() => {
     if (addTaskMutation.isSuccess) {
       if (!isAnotherTask) {
@@ -748,8 +750,11 @@ export default function AddTaskModal(props) {
                     className="btn btn-primary"
                     type="button"
                     onClick={formik.handleSubmit}
+                    disabled={isAddingTask}
                   >
-                    Create
+
+                    {isAddingTask ? "Creating..." : "Create"}
+            
                   </Button>
                 )}
                 {selectedTask && (
