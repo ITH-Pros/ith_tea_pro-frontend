@@ -63,7 +63,8 @@ export default function AddTaskModal(props) {
     selectedTask,
     handleProjectId,
     selectedSection,
-    // getNewTasks,
+    refetchTasks,
+    setSelectedSection
   } = props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
@@ -71,10 +72,6 @@ export default function AddTaskModal(props) {
   const [isAnotherTask, setIsAnotherTask] = useState(false);
   const miscTypeArray = CONSTANTS.MISCTYPE;
   const [isResetAttachment, setIsResetAttachment] = useState(false);
-  // const [isAddAnother, setAddAnother] = useState(false);
-  // const [categoryList, setCategoryList] = useState([]);
-  // const [leadLists, setLeadLists] = useState([]);
-  // const [userList, setUserList] = useState([]);
   const [selectedSectionName, setSelectedSectionName] = useState(null);
 
 
@@ -216,6 +213,7 @@ export default function AddTaskModal(props) {
     }
   );
 
+
   /*
   @get user list
   */
@@ -243,7 +241,7 @@ export default function AddTaskModal(props) {
         toast.error(data?.message);
         return;
       } else {
-        // getNewTasks()
+        refetchTasks();
         formik.resetForm();
         setUploadedFiles([]);
         setIsResetAttachment(true);
@@ -281,6 +279,7 @@ export default function AddTaskModal(props) {
         return;
       } else {
         // getNewTasks()
+        refetchTasks();
         resetModalData();
         closeModal();
         toast.dismiss();
@@ -796,7 +795,7 @@ export default function AddTaskModal(props) {
                         setIsAnotherTask(true);
                       }}
                     >
-                       {isAddingTask ? "Creating..." :"Create And Add Another"}
+                       Create And Add Another
                     </Button>
                   )}
               </div>
