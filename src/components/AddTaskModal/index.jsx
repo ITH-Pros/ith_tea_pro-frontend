@@ -290,6 +290,8 @@ export default function AddTaskModal(props) {
     },
   });
 
+  const {isLoading: isUpdatingTask} = updateTaskMutation;
+
   /*  @deleteTask */
   const deleteTaskMutation = useMutation(deleteTaskDetails, {
     onSuccess: (data) => {
@@ -763,8 +765,9 @@ export default function AddTaskModal(props) {
                       className="btn btn-primary"
                       type="button"
                       onClick={formik.handleSubmit}
+                      disabled={isUpdatingTask}
                     >
-                      Update
+                      {isUpdatingTask ? "Updating..." : "Update"}
                     </Button>
                     <Button
                       className="btn btn-danger"
@@ -786,13 +789,14 @@ export default function AddTaskModal(props) {
                     <Button
                       className="btn btn-primary"
                       style={{ marginLeft: "10px" }}
+                      disabled={isAddingTask}
                       type="button"
                       onClick={() => {
                         formik.handleSubmit()
                         setIsAnotherTask(true);
                       }}
                     >
-                      Create And Add Another
+                       {isAddingTask ? "Creating..." :"Create And Add Another"}
                     </Button>
                   )}
               </div>
