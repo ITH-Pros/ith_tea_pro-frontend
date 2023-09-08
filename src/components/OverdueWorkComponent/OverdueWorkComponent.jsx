@@ -13,7 +13,7 @@ import avtar from "@assets/img/avtar.png";
 import { Button } from "react-bootstrap";
 import { getOverDueTaskListData } from "@services/user/api";
 import { useQuery } from "react-query";
-
+import CustomLoader from "@components/Shared/CustomLoader";
 const OverdueWorkComponent = ({
   daysSince,
   userDetails,
@@ -79,10 +79,12 @@ const OverdueWorkComponent = ({
       <Row>
         <Col lg={12} className="mt-3">
           <Card
-            id="card-task"
-            className={!overdueWorkList?.length ? "alig-nodata" : "px-3"}
+           
+            className={!overdueWorkList?.length ? "alig-nodata" : "px-0"}
           >
-            {(isLoading || isFetching) && (
+            {isFetching && <CustomLoader/>}
+            <div  id="card-task">
+            {(isLoading) && (
               <div className="text-center">
                 <div className="spinner-border text-primary" role="status">
                   <span className="visually-hidden">Loading...</span>
@@ -324,6 +326,7 @@ const OverdueWorkComponent = ({
                   </Col>
                 </Row>
               ))}
+              </div>
           </Card>
         </Col>
       </Row>

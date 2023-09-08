@@ -15,6 +15,8 @@ import leadAvatar from "@assets/img/leadAvatar.jpeg";
 import avtar from "@assets/img/avtar.png";
 import { getAllPendingRating, getAllUsers } from "@services/user/api";
 import { useQuery } from "react-query";
+import CustomLoader from "@components/Shared/CustomLoader";
+import Loader from "@components/Shared/Loader";
 
 const TaskVerificationComponent = ({
   userDetails,
@@ -122,15 +124,18 @@ const TaskVerificationComponent = ({
       <Row>
         <Col lg={12} className="mt-3">
           <Card
-            id="card-task"
-            className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-3"}
+            
+            className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-0"}
           >
-            {(isLoading || isFetching) && (
-              <div className="text-center">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
+                 {isFetching && <CustomLoader/>}
+            <div  id="card-task">
+            { (
+              // <div className="card_loader">
+              //   <div className="spinner-border text-primary" role="status">
+                  
+              //   </div>
+              // </div>
+           <Loader/>
             )}
 
             {pendingRatingList && pendingRatingList?.length === 0 && (
@@ -307,6 +312,7 @@ const TaskVerificationComponent = ({
                   )}
                 </Row>
               ))}
+              </div>
           </Card>
         </Col>
       </Row>
