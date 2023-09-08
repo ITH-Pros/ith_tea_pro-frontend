@@ -411,7 +411,7 @@ const Tasks = () => {
     isLoading,
     isFetching,
   } = useQuery(["getAllTasks" , showAddTask], () => getProjectsTask(fetchTasks()), {
-    enabled: true,
+    enabled: !showAddTask,
     refetchOnWindowFocus: false,
     select: (data) => {
       if (data?.error) {
