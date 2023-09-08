@@ -63,7 +63,8 @@ export default function AddTaskModal(props) {
     selectedTask,
     handleProjectId,
     selectedSection,
-    // getNewTasks,
+    refetchTasks,
+    setSelectedSection
   } = props;
   const statusList = CONSTANTS.statusList;
   const priorityList = CONSTANTS.priorityList;
@@ -71,10 +72,6 @@ export default function AddTaskModal(props) {
   const [isAnotherTask, setIsAnotherTask] = useState(false);
   const miscTypeArray = CONSTANTS.MISCTYPE;
   const [isResetAttachment, setIsResetAttachment] = useState(false);
-  // const [isAddAnother, setAddAnother] = useState(false);
-  // const [categoryList, setCategoryList] = useState([]);
-  // const [leadLists, setLeadLists] = useState([]);
-  // const [userList, setUserList] = useState([]);
   const [selectedSectionName, setSelectedSectionName] = useState(null);
 
 
@@ -216,6 +213,7 @@ export default function AddTaskModal(props) {
     }
   );
 
+
   /*
   @get user list
   */
@@ -243,7 +241,7 @@ export default function AddTaskModal(props) {
         toast.error(data?.message);
         return;
       } else {
-        // getNewTasks()
+        refetchTasks();
         formik.resetForm();
         setUploadedFiles([]);
         setIsResetAttachment(true);
@@ -257,6 +255,8 @@ export default function AddTaskModal(props) {
       }
     },
   });
+
+  const {isLoading: isAddingTask} = addTaskMutation;
 
   useEffect(() => {
     if (addTaskMutation.isSuccess) {
@@ -279,6 +279,7 @@ export default function AddTaskModal(props) {
         return;
       } else {
         // getNewTasks()
+        refetchTasks();
         resetModalData();
         closeModal();
         toast.dismiss();
@@ -287,6 +288,8 @@ export default function AddTaskModal(props) {
       }
     },
   });
+
+  const {isLoading: isUpdatingTask} = updateTaskMutation;
 
   /*  @deleteTask */
   const deleteTaskMutation = useMutation(deleteTaskDetails, {
@@ -748,8 +751,11 @@ export default function AddTaskModal(props) {
                     className="btn btn-primary"
                     type="button"
                     onClick={formik.handleSubmit}
+                    disabled={isAddingTask}
                   >
-                    Create
+
+                    {isAddingTask ? "Creating..." : "Create"}
+            
                   </Button>
                 )}
                 {selectedTask && (
@@ -758,8 +764,9 @@ export default function AddTaskModal(props) {
                       className="btn btn-primary"
                       type="button"
                       onClick={formik.handleSubmit}
+                      disabled={isUpdatingTask}
                     >
-                      Update
+                      {isUpdatingTask ? "Updating..." : "Update"}
                     </Button>
                     <Button
                       className="btn btn-danger"
@@ -781,13 +788,14 @@ export default function AddTaskModal(props) {
                     <Button
                       className="btn btn-primary"
                       style={{ marginLeft: "10px" }}
+                      disabled={isAddingTask}
                       type="button"
                       onClick={() => {
                         formik.handleSubmit()
                         setIsAnotherTask(true);
                       }}
                     >
-                      Create And Add Another
+                       Create And Add Another
                     </Button>
                   )}
               </div>

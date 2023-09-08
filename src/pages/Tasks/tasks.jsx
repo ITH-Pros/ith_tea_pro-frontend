@@ -410,7 +410,7 @@ const Tasks = () => {
     refetch: getAllTasksForListing,
     isLoading,
     isFetching,
-  } = useQuery(["getAllTasks" , showAddTask], () => getProjectsTask(fetchTasks()), {
+  } = useQuery(["getAllTasks" ], () => getProjectsTask(fetchTasks()), {
     enabled: true,
     refetchOnWindowFocus: false,
     select: (data) => {
@@ -583,11 +583,6 @@ const Tasks = () => {
     },
   });
 
-  const getNewTasks = (id) => {
-    closeModal();
-    getAllTasksForListing();
-  };
-
   const getTaskFilters = () => {
     if (
       localStorage.getItem("taskFilters") ||
@@ -599,6 +594,7 @@ const Tasks = () => {
 
   const closeModal = () => {
     setShowAddTask(false);
+    setSelectedSection(null);
     setSelectedProject();
     setSelectedTask();
   };
@@ -664,8 +660,8 @@ const Tasks = () => {
         {showAddTask && (
           <AddTaskModal
             selectedProjectFromTask={selectedProject?._id}
+            refetchTasks={getAllTasksForListing}
             selectedTask={selectedTask}
-            getNewTasks={getNewTasks}
             showAddTask={showAddTask}
             closeModal={closeModal}
             handleProjectId={selectedProjectId}

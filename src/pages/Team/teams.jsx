@@ -41,7 +41,7 @@ export default function Teams() {
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [projectList, setProjectListValue] = useState([]);
+  // const [projectList, setProjectListValue] = useState([]);
   const [userAssignedProjects, setUserAssignedProjects] = useState([]);
   const [selectedProjectIds, setSelectedProjectIds] = useState([]);
   const [pageDetails, setPageDetails] = useState({
@@ -199,13 +199,15 @@ export default function Teams() {
     setModalShow(true);
   };
 
-  const { isLoading: projectLoading } = useQuery(
-    ["allProjects", modalShow],
+  const { isLoading: projectLoading, data: projectList } = useQuery(
+    ["allProjects"],
     () => getAllProjects(),
     {
       refetchOnWindowFocus: false,
-      enabled: modalShow,
-      onSuccess: (data) => setProjectListValue(data?.data),
+      enabled: true,
+      select: (data) => {
+        return data?.data;
+      },
     }
   );
 
@@ -214,6 +216,8 @@ export default function Teams() {
       setUserAssignedProjects(data?.data);
     },
   });
+
+  const { isLoading: isLoadingAssignedProject } = assignedUserToProjectMutation;
 
   const GetModalBody = () => {
     return (
@@ -225,29 +229,35 @@ export default function Teams() {
             );
             const isSelected = selectedProjectIds?.includes(project?._id);
             return (
-              <div key={project?._id} className="assignPro">
-                <input
-                  disabled={checkAlreadyAssigned}
-                  checked={checkAlreadyAssigned || isSelected}
-                  onChange={() => {
-                    if (isSelected) {
-                      setSelectedProjectIds(
-                        selectedProjectIds?.filter((id) => id !== project?._id)
-                      );
-                    } else {
-                      setSelectedProjectIds([
-                        ...selectedProjectIds,
-                        project?._id,
-                      ]);
-                    }
-                  }}
-                  type="checkbox"
-                />
-                <span>{project?.name}</span>
-                {projectLoading && (
-                  <Spinner animation="border" variant="primary" />
-                )}
-              </div>
+              <>
+                {/* {!isLoadingAssignedProject && ( */}
+                  <div key={project?._id} className="assignPro">
+                    <input
+                      disabled={checkAlreadyAssigned}
+                      checked={checkAlreadyAssigned || isSelected}
+                      onChange={() => {
+                        if (isSelected) {
+                          setSelectedProjectIds(
+                            selectedProjectIds?.filter(
+                              (id) => id !== project?._id
+                            )
+                          );
+                        } else {
+                          setSelectedProjectIds([
+                            ...selectedProjectIds,
+                            project?._id,
+                          ]);
+                        }
+                      }}
+                      type="checkbox"
+                    />
+                    <span>{project?.name}</span>
+                    {projectLoading && (
+                      <Spinner animation="border" variant="primary" />
+                    )}
+                  </div>
+                {/* )} */}
+              </>
             );
           })}
       </>
@@ -268,6 +278,7 @@ export default function Teams() {
         return;
       } else {
         // setProjectListValue(data);
+        setSelectedUserId("");
         setModalShow(false);
         toast.dismiss();
         toast.info(data?.message);
@@ -666,7 +677,8 @@ export default function Teams() {
                             <>
                               {(userDetails?.role === "SUPER_ADMIN" ||
                                 userDetails?.role === "ADMIN") &&
-                                usersList?.users?.length > 0 && !user?.isDeleted &&
+                                usersList?.users?.length > 0 &&
+                                !user?.isDeleted &&
                                 AssignedManager(user)}
                             </>
                             <div className="user-analytics-item">
@@ -752,7 +764,7 @@ export default function Teams() {
                           }}
                         >
                           <i className="fa fa-check " aria-hidden="true"></i>{" "}
-                          Assign
+                         {isLoadingAssignedProject && user._id === selectedUserId ? "Please wait..." : "Assign" } 
                         </button>
                       </div>
                     )}
@@ -780,7 +792,7 @@ export default function Teams() {
         {loading ? <Loader /> : null}
 
         <Modals
-          modalShow={modalShow}
+          modalShow={modalShow && !isLoadingAssignedProject}
           modalBody={<GetModalBody />}
           heading="Assign Project"
           onHide={() => setModalShow(false)}
