@@ -6,7 +6,6 @@ import "./index.css";
 import "react-quill/dist/quill.snow.css";
 import { AuthProvider } from "./utlis/AuthProvider.jsx";
 import { BrowserRouter } from "react-router-dom";
-import { ReactQueryDevtools } from "react-query/devtools";
 // React Query imports
 import { QueryClient, QueryClientProvider } from "react-query";
 

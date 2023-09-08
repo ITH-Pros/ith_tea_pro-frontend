@@ -14,6 +14,7 @@ import { Button } from "react-bootstrap";
 import { getOverDueTaskListData } from "@services/user/api";
 import { useQuery } from "react-query";
 import CustomLoader from "@components/Shared/CustomLoader";
+import Loader from "@components/Shared/Loader";
 const OverdueWorkComponent = ({
   daysSince,
   userDetails,
@@ -82,15 +83,9 @@ const OverdueWorkComponent = ({
            
             className={!overdueWorkList?.length ? "alig-nodata" : "px-0"}
           >
-            {isFetching && <CustomLoader/>}
+           {isFetching && !isLoading && <CustomLoader />}
             <div  id="card-task">
-            {(isLoading) && (
-              <div className="text-center">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            )}
+            {isLoading && <Loader />}
             {overdueWorkList && overdueWorkList?.length === 0 && (
               <p className="text-center">No task found.</p>
             )}
