@@ -14,21 +14,18 @@ const Loader = () => {
   `
 
   return (
-    <Wrapper>
+    
       <div className="wrapper_loader">
         <div className="vertical-centered-box">
           <div className="content">
-            <div className="loader-circle"></div>
-            <div className="loader-line-mask">
-              <div className="loader-line"></div>
-            </div>
-            <div className="loader_wrap">
-              <TeaCupImage src={loader} />
-            </div>
+      
+          <div class="loader"></div>
+
+         
           </div>
         </div>
       </div>
-    </Wrapper>
+  
   )
 }
 

@@ -247,11 +247,6 @@ export default function AddTaskModal(props) {
         setIsResetAttachment(true);
         toast.dismiss();
         toast.success(data?.message);
-        // if (!isAnotherTask) {
-        //   closeModal();
-        //   return;
-        // }
-        // setIsAnotherTask(false);
       }
     },
   });

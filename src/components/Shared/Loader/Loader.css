@@ -1,5 +1,6 @@
 
-.wrapper_loader{   position: fixed;
+.wrapper_loader{  
+   position: absolute;
   top: 0;
   left: 0;
   z-index: 9999;
@@ -9,9 +10,11 @@
   width: 100%;
   height: 100%;
   cursor: none;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #ffffffcc;
+  border-radius: 10px;
   pointer-events: none;}
 .loader_wrap{ background: #fff; border-radius: 50%; width: 100px; height: 100px; text-align: center;}
+
 /* .loader_wrap small{ margin-top: -40px;} */
 .loader_wrap img{  width: 100%;}
  
@@ -21,7 +24,7 @@ body .vertical-centered-box {
   height: 100%;
   text-align: center;
   cursor: none;
-  z-index: 9999;
+  z-index: 999999;
 }
 body .vertical-centered-box:after {
   content: '';
@@ -45,31 +48,29 @@ body .vertical-centered-box .content {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  margin-left: -60px;
-  margin-top: -60px;
+ 
 }
 .loader-line-mask {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 60px;
-  height: 120px;
-  margin-left: -60px;
-  margin-top: -60px;
+  height: 60px;
+ 
   overflow: hidden;
   transform-origin: 60px 60px;
   -webkit-mask-image: -webkit-linear-gradient(top, #000000, rgba(0, 0, 0, 0));
   animation: rotate 1.2s infinite linear;
 }
 .loader-line-mask .loader-line {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(222, 7, 222, 0.5);
 } 
 @keyframes rotate {
   0% {
@@ -79,3 +80,26 @@ body .vertical-centered-box .content {
     transform: rotate(360deg);
   }
 } 
+
+
+.loader {
+  border: 7px solid #eeeeee;
+  border-radius: 50%;
+  border-top: 7px solid #a910e1;
+  width: 35px;
+  height: 35px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  background: #fff;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

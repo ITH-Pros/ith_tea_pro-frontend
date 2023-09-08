@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import "./dashboard.css";
 import Col from "react-bootstrap/Col";
 import Loader from "@components/Shared/Loader";
+
 import {
   editLogedInUserDetails,
   reopenTaskById,
@@ -155,7 +156,6 @@ export default function Dashboard(props) {
     setShowAddTask(false);
     setSelectedProject();
     setSelectedTask();
-    onInit();
     if (userDetails?.role !== "CONTRIBUTOR") {
       setIsChange(!isChange);
     }
@@ -363,6 +363,7 @@ export default function Dashboard(props) {
                 showAddTask={showAddTask}
                 closeModal={closeModal}
                 setToasterMessageToDashboard={setToasterMessageToDashboard}
+                refetchTasks={onInit}
               />
             )}
           </>

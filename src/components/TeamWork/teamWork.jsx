@@ -12,6 +12,8 @@ import avtar from "@assets/img/avtar.png";
 import { Row, Container, Dropdown, Card, Button, Badge } from "react-bootstrap";
 import CustomCalendar from "@components/CustomCalender/custom-calender";
 import { formatDateToTeam } from "@helpers/index";
+import CustomLoader from "@components/Shared/CustomLoader";
+import Loader from "@components/Shared/Loader";
 
 const Teamwork = ({
   userDetails,
@@ -69,16 +71,8 @@ const Teamwork = ({
                         teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
                       }
                     >
-                      {(isLoading || isFetching) && (
-                        <div className="text-center">
-                          <div
-                            className="spinner-border text-primary"
-                            role="status"
-                          >
-                            <span className="visually-hidden">Loading...</span>
-                          </div>
-                        </div>
-                      )}
+                      {isFetching && !isLoading && <CustomLoader />}
+                      {isLoading && <Loader />}
 
                       {teamWorkList &&
                         teamWorkList?.length > 0 &&
