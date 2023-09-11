@@ -9,11 +9,18 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
- 
+
 import moment from "moment";
 import UserIcon from "@components/ProfileImage/profileImage";
 import "../../pages/Tasks/tasks.css";
-import { BsPencilSquare, BsArrowsMove, BsJournalPlus, BsFillTrash3Fill } from "react-icons/bs";
+import {
+  BsPencilSquare,
+  BsArrowsMove,
+  BsJournalPlus,
+  BsFillTrash3Fill,
+} from "react-icons/bs";
+import CustomLoader from "@components/Shared/CustomLoader";
+import Loader from "@components/Shared/Loader";
 const TaskList = ({
   projects,
   selectedProjectId,
@@ -31,7 +38,6 @@ const TaskList = ({
   setShowAddTask,
   setSelectedTask,
   isLoading,
-  isFetching,
 }) => {
   return (
     <Accordion alwaysOpen="true">
@@ -40,13 +46,7 @@ const TaskList = ({
           No Tasks Found
         </p>
       )}
-      {(isLoading || isFetching) && (
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      )}
+      {isLoading && <Loader />}
 
       {projects?.map((project, index) => (
         // check if tasks array has data
@@ -106,8 +106,7 @@ const TaskList = ({
                         handleAddTaskFromSection(project);
                       }}
                     >
-                      <BsJournalPlus/>{" "}
-                      Add Tasks
+                      <BsJournalPlus /> Add Tasks
                     </Dropdown.Item>
                   )}
 
@@ -124,8 +123,7 @@ const TaskList = ({
                             })
                           }
                         >
-                           <BsPencilSquare/>{" "}
-                          Edit Section
+                          <BsPencilSquare /> Edit Section
                         </Dropdown.Item>
                       )}
                       {/* {!isArchive && (
@@ -142,8 +140,7 @@ const TaskList = ({
                           })
                         }
                       >
-                        <BsFillTrash3Fill/>{" "}
-                            Delete Section
+                        <BsFillTrash3Fill /> Delete Section
                       </Dropdown.Item>
                     </>
                   )}
@@ -463,9 +460,7 @@ const TaskList = ({
                           setSelectedTask(task);
                         }}
                       >
-                        <BsPencilSquare/>
-                         
-                         
+                        <BsPencilSquare />
                       </a>
                     )}
                 </li>

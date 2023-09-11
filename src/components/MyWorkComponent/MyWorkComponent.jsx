@@ -13,6 +13,8 @@ import moment from "moment";
 import "@pages/Dashbord/dashboard";
 import { useQuery } from "react-query";
 import { getAllMyWorks } from "@services/user/api";
+import CustomLoader from "@components/Shared/CustomLoader";
+import Loader from "@components/Shared/Loader";
 
 const MyWorkComponent = ({
   userDetails,
@@ -89,13 +91,8 @@ const MyWorkComponent = ({
             id="card-task"
             className={myWorkList?.length === 0 ? "alig-nodata" : "px-3"}
           >
-            {(isLoading || isFetching) && (
-              <div className="text-center">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            )}
+            {isFetching && !isLoading && <CustomLoader />}
+            {isLoading && <Loader />}
             {!myWorkList ||
               (myWorkList?.length === 0 && !isFetching && !isLoading && (
                 <Row>

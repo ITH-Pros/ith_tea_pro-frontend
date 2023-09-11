@@ -21,6 +21,7 @@ import { useAuth } from "../../utlis/AuthProvider";
 import TaskList from "@components/task-List/tasklist";
 import { useMutation, useQuery } from "react-query";
 import { convertToUTCDay, convertToUTCNight } from "@helpers/index";
+import CustomLoader from "@components/Shared/CustomLoader";
 
 const Tasks = () => {
   const [selectedProject, setSelectedProject] = useState({});
@@ -321,7 +322,7 @@ const Tasks = () => {
       let filterData = JSON.parse(localStorage.getItem("taskFilters"));
       let selectedFilter = localStorage.getItem("selectedFilter");
       if (selectedFilter) {
-       let dueDate =  JSON.parse(localStorage.getItem("dueDate"));
+        let dueDate = JSON.parse(localStorage.getItem("dueDate"));
         let fromDate = dueDate.fromDate;
         let toDate = dueDate.toDate;
         if (
@@ -410,7 +411,7 @@ const Tasks = () => {
     refetch: getAllTasksForListing,
     isLoading,
     isFetching,
-  } = useQuery(["getAllTasks" ], () => getProjectsTask(fetchTasks()), {
+  } = useQuery(["getAllTasks"], () => getProjectsTask(fetchTasks()), {
     enabled: true,
     refetchOnWindowFocus: false,
     select: (data) => {
@@ -485,7 +486,7 @@ const Tasks = () => {
       let filterData = JSON.parse(localStorage.getItem("taskFilters"));
       let selectedFilter = localStorage.getItem("selectedFilter");
       if (selectedFilter) {
-        let dueDate =  JSON.parse(localStorage.getItem("dueDate"));
+        let dueDate = JSON.parse(localStorage.getItem("dueDate"));
         let fromDate = dueDate.fromDate;
         let toDate = dueDate.toDate;
         if (
@@ -603,10 +604,11 @@ const Tasks = () => {
     <>
       <div className="rightDashboard" style={{ marginTop: "7%" }}>
         <Row>
-          <Col lg={6}>
+          <Col lg={6} style={{ position: "relative" }}>
             <h1 className="h1-text mt-0">
               <i className="fa fa-list-ul" aria-hidden="true"></i>
               Task
+              {!isLoading && isFetching && <CustomLoader />}
             </h1>
           </Col>
           <Col lg={6}>
@@ -680,7 +682,6 @@ const Tasks = () => {
 
         <TaskList
           projects={projects}
-          isFetching={isFetching}
           isLoading={isLoading}
           selectedProjectId={selectedProjectId}
           isArchive={isArchive}

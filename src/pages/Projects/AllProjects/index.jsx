@@ -18,6 +18,7 @@ import { FaGem } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+import CustomLoader from "@components/Shared/CustomLoader";
 
 export default function AllProject() {
   const { userDetails } = useAuth();
@@ -220,7 +221,7 @@ export default function AllProject() {
               Projects
             </h1>
           </Col>
-          <Col lg={6}>
+          <Col lg={6} style={{ position: "relative" }}>
             <div className="text-end">
               {(userDetails?.role === "SUPER_ADMIN" ||
                 userDetails?.role === "ADMIN") &&
@@ -240,17 +241,12 @@ export default function AllProject() {
                 </button>
               )}
             </div>
+            {isFetching && !isLoading && <CustomLoader />}
           </Col>
         </Row>
 
         <div className="project-boxes jsGridView">
-          {(isLoading || isFetching) && (
-            <div className="text-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          )}
+          {isLoading && <Loader />}
           {projectList &&
             projectList.map((element, projectIndex) => {
               return (
