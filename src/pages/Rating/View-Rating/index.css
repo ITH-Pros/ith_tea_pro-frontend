@@ -1,6 +1,6 @@
-td {
+/* td {
   width: 52px;
-}
+} */
 
 .input_dashboard {
   color: black;
@@ -721,8 +721,8 @@ ul.weekdays {
 
  
 
-.tableFixHead tbody { display:block; height:890px; overflow-y:scroll; width: 1865px; }
-.tableFixHead thead, table tbody tr { display:table; width:100%; table-layout:fixed; }
+/* .tableFixHead tbody { display:block; height:890px; overflow-y:scroll; width: 1865px; }
+.tableFixHead thead, table tbody tr { display:table; width:100%; table-layout:fixed; } */
 
 
  

@@ -1,6 +1,4 @@
-td {
-  width: 52px;
-}
+ 
 
 .input_dashboard {
   color: black;
@@ -324,7 +322,7 @@ button.add-rating-button {
   border-radius: 10px;
   height: 300px;
   overflow-y: auto;
-  margin-bottom: 2rem;
+  margin-bottom: 0rem;
   border: 0px;
 }
 
@@ -721,8 +719,7 @@ ul.weekdays {
 
  
 
-.tableFixHead tbody { display:block; height:900px; overflow-y:scroll; width: 1925px; }
-.tableFixHead thead, table tbody tr { display:table; width:100%; table-layout:fixed; }
+ 
 
 
  
@@ -737,53 +734,3 @@ ul.weekdays {
 
   
 } */
-
-.table-fixed-column-outter {
-  position: relative;
-  margin: 2rem auto;
-  max-width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-}
-
-.table-fixed-column-inner {
-  overflow-x: scroll;
-  overflow-y: visible;
-  margin-left: 100px;
-}
-.table-fixed-column-inner .table {
-  margin-bottom: 0.25rem;
-  border-color: #fff !important;
-}
-
-.tableFixHead .table.table-fixed-column {
-  table-layout: fixed;
-  width: 100%;
-}
-.tableFixHead .table th{ text-align: center; border: 0px !important;
-  margin: auto;
-  padding: 0 5px !important;
-  width: 60px !important;}
-  .tableFixHead .table td
- {
-  text-align: center;
-  margin: auto;
-  padding: 0 5px !important;
-  width: 60px !important;
-  border: 0px !important;
-}
-
- 
-.table tr td:first-child {
-  /* position: absolute; */
-  left: 0;
-  width: 100px !important;
-  height: 25px;
-}
-
-
-
-
-
-
-

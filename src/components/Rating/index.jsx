@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Offcanvas, Row, Table } from "react-bootstrap";
+import { Offcanvas, Row,  } from "react-bootstrap";
 import { getRatings, verifyManager } from "@services/user/api";
 import RatingBox from "./ratingBox";
 import Loader from "../Shared/Loader";
@@ -14,6 +14,88 @@ import TasksModalBody from "./view-task-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+
+import { Table } from 'antd';
+const columns = [
+  {
+    title: ' Name',
+    width: 100,
+    dataIndex: 'name',
+    key: 'name',
+    fixed: 'left',
+    ellipsis:'true'
+  },
+  {
+    title: 'Age',
+    width: 100,
+    dataIndex: 'age',
+    key: 'age',
+   
+  },
+  {
+    title: 'Column 1',
+    dataIndex: 'address',
+    key: '1',
+    width: 150,
+  },
+  {
+    title: 'Column 2',
+    dataIndex: 'address',
+    key: '2',
+    width: 150,
+  },
+  {
+    title: 'Column 3',
+    dataIndex: 'address',
+    key: '3',
+    width: 150,
+  },
+  {
+    title: 'Column 4',
+    dataIndex: 'address',
+    key: '4',
+    width: 150,
+  },
+  {
+    title: 'Column 5',
+    dataIndex: 'address',
+    key: '5',
+    width: 150,
+  },
+  {
+    title: 'Column 6',
+    dataIndex: 'address',
+    key: '6',
+    width: 150,
+  },
+  {
+    title: 'Column 7',
+    dataIndex: 'address',
+    key: '7',
+    width: 150,
+  },
+  {
+    title: 'Column 8',
+    dataIndex: 'address',
+    key: '8',
+  },
+  {
+    title: 'Average',
+    key: 'operation',
+    fixed: 'right',
+    width: 100,
+    render: () => <a>action</a>,
+  },
+];
+const data = [];
+for (let i = 0; i < 100; i++) {
+  data.push({
+    key: i,
+    name: `Aditya Kumar ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  });
+}
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -325,12 +407,12 @@ export default function ViewRating() {
                 </Form.Group>
               </h5>
             </div>
-            <div class="table-fixed-column-outter">
-              <div class="table-fixed-column-inner">
-                <div className="tableFixHead">
-                  <Table
+            <div class="">
+              <div class="">
+                <div className="">
+                  <table
                     responsive
-                    className="table-fixed-column table-fixed-column table table-bordered table-striped"
+                    className=""
                   >
                     <thead>
                       <tr>
@@ -513,7 +595,7 @@ export default function ViewRating() {
                         );
                       })}
                     </tbody>
-                  </Table>
+                  </table>
                   {(isLoading || verifyManagerMutation.isLoading) && (
                     <div
                       className="text-center"
@@ -532,7 +614,17 @@ export default function ViewRating() {
             </div>
           </div>
 
-          <div></div>
+          <div>
+
+          <Table
+    columns={columns}
+    dataSource={data}
+    scroll={{
+      x: 1500,
+      y: 300,
+    }}
+  />
+          </div>
         </div>
       ) : (
         <div>{teamView !== undefined && <MyCalendar />}</div>
