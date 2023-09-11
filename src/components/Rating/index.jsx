@@ -75,7 +75,7 @@ export default function ViewRating() {
           ),
           dataIndex: "rating",
           key: index + 1,
-          width: 150,
+          width: 60,
           render: (text, record) => {
             return (
               <div
@@ -94,8 +94,9 @@ export default function ViewRating() {
       title: "Average",
       key: "operation",
       fixed: "right",
-      width: 100,
+      width: 70,
       dataIndex: "averageRating",
+      
 
       // render: () => <a>1.0</a>,
     },
@@ -460,7 +461,7 @@ export default function ViewRating() {
               dataSource={data}
               scroll={{
                 x: 1500,
-                y: 1000,
+                y: 350,
               }}
             />
           </div>

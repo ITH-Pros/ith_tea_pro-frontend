@@ -73,10 +73,10 @@ table > :not(caption) > * > * {
   -webkit-backdrop-filter: blur(3.7px);
   backdrop-filter: blur(3.7px);
   border: 1px solid rgba(210, 210, 210, 0.99);
-  height: 25px;
-  width: 50px !important;
+ 
+ 
   display: block;
-  line-height: 20px;
+ 
 }
 
 thead,
