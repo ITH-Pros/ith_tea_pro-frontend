@@ -16,7 +16,7 @@ import TasksModalBody from "./view-task-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
-const ROOT = `rating_table`
+const ROOT = `rating_table`;
 
 import { Table } from "antd";
 
@@ -81,8 +81,14 @@ export default function ViewRating() {
               <div
                 className={`${
                   weekendValue ? "weekendBox" : ""
-                } input_dashboard`} 
-                // onClick={(e)=>handleTableClick(e)}
+                } input_dashboard`}
+                data-filled={text[index] !== 0}
+                data-user={JSON.stringify(ratingsArray[index])}
+                data-date={index + 1}
+                data-month={months.indexOf(monthUse) + 1}
+                data-year={yearUse}
+
+                onClick={(e) => handleTableClick(e)}
               >
                 {text[index]}
               </div>
@@ -202,9 +208,6 @@ export default function ViewRating() {
    */
 
   const handleTableClick = (event) => {
-
-    console.log(event.target?.dataset?.filled);
-
     let isFilled = event.target?.dataset?.filled;
     const clickedElement = event.target;
     const childData = clickedElement.dataset;
@@ -292,7 +295,8 @@ export default function ViewRating() {
     for (let j = 0; j < days; j++) {
       if (userRatings[j] === -1) {
         rating.push("A");
-      } else {
+      }
+       else {
         rating.push(formatedRating(userRatings[j]));
       }
     }
@@ -305,169 +309,169 @@ export default function ViewRating() {
   }
 
   return (
-    <div>
-      <Offcanvas
-        className="Offcanvas-modal"
-        style={{ width: "500px" }}
-        show={modalShow}
-        onHide={() => hideModal()}
-        placement="end"
-      >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>
-            {" "}
-            {userDetails?.role !== "CONTRIBUTOR"
-              ? raitngForDay >= -1
-                ? "View Tasks"
-                : "Add Rating"
-              : "View Tasks"}
-          </Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          {userDetails?.role !== "CONTRIBUTOR" ? (
-            <RatingModalBody
-              data={ratingData}
-              setModalShow={(data) => {
-                setModalShow(data);
-                if (data === false && teamView) {
-                  getAllRatings();
-                }
-              }}
-              raitngForDay={raitngForDay}
-            />
-          ) : (
-            <TasksModalBody
-              data={ratingData}
-              setModalShow={(data) => {
-                setModalShow(data);
-                if (data === false && teamView) {
-                  getAllRatings();
-                }
-              }}
-              raitngForDay={raitngForDay}
-            />
-          )}
-        </Offcanvas.Body>
-      </Offcanvas>
-      <div className="dashboard_camp">
-        <Row>
-          <Col lg={12}>
-            {(userDetails?.role === "LEAD" ||
-              userDetails?.role === "CONTRIBUTOR") && (
-              <button
-                className="addTaskBtn"
-                onClick={() => setTeamView(!teamView)}
-                style={{ position: "absolute", right: "40px", zIndex: "9" }}
-              >
-                {teamView ? "Self view" : "Team View"}{" "}
-              </button>
+    <>
+      <div>
+        <Offcanvas
+          className="Offcanvas-modal"
+          style={{ width: "500px" }}
+          show={modalShow}
+          onHide={() => hideModal()}
+          placement="end"
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>
+              {" "}
+              {userDetails?.role !== "CONTRIBUTOR"
+                ? raitngForDay >= -1
+                  ? "View Tasks"
+                  : "Add Rating"
+                : "View Tasks"}
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            {userDetails?.role !== "CONTRIBUTOR" ? (
+              <RatingModalBody
+                data={ratingData}
+                setModalShow={(data) => {
+                  setModalShow(data);
+                  if (data === false && teamView) {
+                    getAllRatings();
+                  }
+                }}
+                raitngForDay={raitngForDay}
+              />
+            ) : (
+              <TasksModalBody
+                data={ratingData}
+                setModalShow={(data) => {
+                  setModalShow(data);
+                  if (data === false && teamView) {
+                    getAllRatings();
+                  }
+                }}
+                raitngForDay={raitngForDay}
+              />
             )}
-          </Col>
-        </Row>
-      </div>
-
-      {teamView ? (
+          </Offcanvas.Body>
+        </Offcanvas>
         <div className="dashboard_camp">
-          <div className=" ">
-            <div className="d-flex" style={{ marginTop: "10px" }}>
-              <h5 className="text-center h5cls">
-                <p
-                  style={{
-                    marginRight: "10px",
-                    marginTop: "13px",
-                    fontSize: "14",
-                  }}
+          <Row>
+            <Col lg={12}>
+              {(userDetails?.role === "LEAD" ||
+                userDetails?.role === "CONTRIBUTOR") && (
+                <button
+                  className="addTaskBtn"
+                  onClick={() => setTeamView(!teamView)}
+                  style={{ position: "absolute", right: "40px", zIndex: "9" }}
                 >
-                  Ratings for
-                </p>
-                <Form.Group as={Col} md="2" controlId="select_month">
-                  <Form.Control
-                    className="month-drop-select"
-                    required
-                    as="select"
-                    type="select"
-                    name="select_team"
-                    onChange={onchangeMonth}
-                    value={monthUse}
-                  >
-                    <option defaultValue="" disabled>
-                      Select Month
-                    </option>
-                    {months.map((monthh, index) => (
-                      <option
-                        value={monthh}
-                        key={monthh}
-                        disabled={index > month && yearUse >= currentYear}
-                      >
-                        {monthh}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-                <Form.Group as={Col} md="2" controlId="select_year">
-                  <Form.Control
-                    className="year-drop-select"
-                    required
-                    as="select"
-                    type="select"
-                    name="select_team"
-                    onChange={onChangeYear}
-                    value={yearUse}
-                  >
-                    <option value="" disabled>
-                      Select Year
-                    </option>
-                    {years.map((year) => (
-                      <option
-                        value={year}
-                        key={year}
-                        disabled={year > currentYear}
-                      >
-                        {year}
-                      </option>
-                    ))}
-                  </Form.Control>
-                </Form.Group>
-              </h5>
-            </div>
-            <div class="">
-              <div class="">
-                <div className="">
+                  {teamView ? "Self view" : "Team View"}{" "}
+                </button>
+              )}
+            </Col>
+          </Row>
+        </div>
 
-                  {(isLoading || verifyManagerMutation.isLoading) && (
-                    <div
-                      className="text-center"
-                      style={{ position: "relative", top: -500, left: -50 }}
+        {teamView ? (
+          <div className="dashboard_camp">
+            <div className=" ">
+              <div className="d-flex" style={{ marginTop: "10px" }}>
+                <h5 className="text-center h5cls">
+                  <p
+                    style={{
+                      marginRight: "10px",
+                      marginTop: "13px",
+                      fontSize: "14",
+                    }}
+                  >
+                    Ratings for
+                  </p>
+                  <Form.Group as={Col} md="2" controlId="select_month">
+                    <Form.Control
+                      className="month-drop-select"
+                      required
+                      as="select"
+                      type="select"
+                      name="select_team"
+                      onChange={onchangeMonth}
+                      value={monthUse}
                     >
+                      <option defaultValue="" disabled>
+                        Select Month
+                      </option>
+                      {months.map((monthh, index) => (
+                        <option
+                          value={monthh}
+                          key={monthh}
+                          disabled={index > month && yearUse >= currentYear}
+                        >
+                          {monthh}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group as={Col} md="2" controlId="select_year">
+                    <Form.Control
+                      className="year-drop-select"
+                      required
+                      as="select"
+                      type="select"
+                      name="select_team"
+                      onChange={onChangeYear}
+                      value={yearUse}
+                    >
+                      <option value="" disabled>
+                        Select Year
+                      </option>
+                      {years.map((year) => (
+                        <option
+                          value={year}
+                          key={year}
+                          disabled={year > currentYear}
+                        >
+                          {year}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                </h5>
+              </div>
+              <div class="">
+                <div class="">
+                  <div className="">
+                    {(isLoading || verifyManagerMutation.isLoading) && (
                       <div
-                        className="spinner-border text-primary"
-                        role="status"
+                        className="text-center"
+                        style={{ position: "relative", top: -500, left: -50 }}
                       >
-                        <span className="visually-hidden">Loading...</span>
+                        <div
+                          className="spinner-border text-primary"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-       
-          <div  className={`${ROOT}__rating_table`}>
-            <Table
-              pagination={false}
-              columns={columns}
-              dataSource={data}
-              scroll={{
-                x: 1500,
-                y: 1000,
-              }}
-            />
+            <div className={`${ROOT}__rating_table`}>
+              <Table
+                pagination={false}
+                columns={columns}
+                dataSource={data}
+                scroll={{
+                  x: 1500,
+                  y: 1000,
+                }}
+              />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>{teamView !== undefined && <MyCalendar />}</div>
-      )}
-    </div>
+        ) : (
+          <div>{teamView !== undefined && <MyCalendar />}</div>
+        )}
+      </div>
+    </>
   );
 }
