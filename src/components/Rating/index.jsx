@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import "./index.css";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Offcanvas, Row,  } from "react-bootstrap";
+import { Offcanvas, Row } from "react-bootstrap";
 import { getRatings, verifyManager } from "@services/user/api";
 import RatingBox from "./ratingBox";
 import Loader from "../Shared/Loader";
@@ -15,74 +15,73 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 
-import { Table } from 'antd';
+import { Table } from "antd";
 const columns = [
   {
-    title: ' Name',
+    title: " Name",
     width: 100,
-    dataIndex: 'name',
-    key: 'name',
-    fixed: 'left',
-    ellipsis:'true'
+    dataIndex: "name",
+    key: "name",
+    fixed: "left",
+    ellipsis: "true",
   },
   {
-    title: 'Age',
+    title: "Age",
     width: 100,
-    dataIndex: 'age',
-    key: 'age',
-   
+    dataIndex: "age",
+    key: "age",
   },
   {
-    title: 'Column 1',
-    dataIndex: 'address',
-    key: '1',
+    title: "Column 1",
+    dataIndex: "address",
+    key: "1",
     width: 150,
   },
   {
-    title: 'Column 2',
-    dataIndex: 'address',
-    key: '2',
+    title: "Column 2",
+    dataIndex: "address",
+    key: "2",
     width: 150,
   },
   {
-    title: 'Column 3',
-    dataIndex: 'address',
-    key: '3',
+    title: "Column 3",
+    dataIndex: "address",
+    key: "3",
     width: 150,
   },
   {
-    title: 'Column 4',
-    dataIndex: 'address',
-    key: '4',
+    title: "Column 4",
+    dataIndex: "address",
+    key: "4",
     width: 150,
   },
   {
-    title: 'Column 5',
-    dataIndex: 'address',
-    key: '5',
+    title: "Column 5",
+    dataIndex: "address",
+    key: "5",
     width: 150,
   },
   {
-    title: 'Column 6',
-    dataIndex: 'address',
-    key: '6',
+    title: "Column 6",
+    dataIndex: "address",
+    key: "6",
     width: 150,
   },
   {
-    title: 'Column 7',
-    dataIndex: 'address',
-    key: '7',
+    title: "Column 7",
+    dataIndex: "address",
+    key: "7",
     width: 150,
   },
   {
-    title: 'Column 8',
-    dataIndex: 'address',
-    key: '8',
+    title: "Column 8",
+    dataIndex: "address",
+    key: "8",
   },
   {
-    title: 'Average',
-    key: 'operation',
-    fixed: 'right',
+    title: "Average",
+    key: "operation",
+    fixed: "right",
     width: 100,
     render: () => <a>action</a>,
   },
@@ -181,8 +180,6 @@ export default function ViewRating() {
       },
     }
   );
-
-
 
   /**
    * @description React Query Mutation -used for verifying manager has access for rating or not
@@ -283,8 +280,6 @@ export default function ViewRating() {
     // setRatingForDay();
   };
 
-
-
   return (
     <div>
       <Offcanvas
@@ -297,7 +292,11 @@ export default function ViewRating() {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             {" "}
-            {userDetails?.role !== "CONTRIBUTOR" ? (raitngForDay >= -1 ? "View Tasks"  : "Add Rating"): "View Tasks"}
+            {userDetails?.role !== "CONTRIBUTOR"
+              ? raitngForDay >= -1
+                ? "View Tasks"
+                : "Add Rating"
+              : "View Tasks"}
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
@@ -410,10 +409,7 @@ export default function ViewRating() {
             <div class="">
               <div class="">
                 <div className="">
-                  <table
-                    responsive
-                    className=""
-                  >
+                  <table responsive className="">
                     <thead>
                       <tr>
                         <th
@@ -615,15 +611,15 @@ export default function ViewRating() {
           </div>
 
           <div>
-
-          <Table
-    columns={columns}
-    dataSource={data}
-    scroll={{
-      x: 1500,
-      y: 300,
-    }}
-  />
+            <Table
+              pagination={false}
+              columns={columns}
+              dataSource={data}
+              scroll={{
+                x: 1500,
+                y: 300,
+              }}
+            />
           </div>
         </div>
       ) : (
