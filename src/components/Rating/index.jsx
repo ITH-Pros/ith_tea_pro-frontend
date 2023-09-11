@@ -16,91 +16,13 @@ import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 
 import { Table } from "antd";
-const columns = [
-  {
-    title: " Name",
-    width: 100,
-    dataIndex: "name",
-    key: "name",
-    fixed: "left",
-    ellipsis: "true",
-  },
-  {
-    title: "Age",
-    width: 100,
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Column 1",
-    dataIndex: "address",
-    key: "1",
-    width: 150,
-  },
-  {
-    title: "Column 2",
-    dataIndex: "address",
-    key: "2",
-    width: 150,
-  },
-  {
-    title: "Column 3",
-    dataIndex: "address",
-    key: "3",
-    width: 150,
-  },
-  {
-    title: "Column 4",
-    dataIndex: "address",
-    key: "4",
-    width: 150,
-  },
-  {
-    title: "Column 5",
-    dataIndex: "address",
-    key: "5",
-    width: 150,
-  },
-  {
-    title: "Column 6",
-    dataIndex: "address",
-    key: "6",
-    width: 150,
-  },
-  {
-    title: "Column 7",
-    dataIndex: "address",
-    key: "7",
-    width: 150,
-  },
-  {
-    title: "Column 8",
-    dataIndex: "address",
-    key: "8",
-  },
-  {
-    title: "Average",
-    key: "operation",
-    fixed: "right",
-    width: 100,
-    render: () => <a>action</a>,
-  },
-];
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    name: `Aditya Kumar ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
 
 var month = moment().month();
 let currentYear = moment().year();
 
 export default function ViewRating() {
   /* state variables start */
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const [teamView, setTeamView] = useState(undefined);
   const { userDetails } = useAuth();
@@ -118,6 +40,64 @@ export default function ViewRating() {
   });
   const [boxDetails, setBoxDetails] = useState(null);
   const [raitngForDay, setRatingForDay] = useState();
+
+  const columns = [
+    {
+      title: "Name",
+      width: 100,
+      dataIndex: "name",
+      key: "name",
+      fixed: "left",
+      ellipsis: "true",
+    },
+
+    // for days in month that will be columns
+
+    ...Array(days)
+      .fill(0)
+      .map((day, index) => {
+        const date = new Date(yearUse, months.indexOf(monthUse), index + 1);
+        const dayOfWeek = date.getDay();
+        const weekendValue = dayOfWeek === 0 || dayOfWeek === 6;
+        return {
+          title: (
+            <div>
+              <span>
+                {index + 1 < 10 ? "0" : ""}
+                {index + 1}
+              </span>
+              <br></br>
+              <span>{dayNames[dayOfWeek]}</span>
+            </div>
+          ),
+          dataIndex: "rating",
+          key: index + 1,
+          width: 150,
+          render: (text, record) => {
+            return (
+              <div
+                className={`${
+                  weekendValue ? "weekendBox" : ""
+                } input_dashboard`} 
+                // onClick={(e)=>handleTableClick(e)}
+              >
+                {text[index]}
+              </div>
+            );
+          },
+        };
+      }),
+    {
+      title: "Average",
+      key: "operation",
+      fixed: "right",
+      width: 100,
+      dataIndex: "averageRating",
+
+      // render: () => <a>1.0</a>,
+    },
+  ];
+  const data = [];
 
   /* state variables end */
 
@@ -178,6 +158,7 @@ export default function ViewRating() {
       onError: (err) => {
         throw new Error(err?.message || "Something Went Wrong");
       },
+      onSuccess: (data) => {},
     }
   );
 
@@ -218,6 +199,9 @@ export default function ViewRating() {
    */
 
   const handleTableClick = (event) => {
+
+    console.log(event.target?.dataset?.filled);
+
     let isFilled = event.target?.dataset?.filled;
     const clickedElement = event.target;
     const childData = clickedElement.dataset;
@@ -279,6 +263,43 @@ export default function ViewRating() {
     localStorage.removeItem("userId");
     // setRatingForDay();
   };
+
+  const formatedRating = (rating) => {
+    let num = rating;
+    let formattedNum;
+    if (num % 1 !== 0) {
+      formattedNum = num.toFixed(1);
+    } else {
+      formattedNum = num;
+    }
+    return formattedNum;
+  };
+
+  for (let i = 0; i < ratingsArray?.length; i++) {
+    // const isCurrentUser = ratingsArray[i]._id === userDetails?.id;
+    // const isCurrentUserManager = ratingsArray[i]?.managerIds?.includes(
+    //   userDetails?.id
+    // );
+
+    let userRatings = Array(days).fill(0);
+    for (const element of ratingsArray[i].ratings) {
+      userRatings[element.date - 1] = element.rating;
+    }
+    let rating = [];
+    for (let j = 0; j < days; j++) {
+      if (userRatings[j] === -1) {
+        rating.push("A");
+      } else {
+        rating.push(formatedRating(userRatings[j]));
+      }
+    }
+    data.push({
+      key: i,
+      name: `${ratingsArray[i].name}`,
+      rating,
+      averageRating: ratingsArray[i].monthlyAverage?.toFixed(2) || "NA",
+    });
+  }
 
   return (
     <div>
@@ -409,189 +430,7 @@ export default function ViewRating() {
             <div class="">
               <div class="">
                 <div className="">
-                  <table responsive className="">
-                    <thead>
-                      <tr>
-                        <th
-                          style={{
-                            width: "100px",
-                            position: "sticky",
-                            left: "0",
-                            display: "none",
-                            backgroundColor: "#fff",
-                          }}
-                        ></th>
-                        {/* <th>Day</th> */}
-                        {Array(days)
-                          .fill(0)
-                          .map((rating, index) => {
-                            const date = new Date(
-                              yearUse,
-                              months.indexOf(monthUse),
-                              index + 1
-                            );
-                            const dayOfWeek = date.getDay();
-                            const dayNames = [
-                              "Sun",
-                              "Mon",
-                              "Tue",
-                              "Wed",
-                              "Thu",
-                              "Fri",
-                              "Sat",
-                            ];
-                            const weekend = isWeekend(dayOfWeek);
-                            const className = weekend ? "weekend" : "";
 
-                            return (
-                              <th key={index} className={className}>
-                                <span>
-                                  {index + 1 < 10 ? "0" : ""}
-                                  {index + 1}
-                                </span>
-                                <br></br>
-                                <span>{dayNames[dayOfWeek]}</span>
-                              </th>
-                            );
-                          })}
-                        <th style={{ color: "green" }}>Average</th>
-                      </tr>
-                    </thead>
-                    <tbody onClick={(e) => handleTableClick(e)}>
-                      {ratingsArray?.map((user, index) => {
-                        const isCurrentUser = user._id === userDetails?.id;
-                        const isCurrentUserManager = user?.managerIds?.includes(
-                          userDetails?.id
-                        );
-
-                        return (
-                          <tr
-                            key={index}
-                            className={`${
-                              isCurrentUser ? "highlighted-user" : ""
-                            } ${
-                              isCurrentUserManager ? "highlighted-manager" : ""
-                            }`}
-                          >
-                            <td
-                              className={`user_names text-truncate ${
-                                isCurrentUser ? "highlighted-user" : ""
-                              } ${
-                                isCurrentUserManager
-                                  ? "highlighted-manager"
-                                  : ""
-                              }`}
-                            >
-                              {user.name}
-                            </td>
-
-                            {Array(days)
-                              .fill(0)
-                              .map((day, index) => {
-                                let ratingUserObj = user?.ratings;
-                                let ratingCommentObj = ratingUserObj?.find(
-                                  (el) => el.date - 1 === index
-                                );
-
-                                const date = new Date(
-                                  yearUse,
-                                  months.indexOf(monthUse),
-                                  index + 1
-                                );
-                                const dayOfWeek = date.getDay();
-                                const weekendValue =
-                                  dayOfWeek === 0 || dayOfWeek === 6;
-                                if (ratingCommentObj) {
-                                  return (
-                                    <RatingBox
-                                      key={index}
-                                      index={index}
-                                      getAllRatings={getAllRatings}
-                                      ratingCommentObj={ratingCommentObj}
-                                      className={
-                                        weekendValue ? "weekendBox" : ""
-                                      }
-                                      month={months.indexOf(monthUse) + 1}
-                                      year={yearUse}
-                                      user={user}
-                                      setTaskModalShow={setModalShow}
-                                      setRatingData={setRatingData}
-                                      setRatingForDay={setRatingForDay}
-                                      isCurrentUserManager={
-                                        isCurrentUserManager
-                                      }
-                                      isCurrentUser={isCurrentUser}
-                                    />
-                                  );
-                                } else {
-                                  let dateToSend = `${yearUse}-${
-                                    months.indexOf(monthUse) + 1 <= 9
-                                      ? "0" + (months.indexOf(monthUse) + 1)
-                                      : months.indexOf(monthUse) + 1
-                                  }-${
-                                    index + 1 <= 9
-                                      ? "0" + (index + 1)
-                                      : index + 1
-                                  }`;
-                                  return (
-                                    <td
-                                      className={`${
-                                        isCurrentUser ? "highlighted-user" : ""
-                                      } ${
-                                        isCurrentUserManager
-                                          ? "highlighted-manager"
-                                          : ""
-                                      }`}
-                                      key={index}
-                                    >
-                                      {userDetails?.role === "CONTRIBUTOR" ||
-                                      new Date(dateToSend) > new Date() ? (
-                                        <span
-                                          style={{
-                                            padding: "2px 15px",
-                                          }}
-                                          className={
-                                            weekendValue
-                                              ? "weekendBox input_dashboard"
-                                              : "input_dashboard first"
-                                          }
-                                        ></span>
-                                      ) : (
-                                        <>
-                                          <span
-                                            style={{
-                                              padding: "2px 15px",
-                                            }}
-                                            className={
-                                              weekendValue
-                                                ? "weekendBox input_dashboard"
-                                                : "input_dashboard second"
-                                            }
-                                            data-user={JSON.stringify(user)}
-                                            data-date={index + 1}
-                                            data-month={
-                                              months.indexOf(monthUse) + 1
-                                            }
-                                            data-year={yearUse}
-                                          >
-                                            {!weekendValue && "?"}
-                                          </span>
-                                        </>
-                                      )}
-                                    </td>
-                                  );
-                                }
-                              })}
-                            <td className="userAverage">
-                              {user.monthlyAverage
-                                ? Math.round(user.monthlyAverage * 100) / 100
-                                : "NA"}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
                   {(isLoading || verifyManagerMutation.isLoading) && (
                     <div
                       className="text-center"
@@ -617,7 +456,7 @@ export default function ViewRating() {
               dataSource={data}
               scroll={{
                 x: 1500,
-                y: 300,
+                y: 1000,
               }}
             />
           </div>
