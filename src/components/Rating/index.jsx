@@ -2,6 +2,8 @@ import React from "react";
 import moment from "moment";
 import { useState, useEffect } from "react";
 import "./index.css";
+import "./rating.scss";
+
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Offcanvas, Row } from "react-bootstrap";
@@ -14,6 +16,7 @@ import TasksModalBody from "./view-task-modal/viewTaskModal";
 import { toast } from "react-toastify";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+const ROOT = `rating_table`
 
 import { Table } from "antd";
 const columns = [
@@ -610,7 +613,8 @@ export default function ViewRating() {
             </div>
           </div>
 
-          <div>
+       
+          <div  className={`${ROOT}__rating_table`}>
             <Table
               pagination={false}
               columns={columns}
