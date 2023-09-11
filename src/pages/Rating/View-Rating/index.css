@@ -702,6 +702,7 @@ ul.weekdays {
 .weekendBox {
   background-color: #ea7777;
   /* height: 75px !important; */
+  color: #fff;
 }
 .absentBox {
   color: red;

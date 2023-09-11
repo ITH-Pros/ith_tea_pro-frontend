@@ -461,8 +461,9 @@ export default function ViewRating() {
               dataSource={data}
               scroll={{
                 x: 1500,
-                y: 350,
+                y: 320,
               }}
+        
             />
           </div>
         </div>
