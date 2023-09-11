@@ -73,6 +73,7 @@ table > :not(caption) > * > * {
   -webkit-backdrop-filter: blur(3.7px);
   backdrop-filter: blur(3.7px);
   border: 1px solid rgba(207, 207, 207, 0.99);
+  cursor: pointer;
 }
 
 thead,

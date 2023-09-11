@@ -50,7 +50,7 @@ export default function Dashboard(props) {
   const [selectedTask, setSelectedTask] = useState({});
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [showModalOnLogin, setShowModalOnLogin] = useState(true);
+  const [showModalOnLogin, setShowModalOnLogin] = useState(false);
   const [showViewTask, setShowViewTask] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState("");
   const { userDetails } = useAuth();

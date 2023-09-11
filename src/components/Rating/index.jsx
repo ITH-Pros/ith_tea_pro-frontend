@@ -75,20 +75,20 @@ export default function ViewRating() {
           ),
           dataIndex: "rating",
           key: index + 1,
-          width: 150,
+          width: 60,
           render: (text, record) => {
             return (
               <div
                 className={`${
                   weekendValue ? "weekendBox" : ""
                 } input_dashboard`}
-                data-filled={text[index] !== 0}
-                data-user={JSON.stringify(ratingsArray[index])}
-                data-date={index + 1}
-                data-month={months.indexOf(monthUse) + 1}
-                data-year={yearUse}
+                // data-filled={text[index] !== 0}
+                // data-user={JSON.stringify(ratingsArray[index])}
+                // data-date={index + 1}
+                // data-month={months.indexOf(monthUse) + 1}
+                // data-year={yearUse}
 
-                onClick={(e) => handleTableClick(e)}
+                // onClick={(e) => handleTableClick(e)}
               >
                 {text[index]}
               </div>
@@ -100,8 +100,9 @@ export default function ViewRating() {
       title: "Average",
       key: "operation",
       fixed: "right",
-      width: 100,
+      width: 70,
       dataIndex: "averageRating",
+      
 
       // render: () => <a>1.0</a>,
     },
@@ -457,15 +458,16 @@ export default function ViewRating() {
             </div>
 
             <div className={`${ROOT}__rating_table`}>
-              <Table
-                pagination={false}
-                columns={columns}
-                dataSource={data}
-                scroll={{
-                  x: 1500,
-                  y: 1000,
-                }}
-              />
+            <Table
+              pagination={false}
+              columns={columns}
+              dataSource={data}
+              scroll={{
+                x: 1500,
+                y: 320,
+              }}
+        
+            />
             </div>
           </div>
         ) : (
