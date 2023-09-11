@@ -156,7 +156,6 @@ export default function Dashboard(props) {
     setShowAddTask(false);
     setSelectedProject();
     setSelectedTask();
-    onInit();
     if (userDetails?.role !== "CONTRIBUTOR") {
       setIsChange(!isChange);
     }
@@ -364,6 +363,7 @@ export default function Dashboard(props) {
                 showAddTask={showAddTask}
                 closeModal={closeModal}
                 setToasterMessageToDashboard={setToasterMessageToDashboard}
+                refetchTasks={onInit}
               />
             )}
           </>
