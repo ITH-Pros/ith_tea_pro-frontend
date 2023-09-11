@@ -34,7 +34,8 @@ import RatingGraph from "@components/Rating/rating-graph/rating-graph";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 import { convertToUTCDay } from "@helpers/index";
-
+import { Tooltip } from "@material-ui/core";
+// import { Tooltip } from 'antd';
 const customStyles = {
   option: (provided) => ({
     ...provided,
@@ -292,13 +293,15 @@ const {data:teamWorkList} = useQuery(['userReport' , selectedOption , selectedEv
                       </span>
                     }
                   >
-                    <div>
+                    <div >
                       <Table responsive="md" className="mb-0">
                         <tbody>
                           {teamWorkList?.map((team, index) => [
                             <tr>
                               <td style={{ width: "150px" }}>
+                              <Tooltip title={team?.title || "--"}>
                                 <p className="text-truncate">
+                                 
                                   <Link
                                     to={`/view-task/${team._id}`}
                                     className="text-muted"
@@ -307,7 +310,9 @@ const {data:teamWorkList} = useQuery(['userReport' , selectedOption , selectedEv
                                   >
                                     {team?.title || "--"}
                                   </Link>
+                                  
                                 </p>
+                                </Tooltip>
                               </td>
                               <td style={{ width: "150px" }}>
                                 <Badge bg="primary">
