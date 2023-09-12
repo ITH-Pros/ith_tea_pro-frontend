@@ -150,7 +150,6 @@ export default function RatingModalBody(props) {
         fromDate: convertToUTCDay(date),
         toDate: convertToUTCNight(date),
       };
-      console.log(" I am here");
       const tasks = await getProjectsTask(data);
       // setLoading(false);
       if (tasks.error) {
@@ -161,7 +160,6 @@ export default function RatingModalBody(props) {
         let allTask = tasks?.data;
         allTask?.map((task, index) => {
           task?.tasks?.map((ele, i) => {
-            console.log(ele);
             if (!ele?.isVerified) {
               setRatingButtonDisable(true);
             }

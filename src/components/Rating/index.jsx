@@ -3,13 +3,10 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import "./index.css";
 import "./rating.scss";
-
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Offcanvas, Row } from "react-bootstrap";
 import { getRatings, verifyManager } from "@services/user/api";
-import RatingBox from "./ratingBox";
-import Loader from "../Shared/Loader";
 import MyCalendar from "./weekCalendar/weekCalendra";
 import RatingModalBody from "./add-rating-modal/index.jsx";
 import TasksModalBody from "./view-task-modal/viewTaskModal";
@@ -79,15 +76,12 @@ export default function ViewRating() {
           render: (text, record) => {
             return (
               <div
-                className={`${
-                  weekendValue ? "weekendBox" : ""
-                } input_dashboard`}
-                data-filled={text[index] !== 0}
-                data-user={JSON.stringify(ratingsArray[index])}
+                className={`${weekendValue ? "weekendBox" : ""} `}
+                data-filled={text[index]}
+                data-user={JSON.stringify(ratingsArray[record.key])}
                 data-date={index + 1}
                 data-month={months.indexOf(monthUse) + 1}
                 data-year={yearUse}
-
                 onClick={(e) => handleTableClick(e)}
               >
                 {text[index]}
@@ -102,7 +96,6 @@ export default function ViewRating() {
       fixed: "right",
       width: 70,
       dataIndex: "averageRating",
-      
 
       // render: () => <a>1.0</a>,
     },
@@ -209,11 +202,20 @@ export default function ViewRating() {
    */
 
   const handleTableClick = (event) => {
+
+    if(userDetails?.role === "CONTRIBUTOR"){
+       if(userDetails.id !== JSON.parse(event.target.dataset.user)._id){
+        toast.dismiss();
+        toast.info("You are not allowed to view tasks of other members.");
+        return;
+       }
+    }
+
     let isFilled = event.target?.dataset?.filled;
     const clickedElement = event.target;
     const childData = clickedElement.dataset;
 
-    if (!isFilled) {
+    if (isFilled === "?" || isFilled === "W") {
       if (childData.user) {
         setBoxDetails({
           user: JSON.parse(childData.user),
@@ -231,9 +233,14 @@ export default function ViewRating() {
         month: childData.month,
         year: childData.year,
       }));
-      setRatingForDay(childData?.rcomment);
+      console.log("childData?.rcomment", childData?.rcomment);
+      setRatingForDay(isFilled);
     }
   };
+
+  useEffect(() => {
+    console.log("ratingForDay", raitngForDay);
+  }, [raitngForDay]);
 
   /**
    * @description checks if day is weekend day or not
@@ -282,25 +289,43 @@ export default function ViewRating() {
     return formattedNum;
   };
 
-  for (let i = 0; i < ratingsArray?.length; i++) {
-    // const isCurrentUser = ratingsArray[i]._id === userDetails?.id;
-    // const isCurrentUserManager = ratingsArray[i]?.managerIds?.includes(
-    //   userDetails?.id
-    // );
+  /**
+   * @description creates data for rating table
+   * @returns Array of objects
+   *        -each object contains name, rating, averageRating
+   */
 
-    let userRatings = Array(days).fill(0);
+  for (let i = 0; i < ratingsArray?.length; i++) {
+    const userRatings = Array(days).fill(-2);
     for (const element of ratingsArray[i].ratings) {
       userRatings[element.date - 1] = element.rating;
     }
-    let rating = [];
+    const rating = [];
     for (let j = 0; j < days; j++) {
-      if (userRatings[j] === -1) {
-        rating.push("A");
-      }
-       else {
-        rating.push(formatedRating(userRatings[j]));
+      if (
+        yearUse === currentYear &&
+        months.indexOf(monthUse) === month &&
+        j + 1 > moment().date()
+      ) {
+        rating.push(" ");
+      } else {
+        if (
+          userRatings[j] === -2 &&
+          isWeekend(new Date(yearUse, months.indexOf(monthUse), j + 1).getDay())
+        ) {
+          rating.push("W");
+        } else {
+          if (userRatings[j] === -1) {
+            rating.push("A");
+          } else if (userRatings[j] === -2) {
+            rating.push("?");
+          } else {
+            rating.push(formatedRating(userRatings[j]));
+          }
+        }
       }
     }
+
     data.push({
       key: i,
       name: `${ratingsArray[i].name}`,
@@ -312,49 +337,6 @@ export default function ViewRating() {
   return (
     <>
       <div>
-        <Offcanvas
-          className="Offcanvas-modal"
-          style={{ width: "500px" }}
-          show={modalShow}
-          onHide={() => hideModal()}
-          placement="end"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-              {" "}
-              {userDetails?.role !== "CONTRIBUTOR"
-                ? raitngForDay >= -1
-                  ? "View Tasks"
-                  : "Add Rating"
-                : "View Tasks"}
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            {userDetails?.role !== "CONTRIBUTOR" ? (
-              <RatingModalBody
-                data={ratingData}
-                setModalShow={(data) => {
-                  setModalShow(data);
-                  if (data === false && teamView) {
-                    getAllRatings();
-                  }
-                }}
-                raitngForDay={raitngForDay}
-              />
-            ) : (
-              <TasksModalBody
-                data={ratingData}
-                setModalShow={(data) => {
-                  setModalShow(data);
-                  if (data === false && teamView) {
-                    getAllRatings();
-                  }
-                }}
-                raitngForDay={raitngForDay}
-              />
-            )}
-          </Offcanvas.Body>
-        </Offcanvas>
         <div className="dashboard_camp">
           <Row>
             <Col lg={12}>
@@ -436,44 +418,78 @@ export default function ViewRating() {
                   </Form.Group>
                 </h5>
               </div>
-              <div class="">
-                <div class="">
-                  <div className="">
-                    {(isLoading || verifyManagerMutation.isLoading) && (
-                      <div
-                        className="text-center"
-                        style={{ position: "relative", top: -500, left: -50 }}
-                      >
-                        <div
-                          className="spinner-border text-primary"
-                          role="status"
-                        >
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+              <div className="">
+                <div className={`${ROOT}__rating_table`}>
+                  <Table
+                    pagination={false}
+                    columns={columns}
+                    dataSource={data}
+                    scroll={{
+                      x: 1500,
+                      y: 320,
+                    }}
+                  />
                 </div>
+                {(isLoading || verifyManagerMutation.isLoading) && (
+                  <div
+                    className="text-center"
+                    style={{ position: "relative", top: -500, left: -50 }}
+                  >
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-
-            <div className={`${ROOT}__rating_table`}>
-            <Table
-              pagination={false}
-              columns={columns}
-              dataSource={data}
-              scroll={{
-                x: 1500,
-                y: 320,
-              }}
-        
-            />
             </div>
           </div>
         ) : (
           <div>{teamView !== undefined && <MyCalendar />}</div>
         )}
       </div>
+      <Offcanvas
+        className="Offcanvas-modal"
+        style={{ width: "500px" }}
+        show={modalShow}
+        onHide={() => hideModal()}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>
+            {" "}
+            {userDetails?.role !== "CONTRIBUTOR"
+              ? raitngForDay >= -1
+                ? "View Tasks"
+                : "Add Rating"
+              : "View Tasks"}
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {userDetails?.role !== "CONTRIBUTOR" ? (
+            <RatingModalBody
+              data={ratingData}
+              setModalShow={(data) => {
+                setModalShow(data);
+                if (data === false && teamView) {
+                  getAllRatings();
+                }
+              }}
+              raitngForDay={raitngForDay}
+            />
+          ) : (
+            <TasksModalBody
+              data={ratingData}
+              setModalShow={(data) => {
+                setModalShow(data);
+                if (data === false && teamView) {
+                  getAllRatings();
+                }
+              }}
+              raitngForDay={raitngForDay}
+            />
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
     </>
   );
 }
