@@ -82,13 +82,13 @@ export default function ViewRating() {
                 className={`${
                   weekendValue ? "weekendBox" : ""
                 } input_dashboard`}
-                // data-filled={text[index] !== 0}
-                // data-user={JSON.stringify(ratingsArray[index])}
-                // data-date={index + 1}
-                // data-month={months.indexOf(monthUse) + 1}
-                // data-year={yearUse}
+                data-filled={text[index] !== 0}
+                data-user={JSON.stringify(ratingsArray[index])}
+                data-date={index + 1}
+                data-month={months.indexOf(monthUse) + 1}
+                data-year={yearUse}
 
-                // onClick={(e) => handleTableClick(e)}
+                onClick={(e) => handleTableClick(e)}
               >
                 {text[index]}
               </div>
