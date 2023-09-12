@@ -403,7 +403,6 @@ const Tasks = () => {
       }
     }
     return data;
-    // taskMutation.mutate(data);
   };
 
   const {
@@ -433,7 +432,6 @@ const Tasks = () => {
               } else {
                 task.dueToday = false;
               }
-
               if (
                 task.completedDate &&
                 new Date(task.completedDate).getTime() >

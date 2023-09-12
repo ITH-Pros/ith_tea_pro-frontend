@@ -5,7 +5,7 @@ const CustomLoader = () => {
   return (
     <>
       
-          <div class="loader1">
+          <div className="loader1">
             <span></span>
             <span></span>
             <span></span>

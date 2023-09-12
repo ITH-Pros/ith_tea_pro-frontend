@@ -212,6 +212,13 @@ export default function ViewRating() {
        }
     }
 
+    // if user is A 
+    if (event.target?.dataset?.filled === "A") {
+      toast.dismiss();
+      toast.info("Absent user can not have tasks.");
+      return;
+    }
+
     let isFilled = event.target?.dataset?.filled;
     const clickedElement = event.target;
     const childData = clickedElement.dataset;
