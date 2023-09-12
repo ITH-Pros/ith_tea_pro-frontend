@@ -4,8 +4,9 @@
 
     & .ant-table-cell{padding: 5px 7px !important; font-size: 13px !important; text-align: center;}
     & .ant-table-cell-fix-right-first{color: green;}
-    & .ant-table-body{max-height: 62vh !important;}
+    & .ant-table-body{max-height: 65vh !important; min-height: 65vh;}
     & .ant-table-thead > tr > th{background: #f5f5f5 !important; font-size: 13px !important; text-align: center;}
+
 }
     
 }
