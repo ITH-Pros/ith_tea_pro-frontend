@@ -7,7 +7,7 @@ import "@pages/Rating/rating.css";
 import "./index.css";
 import { addRatingOnTask, getProjectsTask } from "@services/user/api";
 import Loader from "@components/Shared/Loader";
-import { Accordion, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Accordion, Button, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useAuth } from "@utlis/AuthProvider";
 import { useFormik } from "formik";
@@ -141,7 +141,7 @@ export default function RatingModalBody(props) {
   const getTasksDataUsingProjectId = async (date) => {
     let assignedTo = JSON.parse(localStorage.getItem("userId"));
     assignedTo = JSON.stringify(assignedTo);
-    // setLoading(true);
+    setLoading(true);
     try {
       let data = {
         groupBy: "default",
@@ -151,7 +151,7 @@ export default function RatingModalBody(props) {
         toDate: convertToUTCNight(date),
       };
       const tasks = await getProjectsTask(data);
-      // setLoading(false);
+      setLoading(false);
       if (tasks.error) {
         toast.dismiss();
         toast.info(tasks?.error?.message || "Something Went Wrong");
@@ -171,7 +171,7 @@ export default function RatingModalBody(props) {
       toast.dismiss();
       toast.info(error?.error?.message || "Something Went Wrong");
       // set
-      // setLoading(false);
+      setLoading(false);
       return error.message;
     }
   };
@@ -599,7 +599,7 @@ export default function RatingModalBody(props) {
         </div>
       )}
 
-      {loading ? <Loader /> : null}
+      {loading ?  <Spinner  /> : null}
     </>
   );
 }
