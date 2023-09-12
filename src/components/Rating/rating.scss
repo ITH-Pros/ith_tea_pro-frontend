@@ -2,13 +2,19 @@
 
 &__rating_table{width: 100%;
 
-    & .ant-table-cell{padding: 5px 7px !important; font-size: 13px !important; text-align: center;}
+    & .ant-table-cell{padding: 5px 7px !important; font-size: 13px !important; text-align: center; cursor: pointer; border-left: 1px #cccccc47 solid;}
     & .ant-table-cell-fix-right-first{color: green;}
     & .ant-table-body{max-height: 65vh !important; min-height: 65vh;}
     & .ant-table-thead > tr > th{background: #f5f5f5 !important; font-size: 13px !important; text-align: center;}
-
+& .ant-empty{display: none;}
 
 }
 
     
 }
+
+.loader_rating{position: absolute;     position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    bottom: 0;}

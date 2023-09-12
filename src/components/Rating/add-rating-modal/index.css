@@ -22,4 +22,6 @@
     margin-top: 5px;
     font-style: italic;
   }
+
+  .csnvas_loader{position: absolute; left: 50%; top: 50%;}
   

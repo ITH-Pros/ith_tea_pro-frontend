@@ -131,7 +131,7 @@ const TaskVerificationComponent = ({
               {isLoading && <Loader />}
 
               {pendingRatingList && pendingRatingList?.length === 0 && (
-                <p>No task found.</p>
+                <p className="d-flex align-items-center" style={{height:'100%'}}>No task found.</p>
               )}
 
               {pendingRatingList &&

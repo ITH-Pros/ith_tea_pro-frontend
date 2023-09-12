@@ -419,7 +419,7 @@ export default function ViewRating() {
                   </Form.Group>
                 </h5>
               </div>
-              <div className="">
+              <div style={{position:'relative'}}>
                 <div className={`${ROOT}__rating_table`}>
                   <Table
                     pagination={false}
@@ -433,8 +433,8 @@ export default function ViewRating() {
                 </div>
                 {(isLoading || verifyManagerMutation.isLoading) && (
                   <div
-                    className="text-center"
-                    style={{ position: "relative", top: -500, left: -50 }}
+                    className="text-center loader_rating"
+                    
                   >
                     <div className="spinner-border text-primary" role="status">
                       <span className="visually-hidden">Loading...</span>

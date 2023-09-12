@@ -599,7 +599,7 @@ export default function RatingModalBody(props) {
         </div>
       )}
 
-      {loading ?  <Spinner  /> : null}
+      {loading ? <div className="csnvas_loader">  <Spinner  /></div> : null}
     </>
   );
 }
