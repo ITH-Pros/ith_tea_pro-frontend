@@ -147,7 +147,7 @@ export default function Teams() {
       toast.dismiss();
       toast.info("Please select  manager");
       return;
-    } else if (selectedManagers.length > 1) {
+    } else if (selectedManagers.length >= 1) {
       let data = {
         managerIds: selectedManagers,
         userId: userId,
