@@ -83,13 +83,15 @@ const ProjectList = ({
           </Col>
         ))}
 
-      <button className="expend" onClick={()=>setShowAllProjects()}>
-        {showAllProjects ? (
-          <i className="fas fa-expand"></i>
-        ) : (
-          <i className="fas fa-expand-alt"></i>
-        )}
-      </button>
+      {projectList && projectList.length > 2 && (
+        <button className="expend" onClick={() => setShowAllProjects()}>
+          {showAllProjects ? (
+            <i className="fas fa-expand"></i>
+          ) : (
+            <i className="fas fa-expand-alt"></i>
+          )}
+        </button>
+      )}
     </Row>
   );
 };
