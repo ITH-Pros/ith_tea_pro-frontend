@@ -209,7 +209,7 @@ const ForgotPassword = () => {
                       </div>
                     ) : null}
                   </div>
-                  <div className="field">
+                  <div className="field" style={{height:'auto'}}>
                     <span className="fa fa-lock"></span>
                     <div className="password-field">
                       <input
@@ -248,7 +248,7 @@ const ForgotPassword = () => {
                 </div>
               )}
 
-              <button
+              <button 
                 className="loginButton"
                 type="submit"
                 disabled={formik.isSubmitting}
