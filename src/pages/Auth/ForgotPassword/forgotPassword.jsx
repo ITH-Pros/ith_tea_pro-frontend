@@ -159,7 +159,7 @@ const ForgotPassword = () => {
                       disabled
                     />
                   </div>
-                  <div className="field mt-4">
+                  <div className="field mt-4" style={{height:'auto'}}>
                     <span className="fa fa-lock"></span>
                     <input
                       placeholder="OTP"
@@ -177,7 +177,7 @@ const ForgotPassword = () => {
               )}
 
               {passWordSection && (
-                <div className="field mt-4">
+                    <div className="field" style={{height:'auto'}}>
                   <span className="fa fa-lock"></span>
                   <div className="password-field">
                     <input

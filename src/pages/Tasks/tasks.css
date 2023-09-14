@@ -314,6 +314,9 @@ button.accordion-button {
 .accordion-body ul li span {
   margin-right: 5px;
   margin-left: 5px;
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .accordion-body ul li:last-child {
@@ -460,10 +463,10 @@ button.accordion-button {
 }
 
 .clickLabelArea p {
-  font-size: 16px;
+  font-size: 14px;
 }
 .clickLabelArea .btn{ padding: 0px !important;}
-.clickLabelArea .nameTag{ display: contents;}
+/* .clickLabelArea .nameTag{ display: contents;} */
 
 .body_ui{ position: inherit;     height: 21vh !important;}
 

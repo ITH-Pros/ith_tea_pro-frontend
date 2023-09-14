@@ -127,7 +127,7 @@ const TaskVerificationComponent = ({
             className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-0"}
           >
             {isFetching && !isLoading && <CustomLoader />}
-            <div id="card-task">
+            <div id="card-task" style={{boxShadow:'none'}}>
               {isLoading && <Loader />}
 
               {pendingRatingList && pendingRatingList?.length === 0 && (

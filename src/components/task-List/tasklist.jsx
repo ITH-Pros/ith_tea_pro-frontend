@@ -363,7 +363,7 @@ const TaskList = ({
                         {task?.assignedTo?.profilePicture && (
                           <div
                             className="nameTag"
-                            style={{ display: "contents" }}
+                            
                           >
                             <img
                               style={{
@@ -376,17 +376,17 @@ const TaskList = ({
                             ></img>
                           </div>
                         )}
-                        <span className="text-truncate d-block">
+                        <p className="text-truncate d-block">
                           {" "}
                           {task?.assignedTo?.name}
-                        </span>
+                        </p>
                         {!task?.assignedTo?.name && <span> NOT ASSIGNED </span>}
                       </Col>
                       {/* for lead  */}
 
                       <Col
                         lg={2}
-                        className="align-items-center justify-content-start"
+                        className="align-items-center justify-content-start d-flex"
                       >
                         {!task?.lead[0]?.profilePicture &&
                           task?.lead[0]?.name && (
@@ -400,12 +400,12 @@ const TaskList = ({
                         {task?.lead[0]?.profilePicture && (
                           <div
                             className="nameTag"
-                            style={{ display: "contents" }}
+                            
                           >
                             <img
                               style={{
-                                width: "20px",
-                                height: "20px",
+                                width: "24px",
+                                height: "24px",
                                 borderRadius: "50%",
                               }}
                               src={`${task?.lead[0]?.profilePicture}`}
@@ -413,7 +413,7 @@ const TaskList = ({
                             ></img>
                           </div>
                         )}
-                        <span> {task?.lead[0]?.name}</span>
+                        <p className="text-truncate d-block"> {task?.lead[0]?.name}</p>
                         {!task?.lead[0]?.name && <span> NOT ASSIGNED </span>}
                       </Col>
 
