@@ -268,7 +268,7 @@ const MyWorkComponent = ({
                       )}
                     </small>
                   </Col>
-                  <Col lg={1} id="dropdown_action" className="text-end middle">
+                  <Col lg={2} id="dropdown_action" className="text-right middle d-block">
                     <Dropdown>
                       <Dropdown.Toggle variant="defult" id="dropdown-basic">
                         <i className="fa fa-ellipsis-v"></i>
