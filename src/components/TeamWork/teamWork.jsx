@@ -32,7 +32,7 @@ const Teamwork = ({
 
   return (
     <Container fluid>
-      <Row className="mt-3">
+      <Row className="mt-0">
         <Col lg={12} style={{ paddingLeft: "0px" }}>
           <Row>
             <Col lg={6} className="left-add">

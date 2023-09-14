@@ -86,7 +86,7 @@ const MyWorkComponent = ({
         <Col lg={6} className="right-filter"></Col>
       </Row>
       <Row>
-        <Col lg={12} className="mt-3">
+        <Col lg={12} className="mt-3 mb-4">
           <Card
             id="card-task"
             className={myWorkList?.length === 0 ? "alig-nodata" : "px-3"}
