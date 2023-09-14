@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Col,
@@ -49,32 +49,70 @@ const TaskVerificationComponent = ({
       .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
   };
 
+  // const {
+  //   data: pendingRatingList,
+  //   error,
+  //   isLoading,
+  //   isFetching,
+  // } = useQuery(
+  //   ["getAllPendingRating", verifyTeamMember, isRefetch ],
+  //   () => {
+  //     const payload = {};
+  //     if (verifyTeamMember) {
+  //       payload.memberId = verifyTeamMember;
+  //     }
+  //     return getAllPendingRating(payload);
+  //   },
+  //   {
+  //     refetchOnWindowFocus: false,
+  //     select: (data) => {
+  //       if (data.error) {
+  //         toast.dismiss();
+  //         toast.info(
+  //           data?.message ||
+  //             "Something Went Wrong while fetching Pending Ratings Data"
+  //         );
+  //         return [];
+  //       }
+
+  //       let allTask = data?.data?.tasks || [];
+  //       const today = getFormattedDate(new Date());
+
+  //       allTask.forEach((item) => {
+  //         let dateMonth = item?.dueDate?.split("T")[0];
+  //         if (dateMonth === today) {
+  //           item.dueToday = true;
+  //         } else if (new Date().getTime() > new Date(item?.dueDate).getTime()) {
+  //           item.dueToday = true;
+  //         } else {
+  //           item.dueToday = false;
+  //         }
+  //       });
+  //       return data?.data;
+  //     },
+  //   }
+  // );
+
+  const createPayload = () => {
+    const payload = {};
+    if (verifyTeamMember) {
+      payload.memberId = verifyTeamMember;
+    }
+    return payload;
+  }
+
   const {
     data: pendingRatingList,
     error,
     isLoading,
     isFetching,
+    refetch
   } = useQuery(
-    ["getAllPendingRating", verifyTeamMember, isRefetch],
-    () => {
-      const payload = {};
-      if (verifyTeamMember) {
-        payload.memberId = verifyTeamMember;
-      }
-      return getAllPendingRating(payload);
-    },
+    ["getAllPendingRating", verifyTeamMember ],
+    () => getAllPendingRating(createPayload()),
     {
       refetchOnWindowFocus: false,
       select: (data) => {
-        if (data.error) {
-          toast.dismiss();
-          toast.info(
-            data?.message ||
-              "Something Went Wrong while fetching Pending Ratings Data"
-          );
-          return [];
-        }
-
         let allTask = data?.data?.tasks || [];
         const today = getFormattedDate(new Date());
 
@@ -92,6 +130,12 @@ const TaskVerificationComponent = ({
       },
     }
   );
+
+useEffect(() => {
+  refetch()
+} , [isRefetch])
+
+
 
   return (
     <Col lg={6} style={{ paddingRight: "0px" }}>

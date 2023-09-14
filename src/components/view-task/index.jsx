@@ -40,11 +40,12 @@ export default function ViewTaskModal(props) {
   const [text, setText] = useState("");
   const [activeTab, setActiveTab] = useState("comments");
   const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
-  const [isAddCommentButtonEnabled, setIsAddCommentButtonEnabled] = useState(false);
-
+  const [isAddCommentButtonEnabled, setIsAddCommentButtonEnabled] =
+    useState(false);
 
   const {
     isLoading,
+    isFetching,
     error,
     data: task,
     refetch: refetchTaskDetails,
@@ -57,13 +58,18 @@ export default function ViewTaskModal(props) {
         throw new Error(response.message);
       }
       setIsLoadingSpinner(false);
-      setShowViewTaskModal(true);
       return response?.data;
     },
     {
       refetchOnWindowFocus: false,
     }
   );
+
+  useEffect(() => {
+    if (selectedTaskId) {
+      setShowViewTaskModal(true);
+    }
+  }, [selectedTaskId]);
 
   // Mutation for updating task status
   const mutationUpdateTask = useMutation(async (newStatus) => {
@@ -128,7 +134,6 @@ export default function ViewTaskModal(props) {
     }, 200); // checking every 200ms
     return () => clearInterval(intervalId);
   }, [text]);
-  
 
   const updateTaskStatus = async (dataToSend) => {
     mutationUpdateTask.mutate(dataToSend, {
@@ -221,247 +226,209 @@ export default function ViewTaskModal(props) {
           <Offcanvas.Title>Task Details</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <div className="dv-50">
-            <Form>
-              {task?.status === "COMPLETED" && (
-                <Row
-                  className="mb-3"
-                  style={{
-                    alignItems: "end",
-                    justifyContent: "end",
-                    justifyItems: "end",
-                  }}
-                ></Row>
-              )}
-              <Row className="mb-3">
-                <Form.Group as={Col} md="4">
-                  <Form.Label>Project Name</Form.Label>
-                  <p>{task?.projectId?.name} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label>Section Name</Form.Label>
-                  <p>{task?.section?.name} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                  <Form.Label>Lead</Form.Label>
-                  {task?.lead?.map((item, index) => {
-                    return <p key={index}>{item?.name} </p>;
-                  })}
-                </Form.Group>
-              </Row>
+          {isLoading || isFetching ? <LoadingSpinner  />  : null}
 
-              <Row className="mb-3">
-                <Form.Group as={Col} md="12">
-                  <Form.Label>Task Title</Form.Label>
-                  <p>{task?.title} </p>
-                </Form.Group>
-                {/* Estimated Time */}
-              </Row>
-
-              <Row className="mb-3">
-                <Form.Group className="desc" as={Col} md="12">
-                  <Form.Label>Task Description</Form.Label>
-                  <p
-                    className="text-muted"
-                    dangerouslySetInnerHTML={{ __html: task?.description }}
-                  ></p>
-                </Form.Group>
-              </Row>
-
-              <Row className="mb-3">
-                <Form.Group as={Col} md="3">
-                  <Form.Label>Assigned To</Form.Label>
-                  <p>{task?.assignedTo?.name || "Not Assigned"} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="3" className="px-1">
-                  <Form.Label>Due Date</Form.Label>
-                  <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {task?.dueDate ? formatDateToRating(task?.dueDate) : "--"}{" "}
-                  </p>
-                </Form.Group>
-
-                <Form.Group as={Col} md="3">
-                  <Form.Label>Priority</Form.Label>
-                  <p>{task?.priority} </p>
-                </Form.Group>
-                <Form.Group as={Col} md="3" className="ps-0">
-                  <Form.Label>Status</Form.Label>
-                  <select
-                    className="form-control form-control-lg"
-                    defaultValue={task?.status}
-                    onChange={(event) => handleStatusChange(event, task?._id)}
-                    disabled={
-                      task?.status === "COMPLETED" ||
-                      !(
-                        userDetails.id === task?.assignedTo?._id ||
-                        (userDetails?.role === "LEAD" &&
-                          (userDetails.id === task?.assignedTo?._id ||
-                            task?.lead?.includes(userDetails.id) ||
-                            userDetails.id === task?.createdBy?._id)) ||
-                        userDetails?.role === "SUPER_ADMIN" ||
-                        userDetails?.role === "ADMIN"
-                      )
-                    }
-                  >
-                    <option value="NOT_STARTED">NOT STARTED</option>
-                    <option value="ONHOLD">On Hold</option>
-                    <option value="ONGOING">On Going</option>
-                    <option value="COMPLETED">Completed</option>
-                  </select>
-                </Form.Group>
-
-                <Row className="mb-3 mt-3">
-                  <>
-                    {task?.status === "COMPLETED" && (
-                      <Form.Group as={Col} md="3">
-                        <Form.Label>Completed Date : </Form.Label>
-                        <p>
-                          {formatDateToRating(task?.completedDate) || "--"}{" "}
-                        </p>
-                      </Form.Group>
-                    )}
-
-                    {/* Task completion time  */}
-
-                    {task?.status === "COMPLETED" && (
-                      <Form.Group as={Col} md="6">
-                        {/* <Form.Label>Completed Date</Form.Label> */}
-                        <MinutesToDaysHoursMinutes minutes={task?.timeTaken} />
-                      </Form.Group>
-                    )}
-
-                    <Form.Group as={Col} md="3" className="estimated-time">
-                      <Form.Label>Estimated Time :</Form.Label>{" "}
-                      <div className="time">
-                        <span>
-                          {task?.defaultTaskTime?.hours || "00"} :{" "}
-                          {task?.defaultTaskTime?.minutes || "00"}{" "}
-                        </span>
-                      </div>
-                    </Form.Group>
-
-                    {(task?.status === "ONHOLD" ||
-                      task?.status === "ONGOING") && (
-                      <Form.Group as={Col} md="3">
-                        <Form.Label>Time Left : </Form.Label>
-                        {(hoursLeft < 0 || minutesLeft < 0) && (
-                          <p>Time Exceed</p>
-                        )}
-                        {hoursLeft >= 0 && minutesLeft >= 0 && (
-                          <p>
-                            {" "}
-                            {hoursLeft || 0} hr {minutesLeft || 0} mins{" "}
-                          </p>
-                        )}
-                      </Form.Group>
-                    )}
-                  </>
-                </Row>
-              </Row>
-              <Row className="mb-3">
-                <Form.Group as={Col}>
-                  <Form.Label>Attachments</Form.Label>
-                  <Row>
-                    {task?.attachments &&
-                      task?.attachments.map((file, index) => {
-                        return (
-                          <Col key={index} sm={3}>
-                            <div className="attchment">
-                              <a
-                                href={`${file}`}
-                                target="_blank"
-                                className="text-truncate"
-                              >
-                                {"Attachment" + " " + (index + 1)}
-                              </a>
-                            </div>
-                          </Col>
-                        );
-                      })}
-                  </Row>
-                </Form.Group>
-              </Row>
-            </Form>
-
-            <div className="comment-section">
-              <h6>Comments</h6>
-              <div className="toggle-tags">
-                <button
-                  onClick={() => handleTabChange("comments")}
-                  className={`toggle-button ${
-                    activeTab === "comments" ? "active" : ""
-                  }`}
-                >
-                  Comments
-                </button>
-                {/* history */}
-                <button
-                  onClick={() => handleTabChange("history")}
-                  className={`toggle-button ${
-                    activeTab === "history" ? "active" : ""
-                  }`}
-                >
-                  History
-                </button>
-              </div>
-              <div className="container no_comment">
-                {activeTab === "comments" && (
-                  <>
-                    {task?.comments?.map((item, index) => {
-                      const options = {
-                        timeZone: "Asia/Kolkata",
-                        dateStyle: "medium",
-                        timeStyle: "medium",
-                      };
-                      const createdAt = new Date(
-                        item?.createdAt
-                      ).toLocaleString("en-US", options);
-
-                      return (
-                        <div className="comment mb-0 mt-0 pt-0" key={index}>
-                          <div className="commentedBy pb-2">
-                            <UserIcon
-                              style={{ float: "left" }}
-                              key={index}
-                              firstName={item?.commentedBy?.name}
-                            />
-                            {item?.commentedBy?.name}
-                          </div>
-
-                          <p
-                            dangerouslySetInnerHTML={{ __html: item?.comment }}
-                            className="comment-tex"
-                          ></p>
-                          <span className="date sub-text">{createdAt}</span>
-                        </div>
-                      );
-                    })}
-                    {!task?.comments?.length && (
-                      <p className="text-muted">No Comments</p>
-                    )}
-                    {isLoadingSpinner ? <LoadingSpinner /> : null}
-                  </>
+          {!isLoading && !isFetching && (
+            <div className="dv-50">
+              <Form>
+                {task?.status === "COMPLETED" && (
+                  <Row
+                    className="mb-3"
+                    style={{
+                      alignItems: "end",
+                      justifyContent: "end",
+                      justifyItems: "end",
+                    }}
+                  ></Row>
                 )}
+                <Row className="mb-3">
+                  <Form.Group as={Col} md="4">
+                    <Form.Label>Project Name</Form.Label>
+                    <p>{task?.projectId?.name} </p>
+                  </Form.Group>
+                  <Form.Group as={Col} md="4">
+                    <Form.Label>Section Name</Form.Label>
+                    <p>{task?.section?.name} </p>
+                  </Form.Group>
+                  <Form.Group as={Col} md="4">
+                    <Form.Label>Lead</Form.Label>
+                    {task?.lead?.map((item, index) => {
+                      return <p key={index}>{item?.name} </p>;
+                    })}
+                  </Form.Group>
+                </Row>
 
-                {activeTab === "ratings" && (
-                  <>
-                    {task?.ratingComments?.map((item, index) => {
-                      const options = {
-                        timeZone: "Asia/Kolkata",
-                        dateStyle: "medium",
-                        timeStyle: "medium",
-                      };
+                <Row className="mb-3">
+                  <Form.Group as={Col} md="12">
+                    <Form.Label>Task Title</Form.Label>
+                    <p>{task?.title} </p>
+                  </Form.Group>
+                  {/* Estimated Time */}
+                </Row>
 
-                      const createdAt = new Date(
-                        item?.createdAt
-                      ).toLocaleString("en-US", options);
+                <Row className="mb-3">
+                  <Form.Group className="desc" as={Col} md="12">
+                    <Form.Label>Task Description</Form.Label>
+                    <p
+                      className="text-muted"
+                      dangerouslySetInnerHTML={{ __html: task?.description }}
+                    ></p>
+                  </Form.Group>
+                </Row>
 
-                      return (
-                        <>
-                          <div
-                            className="comment comment mb-0 mt-0 pt-0"
-                            key={index}
-                          >
+                <Row className="mb-3">
+                  <Form.Group as={Col} md="3">
+                    <Form.Label>Assigned To</Form.Label>
+                    <p>{task?.assignedTo?.name || "Not Assigned"} </p>
+                  </Form.Group>
+                  <Form.Group as={Col} md="3" className="px-1">
+                    <Form.Label>Due Date</Form.Label>
+                    <p style={{ fontSize: "13px", marginBottom: "0" }}>
+                      {task?.dueDate ? formatDateToRating(task?.dueDate) : "--"}{" "}
+                    </p>
+                  </Form.Group>
+
+                  <Form.Group as={Col} md="3">
+                    <Form.Label>Priority</Form.Label>
+                    <p>{task?.priority} </p>
+                  </Form.Group>
+                  <Form.Group as={Col} md="3" className="ps-0">
+                    <Form.Label>Status</Form.Label>
+                    <select
+                      className="form-control form-control-lg"
+                      defaultValue={task?.status}
+                      onChange={(event) => handleStatusChange(event, task?._id)}
+                      disabled={
+                        task?.status === "COMPLETED" ||
+                        !(
+                          userDetails.id === task?.assignedTo?._id ||
+                          (userDetails?.role === "LEAD" &&
+                            (userDetails.id === task?.assignedTo?._id ||
+                              task?.lead?.includes(userDetails.id) ||
+                              userDetails.id === task?.createdBy?._id)) ||
+                          userDetails?.role === "SUPER_ADMIN" ||
+                          userDetails?.role === "ADMIN"
+                        )
+                      }
+                    >
+                      <option value="NOT_STARTED">NOT STARTED</option>
+                      <option value="ONHOLD">On Hold</option>
+                      <option value="ONGOING">On Going</option>
+                      <option value="COMPLETED">Completed</option>
+                    </select>
+                  </Form.Group>
+
+                  <Row className="mb-3 mt-3">
+                    <>
+                      {task?.status === "COMPLETED" && (
+                        <Form.Group as={Col} md="3">
+                          <Form.Label>Completed Date : </Form.Label>
+                          <p>
+                            {formatDateToRating(task?.completedDate) || "--"}{" "}
+                          </p>
+                        </Form.Group>
+                      )}
+
+                      {/* Task completion time  */}
+
+                      {task?.status === "COMPLETED" && (
+                        <Form.Group as={Col} md="6">
+                          {/* <Form.Label>Completed Date</Form.Label> */}
+                          <MinutesToDaysHoursMinutes
+                            minutes={task?.timeTaken}
+                          />
+                        </Form.Group>
+                      )}
+
+                      <Form.Group as={Col} md="3" className="estimated-time">
+                        <Form.Label>Estimated Time :</Form.Label>{" "}
+                        <div className="time">
+                          <span>
+                            {task?.defaultTaskTime?.hours || "00"} :{" "}
+                            {task?.defaultTaskTime?.minutes || "00"}{" "}
+                          </span>
+                        </div>
+                      </Form.Group>
+
+                      {(task?.status === "ONHOLD" ||
+                        task?.status === "ONGOING") && (
+                        <Form.Group as={Col} md="3">
+                          <Form.Label>Time Left : </Form.Label>
+                          {(hoursLeft < 0 || minutesLeft < 0) && (
+                            <p>Time Exceed</p>
+                          )}
+                          {hoursLeft >= 0 && minutesLeft >= 0 && (
+                            <p>
+                              {" "}
+                              {hoursLeft || 0} hr {minutesLeft || 0} mins{" "}
+                            </p>
+                          )}
+                        </Form.Group>
+                      )}
+                    </>
+                  </Row>
+                </Row>
+                <Row className="mb-3">
+                  <Form.Group as={Col}>
+                    <Form.Label>Attachments</Form.Label>
+                    <Row>
+                      {task?.attachments &&
+                        task?.attachments.map((file, index) => {
+                          return (
+                            <Col key={index} sm={3}>
+                              <div className="attchment">
+                                <a
+                                  href={`${file}`}
+                                  target="_blank"
+                                  className="text-truncate"
+                                >
+                                  {"Attachment" + " " + (index + 1)}
+                                </a>
+                              </div>
+                            </Col>
+                          );
+                        })}
+                    </Row>
+                  </Form.Group>
+                </Row>
+              </Form>
+
+              <div className="comment-section">
+                <h6>Comments</h6>
+                <div className="toggle-tags">
+                  <button
+                    onClick={() => handleTabChange("comments")}
+                    className={`toggle-button ${
+                      activeTab === "comments" ? "active" : ""
+                    }`}
+                  >
+                    Comments
+                  </button>
+                  {/* history */}
+                  <button
+                    onClick={() => handleTabChange("history")}
+                    className={`toggle-button ${
+                      activeTab === "history" ? "active" : ""
+                    }`}
+                  >
+                    History
+                  </button>
+                </div>
+                <div className="container no_comment">
+                  {activeTab === "comments" && (
+                    <>
+                      {task?.comments?.map((item, index) => {
+                        const options = {
+                          timeZone: "Asia/Kolkata",
+                          dateStyle: "medium",
+                          timeStyle: "medium",
+                        };
+                        const createdAt = new Date(
+                          item?.createdAt
+                        ).toLocaleString("en-US", options);
+
+                        return (
+                          <div className="comment mb-0 mt-0 pt-0" key={index}>
                             <div className="commentedBy pb-2">
                               <UserIcon
                                 style={{ float: "left" }}
@@ -470,6 +437,7 @@ export default function ViewTaskModal(props) {
                               />
                               {item?.commentedBy?.name}
                             </div>
+
                             <p
                               dangerouslySetInnerHTML={{
                                 __html: item?.comment,
@@ -478,60 +446,107 @@ export default function ViewTaskModal(props) {
                             ></p>
                             <span className="date sub-text">{createdAt}</span>
                           </div>
-                        </>
-                      );
-                    })}
-                    {!task?.ratingComments?.length && (
-                      <p className="text-muted">No Rating Comments</p>
-                    )}
-                  </>
-                )}
+                        );
+                      })}
+                      {!task?.comments?.length && (
+                        <p className="text-muted">No Comments</p>
+                      )}
+                      {isLoadingSpinner ? <LoadingSpinner /> : null}
+                    </>
+                  )}
 
-                {activeTab === "history" && (
-                  <>
-                    {/* <h1>hello history</h1> */}
-                    <History taskId={task?._id} />
-                  </>
-                )}
-              </div>
-            </div>
+                  {activeTab === "ratings" && (
+                    <>
+                      {task?.ratingComments?.map((item, index) => {
+                        const options = {
+                          timeZone: "Asia/Kolkata",
+                          dateStyle: "medium",
+                          timeStyle: "medium",
+                        };
 
-            {activeTab === "comments" && (
-              <>
-                <div
-                  className="container"
-                  style={{ padding: "0", width: "100%" }}
-                >
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                      <TextEditor
-                      onBlur={() => setIsAddCommentButtonEnabled(text.trim().length > 0)}
-                        width="100%"
-                        placeholder="Enter text here"
-                        value={text}
-                        onChange={handleTextChange}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        float: "left",
-                        width: "100%",
-                        textAlign: "right",
-                      }}
-                    >
-                      <Button
-                        disabled={!isAddCommentButtonEnabled}
-                        type="submit"
-                        className="btn btn-primary mb-2"
-                      >
-                        Post
-                      </Button>
-                    </div>
-                  </form>
+                        const createdAt = new Date(
+                          item?.createdAt
+                        ).toLocaleString("en-US", options);
+
+                        return (
+                          <>
+                            <div
+                              className="comment comment mb-0 mt-0 pt-0"
+                              key={index}
+                            >
+                              <div className="commentedBy pb-2">
+                                <UserIcon
+                                  style={{ float: "left" }}
+                                  key={index}
+                                  firstName={item?.commentedBy?.name}
+                                />
+                                {item?.commentedBy?.name}
+                              </div>
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html: item?.comment,
+                                }}
+                                className="comment-tex"
+                              ></p>
+                              <span className="date sub-text">{createdAt}</span>
+                            </div>
+                          </>
+                        );
+                      })}
+                      {!task?.ratingComments?.length && (
+                        <p className="text-muted">No Rating Comments</p>
+                      )}
+                    </>
+                  )}
+
+                  {activeTab === "history" && (
+                    <>
+                      {/* <h1>hello history</h1> */}
+                      <History taskId={task?._id} />
+                    </>
+                  )}
                 </div>
-              </>
-            )}
-          </div>
+              </div>
+
+              {activeTab === "comments" && (
+                <>
+                  <div
+                    className="container"
+                    style={{ padding: "0", width: "100%" }}
+                  >
+                    <form onSubmit={handleSubmit}>
+                      <div className="form-group">
+                        <TextEditor
+                          onBlur={() =>
+                            setIsAddCommentButtonEnabled(text.trim().length > 0)
+                          }
+                          width="100%"
+                          placeholder="Enter text here"
+                          value={text}
+                          onChange={handleTextChange}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          float: "left",
+                          width: "100%",
+                          textAlign: "right",
+                        }}
+                      >
+                        <Button
+                          disabled={!isAddCommentButtonEnabled}
+                          type="submit"
+                          className="btn btn-primary mb-2"
+                        >
+                          Post
+                        </Button>
+                      </div>
+                    </form>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </Offcanvas.Body>
       </Offcanvas>
 
