@@ -58,10 +58,12 @@
 
 .d-flex.rightTags {
   font-size: 12px;
+  align-items:baseline;
+  padding-right: 50px;
 }
 
 .d-flex.rightTags .progress {
-  margin-left: 10px !important;
+  margin-left: 0px !important;
 }
 
 .btn-glow:hover {
@@ -261,11 +263,12 @@ button.accordion-button {
 
 .accordion .accordion-item {
   position: relative;
-  background: transparent;
-  margin-bottom: 1rem;
+  background: #fff;
+  margin-bottom: 5px;
   border: 0;
+  padding: 10px;
 }
-
+.accordion .accordion-item:hover{ background: #f3f3f3; }
 .accordion-header {
   /* padding: 0rem 1rem; */
   background-color: #f7f7f700 !important;
@@ -463,7 +466,7 @@ button.accordion-button {
 }
 
 .clickLabelArea p {
-  font-size: 14px;
+  font-size: 13px;
 }
 .clickLabelArea .btn{ padding: 0px !important;}
 /* .clickLabelArea .nameTag{ display: contents;} */

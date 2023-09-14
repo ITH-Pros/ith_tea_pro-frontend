@@ -57,7 +57,7 @@ const TaskList = ({
             </Accordion.Header>
           )}
 
-          <div className="d-flex rightTags">
+          <div className="d-flex rightTags pt-2">
             <OverlayTrigger
               placement="top"
               overlay={
@@ -93,7 +93,7 @@ const TaskList = ({
                 </ProgressBar>
               </div>
             </OverlayTrigger>
-            <div>
+            <div style={{position:'absolute', right:'10px', top:'10px'}}>
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic" className="action_btn">
                   <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
