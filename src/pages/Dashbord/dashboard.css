@@ -602,8 +602,9 @@ th {
 .skip-button {
   background: #673ab7;
   color: #fff;
-  padding: 8px;
+  padding: 5px 8px;
   border-radius: 6px;
+  border: 0px;
   /* margin-left: 350px; */
 }
 

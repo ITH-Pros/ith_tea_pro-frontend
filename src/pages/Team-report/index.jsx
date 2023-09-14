@@ -298,9 +298,9 @@ const {data:teamWorkList} = useQuery(['userReport' , selectedOption , selectedEv
                         <tbody>
                           {teamWorkList?.map((team, index) => [
                             <tr>
-                              <td style={{ width: "150px" }}>
-                              <Tooltip title={team?.title || "--"}>
-                                <p className="text-truncate">
+                              <td >
+                              
+                                <p style={{ width: "250px", display:'block' }} className="text-truncate d-block" title={team?.title || "--"}>
                                  
                                   <Link
                                     to={`/view-task/${team._id}`}
@@ -309,25 +309,26 @@ const {data:teamWorkList} = useQuery(['userReport' , selectedOption , selectedEv
                                     rel="noopener noreferrer"
                                   >
                                     {team?.title || "--"}
+                                   
                                   </Link>
                                   
                                 </p>
-                                </Tooltip>
+                              
                               </td>
                               <td style={{ width: "150px" }}>
                                 <Badge bg="primary">
-                                  Due : {team?.dueDate?.split("T")[0] || "--"}
+                                  Due :  {team?.dueDate?.split("T")[0] || "--"}
                                 </Badge>
                               </td>
                               <td style={{ width: "150px" }}>
                                 <small className="text-muted">
-                                  <b>Status :</b>
+                                  <b>Status : </b>
                                   {team?.status || "--"}
                                 </small>
                               </td>
                               <td style={{ width: "150px" }}>
                                 <small className="text-muted">
-                                  <b>Lead :</b>
+                                  <b>Lead : </b>
                                   {team?.lead[0]?.name || "--"}
                                 </small>
                               </td>

@@ -50,7 +50,7 @@ function PasswordForm() {
 
   const handleSubmit = (values) => {
     setPasswordMutation.mutate({
-      email: values.email,
+      email: verifyTokenData?.data?.email,
       password: values.password,
       confirmPassword: values.confirmPassword,
     });
@@ -68,7 +68,6 @@ function PasswordForm() {
         initialValues={{
           password: "",
           confirmPassword: "",
-          email: verifyTokenData?.data?.email || "",
         }}
         validationSchema={PasswordSchema}
         onSubmit={handleSubmit}
@@ -78,7 +77,7 @@ function PasswordForm() {
           <Form className="password-form">
             <h4>Set Password</h4>
             <div className="hed-pass">
-              <h4>Email : {values.email}</h4>
+              <h4>Email : {verifyTokenData?.data?.email}</h4>
             </div>
 
             <div className="mb-3">

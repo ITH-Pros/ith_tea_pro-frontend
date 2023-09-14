@@ -15,8 +15,7 @@ import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 const ROOT = `rating_table`;
 
-
-import { Table } from "antd";
+import { Table, Tooltip } from "antd";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -45,11 +44,16 @@ export default function ViewRating() {
   const columns = [
     {
       title: "Name",
-      width: 100,
+      width: 110,
       dataIndex: "name",
       key: "name",
       fixed: "left",
       ellipsis: "true",
+      render: (name) => (
+        
+          <span className="text-turncate" title={name}>{name}</span>
+         
+      ),
     },
 
     // for days in month that will be columns
@@ -203,16 +207,15 @@ export default function ViewRating() {
    */
 
   const handleTableClick = (event) => {
-
-    if(userDetails?.role === "CONTRIBUTOR"){
-       if(userDetails.id !== JSON.parse(event.target.dataset.user)._id){
+    if (userDetails?.role === "CONTRIBUTOR") {
+      if (userDetails.id !== JSON.parse(event.target.dataset.user)._id) {
         toast.dismiss();
         toast.info("You are not allowed to view tasks of other members.");
         return;
-       }
+      }
     }
 
-    // if user is A 
+    // if user is A
     if (event.target?.dataset?.filled === "A") {
       toast.dismiss();
       toast.info("Absent user can not have tasks.");
@@ -426,7 +429,7 @@ export default function ViewRating() {
                   </Form.Group>
                 </h5>
               </div>
-              <div style={{position:'relative'}}>
+              <div style={{ position: "relative" }}>
                 <div className={`${ROOT}__rating_table`}>
                   <Table
                     pagination={false}
@@ -439,10 +442,7 @@ export default function ViewRating() {
                   />
                 </div>
                 {(isLoading || verifyManagerMutation.isLoading) && (
-                  <div
-                    className="text-center loader_rating"
-                    
-                  >
+                  <div className="text-center loader_rating">
                     <div className="spinner-border text-primary" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </div>

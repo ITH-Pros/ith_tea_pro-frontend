@@ -241,7 +241,7 @@ export default function AllProject() {
                 </button>
               )}
             </div>
-            {isFetching && !isLoading && <CustomLoader />}
+            
           </Col>
         </Row>
 
