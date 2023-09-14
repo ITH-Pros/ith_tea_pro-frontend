@@ -19,9 +19,7 @@ const Loader = () => {
         <div className="vertical-centered-box">
           <div className="content">
       
-          <div class="loader"></div>
-
-         
+          <div className="loader"></div>
           </div>
         </div>
       </div>
