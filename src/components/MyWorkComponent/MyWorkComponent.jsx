@@ -97,7 +97,7 @@ const MyWorkComponent = ({
               (myWorkList?.length === 0 && !isFetching && !isLoading && (
                 <Row>
                   <Col lg="12">
-                    <p>No task found.</p>
+                    <p className="d-flex align-items-center" style={{height:'100%'}}>No task found.</p>
                   </Col>
                 </Row>
               ))}

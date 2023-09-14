@@ -87,7 +87,7 @@ const OverdueWorkComponent = ({
             <div  id="card-task">
             {isLoading && <Loader />}
             {overdueWorkList && overdueWorkList?.length === 0 && (
-              <p className="text-center">No task found.</p>
+              <p className="d-flex align-items-center" style={{height:'100%'}}>No task found.</p>
             )}
             {overdueWorkList &&
               overdueWorkList?.length > 0 &&
