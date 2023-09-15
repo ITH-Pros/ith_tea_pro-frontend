@@ -11,6 +11,7 @@ import "./weekCalender.css";
 import { enUS } from "date-fns/locale";
 import { useAuth } from "../../../utlis/AuthProvider";
 import { getDatesForXAxis, getTotalDaysInMonth } from "@helpers/index";
+import { useQuery } from "react-query";
 
 Chart.register(...registerables);
 
@@ -41,57 +42,111 @@ export default function MyCalendar(props) {
     const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
     if (!allowedRoles.includes(userDetails?.role)) {
       getAllRatings();
-      getUserRatings();
+      // getUserRatings();
     }
   }, [selectedDate]);
 
   
+ const isAllowed = () => {
+    const allowedRoles = ["SUPER_ADMIN", "ADMIN"];
+    if (!allowedRoles.includes(userDetails?.role)) {
+      return true;
+    }
+    return false;
+  }
 
 
 
   /**
    * @description gets user ratings
    */
-  async function getUserRatings() {
-    setLoading(true);
-    try {
-      const dataToSend = {
-        date: selectedDate.getDate(),
-        month: selectedDate.getMonth() + 1,
-        year: selectedDate.getFullYear(),
-        userRating: true,
-      };
+  // async function getUserRatings() {
+  //   setLoading(true);
+  //   try {
+  //     const dataToSend = {
+  //       date: selectedDate.getDate(),
+  //       month: selectedDate.getMonth() + 1,
+  //       year: selectedDate.getFullYear(),
+  //       userRating: true,
+  //     };
 
-      const rating = await getRatings(dataToSend);
-      if (rating.error) {
-        setLoading(false);
-      } else {
-        getAllRatings(rating);
-        let userRatingObj = {};
-        rating.data?.[0]?.ratings?.forEach((element) => {
-          userRatingObj[element.date] = element.rating;
-        });
-        let userRatingForGraph = [];
-        const totalDays = getTotalDaysInMonth(selectedDate);
+  //     const rating = await getRatings(dataToSend);
+  //     if (rating.error) {
+  //       setLoading(false);
+  //     } else {
+  //       getAllRatings(rating);
+  //       let userRatingObj = {};
+  //       rating.data?.[0]?.ratings?.forEach((element) => {
+  //         userRatingObj[element.date] = element.rating;
+  //       });
+  //       let userRatingForGraph = [];
+  //       const totalDays = getTotalDaysInMonth(selectedDate);
 
-        for (let i = 1; i <= totalDays; i++) {
-          if (!userRatingObj[i] && userRatingObj[i] !== 0) {
-            userRatingObj[i] = userRatingObj[i - 1] || 0;
-          }
-          if(userRatingObj[i] === -1){
-            userRatingObj[i] = userRatingObj[i - 1] || 0;
-          }
-          userRatingForGraph.push(userRatingObj[i] );
-        }
-        
+  //       for (let i = 1; i <= totalDays; i++) {
+  //         if (!userRatingObj[i] && userRatingObj[i] !== 0) {
+  //           userRatingObj[i] = userRatingObj[i - 1] || 0;
+  //         }
+  //         if(userRatingObj[i] === -1){
+  //           userRatingObj[i] = userRatingObj[i - 1] || 0;
+  //         }
+  //         userRatingForGraph.push(userRatingObj[i] );
+  //       }
+  //       setUserRatingForGraph(userRatingForGraph);
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //   }
+  // }
 
-        setUserRatingForGraph(userRatingForGraph);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-    }
+  // payload 
+
+  const payloadUserRating = () => {
+    const dataToSend = {
+      date: selectedDate.getDate(),
+      month: selectedDate.getMonth() + 1,
+      year: selectedDate.getFullYear(),
+      userRating: true,
+    };
+    return dataToSend;
   }
+
+
+  const { isFetching , isLoading } = useQuery(
+    ["userRating", payloadUserRating()],
+    () => getRatings(payloadUserRating()),
+    {
+      refetchOnWindowFocus: false,
+      enabled: isAllowed(),
+      onSuccess: (data) => {
+        if (data.error) {
+          // setLoading(false);
+        } else {
+          getAllRatings(data);
+          let userRatingObj = {};
+          data.data?.[0]?.ratings?.forEach((element) => {
+            userRatingObj[element.date] = element.rating;
+          });
+          let userRatingForGraph = [];
+          const totalDays = getTotalDaysInMonth(selectedDate);
+
+          for (let i = 1; i <= totalDays; i++) {
+            if (!userRatingObj[i] && userRatingObj[i] !== 0) {
+              userRatingObj[i] = userRatingObj[i - 1] || 0;
+            }
+            if(userRatingObj[i] === -1){
+              userRatingObj[i] = userRatingObj[i - 1] || 0;
+            }
+            userRatingForGraph.push(userRatingObj[i] );
+          }
+          setUserRatingForGraph(userRatingForGraph);
+          // setLoading(false);
+        }
+      },
+    }
+  );
+
+
 
   
 
