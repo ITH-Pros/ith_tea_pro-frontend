@@ -14,6 +14,7 @@ import CustomCalendar from "@components/CustomCalender/custom-calender";
 import { formatDateToTeam } from "@helpers/index";
 import CustomLoader from "@components/Shared/CustomLoader";
 import Loader from "@components/Shared/Loader";
+import TeamworkSkeleton from "./TeamworkSkeleton";
 
 const Teamwork = ({
   userDetails,
@@ -66,22 +67,22 @@ const Teamwork = ({
                   }}
                 >
                   <div id="list_ui" className="mt-2">
+                  {isLoading ? ( <TeamworkSkeleton />) : (
                     <Row
                       className={
                         teamWorkList?.length === 0 ? "alig-nodata" : "px-0"
                       }
                     >
                       {isFetching && !isLoading && <CustomLoader />}
-                      {isLoading && <Loader />}
-
+                    
+                   
                       {teamWorkList &&
                         teamWorkList?.length > 0 &&
                         teamWorkList?.map((task, taskIndex) => (
                           <>
-                            {taskIndex === 0 ||
-                            task.dueDate !==
+                            {taskIndex === 0 || task.dueDate !==
                               teamWorkList[taskIndex - 1].dueDate ? (
-                              <Col
+                              <Col  
                                 lg={1}
                                 className="border-top day v-align completed_task"
                               >
@@ -90,7 +91,7 @@ const Teamwork = ({
                             ) : (
                               <Col lg={1} className="v-align "></Col>
                             )}
-                            <Col
+                            <Col key={task._id}
                               lg={11}
                               className="border-start border-bottom d-flex justify-content-start px-0"
                             >
@@ -379,11 +380,14 @@ const Teamwork = ({
                             </Col>
                           </>
                         ))}
+                    
+                  
                       {teamWorkList &&
                         !isLoading &&
                         !isFetching &&
                         teamWorkList?.length === 0 && <p>No task found.</p>}
                     </Row>
+                    )}
                   </div>
                 </div>
               </Card>

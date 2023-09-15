@@ -14,7 +14,8 @@ import "@pages/Dashbord/dashboard";
 import { useQuery } from "react-query";
 import { getAllMyWorks } from "@services/user/api";
 import CustomLoader from "@components/Shared/CustomLoader";
-import Loader from "@components/Shared/Loader";
+import MyWorkComponentSkeleton from "./MyWorkComponentSkeleton";
+import OverdueWorkComponentSkeleton from "@components/OverdueWorkComponent/overdueSkeleton";
 
 const MyWorkComponent = ({
   userDetails,
@@ -77,226 +78,248 @@ const MyWorkComponent = ({
   });
 
   return (
-    <Col lg={6} style={{ paddingLeft: "0px" }}>
-      {/* Your My Work component code */}
-      <Row>
-        <Col lg={6} className="left-add">
-          <span>MY WORK</span>
-        </Col>
-        <Col lg={6} className="right-filter"></Col>
-      </Row>
-      <Row>
-        <Col lg={12} className="mt-3 mb-4">
-          <Card
-            id="card-task"
-            className={myWorkList?.length === 0 ? "alig-nodata" : "px-3"}
-          >
-            {isFetching && !isLoading && <CustomLoader />}
-            {isLoading && <Loader />}
-            {!myWorkList ||
-              (myWorkList?.length === 0 && !isFetching && !isLoading && (
-                <Row>
-                  <Col lg="12">
-                    <p className="d-flex align-items-center" style={{height:'100%'}}>No task found.</p>
-                  </Col>
-                </Row>
-              ))}
-
-            {myWorkList &&
-              myWorkList?.length > 0 &&
-              myWorkList?.map((task) => (
-                <Row
-                  key={task?._id}
-                  className="d-flex justify-content-start list_task w-100 mx-0"
-                >
-                  {task?.isReOpen && (
-                    <div className="red-flag">
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Re-opened</Tooltip>}
-                      >
-                        <i className="fa fa-retweet" aria-hidden="true"></i>
-                      </OverlayTrigger>
-                    </div>
-                  )}
-                  {task?.isDelayTask && (
-                    <div className="red-flag">
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Overdue</Tooltip>}
-                      >
-                        <i className="fa fa-flag" aria-hidden="true"></i>
-                      </OverlayTrigger>
-                    </div>
-                  )}
-                  <Col lg={4} className="middle">
-                    {(userDetails.id === task?.assignedTo?._id ||
-                      userDetails?.role === "CONTRIBUTOR") && (
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          variant="success"
-                          id="dropdown-basic"
-                          style={{ padding: "0" }}
+    <>
+      {isLoading ? (
+        <MyWorkComponentSkeleton />
+      ) : (
+        <Col lg={6} style={{ paddingLeft: "0px" }}>
+          {/* Your My Work component code */}
+          <Row>
+            <Col lg={6} className="left-add">
+              <span>MY WORK</span>
+            </Col>
+            <Col lg={6} className="right-filter"></Col>
+          </Row>
+          <Row>
+            <Col lg={12} className="mt-3 mb-4">
+              <Card
+                id="card-task"
+                className={myWorkList?.length === 0 ? "alig-nodata" : "px-3"}
+              >
+                {isFetching && !isLoading && <CustomLoader />}
+                {!myWorkList ||
+                  (myWorkList?.length === 0 && !isFetching && !isLoading && (
+                    <Row>
+                      <Col lg="12">
+                        <p
+                          className="d-flex align-items-center"
+                          style={{ height: "100%" }}
                         >
-                          {task.status === "NOT_STARTED" && (
-                            <i
-                              className="fa fa-check-circle secondary"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                          {task.status === "ONGOING" && (
-                            <i
-                              className="fa fa-check-circle warning"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                          {task.status === "COMPLETED" && (
-                            <i
-                              className="fa fa-check-circle success"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                          {task.status === "ONHOLD" && (
-                            <i
-                              className="fa fa-check-circle primary"
-                              aria-hidden="true"
-                            ></i>
-                          )}
-                        </Dropdown.Toggle>
+                          No task found.
+                        </p>
+                      </Col>
+                    </Row>
+                  ))}
 
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(
-                                event,
-                                task?._id,
-                                "NOT_STARTED"
-                              )
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle secondary "
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Not Started
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(event, task?._id, "ONGOING")
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle warning"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Ongoing
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(event, task?._id, "COMPLETED")
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle success"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            Completed
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={(event) =>
-                              handleStatusChange(event, task?._id, "ONHOLD")
-                            }
-                          >
-                            <i
-                              className="fa fa-check-circle primary"
-                              aria-hidden="true"
-                            ></i>{" "}
-                            On Hold
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    )}
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>{task?.title}</Tooltip>}
+                {myWorkList &&
+                  myWorkList?.length > 0 &&
+                  myWorkList?.map((task) => (
+                    <Row
+                      key={task?._id}
+                      className="d-flex justify-content-start list_task w-100 mx-0"
                     >
-                      <h5
-                        onClick={() => handleViewDetails(task?._id)}
-                        className="text-truncate"
-                      >
-                        {task?.title}
-                      </h5>
-                    </OverlayTrigger>
-                  </Col>
-                  <Col lg={4} className="middle">
-                    {task?.status !== "COMPLETED" && (
-                      <small>
-                        <Badge bg={task?.dueToday ? "danger" : "primary"}>
-                          {moment(task?.dueDate?.split("T")[0]).format(
-                            "DD/MM/YYYY"
-                          )}
-                        </Badge>
-                      </small>
-                    )}
-                    {task?.status === "COMPLETED" && (
-                      <small>
-                        <Badge bg="success">
-                          {moment(task?.completedDate?.split("T")[0]).format(
-                            "DD/MM/YYYY"
-                          )}
-                        </Badge>
-                      </small>
-                    )}
-                  </Col>
-                  <Col
-                    lg={2}
-                    className="text-end middle"
-                    style={{ justifyContent: "end" }}
-                  >
-                    <small>
-                      {task?.status === "NOT_STARTED" && (
-                        <Badge bg=" secondary ">NOT STARTED</Badge>
+                      {task?.isReOpen && (
+                        <div className="red-flag">
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip>Re-opened</Tooltip>}
+                          >
+                            <i className="fa fa-retweet" aria-hidden="true"></i>
+                          </OverlayTrigger>
+                        </div>
                       )}
-                      {task?.status === "ONGOING" && (
-                        <Badge bg="warning">ONGOING</Badge>
+                      {task?.isDelayTask && (
+                        <div className="red-flag">
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip>Overdue</Tooltip>}
+                          >
+                            <i className="fa fa-flag" aria-hidden="true"></i>
+                          </OverlayTrigger>
+                        </div>
                       )}
-                      {task?.status === "COMPLETED" && (
-                        <Badge bg="success">COMPLETED</Badge>
-                      )}
-                      {task?.status === "ONHOLD" && (
-                        <Badge bg="primary">ON HOLD</Badge>
-                      )}
-                    </small>
-                  </Col>
-                  <Col lg={2} id="dropdown_action" className="text-right middle d-block">
-                    <Dropdown>
-                      <Dropdown.Toggle variant="defult" id="dropdown-basic">
-                        <i className="fa fa-ellipsis-v"></i>
-                      </Dropdown.Toggle>
+                      <Col lg={4} className="middle">
+                        {(userDetails.id === task?.assignedTo?._id ||
+                          userDetails?.role === "CONTRIBUTOR") && (
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="success"
+                              id="dropdown-basic"
+                              style={{ padding: "0" }}
+                            >
+                              {task.status === "NOT_STARTED" && (
+                                <i
+                                  className="fa fa-check-circle secondary"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                              {task.status === "ONGOING" && (
+                                <i
+                                  className="fa fa-check-circle warning"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                              {task.status === "COMPLETED" && (
+                                <i
+                                  className="fa fa-check-circle success"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                              {task.status === "ONHOLD" && (
+                                <i
+                                  className="fa fa-check-circle primary"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                            </Dropdown.Toggle>
 
-                      <Dropdown.Menu>
-                        <Dropdown.Item
-                          onClick={() => {
-                            setSelectedProject();
-                            setShowAddTask(true);
-                            setSelectedTask(task);
-                          }}
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(
+                                    event,
+                                    task?._id,
+                                    "NOT_STARTED"
+                                  )
+                                }
+                              >
+                                <i
+                                  className="fa fa-check-circle secondary "
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                Not Started
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(
+                                    event,
+                                    task?._id,
+                                    "ONGOING"
+                                  )
+                                }
+                              >
+                                <i
+                                  className="fa fa-check-circle warning"
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                Ongoing
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(
+                                    event,
+                                    task?._id,
+                                    "COMPLETED"
+                                  )
+                                }
+                              >
+                                <i
+                                  className="fa fa-check-circle success"
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                Completed
+                              </Dropdown.Item>
+                              <Dropdown.Item
+                                onClick={(event) =>
+                                  handleStatusChange(event, task?._id, "ONHOLD")
+                                }
+                              >
+                                <i
+                                  className="fa fa-check-circle primary"
+                                  aria-hidden="true"
+                                ></i>{" "}
+                                On Hold
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        )}
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip>{task?.title}</Tooltip>}
                         >
-                          <i
-                            className="fa fa-pencil-square"
-                            aria-hidden="true"
-                          ></i>{" "}
-                          Edit Task
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Col>
-                </Row>
-              ))}
-          </Card>
+                          <h5
+                            onClick={() => handleViewDetails(task?._id)}
+                            className="text-truncate"
+                          >
+                            {task?.title}
+                          </h5>
+                        </OverlayTrigger>
+                      </Col>
+                      <Col lg={4} className="middle">
+                        {task?.status !== "COMPLETED" && (
+                          <small>
+                            <Badge bg={task?.dueToday ? "danger" : "primary"}>
+                              {moment(task?.dueDate?.split("T")[0]).format(
+                                "DD/MM/YYYY"
+                              )}
+                            </Badge>
+                          </small>
+                        )}
+                        {task?.status === "COMPLETED" && (
+                          <small>
+                            <Badge bg="success">
+                              {moment(
+                                task?.completedDate?.split("T")[0]
+                              ).format("DD/MM/YYYY")}
+                            </Badge>
+                          </small>
+                        )}
+                      </Col>
+                      <Col
+                        lg={2}
+                        className="text-end middle"
+                        style={{ justifyContent: "end" }}
+                      >
+                        <small>
+                          {task?.status === "NOT_STARTED" && (
+                            <Badge bg=" secondary ">NOT STARTED</Badge>
+                          )}
+                          {task?.status === "ONGOING" && (
+                            <Badge bg="warning">ONGOING</Badge>
+                          )}
+                          {task?.status === "COMPLETED" && (
+                            <Badge bg="success">COMPLETED</Badge>
+                          )}
+                          {task?.status === "ONHOLD" && (
+                            <Badge bg="primary">ON HOLD</Badge>
+                          )}
+                        </small>
+                      </Col>
+                      <Col
+                        lg={2}
+                        id="dropdown_action"
+                        className="text-right middle d-block"
+                      >
+                        <Dropdown>
+                          <Dropdown.Toggle variant="defult" id="dropdown-basic">
+                            <i className="fa fa-ellipsis-v"></i>
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              onClick={() => {
+                                setSelectedProject();
+                                setShowAddTask(true);
+                                setSelectedTask(task);
+                              }}
+                            >
+                              <i
+                                className="fa fa-pencil-square"
+                                aria-hidden="true"
+                              ></i>{" "}
+                              Edit Task
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                    </Row>
+                  ))}
+              </Card>
+            </Col>
+          </Row>
         </Col>
-      </Row>
-    </Col>
+      )}
+    </>
   );
 };
 
