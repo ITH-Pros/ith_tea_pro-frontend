@@ -167,7 +167,7 @@ useEffect(() => {
       </Row>
       <Row>
         <Col lg={12} className="mt-3">
-          <Card style={{border:'0px'}}
+          <Card style={{border:'0px', borderRadius:'10px'}}
             className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-0 border-0"}
           >
             {isFetching && !isLoading && <CustomLoader />}
