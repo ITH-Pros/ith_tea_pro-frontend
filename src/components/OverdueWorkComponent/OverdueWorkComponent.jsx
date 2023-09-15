@@ -71,7 +71,7 @@ const OverdueWorkComponent = ({
 
   return (
     <Col lg={6} style={{ paddingLeft: "0px" }}>
-      <Row className="mb-3">
+      <Row className="mt-3">
         <Col lg={6} className="left-add pb-1">
           <span>OVERDUE WORK</span>
         </Col>
@@ -79,7 +79,7 @@ const OverdueWorkComponent = ({
       </Row>
       <Row>
         <Col lg={12} className="mt-3">
-          <Card
+          <Card style={{border:'0px', borderRadius:'10px'}}
            
             className={!overdueWorkList?.length ? "alig-nodata" : "px-0"}
           >

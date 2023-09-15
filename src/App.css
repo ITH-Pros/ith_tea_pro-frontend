@@ -161,6 +161,7 @@ span.rbc-toolbar-label {
 .btn-primary {
   background: #8355ad !important;
   border-color: #8355ad !important;
+  font-size: 13px !important;
 }
 
 .rbc-today {
@@ -185,4 +186,11 @@ span.rbc-toolbar-label {
 }
 .accordion-button:focus{
   box-shadow: none;
+}
+
+.spinner-border{
+  width: 40px !important;
+  height: 40px !important;
+  border: 6px solid #f3f3f3 !important; /* Light grey */
+  border-top: 6px solid #8355ad !important; /* Black */
 }

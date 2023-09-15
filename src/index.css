@@ -71,17 +71,18 @@ code {
   outline: none !important;
   box-shadow: none !important;
 }
-
+.btn-sm{font-size: 10px !important;}
 .addTaskBtn {
   background-color: #8355ad !important;
-  line-height: 16px;
+ 
   white-space: nowrap;
   transition: color .3s linear;
   color: #fff !important;
   border-color: #d1a2fb;
-  padding: 10px 12px;
+  padding: 6px 12px;
   border-radius: 5px;
   border: 1px solid;
+  font-size: 13px !important;
    
 }
 
