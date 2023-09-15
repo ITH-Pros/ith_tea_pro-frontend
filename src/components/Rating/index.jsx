@@ -50,9 +50,9 @@ export default function ViewRating() {
       fixed: "left",
       ellipsis: "true",
       render: (name) => (
-        
-          <span className="text-turncate" title={name}>{name}</span>
-         
+        <span className="text-turncate" title={name}>
+          {name}
+        </span>
       ),
     },
 
@@ -101,8 +101,6 @@ export default function ViewRating() {
       fixed: "right",
       width: 70,
       dataIndex: "averageRating",
-
-      // render: () => <a>1.0</a>,
     },
   ];
   const data = [];
@@ -337,11 +335,18 @@ export default function ViewRating() {
       }
     }
 
+    const isCurrentUserManager = ratingsArray[i]?.managerIds?.includes(
+      userDetails?.id
+    );
+    const isCurrentUser = ratingsArray[i]?._id === userDetails.id;
+    const userRowClass = isCurrentUserManager ? "current-manager-row" : "" ||  isCurrentUser ? "current-user-row" : "";
+
     data.push({
       key: i,
       name: `${ratingsArray[i].name}`,
       rating,
       averageRating: ratingsArray[i].monthlyAverage?.toFixed(2) || "NA",
+      userRowClass,
     });
   }
 
@@ -439,6 +444,7 @@ export default function ViewRating() {
                       x: 1500,
                       y: 320,
                     }}
+                    rowClassName={(record) => record.userRowClass}
                   />
                 </div>
                 {(isLoading || verifyManagerMutation.isLoading) && (
