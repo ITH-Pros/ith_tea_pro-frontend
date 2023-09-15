@@ -32,7 +32,6 @@ export default function MyCalendar(props) {
   // state variables
   const [myRatings, setMyRatings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [loading, setLoading] = useState(false);
   const [userRatingForGraph, setUserRatingForGraph] = useState([]);
 
   /**
@@ -60,47 +59,6 @@ export default function MyCalendar(props) {
   /**
    * @description gets user ratings
    */
-  // async function getUserRatings() {
-  //   setLoading(true);
-  //   try {
-  //     const dataToSend = {
-  //       date: selectedDate.getDate(),
-  //       month: selectedDate.getMonth() + 1,
-  //       year: selectedDate.getFullYear(),
-  //       userRating: true,
-  //     };
-
-  //     const rating = await getRatings(dataToSend);
-  //     if (rating.error) {
-  //       setLoading(false);
-  //     } else {
-  //       getAllRatings(rating);
-  //       let userRatingObj = {};
-  //       rating.data?.[0]?.ratings?.forEach((element) => {
-  //         userRatingObj[element.date] = element.rating;
-  //       });
-  //       let userRatingForGraph = [];
-  //       const totalDays = getTotalDaysInMonth(selectedDate);
-
-  //       for (let i = 1; i <= totalDays; i++) {
-  //         if (!userRatingObj[i] && userRatingObj[i] !== 0) {
-  //           userRatingObj[i] = userRatingObj[i - 1] || 0;
-  //         }
-  //         if(userRatingObj[i] === -1){
-  //           userRatingObj[i] = userRatingObj[i - 1] || 0;
-  //         }
-  //         userRatingForGraph.push(userRatingObj[i] );
-  //       }
-  //       setUserRatingForGraph(userRatingForGraph);
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //   }
-  // }
-
-  // payload 
-
   const payloadUserRating = () => {
     const dataToSend = {
       date: selectedDate.getDate(),
@@ -119,9 +77,7 @@ export default function MyCalendar(props) {
       refetchOnWindowFocus: false,
       enabled: isAllowed(),
       onSuccess: (data) => {
-        if (data.error) {
-          // setLoading(false);
-        } else {
+    
           getAllRatings(data);
           let userRatingObj = {};
           data.data?.[0]?.ratings?.forEach((element) => {
@@ -140,8 +96,6 @@ export default function MyCalendar(props) {
             userRatingForGraph.push(userRatingObj[i] );
           }
           setUserRatingForGraph(userRatingForGraph);
-          // setLoading(false);
-        }
       },
     }
   );
@@ -256,7 +210,7 @@ export default function MyCalendar(props) {
                 eventPropGetter={eventStyleGetter}
               />
             </div>
-            {loading ? <Loader /> : null}
+            {isLoading ? <Loader /> : null}
           </div>
         </Col>
       </Row>
