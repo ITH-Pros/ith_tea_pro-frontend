@@ -148,7 +148,7 @@ useEffect(() => {
               controlId="formBasicEmail"
               className="team-member-select mb-0 "
             >
-              <Form.Label>Team Member</Form.Label>
+              {/* <Form.Label>Team Member</Form.Label> */}
               <Form.Control
                 as="select"
                 onChange={(event) => {
@@ -167,8 +167,8 @@ useEffect(() => {
       </Row>
       <Row>
         <Col lg={12} className="mt-3">
-          <Card
-            className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-0"}
+          <Card style={{border:'0px', borderRadius:'10px'}}
+            className={pendingRatingList?.length === 0 ? "alig-nodata" : "px-0 border-0"}
           >
             {isFetching && !isLoading && <CustomLoader />}
             <div id="card-task" style={{boxShadow:'none'}}>

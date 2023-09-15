@@ -28,7 +28,7 @@ const ProjectList = ({
         ?.slice(0, showAllProjects ? projectList.length : 2)
         .map((project) => (
           <Col lg={6}>
-            <Card id={`card-${project.id}`} key={project?.id}>
+            <Card id={`card-${project.id}`} key={project?.id} className="mb-1">
               <Row className="d-flex justify-content-start">
                 <Col lg={6} className="middle">
                   <Avatar name={project.name} size={40} round="20px" />{" "}
