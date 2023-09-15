@@ -445,6 +445,8 @@ export default function ViewRating() {
                       y: 320,
                     }}
                     rowClassName={(record) => record.userRowClass}
+
+
                   />
                 </div>
                 {(isLoading || verifyManagerMutation.isLoading) && (
