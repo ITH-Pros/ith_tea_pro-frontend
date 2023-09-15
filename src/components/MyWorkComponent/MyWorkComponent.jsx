@@ -109,26 +109,8 @@ const MyWorkComponent = ({
                   key={task?._id}
                   className="d-flex justify-content-start list_task w-100 mx-0"
                 >
-                  {task?.isReOpen && (
-                    <div className="red-flag">
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Re-opened</Tooltip>}
-                      >
-                        <i className="fa fa-retweet" aria-hidden="true"></i>
-                      </OverlayTrigger>
-                    </div>
-                  )}
-                  {task?.isDelayTask && (
-                    <div className="red-flag">
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Overdue</Tooltip>}
-                      >
-                        <i className="fa fa-flag" aria-hidden="true"></i>
-                      </OverlayTrigger>
-                    </div>
-                  )}
+             
+     
                   <Col lg={4} className="middle">
                     {(userDetails.id === task?.assignedTo?._id ||
                       userDetails?.role === "CONTRIBUTOR") && (
@@ -228,7 +210,29 @@ const MyWorkComponent = ({
                       </h5>
                     </OverlayTrigger>
                   </Col>
-                  <Col lg={4} className="middle">
+                  <Col lg={1} className="middle">
+                  {task?.isReOpen && (
+                    <div className="red-flag px-0">
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>Re-opened</Tooltip>}
+                      >
+                        <i className="fa fa-retweet" aria-hidden="true"></i>
+                      </OverlayTrigger>
+                    </div>
+                  )}
+                  {task?.isDelayTask && (
+                    <div className="red-flag px-0">
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>Overdue</Tooltip>}
+                      >
+                        <i className="fa fa-flag" aria-hidden="true"></i>
+                      </OverlayTrigger>
+                    </div>
+                  )}
+                  </Col>
+                  <Col lg={3} className="middle">
                     {task?.status !== "COMPLETED" && (
                       <small>
                         <Badge bg={task?.dueToday ? "danger" : "primary"}>
