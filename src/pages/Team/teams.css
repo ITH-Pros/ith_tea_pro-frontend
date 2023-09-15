@@ -93,7 +93,7 @@ a {
 .box .heart-btn:checked ~ .heart::before {
   color: #e41934;
 }
-
+ 
 .heart-btn {
   position: absolute;
   top: 25px;
