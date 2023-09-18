@@ -510,7 +510,7 @@ export default function Teams() {
                 <span
                   className=""
                   aria-hidden="true"
-                  style={{ marginRight: "10px", marginLeft: "5px" }}
+                  
                 >
                   {" "}
                 </span>

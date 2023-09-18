@@ -10,17 +10,19 @@
   box-shadow: none;
   margin: 0;
   padding: 2px 5px;
-  background-color: #198754 !important;
+  background-color: #19c375 !important;
   border-radius: 5px;
   color: #f8f9fa;
-  border-radius: 0;
+  border-radius: 0 !important;
   cursor: pointer;
-  height: 30px;
-  width: 43px !important;
-  top: 0;
+  /* height: 30px; */
+  width: 70px !important;
+  bottom: -12px;
   width: 100%;
   text-align: left;
   position: absolute;
+  font-size: 12px;
+  text-align: center !important;
 }
 .rbc-ellipsis, .rbc-show-more, .rbc-row-segment .rbc-event-content, .rbc-event-label {
   display: block;
@@ -161,6 +163,7 @@ span.rbc-toolbar-label {
 .btn-primary {
   background: #8355ad !important;
   border-color: #8355ad !important;
+  font-size: 13px !important;
 }
 
 .rbc-today {
@@ -185,4 +188,11 @@ span.rbc-toolbar-label {
 }
 .accordion-button:focus{
   box-shadow: none;
+}
+
+.spinner-border{
+  width: 40px !important;
+  height: 40px !important;
+  border: 6px solid #f3f3f3 !important; /* Light grey */
+  border-top: 6px solid #8355ad !important; /* Black */
 }

@@ -494,7 +494,7 @@ button.accordion-button {
   float: right;
   background: none;
   text-align: end;}
- 
+  .filter_btn .btn{font-size: 13px !important;}
  
 .action_btn { background: none !important; }
 

@@ -30,7 +30,7 @@ export default function ViewTeamList(props) {
         <Offcanvas.Title>Team List</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        {isLoading && <Spinner className="text-center" animation="border" variant="primary" />}
+       <div className="spinner-container">{isLoading && <Spinner className="text-center" animation="border" variant="primary" />}</div> 
 
         <div className="container">
           <ul className="team-list">
