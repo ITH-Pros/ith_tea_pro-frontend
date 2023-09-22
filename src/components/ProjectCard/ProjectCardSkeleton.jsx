@@ -33,7 +33,7 @@ const ProjectCardSkeleton = () => {
           </div>
 
           <div className="pull-left w-100">
-            <label className="lableName">Team Members</label>
+            <label className="lableName">{<Skeleton width={100}/>}</label>
             <div className="user-profile-pics" style={{ paddingLeft: "10px" }}>
               <Skeleton  circle={true} height={30} width={30} />
               <Skeleton circle={true} height={30} width={30} />
