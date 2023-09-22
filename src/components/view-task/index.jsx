@@ -26,6 +26,7 @@ import LoadingSpinner from "../Shared/Spinner/spinner";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 import { formatDateToRating } from "@helpers/index";
+import Skeleton from "react-loading-skeleton";
 export default function ViewTaskModal(props) {
   const {
     closeViewTaskModal,
@@ -40,11 +41,12 @@ export default function ViewTaskModal(props) {
   const [text, setText] = useState("");
   const [activeTab, setActiveTab] = useState("comments");
   const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
-  const [isAddCommentButtonEnabled, setIsAddCommentButtonEnabled] = useState(false);
-
+  const [isAddCommentButtonEnabled, setIsAddCommentButtonEnabled] =
+    useState(false);
 
   const {
     isLoading,
+    isFetching,
     error,
     data: task,
     refetch: refetchTaskDetails,
@@ -57,13 +59,18 @@ export default function ViewTaskModal(props) {
         throw new Error(response.message);
       }
       setIsLoadingSpinner(false);
-      setShowViewTaskModal(true);
       return response?.data;
     },
     {
       refetchOnWindowFocus: false,
     }
   );
+
+  useEffect(() => {
+    if (selectedTaskId) {
+      setShowViewTaskModal(true);
+    }
+  }, [selectedTaskId]);
 
   // Mutation for updating task status
   const mutationUpdateTask = useMutation(async (newStatus) => {
@@ -128,7 +135,6 @@ export default function ViewTaskModal(props) {
     }, 200); // checking every 200ms
     return () => clearInterval(intervalId);
   }, [text]);
-  
 
   const updateTaskStatus = async (dataToSend) => {
     mutationUpdateTask.mutate(dataToSend, {
@@ -236,24 +242,28 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="4">
                   <Form.Label>Project Name</Form.Label>
-                  <p>{task?.projectId?.name} </p>
+                  <p>{task?.projectId?.name || <Skeleton/>} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
                   <Form.Label>Section Name</Form.Label>
-                  <p>{task?.section?.name} </p>
+                  <p>{task?.section?.name || <Skeleton/>} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
                   <Form.Label>Lead</Form.Label>
                   {task?.lead?.map((item, index) => {
                     return <p key={index}>{item?.name} </p>;
                   })}
+
+                  {!task?.lead && ( <Skeleton/>)}
+
+
                 </Form.Group>
               </Row>
 
               <Row className="mb-3">
                 <Form.Group as={Col} md="12">
                   <Form.Label>Task Title</Form.Label>
-                  <p>{task?.title} </p>
+                  <p>{task?.title || <Skeleton/>} </p>
                 </Form.Group>
                 {/* Estimated Time */}
               </Row>
@@ -261,6 +271,11 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group className="desc" as={Col} md="12">
                   <Form.Label>Task Description</Form.Label>
+
+                  {!task?.description &&
+                  (<Skeleton count={5}/>)
+                  }
+
                   <p
                     className="text-muted"
                     dangerouslySetInnerHTML={{ __html: task?.description }}
@@ -271,18 +286,18 @@ export default function ViewTaskModal(props) {
               <Row className="mb-3">
                 <Form.Group as={Col} md="3">
                   <Form.Label>Assigned To</Form.Label>
-                  <p>{task?.assignedTo?.name || "Not Assigned"} </p>
+                  <p>{(task?.assignedTo?.name || "Not Assigned")} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="px-1">
                   <Form.Label>Due Date</Form.Label>
                   <p style={{ fontSize: "13px", marginBottom: "0" }}>
-                    {task?.dueDate ? formatDateToRating(task?.dueDate) : "--"}{" "}
+                    {task?.dueDate ? formatDateToRating(task?.dueDate) : "--" || <Skeleton/>}{" "}
                   </p>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3">
                   <Form.Label>Priority</Form.Label>
-                  <p>{task?.priority} </p>
+                  <p>{task?.priority || <Skeleton/>} </p>
                 </Form.Group>
                 <Form.Group as={Col} md="3" className="ps-0">
                   <Form.Label>Status</Form.Label>
@@ -425,14 +440,14 @@ export default function ViewTaskModal(props) {
                               key={index}
                               firstName={item?.commentedBy?.name}
                             />
-                            {item?.commentedBy?.name}
+                            {item?.commentedBy?.name || <Skeleton/>}
                           </div>
 
                           <p
                             dangerouslySetInnerHTML={{ __html: item?.comment }}
                             className="comment-tex"
                           ></p>
-                          <span className="date sub-text">{createdAt}</span>
+                          <span className="date sub-text">{createdAt || <Skeleton/>}</span>
                         </div>
                       );
                     })}
@@ -468,7 +483,7 @@ export default function ViewTaskModal(props) {
                                 key={index}
                                 firstName={item?.commentedBy?.name}
                               />
-                              {item?.commentedBy?.name}
+                              {item?.commentedBy?.name || <Skeleton/>}
                             </div>
                             <p
                               dangerouslySetInnerHTML={{
@@ -476,7 +491,7 @@ export default function ViewTaskModal(props) {
                               }}
                               className="comment-tex"
                             ></p>
-                            <span className="date sub-text">{createdAt}</span>
+                            <span className="date sub-text">{createdAt || <Skeleton/>}</span>
                           </div>
                         </>
                       );

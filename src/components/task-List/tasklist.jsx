@@ -21,6 +21,7 @@ import {
 } from "react-icons/bs";
 import CustomLoader from "@components/Shared/CustomLoader";
 import Loader from "@components/Shared/Loader";
+import TaskSkeleton from "./TaskSkeleton";
 const TaskList = ({
   projects,
   selectedProjectId,
@@ -40,13 +41,16 @@ const TaskList = ({
   isLoading,
 }) => {
   return (
+
+    
+
+
     <Accordion alwaysOpen="true">
       {!projects?.length && !selectedProjectId && !isLoading && (
         <p className="alig-nodata" style={{ textAlign: "center" }}>
           No Tasks Found
         </p>
       )}
-      {isLoading && <Loader />}
 
       {projects?.map((project, index) => (
         // check if tasks array has data
@@ -64,8 +68,8 @@ const TaskList = ({
                 <Tooltip>
                   {taskInfo && (
                     <div>
-                      <div>Completed Tasks: {taskInfo.completedTasks}</div>
-                      <div>Pending Tasks: {taskInfo.pendingTasks}</div>
+                      <div>Completed Tasks: {taskInfo?.completedTasks}</div>
+                      <div>Pending Tasks: {taskInfo?.pendingTasks}</div>
                     </div>
                   )}
                 </Tooltip>
@@ -469,9 +473,12 @@ const TaskList = ({
           </Accordion.Body>
         </Accordion.Item>
       ))}
-      {projects && projects.length === 0 && (
+      {projects && projects.length === 0 && !isLoading && (
         <p> {isArchive ? "No Task archived." : ""} </p>
       )}
+
+      {isLoading && <TaskSkeleton /> }
+
     </Accordion>
   );
 };

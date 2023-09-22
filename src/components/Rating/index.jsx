@@ -16,6 +16,8 @@ import { useMutation, useQuery } from "react-query";
 const ROOT = `rating_table`;
 
 import { Table, Tooltip } from "antd";
+import Skeleton from "react-loading-skeleton";
+import RatingTableSkeleton from "./skeleton";
 
 var month = moment().month();
 let currentYear = moment().year();
@@ -435,6 +437,7 @@ export default function ViewRating() {
                 </h5>
               </div>
               <div style={{ position: "relative" }}>
+              {(!isLoading) && (
                 <div className={`${ROOT}__rating_table`}>
                   <Table
                     pagination={false}
@@ -449,7 +452,10 @@ export default function ViewRating() {
 
                   />
                 </div>
-                {(isLoading || verifyManagerMutation.isLoading) && (
+                )}
+                {(isLoading) && (<RatingTableSkeleton/>)}
+
+                {(verifyManagerMutation.isLoading) && (
                   <div className="text-center loader_rating">
                     <div className="spinner-border text-primary" role="status">
                       <span className="visually-hidden">Loading...</span>

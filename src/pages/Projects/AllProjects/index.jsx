@@ -19,6 +19,8 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 import CustomLoader from "@components/Shared/CustomLoader";
+import ProjectCardSkeleton from "@components/ProjectCard/ProjectCardSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function AllProject() {
   const { userDetails } = useAuth();
@@ -246,8 +248,8 @@ export default function AllProject() {
         </Row>
 
         <div className="project-boxes jsGridView">
-          {isLoading && <Loader />}
-          {projectList &&
+          {/* {isLoading && <Loader />} */}
+          {projectList && !loading  && !isLoading &&
             projectList.map((element, projectIndex) => {
               return (
                 <div key={projectIndex}>
@@ -274,14 +276,20 @@ export default function AllProject() {
                 </div>
               );
             })}
-          {!projectList?.length && !isLoading && !isFetching && (
+
+            {isLoading && (
+              <div> <ProjectCardSkeleton /></div>
+            )}
+
+
+          {!projectList?.length && !isLoading && !isFetching && !loading && (
             <div>
               <p className="alig-nodata">No Project Found</p>
             </div>
           )}
         </div>
       </div>
-      {loading ? <Loader /> : null}
+      {/* {loading ? <Loader /> : null} */}
 
       <Modal
         show={confirmModalShow}

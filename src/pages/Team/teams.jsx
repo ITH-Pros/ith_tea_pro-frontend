@@ -35,6 +35,7 @@ import UserIcon from "@components/ProfileImage/profileImage";
 import resend from "@assets/img/resend-icon.jpg";
 import { useAuth } from "../../utlis/AuthProvider";
 import { useMutation, useQuery } from "react-query";
+import UserSkeleton from "./team-skeleton";
 
 export default function Teams() {
   const { userDetails } = useAuth();
@@ -586,9 +587,6 @@ export default function Teams() {
                             }}
                             icon="pi pi-check"
                             label="Confirm"
-                            // onClick={() => {
-                            //   handleEdit();
-                            // }}
                           >
                             {" "}
                             <i
@@ -776,6 +774,10 @@ export default function Teams() {
                 </div>
               );
             })}
+
+            {isUsersLoading && Array.from({ length: 5 }).map((_, index) => (
+                  <UserSkeleton key={`skeleton-${index}`} />
+                ))}
         </div>
 
         {usersList?.users?.length ? (
@@ -785,7 +787,7 @@ export default function Teams() {
           />
         ) : (
           <p className="alig-nodata">
-            {isUsersLoading ? "Loading..." : "No User Found"}
+            {!isUsersLoading &&  "No User Found"}
           </p>
         )}
 
