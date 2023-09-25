@@ -430,9 +430,10 @@ export default function AddTaskModal(props) {
                     disabled={
                       selectedTask  || selectedProjectFromTask
                     }
+                    
                   >
                     <option selected value="" disabled>
-                      Select Project
+                      {isLoading ?"Loading...": "Select Project"}
                     </option>
                     {projectList?.map((project, index) => (
                       <option value={project?._id} key={index}>
