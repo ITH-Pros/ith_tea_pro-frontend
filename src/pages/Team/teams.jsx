@@ -810,6 +810,8 @@ export default function Teams() {
           />
         )}
 
+        
+
         <Modal
           centered
           show={confirmModalShow}
@@ -892,14 +894,13 @@ export default function Teams() {
             <Button
               variant="primary"
               style={{ marginRight: "10px" }}
+              disabled={isAssigningManager}
               onClick={() => {
                 assignManagers();
               }}
             >
-              Confirm{" "}
-              {isAssigningManager ? (
-                <Spinner animation="border" size="sm" />
-              ) : null}
+             {isAssigningManager ? 'Please wait...':'Confirm' } 
+             
             </Button>
           </Modal.Footer>
         </Modal>
