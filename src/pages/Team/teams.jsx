@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -72,7 +72,7 @@ export default function Teams() {
     isLoading: isUsersLoading,
     refetch: refetchUsers,
   } = useQuery(
-    ["allUsersList", pageDetails.currentPage, pageDetails.rowsPerPage],
+    ["allUsersList", pageDetails?.rowsPerPage],
     () =>
       getAllUsers({
         params: {
@@ -97,6 +97,14 @@ export default function Teams() {
       },
     }
   );
+
+  useEffect(() => {
+    if(isNaN(pageDetails?.currentPage)){
+      return;
+    } else {
+      refetchUsers();
+    }
+  }, [pageDetails?.currentPage]);
 
   /* *************  Get All manager *************** 
   /* @ param: options
@@ -232,31 +240,31 @@ export default function Teams() {
             return (
               <>
                 {/* {!isLoadingAssignedProject && ( */}
-                  <div key={project?._id} className="assignPro">
-                    <input
-                      disabled={checkAlreadyAssigned}
-                      checked={checkAlreadyAssigned || isSelected}
-                      onChange={() => {
-                        if (isSelected) {
-                          setSelectedProjectIds(
-                            selectedProjectIds?.filter(
-                              (id) => id !== project?._id
-                            )
-                          );
-                        } else {
-                          setSelectedProjectIds([
-                            ...selectedProjectIds,
-                            project?._id,
-                          ]);
-                        }
-                      }}
-                      type="checkbox"
-                    />
-                    <span>{project?.name}</span>
-                    {projectLoading && (
-                      <Spinner animation="border" variant="primary" />
-                    )}
-                  </div>
+                <div key={project?._id} className="assignPro">
+                  <input
+                    disabled={checkAlreadyAssigned}
+                    checked={checkAlreadyAssigned || isSelected}
+                    onChange={() => {
+                      if (isSelected) {
+                        setSelectedProjectIds(
+                          selectedProjectIds?.filter(
+                            (id) => id !== project?._id
+                          )
+                        );
+                      } else {
+                        setSelectedProjectIds([
+                          ...selectedProjectIds,
+                          project?._id,
+                        ]);
+                      }
+                    }}
+                    type="checkbox"
+                  />
+                  <span>{project?.name}</span>
+                  {projectLoading && (
+                    <Spinner animation="border" variant="primary" />
+                  )}
+                </div>
                 {/* )} */}
               </>
             );
@@ -346,6 +354,9 @@ export default function Teams() {
     const numberOfRowsArray = [10, 20, 30, 40, 50];
     const handleOnChange = (e) => {
       let pageNumber = parseInt(e.target.value);
+      // if pageNumber is not a number or less than 1 or greater than total pages
+      
+
       if (pageNumber < 1 || pageNumber > pageDetails.totalPages) {
         return;
       }
@@ -508,11 +519,7 @@ export default function Teams() {
                 style={{ marginRight: "10px", marginLeft: "5px" }}
                 onClick={getTeamListForLogginUser}
               >
-                <span
-                  className=""
-                  aria-hidden="true"
-                  
-                >
+                <span className="" aria-hidden="true">
                   {" "}
                 </span>
                 Team List{" "}
@@ -762,7 +769,10 @@ export default function Teams() {
                           }}
                         >
                           <i className="fa fa-check " aria-hidden="true"></i>{" "}
-                         {isLoadingAssignedProject && user._id === selectedUserId ? "Please wait..." : "Assign" } 
+                          {isLoadingAssignedProject &&
+                          user._id === selectedUserId
+                            ? "Please wait..."
+                            : "Assign"}
                         </button>
                       </div>
                     )}
@@ -775,9 +785,10 @@ export default function Teams() {
               );
             })}
 
-            {isUsersLoading && Array.from({ length: 5 }).map((_, index) => (
-                  <UserSkeleton key={`skeleton-${index}`} />
-                ))}
+          {isUsersLoading &&
+            Array.from({ length: 5 }).map((_, index) => (
+              <UserSkeleton key={`skeleton-${index}`} />
+            ))}
         </div>
 
         {usersList?.users?.length ? (
@@ -786,9 +797,7 @@ export default function Teams() {
             setPageDetails={setPageDetails}
           />
         ) : (
-          <p className="alig-nodata">
-            {!isUsersLoading &&  "No User Found"}
-          </p>
+          <p className="alig-nodata">{!isUsersLoading && "No User Found"}</p>
         )}
 
         {loading ? <Loader /> : null}
@@ -809,8 +818,6 @@ export default function Teams() {
             getTeamListForLogginUser={getTeamListForLogginUser}
           />
         )}
-
-        
 
         <Modal
           centered
@@ -899,8 +906,7 @@ export default function Teams() {
                 assignManagers();
               }}
             >
-             {isAssigningManager ? 'Please wait...':'Confirm' } 
-             
+              {isAssigningManager ? "Please wait..." : "Confirm"}
             </Button>
           </Modal.Footer>
         </Modal>
