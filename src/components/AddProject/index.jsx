@@ -53,8 +53,8 @@ export default function AddProject(props) {
     initialValues: {
       name: projectById?.name || "",
       description: projectById?.description || "",
-      selectedManagers: projectById?.managedBy?.map((el) => el._id) || [],
-      selectAccessibleBy: projectById?.accessibleBy?.map((el) => el._id) || [],
+      selectedManagers: projectById?.managedBy?.map((el) => el?._id) || [],
+      selectAccessibleBy: projectById?.accessibleBy?.map((el) => el?._id) || [],
       colorCode: projectById?.colorCode || "#ADD8E6",
     },
     validationSchema,
@@ -163,8 +163,8 @@ export default function AddProject(props) {
       formik.setValues({
         name: projectById.name,
         description: projectById.description,
-        selectedManagers: projectById.managedBy.map((el) => el._id),
-        selectAccessibleBy: projectById.accessibleBy.map((el) => el._id),
+        selectedManagers: projectById.managedBy?.map((el) => el._id),
+        selectAccessibleBy: projectById.accessibleBy?.map((el) => el._id),
         colorCode: projectById?.colorCode,
       });
     }
@@ -234,7 +234,7 @@ export default function AddProject(props) {
                 onChange={(selected) =>
                   formik.setFieldValue(
                     "selectedManagers",
-                    selected.map((el) => el._id)
+                    selected?.map((el) => el._id)
                   )
                 }
                 getOptionLabel={(options) => options["name"]}
@@ -242,7 +242,7 @@ export default function AddProject(props) {
                 isLoading={isLeadListLoading}
                 options={leadList}
                 value={leadList?.filter((lead) =>
-                  formik.values.selectedManagers.includes(lead._id)
+                  formik.values.selectedManagers?.includes(lead?._id)
                 )}
                 required
               />
@@ -260,7 +260,7 @@ export default function AddProject(props) {
                 onChange={(selected) =>
                   formik.setFieldValue(
                     "selectAccessibleBy",
-                    selected.map((el) => el._id)
+                    selected?.map((el) => el._id)
                   )
                 }
                 getOptionLabel={(options) => options["name"]}
@@ -268,7 +268,7 @@ export default function AddProject(props) {
                 options={userList}
                 isLoading={isUserListLoading}
                 value={userList?.filter((user) =>
-                  formik.values.selectAccessibleBy.includes(user._id)
+                  formik.values.selectAccessibleBy?.includes(user?._id)
                 )}
                 required
               />
